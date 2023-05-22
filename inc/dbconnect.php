@@ -1,7 +1,6 @@
 <?php
 // connect to database
-$conn = mysqli_connect('localhost', 'root', 'root', 'ndknew');
-// $conn = mysqli_connect('localhost', 'newndk', 'ganasysnewndk2023', 'newndk');
+$conn = mysqli_connect('153.127.255.167', 'ndk', 'ganandkadm2019', 'newndk');
 
 // check connection
 if (!$conn) {
