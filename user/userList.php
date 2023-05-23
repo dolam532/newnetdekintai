@@ -233,11 +233,11 @@ if (isset($_POST['save'])) {
 								</div>
 								<div class="col-xs-3">
 									<label for="inymd">入社日</label>
-									<input type="text" class="form-control" name="inymd" maxlength="10" placeholder="" style="text-align: left">
+									<input type="text" class="form-control" id="inymd" name="inymd" maxlength="10" placeholder="" style="text-align: left">
 								</div>
 								<div class="col-xs-3">
 									<label for="outymd">退社日</label>
-									<input type="text" class="form-control" name="outymd" maxlength="10" placeholder="" style="text-align: left">
+									<input type="text" class="form-control" id="outymd" name="outymd" maxlength="10" placeholder="" style="text-align: left">
 								</div>
 							</div>
 							<br>
@@ -257,11 +257,11 @@ if (isset($_POST['save'])) {
 								</div>
 								<div class="col-xs-3">
 									<label for="genstrymd">契約期間(F)</label>
-									<input type="text" class="form-control" name="genstrymd" maxlength="10" placeholder="" style="text-align: left">
+									<input type="text" class="form-control" id="genstrymd" name="genstrymd" maxlength="10" placeholder="" style="text-align: left">
 								</div>
 								<div class="col-xs-3">
 									<label for="genendymd">契約期間(T)</label>
-									<input type="text" class="form-control" name="genendymd" maxlength="10" placeholder="" style="text-align: left">
+									<input type="text" class="form-control"  id="genendymd" name="genendymd" maxlength="10" placeholder="" style="text-align: left">
 								</div>
 							</div>
 						</div>
