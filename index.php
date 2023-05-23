@@ -1,16 +1,13 @@
 <?php
 include('./inc/dbconnect.php');
 
-// write query for all datas
+// Select data from tbl_notice
 $sql_notice = 'SELECT * FROM `tbl_notice`
 JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
 WHERE `tbl_notice`.`uid` = `tbl_user`.`uid`';
 
-// make query & get result
-$result = mysqli_query($conn, $sql_notice);
-
-// fetch the resulting rows as a array
-$notice_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$result_notice = mysqli_query($conn, $sql_notice);
+$notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -120,7 +117,7 @@ $notice_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							<div style="width:30px; float:left;"><img src="/assets/images/30_file.png" width="25" height="25"></div>
+							<div style="width:30px; float:left;"><img src="./assets/images/30_file.png" width="25" height="25"></div>
 							<div style="float:left; margin-top:-7px;">
 								<h4><span id="title"></span></h4>
 							</div>

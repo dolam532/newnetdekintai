@@ -2,7 +2,7 @@
 // connect to database
 include('../inc/dbconnect.php');
 
-// fetch the resulting rows as a array
+// Select database from tbl_user table
 if (isset($_POST['searchGrade']) || isset($_POST['searchName'])) {
 	$searchData = $_POST['searchGrade'];
 	$searchName = $_POST['searchName'];
@@ -22,9 +22,39 @@ if (isset($_POST['searchGrade']) || isset($_POST['searchName'])) {
 } else {
 	$sql_user = 'SELECT * FROM `tbl_user`';
 }
-$result = mysqli_query($conn, $sql_user);
-$user_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
+$result_user = mysqli_query($conn, $sql_user);
+$user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 
+// Select data from tbl_genba
+$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN (1)';
+$result_genba = mysqli_query($conn, $sql_genba);
+$genba_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
+
+// Save data to tbl_user table of database
+if (isset($_POST['save'])) {
+	$uid = mysqli_real_escape_string($conn, $_POST['uid']);
+	$companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
+	$pwd = mysqli_real_escape_string($conn, $_POST['pwd']);
+	$name = mysqli_real_escape_string($conn, $_POST['name']);
+	$grade = mysqli_real_escape_string($conn, $_POST['grade']);
+	$email = mysqli_real_escape_string($conn, $_POST['email']);
+	$dept = mysqli_real_escape_string($conn, $_POST['dept']);
+	$bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
+	$inymd = mysqli_real_escape_string($conn, $_POST['inymd']);
+	$outymd = mysqli_real_escape_string($conn, $_POST['outymd']);
+	$genba_list = mysqli_real_escape_string($conn, $_POST['genba_list']);
+	$genstrymd = mysqli_real_escape_string($conn, $_POST['genstrymd']);
+	$genendymd = mysqli_real_escape_string($conn, $_POST['genendymd']);
+
+	$gen_id_dev = explode(",", $genba_list);
+	$genid = $gen_id_dev[0];
+	$sql_user_i = "INSERT INTO tbl_user(uid, companyid, pwd, name, grade, email, dept, bigo, inymd, outymd, genid, genstrymd, genendymd) VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd')";
+	if (mysqli_query($conn, $sql_user_i)) {
+		echo 'Save';
+	} else {
+		echo 'query error: ' . mysqli_error($conn);
+	}
+}
 ?>
 
 <!DOCTYPE html>
@@ -156,91 +186,119 @@ $user_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
 	<div class="row">
 		<div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						社員登録(<span id="sname"></span>)
-						<button class="close" data-dismiss="modal">&times;</button>
-					</div>
+				<form method="post">
+					<div class="modal-content">
+						<div class="modal-header">社員登録(<span id="sname">New</span>)
+							<button class="close" data-dismiss="modal">&times;</button>
+						</div>
 
-					<div class="modal-body">
-						<div class="row">
-							<div class="col-xs-3">
-								<label for="uid">ID</label>
-								<input type="text" class="form-control" id="uid" placeholder="ID" required="required" maxlength="10" style="text-align: left">
-								<input type="hidden" id="seq" value="">
-								<input type="hidden" id="companyid" value="">
-								<input type="hidden" id="type" value="">
+						<div class="modal-body">
+							<div class="row">
+								<div class="col-xs-3">
+									<label for="uid">ID</label>
+									<input type="text" class="form-control" name="uid" placeholder="ID" required="required" maxlength="10" style="text-align: left">
+									<input type="hidden" name="seq" value="">
+									<input type="hidden" name="companyid" value="">
+									<input type="hidden" name="type" value="">
+								</div>
+								<div class="col-xs-3">
+									<label for="pwd">PASSWORD</label>
+									<input type="password" class="form-control" name="pwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
+								</div>
+								<div class="col-xs-3">
+									<label for="name">社員名</label>
+									<input type="text" class="form-control" name="name" placeholder="name" required="required" maxlength="100" style="text-align: left">
+								</div>
+								<div class="col-xs-3">
+									<label for="grade">区分</label>
+									<input type="text" class="form-control" name="grade" placeholder="役員/管理/社員" required="required" maxlength="30" style="text-align: left">
+								</div>
 							</div>
-							<div class="col-xs-3">
-								<label for="pwd">PASSWORD</label>
-								<input type="password" class="form-control" id="pwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
+							<br>
+							<div class="row">
+								<div class="col-xs-6">
+									<label for="email">email</label>
+									<input type="text" class="form-control" name="email" placeholder="email" required="required" maxlength="100" style="text-align: left">
+								</div>
+								<div class="col-xs-6">
+									<label for="dept">部署</label>
+									<input type="text" class="form-control" name="dept" placeholder="開発部" maxlength="50" style="text-align: left">
+								</div>
 							</div>
-							<div class="col-xs-3">
-								<label for="name">社員名</label>
-								<input type="text" class="form-control" id="name" placeholder="name" required="required" maxlength="100" style="text-align: left">
+							<br>
+							<div class="row">
+								<div class="col-xs-6">
+									<label for="bigo">備考</label>
+									<input type="text" class="form-control" name="bigo" maxlength="1000" style="text-align: left">
+								</div>
+								<div class="col-xs-3">
+									<label for="inymd">入社日</label>
+									<input type="text" class="form-control" name="inymd" maxlength="10" placeholder="" style="text-align: left">
+								</div>
+								<div class="col-xs-3">
+									<label for="outymd">退社日</label>
+									<input type="text" class="form-control" name="outymd" maxlength="10" placeholder="" style="text-align: left">
+								</div>
 							</div>
-							<div class="col-xs-3">
-								<label for="grade">区分</label>
-								<input type="text" class="form-control" id="grade" placeholder="役員/管理/社員" required="required" maxlength="30" style="text-align: left">
+							<br>
+							<div class="row">
+								<div class="col-xs-6">
+									<label for="genid">現場</label>
+									<select class="form-control" name="genba_list">
+										<option value=""></option>
+										<?php
+										foreach ($genba_list as $key) {
+										?>
+											<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["worktime1"] . ',' . $key["worktime2"] ?>"><?= $key["genbaname"] . $key["worktime1"] . $key["worktime2"] ?></option>
+										<?php
+										}
+										?>
+									</select>
+								</div>
+								<div class="col-xs-3">
+									<label for="genstrymd">契約期間(F)</label>
+									<input type="text" class="form-control" name="genstrymd" maxlength="10" placeholder="" style="text-align: left">
+								</div>
+								<div class="col-xs-3">
+									<label for="genendymd">契約期間(T)</label>
+									<input type="text" class="form-control" name="genendymd" maxlength="10" placeholder="" style="text-align: left">
+								</div>
 							</div>
 						</div>
-						<br>
-						<div class="row">
-							<div class="col-xs-6">
-								<label for="email">email</label>
-								<input type="text" class="form-control" id="email" placeholder="email" required="required" maxlength="100" style="text-align: left">
+						<div class="modal-footer" style="text-align: center">
+							<div class="col-xs-4"></div>
+							<div class="col-xs-2">
+								<p class="text-center">
+									<input type="submit" name="save" class="btn btn-primary btn-md" id="btnReg" role="button" value="登録">
+								</p>
 							</div>
-							<div class="col-xs-6">
-								<label for="dept">部署</label>
-								<input type="text" class="form-control" id="dept" placeholder="開発部" maxlength="50" style="text-align: left">
+							<div class="col-xs-2">
+								<p class="text-center">
+									<a class="btn btn-primary btn-md" id="btnRet" data-dismiss="modal">閉じる </a>
+								</p>
 							</div>
-						</div>
-						<br>
-						<div class="row">
-							<div class="col-xs-6">
-								<label for="bigo">備考</label>
-								<input type="text" class="form-control" id="bigo" maxlength="1000" style="text-align: left">
-							</div>
-							<div class="col-xs-3">
-								<label for="inymd">入社日</label>
-								<input type="text" class="form-control" id="inymd" maxlength="10" placeholder="" style="text-align: left">
-							</div>
-							<div class="col-xs-3">
-								<label for="outymd">退社日</label>
-								<input type="text" class="form-control" id="outymd" maxlength="10" placeholder="" style="text-align: left">
-							</div>
-						</div>
-						<br>
-						<div class="row">
-							<div class="col-xs-6">
-								<label for="genid">現場</label>
-								<select class="form-control" id="genid" name="genid"></select>
-							</div>
-							<div class="col-xs-3">
-								<label for="genstrymd">契約期間(F)</label>
-								<input type="text" class="form-control" id="genstrymd" maxlength="10" placeholder="" style="text-align: left">
-							</div>
-							<div class="col-xs-3">
-								<label for="genendymd">契約期間(T)</label>
-								<input type="text" class="form-control" id="genendymd" maxlength="10" placeholder="" style="text-align: left">
-							</div>
+							<div class="col-xs-4"></div>
 						</div>
 					</div>
-					<div class="modal-footer" style="text-align: center">
-						<div class="col-xs-4"></div>
-						<div class="col-xs-2">
-							<p class="text-center"><a class="btn btn-primary btn-md" id="btnReg" href="#" role="button">登録 </a></p>
-						</div>
-						<div class="col-xs-2">
-							<p class="text-center"><a class="btn btn-primary btn-md" id="btnRet" data-dismiss="modal">閉じる </a></p>
-						</div>
-						<div class="col-xs-4"></div>
-					</div>
-				</div>
+				</form>
 			</div>
 		</div>
 	</div>
 	<script>
+		//Datepeeker 설정
+		$("#genstrymd").datepicker({
+			dateFormat: 'yy/mm/dd'
+		});
+		$("#genendymd").datepicker({
+			dateFormat: 'yy/mm/dd'
+		});
+		$("#inymd").datepicker({
+			dateFormat: 'yy/mm/dd'
+		});
+		$("#outymd").datepicker({
+			dateFormat: 'yy/mm/dd'
+		});
+
 		//신규버튼 : popup & clear 
 		$(document).on('click', '#btnNew', function(e) {
 			$('#modal').modal('toggle');

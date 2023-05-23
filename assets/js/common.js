@@ -304,7 +304,7 @@
     *     }
     */
     function isValidTime(time) {
-	    var hour  = time.substring(0,2);
+	    var hour = time.substring(0,2);
 	    var min = time.substring(3,5);
 	    var spchar = time.substring(2,3);
 	    
