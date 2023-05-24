@@ -1,8 +1,7 @@
 <?php
 // connect to database
-$conn = mysqli_connect('153.127.255.167', 'ndk', 'ganandkadm2019', 'newndk');
-
-//Demo Test Commit BAO wqewqe
+require_once __DIR__ . '/./const.php';
+$conn = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
 
 // check connection
 if (!$conn) {

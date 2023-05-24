@@ -28,10 +28,16 @@ $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 // Select data from tbl_genba
 $sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN (1)';
 $result_genba = mysqli_query($conn, $sql_genba);
-$genba_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
+$genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
 // Save data to tbl_user table of database
 if (isset($_POST['save'])) {
+	if ($_POST['companyid'] = "") {
+		$_POST['companyid'] = "0";
+	}
+	$_POST['companyid'] = intval($_POST['companyid']);
+	$reg_dt = date('Y-m-d H:i:s');
+
 	$uid = mysqli_real_escape_string($conn, $_POST['uid']);
 	$companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
 	$pwd = mysqli_real_escape_string($conn, $_POST['pwd']);
@@ -48,9 +54,10 @@ if (isset($_POST['save'])) {
 
 	$gen_id_dev = explode(",", $genba_list);
 	$genid = $gen_id_dev[0];
-	$sql_user_i = "INSERT INTO tbl_user(uid, companyid, pwd, name, grade, email, dept, bigo, inymd, outymd, genid, genstrymd, genendymd) VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd')";
+
+	$sql_user_i = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
 	if (mysqli_query($conn, $sql_user_i)) {
-		echo 'Save';
+		echo $save_success;
 	} else {
 		echo 'query error: ' . mysqli_error($conn);
 	}
@@ -100,7 +107,10 @@ if (isset($_POST['save'])) {
 </head>
 
 <body>
-	<?php include('../inc/header.php'); ?>
+	<?php
+	include('../inc/header.php');
+	include('../inc/message.php');
+	?>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-3 text-left">
@@ -247,7 +257,7 @@ if (isset($_POST['save'])) {
 									<select class="form-control" name="genba_list">
 										<option value=""></option>
 										<?php
-										foreach ($genba_list as $key) {
+										foreach ($genba_list_db as $key) {
 										?>
 											<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["worktime1"] . ',' . $key["worktime2"] ?>"><?= $key["genbaname"] . $key["worktime1"] . $key["worktime2"] ?></option>
 										<?php
@@ -261,7 +271,7 @@ if (isset($_POST['save'])) {
 								</div>
 								<div class="col-xs-3">
 									<label for="genendymd">契約期間(T)</label>
-									<input type="text" class="form-control"  id="genendymd" name="genendymd" maxlength="10" placeholder="" style="text-align: left">
+									<input type="text" class="form-control" id="genendymd" name="genendymd" maxlength="10" placeholder="" style="text-align: left">
 								</div>
 							</div>
 						</div>
