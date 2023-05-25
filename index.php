@@ -71,7 +71,7 @@ $notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
 					<a href="./kintai/kintai.php"><img src="./assets/images/main-12.jpg" width="100%" height="200"></a>
 				</div>
 				<div class="col-md-4 text-center" style="margin-bottom: 5px;">
-					<a href="./kyuka/kyuka.php"><img src="./assets/images/main-13.jpg" width="100%" height="200"></a>
+					<a href="./kyuka/kyukaReg.php"><img src="./assets/images/main-13.jpg" width="100%" height="200"></a>
 				</div>
 				<div class="col-md-4 text-center" style="margin-bottom: 5px;">
 					<a href="./kintai/kintaiMonthly.php"><img src="./assets/images/main-15.jpg" width="100%" height="200"></a>

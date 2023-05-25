@@ -107,11 +107,9 @@ if (isset($_POST['save'])) {
 </head>
 
 <body>
-	<?php
-	include('../inc/header.php');
-	include('../inc/message.php');
-	?>
+	<?php include('../inc/header.php'); ?>
 	<div class="container">
+	<?php include('../inc/message.php'); ?>
 		<div class="row">
 			<div class="col-md-3 text-left">
 				<div class="title_name">
