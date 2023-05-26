@@ -53,7 +53,7 @@
                             <li class="menu-level3"><a href="">休暇使用現状</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown active" id="manager" style="">
+                    <li class="dropdown active" id="manager">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">基本情報
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -71,7 +71,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="dropdown active" id="gana" style="">
+                    <li class="dropdown active" id="gana">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true">GANASYS<span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li><a href="">使用者登録</a></li>
