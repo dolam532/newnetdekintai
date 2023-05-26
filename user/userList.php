@@ -1,6 +1,8 @@
 <?php
 // connect to database
+session_start();
 include('../inc/dbconnect.php');
+include('../inc/message.php');
 
 // Select database from tbl_user table
 if (isset($_POST['searchGrade']) || isset($_POST['searchName'])) {
@@ -55,9 +57,10 @@ if (isset($_POST['save'])) {
 	$gen_id_dev = explode(",", $genba_list);
 	$genid = $gen_id_dev[0];
 
-	$sql_user_i = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
+	$sql_user_i = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) 
+	VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
 	if (mysqli_query($conn, $sql_user_i)) {
-		echo $save_success;
+		$_SESSION['save_success'] =  $save_success;
 	} else {
 		echo 'query error: ' . mysqli_error($conn);
 	}
@@ -109,7 +112,17 @@ if (isset($_POST['save'])) {
 <body>
 	<?php include('../inc/header.php'); ?>
 	<div class="container">
-	<?php include('../inc/message.php'); ?>
+		<?php
+		if (isset($_SESSION['save_success'])) {
+		?>
+			<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+				<?php echo $_SESSION['save_success']; ?>
+			</div>
+		<?php
+			unset($_SESSION['save_success']);
+		}
+		?>
 		<div class="row">
 			<div class="col-md-3 text-left">
 				<div class="title_name">
@@ -204,33 +217,33 @@ if (isset($_POST['save'])) {
 							<div class="row">
 								<div class="col-xs-3">
 									<label for="uid">ID</label>
-									<input type="text" class="form-control" name="uid" placeholder="ID" required="required" maxlength="10" style="text-align: left">
+									<input type="text" class="form-control" id="uid" name="uid" placeholder="ID" required="required" maxlength="10" style="text-align: left">
 									<input type="hidden" name="seq" value="">
 									<input type="hidden" name="companyid" value="">
 									<input type="hidden" name="type" value="">
 								</div>
 								<div class="col-xs-3">
 									<label for="pwd">PASSWORD</label>
-									<input type="password" class="form-control" name="pwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
+									<input type="password" class="form-control" id="pwd" name="pwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
 								</div>
 								<div class="col-xs-3">
 									<label for="name">社員名</label>
-									<input type="text" class="form-control" name="name" placeholder="name" required="required" maxlength="100" style="text-align: left">
+									<input type="text" class="form-control" id="name" name="name" placeholder="name" required="required" maxlength="100" style="text-align: left">
 								</div>
 								<div class="col-xs-3">
 									<label for="grade">区分</label>
-									<input type="text" class="form-control" name="grade" placeholder="役員/管理/社員" required="required" maxlength="30" style="text-align: left">
+									<input type="text" class="form-control" id="grade" name="grade" placeholder="役員/管理/社員" required="required" maxlength="30" style="text-align: left">
 								</div>
 							</div>
 							<br>
 							<div class="row">
 								<div class="col-xs-6">
 									<label for="email">email</label>
-									<input type="text" class="form-control" name="email" placeholder="email" required="required" maxlength="100" style="text-align: left">
+									<input type="text" class="form-control" id="email" name="email" placeholder="email" required="required" maxlength="100" style="text-align: left">
 								</div>
 								<div class="col-xs-6">
 									<label for="dept">部署</label>
-									<input type="text" class="form-control" name="dept" placeholder="開発部" maxlength="50" style="text-align: left">
+									<input type="text" class="form-control" id="dept" name="dept" placeholder="開発部" maxlength="50" style="text-align: left">
 								</div>
 							</div>
 							<br>
@@ -310,6 +323,58 @@ if (isset($_POST['save'])) {
 		//신규버튼 : popup & clear 
 		$(document).on('click', '#btnNew', function(e) {
 			$('#modal').modal('toggle');
+		});
+
+		// Check Error
+		$(document).on('click', '#btnReg', function(e) {
+			e.preventDefault();
+
+			var uid = $("#uid").val();
+			var pwd = $("#pwd").val();
+			var name = $("#name").val();
+			var email = $("#email").val();
+			var dept = $("#dept").val();
+			var grade = $("#grade").val();
+
+			<?php foreach ($user_list as $user) : ?>
+				var user_uid = '<?php echo $user["uid"] ?>';
+				if (uid == user_uid) {
+					alert("他の社員が使用しているidです。");
+					$("#uid").focus(); //입력 포커스 이동
+					return; //함수 종료
+				}
+			<?php endforeach; ?>
+
+			if (uid == "") {
+				alert("IDを入力してください。");
+				$("#uid").focus(); //입력 포커스 이동
+				return; //함수 종료
+			}
+			if (pwd == "") {
+				alert("Passwordを入力してください。");
+				$("#pwd").focus();
+				return;
+			}
+			if (name == "") {
+				alert("社員名を入力してください。.");
+				$("#name").focus();
+				return;
+			}
+			if (email == "") {
+				alert("E-mailを入力してください。");
+				$("#email").focus();
+				return;
+			}
+			if (dept == "") {
+				alert("部署を入力してください。");
+				$("#dept").focus();
+				return;
+			}
+			if (grade == "") {
+				alert("区分を入力してください。.");
+				$("#grade").focus();
+				return;
+			}
 		});
 	</script>
 </body>

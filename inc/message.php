@@ -1,2 +1,3 @@
 <?php 
-    $save_success = '<div class="alert alert-success" role="alert">入力情報保存しました。</div>';
+    $save_success = '入力情報保存しました。';
+    $save_fail = '入力情報保存できませんでした。';
