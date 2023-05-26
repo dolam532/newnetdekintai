@@ -43,7 +43,7 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">勤怠 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li class="menu-level1"><a href="">勤務表（本社用）</a></li>
-                            <li class="menu-level1"><a href="">月間勤怠</a></li>
+                            <li class="menu-level1"><a href="../kintai/kintaiMonthly.php">月間勤怠</a></li>
                         </ul>
                     </li>
                     <li class="dropdown active">
