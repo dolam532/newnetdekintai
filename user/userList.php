@@ -266,7 +266,7 @@ if (isset($_POST['save'])) {
 								<div class="col-xs-6">
 									<label for="genid">現場</label>
 									<select class="form-control" name="genba_list">
-										<option value=""></option>
+										<option value="" selected=""></option>
 										<?php
 										foreach ($genba_list_db as $key) {
 										?>

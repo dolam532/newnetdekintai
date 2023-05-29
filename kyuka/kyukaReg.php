@@ -3,11 +3,26 @@
 session_start();
 include('../inc/dbconnect.php');
 include('../inc/message.php');
+include('../inc/const_array.php');
+
+// Select data from tbl_user
+$sql_user = 'SELECT `uid`, `name` FROM `tbl_user`';
+$result_user = mysqli_query($conn, $sql_user);
+$user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
+
+// Select data from tbl_userkyuka
+$sql_userkyuka = 'SELECT * FROM `tbl_userkyuka`
+JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
+WHERE
+`tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
+AND 
+`tbl_codebase`.`typecode` = 02';
+$result_userkyuka = mysqli_query($conn, $sql_userkyuka);
+$userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
 WHERE `tbl_codebase`.`typecode` = 02 GROUP BY `code`, `name`';
-
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
@@ -121,68 +136,62 @@ if (isset($_POST['save'])) {
 					<span class="text-left">休年届</span>
 				</div>
 			</div>
-			<div class="col-md-3 text-center">
-				<div class="title_condition custom-control custom-radio" id="divAllowok">
-					<label>&nbsp;
-						<input type="radio" name="searchAllowok" value="9" checked="">全体
-						<input type="radio" name="searchAllowok" value="0">未決裁
-						<input type="radio" name="searchAllowok" value="1">決裁完了
-					</label>
+			<form method="post">
+				<div class="col-md-3 text-center">
+					<div class="title_condition custom-control custom-radio" id="divAllowok">
+						<label>&nbsp;
+							<input type="radio" name="searchAllowok" value="9" checked="">全体
+							<input type="radio" name="searchAllowok" value="0">未決裁
+							<input type="radio" name="searchAllowok" value="1">決裁完了
+						</label>
+					</div>
 				</div>
-			</div>
 
-			<div class="col-md-3" id="divUid">
-				<div class="title_condition">
-					<label>社員名 :
-						<select id="searchUid" name="searchUid" style="padding:5px;">
-							<option value="" selected=""></option>
-							<option value="admin">GANASYS</option>
-							<option value="arai">新井 一郎</option>
-							<option value="hasegawa">長谷川 敏明</option>
-							<option value="katou">加藤 三郎</option>
-							<option value="satou">佐藤 次郎</option>
-							<option value="tanaka">田中 利明</option>
-							<option value="sakamoto">坂本 龍馬</option>
-							<option value="zaw">ゾウ テ</option>
-							<option value="thanh">ハ ミン タン</option>
-							<option value="prasanna">プラサンナ</option>
-							<option value="mikash">ミカシュ</option>
-							<option value="dhanushka">ダヌシカ</option>
-							<option value="myo">ミョウ</option>
-							<option value="yamasita">山下</option>
-							<option value="ishihara">石原</option>
-							<option value="dhkang">姜東勳</option>
-							<option value="dglee">李 東揆</option>
-						</select>
-					</label>
+				<div class="col-md-3" id="divUid">
+					<div class="title_condition">
+						<label>社員名 :
+							<select id="searchUid" name="searchUid" style="padding:5px;">
+								<option value="" selected=""></option>
+								<?php
+								foreach ($user_list as $value) {
+								?>
+									<option value="<?= $value['uid'] ?>"><?= $value['name'] ?></option>
+								<?php
+								}
+								?>
+							</select>
+						</label>
+					</div>
 				</div>
-			</div>
 
-			<div class=" col-md-2 text-right">
-				<div class="title_condition">
-					<label>基準日 :
-						<select id="searchYY" name="searchYY" style="padding:5px;">
-							<option value="2020">2020</option>
-							<option value="2021">2021</option>
-							<option value="2022">2022</option>
-							<option value="2023">2023</option>
-							<option value="2024">2024</option>
-							<option value="2025">2025</option>
-							<option value="2026">2026</option>
-							<option value="2027">2027</option>
-							<option value="2028">2028</option>
-							<option value="2029">2029</option>
-							<option value="2030">2030</option>
-						</select>
-					</label>
+				<div class=" col-md-2 text-right">
+					<div class="title_condition">
+						<label>基準日 :
+							<select id="searchYY" name="searchYY" style="padding:5px;">
+								<option value="" selected="selected"></option>
+								<?php
+								foreach (ConstArray::$search_year as $key => $value) {
+								?>
+									<option value="<?= $key ?>" <?php if ($value == date("Y")) {
+																	echo ' selected="selected"';
+																} ?>>
+										<?= $value ?>
+									</option>
+								<?php
+								}
+								?>
+							</select>
+						</label>
+					</div>
 				</div>
-			</div>
 
-			<div class="col-md-2 text-right">
-				<div class="title_btn">
-					<input type="button" id="btnSearch" value="検索 ">&nbsp;&nbsp;&nbsp;<input type="button" id="btnNew" value="新規 ">
+				<div class="col-md-2 text-right">
+					<div class="title_btn">
+						<input type="button" id="btnSearch" value="検索 ">&nbsp;&nbsp;&nbsp;
+						<input type="button" id="btnNew" value="新規 ">
+					</div>
 				</div>
-			</div>
+			</form>
 		</div>
 
 		<div class="form-group">
@@ -201,9 +210,36 @@ if (isset($_POST['save'])) {
 					</tr>
 				</thead>
 				<tbody>
-					<tr>
-						<td colspan="9" align="center">登録されたデータがありません.</td>
-					</tr>
+					<?php if (empty($userkyuka_list)) { ?>
+						<tr>
+							<td colspan="8" align="center">登録されたデータがありません.</td>
+						</tr>
+						<?php } elseif (!empty($userkyuka_list)) {
+						foreach ($userkyuka_list as $userkyuka) {
+						?>
+							<tr>
+								<td><span name="ymd"><?= $userkyuka['kyukaymd'] ?></span></td>
+								<td><span name="cname"><?= $userkyuka['name'] ?></span></td>
+								<td>
+									<span name="crequestdate"><?= $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'] ?></span>
+								</td>
+								<td><span name="cymdcnt"><?= $userkyuka['ymdcnt'] ?>(<?= $userkyuka['timecnt'] ?>)</span></td>
+								<td><span name="cvacationdate"><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
+								<td><span name="ctotcnt"><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
+								<td><span name="crestcnt"><?= date('d', strtotime($userkyuka['endymd']) - strtotime($userkyuka['strymd'])) - 1 ?></span></td>
+								<td><span name="callowok">
+										<?php
+										if ($userkyuka['allowok'] == "0") { ?>
+											<span name="callowok" style="color:red">未決裁</span>
+										<?php } else { ?>
+											<span name="callowok">決裁完了</span>
+										<?php } ?>
+									</span>
+								</td>
+								<td><span name="cdestplace"><?= $userkyuka['destplace'] ?></span></td>
+							</tr>
+					<?php }
+					} ?>
 				</tbody>
 			</table>
 		</div>
@@ -362,9 +398,9 @@ if (isset($_POST['save'])) {
 		//신규버튼 
 		$(document).on('click', '#btnNew', function(e) {
 			$('#modal').modal('toggle');
-		
+
 			$("#kyukaymd").val("").prop('disabled', true);
-			
+
 			//신규때는 신청구분 선택하기 전에는 사용 불가
 			$("#strymd").val("").prop('disabled', true);
 			$("#endymd").val("").prop('disabled', true);
