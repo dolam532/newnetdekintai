@@ -11,6 +11,7 @@ if (isset($_POST['searchGrade']) || isset($_POST['searchName'])) {
 	$clear = $_POST['clear'];
 
 	if ($clear !== NULL) {
+		unset($_POST);
 		$sql_user = 'SELECT * FROM `tbl_user`';
 	} elseif (!empty($searchData) && empty($searchName)) {
 		$sql_user = "SELECT * FROM `tbl_user` WHERE grade LIKE '%$searchData%'";
@@ -132,12 +133,12 @@ if (isset($_POST['save'])) {
 			<form method="post">
 				<div class="col-md-3 text-left">
 					<div class="title_condition">
-						<label>区分 : <input type="text" name="searchGrade" style="width: 100px;"></label>
+						<label>区分 : <input type="text" name="searchGrade" value="<?= $_POST['searchGrade'] ?>" style="width: 100px;"></label>
 					</div>
 				</div>
 				<div class="col-md-3 text-left">
 					<div class="title_condition">
-						<label>社員名 : <input type="text" name="searchName" style="width: 100px;"></label>
+						<label>社員名 : <input type="text" name="searchName" value="<?= $_POST['searchName'] ?>" style="width: 100px;"></label>
 					</div>
 				</div>
 				<div class="col-md-3 text-right">

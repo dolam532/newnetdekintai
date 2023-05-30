@@ -4,7 +4,8 @@ include('./inc/dbconnect.php');
 // Select data from tbl_notice
 $sql_notice = 'SELECT * FROM `tbl_notice`
 JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
-WHERE `tbl_notice`.`uid` = `tbl_user`.`uid`';
+WHERE `tbl_notice`.`uid` = `tbl_user`.`uid`
+ORDER BY `tbl_notice`.`bid`';
 
 $result_notice = mysqli_query($conn, $sql_notice);
 $notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
@@ -20,7 +21,9 @@ $notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
 	<script src="./assets/js/jquery.min.js"></script>
 	<script src="./assets/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-
+	<link rel="stylesheet" href="./assets/fonts/glyphicons-halflings-regular.eot">
+	<link rel="stylesheet" href="./assets/fonts/glyphicons-halflings-regular.ttf">
+	<link rel="stylesheet" href="./assets/fonts/glyphicons-halflings-regular.woff">
 	<!-- common Javascript -->
 	<script type="text/javascript" src="./assets/js/common.js"> </script>
 
@@ -80,7 +83,7 @@ $notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h1 class="panel-title">
-						<span class="glyphicon glyphicon-pencil"></span>
+						<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
 						&nbsp;&nbsp;サイトお知らせ
 					</h1>
 				</div>

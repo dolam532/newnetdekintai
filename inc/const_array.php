@@ -14,4 +14,10 @@ class ConstArray
         '2029' => '2029',
         '2030' => '2030'
     ];
+
+    public static $search_allowok = [
+        '9' => '全体',
+        '0' => '未決裁',
+        '1' => '決裁完了'
+    ];
 }

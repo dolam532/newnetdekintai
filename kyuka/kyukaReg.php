@@ -10,21 +10,44 @@ $sql_user = 'SELECT `uid`, `name` FROM `tbl_user`';
 $result_user = mysqli_query($conn, $sql_user);
 $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 
-// Select data from tbl_userkyuka
-$sql_userkyuka = 'SELECT * FROM `tbl_userkyuka`
-JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
-WHERE
-`tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
-AND 
-`tbl_codebase`.`typecode` = 02';
-$result_userkyuka = mysqli_query($conn, $sql_userkyuka);
-$userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
-
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
 WHERE `tbl_codebase`.`typecode` = 02 GROUP BY `code`, `name`';
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
+
+// Search Button Click
+if ($_POST['btnSearch'] == NULL) {
+	$_POST['searchAllowok'] = "9";
+
+	// Select data from tbl_userkyuka
+	$sql_userkyuka = 'SELECT * FROM `tbl_userkyuka`
+JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
+JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
+WHERE
+    `tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
+	AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
+	AND `tbl_codebase`.`typecode` = 02';
+} elseif ($_POST['btnSearch'] != NULL) {
+	if ($_POST['searchAllowok'] == "9") {
+		$searchNo = ['0', '1'];
+	} else {
+		$searchNo = $_POST['searchAllowok'];
+	}
+	var_dump($searchNo);
+	$sql_userkyuka = "SELECT * FROM `tbl_userkyuka`
+JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
+JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
+WHERE
+	`tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
+	AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
+	AND `tbl_codebase`.`typecode` = 02
+	AND `tbl_userkyuka`.`allowok`='$searchNo'";
+} else {
+}
+$result_userkyuka = mysqli_query($conn, $sql_userkyuka);
+$userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
+
 
 // Save data to tbl_userkyuka table of database
 if (isset($_POST['save'])) {
@@ -130,19 +153,27 @@ if (isset($_POST['save'])) {
 			unset($_SESSION['save_success']);
 		}
 		?>
-		<div class="row">
-			<div class="col-md-2 text-left">
-				<div class="title_name">
-					<span class="text-left">休年届</span>
+		<form method="post">
+			<div class="row">
+				<div class="col-md-2 text-left">
+					<div class="title_name">
+						<span class="text-left">休年届</span>
+					</div>
 				</div>
-			</div>
-			<form method="post">
 				<div class="col-md-3 text-center">
 					<div class="title_condition custom-control custom-radio" id="divAllowok">
 						<label>&nbsp;
-							<input type="radio" name="searchAllowok" value="9" checked="">全体
-							<input type="radio" name="searchAllowok" value="0">未決裁
-							<input type="radio" name="searchAllowok" value="1">決裁完了
+							<?php
+							foreach (ConstArray::$search_allowok as $key => $value) {
+							?>
+								<input type='radio' name='searchAllowok' value='<?= $key ?>' <?php if ($key == $_POST['searchAllowok']) {
+																									echo ' checked="checked"';
+																								} ?>>
+								<?= $value ?>
+								</input>
+							<?php
+							}
+							?>
 						</label>
 					</div>
 				</div>
@@ -187,62 +218,62 @@ if (isset($_POST['save'])) {
 
 				<div class="col-md-2 text-right">
 					<div class="title_btn">
-						<input type="button" id="btnSearch" value="検索 ">&nbsp;&nbsp;&nbsp;
+						<input type="submit" name="btnSearch" value="検索 ">&nbsp;&nbsp;&nbsp;
 						<input type="button" id="btnNew" value="新規 ">
 					</div>
 				</div>
-			</form>
-		</div>
+			</div>
 
-		<div class="form-group">
-			<table class="table table-bordered datatable">
-				<thead>
-					<tr class="info">
-						<th style="text-align: center; width: 12%;">申請日</th>
-						<th style="text-align: center; width: 10%;">休暇区分</th>
-						<th style="text-align: center; width: 16%;">申請期間</th>
-						<th style="text-align: center; width: 10%;">申込日(時)</th>
-						<th style="text-align: center; width: 16%;">年次期間</th>
-						<th style="text-align: center; width: 8%;">総休暇数</th>
-						<th style="text-align: center; width: 8%;">残日数</th>
-						<th style="text-align: center; width: 8%;">決裁</th>
-						<th style="text-align: center; width: auto;">暇中居る連絡先</th>
-					</tr>
-				</thead>
-				<tbody>
-					<?php if (empty($userkyuka_list)) { ?>
-						<tr>
-							<td colspan="8" align="center">登録されたデータがありません.</td>
+			<div class="form-group">
+				<table class="table table-bordered datatable">
+					<thead>
+						<tr class="info">
+							<th style="text-align: center; width: 12%;">申請日</th>
+							<th style="text-align: center; width: 10%;">休暇区分</th>
+							<th style="text-align: center; width: 16%;">申請期間</th>
+							<th style="text-align: center; width: 10%;">申込日(時)</th>
+							<th style="text-align: center; width: 16%;">年次期間</th>
+							<th style="text-align: center; width: 8%;">総休暇数</th>
+							<th style="text-align: center; width: 8%;">残日数</th>
+							<th style="text-align: center; width: 8%;">決裁</th>
+							<th style="text-align: center; width: auto;">暇中居る連絡先</th>
 						</tr>
-						<?php } elseif (!empty($userkyuka_list)) {
-						foreach ($userkyuka_list as $userkyuka) {
-						?>
+					</thead>
+					<tbody>
+						<?php if (empty($userkyuka_list)) { ?>
 							<tr>
-								<td><span name="ymd"><?= $userkyuka['kyukaymd'] ?></span></td>
-								<td><span name="cname"><?= $userkyuka['name'] ?></span></td>
-								<td>
-									<span name="crequestdate"><?= $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'] ?></span>
-								</td>
-								<td><span name="cymdcnt"><?= $userkyuka['ymdcnt'] ?>(<?= $userkyuka['timecnt'] ?>)</span></td>
-								<td><span name="cvacationdate"><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
-								<td><span name="ctotcnt"><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
-								<td><span name="crestcnt"><?= date('d', strtotime($userkyuka['endymd']) - strtotime($userkyuka['strymd'])) - 1 ?></span></td>
-								<td><span name="callowok">
-										<?php
-										if ($userkyuka['allowok'] == "0") { ?>
-											<span name="callowok" style="color:red">未決裁</span>
-										<?php } else { ?>
-											<span name="callowok">決裁完了</span>
-										<?php } ?>
-									</span>
-								</td>
-								<td><span name="cdestplace"><?= $userkyuka['destplace'] ?></span></td>
+								<td colspan="8" align="center">登録されたデータがありません.</td>
 							</tr>
-					<?php }
-					} ?>
-				</tbody>
-			</table>
-		</div>
+							<?php } elseif (!empty($userkyuka_list)) {
+							foreach ($userkyuka_list as $userkyuka) {
+							?>
+								<tr>
+									<td><span name="ymd"><?= $userkyuka['kyukaymd'] ?></span></td>
+									<td><span name="cname"><?= $userkyuka['name'] ?></span></td>
+									<td>
+										<span name="crequestdate"><?= $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'] ?></span>
+									</td>
+									<td><span name="cymdcnt"><?= $userkyuka['ymdcnt'] ?>(<?= $userkyuka['timecnt'] ?>)</span></td>
+									<td><span name="cvacationdate"><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
+									<td><span name="ctotcnt"><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
+									<td><span name="crestcnt"><?= date('d', strtotime($userkyuka['endymd']) - strtotime($userkyuka['strymd'])) - 1 ?></span></td>
+									<td><span name="callowok">
+											<?php
+											if ($userkyuka['allowok'] == "0") { ?>
+												<span name="callowok" style="color:red">未決裁</span>
+											<?php } else { ?>
+												<span name="callowok">決裁完了</span>
+											<?php } ?>
+										</span>
+									</td>
+									<td><span name="cdestplace"><?= $userkyuka['destplace'] ?></span></td>
+								</tr>
+						<?php }
+						} ?>
+					</tbody>
+				</table>
+			</div>
+		</form>
 
 		<div class="row">
 			<div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
