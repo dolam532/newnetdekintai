@@ -328,8 +328,6 @@ if (isset($_POST['save'])) {
 
 		// Check Error
 		$(document).on('click', '#btnReg', function(e) {
-			e.preventDefault();
-
 			var uid = $("#uid").val();
 			var pwd = $("#pwd").val();
 			var name = $("#name").val();
@@ -342,6 +340,7 @@ if (isset($_POST['save'])) {
 				if (uid == user_uid) {
 					alert("他の社員が使用しているidです。");
 					$("#uid").focus(); //입력 포커스 이동
+					e.preventDefault();
 					return; //함수 종료
 				}
 			<?php endforeach; ?>
@@ -349,16 +348,19 @@ if (isset($_POST['save'])) {
 			if (uid == "") {
 				alert("IDを入力してください。");
 				$("#uid").focus(); //입력 포커스 이동
+				e.preventDefault();
 				return; //함수 종료
 			}
 			if (pwd == "") {
 				alert("Passwordを入力してください。");
 				$("#pwd").focus();
+				e.preventDefault();
 				return;
 			}
 			if (name == "") {
 				alert("社員名を入力してください。.");
 				$("#name").focus();
+				e.preventDefault();
 				return;
 			}
 			if (email == "") {
@@ -369,11 +371,13 @@ if (isset($_POST['save'])) {
 			if (dept == "") {
 				alert("部署を入力してください。");
 				$("#dept").focus();
+				e.preventDefault();
 				return;
 			}
 			if (grade == "") {
 				alert("区分を入力してください。.");
 				$("#grade").focus();
+				e.preventDefault();
 				return;
 			}
 		});
