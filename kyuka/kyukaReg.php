@@ -392,11 +392,9 @@ include('../inc/model.php');
 									</table>
 								</div>
 							</div>
-							<div class="modal-footer" style="text-align: center">
+							<div class="modal-footer" style="padding-bottom: 5px;">
 								<div class="col-md text-center">
-									<p class="text-center">
-										<a class="btn btn-primary btn-md" id="btnRet" href="../kyuka/kyukaReg.php" role="button">閉じる </a>
-									</p>
+									<a class="btn btn-primary btn-md" id="btnRet" href="../kyuka/kyukaReg.php" role="button">閉じる </a>
 								</div>
 							</div>
 						</div>
