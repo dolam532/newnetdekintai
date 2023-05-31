@@ -3,69 +3,7 @@
 session_start();
 include('../inc/dbconnect.php');
 include('../inc/message.php');
-
-// Select database from tbl_user table
-if (isset($_POST['searchGrade']) || isset($_POST['searchName'])) {
-	$searchData = $_POST['searchGrade'];
-	$searchName = $_POST['searchName'];
-	$clear = $_POST['clear'];
-
-	if ($clear !== NULL) {
-		unset($_POST);
-		$sql_user = 'SELECT * FROM `tbl_user`';
-	} elseif (!empty($searchData) && empty($searchName)) {
-		$sql_user = "SELECT * FROM `tbl_user` WHERE grade LIKE '%$searchData%'";
-	} elseif (!empty($searchName) && empty($searchData)) {
-		$sql_user = "SELECT * FROM `tbl_user` WHERE name LIKE '%$searchName%'";
-	} else if (!empty($searchData) && !empty($searchName)) {
-		$sql_user = "SELECT * FROM `tbl_user` WHERE grade LIKE '%$searchData%' AND name LIKE '%$searchName%'";
-	} else {
-		$sql_user = 'SELECT * FROM `tbl_user`';
-	}
-} else {
-	$sql_user = 'SELECT * FROM `tbl_user`';
-}
-$result_user = mysqli_query($conn, $sql_user);
-$user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
-
-// Select data from tbl_genba
-$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN (1)';
-$result_genba = mysqli_query($conn, $sql_genba);
-$genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
-
-// Save data to tbl_user table of database
-if (isset($_POST['save'])) {
-	if ($_POST['companyid'] = "") {
-		$_POST['companyid'] = "0";
-	}
-	$_POST['companyid'] = intval($_POST['companyid']);
-	$reg_dt = date('Y-m-d H:i:s');
-
-	$uid = mysqli_real_escape_string($conn, $_POST['uid']);
-	$companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
-	$pwd = mysqli_real_escape_string($conn, $_POST['pwd']);
-	$name = mysqli_real_escape_string($conn, $_POST['name']);
-	$grade = mysqli_real_escape_string($conn, $_POST['grade']);
-	$email = mysqli_real_escape_string($conn, $_POST['email']);
-	$dept = mysqli_real_escape_string($conn, $_POST['dept']);
-	$bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
-	$inymd = mysqli_real_escape_string($conn, $_POST['inymd']);
-	$outymd = mysqli_real_escape_string($conn, $_POST['outymd']);
-	$genba_list = mysqli_real_escape_string($conn, $_POST['genba_list']);
-	$genstrymd = mysqli_real_escape_string($conn, $_POST['genstrymd']);
-	$genendymd = mysqli_real_escape_string($conn, $_POST['genendymd']);
-
-	$gen_id_dev = explode(",", $genba_list);
-	$genid = $gen_id_dev[0];
-
-	$sql_user_i = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) 
-	VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
-	if (mysqli_query($conn, $sql_user_i)) {
-		$_SESSION['save_success'] =  $save_success;
-	} else {
-		echo 'query error: ' . mysqli_error($conn);
-	}
-}
+include('../inc/model.php');
 ?>
 
 <!DOCTYPE html>
@@ -166,12 +104,12 @@ if (isset($_POST['save'])) {
 					</tr>
 				</thead>
 				<tbody>
-					<?php if (empty($user_list)) { ?>
+					<?php if (empty($userlist_list)) { ?>
 						<tr>
 							<td colspan="8" align="center">登録されたデータがありません.</td>
 						</tr>
-						<?php } elseif (!empty($user_list)) {
-						foreach ($user_list as $user) {
+						<?php } elseif (!empty($userlist_list)) {
+						foreach ($userlist_list as $user) {
 						?>
 							<tr>
 								<td><a href="#"><span class="showModal"><?= $user['uid'] ?></span></a></td>
@@ -291,7 +229,7 @@ if (isset($_POST['save'])) {
 							<div class="col-xs-4"></div>
 							<div class="col-xs-2">
 								<p class="text-center">
-									<input type="submit" name="save" class="btn btn-primary btn-md" id="btnReg" role="button" value="登録">
+									<input type="submit" name="SaveUserList" class="btn btn-primary btn-md" id="btnReg" role="button" value="登録">
 								</p>
 							</div>
 							<div class="col-xs-2">
@@ -335,7 +273,7 @@ if (isset($_POST['save'])) {
 			var dept = $("#dept").val();
 			var grade = $("#grade").val();
 
-			<?php foreach ($user_list as $user) : ?>
+			<?php foreach ($userlist_list as $user) : ?>
 				var user_uid = '<?php echo $user["uid"] ?>';
 				if (uid == user_uid) {
 					alert("他の社員が使用しているidです。");

@@ -4,99 +4,9 @@ session_start();
 include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../inc/const_array.php');
-
-// Select data from tbl_user
-$sql_user = 'SELECT `uid`, `name` FROM `tbl_user`';
-$result_user = mysqli_query($conn, $sql_user);
-$user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
-
-// Select data from tbl_codebase
-$sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
-WHERE `tbl_codebase`.`typecode` = 02 GROUP BY `code`, `name`';
-$result_codebase = mysqli_query($conn, $sql_codebase);
-$codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
-
-// Search Button Click
-if ($_POST['btnSearch'] == NULL) {
-	$_POST['searchAllowok'] = "9";
-
-	// Select data from tbl_userkyuka
-	$sql_userkyuka = 'SELECT * FROM `tbl_userkyuka`
-JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
-JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
-WHERE
-    `tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
-	AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
-	AND `tbl_codebase`.`typecode` = 02';
-} elseif ($_POST['btnSearch'] != NULL) {
-	if ($_POST['searchAllowok'] == "9") {
-		$searchNo = ['0', '1'];
-	} else {
-		$searchNo = $_POST['searchAllowok'];
-	}
-	var_dump($searchNo);
-	$sql_userkyuka = "SELECT * FROM `tbl_userkyuka`
-JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
-JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
-WHERE
-	`tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
-	AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
-	AND `tbl_codebase`.`typecode` = 02
-	AND `tbl_userkyuka`.`allowok`='$searchNo'";
-} else {
-}
-$result_userkyuka = mysqli_query($conn, $sql_userkyuka);
-$userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
-
-
-// Save data to tbl_userkyuka table of database
-if (isset($_POST['save'])) {
-	if ($_POST['kyukaid'] = "") {
-		$_POST['kyukaid'] = "0";
-	}
-
-	// 申込区分 時間時
-	if ($_POST['kyukatype'] == "0") {
-		$_POST['totcnt'] = "0";
-		$_POST['ymdcnt'] = "0";
-		$_POST['timecnt'] = "0";
-		$_POST['uid'] = "0";
-		$_POST['vacationid'] = "0";
-		$_POST['kyukaymd'] = "0";
-	}
-
-	$_POST['kyukaid'] = intval($_POST['kyukaid']);
-	$reg_dt = date('Y-m-d H:i:s');
-
-	$uid = mysqli_real_escape_string($conn, $_POST['uid']);
-	$vacationid = mysqli_real_escape_string($conn, $_POST['vacationid']);
-	$kyukaymd = mysqli_real_escape_string($conn, $_POST['kyukaymd']);
-	$kyukaid = mysqli_real_escape_string($conn, $_POST['kyukaid']);
-	$kyukacode = mysqli_real_escape_string($conn, $_POST['kyukacode']);
-	$kyukatype = mysqli_real_escape_string($conn, $_POST['kyukatype']);
-	$strymd = mysqli_real_escape_string($conn, $_POST['strymd']);
-	$endymd = mysqli_real_escape_string($conn, $_POST['endymd']);
-	$strtime = mysqli_real_escape_string($conn, $_POST['strtime']);
-	$endtime = mysqli_real_escape_string($conn, $_POST['endtime']);
-	$ymdcnt = mysqli_real_escape_string($conn, $_POST['ymdcnt']);
-	$inymd = mysqli_real_escape_string($conn, $_POST['inymd']);
-	$timecnt = mysqli_real_escape_string($conn, $_POST['timecnt']);
-	$allowok = mysqli_real_escape_string($conn, $_POST['allowok']);
-	$destcode = mysqli_real_escape_string($conn, $_POST['destcode']);
-	$destplace = mysqli_real_escape_string($conn, $_POST['destplace']);
-	$desttel = mysqli_real_escape_string($conn, $_POST['desttel']);
-
-
-	$sql_userkyuka_i = "INSERT INTO `tbl_userkyuka` (`uid`, `vacationid`, `kyukaymd`, `kyukaid`, `kyukacode`, `kyukatype`, `strymd`, `endymd`, `strtime`, `endtime`, `ymdcnt`, `timecnt`, `allowok`, `destcode`, `destplace`, `desttel`, `reg_dt`) 
-	VALUES('$uid', '$vacationid', '$kyukaymd', '$kyukaid', '$kyukacode' ,'$kyukatype' ,'$strymd', '$endymd', '$strtime', '$endtime', '$ymdcnt', '$timecnt', '$allowok', '$destcode', '$destplace', '$desttel', '$reg_dt')";
-	if (mysqli_query($conn, $sql_userkyuka_i)) {
-		$_SESSION['save_success'] =  $save_success;
-	} else {
-		echo 'query error: ' . mysqli_error($conn);
-	}
-}
-
+include('../inc/model.php');
 ?>
+
 <!DOCTYPE html>
 <html>
 
@@ -155,7 +65,7 @@ if (isset($_POST['save'])) {
 		?>
 		<form method="post">
 			<div class="row">
-				<div class="col-md-2 text-left">
+				<div class="col-md-1 text-left" style="width: 12.499999995%">
 					<div class="title_name">
 						<span class="text-left">休年届</span>
 					</div>
@@ -216,10 +126,11 @@ if (isset($_POST['save'])) {
 					</div>
 				</div>
 
-				<div class="col-md-2 text-right">
+				<div class="col-md-2 text-right" style="width: 20.8%">
 					<div class="title_btn">
-						<input type="submit" name="btnSearch" value="検索 ">&nbsp;&nbsp;&nbsp;
-						<input type="button" id="btnNew" value="新規 ">
+						<input type="submit" name="btnSearch" value="検索 ">&nbsp;
+						<input type="button" id="btnNew" value="新規 ">&nbsp;
+						<input type="button" id="btnAnnt" value="お知らせ ">
 					</div>
 				</div>
 			</div>
@@ -253,7 +164,7 @@ if (isset($_POST['save'])) {
 									<td>
 										<span name="crequestdate"><?= $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'] ?></span>
 									</td>
-									<td><span name="cymdcnt"><?= $userkyuka['ymdcnt'] ?>(<?= $userkyuka['timecnt'] ?>)</span></td>
+									<td><span name="cymdcnt"><?= $userkyuka['ymdcnt'] ?>日(<?= $userkyuka['timecnt'] ?>時)</span></td>
 									<td><span name="cvacationdate"><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
 									<td><span name="ctotcnt"><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
 									<td><span name="crestcnt"><?= date('d', strtotime($userkyuka['endymd']) - strtotime($userkyuka['strymd'])) - 1 ?></span></td>
@@ -404,7 +315,7 @@ if (isset($_POST['save'])) {
 								</div>
 								<div class="col-md-2">
 									<p class="text-center">
-										<input type="submit" name="save" class="btn btn-primary btn-md" id="btnReg" role="button" value="登録">
+										<input type="submit" name="SaveKyuka" class="btn btn-primary btn-md" id="btnReg" role="button" value="登録">
 									</p>
 								</div>
 								<div class="col-md-2">
@@ -414,101 +325,172 @@ if (isset($_POST['save'])) {
 								</div>
 								<div class="col-md-2">
 									<p class="text-center">
-										<a class="btn btn-primary btn-md" id="btnRet" href="http://localhost:8080/web/kyuka/kyukaReg#" role="button">閉じる </a>
+										<a class="btn btn-primary btn-md" id="btnRet" href="../kyuka/kyukaReg.php" role="button">閉じる </a>
 									</p>
 								</div>
-								<div class="col-md-2"></div>
 							</div>
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
-	</div>
-	<script>
-		//신규버튼 
-		$(document).on('click', '#btnNew', function(e) {
-			$('#modal').modal('toggle');
 
-			$("#kyukaymd").val("").prop('disabled', true);
+		<div class="row">
+			<div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header"><span style="font-size:20px;font-weight: bold;">お知らせ(注意)</span>
+							<button class="close" data-dismiss="modal">x</button>
+						</div>
 
-			//신규때는 신청구분 선택하기 전에는 사용 불가
-			$("#strymd").val("").prop('disabled', true);
-			$("#endymd").val("").prop('disabled', true);
-			//휴가신청 타입(일/시간) 
-			$('input[name="kyukatype"]').prop('checked', false);
-			//휴가중 연락처
-			$('input[name="destcode"]').prop('checked', false);
+						<div class="modal-body" style="text-align: left">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="alert alert-warning">
+										<strong>1&nbsp;</strong>事前許可が必要なので、担当者に許可の届け (休暇届) を提出すること。<br>
+										<strong>&nbsp;・</strong>原則として1週間前までに、少なくとも前々日までに提出すること。<br>
+										<strong>&nbsp;・</strong>連続4日以上 (所定休日が含まれる場合を含む。) の休暇を取得するときは、1ヵ月前までに提出すること。<br>
+										<strong>&nbsp;・</strong>緊急・病気の場合は、その時点ですぐに提出すること。<br>
+										<strong>2&nbsp;</strong>年間で5日分はその年で必ず取ること。<br>
+										<strong>3&nbsp;</strong>有給休暇は1年に限って繰り越しできます (2の5日分は除外、 0.5日分は除外)。<br>
+										<strong>4&nbsp;</strong>半休(5時間以内)の場合は0.5日にて表現してください。その他詳しい内容は担当者に聞いてください。
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="alert alert-info" style="margin-bottom: 10px;">
+										<strong>※&nbsp;年次有給休暇</strong>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<table class="table table-bordered datatable">
+										<thead>
+											<tr>
+												<th class="info" style="text-align: center; color: #31708f;">勤続年数</th>
+												<td style="text-align: center;">6ヵ月以内</td>
+												<td style="text-align: center;">6ヵ月</td>
+												<td style="text-align: center;">1年6ヵ月</td>
+												<td style="text-align: center;">2年6ヵ月</td>
+												<td style="text-align: center;">3年6ヵ月</td>
+												<td style="text-align: center;">4年6ヵ月</td>
+												<td style="text-align: center;">5年6ヵ月</td>
+												<td style="text-align: center;">5年6ヵ月以上</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<th class="info" style="text-align: center; color: #31708f;">付与日数</th>
+												<td style="text-align: center;">無し</td>
+												<td style="text-align: center;">10日</td>
+												<td style="text-align: center;">11日</td>
+												<td style="text-align: center;">12日</td>
+												<td style="text-align: center;">14日</td>
+												<td style="text-align: center;">16日</td>
+												<td style="text-align: center;">18日</td>
+												<td style="text-align: center;">20日</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="modal-footer" style="text-align: center">
+								<div class="col-md text-center">
+									<p class="text-center">
+										<a class="btn btn-primary btn-md" id="btnRet" href="../kyuka/kyukaReg.php" role="button">閉じる </a>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<script>
+				//신규버튼 
+				$(document).on('click', '#btnNew', function(e) {
+					$('#modal').modal('toggle');
 
-			$("#vacationid").val("");
-			$("#vacationstr").val("");
-			$("#vacationend").val("");
+					$("#kyukaymd").val("").prop('disabled', true);
 
-			$("#totcnt").val("0").prop('disabled', true);
-			$("#usecnt").val("").prop('disabled', true);
-			//신규때는 신청구분 선택하기 전에는 사용 불가
-			$("#strtime").val("").prop('disabled', true);
-			$("#endtime").val("").prop('disabled', true);
+					//신규때는 신청구분 선택하기 전에는 사용 불가
+					$("#strymd").val("").prop('disabled', true);
+					$("#endymd").val("").prop('disabled', true);
+					//휴가신청 타입(일/시간) 
+					$('input[name="kyukatype"]').prop('checked', false);
+					//휴가중 연락처
+					$('input[name="destcode"]').prop('checked', false);
 
-			$("#usetime").val("").prop('disabled', true);
-			$("#restcnt").val("").prop('disabled', true);
-			$("#kyukatimelimit").val("");
+					$("#vacationid").val("");
+					$("#vacationstr").val("");
+					$("#vacationend").val("");
 
-			$("#ymdcnt").val("").prop('disabled', true);
-			$("#timecnt").val("").prop('disabled', true);
+					$("#totcnt").val("0").prop('disabled', true);
+					$("#usecnt").val("").prop('disabled', true);
+					//신규때는 신청구분 선택하기 전에는 사용 불가
+					$("#strtime").val("").prop('disabled', true);
+					$("#endtime").val("").prop('disabled', true);
 
-			$("#kyukaname").focus();
-		});
+					$("#usetime").val("").prop('disabled', true);
+					$("#restcnt").val("").prop('disabled', true);
+					$("#kyukatimelimit").val("");
 
-		//휴가신청 타입(일/시간) 선택시 항목 잠그고 풀기  
-		$('input[type=radio][name=kyukatype]').change(function() {
-			if (this.value == '1') {
-				//일 선택
-				$("#strymd").prop('disabled', false);
-				$("#endymd").prop('disabled', false);
-				$("#strtime").prop('disabled', true);
-				$("#endtime").prop('disabled', true);
-				$("#strtime").val(0);
-				$("#endtime").val(0);
-				$("#timecnt").val(0);
-				$("#ymdcnt").val("NaN");
-			} else if (this.value == '0') {
-				//시간 선택
-				$("#strymd").prop('disabled', false);
-				$("#endymd").prop('disabled', true);
-				$("#strtime").prop('disabled', false);
-				$("#endtime").prop('disabled', false);
+					$("#ymdcnt").val("").prop('disabled', true);
+					$("#timecnt").val("").prop('disabled', true);
 
-				//일자<=>시간 변경시 일수계산을 0으로 한다. 
-				$("#ymdcnt").val(0);
-				$("#strtime").val(0);
-				$("#endtime").val(0);
-				$("#timecnt").val(0);
-			}
-		});
+					$("#kyukaname").focus();
+				});
 
-		//휴가중 연락처
-		$('input[type=radio][name=destcode]').change(function() {
-			if (this.value == '0') {
-				//일본
-				$("#destplace").val("日本").prop('disabled', true);
-			} else if (this.value == '1') {
-				//한국
-				$("#destplace").val("韓国").prop('disabled', true);
-			} else {
-				//기타
-				$("#destplace").val("").prop('disabled', false);
-			}
-		});
+				//휴가신청 타입(일/시간) 선택시 항목 잠그고 풀기  
+				$('input[type=radio][name=kyukatype]').change(function() {
+					if (this.value == '1') {
+						//일 선택
+						$("#strymd").prop('disabled', false);
+						$("#endymd").prop('disabled', false);
+						$("#strtime").prop('disabled', true);
+						$("#endtime").prop('disabled', true);
+						$("#strtime").val(0);
+						$("#endtime").val(0);
+						$("#timecnt").val(0);
+						$("#ymdcnt").val("NaN");
+					} else if (this.value == '0') {
+						//시간 선택
+						$("#strymd").prop('disabled', false);
+						$("#endymd").prop('disabled', true);
+						$("#strtime").prop('disabled', false);
+						$("#endtime").prop('disabled', false);
 
-		//Datepeeker 설정 strtime
-		$("#strymd").datepicker({
-			dateFormat: 'yy/mm/dd'
-		});
-		$("#endymd").datepicker({
-			dateFormat: 'yy/mm/dd'
-		});
-	</script>
+						//일자<=>시간 변경시 일수계산을 0으로 한다. 
+						$("#ymdcnt").val(0);
+						$("#strtime").val(0);
+						$("#endtime").val(0);
+						$("#timecnt").val(0);
+					}
+				});
+
+				//휴가중 연락처
+				$('input[type=radio][name=destcode]').change(function() {
+					if (this.value == '0') {
+						//일본
+						$("#destplace").val("日本").prop('disabled', true);
+					} else if (this.value == '1') {
+						//한국
+						$("#destplace").val("韓国").prop('disabled', true);
+					} else {
+						//기타
+						$("#destplace").val("").prop('disabled', false);
+					}
+				});
+
+				//Datepeeker 설정 strtime
+				$("#strymd").datepicker({
+					dateFormat: 'yy/mm/dd'
+				});
+				$("#endymd").datepicker({
+					dateFormat: 'yy/mm/dd'
+				});
+
+				$(document).on('click', '#btnAnnt', function(e) {
+					$('#modal2').modal('toggle');
+				});
+			</script>
 </body>
 
 </html>
