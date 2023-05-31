@@ -105,18 +105,36 @@ WHERE
 	AND `tbl_codebase`.`typecode` = 02';
 } elseif ($_POST['btnSearch'] != NULL) {
     if ($_POST['searchAllowok'] == "9") {
-        $searchNo = ['0', '1'];
+        $ArrayAll = ['0', '1'];
+        $searchAllowok = implode('","', $ArrayAll);
     } else {
-        $searchNo = $_POST['searchAllowok'];
+        $searchAllowok = $_POST['searchAllowok'];
     }
-    $sql_userkyuka = "SELECT * FROM `tbl_userkyuka`
-JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
-JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
-WHERE
-	`tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
-	AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
-	AND `tbl_codebase`.`typecode` = 02
-	AND `tbl_userkyuka`.`allowok`='$searchNo'";
+    if (!empty($_POST['searchUid']) && !empty($_POST['searchAllowok'])) {
+        $searchUid = $_POST['searchUid'];
+        $sql_userkyuka = 'SELECT * FROM `tbl_userkyuka`
+    JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
+    JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
+    JOIN `tbl_vacationinfo` ON `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid`
+    WHERE
+        `tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
+        AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
+        AND `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid` 
+        AND `tbl_codebase`.`typecode` = 02
+        AND `tbl_userkyuka`.`allowok` IN ("' . $searchAllowok . '")
+        AND `tbl_user`.`uid` IN ("' . $searchUid . '")';
+    }elseif(!empty($_POST['searchAllowok'] && empty($_POST['searchUid']))){
+    $sql_userkyuka = 'SELECT * FROM `tbl_userkyuka`
+    JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
+    JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
+    JOIN `tbl_vacationinfo` ON `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid`
+    WHERE
+        `tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
+        AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
+        AND `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid` 
+        AND `tbl_codebase`.`typecode` = 02
+        AND `tbl_userkyuka`.`allowok` IN ("' . $searchAllowok . '")';
+    }
 } else {
 }
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);

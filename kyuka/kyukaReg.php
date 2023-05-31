@@ -96,7 +96,11 @@ include('../inc/model.php');
 								<?php
 								foreach ($user_list as $value) {
 								?>
-									<option value="<?= $value['uid'] ?>"><?= $value['name'] ?></option>
+									<option value="<?= $value['uid'] ?>" <?php if ($value['name'] == $_POST['searchUid']) {
+																				echo ' selected="selected"';
+																			} ?>>
+										<?= $value['name'] ?>
+									</option>
 								<?php
 								}
 								?>
