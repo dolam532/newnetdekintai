@@ -90,16 +90,20 @@ $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
 // Select data from tbl_userkyuka
-$sql_userkyuka_select_db = 'SELECT * FROM `tbl_userkyuka`
- JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
- JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
- JOIN `tbl_vacationinfo` ON `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid`
- JOIN `tbl_workmonth` ON `tbl_workmonth`.`uid` = `tbl_userkyuka`.`uid`
- WHERE
-     `tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
-     AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
-     AND `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid` 
-     AND `tbl_codebase`.`typecode` = 02';
+$sql_userkyuka_select_db = 'SELECT DISTINCT
+`tbl_userkyuka`.*,
+`tbl_user`.`name`,
+`tbl_vacationinfo`.`vacationstr`,
+`tbl_vacationinfo`.`vacationend`,
+`tbl_vacationinfo`.`oldcnt`,
+`tbl_vacationinfo`.`newcnt`
+FROM
+`tbl_userkyuka`
+CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`uid` = `tbl_user`.`uid`
+CROSS JOIN `tbl_codebase` ON `tbl_userkyuka`.`kyukacode` = `tbl_codebase`.`code`
+CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinfo`.`vacationid`
+WHERE
+`tbl_codebase`.`typecode` = 02';
 
 // Search Button Click
 $sql_userkyuka_select = mysqli_query($conn, $sql_userkyuka_select_db);
@@ -118,6 +122,7 @@ if ($_POST['btnSearch'] == NULL) {
     $_POST['searchAllowok'] = "9";
     $sql_userkyuka = $sql_userkyuka_select_db;
 } elseif ($_POST['btnSearch'] != NULL) {
+
     if ($_POST['searchAllowok'] == "9") {
         $searchAllowok = implode('","', $AllowOk);
     } else {
@@ -130,23 +135,27 @@ if ($_POST['btnSearch'] == NULL) {
     }
     if ($_POST['searchYY'] == "") {
         $searchYY = implode('","', $WorkYM);
-        $searchYY = substr($searchYY, 0,4);
+        $searchYY = substr($searchYY, 0, 4);
     } else {
         $searchYY = $_POST['searchYY'];
     }
-    $sql_userkyuka = 'SELECT * FROM `tbl_userkyuka`
-    JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
-    JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
-    JOIN `tbl_vacationinfo` ON `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid`
-    JOIN `tbl_workmonth` ON `tbl_workmonth`.`uid` = `tbl_userkyuka`.`uid`
+    $sql_userkyuka = 'SELECT DISTINCT
+    `tbl_userkyuka`.*,
+    `tbl_user`.`name`,
+    `tbl_vacationinfo`.`vacationstr`,
+    `tbl_vacationinfo`.`vacationend`,
+    `tbl_vacationinfo`.`oldcnt`,
+    `tbl_vacationinfo`.`newcnt`
+FROM
+    `tbl_userkyuka`
+CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`uid` = `tbl_user`.`uid`
+CROSS JOIN `tbl_codebase` ON `tbl_userkyuka`.`kyukacode` = `tbl_codebase`.`code`
+CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinfo`.`vacationid`
     WHERE
-        `tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
-        AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
-        AND `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid` 
-        AND `tbl_codebase`.`typecode` = 02
-        AND `tbl_userkyuka`.`allowok` IN ("' . $searchAllowok . '")
-        AND `tbl_user`.`uid` IN ("' . $searchUid . '")
-        AND LEFT(`tbl_workmonth`.`workym`, 4)  IN ("' . $searchYY . '")';
+        `tbl_userkyuka`.`allowok` IN("' . $searchAllowok . '") 
+        AND `tbl_user`.`uid` IN ("' . $searchUid . '") 
+        AND LEFT(`tbl_userkyuka`.`kyukaymd`, 4)  IN ("' . $searchYY . '")
+        AND `tbl_codebase`.`typecode` = 02';
 }
 
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
