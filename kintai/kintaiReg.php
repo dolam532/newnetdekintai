@@ -13,8 +13,7 @@
 	<!-- common Javascript -->
 	<script type="text/javascript" src="../assets/js/common.js"> </script>
 
-		<!-- common Javascript -->
-		<script type="text/javascript" src="../assets/js/kintaiReg.js"> </script>
+
 
 	<!-- Datepeeker 위한 link -->
 	<link rel="stylesheet" href="../assets/css/jquery-ui.min.css">
@@ -41,28 +40,32 @@
 <?php
 // Include const.php
 require_once '../inc/const.php';
-
+include('../inc/message.php');
 ?>
 
 <script>
+	var KINTAI_NODATA_WORKYEARMONTHDAY = "<?php echo $KINTAI_NODATA_WORKYEARMONTHDAY; ?>";
+
+
 	// ***Handler Script ****
-	
+
 	//================================/// 
-    //=========== init======//     
-    //============================///  
+	//=========== init======//     
+	//============================///  
 	document.addEventListener('DOMContentLoaded', function () {
 		var currentDate = new Date();
-		var currentMonth = currentDate.getMonth() + 1; // Month is zero-based in JavaScript
+		var currentMonth = currentDate.getMonth(); // Month is zero-based in JavaScript
 		var currentYear = currentDate.getFullYear();
-		drawDayOfMonth(currentYear, currentMonth);
-
-	}, false);
-
+		document.getElementById('selyy').value = currentYear;
+		document.getElementById('selmm').value = currentMonth < 10 ? '0' + currentMonth : currentMonth;
+		handleDateChange(currentYear, currentMonth);
+	});
 	//================================/// 
-    //======= Add Day Of Month ======//     
-    //============================///  
-	function drawDayOfMonth(showYear, showMonth) {
+	//======= Add Day Of Month ======//     
+	//============================///  
+	function drawDayOfMonth(showYear, showMonth, listDataWorkymd) {
 		var daysInMonth = new Date(showYear, showMonth, 0).getDate();
+
 		var dayOfWeekNames = {
 			'Mon': '月',
 			'Tue': '火',
@@ -73,90 +76,159 @@ require_once '../inc/const.php';
 			'Sun': '日'
 		};
 		var html = '';
-		for (var day = 1; day <= daysInMonth; day++) {
-			var formattedDate = ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2);
-			var dateObj = new Date(showYear, showMonth - 1, day);
-			var dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
-			var dayOfWeekJapanese = dayOfWeekNames[dayOfWeek];
+		//=====//PARAMETER listDataWorkymd is null 
+		if (listDataWorkymd === null) {
+			
+			html = '';
+			for (var day = 1; day <= daysInMonth; day++) {
+				var formattedDate = ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2);
+				var dateObj = new Date(showYear, showMonth - 1, day);
+				var dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+				var dayOfWeekJapanese = dayOfWeekNames[dayOfWeek];
+				html += '<tr>';
+				html += '<td>';
+				html += '<a href="http://localhost:8080/web/kintai/kintaiReg#" onclick="fnClickTitle(' + (day - 1) + '); return false;">';
+				html += '<span>' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+				html += '</a>';
+				html += '</td>';
+				html += '<td><span name="cdaystarthh"></span>:<span name="cdaystartmm"></span></td>';
+				html += '<td><span name="cdayendhh"></span>:<span name="cdayendmm"></span></td>';
+				html += '<td><span name="cjobstarthh"></span>:<span name="cjobstartmm"></span></td>';
+				html += '<td><span name="cjobendhh"></span>:<span name="cjobendmm"></span></td>';
+				html += '<td><span name="cofftimehh"></span>:<span name="cofftimemm"></span></td>';
+				html += '<td><span name="cworkhh"></span></td>';
+				html += '<td><span name="cworkmm"></span></td>';
+				html += '<td><span name="cjanhh"></span>:<span name="cjanmm"></span></td>';
+				html += '<td style="text-align:left"><span name="ccomment"></span></td>';
+				html += '<td style="text-align:left"><span name="cbigo"></span>';
+				html += '<input type="hidden" name="tuid" value="admin">';
+				html += '<input type="hidden" name="tgenid" value="0">';
+				html += '<input type="hidden" name="tworkymd" value="' + showYear + '/' + ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2) + '">';
+				html += '<input type="hidden" name="tdaystarthh" value="">';
+				html += '<input type="hidden" name="tdaystartmm" value="">';
+				html += '<input type="hidden" name="tdayendhh" value="">';
+				html += '<input type="hidden" name="tdayendmm" value="">';
+				html += '<input type="hidden" name="tjobstarthh" value="">';
+				html += '<input type="hidden" name="tjobstartmm" value="">';
+				html += '<input type="hidden" name="tjobendhh" value="">';
+				html += '<input type="hidden" name="tjobendmm" value="">';
+				html += '<input type="hidden" name="tofftimehh" value="">';
+				html += '<input type="hidden" name="tofftimemm" value="">';
+				html += '<input type="hidden" name="tworkhh" value="">';
+				html += '<input type="hidden" name="tworkmm" value="">';
+				html += '<input type="hidden" name="tcomment" value="">';
+				html += '<input type="hidden" name="tbigo" value="">';
+				html += '</td>';
+				html += '</tr>';
+			}
+		} else { //=====//PARAMETER listDataWorkymd not null 
+			html = '';
+			// convert data 
+			var jsonData = JSON.parse(listDataWorkymd);
+			const workYmdList = jsonData.workYmdList;
+			for (var i = 0; i < workYmdList.length; i++) {
+				var data = workYmdList[i];
+				var day = i + 1;
+				var formattedDate = '';
+				if (data && data.workymd) {
+					formattedDate = data.workymd.replace(/\//g, '-');
+				}
+				var formattedDate = ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2);
+				var dateObj = new Date(showYear, showMonth - 1, day);
+				var dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+				var dayOfWeekJapanese = dayOfWeekNames[dayOfWeek];
+				
+				//Create HTML for one row
+				html += '<tr>';
+				html += '<td>';
+				html += '<a href="#" onclick="fnClickTitle(' + i + '); return false;">';
+				html += '<span>' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+				html += '</a>';
+				html += '</td>';
+				html += '<td><span name="cdaystarthh">' + (data.daystarthh || '') + '</span>:<span name="cdaystartmm">' + (data.daystartmm || '') + '</span></td>';
+				html += '<td><span name="cdayendhh">' + (data.dayendhh || '') + '</span>:<span name="cdayendmm">' + (data.dayendmm || '') + '</span></td>';
+				html += '<td><span name="cjobstarthh">' + (data.jobstarthh || '') + '</span>:<span name="cjobstartmm">' + (data.jobstartmm || '') + '</span></td>';
+				html += '<td><span name="cjobendhh">' + (data.jobendhh || '') + '</span>:<span name="cjobendmm">' + (data.jobendmm || '') + '</span></td>';
+				html += '<td><span name="cofftimehh">' + (data.offtimehh || '') + '</span>:<span name="cofftimemm">' + (data.offtimemm || '') + '</span></td>';
+				html += '<td><span name="cworkhh">' + (data.workhh || '') + '</span></td>';
+				html += '<td><span name="cworkmm">' + (data.workmm || '') + '</span></td>';
+				html += '<td><span name="cjanhh">' + (data.janhh || '') + '</span>:<span name="cjanmm">' + (data.janmm || '') + '</span></td>';
+				html += '<td><span name="ccomment">' + (data.comment || '') + '</span></td>';
+				html += '<td><span name="cbigo">' + (data.bigo || '') + '</span>';
+				html += '<input type="hidden" name="tuid" value="' + data.uid + '">';
+				html += '<input type="hidden" name="tgenid" value="' + data.genid + '">';
+				html += '<input type="hidden" name="tworkymd" value="' + showYear + '/' + ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2) + '">';
+				html += '<input type="hidden" name="tdaystarthh" value="' + (data.daystarthh || '') + '">';
+				html += '<input type="hidden" name="tdaystartmm" value="' + (data.daystartmm || '') + '">';
+				html += '<input type="hidden" name="tdayendhh" value="' + (data.dayendhh || '') + '">';
+				html += '<input type="hidden" name="tdayendmm" value="' + (data.dayendmm || '') + '">';
+				html += '<input type="hidden" name="tjobstarthh" value="' + (data.jobstarthh || '') + '">';
+				html += '<input type="hidden" name="tjobstartmm" value="' + (data.jobstartmm || '') + '">';
+				html += '<input type="hidden" name="tjobendhh" value="' + (data.jobendhh || '') + '">';
+				html += '<input type="hidden" name="tjobendmm" value="' + (data.jobendmm || '') + '">';
+				html += '<input type="hidden" name="tofftimehh" value="' + (data.offtimehh || '') + '">';
+				html += '<input type="hidden" name="tofftimemm" value="' + (data.offtimemm || '') + '">';
+				html += '<input type="hidden" name="tworkhh" value="' + (data.workhh || '') + '">';
+				html += '<input type="hidden" name="tworkmm" value="' + (data.workmm || '') + '">';
+				html += '<input type="hidden" name="tcomment" value="' + (data.comment || '') + '">';
+				html += '<input type="hidden" name="tbigo" value="' + (data.bigo || '') + '">';
+				html += '</td>';
+				html += '</tr>';
+			}
 
-			html += '<tr>';
-			html += '<td>';
-			html += '<a href="http://localhost:8080/web/kintai/kintaiReg#" onclick="fnClickTitle(' + (day - 1) + '); return false;">';
-			html += '<span>' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
-			html += '</a>';
-			html += '</td>';
-			html += '<td><span name="cdaystarthh"></span>:<span name="cdaystartmm"></span></td>';
-			html += '<td><span name="cdayendhh"></span>:<span name="cdayendmm"></span></td>';
-			html += '<td><span name="cjobstarthh"></span>:<span name="cjobstartmm"></span></td>';
-			html += '<td><span name="cjobendhh"></span>:<span name="cjobendmm"></span></td>';
-			html += '<td><span name="cofftimehh"></span>:<span name="cofftimemm"></span></td>';
-			html += '<td><span name="cworkhh"></span></td>';
-			html += '<td><span name="cworkmm"></span></td>';
-			html += '<td><span name="cjanhh"></span>:<span name="cjanmm"></span></td>';
-			html += '<td style="text-align:left"><span name="ccomment"></span></td>';
-			html += '<td style="text-align:left"><span name="cbigo"></span>';
-			html += '<input type="hidden" name="tuid" value="admin">';
-			html += '<input type="hidden" name="tgenid" value="0">';
-			html += '<input type="hidden" name="tworkymd" value="' + showYear + '/' + ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2) + '">';
-			html += '<input type="hidden" name="tdaystarthh" value="">';
-			html += '<input type="hidden" name="tdaystartmm" value="">';
-			html += '<input type="hidden" name="tdayendhh" value="">';
-			html += '<input type="hidden" name="tdayendmm" value="">';
-			html += '<input type="hidden" name="tjobstarthh" value="">';
-			html += '<input type="hidden" name="tjobstartmm" value="">';
-			html += '<input type="hidden" name="tjobendhh" value="">';
-			html += '<input type="hidden" name="tjobendmm" value="">';
-			html += '<input type="hidden" name="tofftimehh" value="">';
-			html += '<input type="hidden" name="tofftimemm" value="">';
-			html += '<input type="hidden" name="tworkhh" value="">';
-			html += '<input type="hidden" name="tworkmm" value="">';
-			html += '<input type="hidden" name="tcomment" value="">';
-			html += '<input type="hidden" name="tbigo" value="">';
-			html += '</td>';
-			html += '</tr>';
 		}
+
 		// Update the table body with the generated HTML
 		document.getElementById('dayOfMonthTableBody').innerHTML = html;
 	}
 
 
 
-   //====================================================================/// 
-    //======= Funtion for click day of week --> show register ======//     
-    //============================================================///  
+	//====================================================================/// 
+	//======= Funtion for click day of week --> show register ======//     
+	//============================================================///  
 	function fnClickTitle(DayOfMonth) {
 		console.log(DayOfMonth);
 	}
 
-   //====================================================================/// 
-    //=======function for bind change year month combo box==============//     
-    //============================================================///  
-function handleDateChange(selectedYear, selectedMonth) {
+	//====================================================================/// 
+	//=======function for bind change year month combo box==============//     
+	//============================================================///  
+	function handleDateChange(selectedYear, selectedMonth) {
 
-  var dayOfMonthTableBody = document.getElementById('dayOfMonthTableBody');
+		var dayOfMonthTableBody = document.getElementById('dayOfMonthTableBody');
 
-  // Create an AJAX request to fetch the list of days in the selected month and year from PHP file or API
-  var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() {
-    if (xhr.readyState === XMLHttpRequest.DONE) {
-      if (xhr.status === 200) {
-        // Get the tbody element to update the content
-       
-        // Update the content with the response
-        dayOfMonthTableBody.innerHTML = xhr.responseText;
-      } else {  // no data 
-        console.error('Error: ' + xhr.status);
 
-		//dayOfMonthTableBody.innerHTML = "";
-		drawDayOfMonth(selectedYear , selectedMonth);
-      }
-    }
-  };
+		// Create an AJAX request to fetch the list of days in the selected month and year from PHP file or API
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState === XMLHttpRequest.DONE) {
+				if (xhr.status === 200) {
+					// Get the tbody element to update the content
+					// if database no value 
+					if (JSON.parse(xhr.responseText) === KINTAI_NODATA_WORKYEARMONTHDAY) {		
+						drawDayOfMonth(selectedYear, selectedMonth, null);
+						return xhr.responseText;
+						// database have value 
+					} else {
+						//console.log(xhr.responseText);
+						drawDayOfMonth(selectedYear, selectedMonth, xhr.responseText);
+						return xhr.responseText;
+					}
+				} else {
+					console.error('Error: ' + xhr.status);
+					drawDayOfMonth(selectedYear, selectedMonth, null);
+				}
+			}
+		};
 
-  // Send the AJAX request to retrieve the list of days in the selected month and year
-  xhr.open('GET', 'get-day-of-month.php?year=' + selectedYear + '&month=' + selectedMonth, true);
-  xhr.send();
-}
+		// Send the AJAX request to retrieve the list of days in the selected month and year
+		// Check Security -> user can view 
+		// get data of kintaiymd of user => GET 
+		// xhr.open('GET', 'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=getKintaiymd', true);
+		xhr.open('GET', 'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=getKintaiymd', true);
+		xhr.send();
+	}
 
 </script>
 

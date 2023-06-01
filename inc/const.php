@@ -8,3 +8,4 @@ DEFINE('DB_NAME', 'newndk');
 
 
 define('START_SHOW_YEAR_KINMUHYO' , '1950');
+

@@ -1,0 +1,20 @@
+{
+    "name": "ganasys/newnetdekintai",
+    "autoload": {
+        "psr-4": {
+            "Ganasys\\Newnetdekintai\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Marucho2020",
+            "email": "115078558+Marucho2020@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "php-di/php-di": "^6.4"
+    }
+
+
+       
+}
