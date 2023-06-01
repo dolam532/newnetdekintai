@@ -92,11 +92,11 @@ include('../inc/model.php');
 					<div class="title_condition">
 						<label>社員名 :
 							<select id="searchUid" name="searchUid" style="padding:5px;">
-								<option value="" selected=""></option>
+								<option value="" selected="">選択なし</option>
 								<?php
 								foreach ($user_list as $value) {
 								?>
-									<option value="<?= $value['uid'] ?>" <?php if ($value['name'] == $_POST['searchUid']) {
+									<option value="<?= $value['uid'] ?>" <?php if ($value['uid'] == $_POST['searchUid']) {
 																				echo ' selected="selected"';
 																			} ?>>
 										<?= $value['name'] ?>
@@ -113,11 +113,11 @@ include('../inc/model.php');
 					<div class="title_condition">
 						<label>基準日 :
 							<select id="searchYY" name="searchYY" style="padding:5px;">
-								<option value="" selected="selected"></option>
+								<option value="" selected="selected">選択なし</option>
 								<?php
 								foreach (ConstArray::$search_year as $key => $value) {
 								?>
-									<option value="<?= $key ?>" <?php if ($value == date("Y")) {
+									<option value="<?= $key ?>" <?php if ($value == $_POST['searchYY']) {
 																	echo ' selected="selected"';
 																} ?>>
 										<?= $value ?>

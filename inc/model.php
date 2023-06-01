@@ -89,54 +89,66 @@ WHERE `tbl_codebase`.`typecode` = 02 GROUP BY `code`, `name`';
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
+// Select data from tbl_userkyuka
+$sql_userkyuka_select_db = 'SELECT * FROM `tbl_userkyuka`
+ JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
+ JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
+ JOIN `tbl_vacationinfo` ON `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid`
+ JOIN `tbl_workmonth` ON `tbl_workmonth`.`uid` = `tbl_userkyuka`.`uid`
+ WHERE
+     `tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
+     AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
+     AND `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid` 
+     AND `tbl_codebase`.`typecode` = 02';
+
 // Search Button Click
+$sql_userkyuka_select = mysqli_query($conn, $sql_userkyuka_select_db);
+$result_userkyuka_select = mysqli_fetch_all($sql_userkyuka_select, MYSQLI_ASSOC);
+if (!empty($result_userkyuka_select)) {
+    foreach ($result_userkyuka_select as $key) {
+        $AllowOk[] = $key['allowok'];
+        $UId[] = $key['uid'];
+        $WorkYM[] = $key['workym'];
+    }
+}
+$AllowOk = array_unique($AllowOk);
+$UId = array_unique($UId);
+$WorkYM = array_unique($WorkYM);
 if ($_POST['btnSearch'] == NULL) {
     $_POST['searchAllowok'] = "9";
-
-    // Select data from tbl_userkyuka
-    $sql_userkyuka = 'SELECT * FROM `tbl_userkyuka`
-JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
-JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
-JOIN `tbl_vacationinfo` ON `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid`
-WHERE
-    `tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
-	AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
-	AND `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid` 
-	AND `tbl_codebase`.`typecode` = 02';
+    $sql_userkyuka = $sql_userkyuka_select_db;
 } elseif ($_POST['btnSearch'] != NULL) {
     if ($_POST['searchAllowok'] == "9") {
-        $ArrayAll = ['0', '1'];
-        $searchAllowok = implode('","', $ArrayAll);
+        $searchAllowok = implode('","', $AllowOk);
     } else {
         $searchAllowok = $_POST['searchAllowok'];
     }
-    if (!empty($_POST['searchUid']) && !empty($_POST['searchAllowok'])) {
+    if ($_POST['searchUid'] == "") {
+        $searchUid = implode('","', $UId);
+    } else {
         $searchUid = $_POST['searchUid'];
-        $sql_userkyuka = 'SELECT * FROM `tbl_userkyuka`
+    }
+    if ($_POST['searchYY'] == "") {
+        $searchYY = implode('","', $WorkYM);
+        $searchYY = substr($searchYY, 0,4);
+    } else {
+        $searchYY = $_POST['searchYY'];
+    }
+    $sql_userkyuka = 'SELECT * FROM `tbl_userkyuka`
     JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
     JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
     JOIN `tbl_vacationinfo` ON `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid`
+    JOIN `tbl_workmonth` ON `tbl_workmonth`.`uid` = `tbl_userkyuka`.`uid`
     WHERE
         `tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
         AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
         AND `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid` 
         AND `tbl_codebase`.`typecode` = 02
         AND `tbl_userkyuka`.`allowok` IN ("' . $searchAllowok . '")
-        AND `tbl_user`.`uid` IN ("' . $searchUid . '")';
-    }elseif(!empty($_POST['searchAllowok'] && empty($_POST['searchUid']))){
-    $sql_userkyuka = 'SELECT * FROM `tbl_userkyuka`
-    JOIN `tbl_user` ON `tbl_user`.`uid` = `tbl_userkyuka`.`uid`
-    JOIN `tbl_codebase` ON `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode`
-    JOIN `tbl_vacationinfo` ON `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid`
-    WHERE
-        `tbl_user`.`uid` = `tbl_userkyuka`.`uid` 
-        AND `tbl_codebase`.`code` = `tbl_userkyuka`.`kyukacode` 
-        AND `tbl_vacationinfo`.`vacationid` = `tbl_userkyuka`.`vacationid` 
-        AND `tbl_codebase`.`typecode` = 02
-        AND `tbl_userkyuka`.`allowok` IN ("' . $searchAllowok . '")';
-    }
-} else {
+        AND `tbl_user`.`uid` IN ("' . $searchUid . '")
+        AND LEFT(`tbl_workmonth`.`workym`, 4)  IN ("' . $searchYY . '")';
 }
+
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 
