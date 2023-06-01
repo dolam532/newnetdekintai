@@ -13,8 +13,6 @@
 	<!-- common Javascript -->
 	<script type="text/javascript" src="../assets/js/common.js"> </script>
 
-
-
 	<!-- Datepeeker 위한 link -->
 	<link rel="stylesheet" href="../assets/css/jquery-ui.min.css">
 	<script src="../assets/js/jquery-ui.min.js"></script>
@@ -42,13 +40,9 @@
 require_once '../inc/const.php';
 include('../inc/message.php');
 ?>
-
 <script>
 	var KINTAI_NODATA_WORKYEARMONTHDAY = "<?php echo $KINTAI_NODATA_WORKYEARMONTHDAY; ?>";
-
-
 	// ***Handler Script ****
-
 	//================================/// 
 	//=========== init======//     
 	//============================///  
@@ -78,7 +72,6 @@ include('../inc/message.php');
 		var html = '';
 		//=====//PARAMETER listDataWorkymd is null 
 		if (listDataWorkymd === null) {
-			
 			html = '';
 			for (var day = 1; day <= daysInMonth; day++) {
 				var formattedDate = ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2);
@@ -181,23 +174,17 @@ include('../inc/message.php');
 		// Update the table body with the generated HTML
 		document.getElementById('dayOfMonthTableBody').innerHTML = html;
 	}
-
-
-
 	//====================================================================/// 
 	//======= Funtion for click day of week --> show register ======//     
 	//============================================================///  
 	function fnClickTitle(DayOfMonth) {
 		console.log(DayOfMonth);
 	}
-
 	//====================================================================/// 
 	//=======function for bind change year month combo box==============//     
 	//============================================================///  
 	function handleDateChange(selectedYear, selectedMonth) {
-
 		var dayOfMonthTableBody = document.getElementById('dayOfMonthTableBody');
-
 
 		// Create an AJAX request to fetch the list of days in the selected month and year from PHP file or API
 		var xhr = new XMLHttpRequest();
