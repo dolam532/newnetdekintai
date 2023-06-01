@@ -112,17 +112,16 @@ if (!empty($result_userkyuka_select)) {
     foreach ($result_userkyuka_select as $key) {
         $AllowOk[] = $key['allowok'];
         $UId[] = $key['uid'];
-        $WorkYM[] = $key['workym'];
+        $KyukayMD[] = substr($key['kyukaymd'], 0, 4);
     }
 }
 $AllowOk = array_unique($AllowOk);
 $UId = array_unique($UId);
-$WorkYM = array_unique($WorkYM);
+$KyukayMD = array_unique($KyukayMD);
 if ($_POST['btnSearch'] == NULL) {
     $_POST['searchAllowok'] = "9";
     $sql_userkyuka = $sql_userkyuka_select_db;
 } elseif ($_POST['btnSearch'] != NULL) {
-
     if ($_POST['searchAllowok'] == "9") {
         $searchAllowok = implode('","', $AllowOk);
     } else {
@@ -134,8 +133,7 @@ if ($_POST['btnSearch'] == NULL) {
         $searchUid = $_POST['searchUid'];
     }
     if ($_POST['searchYY'] == "") {
-        $searchYY = implode('","', $WorkYM);
-        $searchYY = substr($searchYY, 0, 4);
+        $searchYY = implode('","', $KyukayMD);
     } else {
         $searchYY = $_POST['searchYY'];
     }
