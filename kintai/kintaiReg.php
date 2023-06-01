@@ -39,12 +39,20 @@
 // Include const.php
 require_once '../inc/const.php';
 include('../inc/message.php');
+include('../inc/request_param.php');
 ?>
 <script>
-	var KINTAI_NODATA_WORKYEARMONTHDAY = "<?php echo $KINTAI_NODATA_WORKYEARMONTHDAY; ?>";
+
+	// Get CONST
+	var KINTAI_NODATA = "<?php echo $KINTAI_NODATA; ?>";
+	var TYPE_GET_WORK_YEAR_MONTH_DAY = "<?php echo $TYPE_GET_WORK_YEAR_MONTH_DAY; ?>"
+	var TYPE_GET_WORK_YEAR_MONTH = "<?php echo $TYPE_GET_WORK_YEAR_MONTH; ?>"
+
+
+
 	// ***Handler Script ****
 	//================================/// 
-	//=========== init======//     
+	//=========== init===============//     
 	//============================///  
 	document.addEventListener('DOMContentLoaded', function () {
 		var currentDate = new Date();
@@ -52,14 +60,20 @@ include('../inc/message.php');
 		var currentYear = currentDate.getFullYear();
 		document.getElementById('selyy').value = currentYear;
 		document.getElementById('selmm').value = currentMonth < 10 ? '0' + currentMonth : currentMonth;
+		// Function to call handleDateChange after AJAX requests are complete
 		handleDateChange(currentYear, currentMonth);
 	});
+
+
+
+
+
+
 	//================================/// 
 	//======= Add Day Of Month ======//     
 	//============================///  
 	function drawDayOfMonth(showYear, showMonth, listDataWorkymd) {
 		var daysInMonth = new Date(showYear, showMonth, 0).getDate();
-
 		var dayOfWeekNames = {
 			'Mon': '月',
 			'Tue': '火',
@@ -130,7 +144,7 @@ include('../inc/message.php');
 				var dateObj = new Date(showYear, showMonth - 1, day);
 				var dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
 				var dayOfWeekJapanese = dayOfWeekNames[dayOfWeek];
-				
+
 				//Create HTML for one row
 				html += '<tr>';
 				html += '<td>';
@@ -170,10 +184,63 @@ include('../inc/message.php');
 			}
 
 		}
-
-		// Update the table body with the generated HTML
 		document.getElementById('dayOfMonthTableBody').innerHTML = html;
 	}
+
+	//====================================================/// 
+	//======= Funtion add value to total month ===========//     
+	//=====================================================/// 
+	function drawDataToTotalMonth(dataJson) {
+		// Parse JSON data
+		// var dataJson = JSON.parse(dataJson);
+		// const data = dataJson.data;
+		// console.log(dataJson);
+
+		// show area
+		// var jobhour_top = document.getElementById('jobhour_top');
+		// var jobminute_top = document.getElementById('jobminute_top');
+		// var workdays_top = document.getElementById('workdays_top');
+		// var jobdays_top = document.getElementById('jobdays_top');
+		// var offdays_top = document.getElementById('offdays_top');
+		// var delaydays_top = document.getElementById('delaydays_top');
+		// var earlydays_top = document.getElementById('earlydays_top');
+
+
+
+		// jobhour_top.value = data.workym && data.workym[0].jobhour_top ? data.workym[0].jobhour_top : "0";
+		// jobminute_top.value = data.workym && data.workym[0].jobminute_top ? data.workym[0].jobminute_top : "0";
+		// workdays_top.value = data.workym && data.workym[0].workdays_top ? data.workym[0].workdays_top : "0";
+		// jobdays_top.value = data.workym && data.workym[0].jobdays_top ? data.workym[0].jobdays_top : "0";
+		// offdays_top.value = data.workym && data.workym[0].offdays_top ? data.workym[0].offdays_top : "0";
+		// delaydays_top.value = data.workym && data.workym[0].delaydays_top ? data.workym[0].delaydays_top : "0";
+		// earlydays_top.value = data.workym && data.workym[0].earlydays_top ? data.workym[0].earlydays_top : "0";
+
+
+
+		// // edit area 
+		// var jobhour = document.getElementById('jobhour');
+		// var jobminute = document.getElementById('jobminute');
+		// var workdays = document.getElementById('workdays');
+		// var jobdays = document.getElementById('jobdays');
+		// var offdays = document.getElementById('offdays');
+		// var delaydays = document.getElementById('delaydays');
+		// var earlydays = document.getElementById('earlydays');
+
+		// jobhour.value = data.workym && data.workym[0].jobhour ? data.workym[0].jobhour : "0";
+		// jobminute.value = data.workym && data.workym[0].jobminute ? data.workym[0].jobminute : "0";
+		// workdays.value = data.workym && data.workym[0].workdays ? data.workym[0].workdays : "0";
+		// jobdays.value = data.workym && data.workym[0].jobdays ? data.workym[0].jobdays : "0";
+		// offdays.value = data.workym && data.workym[0].offdays ? data.workym[0].offdays : "0";
+		// delaydays.value = data.workym && data.workym[0].delaydays ? data.workym[0].delaydays : "0";
+		// earlydays.value = data.workym && data.workym[0].earlydays ? data.workym[0].earlydays : "0";
+
+
+
+	}
+
+
+
+
 	//====================================================================/// 
 	//======= Funtion for click day of week --> show register ======//     
 	//============================================================///  
@@ -183,39 +250,71 @@ include('../inc/message.php');
 	//====================================================================/// 
 	//=======function for bind change year month combo box==============//     
 	//============================================================///  
+
 	function handleDateChange(selectedYear, selectedMonth) {
 		var dayOfMonthTableBody = document.getElementById('dayOfMonthTableBody');
+		var workYearMonthDayComplete = false;
+		var totalMonthOnce = false;
 
-		// Create an AJAX request to fetch the list of days in the selected month and year from PHP file or API
+
+		// Ajax Request for Work Year Month Day 
+		ajaxRequest(
+			'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=' + TYPE_GET_WORK_YEAR_MONTH_DAY,
+			function (response) {
+				if (JSON.parse(response) === KINTAI_NODATA) {
+					response = null;
+				}
+				workYearMonthDayComplete = true;
+				drawDayOfMonth(selectedYear, selectedMonth, response);
+			},
+			function (errorStatus) {
+				workYearMonthDayComplete = true;
+				console.error('Error: ' + errorStatus);
+				drawDayOfMonth(selectedYear, selectedMonth, null);
+			}
+		);
+		
+		// Ajax Request for Total Month 
+			ajaxRequest(
+			'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=' + TYPE_GET_WORK_YEAR_MONTH,
+			function (response) {
+				if (JSON.parse(response) === KINTAI_NODATA) {
+					response = null;
+				}
+				console.log(response);
+				drawDataToTotalMonth(response) 
+			},
+			function (errorStatus) {
+				console.error('Error: ' + errorStatus);
+				drawDataToTotalMonth(null) 
+			}
+		);
+
+	}
+
+
+
+
+	// Call Ajax 
+	function ajaxRequest(url, successCallback, errorCallback) {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function () {
 			if (xhr.readyState === XMLHttpRequest.DONE) {
 				if (xhr.status === 200) {
-					// Get the tbody element to update the content
-					// if database no value 
-					if (JSON.parse(xhr.responseText) === KINTAI_NODATA_WORKYEARMONTHDAY) {		
-						drawDayOfMonth(selectedYear, selectedMonth, null);
-						return xhr.responseText;
-						// database have value 
-					} else {
-						//console.log(xhr.responseText);
-						drawDayOfMonth(selectedYear, selectedMonth, xhr.responseText);
-						return xhr.responseText;
+					if (successCallback) {
+						successCallback(xhr.responseText);
 					}
 				} else {
-					console.error('Error: ' + xhr.status);
-					drawDayOfMonth(selectedYear, selectedMonth, null);
+					if (errorCallback) {
+						errorCallback(xhr.status);
+					}
 				}
 			}
 		};
-
-		// Send the AJAX request to retrieve the list of days in the selected month and year
-		// Check Security -> user can view 
-		// get data of kintaiymd of user => GET 
-		// xhr.open('GET', 'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=getKintaiymd', true);
-		xhr.open('GET', 'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=getKintaiymd', true);
+		xhr.open('GET', url, true);
 		xhr.send();
 	}
+
 
 </script>
 
@@ -297,13 +396,13 @@ include('../inc/message.php');
 					<th style="width: 10%; ">早退</th>
 				</tr>
 				<tr>
-					<td><strong>0</strong></td>
-					<td><strong>0</strong></td>
-					<td><strong>0</strong></td>
-					<td><strong>0</strong></td>
-					<td><strong>0</strong></td>
-					<td><strong>0</strong></td>
-					<td><strong>0</strong></td>
+					<td id="jobhour_top"><strong>0</strong></td>
+					<td id="jobminute_top"><strong>0</strong></td>
+					<td id="workdays_top"><strong>0</strong></td>
+					<td id="jobdays_top"><strong>0</strong></td>
+					<td id="offdays_top"><strong>0</strong></td>
+					<td id="delaydays_top"><strong>0</strong></td>
+					<td id="earlydays_top"><strong>0</strong></td>
 				</tr>
 				<tr>
 					<td><button type="button" class="btn btn-primary" id="btnUpdMonthly">月登録</button></td>

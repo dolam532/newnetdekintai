@@ -47,6 +47,11 @@ class KintaiRegDAOImpl implements KintaiDAO {
         return $kintaiRegRepository->getWorkOfMonth($year , $month , $uid);
     }
 
+    public function getTotalWorkMonth($year , $month , $uid) {
+        $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);
+        return $kintaiRegRepository->getTotalWorkMonth($year , $month , $uid);
+    }
+
 
 
 

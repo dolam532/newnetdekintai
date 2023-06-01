@@ -16,6 +16,8 @@ interface KintaiDAO {
 
     public function getWorkOfMonth($year , $month , $uid) ;
 
+    public function getTotalWorkMonth($year , $month , $uid) ;
+
 }
 
 
