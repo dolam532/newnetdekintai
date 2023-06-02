@@ -1,0 +1,15 @@
+{
+    "name": "user/newnetdekintai",
+    "autoload": {
+        "psr-4": {
+            "User\\Newnetdekintai\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Daniel MungSen",
+            "email": "danielmungsen2019@gmail.com"
+        }
+    ],
+    "require": {}
+}
