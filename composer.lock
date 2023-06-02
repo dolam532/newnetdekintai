@@ -1,18 +1,15 @@
 {
-    "_readme": [
-        "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
-        "This file is @generated automatically"
+    "name": "user/newnetdekintai",
+    "autoload": {
+        "psr-4": {
+            "User\\Newnetdekintai\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Daniel MungSen",
+            "email": "danielmungsen2019@gmail.com"
+        }
     ],
-    "content-hash": "ae6c4d40bec9c69c32c87afe4f0dc172",
-    "packages": [],
-    "packages-dev": [],
-    "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": [],
-    "prefer-stable": false,
-    "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "require": {}
 }
