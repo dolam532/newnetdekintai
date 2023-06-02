@@ -14,8 +14,8 @@
 	<script type="text/javascript" src="../assets/js/common.js"> </script>
 
 	<!-- Datepeeker 위한 link -->
-	<link rel="stylesheet" href="../assets/css/jquery-ui.min.css">
 	<script src="../assets/js/jquery-ui.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 	<!-- common CSS -->
 	<link rel="stylesheet" href="../assets/css/common.css">
@@ -33,13 +33,20 @@
 		.datatable tr td {
 			text-align: center;
 		}
+
+		.day-of-week-saturday {
+			color: blue;
+		}
+
+		.day-of-week-sunday {
+			color: red;
+		}
 	</style>
 </head>
 <?php
 // Include const.php
 require_once '../inc/const.php';
 include('../inc/message.php');
-include('../inc/request_param.php');
 ?>
 <script>
 
@@ -54,19 +61,14 @@ include('../inc/request_param.php');
 	//================================/// 
 	//=========== init===============//     
 	//============================///  
-	document.addEventListener('DOMContentLoaded', function () {
+	window.onload = function () {
 		var currentDate = new Date();
 		var currentMonth = currentDate.getMonth(); // Month is zero-based in JavaScript
 		var currentYear = currentDate.getFullYear();
 		document.getElementById('selyy').value = currentYear;
 		document.getElementById('selmm').value = currentMonth < 10 ? '0' + currentMonth : currentMonth;
-		// Function to call handleDateChange after AJAX requests are complete
 		handleDateChange(currentYear, currentMonth);
-	});
-
-
-
-
+	};
 
 
 	//================================/// 
@@ -95,7 +97,13 @@ include('../inc/request_param.php');
 				html += '<tr>';
 				html += '<td>';
 				html += '<a href="http://localhost:8080/web/kintai/kintaiReg#" onclick="fnClickTitle(' + (day - 1) + '); return false;">';
-				html += '<span>' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+				if (dayOfWeekJapanese === '土') {
+					html += '<span class="day-of-week-saturday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+				} else if (dayOfWeekJapanese === '日') {
+					html += '<span class="day-of-week-sunday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+				} else {
+					html += '<span>' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+				}
 				html += '</a>';
 				html += '</td>';
 				html += '<td><span name="cdaystarthh"></span>:<span name="cdaystartmm"></span></td>';
@@ -149,7 +157,13 @@ include('../inc/request_param.php');
 				html += '<tr>';
 				html += '<td>';
 				html += '<a href="#" onclick="fnClickTitle(' + i + '); return false;">';
-				html += '<span>' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+				if (dayOfWeekJapanese === '土') {
+					html += '<span class="day-of-week-saturday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+				} else if (dayOfWeekJapanese === '日') {
+					html += '<span class="day-of-week-sunday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+				} else {
+					html += '<span>' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+				}
 				html += '</a>';
 				html += '</td>';
 				html += '<td><span name="cdaystarthh">' + (data.daystarthh || '') + '</span>:<span name="cdaystartmm">' + (data.daystartmm || '') + '</span></td>';
@@ -196,28 +210,157 @@ include('../inc/request_param.php');
 		// const data = dataJson.data;
 		// console.log(dataJson);
 
-		// show area
-		// var jobhour_top = document.getElementById('jobhour_top');
-		// var jobminute_top = document.getElementById('jobminute_top');
-		// var workdays_top = document.getElementById('workdays_top');
-		// var jobdays_top = document.getElementById('jobdays_top');
-		// var offdays_top = document.getElementById('offdays_top');
-		// var delaydays_top = document.getElementById('delaydays_top');
-		// var earlydays_top = document.getElementById('earlydays_top');
 
 
+		// loop foreach write data 
 
-		// jobhour_top.value = data.workym && data.workym[0].jobhour_top ? data.workym[0].jobhour_top : "0";
-		// jobminute_top.value = data.workym && data.workym[0].jobminute_top ? data.workym[0].jobminute_top : "0";
-		// workdays_top.value = data.workym && data.workym[0].workdays_top ? data.workym[0].workdays_top : "0";
-		// jobdays_top.value = data.workym && data.workym[0].jobdays_top ? data.workym[0].jobdays_top : "0";
-		// offdays_top.value = data.workym && data.workym[0].offdays_top ? data.workym[0].offdays_top : "0";
-		// delaydays_top.value = data.workym && data.workym[0].delaydays_top ? data.workym[0].delaydays_top : "0";
-		// earlydays_top.value = data.workym && data.workym[0].earlydays_top ? data.workym[0].earlydays_top : "0";
+		var totalDayStartHours = 0;
+		var totalDayStartMinutes = 0;
+		var totalDayEndHours = 0;
+		var totalDayEndMinutes = 0;
+		var totalJobStartHours = 0;
+		var totalJobStartMinutes = 0;
+		var totalJobEndHours = 0;
+		var totalJobEndMinutes = 0;
+		var totalOffTimeHours = 0;
+		var totalOffTimeMinutes = 0;
+		var totalWorkHours = 0;
+		var totalWorkMinutes = 0;
+		var totalJanHours = 0;
+		var totalJanMinutes = 0;
 
 
+		var cdaystarthhList = document.getElementsByName('cdaystarthh');
+		var cdaystartmmList = document.getElementsByName('cdaystartmm');
+		var cdayendhhList = document.getElementsByName('cdayendhh');
+		var cdayendmmList = document.getElementsByName('cdayendmm');
+		var cjobstarthhList = document.getElementsByName('cjobstarthh');
+		var cjobstartmmList = document.getElementsByName('cjobstartmm');
+		var cjobendhhList = document.getElementsByName('cjobendhh');
+		var cjobendmmList = document.getElementsByName('cjobendmm');
+		var cofftimehhList = document.getElementsByName('cofftimehh');
+		var cofftimemmList = document.getElementsByName('cofftimemm');
+		var cworkhhList = document.getElementsByName('cworkhh');
+		var cworkmmList = document.getElementsByName('cworkmm');
+		var cjanhhList = document.getElementsByName('cjanhh');
+		var cjanmmList = document.getElementsByName('cjanmm');
 
-		// // edit area 
+
+		var rowCount = cdaystarthhList.length;
+		var nCountJobDay = 0;
+		var nCountWorkDay = 0;
+		var nCountDelayCount = 0;
+		var nCountEarlyCount = 0;
+		for (var i = 0; i < rowCount; i++) {
+			var dayStartHours = parseInt(cdaystarthhList[i].innerHTML);
+			var dayStartMinutes = parseInt(cdaystartmmList[i].innerHTML);
+			var dayEndHours = parseInt(cdayendhhList[i].innerHTML);
+			var dayEndMinutes = parseInt(cdayendmmList[i].innerHTML);
+			var jobStartHours = parseInt(cjobstarthhList[i].innerHTML);
+			var jobStartMinutes = parseInt(cjobstartmmList[i].innerHTML);
+			var jobEndHours = parseInt(cjobendhhList[i].innerHTML);
+			var jobEndMinutes = parseInt(cjobendmmList[i].innerHTML);
+			var offTimeHours = parseInt(cofftimehhList[i].innerHTML);
+			var offTimeMinutes = parseInt(cofftimemmList[i].innerHTML);
+			var workHours = parseInt(cworkhhList[i].innerHTML);
+			var workMinutes = parseInt(cworkmmList[i].innerHTML);
+			var janHours = parseInt(cjanhhList[i].innerHTML);
+			var janMinutes = parseInt(cjanmmList[i].innerHTML);
+
+			if (!isNaN(dayStartHours)) {
+				totalDayStartHours += dayStartHours;
+				// get WorkDay 
+				nCountWorkDay +=1;
+
+			}
+			if (!isNaN(dayStartMinutes)) {
+				totalDayStartMinutes += dayStartMinutes;
+			}
+			if (!isNaN(dayEndHours)) {
+				totalDayEndHours += dayEndHours;
+			}
+			if (!isNaN(dayEndMinutes)) {
+				totalDayEndMinutes += dayEndMinutes;
+			}
+			if (!isNaN(jobStartHours)) {
+				totalJobStartHours += jobStartHours;
+					// get JobDay 
+				nCountJobDay+=1;
+				// check delay and early  ....
+				
+
+			}
+			if (!isNaN(jobStartMinutes)) {
+				totalJobStartMinutes += jobStartMinutes;
+			}
+			if (!isNaN(jobEndHours)) {
+				totalJobEndHours += jobEndHours;
+			}
+			if (!isNaN(jobEndMinutes)) {
+				totalJobEndMinutes += jobEndMinutes;
+			}
+			if (!isNaN(offTimeHours)) {
+				totalOffTimeHours += offTimeHours;
+			}
+			if (!isNaN(offTimeMinutes)) {
+				totalOffTimeMinutes += offTimeMinutes;
+			}
+			if (!isNaN(workHours)) {
+				totalWorkHours += workHours;
+			}
+			if (!isNaN(workMinutes)) {
+				totalWorkMinutes += workMinutes;
+			}
+			if (!isNaN(janHours)) {
+				totalJanHours += janHours;
+			}
+			if (!isNaN(janMinutes)) {
+				totalJanMinutes += janMinutes;
+			}
+
+			
+
+
+			// get JobDay
+		}
+
+		totalDayStartHours += Math.floor(totalDayStartMinutes / 60);
+		totalDayStartMinutes = totalDayStartMinutes % 60;
+		totalDayEndHours += Math.floor(totalDayEndMinutes / 60);
+		totalDayEndMinutes = totalDayEndMinutes % 60;
+		totalJobStartHours += Math.floor(totalJobStartMinutes / 60);
+		totalJobStartMinutes = totalJobStartMinutes % 60;
+		totalJobEndHours += Math.floor(totalJobEndMinutes / 60);
+		totalJobEndMinutes = totalJobEndMinutes % 60;
+		totalOffTimeHours += Math.floor(totalOffTimeMinutes / 60);
+		totalOffTimeMinutes = totalOffTimeMinutes % 60;
+		totalWorkHours += Math.floor(totalWorkMinutes / 60);
+		totalWorkMinutes = totalWorkMinutes % 60;
+		totalJanHours += Math.floor(totalJanMinutes / 60);
+		totalJanMinutes = totalJanMinutes % 60;
+
+		// Hiển thị các tổng
+		console.log("Tổng giờ bắt đầu ngày: " + totalDayStartHours + ":" + totalDayStartMinutes);
+		console.log("Tổng giờ kết thúc ngày: " + totalDayEndHours + ":" + totalDayEndMinutes);
+		console.log("Tổng giờ bắt đầu công việc: " + totalJobStartHours + ":" + totalJobStartMinutes);
+		console.log("Tổng giờ kết thúc công việc: " + totalJobEndHours + ":" + totalJobEndMinutes);
+		console.log("Tổng giờ nghỉ giữa giờ: " + totalOffTimeHours + ":" + totalOffTimeMinutes);
+		console.log("Tổng giờ làm việc thực tế : " + totalWorkHours + ":" + totalWorkMinutes);
+		console.log("Tổng giờ làm thêm: " + totalJanHours + ":" + totalJanMinutes);
+
+		var offDay = nCountJobDay - nCountWorkDay ;
+		// //show area
+		jobhour_top.innerHTML = "<strong>" +totalDayStartHours+"</strong>";
+		jobminute_top.innerHTML = "<strong>" +totalDayStartMinutes+"</strong>";
+
+		workdays_top.innerHTML = "<strong>" +nCountWorkDay+"</strong>";
+		jobdays_top.innerHTML = "<strong>" +nCountJobDay+"</strong>";
+		offdays_top.innerHTML = "<strong>" +offDay +"</strong>";
+		delaydays_top.innerHTML = "<strong>" +totalDayStartMinutes+"</strong>";
+		earlydays_top.innerHTML = "<strong>" +totalDayStartMinutes+"</strong>";
+		
+
+		// //edit area 
 		// var jobhour = document.getElementById('jobhour');
 		// var jobminute = document.getElementById('jobminute');
 		// var workdays = document.getElementById('workdays');
@@ -225,16 +368,6 @@ include('../inc/request_param.php');
 		// var offdays = document.getElementById('offdays');
 		// var delaydays = document.getElementById('delaydays');
 		// var earlydays = document.getElementById('earlydays');
-
-		// jobhour.value = data.workym && data.workym[0].jobhour ? data.workym[0].jobhour : "0";
-		// jobminute.value = data.workym && data.workym[0].jobminute ? data.workym[0].jobminute : "0";
-		// workdays.value = data.workym && data.workym[0].workdays ? data.workym[0].workdays : "0";
-		// jobdays.value = data.workym && data.workym[0].jobdays ? data.workym[0].jobdays : "0";
-		// offdays.value = data.workym && data.workym[0].offdays ? data.workym[0].offdays : "0";
-		// delaydays.value = data.workym && data.workym[0].delaydays ? data.workym[0].delaydays : "0";
-		// earlydays.value = data.workym && data.workym[0].earlydays ? data.workym[0].earlydays : "0";
-
-
 
 	}
 
@@ -247,55 +380,61 @@ include('../inc/request_param.php');
 	function fnClickTitle(DayOfMonth) {
 		console.log(DayOfMonth);
 	}
+
+
 	//====================================================================/// 
 	//=======function for bind change year month combo box==============//     
 	//============================================================///  
 
-	function handleDateChange(selectedYear, selectedMonth) {
-		var dayOfMonthTableBody = document.getElementById('dayOfMonthTableBody');
-		var workYearMonthDayComplete = false;
-		var totalMonthOnce = false;
-
-
-		// Ajax Request for Work Year Month Day 
-		ajaxRequest(
-			'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=' + TYPE_GET_WORK_YEAR_MONTH_DAY,
-			function (response) {
-				if (JSON.parse(response) === KINTAI_NODATA) {
-					response = null;
-				}
-				workYearMonthDayComplete = true;
-				drawDayOfMonth(selectedYear, selectedMonth, response);
-			},
-			function (errorStatus) {
-				workYearMonthDayComplete = true;
-				console.error('Error: ' + errorStatus);
-				drawDayOfMonth(selectedYear, selectedMonth, null);
-			}
-		);
-		
-		// Ajax Request for Total Month 
-			ajaxRequest(
-			'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=' + TYPE_GET_WORK_YEAR_MONTH,
-			function (response) {
-				if (JSON.parse(response) === KINTAI_NODATA) {
-					response = null;
-				}
-				console.log(response);
-				drawDataToTotalMonth(response) 
-			},
-			function (errorStatus) {
-				console.error('Error: ' + errorStatus);
-				drawDataToTotalMonth(null) 
-			}
-		);
-
+	async function handleDateChange(selectedYear, selectedMonth) {
+		try {
+			await handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth);
+			await handlerDateChangeUpdateTotalWorkMonth(selectedYear, selectedMonth);
+		} catch (error) {
+			console.error('Error: ' + error);
+			drawDataToTotalMonth(null);
+		}
 	}
 
+	async function handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth) {
 
+		console.log("Start");
+		try {
+			const response = await ajaxRequestPromise(
+				'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=' + TYPE_GET_WORK_YEAR_MONTH_DAY
+			);
 
+			let parsedResponse = response;
+			if (JSON.parse(parsedResponse) === KINTAI_NODATA) {
+				parsedResponse = null;
+			}
 
-	// Call Ajax 
+			drawDayOfMonth(selectedYear, selectedMonth, parsedResponse);
+		} catch (errorStatus) {
+			console.error('Error: ' + errorStatus);
+			drawDayOfMonth(selectedYear, selectedMonth, null);
+		}
+	}
+
+	async function handlerDateChangeUpdateTotalWorkMonth(selectedYear, selectedMonth) {
+
+		try {
+			const response = await ajaxRequestPromise(
+				'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=' + TYPE_GET_WORK_YEAR_MONTH
+			);
+
+			let parsedResponse = response;
+			if (JSON.parse(parsedResponse) === KINTAI_NODATA) {
+				parsedResponse = null;
+			}
+			drawDataToTotalMonth(parsedResponse);
+		} catch (errorStatus) {
+			console.error('Error: ' + errorStatus);
+			drawDataToTotalMonth(null);
+		}
+	}
+
+	//  Ajax 
 	function ajaxRequest(url, successCallback, errorCallback) {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function () {
@@ -313,6 +452,20 @@ include('../inc/request_param.php');
 		};
 		xhr.open('GET', url, true);
 		xhr.send();
+	}
+
+	function ajaxRequestPromise(url) {
+		return new Promise(function (resolve, reject) {
+			ajaxRequest(
+				url,
+				function (response) {
+					resolve(response);
+				},
+				function (errorStatus) {
+					reject(errorStatus);
+				}
+			);
+		});
 	}
 
 

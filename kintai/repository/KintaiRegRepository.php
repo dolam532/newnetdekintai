@@ -6,6 +6,7 @@ include('.././inc/message.php');
 session_start();
 class KintaiRegRepository
 {
+
     public function selectById($id)
     {
         //==// Action connect to db get data -> return value = Object 
@@ -75,17 +76,18 @@ class KintaiRegRepository
         }
     }
 
-
     //==// after update work of day => update work month 
     public function getTotalWorkMonth($year, $month, $uid)
     {
-        global $conn;
+
+
+         global $conn;
         global $QUERY_SELECT_WORKYM;
         // create statemennt
-        $workymd = "$year$month";
+        $workym = "$year$month";
         $stmt = $conn->prepare($QUERY_SELECT_WORKYM);
         if ($stmt) {
-            $stmt->bind_param('sss', $uid, $uid, $workymd);
+            $stmt->bind_param('sss', $uid, $uid, $workym);
             $stmt->execute();
             $result = $stmt->get_result();
             $result_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
@@ -100,8 +102,8 @@ class KintaiRegRepository
         } else {
             return null;
         }
-    }
 
+    }
 }
 
 
