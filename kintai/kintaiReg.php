@@ -161,7 +161,7 @@ function handleDateChange(selectedYear, selectedMonth) {
 </script>
 
 <body>
-	<?php include('../inc/header.php'); ?>
+	<?php include('../inc/menu.php'); ?>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-5 text-left">

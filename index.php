@@ -45,7 +45,6 @@ include('./inc/model.php');
 
 		.jumbotron {
 			background-image: url('./assets/images/bk_image.jpg');
-			/* background-size: cover; */
 			text-shadow: black 0.2em 0.2em 0.2em;
 			color: white;
 			margin-bottom: 5px;
@@ -56,7 +55,7 @@ include('./inc/model.php');
 <body>
 	<div id="tile_body">
 		<title>Home</title>
-		<?php include('./inc/header.php'); ?>
+		<?php include('./inc/menu.php'); ?>
 		<div class="container">
 			<div class="jumbotron" id="jumbo1">
 				<h1 class="text-center">ネットDE勤怠</h1>
