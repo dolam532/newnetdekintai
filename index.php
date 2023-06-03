@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('./inc/dbconnect.php');
-include('./inc/model.php');
+include('./model/indexmodel.php');
 ?>
 
 <!DOCTYPE html>

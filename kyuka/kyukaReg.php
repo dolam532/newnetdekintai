@@ -4,7 +4,7 @@ session_start();
 include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../inc/const_array.php');
-include('../inc/model.php');
+include('../model/kyukamodel.php');
 include('../inc/header.php');
 ?>
 <style>

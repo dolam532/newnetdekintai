@@ -3,7 +3,7 @@
 session_start();
 include('../inc/dbconnect.php');
 include('../inc/message.php');
-include('../inc/model.php');
+include('../model/usermodel.php');
 include('../inc/header.php');
 ?>
 <style>
