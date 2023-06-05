@@ -82,19 +82,30 @@ $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 
 // Save data to tbl_userkyuka table of database
+// var_dump($_POST['timecnt']);
 if (isset($_POST['SaveKyuka'])) {
+    var_dump($_POST['totcnt']);
+    // var_dump($_POST['timecnt']);
     if ($_POST['kyukaid'] = "") {
         $_POST['kyukaid'] = "0";
     }
 
+    $_POST['uid'] = "0";
+    $_POST['vacationid'] = "0";
+    $_POST['oldcnt'] = "0";
+    $_POST['newcnt'] = "0";
+    $_POST['vacationstr'] = "0";
+    $_POST['vacationend'] = "0";
+    $_POST['usecnt'] = "0";
+    $_POST['restcnt'] = "0";
+    $_POST['companyid'] = "0";
+    $_POST['kyukatimelimit'] = "0";
+
     // 申込区分 時間時
     if ($_POST['kyukatype'] == "0") {
-        $_POST['totcnt'] = "0";
         $_POST['ymdcnt'] = "0";
         $_POST['timecnt'] = "0";
-        $_POST['uid'] = "0";
-        $_POST['vacationid'] = "0";
-        $_POST['kyukaymd'] = "0";
+    } elseif ($_POST['kyukatype'] == "1") {
     }
 
     $_POST['kyukaid'] = intval($_POST['kyukaid']);
@@ -102,6 +113,16 @@ if (isset($_POST['SaveKyuka'])) {
 
     $uid = mysqli_real_escape_string($conn, $_POST['uid']);
     $vacationid = mysqli_real_escape_string($conn, $_POST['vacationid']);
+    $oldcnt = mysqli_real_escape_string($conn, $_POST['oldcnt']);
+    $newcnt = mysqli_real_escape_string($conn, $_POST['newcnt']);
+    $vacationstr = mysqli_real_escape_string($conn, $_POST['vacationstr']);
+    $vacationend = mysqli_real_escape_string($conn, $_POST['vacationend']);
+    $usecnt = mysqli_real_escape_string($conn, $_POST['usecnt']);
+    $usetime = mysqli_real_escape_string($conn, $_POST['usetime']);
+    $restcnt = mysqli_real_escape_string($conn, $_POST['restcnt']);
+    $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
+    $kyukatimelimit = mysqli_real_escape_string($conn, $_POST['kyukatimelimit']);
+
     $kyukaymd = mysqli_real_escape_string($conn, $_POST['kyukaymd']);
     $kyukaid = mysqli_real_escape_string($conn, $_POST['kyukaid']);
     $kyukacode = mysqli_real_escape_string($conn, $_POST['kyukacode']);
@@ -118,12 +139,27 @@ if (isset($_POST['SaveKyuka'])) {
     $destplace = mysqli_real_escape_string($conn, $_POST['destplace']);
     $desttel = mysqli_real_escape_string($conn, $_POST['desttel']);
 
+    // $sql_userkyuka_i = "BEGIN;
+    // INSERT INTO `tbl_userkyuka` (`uid`, `vacationid`, `kyukaymd`, `kyukaid`, `kyukacode`, `kyukatype`, `strymd`, `endymd`, `strtime`, `endtime`, `ymdcnt`, `timecnt`, `allowok`, `destcode`, `destplace`, `desttel`, `reg_dt`) 
+	// VALUES('$uid', '$vacationid', '$kyukaymd', '$kyukaid', '$kyukacode' ,'$kyukatype' ,'$strymd', '$endymd', '$strtime', '$endtime', '$ymdcnt', '$timecnt', '$allowok', '$destcode', '$destplace', '$desttel', '$reg_dt');
+    // INSERT INTO `tbl_vacationinfo` (`vacationid`, `uid`, `vacationstr`, `vacationend`, `oldcnt`, ,`newcnt`, `usecnt`, `usetime`, `restcnt`, `reg_dt`) 
+	// VALUES('$vacationid', '$uid', '$vacationstr', '$vacationend', '$oldcnt' , '$newcnt' ,'$usecnt' ,$usetime' , '$restcnt', '$reg_dt');
+    // INSERT INTO `tbl_manageinfo` (`companyid`, `kyukatimelimit`, `reg_dt`) 
+	// VALUES('$companyid', '$kyukatimelimit', '$reg_dt');
+    // COMMIT;";
 
-    $sql_userkyuka_i = "INSERT INTO `tbl_userkyuka` (`uid`, `vacationid`, `kyukaymd`, `kyukaid`, `kyukacode`, `kyukatype`, `strymd`, `endymd`, `strtime`, `endtime`, `ymdcnt`, `timecnt`, `allowok`, `destcode`, `destplace`, `desttel`, `reg_dt`) 
+    $sql_userkyuka_save= "INSERT INTO `tbl_userkyuka` (`uid`, `vacationid`, `kyukaymd`, `kyukaid`, `kyukacode`, `kyukatype`, `strymd`, `endymd`, `strtime`, `endtime`, `ymdcnt`, `timecnt`, `allowok`, `destcode`, `destplace`, `desttel`, `reg_dt`) 
 	VALUES('$uid', '$vacationid', '$kyukaymd', '$kyukaid', '$kyukacode' ,'$kyukatype' ,'$strymd', '$endymd', '$strtime', '$endtime', '$ymdcnt', '$timecnt', '$allowok', '$destcode', '$destplace', '$desttel', '$reg_dt')";
-    if (mysqli_query($conn, $sql_userkyuka_i)) {
-        $_SESSION['save_success'] =  $save_success;
-    } else {
-        echo 'query error: ' . mysqli_error($conn);
-    }
+
+    // $sql_userkyuka= INSERT INTO `tbl_userkyuka` (`vacationid`, `uid`, `vacationstr`, `vacationend`, `oldcnt`, ,`newcnt`, `usecnt`, `usetime`, `restcnt`, `reg_dt`) 
+	// VALUES('$vacationid', '$uid', '$vacationstr', '$vacationend', '$oldcnt' , '$newcnt' ,'$usecnt' ,$usetime' , '$restcnt', '$reg_dt');
+    // INSERT INTO `tbl_manageinfo` (`companyid`, `kyukatimelimit`, `reg_dt`) 
+	// VALUES('$companyid', '$kyukatimelimit', '$reg_dt');
+    // COMMIT;";
+
+//     if (mysqli_query($conn, $sql_userkyuka_save)) {
+//         $_SESSION['save_success'] =  $save_success;
+//     } else {
+//         echo 'query error: ' . mysqli_error($conn);
+//     }
 }

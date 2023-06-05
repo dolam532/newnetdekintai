@@ -139,25 +139,25 @@ include('../inc/header.php');
 						foreach ($userkyuka_list as $userkyuka) {
 						?>
 							<tr>
-								<td><span name="ymd"><?= $userkyuka['kyukaymd'] ?></span></td>
-								<td><span name="cname"><?= $userkyuka['name'] ?></span></td>
+								<td><span><?= $userkyuka['kyukaymd'] ?></span></td>
+								<td><span><?= $userkyuka['name'] ?></span></td>
 								<td>
-									<span name="crequestdate"><?= $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'] ?></span>
+									<span><?= $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'] ?></span>
 								</td>
-								<td><span name="cymdcnt"><?= $userkyuka['ymdcnt'] ?>日(<?= $userkyuka['timecnt'] ?>時)</span></td>
-								<td><span name="cvacationdate"><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
-								<td><span name="ctotcnt"><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
-								<td><span name="crestcnt"><?= date('d', strtotime($userkyuka['endymd']) - strtotime($userkyuka['strymd'])) - 1 ?></span></td>
+								<td><span><?= $userkyuka['ymdcnt'] ?>日(<?= $userkyuka['timecnt'] ?>時)</span></td>
+								<td><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
+								<td><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
+								<td><span><?= date('d', strtotime($userkyuka['endymd']) - strtotime($userkyuka['strymd'])) - 1 ?></span></td>
 								<td><span name="callowok">
 										<?php
 										if ($userkyuka['allowok'] == "0") { ?>
-											<span name="callowok" style="color:red">未決裁</span>
+											<span style="color:red">未決裁</span>
 										<?php } else { ?>
-											<span name="callowok">決裁完了</span>
+											<span>決裁完了</span>
 										<?php } ?>
 									</span>
 								</td>
-								<td><span name="cdestplace"><?= $userkyuka['destplace'] ?></span></td>
+								<td><span><?= $userkyuka['destplace'] ?></span></td>
 							</tr>
 					<?php }
 					} ?>
@@ -179,23 +179,20 @@ include('../inc/header.php');
 							<div class="row">
 								<div class="col-md-3">
 									<label for="kyukaymd">申請日</label>
-									<input type="text" class="form-control" id="kyukaymd" name="kyukaymd" placeholder="" required="required" style="text-align: center">
-									<input type="hidden" id="seq" value="">
-									<input type="hidden" id="kyukaid" value="">
-									<input type="hidden" id="companyid" value="">
-									<input type="hidden" id="uid" value="">
-									<input type="hidden" id="name" value="">
-									<input type="hidden" id="vacationstr" value="">
-									<input type="hidden" id="vacationend" value="">
-									<input type="hidden" id="vacationid" value="">
-									<input type="hidden" id="kyukaid" value="">
-									<input type="hidden" id="oldcnt" value="">
-									<input type="hidden" id="newcnt" value="">
-									<input type="hidden" id="kyukatimelimit" value="">
+									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y-m-d'); ?>" readonly>
+									<input type="hidden" id="kyukaid" name="kyukaid" value="">
+									<input type="hidden" id="companyid" name="companyid" value="">
+									<input type="hidden" id="uid" name="uid" value="">
+									<input type="hidden" id="vacationstr" name="vacationstr" value="">
+									<input type="hidden" id="vacationend" name="vacationend" value="">
+									<input type="hidden" id="vacationid" name="vacationid" value="">
+									<input type="hidden" id="oldcnt" name="oldcnt" value="">
+									<input type="hidden" id="newcnt" name="newcnt" value="">
+									<input type="hidden" id="kyukatimelimit" name="kyukatimelimit" value="">
 								</div>
 								<div class="col-md-5">
 									<label for="kyukacode">休暇区分</label>
-									<select class="form-control" id="kyukacode" name="kyukacode">
+									<select class="form-control" id="kyukaname" name="kyukacode">
 										<option value=""></option>
 										<?php
 										foreach ($codebase_list as $key) {
@@ -239,23 +236,23 @@ include('../inc/header.php');
 							<div class="row">
 								<div class="col-md-2">
 									<label for="totcnt">当年付与</label>
-									<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center">
+									<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly>
 								</div>
 								<div class="col-md-2">
 									<label for="usecnt">使用日数</label>
-									<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center">
+									<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly>
 								</div>
 								<div class="col-md-2">
 									<label for="usetime">使用時間</label>
-									<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center">
+									<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly>
 								</div>
 								<div class="col-md-2">
 									<label for="ymdcnt">申込日</label>
-									<input type="text" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="" style="text-align: center">
+									<input type="text" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="" style="text-align: center" readonly>
 								</div>
 								<div class="col-md-2">
 									<label for="timecnt">申込時間</label>
-									<input type="text" class="form-control" id="timecnt" name="timecnt" placeholder="" style="text-align: center">
+									<input type="text" class="form-control" id="timecnt" name="timecnt" placeholder="" style="text-align: center" readonly>
 								</div>
 								<div class="col-md-2">
 									<label for="allowok">決裁</label>
@@ -388,34 +385,14 @@ include('../inc/header.php');
 	$(document).on('click', '#btnNew', function(e) {
 		$('#modal').modal('toggle');
 
-		$("#kyukaymd").val("").prop('disabled', true);
-
 		//신규때는 신청구분 선택하기 전에는 사용 불가
 		$("#strymd").val("").prop('disabled', true);
 		$("#endymd").val("").prop('disabled', true);
-		//휴가신청 타입(일/시간) 
-		$('input[name="kyukatype"]').prop('checked', false);
-		//휴가중 연락처
-		$('input[name="destcode"]').prop('checked', false);
 
-		$("#vacationid").val("");
-		$("#vacationstr").val("");
-		$("#vacationend").val("");
-
-		$("#totcnt").val("0").prop('disabled', true);
-		$("#usecnt").val("").prop('disabled', true);
 		//신규때는 신청구분 선택하기 전에는 사용 불가
 		$("#strtime").val("").prop('disabled', true);
 		$("#endtime").val("").prop('disabled', true);
-
-		$("#usetime").val("").prop('disabled', true);
-		$("#restcnt").val("").prop('disabled', true);
-		$("#kyukatimelimit").val("");
-
-		$("#ymdcnt").val("").prop('disabled', true);
-		$("#timecnt").val("").prop('disabled', true);
-
-		$("#kyukaname").focus();
+		$("#totcnt").val(0);
 	});
 
 	//휴가신청 타입(일/시간) 선택시 항목 잠그고 풀기  
@@ -426,21 +403,17 @@ include('../inc/header.php');
 			$("#endymd").prop('disabled', false);
 			$("#strtime").prop('disabled', true);
 			$("#endtime").prop('disabled', true);
-			$("#strtime").val(0);
-			$("#endtime").val(0);
-			$("#timecnt").val(0);
 			$("#ymdcnt").val("NaN");
+			$("#timecnt").val(0);
 		} else if (this.value == '0') {
 			//시간 선택
 			$("#strymd").prop('disabled', false);
 			$("#endymd").prop('disabled', true);
 			$("#strtime").prop('disabled', false);
 			$("#endtime").prop('disabled', false);
-
-			//일자<=>시간 변경시 일수계산을 0으로 한다. 
-			$("#ymdcnt").val(0);
 			$("#strtime").val(0);
 			$("#endtime").val(0);
+			$("#ymdcnt").val(0);
 			$("#timecnt").val(0);
 		}
 	});
@@ -459,6 +432,66 @@ include('../inc/header.php');
 		}
 	});
 
+	//휴가일(str) 변경시 휴가일 계산
+	$("#strymd").change(function() {
+		var str = new Date($("#strymd").val());
+		var end = new Date($("#endymd").val());
+
+		if (isNull(end) || str > end) {
+			$("#endymd").val($("#strymd").val());
+			end = new Date($("#endymd").val());
+		}
+
+		//시간을 선택하면 일수는 0으로 한다. 
+		if ($("input[name='kyukatype']:checked").val() == "0") {
+			$("#ymdcnt").val("0");
+			$("#endymd").val($("#strymd").val());
+			return;
+		}
+		var dateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
+		$("#ymdcnt").val(dateDiff + 1);
+	});
+
+	//휴가일(end) 변경시 휴가일 계산
+	$("#endymd").change(function() {
+		var str = new Date($("#strymd").val());
+		var end = new Date($("#endymd").val());
+
+		if (str > end) {
+			$("#endymd").val($("#strymd").val());
+			end = new Date($("#endymd").val());
+		}
+
+		var dateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
+		$("#ymdcnt").val(dateDiff + 1);
+	});
+
+	//휴가시간 변경시 계산
+	$("#strtime").on("change keyup paste", function() {
+		if (($("#strtime").val() * 1 > $("#endtime").val() * 1) && ($("#endtime").val().length == 2)) {
+			$("#endtime").val($("#strtime").val());
+		}
+		var timeDiff = $("#endtime").val() - $("#strtime").val()
+
+		timeDiff = timeDiff > 4 ? timeDiff - 1 : timeDiff; //점심시간 제외
+		timeDiff = timeDiff > 8 ? 8 : timeDiff; //한번에 신청 가능한 시간 최대 8시간
+
+		$("#timecnt").val(timeDiff);
+	});
+
+	//휴가시간 변경시 계산
+	$("#endtime").on("change keyup paste", function() {
+		if (($("#strtime").val() * 1 > $("#endtime").val() * 1) && ($("#endtime").val().length == 2)) {
+			$("#endtime").val($("#strtime").val());
+		}
+		var timeDiff = $("#endtime").val() - $("#strtime").val()
+
+		timeDiff = timeDiff > 4 ? timeDiff - 1 : timeDiff; //점심시간 제외
+		timeDiff = timeDiff > 8 ? 8 : timeDiff; //한번에 신청 가능한 시간 최대 8시간
+
+		$("#timecnt").val(timeDiff);
+	});
+
 	//Datepeeker 설정 strtime
 	$("#strymd").datepicker({
 		dateFormat: 'yy/mm/dd'
@@ -469,6 +502,126 @@ include('../inc/header.php');
 
 	$(document).on('click', '#btnAnnt', function(e) {
 		$('#modal2').modal('toggle');
+	});
+
+	//저장버튼 처리
+	$(document).on('click', '#btnReg', function(e) {
+		var kyukatype = $("input[name='kyukatype']:checked").val();
+		var strymd = $("#strymd").val();
+		var endymd = $("#endymd").val();
+		var ymdcnt = $("#ymdcnt").val() * 1;
+		var strtime = $("#strtime").val() * 1;
+		var endtime = $("#endtime").val() * 1;
+		var timecnt = $("#timecnt").val() * 1;
+		var kyukaname = $("#kyukaname option:selected").text();
+		var allowok = $("input[name='allowok']:checked").val();
+		var destcode = $("input[name='destcode']:checked").val();
+		var destplace = $("#destplace").val();
+		var desttel = $("#desttel").val();
+		var vacationstr = $("#vacationstr").val();
+		var vacationend = $("#vacationend").val();
+		var vacationid = $("#vacationid").val() * 1;
+		var oldcnt = $("#oldcnt").val() * 1;
+		var newcnt = $("#newcnt").val() * 1;
+		var usecnt = $("#usecnt").val() * 1;
+		var usetime = $("#usetime").val() * 1;
+		var restcnt = $("#restcnt").val() * 1;
+
+		//년간 사용 가능한 휴가시간 
+		var kyukatimelimit = $("#kyukatimelimit").val() * 1;
+
+		if (kyukaname == "") {
+			alert("休暇区分を入力してください。");
+			$("#kyukaname").focus();
+			e.preventDefault();
+			return; //함수 종료
+		}
+
+		// 년간 사용 가능한 휴가시간제한 체크 (당해년도사용시간+이번에신청한시간 > 년간사용제한시간 이면 에러)
+		if (usetime + timecnt > kyukatimelimit) {
+			alert("休暇の申込時間は(" + kyukatimelimit + ")を超えるわけにはいきません。");
+			e.preventDefault();
+			return;
+		}
+
+		// 휴가신청기간은 휴가를 부여받은 기간 안에서만 가능해야 하기 때문에 더 큰 경우는 2개로 나눠서 신청하게한다. 
+		if (endymd > vacationend) {
+			alert("休暇の申込は(" + vacationstr + " ~ " + vacationend + "の内だけに可能です。");
+			e.preventDefault();
+			return;
+		}
+
+		//残数(日)	 計算
+		restcnt = oldcnt + newcnt - usecnt - parseInt(usetime / 8);
+		if (restcnt < 0) {
+			alert("残数(日)を超える休暇は申し込む事はできません。。");
+			$("#strymd").focus();
+			e.preventDefault();
+			return; //함수 종료
+		}
+
+		if (kyukatype != "0" && kyukatype != "1") {
+			alert("申込区分を入力してください。");
+			$("#kyukatype").focus();
+			e.preventDefault();
+			return; //함수 종료
+		}
+
+		if (strymd == "") {
+			alert("期間(F)を入力してください。");
+			$("#strymd").focus(); //입력 포커스 이동
+			e.preventDefault();
+			return; //함수 종료
+		}
+
+		if (kyukatype == "1" && endymd == "") {
+			alert("期間(T)を入力してください。");
+			$("#endymd").focus();
+			e.preventDefault();
+			return;
+		}
+
+		if (kyukatype == "0" && (strtime == "" || strtime == "0")) {
+			alert("時間(F)を入力してください。");
+			$("#strtime").focus();
+			e.preventDefault();
+			return;
+		}
+
+		if (kyukatype == "0" && (endtime == "" || endtime == "0")) {
+			alert("時間(T)を入力してください。");
+			$("#endtime").focus();
+			e.preventDefault();
+			return;
+		}
+
+		if (allowok != "0" && allowok != "1") {
+			alert("決裁を入力してください。");
+			$("#allowok").focus(); //입력 포커스 이동
+			e.preventDefault();
+			return; //함수 종료
+		}
+
+		if (destcode != "0" && destcode != "1" && destcode != "2") {
+			alert("暇中居る場所を入力してください。");
+			$("#destcode").focus();
+			e.preventDefault();
+			return; //함수 종료
+		}
+
+		if (destplace == "") {
+			alert("場所を入力してください。");
+			$("#destplace").focus(); //입력 포커스 이동
+			e.preventDefault();
+			return; //함수 종료
+		}
+
+		if (desttel == "") {
+			alert("電話番号を入力してください。");
+			$("#desttel").focus(); //입력 포커스 이동
+			e.preventDefault();
+			return; //함수 종료
+		}
 	});
 </script>
 <?php include('../inc/footer.php'); ?>
