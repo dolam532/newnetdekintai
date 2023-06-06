@@ -85,7 +85,7 @@ include('../inc/header.php');
 				</div>
 			</div>
 
-			<div class=" col-md-2 text-right">
+			<div class="col-md-2 text-right">
 				<div class="title_condition">
 					<label>基準日 :
 						<select id="searchYY" name="searchYY" style="padding:5px;">
@@ -284,12 +284,7 @@ include('../inc/header.php');
 							</div>
 						</div>
 						<div class="modal-footer" style="text-align: center">
-							<div class="col-md-2"></div>
-							<div class="col-md-2">
-								<p class="text-center">
-									<a class="btn btn-warning btn-md" id="btnAllow" href="http://localhost:8080/web/kyuka/kyukaReg#" role="button">決裁 </a>
-								</p>
-							</div>
+							<div class="col-md-3"></div>
 							<div class="col-md-2">
 								<p class="text-center">
 									<input type="submit" name="SaveKyuka" class="btn btn-primary btn-md" id="btnReg" role="button" value="登録">
@@ -297,7 +292,7 @@ include('../inc/header.php');
 							</div>
 							<div class="col-md-2">
 								<p class="text-center">
-									<a class="btn btn-primary btn-md" id="btnDel" href="http://localhost:8080/web/kyuka/kyukaReg#" role="button">削除 </a>
+									<a class="btn btn-primary btn-md" id="btnClear" role="button">クリア </a>
 								</p>
 							</div>
 							<div class="col-md-2">
@@ -305,6 +300,7 @@ include('../inc/header.php');
 									<a class="btn btn-primary btn-md" id="btnRet" href="../kyuka/kyukaReg.php" role="button">閉じる </a>
 								</p>
 							</div>
+							<div class="col-md-3"></div>
 						</div>
 					</div>
 				</form>
@@ -422,13 +418,13 @@ include('../inc/header.php');
 	$('input[type=radio][name=destcode]').change(function() {
 		if (this.value == '0') {
 			//일본
-			$("#destplace").val("日本").prop('disabled', true);
+			$("#destplace").val("日本").prop('readonly', true);
 		} else if (this.value == '1') {
 			//한국
-			$("#destplace").val("韓国").prop('disabled', true);
+			$("#destplace").val("韓国").prop('readonly', true);
 		} else {
 			//기타
-			$("#destplace").val("").prop('disabled', false);
+			$("#destplace").val("").prop('readonly', false);
 		}
 	});
 
@@ -509,7 +505,6 @@ include('../inc/header.php');
 		var kyukatype = $("input[name='kyukatype']:checked").val();
 		var strymd = $("#strymd").val();
 		var endymd = $("#endymd").val();
-		var ymdcnt = $("#ymdcnt").val() * 1;
 		var strtime = $("#strtime").val() * 1;
 		var endtime = $("#endtime").val() * 1;
 		var timecnt = $("#timecnt").val() * 1;
@@ -520,14 +515,11 @@ include('../inc/header.php');
 		var desttel = $("#desttel").val();
 		var vacationstr = $("#vacationstr").val();
 		var vacationend = $("#vacationend").val();
-		var vacationid = $("#vacationid").val() * 1;
 		var oldcnt = $("#oldcnt").val() * 1;
 		var newcnt = $("#newcnt").val() * 1;
 		var usecnt = $("#usecnt").val() * 1;
 		var usetime = $("#usetime").val() * 1;
 		var restcnt = $("#restcnt").val() * 1;
-
-		//년간 사용 가능한 휴가시간 
 		var kyukatimelimit = $("#kyukatimelimit").val() * 1;
 
 		if (kyukaname == "") {
@@ -537,19 +529,19 @@ include('../inc/header.php');
 			return; //함수 종료
 		}
 
-		// 년간 사용 가능한 휴가시간제한 체크 (당해년도사용시간+이번에신청한시간 > 년간사용제한시간 이면 에러)
-		if (usetime + timecnt > kyukatimelimit) {
-			alert("休暇の申込時間は(" + kyukatimelimit + ")を超えるわけにはいきません。");
-			e.preventDefault();
-			return;
-		}
+		// // 년간 사용 가능한 휴가시간제한 체크 (당해년도사용시간+이번에신청한시간 > 년간사용제한시간 이면 에러)
+		// if (usetime + timecnt > kyukatimelimit) {
+		// 	alert("休暇の申込時間は(" + kyukatimelimit + ")を超えるわけにはいきません。");
+		// 	e.preventDefault();
+		// 	return;
+		// }
 
-		// 휴가신청기간은 휴가를 부여받은 기간 안에서만 가능해야 하기 때문에 더 큰 경우는 2개로 나눠서 신청하게한다. 
-		if (endymd > vacationend) {
-			alert("休暇の申込は(" + vacationstr + " ~ " + vacationend + "の内だけに可能です。");
-			e.preventDefault();
-			return;
-		}
+		// // 휴가신청기간은 휴가를 부여받은 기간 안에서만 가능해야 하기 때문에 더 큰 경우는 2개로 나눠서 신청하게한다. 
+		// if (endymd > vacationend) {
+		// 	alert("休暇の申込は(" + vacationstr + " ~ " + vacationend + "の内だけに可能です。");
+		// 	e.preventDefault();
+		// 	return;
+		// }
 
 		//残数(日)	 計算
 		restcnt = oldcnt + newcnt - usecnt - parseInt(usetime / 8);
@@ -622,6 +614,24 @@ include('../inc/header.php');
 			e.preventDefault();
 			return; //함수 종료
 		}
+	});
+
+	//삭제버튼 : Delete 
+	$(document).on('click', '#btnClear', function(e) {
+		$('#kyukaname').val('');
+		$("input[name='kyukatype']").prop('checked', false);
+		$('#strymd').val('');
+		$('#endymd').val('');
+		$('#strtime').val('');
+		$('#endtime').val('');
+		$('#usecnt').val('');
+		$('#usetime').val('');
+		$('#ymdcnt').val('');
+		$('#timecnt').val('');
+		$("input[name='allowok']").prop('checked', false);
+		$("input[name='destcode']").prop('checked', false);
+		$('#destplace').val('');
+		$('#desttel').val('');
 	});
 </script>
 <?php include('../inc/footer.php'); ?>

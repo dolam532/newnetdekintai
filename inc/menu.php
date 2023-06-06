@@ -50,7 +50,7 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">休暇 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li class="menu-level1"><a href="../kyuka/kyukaReg.php">休暇届</a></li>
-                            <li class="menu-level3"><a href="">休暇使用現状</a></li>
+                            <li class="menu-level3"><a href="../kyuka/kyukaMonthly.php">休暇使用現状</a></li>
                         </ul>
                     </li>
                     <li class="dropdown active" id="manager">
