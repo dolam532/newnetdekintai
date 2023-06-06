@@ -26,50 +26,55 @@ $kintaiRegDAO = $container->get(KintaiRegRepository::class);
 // Get data from db with id = id , year = CbbYear , Month = cbbMonth 
 $year = isset($_GET['year']) ? htmlspecialchars($_GET['year']) : null;
 $month = isset($_GET['month']) ? htmlspecialchars($_GET['month']) : null;
-$type = isset($_GET['type']) ? htmlspecialchars($_GET['type']) : null;
-
-
+$type_get = isset($_GET['type']) ? htmlspecialchars($_GET['type']) : null;
+// $type_post = isset($_POST['type']) ? htmlspecialchars($_POST['type']) : null;
 //===// Check Login****
-// Step 1 : Check login session -> 
+// Step 1: Check login session
 // ........ AFTER 
 // Get uid in Session 
 $uidCurrent = 'admin';
 
-
-// step 2 : 
-if (isset($_GET['type']) && in_array($_GET['type'], [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'otherType'])) { // get data for work year month day
-
-        $result = $kintaiRegDAO->getWorkOfMonth($year, $month, $uidCurrent);
-        header('Content-Type: application/json');
-        header('Cache-Control: no-cache, no-store, must-revalidate');
-        header('Pragma: no-cache');
-        header('Expires: 0');
-        if ($result == null || empty($result)) {
-                echo json_encode($KINTAI_NODATA);
+// GET request
+if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'otherType'])) { // get data for work year month day
+    $result = $kintaiRegDAO->getWorkOfMonth($year, $month, $uidCurrent);
+    returnValueTemplate($result);
+} else if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH, 'otherType'])) { // get data for year month 
+    $result = $kintaiRegDAO->getTotalWorkMonth($year, $month, $uidCurrent);
+    returnValueTemplate($result);
+} else if (isset($type_get) && in_array($type_get, [$TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY, 'otherType'])) {
+        $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
+        $result = $kintaiRegDAO->insertMany($data, $uidCurrent);
+        if ($result === 1) {
+                // save success 
+                returnValueTemplate($result);
         } else {
-                echo json_encode($result);
-        }
-        exit;
-
-} else if (isset($_GET['type']) && in_array($_GET['type'], [$TYPE_GET_WORK_YEAR_MONTH, 'otherType'])) { // get data for year month 
-
-        $result = $kintaiRegDAO->getTotalWorkMonth($year, $month, $uidCurrent);
-        header('Content-Type: application/json');
-        header('Cache-Control: no-cache, no-store, must-revalidate');
-        header('Pragma: no-cache');
-        header('Expires: 0');
-        if ($result == null || empty($result)) {
-                echo json_encode($KINTAI_NODATA);
-        } else {
-                echo json_encode($result);
+                returnValueTemplate($ADD_DATA_ERROR_KINTAI); // add value failed => return flag to draw white month
         }
 
-        exit;
-
+}  else if (isset($type_get) && in_array($type_get, [$TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY, 'otherType'])) {
+        $result = $kintaiRegDAO->insertNewMonth($year, $month, $uidCurrent);
+        returnValueTemplate($result);
 
 } else {
-        // type = Other 
+        
+        // Handle other types of requests
 }
 
+
+function returnValueTemplate($result)
+{
+        global $NO_DATA_KINTAI;
+        // ***  Delete Cache ***
+        header('Content-Type: application/json');
+        header('Cache-Control: no-cache, no-store, must-revalidate');
+        header('Pragma: no-cache');
+        header('Expires: 0');
+        if ($result == null || empty($result)) {
+                echo json_encode($NO_DATA_KINTAI);
+        } else {
+                echo json_encode($result);
+        }
+        exit;
+}
 
 ?>

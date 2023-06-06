@@ -45,17 +45,25 @@
 </head>
 <?php
 // Include const.php
-require_once '../inc/const.php';
+include '../inc/const.php';
 include('../inc/message.php');
 ?>
 <script>
 
-	// Get CONST
-	var KINTAI_NODATA = "<?php echo $KINTAI_NODATA; ?>";
+	// Get 
+	var NO_DATA_KINTAI = "<?php echo $NO_DATA_KINTAI; ?>";
 	var TYPE_GET_WORK_YEAR_MONTH_DAY = "<?php echo $TYPE_GET_WORK_YEAR_MONTH_DAY; ?>"
 	var TYPE_GET_WORK_YEAR_MONTH = "<?php echo $TYPE_GET_WORK_YEAR_MONTH; ?>"
+	var TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY = "<?php echo $TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY; ?>"
+	var TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY = "<?php echo $TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY; ?>"
+	var ADD_DATA_ERROR_KINTAI = "<?php echo $ADD_DATA_ERROR_KINTAI; ?>"
 
 
+
+	var TIME_KINTAI_DELAY_IN = parseInt("<?php echo $TIME_KINTAI_DELAY_IN; ?>");
+	var TIME_KINTAI_EARLY_OUT = parseInt("<?php echo $TIME_KINTAI_EARLY_OUT; ?>");
+	var LIST_DELAY_IN_DATE = [];
+	var LIST_DELAY_OUT_DATE = [];
 
 	// ***Handler Script ****
 	//================================/// 
@@ -85,62 +93,24 @@ include('../inc/message.php');
 			'Sat': '土',
 			'Sun': '日'
 		};
-		var html = '';
+
 		//=====//PARAMETER listDataWorkymd is null 
+
 		if (listDataWorkymd === null) {
-			html = '';
-			for (var day = 1; day <= daysInMonth; day++) {
-				var formattedDate = ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2);
-				var dateObj = new Date(showYear, showMonth - 1, day);
-				var dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
-				var dayOfWeekJapanese = dayOfWeekNames[dayOfWeek];
-				html += '<tr>';
-				html += '<td>';
-				html += '<a href="http://localhost:8080/web/kintai/kintaiReg#" onclick="fnClickTitle(' + (day - 1) + '); return false;">';
-				if (dayOfWeekJapanese === '土') {
-					html += '<span class="day-of-week-saturday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
-				} else if (dayOfWeekJapanese === '日') {
-					html += '<span class="day-of-week-sunday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
-				} else {
-					html += '<span>' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
-				}
-				html += '</a>';
-				html += '</td>';
-				html += '<td><span name="cdaystarthh"></span>:<span name="cdaystartmm"></span></td>';
-				html += '<td><span name="cdayendhh"></span>:<span name="cdayendmm"></span></td>';
-				html += '<td><span name="cjobstarthh"></span>:<span name="cjobstartmm"></span></td>';
-				html += '<td><span name="cjobendhh"></span>:<span name="cjobendmm"></span></td>';
-				html += '<td><span name="cofftimehh"></span>:<span name="cofftimemm"></span></td>';
-				html += '<td><span name="cworkhh"></span></td>';
-				html += '<td><span name="cworkmm"></span></td>';
-				html += '<td><span name="cjanhh"></span>:<span name="cjanmm"></span></td>';
-				html += '<td style="text-align:left"><span name="ccomment"></span></td>';
-				html += '<td style="text-align:left"><span name="cbigo"></span>';
-				html += '<input type="hidden" name="tuid" value="admin">';
-				html += '<input type="hidden" name="tgenid" value="0">';
-				html += '<input type="hidden" name="tworkymd" value="' + showYear + '/' + ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2) + '">';
-				html += '<input type="hidden" name="tdaystarthh" value="">';
-				html += '<input type="hidden" name="tdaystartmm" value="">';
-				html += '<input type="hidden" name="tdayendhh" value="">';
-				html += '<input type="hidden" name="tdayendmm" value="">';
-				html += '<input type="hidden" name="tjobstarthh" value="">';
-				html += '<input type="hidden" name="tjobstartmm" value="">';
-				html += '<input type="hidden" name="tjobendhh" value="">';
-				html += '<input type="hidden" name="tjobendmm" value="">';
-				html += '<input type="hidden" name="tofftimehh" value="">';
-				html += '<input type="hidden" name="tofftimemm" value="">';
-				html += '<input type="hidden" name="tworkhh" value="">';
-				html += '<input type="hidden" name="tworkmm" value="">';
-				html += '<input type="hidden" name="tcomment" value="">';
-				html += '<input type="hidden" name="tbigo" value="">';
-				html += '</td>';
-				html += '</tr>';
-			}
+			drawWhiteTable(showYear, showMonth);
 		} else { //=====//PARAMETER listDataWorkymd not null 
-			html = '';
+			var html = '';
 			// convert data 
 			var jsonData = JSON.parse(listDataWorkymd);
-			const workYmdList = jsonData.workYmdList;
+			var workYmdList = jsonData.workYmdList;
+			// Check List Month => If list  check the list of months if the list is missing or missing days then add it to the list
+			var isCheck = checkMonthMissingData(workYmdList, showYear, showMonth);
+			if (!isCheck) {   // If future month => 
+				drawWhiteTable(showYear, showMonth);
+				// call drawDayOfMonth
+				return;
+			}
+
 			for (var i = 0; i < workYmdList.length; i++) {
 				var data = workYmdList[i];
 				var day = i + 1;
@@ -195,25 +165,185 @@ include('../inc/message.php');
 				html += '<input type="hidden" name="tbigo" value="' + (data.bigo || '') + '">';
 				html += '</td>';
 				html += '</tr>';
+
 			}
+			dayOfMonthTableBody.innerHTML = html;
+		}
+
+
+	}
+
+	function drawWhiteTable(showYear, showMonth) {
+		var daysInMonth = new Date(showYear, showMonth, 0).getDate();
+		var dayOfWeekNames = {
+			'Mon': '月',
+			'Tue': '火',
+			'Wed': '水',
+			'Thu': '木',
+			'Fri': '金',
+			'Sat': '土',
+			'Sun': '日'
+		};
+		var html = '';
+		for (var day = 1; day <= daysInMonth; day++) {
+			var formattedDate = ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2);
+			var dateObj = new Date(showYear, showMonth - 1, day);
+			var dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+			var dayOfWeekJapanese = dayOfWeekNames[dayOfWeek];
+			html += '<tr>';
+			html += '<td>';
+			html += '<a href="http://localhost:8080/web/kintai/kintaiReg#" onclick="fnClickTitle(' + (day - 1) + '); return false;">';
+			if (dayOfWeekJapanese === '土') {
+				html += '<span class="day-of-week-saturday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+			} else if (dayOfWeekJapanese === '日') {
+				html += '<span class="day-of-week-sunday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+			} else {
+				html += '<span>' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+			}
+			html += '</a>';
+			html += '</td>';
+			html += '<td><span name="cdaystarthh"></span>:<span name="cdaystartmm"></span></td>';
+			html += '<td><span name="cdayendhh"></span>:<span name="cdayendmm"></span></td>';
+			html += '<td><span name="cjobstarthh"></span>:<span name="cjobstartmm"></span></td>';
+			html += '<td><span name="cjobendhh"></span>:<span name="cjobendmm"></span></td>';
+			html += '<td><span name="cofftimehh"></span>:<span name="cofftimemm"></span></td>';
+			html += '<td><span name="cworkhh"></span></td>';
+			html += '<td><span name="cworkmm"></span></td>';
+			html += '<td><span name="cjanhh"></span>:<span name="cjanmm"></span></td>';
+			html += '<td style="text-align:left"><span name="ccomment"></span></td>';
+			html += '<td style="text-align:left"><span name="cbigo"></span>';
+			html += '<input type="hidden" name="tuid" value="admin">';
+			html += '<input type="hidden" name="tgenid" value="0">';
+			html += '<input type="hidden" name="tworkymd" value="' + showYear + '/' + ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2) + '">';
+			html += '<input type="hidden" name="tdaystarthh" value="">';
+			html += '<input type="hidden" name="tdaystartmm" value="">';
+			html += '<input type="hidden" name="tdayendhh" value="">';
+			html += '<input type="hidden" name="tdayendmm" value="">';
+			html += '<input type="hidden" name="tjobstarthh" value="">';
+			html += '<input type="hidden" name="tjobstartmm" value="">';
+			html += '<input type="hidden" name="tjobendhh" value="">';
+			html += '<input type="hidden" name="tjobendmm" value="">';
+			html += '<input type="hidden" name="tofftimehh" value="">';
+			html += '<input type="hidden" name="tofftimemm" value="">';
+			html += '<input type="hidden" name="tworkhh" value="">';
+			html += '<input type="hidden" name="tworkmm" value="">';
+			html += '<input type="hidden" name="tcomment" value="">';
+			html += '<input type="hidden" name="tbigo" value="">';
+			html += '</td>';
+			html += '</tr>';
 
 		}
-		document.getElementById('dayOfMonthTableBody').innerHTML = html;
+		dayOfMonthTableBody.innerHTML = html;
 	}
 
 	//====================================================/// 
-	//======= Funtion add value to total month ===========//     
+	//======= check the list of months  ===========//     if the list is missing or missing days then add it to the list 
 	//=====================================================/// 
-	function drawDataToTotalMonth(dataJson) {
-		// Parse JSON data
-		// var dataJson = JSON.parse(dataJson);
-		// const data = dataJson.data;
-		// console.log(dataJson);
+	function checkMonthMissingData(workYmdList, year, month) {
 
 
 
+		var flagIsMissingDataOfMonth = false;
+		// IF DATA MISSING ???  
+		var daysInMonth = new Date(year, month, 0).getDate();
+		;
+		// => Current Month if not data => Add new Data to DB 
+		if (typeof workYmdList === 'undefined') {
+			console.log("list" + workYmdList)
+
+			const currentDate = new Date();
+			const currentYear = currentDate.getFullYear(); //
+			const currentMonth = currentDate.getMonth() + 1; // 
+			const parseYear = parseInt(year, 10);
+			const parseMonth = parseInt(month, 10);
+
+			if (currentYear === parseYear && currentMonth === parseMonth) {
+				console.log("CurrentYear:" + currentYear + "||| YEARParam :" + parseYear);
+				console.log("CurrentMONTH:" + currentMonth + "||| MONTHParam :" + parseMonth);
+				insertNewMonthData(year, month);
+				return false;
+			}
+
+		}
+
+
+		if (workYmdList.length !== daysInMonth) {
+			var arrayMissingDay = [];
+			var arrayDayOfWorkList = [];
+			var genidDefault = 0;
+			console.log("IS NEW MONTH");
+			// add value to ararymissing #
+			for (let i = 0, len = daysInMonth; i < len; i++) {
+				var date = new Date(year, month - 1, i);
+				var formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1).toString().padStart(2, '0') + '/' + date.getDate().toString().padStart(2, '0');
+				arrayMissingDay.push(formattedDate);
+			}
+			// add value to DayWOrkList
+			for (let i = 0, len = workYmdList.length; i < len; i++) {
+				arrayDayOfWorkList.push(workYmdList[i].workymd);
+				if (workYmdList[i].genid !== null) {
+					genid = workYmdList[i].genidDefault;   // get genid of last day *** bad
+				}
+			}
+
+			var filteredArray = arrayMissingDay
+				.filter(function (date) {
+					return !arrayDayOfWorkList.includes(date);
+				})
+				.map(function (date) {
+					return {
+						genid: genidDefault, // genIdDefault
+						workymd: date
+					};
+				});
+
+			// call AJAX　　// OK 
+			const data = JSON.stringify(filteredArray); // convert to json 
+			console.log(data);
+			const response = ajaxRequest(
+				'kintaiRegController.php?type='
+				+ TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY + '&data=' + data,
+				'GET',
+				function (response) {
+					//html_entity_decode($data);
+					console.log(response);
+				},
+				function (errorStatus) {
+					console.log("Connect ERROR: " + errorStatus);
+				}
+			);
+			return false;
+		}
+		// one more time get data-> draw
+		return workYmdList;
+	}
+
+	//====================================================/// 
+	//======= Function insert data new month  ===========//     
+	//=====================================================/// 
+	function insertNewMonthData(year, month) {
+
+		const response = ajaxRequest(
+			'kintaiRegController.php?type='
+			+ TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY + '&year=' + year + '&month=' + month,
+			'GET',
+			function (response) {
+				console.log("INSERT" + response);
+			},
+			function (errorStatus) {
+				console.log("Connect ERROR: " + errorStatus);
+			}
+		);
+
+	}
+
+
+
+	//====================================================/// 
+	//======= Function add value to total month ===========//     
+	//=====================================================/// 
+	function drawDataToTotalMonth() {
 		// loop foreach write data 
-
 		var totalDayStartHours = 0;
 		var totalDayStartMinutes = 0;
 		var totalDayEndHours = 0;
@@ -228,8 +358,7 @@ include('../inc/message.php');
 		var totalWorkMinutes = 0;
 		var totalJanHours = 0;
 		var totalJanMinutes = 0;
-
-
+		// get list value of days
 		var cdaystarthhList = document.getElementsByName('cdaystarthh');
 		var cdaystartmmList = document.getElementsByName('cdaystartmm');
 		var cdayendhhList = document.getElementsByName('cdayendhh');
@@ -249,8 +378,8 @@ include('../inc/message.php');
 		var rowCount = cdaystarthhList.length;
 		var nCountJobDay = 0;
 		var nCountWorkDay = 0;
-		var nCountDelayCount = 0;
-		var nCountEarlyCount = 0;
+		var nCountDelayIn = 0;
+		var nCountEarlyOut = 0;
 		for (var i = 0; i < rowCount; i++) {
 			var dayStartHours = parseInt(cdaystarthhList[i].innerHTML);
 			var dayStartMinutes = parseInt(cdaystartmmList[i].innerHTML);
@@ -267,11 +396,15 @@ include('../inc/message.php');
 			var janHours = parseInt(cjanhhList[i].innerHTML);
 			var janMinutes = parseInt(cjanmmList[i].innerHTML);
 
+			// flag -> check delay and early 
+			isJobDay = false;
+			isWorkDay = false;
+
 			if (!isNaN(dayStartHours)) {
 				totalDayStartHours += dayStartHours;
 				// get WorkDay 
-				nCountWorkDay +=1;
-
+				nCountWorkDay += 1;
+				isWorkDay = true;
 			}
 			if (!isNaN(dayStartMinutes)) {
 				totalDayStartMinutes += dayStartMinutes;
@@ -284,11 +417,10 @@ include('../inc/message.php');
 			}
 			if (!isNaN(jobStartHours)) {
 				totalJobStartHours += jobStartHours;
-					// get JobDay 
-				nCountJobDay+=1;
+				isJobDay = true;
+				// get JobDay 
+				nCountJobDay += 1;
 				// check delay and early  ....
-				
-
 			}
 			if (!isNaN(jobStartMinutes)) {
 				totalJobStartMinutes += jobStartMinutes;
@@ -317,11 +449,21 @@ include('../inc/message.php');
 			if (!isNaN(janMinutes)) {
 				totalJanMinutes += janMinutes;
 			}
+			//LIST_DELAY_IN_DATE = [];   1日　= INDEX 0
+			//LIST_DELAY_OUT_DATE = [];  1日　= INDEX 0
+			if (isJobDay && isWorkDay) {
+				// Delay Count
+				if ((dayStartHours * 60 + dayStartMinutes + TIME_KINTAI_DELAY_IN) > (jobStartHours * 60 + jobStartMinutes)) {
+					nCountDelayIn += 1
+					LIST_DELAY_IN_DATE.push(i);   // WHEN FILL COLOR TO DELAY DATE 
+				}
+				// Early off count  
+				if ((dayEndHours * 60 + dayEndMinutes + TIME_KINTAI_EARLY_OUT) > (jobEndHours * 60 + jobEndMinutes)) {
+					nCountEarlyOut += 1;
+					LIST_DELAY_OUT_DATE.push(i); // WHEN FILL COLOR TO EARLY OUT DAY 
+				}
+			}
 
-			
-
-
-			// get JobDay
 		}
 
 		totalDayStartHours += Math.floor(totalDayStartMinutes / 60);
@@ -339,41 +481,27 @@ include('../inc/message.php');
 		totalJanHours += Math.floor(totalJanMinutes / 60);
 		totalJanMinutes = totalJanMinutes % 60;
 
-		// Hiển thị các tổng
-		console.log("Tổng giờ bắt đầu ngày: " + totalDayStartHours + ":" + totalDayStartMinutes);
-		console.log("Tổng giờ kết thúc ngày: " + totalDayEndHours + ":" + totalDayEndMinutes);
-		console.log("Tổng giờ bắt đầu công việc: " + totalJobStartHours + ":" + totalJobStartMinutes);
-		console.log("Tổng giờ kết thúc công việc: " + totalJobEndHours + ":" + totalJobEndMinutes);
-		console.log("Tổng giờ nghỉ giữa giờ: " + totalOffTimeHours + ":" + totalOffTimeMinutes);
-		console.log("Tổng giờ làm việc thực tế : " + totalWorkHours + ":" + totalWorkMinutes);
-		console.log("Tổng giờ làm thêm: " + totalJanHours + ":" + totalJanMinutes);
+		// offday
+		var offDay = nCountJobDay - nCountWorkDay;
 
-		var offDay = nCountJobDay - nCountWorkDay ;
 		// //show area
-		jobhour_top.innerHTML = "<strong>" +totalDayStartHours+"</strong>";
-		jobminute_top.innerHTML = "<strong>" +totalDayStartMinutes+"</strong>";
-
-		workdays_top.innerHTML = "<strong>" +nCountWorkDay+"</strong>";
-		jobdays_top.innerHTML = "<strong>" +nCountJobDay+"</strong>";
-		offdays_top.innerHTML = "<strong>" +offDay +"</strong>";
-		delaydays_top.innerHTML = "<strong>" +totalDayStartMinutes+"</strong>";
-		earlydays_top.innerHTML = "<strong>" +totalDayStartMinutes+"</strong>";
-		
-
-		// //edit area 
-		// var jobhour = document.getElementById('jobhour');
-		// var jobminute = document.getElementById('jobminute');
-		// var workdays = document.getElementById('workdays');
-		// var jobdays = document.getElementById('jobdays');
-		// var offdays = document.getElementById('offdays');
-		// var delaydays = document.getElementById('delaydays');
-		// var earlydays = document.getElementById('earlydays');
+		jobhour_top.innerHTML = "<strong>" + totalDayStartHours + "</strong>";
+		jobminute_top.innerHTML = "<strong>" + totalDayStartMinutes + "</strong>";
+		workdays_top.innerHTML = "<strong>" + nCountWorkDay + "</strong>";
+		jobdays_top.innerHTML = "<strong>" + nCountJobDay + "</strong>";
+		offdays_top.innerHTML = "<strong>" + offDay + "</strong>";
+		delaydays_top.innerHTML = "<strong>" + nCountDelayIn + "</strong>";
+		earlydays_top.innerHTML = "<strong>" + nCountEarlyOut + "</strong>";
+		//edit area 
+		jobhour.value = totalDayStartHours;
+		jobminute.value = totalDayStartMinutes;
+		workdays.value = nCountWorkDay;
+		jobdays.value = nCountJobDay;
+		offdays.value = offDay;
+		delaydays.value = nCountDelayIn;
+		earlydays.value = nCountEarlyOut;
 
 	}
-
-
-
-
 	//====================================================================/// 
 	//======= Funtion for click day of week --> show register ======//     
 	//============================================================///  
@@ -389,53 +517,57 @@ include('../inc/message.php');
 	async function handleDateChange(selectedYear, selectedMonth) {
 		try {
 			await handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth);
-			await handlerDateChangeUpdateTotalWorkMonth(selectedYear, selectedMonth);
+			await handlerDateChangeUpdateTotalWorkMonth(selectedYear, selectedMonth);  // NOW NOT USE
 		} catch (error) {
-			console.error('Error: ' + error);
-			drawDataToTotalMonth(null);
+			drawDataToTotalMonth();
 		}
 	}
-
 	async function handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth) {
-
-		console.log("Start");
 		try {
 			const response = await ajaxRequestPromise(
 				'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=' + TYPE_GET_WORK_YEAR_MONTH_DAY
-			);
+				, 'GET');
 
-			let parsedResponse = response;
-			if (JSON.parse(parsedResponse) === KINTAI_NODATA) {
+			let parsedResponse = null;
+			try {
+				parsedResponse = JSON.parse(response);
+			} catch (error) { parsedResponse = null; console.log("GET_DATA_FAILD") }// JSON ERROR 
+
+			if (parsedResponse === NO_DATA_KINTAI) {
 				parsedResponse = null;
 			}
-
-			drawDayOfMonth(selectedYear, selectedMonth, parsedResponse);
+			drawDayOfMonth(selectedYear, selectedMonth, response);
 		} catch (errorStatus) {
-			console.error('Error: ' + errorStatus);
 			drawDayOfMonth(selectedYear, selectedMonth, null);
 		}
 	}
 
+
 	async function handlerDateChangeUpdateTotalWorkMonth(selectedYear, selectedMonth) {
+		// 	try {
+		// 	const response = await ajaxRequestPromise(
+		// 		'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=' + TYPE_GET_WORK_YEAR_MONTH
+		// 	,'GET');
+		// 	let parsedResponse = null;
+		// 	try {
+		// 		parsedResponse = JSON.parse(response);
+		// 	} catch (error) { parsedResponse = null; console.log("GET_DATA_FAILD")}// JSON ERROR 
 
-		try {
-			const response = await ajaxRequestPromise(
-				'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=' + TYPE_GET_WORK_YEAR_MONTH
-			);
+		// 	if (parsedResponse === NO_DATA_KINTAI) {
+		// 		parsedResponse = null;
+		// 	}
 
-			let parsedResponse = response;
-			if (JSON.parse(parsedResponse) === KINTAI_NODATA) {
-				parsedResponse = null;
-			}
-			drawDataToTotalMonth(parsedResponse);
-		} catch (errorStatus) {
-			console.error('Error: ' + errorStatus);
-			drawDataToTotalMonth(null);
-		}
+		// 	drawDataToTotalMonth();
+		// } catch (errorStatus) {
+		// 	console.error('Error: ' + errorStatus);
+		// 	drawDataToTotalMonth();
+		// }
+
+		// draw data total month 
+		drawDataToTotalMonth();
 	}
-
-	//  Ajax 
-	function ajaxRequest(url, successCallback, errorCallback) {
+	// ajax
+	function ajaxRequest(url, method, successCallback, errorCallback) {
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function () {
 			if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -450,14 +582,15 @@ include('../inc/message.php');
 				}
 			}
 		};
-		xhr.open('GET', url, true);
+		xhr.open(method, url, true);
 		xhr.send();
 	}
 
-	function ajaxRequestPromise(url) {
+	function ajaxRequestPromise(url, method) {
 		return new Promise(function (resolve, reject) {
 			ajaxRequest(
 				url,
+				method,
 				function (response) {
 					resolve(response);
 				},
@@ -468,11 +601,10 @@ include('../inc/message.php');
 		});
 	}
 
-
 </script>
 
 <body>
-	<?php include('../inc/menu.php'); ?>
+	<?php include('../inc/header.php'); ?>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-5 text-left">
