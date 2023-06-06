@@ -18,12 +18,17 @@ $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
 // Select data from tbl_userkyuka
 $sql_userkyuka_select_db = 'SELECT DISTINCT
-`tbl_userkyuka`.*,
-`tbl_user`.`name`,
-`tbl_vacationinfo`.`vacationstr`,
-`tbl_vacationinfo`.`vacationend`,
-`tbl_vacationinfo`.`oldcnt`,
-`tbl_vacationinfo`.`newcnt`
+    `tbl_userkyuka`.*,
+    `tbl_user`.`name`,
+    `tbl_user`.`dept`,
+    `tbl_vacationinfo`.`vacationstr`,
+    `tbl_vacationinfo`.`vacationend`,
+    `tbl_vacationinfo`.`oldcnt`,
+    `tbl_vacationinfo`.`newcnt`,
+    `tbl_vacationinfo`.`usecnt`,
+    `tbl_vacationinfo`.`usetime`,
+    `tbl_vacationinfo`.`restcnt`,
+    `tbl_codebase`.`remark`
 FROM
 `tbl_userkyuka`
 CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`uid` = `tbl_user`.`uid`
@@ -32,23 +37,28 @@ CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinf
 WHERE
 `tbl_codebase`.`typecode` = 02';
 
-// Search Button Click
+// Search Button Click kyukaReg.php
 $sql_userkyuka_select = mysqli_query($conn, $sql_userkyuka_select_db);
 $result_userkyuka_select = mysqli_fetch_all($sql_userkyuka_select, MYSQLI_ASSOC);
 if (!empty($result_userkyuka_select)) {
     foreach ($result_userkyuka_select as $key) {
         $AllowOk[] = $key['allowok'];
         $UId[] = $key['uid'];
-        $KyukayMD[] = substr($key['kyukaymd'], 0, 4);
+        $KyukaY[] = substr($key['kyukaymd'], 0, 4);
+        $Name[] = $key['name'];
+        $VacationY[] = substr($key['vacationstr'], 0, 4);
     }
 }
 $AllowOk = array_unique($AllowOk);
 $UId = array_unique($UId);
-$KyukayMD = array_unique($KyukayMD);
-if ($_POST['btnSearch'] == NULL) {
+$KyukaY = array_unique($KyukaY);
+$Name = array_unique($Name);
+$VacationY = array_unique($VacationY);
+
+if ($_POST['btnSearchReg'] == NULL) {
     $_POST['searchAllowok'] = "9";
     $sql_userkyuka = $sql_userkyuka_select_db;
-} elseif ($_POST['btnSearch'] != NULL) {
+} elseif ($_POST['btnSearchReg'] != NULL) {
     if ($_POST['searchAllowok'] == "9") {
         $searchAllowok = implode('","', $AllowOk);
     } else {
@@ -60,7 +70,7 @@ if ($_POST['btnSearch'] == NULL) {
         $searchUid = $_POST['searchUid'];
     }
     if ($_POST['searchYY'] == "") {
-        $searchYY = implode('","', $KyukayMD);
+        $searchYY = implode('","', $KyukaY);
     } else {
         $searchYY = $_POST['searchYY'];
     }
@@ -83,6 +93,40 @@ CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinf
         AND `tbl_codebase`.`typecode` = 02';
 }
 
+// Search Button Click kyukaMonthly.php
+if ($_POST['btnSearchMon'] != NULL) {
+    if ($_POST['searchUid'] == "") {
+        $searchUid = implode('","', $UId);
+    } else {
+        $searchUid = $_POST['searchUid'];
+    }
+    if ($_POST['searchYY'] == "") {
+        $searchYY = implode('","', $VacationY);
+    } else {
+        $searchYY = $_POST['searchYY'];
+    }
+    $sql_userkyuka = 'SELECT DISTINCT
+    `tbl_userkyuka`.*,
+    `tbl_user`.`name`,
+    `tbl_user`.`dept`,
+    `tbl_vacationinfo`.`vacationstr`,
+    `tbl_vacationinfo`.`vacationend`,
+    `tbl_vacationinfo`.`oldcnt`,
+    `tbl_vacationinfo`.`newcnt`,
+    `tbl_vacationinfo`.`usecnt`,
+    `tbl_vacationinfo`.`usetime`,
+    `tbl_vacationinfo`.`restcnt`,
+    `tbl_codebase`.`remark`
+FROM
+    `tbl_userkyuka`
+CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`uid` = `tbl_user`.`uid`
+CROSS JOIN `tbl_codebase` ON `tbl_userkyuka`.`kyukacode` = `tbl_codebase`.`code`
+CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinfo`.`vacationid`
+WHERE
+    `tbl_user`.`uid` IN("' . $searchUid . '") 
+    AND LEFT(`tbl_vacationinfo`.`vacationstr`, 4) IN("' . $searchYY . '") 
+    AND `tbl_codebase`.`typecode` = 02';
+}
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 

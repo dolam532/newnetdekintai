@@ -108,7 +108,7 @@ include('../inc/header.php');
 
 			<div class="col-md-2 text-right" style="width: 20.8%">
 				<div class="title_btn">
-					<input type="submit" name="btnSearch" value="検索 ">&nbsp;
+					<input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
 					<input type="button" id="btnNew" value="新規 ">&nbsp;
 					<input type="button" id="btnAnnt" value="お知らせ ">
 				</div>
@@ -179,7 +179,7 @@ include('../inc/header.php');
 							<div class="row">
 								<div class="col-md-3">
 									<label for="kyukaymd">申請日</label>
-									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y-m-d'); ?>" readonly>
+									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
 									<input type="hidden" id="kyukaid" name="kyukaid" value="">
 									<input type="hidden" id="companyid" name="companyid" value="">
 									<input type="hidden" id="uid" name="uid" value="">
