@@ -3,12 +3,13 @@
 //========================================================//
 // <!-- KintaiDAO  --> 
 //========================================================//
-interface KintaiDAO {
+interface KintaiRegDAO {
     public function selectById($id) ;
 
     public function insert($object);
 
-    public function insertMany($listObject);
+    public function insertMany($listObject ,  $uid);  
+    public function insertNewMonth($year, $month, $uid);
 
     public function delete($object);
 
