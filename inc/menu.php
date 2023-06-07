@@ -82,7 +82,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href=""><span class="glyphicon glyphicon-user" id="username">
                                 社員名</span></a></li>
-                    <li class="login"><a href=""><span class="glyphicon glyphicon-log-in" id="login"> Login</span></a></li>
+                    <li class="login"><a href="../login/login.php"><span class="glyphicon glyphicon-log-in" id="login"> Login</span></a></li>
                     <li class="logout" style="display: none;"><a href=""><span class="glyphicon glyphicon-log-out" id="logout"> Logout</span></a></li>
                 </ul>
             </div>
