@@ -5,6 +5,10 @@ include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../model/usermodel.php');
 include('../inc/header.php');
+
+if ($_SESSION['auth'] == false) {
+	header("Location: ../loginout/loginout.php");
+}
 ?>
 <style>
 	.usertbl tr th {

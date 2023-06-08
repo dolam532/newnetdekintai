@@ -4,62 +4,55 @@ body {
 }
 
 .board_title {
-
-	font-weight : 700;
-	font-size : 22pt;
-	margin : 10pt;
+  font-weight: 700;
+  font-size: 22pt;
+  margin: 10pt;
 }
 
 .board_info_box {
-
-	color : #6B6B6B;
-	margin : 10pt;
+  color: #6b6b6b;
+  margin: 10pt;
 }
 
 .board_author {
-
-	font-size : 10pt;
-	margin-right : 10pt;
+  font-size: 10pt;
+  margin-right: 10pt;
 }
 
 .board_date {
-
-	font-size : 10pt;
+  font-size: 10pt;
 }
 
 .board_content {
-
-	color : #444343;
-	font-size : 12pt;
-	margin : 10pt;
+  color: #444343;
+  font-size: 12pt;
+  margin: 10pt;
 }
 
 .board_tag {
-
-	font-size : 11pt;
-	margin : 10pt;
-	padding-bottom : 10pt;
+  font-size: 11pt;
+  margin: 10pt;
+  padding-bottom: 10pt;
 }
 
 /* 타이틀 제목 */
 .title_name {
-	 font-size: 2em;
-	 font-weight: bold;
-     height: 70px;
-     display: table-cell;
-     vertical-align: bottom;
+  font-size: 2em;
+  font-weight: bold;
+  height: 70px;
+  display: table-cell;
+  vertical-align: bottom;
 }
 /* 타이틀 조회조건 */
 .title_condition {
-	 font-size: 1em;
-     height: 70px;
-     display: table-cell;
-     vertical-align: bottom;
+  font-size: 1em;
+  height: 70px;
+  display: table-cell;
+  vertical-align: bottom;
 }
 /* 타이틀 버튼 */
 .title_btn {
-     height: 70px;
-     display: inline-block;
-     padding-top:35px;
+  height: 70px;
+  display: inline-block;
+  padding-top: 35px;
 }
-	

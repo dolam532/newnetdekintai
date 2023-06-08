@@ -6,6 +6,10 @@ include('../inc/message.php');
 include('../inc/const_array.php');
 include('../model/kyukamodel.php');
 include('../inc/header.php');
+
+if ($_SESSION['auth'] == false) {
+	header("Location: ../loginout/loginout.php");
+}
 ?>
 <style>
 	.usertbl tr th {

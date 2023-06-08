@@ -1,3 +1,10 @@
+<?php
+session_start();
+if ($_SESSION['auth'] == false) {
+	header("Location: ../loginout/loginout.php");
+}
+
+?>
 <!DOCTYPE html>
 <html>
 

@@ -1,3 +1,10 @@
+<?php
+session_start();
+if ($_SESSION['auth'] == false) {
+	header("Location: ../loginout/loginout.php");
+}
+
+?>
 <!DOCTYPE html>
 <html>
 
@@ -49,7 +56,6 @@ include '../inc/const.php';
 include('../inc/message.php');
 ?>
 <script>
-
 	// Get 
 	var NO_DATA_KINTAI = "<?php echo $NO_DATA_KINTAI; ?>";
 	var TYPE_GET_WORK_YEAR_MONTH_DAY = "<?php echo $TYPE_GET_WORK_YEAR_MONTH_DAY; ?>"
@@ -69,7 +75,7 @@ include('../inc/message.php');
 	//================================/// 
 	//=========== init===============//     
 	//============================///  
-	window.onload = function () {
+	window.onload = function() {
 		var currentDate = new Date();
 		var currentMonth = currentDate.getMonth(); // Month is zero-based in JavaScript
 		var currentYear = currentDate.getFullYear();
@@ -105,7 +111,7 @@ include('../inc/message.php');
 			var workYmdList = jsonData.workYmdList;
 			// Check List Month => If list  check the list of months if the list is missing or missing days then add it to the list
 			var isCheck = checkMonthMissingData(workYmdList, showYear, showMonth);
-			if (!isCheck) {   // If future month => 
+			if (!isCheck) { // If future month => 
 				drawWhiteTable(showYear, showMonth);
 				// call drawDayOfMonth
 				return;
@@ -120,7 +126,9 @@ include('../inc/message.php');
 				}
 				var formattedDate = ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2);
 				var dateObj = new Date(showYear, showMonth - 1, day);
-				var dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+				var dayOfWeek = dateObj.toLocaleDateString('en-US', {
+					weekday: 'short'
+				});
 				var dayOfWeekJapanese = dayOfWeekNames[dayOfWeek];
 
 				//Create HTML for one row
@@ -188,7 +196,9 @@ include('../inc/message.php');
 		for (var day = 1; day <= daysInMonth; day++) {
 			var formattedDate = ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2);
 			var dateObj = new Date(showYear, showMonth - 1, day);
-			var dayOfWeek = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+			var dayOfWeek = dateObj.toLocaleDateString('en-US', {
+				weekday: 'short'
+			});
 			var dayOfWeekJapanese = dayOfWeekNames[dayOfWeek];
 			html += '<tr>';
 			html += '<td>';
@@ -245,8 +255,7 @@ include('../inc/message.php');
 
 		var flagIsMissingDataOfMonth = false;
 		// IF DATA MISSING ???  
-		var daysInMonth = new Date(year, month, 0).getDate();
-		;
+		var daysInMonth = new Date(year, month, 0).getDate();;
 		// => Current Month if not data => Add new Data to DB 
 		if (typeof workYmdList === 'undefined') {
 			console.log("list" + workYmdList)
@@ -282,15 +291,15 @@ include('../inc/message.php');
 			for (let i = 0, len = workYmdList.length; i < len; i++) {
 				arrayDayOfWorkList.push(workYmdList[i].workymd);
 				if (workYmdList[i].genid !== null) {
-					genid = workYmdList[i].genidDefault;   // get genid of last day *** bad
+					genid = workYmdList[i].genidDefault; // get genid of last day *** bad
 				}
 			}
 
 			var filteredArray = arrayMissingDay
-				.filter(function (date) {
+				.filter(function(date) {
 					return !arrayDayOfWorkList.includes(date);
 				})
-				.map(function (date) {
+				.map(function(date) {
 					return {
 						genid: genidDefault, // genIdDefault
 						workymd: date
@@ -301,14 +310,14 @@ include('../inc/message.php');
 			const data = JSON.stringify(filteredArray); // convert to json 
 			console.log(data);
 			const response = ajaxRequest(
-				'kintaiRegController.php?type='
-				+ TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY + '&data=' + data,
+				'kintaiRegController.php?type=' +
+				TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY + '&data=' + data,
 				'GET',
-				function (response) {
+				function(response) {
 					//html_entity_decode($data);
 					console.log(response);
 				},
-				function (errorStatus) {
+				function(errorStatus) {
 					console.log("Connect ERROR: " + errorStatus);
 				}
 			);
@@ -324,13 +333,13 @@ include('../inc/message.php');
 	function insertNewMonthData(year, month) {
 
 		const response = ajaxRequest(
-			'kintaiRegController.php?type='
-			+ TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY + '&year=' + year + '&month=' + month,
+			'kintaiRegController.php?type=' +
+			TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY + '&year=' + year + '&month=' + month,
 			'GET',
-			function (response) {
+			function(response) {
 				console.log("INSERT" + response);
 			},
-			function (errorStatus) {
+			function(errorStatus) {
 				console.log("Connect ERROR: " + errorStatus);
 			}
 		);
@@ -455,7 +464,7 @@ include('../inc/message.php');
 				// Delay Count
 				if ((dayStartHours * 60 + dayStartMinutes + TIME_KINTAI_DELAY_IN) > (jobStartHours * 60 + jobStartMinutes)) {
 					nCountDelayIn += 1
-					LIST_DELAY_IN_DATE.push(i);   // WHEN FILL COLOR TO DELAY DATE 
+					LIST_DELAY_IN_DATE.push(i); // WHEN FILL COLOR TO DELAY DATE 
 				}
 				// Early off count  
 				if ((dayEndHours * 60 + dayEndMinutes + TIME_KINTAI_EARLY_OUT) > (jobEndHours * 60 + jobEndMinutes)) {
@@ -517,7 +526,7 @@ include('../inc/message.php');
 	async function handleDateChange(selectedYear, selectedMonth) {
 		try {
 			await handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth);
-			await handlerDateChangeUpdateTotalWorkMonth(selectedYear, selectedMonth);  // NOW NOT USE
+			await handlerDateChangeUpdateTotalWorkMonth(selectedYear, selectedMonth); // NOW NOT USE
 		} catch (error) {
 			drawDataToTotalMonth();
 		}
@@ -525,13 +534,15 @@ include('../inc/message.php');
 	async function handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth) {
 		try {
 			const response = await ajaxRequestPromise(
-				'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=' + TYPE_GET_WORK_YEAR_MONTH_DAY
-				, 'GET');
+				'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=' + TYPE_GET_WORK_YEAR_MONTH_DAY, 'GET');
 
 			let parsedResponse = null;
 			try {
 				parsedResponse = JSON.parse(response);
-			} catch (error) { parsedResponse = null; console.log("GET_DATA_FAILD") }// JSON ERROR 
+			} catch (error) {
+				parsedResponse = null;
+				console.log("GET_DATA_FAILD")
+			} // JSON ERROR 
 
 			if (parsedResponse === NO_DATA_KINTAI) {
 				parsedResponse = null;
@@ -569,7 +580,7 @@ include('../inc/message.php');
 	// ajax
 	function ajaxRequest(url, method, successCallback, errorCallback) {
 		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function () {
+		xhr.onreadystatechange = function() {
 			if (xhr.readyState === XMLHttpRequest.DONE) {
 				if (xhr.status === 200) {
 					if (successCallback) {
@@ -587,20 +598,19 @@ include('../inc/message.php');
 	}
 
 	function ajaxRequestPromise(url, method) {
-		return new Promise(function (resolve, reject) {
+		return new Promise(function(resolve, reject) {
 			ajaxRequest(
 				url,
 				method,
-				function (response) {
+				function(response) {
 					resolve(response);
 				},
-				function (errorStatus) {
+				function(errorStatus) {
 					reject(errorStatus);
 				}
 			);
 		});
 	}
-
 </script>
 
 <body>
@@ -615,8 +625,7 @@ include('../inc/message.php');
 			<div class="col-md-4 text-center">
 				<div class="title_condition">
 					<label>基準日:
-						<select id="selyy" name="selyy" class="seldate" style="padding:5px;"
-							onchange="handleDateChange(this.value, document.getElementById('selmm').value)">
+						<select id="selyy" name="selyy" class="seldate" style="padding:5px;" onchange="handleDateChange(this.value, document.getElementById('selmm').value)">
 							<?php
 
 							$currentYear = date('Y');
@@ -626,8 +635,7 @@ include('../inc/message.php');
 							}
 							?>
 						</select>
-						<select id="selmm" name="selmm" class="seldate" style="padding:5px;"
-							onchange="handleDateChange(document.getElementById('selyy').value, this.value)">
+						<select id="selmm" name="selmm" class="seldate" style="padding:5px;" onchange="handleDateChange(document.getElementById('selyy').value, this.value)">
 							<?php
 							for ($month = 1; $month <= 12; $month++) {
 								$formattedMonth = sprintf("%02d", $month);
@@ -640,8 +648,7 @@ include('../inc/message.php');
 			</div>
 			<div class="col-md-3 text-right">
 				<div class="title_btn">
-					<p><a href="http://localhost:8080/web/kintai/kintaiReg#" onclick="#" class="btn btn-default"
-							style="width: 120px;">勤務表印刷</a></p>
+					<p><a href="http://localhost:8080/web/kintai/kintaiReg#" onclick="#" class="btn btn-default" style="width: 120px;">勤務表印刷</a></p>
 				</div>
 			</div>
 		</div>
@@ -691,20 +698,13 @@ include('../inc/message.php');
 				</tr>
 				<tr>
 					<td><button type="button" class="btn btn-primary" id="btnUpdMonthly">月登録</button></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="jobhour" id="jobhour"
-							maxlength="3" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="jobminute"
-							id="jobminute" maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="workdays" id="workdays"
-							maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="jobdays" id="jobdays"
-							maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="offdays" id="offdays"
-							maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="delaydays"
-							id="delaydays" maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="earlydays"
-							id="earlydays" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="jobhour" id="jobhour" maxlength="3" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="jobminute" id="jobminute" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="workdays" id="workdays" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="jobdays" id="jobdays" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="offdays" id="offdays" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="delaydays" id="delaydays" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="earlydays" id="earlydays" maxlength="2" value="0"></td>
 				</tr>
 			</tbody>
 		</table>

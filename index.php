@@ -175,21 +175,27 @@ include('./model/indexmodel.php');
 </body>
 <script>
 	function fn_showNotice(bid, imagenum, title, reader, name, viewcnt, reg_dt, content) {
-		$('#modal').modal('toggle');
-		$('#title').text(title);
-		$('#reader').text(reader);
-		$('#content').text(content);
-		$('#name').text(name);
-
-		//조회수를 다시 읽지 않고 화면상에서만 더해서 표시하게 한다. 
-		if ($('#viewcnt').text() > " ") {
-			var cnt = $('#viewcnt').text();
-			cnt = (cnt * 1) + 1;
-			$('#viewcnt').text(cnt);
+		var auth = '<?php echo $_SESSION['auth'] ?>';
+		if (auth == "") {
+			alert("詳細情報はログイン後可能です。")
+			return;
 		} else {
-			$('#viewcnt').text(viewcnt);
+			$('#modal').modal('toggle');
+			$('#title').text(title);
+			$('#reader').text(reader);
+			$('#content').text(content);
+			$('#name').text(name);
+
+			//조회수를 다시 읽지 않고 화면상에서만 더해서 표시하게 한다. 
+			if ($('#viewcnt').text() > " ") {
+				var cnt = $('#viewcnt').text();
+				cnt = (cnt * 1) + 1;
+				$('#viewcnt').text(cnt);
+			} else {
+				$('#viewcnt').text(viewcnt);
+			}
+			$('#reg_dt').text(reg_dt);
 		}
-		$('#reg_dt').text(reg_dt);
 	}
 </script>
 
