@@ -5,6 +5,7 @@ include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../inc/const.php');
 
+// Login
 if (isset($_POST['btnLogin'])) {
     if (($_POST['uid'] == "" || $_POST['pwd'] == "")) {
         $_SESSION['login_empty'] =  $login_empty;
@@ -17,22 +18,23 @@ if (isset($_POST['btnLogin'])) {
         $login_query_run = mysqli_query($conn, $login_query);
         if (mysqli_num_rows($login_query_run) > 0) {
             foreach ($login_query_run as $data) {
-                $user_id = $data['uid'];
+                $user_uid = $data['uid'];
                 $user_pwd = $data['pwd'];
                 $user_name = $data['name'];
                 $user_type = $data['type'];
             }
             $_SESSION['auth'] = true;
             $_SESSION['auth_type'] = "$user_type"; //9=admin, 1=user
-            $_SESSION['auth_user'] = [
-                'user_id' => $user_id,
-                'user_pwd' => $user_pwd,
-                'user_name' => $user_name,
-            ];
+            $_SESSION['auth_uid'] = "$user_uid";
+            $_SESSION['auth_pwd'] = "$user_pwd";
+            $_SESSION['auth_name'] = "$user_name";
+
             if ($_SESSION['auth_type'] == constant('ADMIN')) {
                 header("Location: ../index.php");
+                $_SESSION['login_success'] =  $login_success;
             } elseif ($_SESSION['auth_type'] == constant('USER')) {
                 header("Location: ../index.php");
+                $_SESSION['login_success'] =  $login_success;
             } else {
                 $_SESSION['login_fail'] =  $login_fail;
             }
@@ -40,4 +42,17 @@ if (isset($_POST['btnLogin'])) {
             $_SESSION['login_fail'] =  $login_fail;
         }
     }
+}
+
+//Logout
+if (isset($_POST['btnLogout'])) {
+    // session_destroy();
+    unset($_SESSION['auth']);
+    unset($_SESSION['auth_type']);
+    unset($_SESSION['auth_uid']);
+    unset($_SESSION['auth_pwd']);
+    unset($_SESSION['auth_name']);
+
+    header("Location: ../index.php");
+    $_SESSION['logout_success'] =  $logout_success;
 }

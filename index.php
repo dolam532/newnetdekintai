@@ -57,6 +57,23 @@ include('./model/indexmodel.php');
 		<title>Home</title>
 		<?php include('./inc/menu.php'); ?>
 		<div class="container">
+			<?php if (isset($_SESSION['login_success'])) : ?>
+				<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<?php echo $_SESSION['login_success']; ?>
+				</div>
+			<?php
+				unset($_SESSION['login_success']);
+			elseif (isset($_SESSION['logout_success'])) :
+			?>
+				<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+					<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+					<?php echo $_SESSION['logout_success']; ?>
+				</div>
+			<?php
+				unset($_SESSION['logout_success']);
+			endif;
+			?>
 			<div class="jumbotron" id="jumbo1">
 				<h1 class="text-center">ネットDE勤怠</h1>
 				<p class="text-center">ネット上の勤怠管理システム</p>

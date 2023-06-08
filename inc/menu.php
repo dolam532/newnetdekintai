@@ -53,37 +53,44 @@
                             <li class="menu-level3"><a href="../kyuka/kyukaMonthly.php">休暇使用現状</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown active" id="manager">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">基本情報
-                            <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li class="menu-level3"><a href="">基礎コード登録</a></li>
-                            <li class="menu-level3"><a href="">勤務日登録</a></li>
-                            <li class="menu-level3"><a href="">祝日登録</a></li>
-                            <li class="menu-level3"><a href="../user/userList.php">社員登録</a></li>
-                            <li class="menu-level3"><a href="">年次休暇登録</a></li>
-                            <li class="menu-level3"><a href="">現場登録</a></li>
-                            <li class="menu-level3"><a href="">現場別勤務社員</a></li>
-                            <li class="menu-level3"><a href="">社員ログイン内訳</a></li>
-                            <li class="menu-level3"><a href="">管理情報登録</a>
-                            </li>
-                            <li class="menu-level3"><a href="">お知らせ登録</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown active" id="gana">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true">GANASYS<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="">使用者登録</a></li>
-                            <li><a href="">管理者登録</a></li>
-                        </ul>
-                    </li>
+                    <?php if (isset($_SESSION['auth'])) : ?>
+                        <li class="dropdown active" id="manager">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">基本情報
+                                <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li class="menu-level3"><a href="">基礎コード登録</a></li>
+                                <li class="menu-level3"><a href="">勤務日登録</a></li>
+                                <li class="menu-level3"><a href="">祝日登録</a></li>
+                                <li class="menu-level3"><a href="../user/userList.php">社員登録</a></li>
+                                <li class="menu-level3"><a href="">年次休暇登録</a></li>
+                                <li class="menu-level3"><a href="">現場登録</a></li>
+                                <li class="menu-level3"><a href="">現場別勤務社員</a></li>
+                                <li class="menu-level3"><a href="">社員ログイン内訳</a></li>
+                                <li class="menu-level3"><a href="">管理情報登録</a>
+                                </li>
+                                <li class="menu-level3"><a href="">お知らせ登録</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown active" id="gana">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true">GANASYS<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="">使用者登録</a></li>
+                                <li><a href="">管理者登録</a></li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href=""><span class="glyphicon glyphicon-user" id="username">
-                                社員名</span></a></li>
-                    <li class="login"><a href="../login/login.php"><span class="glyphicon glyphicon-log-in" id="login"> Login</span></a></li>
-                    <li class="logout" style="display: none;"><a href=""><span class="glyphicon glyphicon-log-out" id="logout"> Logout</span></a></li>
+                    <?php if (isset($_SESSION['auth'])) : ?>
+                        <li><a href=""><span class="glyphicon glyphicon-user" id="username">
+                                    <?= $_SESSION['auth_name'] ?></span></a></li>
+                        <li class="logout"><a href="../loginout/loginout.php"><span class="glyphicon glyphicon-log-out" id="logout"> Logout</span></a></li>
+                    <?php else : ?>
+                        <li><a href=""><span class="glyphicon glyphicon-user" id="username">
+                                    社員名</span></a></li>
+                        <li class="login"><a href="../loginout/loginout.php"><span class="glyphicon glyphicon-log-in" id="login"> Login</span></a></li>
+                    <?php endif; ?>
                 </ul>
             </div>
         </div>
