@@ -201,6 +201,102 @@ if ($_SESSION['auth'] == false) {
 			height: 30px;
 		}
 	}
+
+	@media screen and (max-device-width: 667px) and (max-device-height: 375px) {
+		div#tile_header {
+			width: 805px;
+		}
+
+		.col-md-1.col-sm-1.col-sx-1.text-left.all-div {
+			padding-left: 20px;
+			width: 12% !important;
+		}
+
+		.col-md-3.col-sm-3.col-sx-3.sub-bar.text-center,
+		.col-md-1.col-sm-1.col-sx-1.text-left.all-div,
+		.col-md-2.col-sm-2.col-sx-2.sub-bar.text-right.all-div {
+			float: left;
+		}
+
+		.col-md-3.col-sm-3.col-sx-3.sub-bar.text-center {
+			margin-left: 0px;
+		}
+
+		div#divUid {
+			float: left;
+			margin-right: 20px;
+			margin-left: 0px;
+		}
+
+
+		.col-md-2.col-sm-2.col-sx-2.sub-bar.text-right.all-div {
+			margin-left: -8px;
+			margin-right: 10px;
+		}
+
+		th.th1 {
+			width: 10% !important;
+		}
+
+		th.th2 {
+			width: 9% !important;
+		}
+
+		th.th3 {
+			width: 18% !important;
+		}
+
+		th.th4 {
+			width: 9% !important;
+		}
+
+		th.th5 {
+			width: 18% !important;
+		}
+
+		th.th6 {
+			width: 7% !important;
+		}
+
+		th.th7 {
+			width: 7% !important;
+		}
+
+		th.th8 {
+			width: 9% !important;
+		}
+
+		.modal-dialog {
+			width: 582px;
+		}
+
+		.col-md-3.col-sm-3.col-sx-3.kyukaymd,
+		.col-md-5.col-sm-5.col-sx-5.kyukacode,
+		.col-md-4.col-sm-4.col-sx-4.kyukatype {
+			width: 150px;
+			float: left;
+		}
+
+		.col-md-3.col-sm-3.col-sx-3.day {
+			width: 150px;
+			float: left;
+		}
+
+		.col-md-2.col-sm-2.col-sx-2.no {
+			width: 95px;
+			float: left;
+		}
+
+		.col-md-4.col-sm-4.col-sx-4.address {
+			width: 200px;
+			float: left;
+		}
+
+		.modal-footer {
+			padding-top: 0px;
+			padding-bottom: 15px;
+		}
+	}
 </style>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
@@ -352,7 +448,7 @@ if ($_SESSION['auth'] == false) {
 
 						<div class="modal-body" style="text-align: left">
 							<div class="row one">
-								<div class="col-md-3 col-sm-3">
+								<div class="col-md-3 col-sm-3 col-sx-3 kyukaymd">
 									<label for="kyukaymd">申請日</label>
 									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
 									<input type="hidden" id="kyukaid" name="kyukaid" value="">
@@ -365,7 +461,7 @@ if ($_SESSION['auth'] == false) {
 									<input type="hidden" id="newcnt" name="newcnt" value="">
 									<input type="hidden" id="kyukatimelimit" name="kyukatimelimit" value="">
 								</div>
-								<div class="col-md-5 col-sm-5">
+								<div class="col-md-5 col-sm-5 col-sx-5 kyukacode">
 									<label for="kyukacode">休暇区分</label>
 									<select class="form-control" id="kyukaname" name="kyukacode">
 										<option value=""></option>
@@ -378,7 +474,7 @@ if ($_SESSION['auth'] == false) {
 										?>
 									</select>
 								</div>
-								<div class="col-md-4 col-sm-4">
+								<div class="col-md-4 col-sm-4 col-sx-4 kyukatype">
 									<label for="kyukatype">申込区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
@@ -390,46 +486,46 @@ if ($_SESSION['auth'] == false) {
 							</div>
 							<br>
 							<div class="row two">
-								<div class="col-md-3 col-sm-3">
+								<div class="col-md-3 col-sm-3 col-sx-3 day">
 									<label for="strymd">期間(F)</label>
 									<input type="text" class="form-control" id="strymd" name="strymd" placeholder="" required="required" maxlength="10" style="text-align: center">
 								</div>
-								<div class="col-md-3 col-sm-3">
+								<div class="col-md-3 col-sm-3 col-sx-3 day">
 									<label for="endymd">期間(T)</label>
 									<input type="text" class="form-control" id="endymd" name="endymd" placeholder="" required="required" maxlength="10" style="text-align: center">
 								</div>
-								<div class="col-md-3 col-sm-3">
+								<div class="col-md-3 col-sm-3 col-sx-3 day">
 									<label for="strtime">時間(F)</label>
 									<input type="text" class="form-control" id="strtime" name="strtime" placeholder="" required="required" maxlength="2" style="text-align: center">
 								</div>
-								<div class="col-md-3 col-sm-3">
+								<div class="col-md-3 col-sm-3 col-sx-3 day">
 									<label for="endtime">時間(T)</label>
 									<input type="text" class="form-control" id="endtime" name="endtime" placeholder="" required="required" maxlength="2" style="text-align: center">
 								</div>
 							</div>
 							<br>
 							<div class="row three">
-								<div class="col-md-2 col-sm-2">
+								<div class="col-md-2 col-sm-2 col-sx-2 no">
 									<label for="totcnt">当年付与</label>
 									<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly>
 								</div>
-								<div class="col-md-2 col-sm-2">
+								<div class="col-md-2 col-sm-2 col-sx-2 no">
 									<label for="usecnt">使用日数</label>
 									<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly>
 								</div>
-								<div class="col-md-2 col-sm-2">
+								<div class="col-md-2 col-sm-2 col-sx-2 no">
 									<label for="usetime">使用時間</label>
 									<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly>
 								</div>
-								<div class="col-md-2 col-sm-2">
+								<div class="col-md-2 col-sm-2 col-sx-2 no">
 									<label for="ymdcnt">申込日</label>
 									<input type="text" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="" style="text-align: center" readonly>
 								</div>
-								<div class="col-md-2 col-sm-2">
+								<div class="col-md-2 col-sm-2 col-sx-2 no">
 									<label for="timecnt">申込時間</label>
 									<input type="text" class="form-control" id="timecnt" name="timecnt" placeholder="" style="text-align: center" readonly>
 								</div>
-								<div class="col-md-2 col-sm-2">
+								<div class="col-md-2 col-sm-2 col-sx-2 no">
 									<label for="allowok">決裁</label>
 									<div class="custom-control custom-radio">
 										<input type="radio" name="allowok" value="0">未決裁
@@ -439,7 +535,7 @@ if ($_SESSION['auth'] == false) {
 							</div>
 							<br>
 							<div class="row four">
-								<div class="col-md-4 col-sm-4">
+								<div class="col-md-4 col-sm-4 col-sx-4 address">
 									<label for="destcode">暇中居る連絡先</label>
 									<div class="custom-control custom-radio">
 										&nbsp;&nbsp;
@@ -448,34 +544,34 @@ if ($_SESSION['auth'] == false) {
 										<input type="radio" name="destcode" value="2">その他
 									</div>
 								</div>
-								<div class="col-md-4 col-sm-4">
+								<div class="col-md-4 col-sm-4 col-sx-4 address">
 									<label for="destplace">場所</label>
 									<input type="text" class="form-control" name="destplace" id="destplace" placeholder="" required="required" style="text-align: left">
 								</div>
-								<div class="col-md-4 col-sm-4">
+								<div class="col-md-4 col-sm-4 col-sx-4 address">
 									<label for="desttel">Tel</label>
 									<input type="text" class="form-control" name="desttel" id="desttel" placeholder="" required="required" style="text-align: left">
 								</div>
 							</div>
 						</div>
 						<div class="modal-footer" style="text-align: center">
-							<div class="col-md-3 col-sm-3"></div>
-							<div class="col-md-2 col-sm-2">
+							<div class="col-md-3 col-sm-3 col-sx-3"></div>
+							<div class="col-md-2 col-sm-2 col-sx-2 btn">
 								<p class="text-center">
 									<input type="submit" name="SaveKyuka" class="btn btn-primary btn-md" id="btnReg" role="button" value="登録">
 								</p>
 							</div>
-							<div class="col-md-2 col-sm-2">
+							<div class="col-md-2 col-sm-2 col-sx-2 btn">
 								<p class="text-center">
 									<a class="btn btn-primary btn-md" id="btnClear" role="button">クリア </a>
 								</p>
 							</div>
-							<div class="col-md-2 col-sm-2">
+							<div class="col-md-2 col-sm-2 col-sx-2 btn">
 								<p class="text-center">
-									<a class="btn btn-primary btn-md" id="btnRet" href="../kyuka/kyukaReg.php" role="button">閉じる </a>
+									<a class="btn btn-primary btn-md" data-dismiss="modal" role="button">閉じる </a>
 								</p>
 							</div>
-							<div class="col-md-3 col-sm-3"></div>
+							<div class="col-md-3 col-sm-3 col-sx-3"></div>
 						</div>
 					</div>
 				</form>
@@ -542,7 +638,7 @@ if ($_SESSION['auth'] == false) {
 						</div>
 						<div class="modal-footer" style="padding-bottom: 5px;">
 							<div class="col-md text-center">
-								<a class="btn btn-primary btn-md" id="btnRet" href="../kyuka/kyukaReg.php" role="button">閉じる </a>
+								<a class="btn btn-primary btn-md" data-dismiss="modal" role="button">閉じる </a>
 							</div>
 						</div>
 					</div>
