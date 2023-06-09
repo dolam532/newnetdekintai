@@ -29,6 +29,178 @@ if ($_SESSION['auth'] == false) {
 	div label {
 		padding: 5px;
 	}
+
+	nav.navbar.navbar-inverse {
+		margin-bottom: 0px;
+	}
+
+	.col-md-1.col-sm-1.text-left.all-div {
+		width: 12.499999995%;
+	}
+
+	.popup-title {
+		font-size: 20px;
+		font-weight: bold;
+	}
+
+	/* For Mobile Landscape View */
+	@media screen and (max-device-width: 896px) and (orientation: landscape) {
+		.container {
+			width: 800px;
+			padding-right: 10px;
+			padding-left: 10px;
+		}
+
+		.text-left {
+			font-size: 22px;
+		}
+
+		.all-div {
+			padding: 0px;
+		}
+
+		.col-md-1.col-sm-1.text-left.all-div {
+			padding-left: 15px;
+			width: 10.5% !important;
+		}
+
+		.sub-bar {
+			font-size: 12px;
+		}
+
+		.col-md-3.col-sm-3.sub-bar.text-center {
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+
+		.col-md-2.col-sm-2.sub-bar.text-right.all-div {
+			width: 17.5% !important;
+		}
+
+		div#divUid {
+			margin-right: -35px;
+		}
+
+		.col-md-2.col-sm-2.sub-bar.text-right.all-div.last {
+			width: 22.5% !important;
+		}
+
+		th.th1 {
+			width: 11% !important;
+			font-size: 12px;
+		}
+
+		th.th2 {
+			width: 9% !important;
+			font-size: 12px;
+		}
+
+		th.th3 {
+			width: 16% !important;
+			font-size: 12px;
+		}
+
+		th.th4 {
+			width: 8% !important;
+			font-size: 12px;
+		}
+
+		th.th5 {
+			width: 16% !important;
+			font-size: 12px;
+		}
+
+		th.th6 {
+			width: 7% !important;
+			font-size: 12px;
+		}
+
+		th.th7 {
+			width: 7% !important;
+			font-size: 12px;
+		}
+
+		th.th8 {
+			width: 9% !important;
+			font-size: 12px;
+		}
+
+		th.th9 {
+			font-size: 12px;
+		}
+
+		td.td1,
+		td.td2,
+		td.td3,
+		td.td4,
+		td.td5,
+		td.td6,
+		td.td7,
+		td.td8,
+		td.td9 {
+			font-size: 12px;
+		}
+
+		.popup-title {
+			font-size: 14px;
+		}
+
+		.modal-body {
+			font-size: 12px;
+			padding: 5px;
+		}
+
+		.modal-header,
+		.alert.alert-info {
+			padding-top: 5px;
+			padding-bottom: 5px;
+			padding-left: 10px;
+		}
+
+		.col-md-12.col-ms-12.sub-middle {
+			margin-top: -15px;
+			margin-bottom: -8px;
+		}
+
+		.alert.alert-warning,
+		.table-notic {
+			padding: 5px !important;
+		}
+
+		table.table.table-bordered.datatable {
+			margin-bottom: 0px;
+		}
+
+		.modal-footer {
+			padding-top: 5px;
+			padding-bottom: 0px;
+		}
+
+		input.form-control {
+			font-size: 12px;
+		}
+
+		.row.one {
+			margin-top: -5px;
+		}
+
+		.row.two,
+		.row.three {
+			margin-top: -15px;
+		}
+
+		.row.four {
+			margin-top: -20px;
+		}
+
+		.form-control {
+			height: 28px;
+		}
+
+		.btn {
+			height: 30px;
+		}
+	}
 </style>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
@@ -45,12 +217,12 @@ if ($_SESSION['auth'] == false) {
 	?>
 	<form method="post">
 		<div class="row">
-			<div class="col-md-1 text-left" style="width: 12.499999995%">
+			<div class="col-md-1 col-sm-1 col-sx-1 text-left all-div" style="width: 12.499999995%">
 				<div class="title_name">
 					<span class="text-left">休年届</span>
 				</div>
 			</div>
-			<div class="col-md-3 text-center">
+			<div class="col-md-3 col-sm-3 col-sx-3 sub-bar text-center">
 				<div class="title_condition custom-control custom-radio" id="divAllowok">
 					<label>&nbsp;
 						<?php
@@ -68,7 +240,7 @@ if ($_SESSION['auth'] == false) {
 				</div>
 			</div>
 
-			<div class="col-md-3" id="divUid">
+			<div class="col-md-3 col-sm-3 col-sx-3 sub-bar all-div" id="divUid">
 				<div class="title_condition">
 					<label>社員名 :
 						<select id="searchUid" name="searchUid" style="padding:5px;">
@@ -89,7 +261,7 @@ if ($_SESSION['auth'] == false) {
 				</div>
 			</div>
 
-			<div class="col-md-2 text-right">
+			<div class="col-md-2 col-sm-2 col-sx-2 sub-bar text-right all-div">
 				<div class="title_condition">
 					<label>基準日 :
 						<select id="searchYY" name="searchYY" style="padding:5px;">
@@ -110,7 +282,7 @@ if ($_SESSION['auth'] == false) {
 				</div>
 			</div>
 
-			<div class="col-md-2 text-right" style="width: 20.8%">
+			<div class="col-md-2 col-sm-2 col-sx-2 sub-bar text-right all-div last" style="width: 20.8%">
 				<div class="title_btn">
 					<input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
 					<input type="button" id="btnNew" value="新規 ">&nbsp;
@@ -118,20 +290,19 @@ if ($_SESSION['auth'] == false) {
 				</div>
 			</div>
 		</div>
-
 		<div class="form-group">
 			<table class="table table-bordered datatable">
 				<thead>
 					<tr class="info">
-						<th style="text-align: center; width: 12%;">申請日</th>
-						<th style="text-align: center; width: 10%;">休暇区分</th>
-						<th style="text-align: center; width: 16%;">申請期間</th>
-						<th style="text-align: center; width: 10%;">申込日(時)</th>
-						<th style="text-align: center; width: 16%;">年次期間</th>
-						<th style="text-align: center; width: 8%;">総休暇数</th>
-						<th style="text-align: center; width: 8%;">残日数</th>
-						<th style="text-align: center; width: 8%;">決裁</th>
-						<th style="text-align: center; width: auto;">暇中居る連絡先</th>
+						<th class="th1" style="text-align: center; width: 12%;">申請日</th>
+						<th class="th2" style="text-align: center; width: 10%;">休暇区分</th>
+						<th class="th3" style="text-align: center; width: 16%;">申請期間</th>
+						<th class="th4" style="text-align: center; width: 10%;">申込日(時)</th>
+						<th class="th5" style="text-align: center; width: 16%;">年次期間</th>
+						<th class="th6" style="text-align: center; width: 8%;">総休暇数</th>
+						<th class="th7" style="text-align: center; width: 8%;">残日数</th>
+						<th class="th8" style="text-align: center; width: 8%;">決裁</th>
+						<th class="th9" style="text-align: center; width: auto;">暇中居る連絡先</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -143,16 +314,16 @@ if ($_SESSION['auth'] == false) {
 						foreach ($userkyuka_list as $userkyuka) {
 						?>
 							<tr>
-								<td><span><?= $userkyuka['kyukaymd'] ?></span></td>
-								<td><span><?= $userkyuka['name'] ?></span></td>
-								<td>
+								<td class="td1"><span><?= $userkyuka['kyukaymd'] ?></span></td>
+								<td class="td2"><span><?= $userkyuka['name'] ?></span></td>
+								<td class="td3">
 									<span><?= $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'] ?></span>
 								</td>
-								<td><span><?= $userkyuka['ymdcnt'] ?>日(<?= $userkyuka['timecnt'] ?>時)</span></td>
-								<td><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
-								<td><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
-								<td><span><?= date('d', strtotime($userkyuka['endymd']) - strtotime($userkyuka['strymd'])) - 1 ?></span></td>
-								<td><span name="callowok">
+								<td class="td4"><span><?= $userkyuka['ymdcnt'] ?>日(<?= $userkyuka['timecnt'] ?>時)</span></td>
+								<td class="td5"><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
+								<td class="td6"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
+								<td class="td7"><span><?= date('d', strtotime($userkyuka['endymd']) - strtotime($userkyuka['strymd'])) - 1 ?></span></td>
+								<td class="td8"><span name="callowok">
 										<?php
 										if ($userkyuka['allowok'] == "0") { ?>
 											<span style="color:red">未決裁</span>
@@ -161,7 +332,7 @@ if ($_SESSION['auth'] == false) {
 										<?php } ?>
 									</span>
 								</td>
-								<td><span><?= $userkyuka['destplace'] ?></span></td>
+								<td class="td9"><span><?= $userkyuka['destplace'] ?></span></td>
 							</tr>
 					<?php }
 					} ?>
@@ -180,8 +351,8 @@ if ($_SESSION['auth'] == false) {
 						</div>
 
 						<div class="modal-body" style="text-align: left">
-							<div class="row">
-								<div class="col-md-3">
+							<div class="row one">
+								<div class="col-md-3 col-sm-3">
 									<label for="kyukaymd">申請日</label>
 									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
 									<input type="hidden" id="kyukaid" name="kyukaid" value="">
@@ -194,7 +365,7 @@ if ($_SESSION['auth'] == false) {
 									<input type="hidden" id="newcnt" name="newcnt" value="">
 									<input type="hidden" id="kyukatimelimit" name="kyukatimelimit" value="">
 								</div>
-								<div class="col-md-5">
+								<div class="col-md-5 col-sm-5">
 									<label for="kyukacode">休暇区分</label>
 									<select class="form-control" id="kyukaname" name="kyukacode">
 										<option value=""></option>
@@ -207,7 +378,7 @@ if ($_SESSION['auth'] == false) {
 										?>
 									</select>
 								</div>
-								<div class="col-md-4">
+								<div class="col-md-4 col-sm-4">
 									<label for="kyukatype">申込区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
@@ -218,47 +389,47 @@ if ($_SESSION['auth'] == false) {
 								</div>
 							</div>
 							<br>
-							<div class="row">
-								<div class="col-md-3">
+							<div class="row two">
+								<div class="col-md-3 col-sm-3">
 									<label for="strymd">期間(F)</label>
 									<input type="text" class="form-control" id="strymd" name="strymd" placeholder="" required="required" maxlength="10" style="text-align: center">
 								</div>
-								<div class="col-md-3">
+								<div class="col-md-3 col-sm-3">
 									<label for="endymd">期間(T)</label>
 									<input type="text" class="form-control" id="endymd" name="endymd" placeholder="" required="required" maxlength="10" style="text-align: center">
 								</div>
-								<div class="col-md-3">
+								<div class="col-md-3 col-sm-3">
 									<label for="strtime">時間(F)</label>
 									<input type="text" class="form-control" id="strtime" name="strtime" placeholder="" required="required" maxlength="2" style="text-align: center">
 								</div>
-								<div class="col-md-3">
+								<div class="col-md-3 col-sm-3">
 									<label for="endtime">時間(T)</label>
 									<input type="text" class="form-control" id="endtime" name="endtime" placeholder="" required="required" maxlength="2" style="text-align: center">
 								</div>
 							</div>
 							<br>
-							<div class="row">
-								<div class="col-md-2">
+							<div class="row three">
+								<div class="col-md-2 col-sm-2">
 									<label for="totcnt">当年付与</label>
 									<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly>
 								</div>
-								<div class="col-md-2">
+								<div class="col-md-2 col-sm-2">
 									<label for="usecnt">使用日数</label>
 									<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly>
 								</div>
-								<div class="col-md-2">
+								<div class="col-md-2 col-sm-2">
 									<label for="usetime">使用時間</label>
 									<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly>
 								</div>
-								<div class="col-md-2">
+								<div class="col-md-2 col-sm-2">
 									<label for="ymdcnt">申込日</label>
 									<input type="text" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="" style="text-align: center" readonly>
 								</div>
-								<div class="col-md-2">
+								<div class="col-md-2 col-sm-2">
 									<label for="timecnt">申込時間</label>
 									<input type="text" class="form-control" id="timecnt" name="timecnt" placeholder="" style="text-align: center" readonly>
 								</div>
-								<div class="col-md-2">
+								<div class="col-md-2 col-sm-2">
 									<label for="allowok">決裁</label>
 									<div class="custom-control custom-radio">
 										<input type="radio" name="allowok" value="0">未決裁
@@ -267,8 +438,8 @@ if ($_SESSION['auth'] == false) {
 								</div>
 							</div>
 							<br>
-							<div class="row">
-								<div class="col-md-4">
+							<div class="row four">
+								<div class="col-md-4 col-sm-4">
 									<label for="destcode">暇中居る連絡先</label>
 									<div class="custom-control custom-radio">
 										&nbsp;&nbsp;
@@ -277,34 +448,34 @@ if ($_SESSION['auth'] == false) {
 										<input type="radio" name="destcode" value="2">その他
 									</div>
 								</div>
-								<div class="col-md-4">
+								<div class="col-md-4 col-sm-4">
 									<label for="destplace">場所</label>
 									<input type="text" class="form-control" name="destplace" id="destplace" placeholder="" required="required" style="text-align: left">
 								</div>
-								<div class="col-md-4">
+								<div class="col-md-4 col-sm-4">
 									<label for="desttel">Tel</label>
 									<input type="text" class="form-control" name="desttel" id="desttel" placeholder="" required="required" style="text-align: left">
 								</div>
 							</div>
 						</div>
 						<div class="modal-footer" style="text-align: center">
-							<div class="col-md-3"></div>
-							<div class="col-md-2">
+							<div class="col-md-3 col-sm-3"></div>
+							<div class="col-md-2 col-sm-2">
 								<p class="text-center">
 									<input type="submit" name="SaveKyuka" class="btn btn-primary btn-md" id="btnReg" role="button" value="登録">
 								</p>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-2 col-sm-2">
 								<p class="text-center">
 									<a class="btn btn-primary btn-md" id="btnClear" role="button">クリア </a>
 								</p>
 							</div>
-							<div class="col-md-2">
+							<div class="col-md-2 col-sm-2">
 								<p class="text-center">
 									<a class="btn btn-primary btn-md" id="btnRet" href="../kyuka/kyukaReg.php" role="button">閉じる </a>
 								</p>
 							</div>
-							<div class="col-md-3"></div>
+							<div class="col-md-3 col-sm-3"></div>
 						</div>
 					</div>
 				</form>
@@ -316,13 +487,13 @@ if ($_SESSION['auth'] == false) {
 		<div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog">
 				<div class="modal-content">
-					<div class="modal-header"><span style="font-size:20px;font-weight: bold;">お知らせ(注意)</span>
+					<div class="modal-header"><span class="popup-title">お知らせ(注意)</span>
 						<button class="close" data-dismiss="modal">x</button>
 					</div>
 
 					<div class="modal-body" style="text-align: left">
 						<div class="row">
-							<div class="col-md-12">
+							<div class="col-md-12 col-ms-12">
 								<div class="alert alert-warning">
 									<strong>1&nbsp;</strong>事前許可が必要なので、担当者に許可の届け (休暇届) を提出すること。<br>
 									<strong>&nbsp;・</strong>原則として1週間前までに、少なくとも前々日までに提出すること。<br>
@@ -333,37 +504,37 @@ if ($_SESSION['auth'] == false) {
 									<strong>4&nbsp;</strong>半休(5時間以内)の場合は0.5日にて表現してください。その他詳しい内容は担当者に聞いてください。
 								</div>
 							</div>
-							<div class="col-md-12">
+							<div class="col-md-12 col-ms-12 sub-middle">
 								<div class="alert alert-info" style="margin-bottom: 10px;">
 									<strong>※&nbsp;年次有給休暇</strong>
 								</div>
 							</div>
-							<div class="col-md-12">
+							<div class="col-md-12 col-ms-12">
 								<table class="table table-bordered datatable">
 									<thead>
 										<tr>
-											<th class="info" style="text-align: center; color: #31708f;">勤続年数</th>
-											<td style="text-align: center;">6ヵ月以内</td>
-											<td style="text-align: center;">6ヵ月</td>
-											<td style="text-align: center;">1年6ヵ月</td>
-											<td style="text-align: center;">2年6ヵ月</td>
-											<td style="text-align: center;">3年6ヵ月</td>
-											<td style="text-align: center;">4年6ヵ月</td>
-											<td style="text-align: center;">5年6ヵ月</td>
-											<td style="text-align: center;">5年6ヵ月以上</td>
+											<th class="info table-notic" style="text-align: center; color: #31708f;">勤続年数</th>
+											<td class="table-notic" style="text-align: center;">6ヵ月以内</td>
+											<td class="table-notic" style="text-align: center;">6ヵ月</td>
+											<td class="table-notic" style="text-align: center;">1年6ヵ月</td>
+											<td class="table-notic" style="text-align: center;">2年6ヵ月</td>
+											<td class="table-notic" style="text-align: center;">3年6ヵ月</td>
+											<td class="table-notic" style="text-align: center;">4年6ヵ月</td>
+											<td class="table-notic" style="text-align: center;">5年6ヵ月</td>
+											<td class="table-notic" style="text-align: center;">5年6ヵ月以上</td>
 										</tr>
 									</thead>
 									<tbody>
 										<tr>
 											<th class="info" style="text-align: center; color: #31708f;">付与日数</th>
-											<td style="text-align: center;">無し</td>
-											<td style="text-align: center;">10日</td>
-											<td style="text-align: center;">11日</td>
-											<td style="text-align: center;">12日</td>
-											<td style="text-align: center;">14日</td>
-											<td style="text-align: center;">16日</td>
-											<td style="text-align: center;">18日</td>
-											<td style="text-align: center;">20日</td>
+											<td class="table-notic" style="text-align: center;">無し</td>
+											<td class="table-notic" style="text-align: center;">10日</td>
+											<td class="table-notic" style="text-align: center;">11日</td>
+											<td class="table-notic" style="text-align: center;">12日</td>
+											<td class="table-notic" style="text-align: center;">14日</td>
+											<td class="table-notic" style="text-align: center;">16日</td>
+											<td class="table-notic" style="text-align: center;">18日</td>
+											<td class="table-notic" style="text-align: center;">20日</td>
 										</tr>
 									</tbody>
 								</table>
