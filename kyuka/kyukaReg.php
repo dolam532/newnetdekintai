@@ -202,7 +202,7 @@ if ($_SESSION['auth'] == false) {
 		}
 	}
 
-	@media screen and (max-device-width: 837px) and (max-device-height: 414px) {
+	@media screen and (max-device-width: 837px) and (orientation: landscape) {
 		div#tile_header {
 			width: 805px;
 		}
