@@ -3,7 +3,6 @@ include('.././inc/dbconnect.php');
 include('.././inc/query.php');
 include('.././inc/message.php');
 
-session_start();
 class KintaiRegRepository
 {
 
@@ -40,7 +39,6 @@ class KintaiRegRepository
         $listObject = json_decode($data, true);
         global $QUERY_INSERT_MANY_WORK_OF_MONTH;
         $affected_rows = 0;
-        error_log($listObject, 0);
         try {
             $stmt = $conn->prepare($QUERY_INSERT_MANY_WORK_OF_MONTH);
             if ($stmt) {
@@ -74,14 +72,13 @@ class KintaiRegRepository
         global $DEFAULT_GENBA_ID;
         $affected_rows = 0;
         $workymd = "$year/$month/01";
-        // query edit 
+        // add query
         $query =  $QUERY_INSERT_NEW_WORK_OF_MONTH ;
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, intval(substr($workymd, 5, 2)), intval(substr($workymd, 0, 4)));
         for ($i = 1; $i <= $daysInMonth; $i++) {
             $day = str_pad($i, 2, '0', STR_PAD_LEFT);
             $query .= " ('$uid', '$DEFAULT_GENBA_ID', CONCAT(SUBSTRING('$workymd', 1, 8), '$day'), null, null, null, null, null, null, null, null, null, null, null, null, null, null, NOW()),";
         }
-        
         $query = rtrim($query, ','); // clear last , 
         error_log($query , 0);
         try {
