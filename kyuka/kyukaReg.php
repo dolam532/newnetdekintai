@@ -219,7 +219,7 @@ if ($_SESSION['auth'] == false) {
 		}
 
 		.col-md-3.col-sm-3.col-sx-3.sub-bar.text-center {
-			margin-left: 0px;
+			margin-left: -10px;
 		}
 
 		div#divUid {
@@ -230,8 +230,7 @@ if ($_SESSION['auth'] == false) {
 
 
 		.col-md-2.col-sm-2.col-sx-2.sub-bar.text-right.all-div {
-			margin-left: -20px;
-			margin-right: 10px;
+			margin-left: -30px;
 		}
 
 		th.th1 {
