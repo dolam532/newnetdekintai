@@ -43,7 +43,7 @@ if ($_SESSION['auth'] == false) {
 		font-weight: bold;
 	}
 
-	/* For Mobile Landscape View */
+	/* For Mobile Landscape View iPhone XR,12Pro */
 	@media screen and (max-device-width: 896px) and (orientation: landscape) {
 		.container {
 			width: 800px;
@@ -202,6 +202,7 @@ if ($_SESSION['auth'] == false) {
 		}
 	}
 
+	/* For Mobile Landscape View iPhone X,6,7,8 PLUS */
 	@media screen and (max-device-width: 837px) and (orientation: landscape) {
 		div#tile_header {
 			width: 805px;

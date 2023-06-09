@@ -29,6 +29,54 @@ if ($_SESSION['auth'] == false) {
 	div label {
 		padding: 5px;
 	}
+
+	/* For Mobile Landscape View iPhone XR,12Pro */
+	@media screen and (max-device-width: 896px) and (orientation: landscape) {
+		.container {
+			width: 800px;
+			padding-right: 10px;
+			padding-left: 10px;
+			margin-top: -25px;
+		}
+
+		.text-left {
+			font-size: 22px;
+		}
+
+		.col-md-3.col-ms-3.text-left {
+			font-size: 22px;
+			width: 180px;
+		}
+
+		.col-md-3 {
+			width: 195px;
+			float: left;
+		}
+
+		div#divUid {
+			width: 210px;
+			float: left;
+		}
+
+		th {
+			font-size: 12px;
+		}
+
+		span {
+			font-size: 12px;
+		}
+	}
+
+	/* For Mobile Landscape View iPhone X,6,7,8 PLUS */
+	@media screen and (max-device-width: 837px) and (orientation: landscape) {
+		div#tile_header {
+			width: 805px;
+		}
+
+		.col-md-3.col-ms-3.text-left {
+			margin-left: -150px;
+		}
+	}
 </style>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
@@ -46,12 +94,12 @@ if ($_SESSION['auth'] == false) {
 
 	<form method="post">
 		<div class="row">
-			<div class="col-md-3 text-left">
+			<div class="col-md-3 col-ms-3 text-left">
 				<div class="title_name">
 					<span class="text-left">休暇使用現状</span>
 				</div>
 			</div>
-			<div class="col-md-3" id="divUid">
+			<div class="col-md-3 col-ms-3" id="divUid">
 				<div class="title_condition">
 					<label>社員名 :
 						<select id="searchUid" name="searchUid" style="padding:5px;">
@@ -71,7 +119,7 @@ if ($_SESSION['auth'] == false) {
 					</label>
 				</div>
 			</div>
-			<div class="col-md-3 text-right">
+			<div class="col-md-3 col-ms-3 text-right">
 				<div class="title_condition">
 					<label>基準日 :
 						<select id="searchYY" name="searchYY" style="padding:5px;">
@@ -91,7 +139,7 @@ if ($_SESSION['auth'] == false) {
 					</label>
 				</div>
 			</div>
-			<div class="col-md-3 text-right">
+			<div class="col-md-3 col-ms-3 text-right">
 				<div class="title_btn">
 					<input type="submit" name="btnSearchMon" value="検索 ">
 				</div>
