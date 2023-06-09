@@ -230,7 +230,7 @@ if ($_SESSION['auth'] == false) {
 
 
 		.col-md-2.col-sm-2.col-sx-2.sub-bar.text-right.all-div {
-			margin-left: -8px;
+			margin-left: -20px;
 			margin-right: 10px;
 		}
 
