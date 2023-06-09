@@ -219,7 +219,7 @@ if ($_SESSION['auth'] == false) {
 		}
 
 		.col-md-3.col-sm-3.col-sx-3.sub-bar.text-center {
-			margin-left: -20px;
+			margin-left: 0px;
 		}
 
 		div#divUid {
@@ -230,7 +230,15 @@ if ($_SESSION['auth'] == false) {
 
 
 		.col-md-2.col-sm-2.col-sx-2.sub-bar.text-right.all-div {
-			margin-left: -40px;
+			margin-left: -20px;
+		}
+
+		.col-md-2.col-sm-2.col-sx-2.sub-bar.text-right.all-div.last {
+			display: inline-inline-block;
+		}
+
+		.title_btn {
+			width: 215px;
 		}
 
 		th.th1 {
@@ -294,6 +302,10 @@ if ($_SESSION['auth'] == false) {
 		.modal-footer {
 			padding-top: 0px;
 			padding-bottom: 15px;
+		}
+
+		.col-md.text-center {
+			margin-top: 10px;
 		}
 	}
 </style>
