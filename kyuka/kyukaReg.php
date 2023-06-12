@@ -344,13 +344,15 @@ if ($_SESSION['auth'] == false) {
 
 		.col-md-2.col-sm-2.col-sx-2.sub-bar.text-right.all-div {
 			padding-left: 10px;
-			width: 45%;
+			margin-right: -10px;
+			width: 42%;
 			float: left;
 		}
 
 		.col-md-2.col-sm-2.col-sx-2.sub-bar.text-right.all-div.last {
-			width: 55% !important;
+			width: 60% !important;
 			float: left;
+			display: inline;
 		}
 
 		th.th1 {
@@ -530,6 +532,10 @@ if ($_SESSION['auth'] == false) {
 
 		.col-md-2.col-sm-2.col-sx-2.sub-bar.text-right.all-div {
 			padding-left: 10px;
+		}
+
+		.col-md-2.col-sm-2.col-sx-2.sub-bar.text-right.all-div.last {
+			display: inline;
 		}
 	}
 </style>
