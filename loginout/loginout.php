@@ -17,10 +17,6 @@ include('../model/loginoutmodel.php');
 
     /* For Mobile Landscape View iPhone XR,12Pro */
     @media screen and (max-device-width: 896px) and (orientation: landscape) {
-        body {
-            transform: rotate(0deg);
-        }
-
         div#tile_body {
             margin-top: -3%;
             margin-bottom: -5%;
@@ -29,13 +25,17 @@ include('../model/loginoutmodel.php');
 
     /* For Mobile Landscape View iPhone X,6,7,8 PLUS */
     @media screen and (max-device-width: 837px) and (orientation: landscape) {
-        body {
-            transform: rotate(0deg);
-        }
-
         div#tile_body {
             margin-top: -5%;
             margin-bottom: -5%;
+        }
+    }
+
+    /* For Mobile Landscape View iPhone XR,12Pro */
+    @media screen and (max-device-width: 414px) and (orientation: portrait) {
+        form {
+            margin-right: 16px;
+            margin-left: 15px;
         }
     }
 </style>

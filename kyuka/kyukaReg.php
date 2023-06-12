@@ -43,6 +43,19 @@ if ($_SESSION['auth'] == false) {
 		font-weight: bold;
 	}
 
+	@media (orientation: portrait) {
+		body {
+			transform: rotate(90deg);
+			transform-origin: left top;
+			width: 100vh;
+			height: 100vw;
+			overflow-x: hidden;
+			position: fixed;
+			top: 0;
+			left: 0;
+		}
+	}
+
 	/* For Mobile Landscape View iPhone XR,12Pro */
 	@media screen and (max-device-width: 896px) and (orientation: landscape) {
 		.container {
