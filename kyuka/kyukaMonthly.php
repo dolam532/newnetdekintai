@@ -77,6 +77,66 @@ if ($_SESSION['auth'] == false) {
 			margin-left: -150px;
 		}
 	}
+
+	/* For Mobile portrait View iPhone XR,12Pro */
+	@media screen and (max-device-width: 414px) and (orientation: portrait) {
+		.form-group {
+			overflow: scroll;
+		}
+
+		.text-left {
+			font-size: 22px;
+			width: fit-content;
+		}
+
+		.col-md-3.col-ms-3.text-left {
+			font-size: 22px;
+		}
+
+		th {
+			font-size: 12px;
+		}
+
+		span {
+			font-size: 12px;
+		}
+
+		.container {
+			margin-top: -45px;
+		}
+
+		div#divUid {
+			width: 50%;
+			padding-right: 0px;
+			margin-top: -10px;
+			float: left;
+		}
+
+		.col-md-3.col-ms-3.text-right {
+			width: 50%;
+			padding-left: 0px;
+			margin-top: -10px;
+			float: left;
+		}
+
+		.col-md-3.col-ms-3.text-right.btn {
+			margin-top: -20px;
+			margin-bottom: 45px;
+			padding-top: 0px;
+			float: right;
+		}
+	}
+
+	/* For Mobile portrait View iPhone X,6,7,8 PLUS */
+	@media screen and (max-device-width: 375px) and (orientation: portrait) {
+		div#divUid {
+			padding-left: 10px;
+		}
+
+		.col-md-3.col-ms-3.text-right {
+			padding-right: 10px;
+		}
+	}
 </style>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
@@ -139,7 +199,7 @@ if ($_SESSION['auth'] == false) {
 					</label>
 				</div>
 			</div>
-			<div class="col-md-3 col-ms-3 text-right">
+			<div class="col-md-3 col-ms-3 text-right btn">
 				<div class="title_btn">
 					<input type="submit" name="btnSearchMon" value="検索 ">
 				</div>
