@@ -556,7 +556,7 @@ if ($_SESSION['auth'] == false) {
 		<div class="row">
 			<div class="col-md-1 col-sm-1 col-sx-1 text-left all-div" style="width: 12.499999995%">
 				<div class="title_name">
-					<span class="text-left">休年届</span>
+					<span class="text-left">休暇届</span>
 				</div>
 			</div>
 			<div class="col-md-3 col-sm-3 col-sx-3 sub-bar text-center">
