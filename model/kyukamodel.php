@@ -5,11 +5,6 @@ $sql_user = 'SELECT `uid`, `name` FROM `tbl_user`';
 $result_user = mysqli_query($conn, $sql_user);
 $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 
-// Select data from tbl_manageinfo
-$sql_manageinfo = 'SELECT * FROM `tbl_manageinfo`';
-$result_manageinfo = mysqli_query($conn, $sql_manageinfo);
-$manageinfo_list = mysqli_fetch_all($result_manageinfo, MYSQLI_ASSOC);
-
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
 WHERE `tbl_codebase`.`typecode` = 02 GROUP BY `code`, `name`';
@@ -17,8 +12,10 @@ $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
 // Select data from tbl_userkyuka
-$sql_userkyuka_select_db = 'SELECT DISTINCT
+if ($_SESSION['auth_type'] == constant('ADMIN')) {
+    $sql_userkyuka_select_db = 'SELECT DISTINCT
     `tbl_userkyuka`.*,
+    `tbl_user`.`companyid`,
     `tbl_user`.`name`,
     `tbl_user`.`dept`,
     `tbl_vacationinfo`.`vacationstr`,
@@ -28,14 +25,44 @@ $sql_userkyuka_select_db = 'SELECT DISTINCT
     `tbl_vacationinfo`.`usecnt`,
     `tbl_vacationinfo`.`usetime`,
     `tbl_vacationinfo`.`restcnt`,
-    `tbl_codebase`.`remark`
+    `tbl_codebase`.`remark`,
+    `tbl_manageinfo`.`kyukatimelimit`
 FROM
 `tbl_userkyuka`
 CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`uid` = `tbl_user`.`uid`
+CROSS JOIN `tbl_manageinfo` ON `tbl_user`.`companyid` = `tbl_manageinfo`.`companyid`
 CROSS JOIN `tbl_codebase` ON `tbl_userkyuka`.`kyukacode` = `tbl_codebase`.`code`
 CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinfo`.`vacationid`
 WHERE
 `tbl_codebase`.`typecode` = 02';
+} elseif ($_SESSION['auth_type'] == constant('USER')) {
+    $sql_userkyuka_select_db = 'SELECT DISTINCT
+    `tbl_userkyuka`.*,
+    `tbl_user`.`companyid`,
+    `tbl_user`.`name`,
+    `tbl_user`.`dept`,
+    `tbl_vacationinfo`.`vacationstr`,
+    `tbl_vacationinfo`.`vacationend`,
+    `tbl_vacationinfo`.`oldcnt`,
+    `tbl_vacationinfo`.`newcnt`,
+    `tbl_vacationinfo`.`usecnt`,
+    `tbl_vacationinfo`.`usetime`,
+    `tbl_vacationinfo`.`restcnt`,
+    `tbl_codebase`.`remark`,
+    `tbl_manageinfo`.`kyukatimelimit`
+FROM
+`tbl_userkyuka`
+CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`uid` = `tbl_user`.`uid`
+CROSS JOIN `tbl_manageinfo` ON `tbl_user`.`companyid` = `tbl_manageinfo`.`companyid`
+CROSS JOIN `tbl_codebase` ON `tbl_userkyuka`.`kyukacode` = `tbl_codebase`.`code`
+CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinfo`.`vacationid`
+WHERE
+`tbl_codebase`.`typecode` = 02
+AND
+`tbl_user`.`type` = "' . $_SESSION['auth_type'] . '"
+AND
+`tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"';
+}
 
 // Search Button Click kyukaReg.php
 $sql_userkyuka_select = mysqli_query($conn, $sql_userkyuka_select_db);
@@ -93,6 +120,38 @@ CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinf
         AND `tbl_codebase`.`typecode` = 02';
 }
 
+// Save data to tbl_userkyuka table of database
+if (isset($_POST['SaveKyuka'])) {
+    $uid = mysqli_real_escape_string($conn, $_POST['uid']);
+    $vacationid = mysqli_real_escape_string($conn, $_POST['vacationid']);
+    $kyukaymd = mysqli_real_escape_string($conn, $_POST['kyukaymd']);
+    $kyukatype = mysqli_real_escape_string($conn, $_POST['kyukatype']);
+    $strymd = mysqli_real_escape_string($conn, $_POST['strymd']);
+    $endymd = mysqli_real_escape_string($conn, $_POST['endymd']);
+    $ymdcnt = mysqli_real_escape_string($conn, $_POST['ymdcnt']);
+    $strtime = mysqli_real_escape_string($conn, $_POST['strtime']);
+    $endtime = mysqli_real_escape_string($conn, $_POST['endtime']);
+    $timecnt = mysqli_real_escape_string($conn, $_POST['timecnt']);
+    $kyukacode = mysqli_real_escape_string($conn, $_POST['kyukacode']);
+    $destcode = mysqli_real_escape_string($conn, $_POST['destcode']);
+    $destplace = mysqli_real_escape_string($conn, $_POST['destplace']);
+    $desttel = mysqli_real_escape_string($conn, $_POST['desttel']);
+    $allowok = mysqli_real_escape_string($conn, $_POST['allowok']);
+    $allowid = mysqli_real_escape_string($conn, $_POST['allowid']);
+    $allowdt = mysqli_real_escape_string($conn, $_POST['allowdt']);
+    $reg_dt = date('Y-m-d H:i:s');
+
+    $sql_userkyuka_save = mysqli_query($conn, "INSERT INTO `tbl_userkyuka` (`uid`, `vacationid`, `kyukaymd`, `kyukatype`, `strymd`, `endymd`, `ymdcnt`, `strtime`, `endtime`, `timecnt`, `kyukacode`, `destcode`, `destplace`, `desttel`, `allowok`, `allowid`, `allowdt`, `reg_dt`) 
+    VALUES ('$uid', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdt', '$reg_dt')");
+
+    if ($sql_userkyuka_save) {
+        $_SESSION['save_success'] =  $save_success;
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+
 // Search Button Click kyukaMonthly.php
 if ($_POST['btnSearchMon'] != NULL) {
     if ($_POST['searchUid'] == "") {
@@ -129,66 +188,3 @@ WHERE
 }
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
-
-// Save data to tbl_userkyuka table of database
-if (isset($_POST['SaveKyuka'])) {
-    if ($_POST['kyukaid'] = "") {
-        $_POST['kyukaid'] = "0";
-    }
-
-    $_POST['uid'] = "0";
-    $_POST['vacationid'] = "0";
-    $_POST['oldcnt'] = "0";
-    $_POST['newcnt'] = "0";
-    $_POST['vacationstr'] = "0";
-    $_POST['vacationend'] = "0";
-    $_POST['usecnt'] = "0";
-    $_POST['restcnt'] = "0";
-
-    $_POST['kyukaid'] = intval($_POST['kyukaid']);
-    $_POST['usetime'] = intval($_POST['usetime']);
-    $_POST['strtime'] = intval($_POST['strtime']);
-    $_POST['endtime'] = intval($_POST['endtime']);
-    $reg_dt = date('Y-m-d H:i:s');
-
-    $uid = mysqli_real_escape_string($conn, $_POST['uid']);
-    $vacationid = mysqli_real_escape_string($conn, $_POST['vacationid']);
-    $oldcnt = mysqli_real_escape_string($conn, $_POST['oldcnt']);
-    $newcnt = mysqli_real_escape_string($conn, $_POST['newcnt']);
-    $vacationstr = mysqli_real_escape_string($conn, $_POST['vacationstr']);
-    $vacationend = mysqli_real_escape_string($conn, $_POST['vacationend']);
-    $usecnt = mysqli_real_escape_string($conn, $_POST['usecnt']);
-    $usetime = mysqli_real_escape_string($conn, $_POST['usetime']);
-    $restcnt = mysqli_real_escape_string($conn, $_POST['restcnt']);
-
-    $kyukaymd = mysqli_real_escape_string($conn, $_POST['kyukaymd']);
-    $kyukaid = mysqli_real_escape_string($conn, $_POST['kyukaid']);
-    $kyukacode = mysqli_real_escape_string($conn, $_POST['kyukacode']);
-    $kyukatype = mysqli_real_escape_string($conn, $_POST['kyukatype']);
-    $strymd = mysqli_real_escape_string($conn, $_POST['strymd']);
-    $endymd = mysqli_real_escape_string($conn, $_POST['endymd']);
-    $strtime = mysqli_real_escape_string($conn, $_POST['strtime']);
-    $endtime = mysqli_real_escape_string($conn, $_POST['endtime']);
-    $ymdcnt = mysqli_real_escape_string($conn, $_POST['ymdcnt']);
-    $inymd = mysqli_real_escape_string($conn, $_POST['inymd']);
-    $timecnt = mysqli_real_escape_string($conn, $_POST['timecnt']);
-    $allowok = mysqli_real_escape_string($conn, $_POST['allowok']);
-    $destcode = mysqli_real_escape_string($conn, $_POST['destcode']);
-    $destplace = mysqli_real_escape_string($conn, $_POST['destplace']);
-    $desttel = mysqli_real_escape_string($conn, $_POST['desttel']);
-
-    mysqli_query($conn, "SET AUTOCOMMIT=0");
-    mysqli_query($conn, "START TRANSACTION");
-    $sql_userkyuka_save = mysqli_query($conn, "INSERT INTO `tbl_userkyuka` (`uid`, `vacationid`, `kyukaymd`, `kyukaid`, `kyukacode`, `kyukatype`, `strymd`, `endymd`, `strtime`, `endtime`, `ymdcnt`, `timecnt`, `allowok`, `destcode`, `destplace`, `desttel`, `reg_dt`) 
-    VALUES ('$uid', '$vacationid', '$kyukaymd', '$kyukaid', '$kyukacode' ,'$kyukatype' ,'$strymd', '$endymd', '$strtime', '$endtime', '$ymdcnt', '$timecnt', '$allowok', '$destcode', '$destplace', '$desttel', '$reg_dt')");
-
-    $sql_vacationinfo_save = mysqli_query($conn, "INSERT INTO `tbl_vacationinfo` (`vacationid`, `uid`, `vacationstr`, `vacationend`, `oldcnt`, `newcnt`, `usecnt`, `usetime`, `restcnt`, `reg_dt`) 
-    VALUES('$vacationid', '$uid', '$vacationstr', '$vacationend', '$oldcnt' , '$newcnt' ,'$usecnt' ,'$usetime' , '$restcnt', '$reg_dt')");
-
-    if ($sql_userkyuka_save && $sql_vacationinfo_save) {
-        $_SESSION['save_success'] =  $save_success;
-    } else {
-        echo 'query error: ' . mysqli_error($conn);
-    }
-    mysqli_query($conn, "SET AUTOCOMMIT=1");
-}

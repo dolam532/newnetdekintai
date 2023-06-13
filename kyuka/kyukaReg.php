@@ -581,18 +581,22 @@ if ($_SESSION['auth'] == false) {
 				<div class="title_condition">
 					<label>社員名 :
 						<select id="searchUid" name="searchUid" style="padding:5px;">
-							<option value="" selected="">選択なし</option>
-							<?php
-							foreach ($user_list as $value) {
-							?>
-								<option value="<?= $value['uid'] ?>" <?php if ($value['uid'] == $_POST['searchUid']) {
-																			echo ' selected="selected"';
-																		} ?>>
-									<?= $value['name'] ?>
-								</option>
-							<?php
-							}
-							?>
+							<?php if ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
+								<option value="" selected="">選択なし</option>
+								<?php
+								foreach ($user_list as $value) {
+								?>
+									<option value="<?= $value['uid'] ?>" <?php if ($value['uid'] == $_POST['searchUid']) {
+																				echo ' selected="selected"';
+																			} ?>>
+										<?= $value['name'] ?>
+									</option>
+								<?php
+								}
+								?>
+							<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+								<option value="<?= $_SESSION['auth_uid'] ?>"><?= $_SESSION['auth_name'] ?></option>
+							<?php endif; ?>
 						</select>
 					</label>
 				</div>
@@ -692,15 +696,19 @@ if ($_SESSION['auth'] == false) {
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukaymd">
 									<label for="kyukaymd">申請日</label>
 									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
-									<input type="hidden" id="kyukaid" name="kyukaid" value="">
-									<input type="hidden" id="companyid" name="companyid" value="">
-									<input type="hidden" id="uid" name="uid" value="">
-									<input type="hidden" id="vacationstr" name="vacationstr" value="">
-									<input type="hidden" id="vacationend" name="vacationend" value="">
-									<input type="hidden" id="vacationid" name="vacationid" value="">
-									<input type="hidden" id="oldcnt" name="oldcnt" value="">
-									<input type="hidden" id="newcnt" name="newcnt" value="">
-									<input type="hidden" id="kyukatimelimit" name="kyukatimelimit" value="">
+									<?php foreach ($result_userkyuka_select as $key) : ?>
+										<input type="hidden" name="companyid" value="<?= $key['companyid'] ?>">
+										<input type="hidden" name="uid" value="<?= $key['uid'] ?>">
+										<input type="hidden" name="allowid" value="<?= $key['allowid'] ?>">
+										<input type="hidden" name="allowdt" value="<?= $key['allowdt'] ?>">
+										<input type="hidden" name="vacationid" value="<?= $key['vacationid'] ?>">
+										<input type="hidden" id="vacationstr" name="vacationstr" value="<?= $key['vacationstr'] ?>">
+										<input type="hidden" id="vacationend" name="vacationend" value="<?= $key['vacationend'] ?>">
+										<input type="hidden" id="oldcnt" name="oldcnt" value="<?= $key['oldcnt'] ?>">
+										<input type="hidden" id="newcnt" name="newcnt" value="<?= $key['newcnt'] ?>">
+										<input type="hidden" id="restcnt" name="restcnt" value="<?= $key['restcnt'] ?>">
+										<input type="hidden" id="kyukatimelimit" name="kyukatimelimit" value="<?= $key['kyukatimelimit'] ?>">
+									<?php endforeach; ?>
 								</div>
 								<div class="col-md-5 col-sm-5 col-sx-5 kyukacode">
 									<label for="kyukacode">休暇区分</label>
@@ -1041,19 +1049,19 @@ if ($_SESSION['auth'] == false) {
 			return; //함수 종료
 		}
 
-		// // 년간 사용 가능한 휴가시간제한 체크 (당해년도사용시간+이번에신청한시간 > 년간사용제한시간 이면 에러)
-		// if (usetime + timecnt > kyukatimelimit) {
-		// 	alert("休暇の申込時間は(" + kyukatimelimit + ")を超えるわけにはいきません。");
-		// 	e.preventDefault();
-		// 	return;
-		// }
+		// 년간 사용 가능한 휴가시간제한 체크 (당해년도사용시간+이번에신청한시간 > 년간사용제한시간 이면 에러)
+		if (usetime + timecnt > kyukatimelimit) {
+			alert("休暇の申込時間は(" + kyukatimelimit + ")を超えるわけにはいきません。");
+			e.preventDefault();
+			return;
+		}
 
-		// // 휴가신청기간은 휴가를 부여받은 기간 안에서만 가능해야 하기 때문에 더 큰 경우는 2개로 나눠서 신청하게한다. 
-		// if (endymd > vacationend) {
-		// 	alert("休暇の申込は(" + vacationstr + " ~ " + vacationend + "の内だけに可能です。");
-		// 	e.preventDefault();
-		// 	return;
-		// }
+		// 휴가신청기간은 휴가를 부여받은 기간 안에서만 가능해야 하기 때문에 더 큰 경우는 2개로 나눠서 신청하게한다. 
+		if (endymd > vacationend) {
+			alert("休暇の申込は(" + vacationstr + " ~ " + vacationend + "の内だけに可能です。");
+			e.preventDefault();
+			return;
+		}
 
 		//残数(日)	 計算
 		restcnt = oldcnt + newcnt - usecnt - parseInt(usetime / 8);
