@@ -133,7 +133,6 @@ if (isset($_POST['SaveKyuka'])) {
         $oldcnt = 0;
         $newcnt = $havecnt;
     } elseif ($_POST['kyukatype'] == "1") {
-        var_dump($_POST['updatecnt']);
         $usecnt = $_POST['usecnt'] + $_POST['ymdcnt'];
         $restcnt = $_POST['restcnt'] + $_POST['ymdcnt'];
         $updatecnt = $_POST['updatecnt'] + 1;
