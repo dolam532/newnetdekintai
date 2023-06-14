@@ -6,6 +6,7 @@ include('../inc/message.php');
 include('../inc/const_array.php');
 include('../model/kyukamodel.php');
 include('../inc/header.php');
+include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");

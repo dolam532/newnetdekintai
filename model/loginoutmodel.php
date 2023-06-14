@@ -32,9 +32,13 @@ if (isset($_POST['btnLogin'])) {
             if ($_SESSION['auth_type'] == constant('ADMIN')) {
                 header("Location: ../index.php");
                 $_SESSION['login_success'] =  $login_success;
+                $_SESSION['last_login_timestamp'] =  time();
+                header("Location: ../index.php");
             } elseif ($_SESSION['auth_type'] == constant('USER')) {
                 header("Location: ../index.php");
                 $_SESSION['login_success'] =  $login_success;
+                $_SESSION['last_login_timestamp'] =  time();
+                header("Location: ../index.php");
             } else {
                 $_SESSION['login_fail'] =  $login_fail;
             }
@@ -46,12 +50,12 @@ if (isset($_POST['btnLogin'])) {
 
 //Logout
 if (isset($_POST['btnLogout'])) {
-    // session_destroy();
     unset($_SESSION['auth']);
     unset($_SESSION['auth_type']);
     unset($_SESSION['auth_uid']);
     unset($_SESSION['auth_pwd']);
     unset($_SESSION['auth_name']);
+    session_destroy();
 
     header("Location: ../index.php");
     $_SESSION['logout_success'] =  $logout_success;
