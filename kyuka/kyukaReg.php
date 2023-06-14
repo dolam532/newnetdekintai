@@ -11,6 +11,8 @@ include('../model/inactive.php');
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
 }
+
+echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css'>";
 ?>
 <style>
 	.usertbl tr th {
@@ -664,7 +666,7 @@ if ($_SESSION['auth'] == false) {
 								<td class="td4"><span><?= $userkyuka['ymdcnt'] ?>日(<?= $userkyuka['timecnt'] ?>時)</span></td>
 								<td class="td5"><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
 								<td class="td6"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
-								<td class="td7"><span><?= date('d', strtotime($userkyuka['endymd']) - strtotime($userkyuka['strymd'])) - 1 ?></span></td>
+								<td class="td7"><span><?= $userkyuka['restcnt'] ?></span></td>
 								<td class="td8"><span name="callowok">
 										<?php
 										if ($userkyuka['allowok'] == "0") { ?>
@@ -708,6 +710,7 @@ if ($_SESSION['auth'] == false) {
 										<input type="hidden" id="oldcnt" name="oldcnt" value="<?= $key['oldcnt'] ?>">
 										<input type="hidden" id="newcnt" name="newcnt" value="<?= $key['newcnt'] ?>">
 										<input type="hidden" id="restcnt" name="restcnt" value="<?= $key['restcnt'] ?>">
+										<input type="hidden" name="updatecnt" value="<?= $key['updatecnt'] ?>">
 										<input type="hidden" id="kyukatimelimit" name="kyukatimelimit" value="<?= $key['kyukatimelimit'] ?>">
 									<?php endforeach; ?>
 								</div>
@@ -755,18 +758,27 @@ if ($_SESSION['auth'] == false) {
 							</div>
 							<br>
 							<div class="row three">
-								<div class="col-md-2 col-sm-2 col-sx-2 no">
-									<label for="totcnt">当年付与</label>
-									<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly>
-								</div>
-								<div class="col-md-2 col-sm-2 col-sx-2 no">
-									<label for="usecnt">使用日数</label>
-									<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly>
-								</div>
-								<div class="col-md-2 col-sm-2 col-sx-2 no">
-									<label for="usetime">使用時間</label>
-									<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly>
-								</div>
+								<?php
+								$last_key = end($result_userkyuka_select);
+								foreach ($result_userkyuka_select as $key) {
+									if ($key == $last_key) {
+								?>
+										<div class="col-md-2 col-sm-2 col-sx-2 no">
+											<label for="totcnt">当年付与</label>
+											<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="<?= $key['oldcnt'] + $key['newcnt'] ?>">
+										</div>
+										<div class="col-md-2 col-sm-2 col-sx-2 no">
+											<label for="usecnt">使用日数</label>
+											<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="<?= $key['usecnt'] ?>">
+										</div>
+										<div class=" col-md-2 col-sm-2 col-sx-2 no">
+											<label for="usetime">使用時間</label>
+											<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="<?= $key['usetime'] ?>">
+										</div>
+								<?php
+									}
+								}
+								?>
 								<div class="col-md-2 col-sm-2 col-sx-2 no">
 									<label for="ymdcnt">申込日</label>
 									<input type="text" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="" style="text-align: center" readonly>
@@ -909,7 +921,6 @@ if ($_SESSION['auth'] == false) {
 		//신규때는 신청구분 선택하기 전에는 사용 불가
 		$("#strtime").val("").prop('disabled', true);
 		$("#endtime").val("").prop('disabled', true);
-		$("#totcnt").val(0);
 	});
 
 	//휴가신청 타입(일/시간) 선택시 항목 잠그고 풀기  
@@ -1011,9 +1022,12 @@ if ($_SESSION['auth'] == false) {
 
 	//Datepeeker 설정 strtime
 	$("#strymd").datepicker({
+		changeYear: true,
 		dateFormat: 'yy/mm/dd'
 	});
+
 	$("#endymd").datepicker({
+		changeYear: true,
 		dateFormat: 'yy/mm/dd'
 	});
 

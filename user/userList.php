@@ -9,6 +9,8 @@ include('../inc/header.php');
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
 }
+
+echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css'>";
 ?>
 <style>
 	.usertbl tr th {
@@ -227,15 +229,19 @@ if ($_SESSION['auth'] == false) {
 <script>
 	//Datepeeker 설정
 	$("#genstrymd").datepicker({
+		changeYear: true,
 		dateFormat: 'yy/mm/dd'
 	});
 	$("#genendymd").datepicker({
+		changeYear: true,
 		dateFormat: 'yy/mm/dd'
 	});
 	$("#inymd").datepicker({
+		changeYear: true,
 		dateFormat: 'yy/mm/dd'
 	});
 	$("#outymd").datepicker({
+		changeYear: true,
 		dateFormat: 'yy/mm/dd'
 	});
 
