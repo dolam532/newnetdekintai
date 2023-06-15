@@ -11,7 +11,7 @@ include('../model/inactive.php');
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
 }
-
+// header('Location: '.$_SERVER['REQUEST_URI']);
 echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css'>";
 ?>
 <style>
@@ -671,7 +671,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<td class="td4"><span><?= $userkyuka['ymdcnt'] ?>日(<?= $userkyuka['timecnt'] ?>時)</span></td>
 								<td class="td5"><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
 								<td class="td6"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
-								<td class="td7"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] - $userkyuka['usecnt'] ?></span></td>
+								<td class="td7"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] - $userkyuka['usecnt'] - (int)($userkyuka['usetime'] / 8) ?></span></td>
 								<td class="td8"><span name="callowok">
 										<?php
 										if ($userkyuka['allowok'] == "0") { ?>
@@ -915,6 +915,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 </div>
 <script>
 	//신규버튼 
+	// window.location.href="../kyuka/kyukaReg.php";
 	$(document).on('click', '#btnNew', function(e) {
 		$('#modal').modal('toggle');
 
@@ -1065,29 +1066,25 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (ymdcnt > (oldcnt + newcnt)) {
 			alert("休暇の申込日は(" + (oldcnt + newcnt) + "日)を超えるわけにはいきません。");
 			$("#ymdcnt").focus();
-			e.preventDefault();
-			return; //함수 종료
+			return false; //함수 종료
 		}
 
 		if (kyukaname == "") {
 			alert("休暇区分を入力してください。");
 			$("#kyukaname").focus();
-			e.preventDefault();
-			return; //함수 종료
+			return false; //함수 종료
 		}
 
 		// 년간 사용 가능한 휴가시간제한 체크 (당해년도사용시간+이번에신청한시간 > 년간사용제한시간 이면 에러)
 		if (usetime + timecnt > kyukatimelimit) {
 			alert("休暇の申込時間は(" + kyukatimelimit + "時間)を超えるわけにはいきません。");
-			e.preventDefault();
-			return;
+			return false;
 		}
 
 		// 휴가신청기간은 휴가를 부여받은 기간 안에서만 가능해야 하기 때문에 더 큰 경우는 2개로 나눠서 신청하게한다. 
 		if (endymd > vacationend) {
 			alert("休暇の申込は(" + vacationstr + " ~ " + vacationend + "の内だけに可能です。");
-			e.preventDefault();
-			return;
+			return false;
 		}
 
 		//残数(日)	 計算
@@ -1095,71 +1092,61 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (restcnt < 0) {
 			alert("残数(日)を超える休暇は申し込む事はできません。");
 			$("#strymd").focus();
-			e.preventDefault();
-			return; //함수 종료
+			return false; //함수 종료
 		}
 
 		if (kyukatype != "0" && kyukatype != "1") {
 			alert("申込区分を入力してください。");
 			$("#kyukatype").focus();
-			e.preventDefault();
-			return; //함수 종료
+			return false; //함수 종료
 		}
 
 		if (strymd == "") {
 			alert("期間(F)を入力してください。");
 			$("#strymd").focus(); //입력 포커스 이동
-			e.preventDefault();
-			return; //함수 종료
+			return false; //함수 종료
 		}
 
 		if (kyukatype == "1" && endymd == "") {
 			alert("期間(T)を入力してください。");
 			$("#endymd").focus();
-			e.preventDefault();
-			return;
+			return false;
 		}
 
 		if (kyukatype == "0" && (strtime == "" || strtime == "0")) {
 			alert("時間(F)を入力してください。");
 			$("#strtime").focus();
-			e.preventDefault();
-			return;
+			return false;
 		}
 
 		if (kyukatype == "0" && (endtime == "" || endtime == "0")) {
 			alert("時間(T)を入力してください。");
 			$("#endtime").focus();
-			e.preventDefault();
-			return;
+			return false;
 		}
 
 		if (allowok != "0" && allowok != "1") {
 			alert("決裁を入力してください。");
 			$("#allowok").focus(); //입력 포커스 이동
-			e.preventDefault();
-			return; //함수 종료
+			return false; //함수 종료
 		}
 
 		if (destcode != "0" && destcode != "1" && destcode != "2") {
 			alert("暇中居る場所を入力してください。");
 			$("#destcode").focus();
-			e.preventDefault();
-			return; //함수 종료
+			return false; //함수 종료
 		}
 
 		if (destplace == "") {
 			alert("場所を入力してください。");
 			$("#destplace").focus(); //입력 포커스 이동
-			e.preventDefault();
-			return; //함수 종료
+			return false; //함수 종료
 		}
 
 		if (desttel == "") {
 			alert("電話番号を入力してください。");
 			$("#desttel").focus(); //입력 포커스 이동
-			e.preventDefault();
-			return; //함수 종료
+			return false; //함수 종료
 		}
 	});
 

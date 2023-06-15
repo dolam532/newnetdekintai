@@ -248,7 +248,7 @@ if ($_SESSION['auth'] == false) {
 								<td><span><?= $userkyuka['newcnt'] ?></span></td>
 								<td><span><?= $userkyuka['usecnt'] ?></span></td>
 								<td><span><?= $userkyuka['usetime'] ?></span></td>
-								<td><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] - $userkyuka['usecnt'] ?></span></td>
+								<td><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] - $userkyuka['usecnt'] - (int)($userkyuka['usetime'] / 8) ?></span></td>
 								<td><span><?= $userkyuka['remark'] ?></span></td>
 							</tr>
 					<?php }

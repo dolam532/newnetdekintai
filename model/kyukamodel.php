@@ -130,29 +130,15 @@ if (isset($_POST['SaveKyuka'])) {
         if ($_POST['timecnt'] >= 8) {
             $usecnt = $_POST['usecnt'] + 1;
             $usetime = $_POST['usetime'];
-        } else {
+        } elseif ($_POST['timecnt'] < 8) {
             $usecnt = $_POST['usecnt'];
             $usetime = $_POST['usetime'] + $_POST['timecnt'];
         }
         $restcnt = $_POST['restcnt'] + 1;
     } elseif ($_POST['kyukatype'] == "1") {
         $usecnt = $_POST['usecnt'] + $_POST['ymdcnt'];
-        $restcnt = $_POST['restcnt'] + $_POST['ymdcnt'];
+        $restcnt = $_POST['restcnt'] + 1;
         $usetime = $_POST['usetime'];
-
-        if ($_POST['oldcnt'] > 0) {
-            $oldcnt_result = $_POST['oldcnt'] - $_POST['ymdcnt'];
-            if ($oldcnt_result <= 0) {
-                $newcnt = $_POST['newcnt'] - $_POST['ymdcnt'] + $oldcnt_result;
-                $oldcnt = 0;
-            } elseif ($oldcnt_result > 0) {
-                $newcnt = $_POST['newcnt'];
-                $oldcnt = $oldcnt_result;
-            }
-        } elseif ($_POST['oldcnt'] <= 0) {
-            $newcnt = $_POST['newcnt'] - $_POST['ymdcnt'];
-            $oldcnt = 0;
-        }
     }
 
     $_POST['strtime'] = intval($_POST['strtime']);
@@ -188,6 +174,7 @@ if (isset($_POST['SaveKyuka'])) {
 
     if ($sql_userkyuka_insert && $sql_vacationinfo_update) {
         $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
