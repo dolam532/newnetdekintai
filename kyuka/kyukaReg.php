@@ -11,7 +11,6 @@ include('../model/inactive.php');
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
 }
-// header('Location: '.$_SERVER['REQUEST_URI']);
 echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css'>";
 ?>
 <style>
@@ -915,7 +914,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 </div>
 <script>
 	//신규버튼 
-	// window.location.href="../kyuka/kyukaReg.php";
 	$(document).on('click', '#btnNew', function(e) {
 		$('#modal').modal('toggle');
 
