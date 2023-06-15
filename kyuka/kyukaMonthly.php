@@ -31,8 +31,16 @@ if ($_SESSION['auth'] == false) {
 		padding: 5px;
 	}
 
+	.title_btn {
+		padding-top: 27px;
+	}
+
 	/* For Mobile Landscape View iPhone XR,12Pro */
 	@media screen and (max-device-width: 896px) and (orientation: landscape) {
+		.row {
+			display: inline-flex;
+		}
+
 		.container {
 			width: 800px;
 			padding-right: 10px;
@@ -72,10 +80,6 @@ if ($_SESSION['auth'] == false) {
 	@media screen and (max-device-width: 837px) and (orientation: landscape) {
 		div#tile_header {
 			width: 805px;
-		}
-
-		.col-md-3.col-ms-3.text-left {
-			margin-left: -150px;
 		}
 	}
 
@@ -164,18 +168,22 @@ if ($_SESSION['auth'] == false) {
 				<div class="title_condition">
 					<label>社員名 :
 						<select id="searchUid" name="searchUid" style="padding:5px;">
-							<option value="" selected="">選択なし</option>
-							<?php
-							foreach ($user_list as $value) {
-							?>
-								<option value="<?= $value['uid'] ?>" <?php if ($value['uid'] == $_POST['searchUid']) {
-																			echo ' selected="selected"';
-																		} ?>>
-									<?= $value['name'] ?>
-								</option>
-							<?php
-							}
-							?>
+							<?php if ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
+								<option value="" selected="">選択なし</option>
+								<?php
+								foreach ($user_list as $value) {
+								?>
+									<option value="<?= $value['uid'] ?>" <?php if ($value['uid'] == $_POST['searchUid']) {
+																				echo ' selected="selected"';
+																			} ?>>
+										<?= $value['name'] ?>
+									</option>
+								<?php
+								}
+								?>
+							<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+								<option value="<?= $_SESSION['auth_uid'] ?>"><?= $_SESSION['auth_name'] ?></option>
+							<?php endif; ?>
 						</select>
 					</label>
 				</div>
@@ -240,7 +248,7 @@ if ($_SESSION['auth'] == false) {
 								<td><span><?= $userkyuka['newcnt'] ?></span></td>
 								<td><span><?= $userkyuka['usecnt'] ?></span></td>
 								<td><span><?= $userkyuka['usetime'] ?></span></td>
-								<td><span><?= $userkyuka['restcnt'] ?></span></td>
+								<td><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] - $userkyuka['usecnt'] ?></span></td>
 								<td><span><?= $userkyuka['remark'] ?></span></td>
 							</tr>
 					<?php }

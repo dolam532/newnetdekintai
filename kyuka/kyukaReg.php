@@ -525,6 +525,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 	/* For Mobile portrait View iPhone X,6,7,8 PLUS */
 	@media screen and (max-device-width: 375px) and (orientation: portrait) {
+		.col-md-2.col-sm-2.col-sx-2.sub-bar.text-right.all-div {
+			margin-right: -16px;
+			width: 44%;
+		}
+
 		.col-md-3.col-sm-3.col-sx-3.sub-bar.text-center {
 			padding: 0px;
 		}
@@ -666,7 +671,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<td class="td4"><span><?= $userkyuka['ymdcnt'] ?>日(<?= $userkyuka['timecnt'] ?>時)</span></td>
 								<td class="td5"><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
 								<td class="td6"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
-								<td class="td7"><span><?= $userkyuka['restcnt'] ?></span></td>
+								<td class="td7"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] - $userkyuka['usecnt'] ?></span></td>
 								<td class="td8"><span name="callowok">
 										<?php
 										if ($userkyuka['allowok'] == "0") { ?>

@@ -109,7 +109,11 @@ if ($_POST['btnSearchReg'] == NULL) {
     `tbl_vacationinfo`.`vacationstr`,
     `tbl_vacationinfo`.`vacationend`,
     `tbl_vacationinfo`.`oldcnt`,
-    `tbl_vacationinfo`.`newcnt`
+    `tbl_vacationinfo`.`newcnt`,
+    `tbl_vacationinfo`.`usecnt`,
+    `tbl_vacationinfo`.`usetime`,
+    `tbl_vacationinfo`.`restcnt`,
+    `tbl_codebase`.`remark`
 FROM
     `tbl_userkyuka`
 CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`uid` = `tbl_user`.`uid`
@@ -138,7 +142,7 @@ if (isset($_POST['SaveKyuka'])) {
         $updatecnt = $_POST['updatecnt'] + 1;
         $havecnt = $_POST['oldcnt'] +  $_POST['newcnt'] - $_POST['ymdcnt'];
         $oldcnt = 0;
-        $usetime = 0;
+        $usetime = $_POST['usetime'];
         $newcnt = $havecnt;
     }
 
@@ -196,7 +200,8 @@ if ($_POST['btnSearchMon'] != NULL) {
     } else {
         $searchYY = $_POST['searchYY'];
     }
-    $sql_userkyuka = 'SELECT DISTINCT
+    if ($_SESSION['auth_type'] == constant('ADMIN')) {
+        $sql_userkyuka = 'SELECT DISTINCT
     `tbl_userkyuka`.*,
     `tbl_user`.`name`,
     `tbl_user`.`dept`,
@@ -217,6 +222,29 @@ WHERE
     `tbl_user`.`uid` IN("' . $searchUid . '") 
     AND LEFT(`tbl_vacationinfo`.`vacationstr`, 4) IN("' . $searchYY . '") 
     AND `tbl_codebase`.`typecode` = 02';
+    } elseif ($_SESSION['auth_type'] == constant('USER')) {
+        $sql_userkyuka = 'SELECT DISTINCT
+    `tbl_userkyuka`.*,
+    `tbl_user`.`name`,
+    `tbl_user`.`dept`,
+    `tbl_vacationinfo`.`vacationstr`,
+    `tbl_vacationinfo`.`vacationend`,
+    `tbl_vacationinfo`.`oldcnt`,
+    `tbl_vacationinfo`.`newcnt`,
+    `tbl_vacationinfo`.`usecnt`,
+    `tbl_vacationinfo`.`usetime`,
+    `tbl_vacationinfo`.`restcnt`,
+    `tbl_codebase`.`remark`
+FROM
+    `tbl_userkyuka`
+CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`uid` = `tbl_user`.`uid`
+CROSS JOIN `tbl_codebase` ON `tbl_userkyuka`.`kyukacode` = `tbl_codebase`.`code`
+CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinfo`.`vacationid`
+WHERE
+    `tbl_user`.`uid` IN("' . $_SESSION['auth_uid'] . '") 
+    AND LEFT(`tbl_vacationinfo`.`vacationstr`, 4) IN("' . $searchYY . '") 
+    AND `tbl_codebase`.`typecode` = 02';
+    }
 }
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
