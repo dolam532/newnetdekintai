@@ -54,6 +54,7 @@ if ($_SESSION['auth'] == false) {
 // Include const.php
 include '../inc/const.php';
 include('../inc/message.php');
+include('../inc/menu.php');
 ?>
 <script>
 	// Get 
@@ -75,7 +76,7 @@ include('../inc/message.php');
 	//================================/// 
 	//=========== init===============//     
 	//============================///  
-	window.onload = function() {
+	window.onload = function () {
 		var currentDate = new Date();
 		var currentMonth = currentDate.getMonth(); // Month is zero-based in JavaScript
 		var currentYear = currentDate.getFullYear();
@@ -202,7 +203,7 @@ include('../inc/message.php');
 			var dayOfWeekJapanese = dayOfWeekNames[dayOfWeek];
 			html += '<tr>';
 			html += '<td>';
-			html += '<a href="http://localhost:8080/web/kintai/kintaiReg#" onclick="fnClickTitle(' + (day - 1) + '); return false;">';
+			html += '<a href="#" onclick="fnClickTitle(' + (day - 1) + '); return false;">';
 			if (dayOfWeekJapanese === '土') {
 				html += '<span class="day-of-week-saturday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
 			} else if (dayOfWeekJapanese === '日') {
@@ -250,29 +251,20 @@ include('../inc/message.php');
 	//======= check the list of months  ===========//     if the list is missing or missing days then add it to the list 
 	//=====================================================/// 
 	function checkMonthMissingData(workYmdList, year, month) {
-
-
-
 		var flagIsMissingDataOfMonth = false;
 		// IF DATA MISSING ???  
 		var daysInMonth = new Date(year, month, 0).getDate();;
 		// => Current Month if not data => Add new Data to DB 
 		if (typeof workYmdList === 'undefined') {
-			console.log("list" + workYmdList)
-
 			const currentDate = new Date();
 			const currentYear = currentDate.getFullYear(); //
 			const currentMonth = currentDate.getMonth() + 1; // 
 			const parseYear = parseInt(year, 10);
 			const parseMonth = parseInt(month, 10);
-
 			if (currentYear === parseYear && currentMonth === parseMonth) {
-				console.log("CurrentYear:" + currentYear + "||| YEARParam :" + parseYear);
-				console.log("CurrentMONTH:" + currentMonth + "||| MONTHParam :" + parseMonth);
 				insertNewMonthData(year, month);
 				return false;
 			}
-
 		}
 
 
@@ -280,7 +272,6 @@ include('../inc/message.php');
 			var arrayMissingDay = [];
 			var arrayDayOfWorkList = [];
 			var genidDefault = 0;
-			console.log("IS NEW MONTH");
 			// add value to ararymissing #
 			for (let i = 0, len = daysInMonth; i < len; i++) {
 				var date = new Date(year, month - 1, i);
@@ -296,10 +287,10 @@ include('../inc/message.php');
 			}
 
 			var filteredArray = arrayMissingDay
-				.filter(function(date) {
+				.filter(function (date) {
 					return !arrayDayOfWorkList.includes(date);
 				})
-				.map(function(date) {
+				.map(function (date) {
 					return {
 						genid: genidDefault, // genIdDefault
 						workymd: date
@@ -313,11 +304,11 @@ include('../inc/message.php');
 				'kintaiRegController.php?type=' +
 				TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY + '&data=' + data,
 				'GET',
-				function(response) {
+				function (response) {
 					//html_entity_decode($data);
 					console.log(response);
 				},
-				function(errorStatus) {
+				function (errorStatus) {
 					console.log("Connect ERROR: " + errorStatus);
 				}
 			);
@@ -336,17 +327,15 @@ include('../inc/message.php');
 			'kintaiRegController.php?type=' +
 			TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY + '&year=' + year + '&month=' + month,
 			'GET',
-			function(response) {
+			function (response) {
 				console.log("INSERT" + response);
 			},
-			function(errorStatus) {
+			function (errorStatus) {
 				console.log("Connect ERROR: " + errorStatus);
 			}
 		);
 
 	}
-
-
 
 	//====================================================/// 
 	//======= Function add value to total month ===========//     
@@ -472,7 +461,6 @@ include('../inc/message.php');
 					LIST_DELAY_OUT_DATE.push(i); // WHEN FILL COLOR TO EARLY OUT DAY 
 				}
 			}
-
 		}
 
 		totalDayStartHours += Math.floor(totalDayStartMinutes / 60);
@@ -514,15 +502,72 @@ include('../inc/message.php');
 	//====================================================================/// 
 	//======= Funtion for click day of week --> show register ======//     
 	//============================================================///  
-	function fnClickTitle(DayOfMonth) {
-		console.log(DayOfMonth);
-	}
+	function fnClickTitle(i) {
+		// console.log(selyy.value); // year 
+		// console.log(selmm.value);  // month 
+		// console.log(DayOfMonth + 1); // day 
 
+		// var magamym = $("#magamym").val(); 		//월마감
+		// var magamymd = $("#magamymd").val(); 	//일마감
+		var magamym = selyy.value; 		//월마감
+		var magamymd = selmm.value; 	//일마감
+		var workymd = $('[name="tworkymd"]').eq(i).val(); 	//클릭일자
+
+		console.log(workymd);
+
+
+		if (workymd <= magamymd) {
+			$('#btnUpd').prop('disabled', true);
+			$('#btnDel').prop('disabled', true);
+			alert("締切(" + magamymd + ")以前の日は登録と削除できません。");
+		} else {
+			$('#btnUpd').prop('disabled', false);
+			$('#btnDel').prop('disabled', false);
+		}
+
+		$('#modal2').modal('toggle');
+
+
+
+
+
+		//선택된 index저장, 수정시 업데이트 할 테이블의 row위치 
+		$("#seq").val(i);
+
+		//title에 작업일 표시
+		$("#selkindate").text($('[name="tworkymd"]').eq(i).val());
+
+		$("#uid").val($('[name="tuid"]').eq(i).val());
+		$("#genid").val($('[name="tgenid"]').eq(i).val());
+		$("#workymd").val($('[name="tworkymd"]').eq(i).val()).prop('disabled', true);
+
+		$("#workymd2").val($('[name="tworkymd"]').eq(i).val());
+
+		$("#daystarthh").val($('[name="tdaystarthh"]').eq(i).val());
+		$("#daystartmm").val($('[name="tdaystartmm"]').eq(i).val());
+		$("#dayendhh").val($('[name="tdayendhh"]').eq(i).val());
+		$("#dayendmm").val($('[name="tdayendmm"]').eq(i).val());
+		$("#jobstarthh").val($('[name="tjobstarthh"]').eq(i).val());
+		$("#jobstartmm").val($('[name="tjobstartmm"]').eq(i).val());
+		$("#jobendhh").val($('[name="tjobendhh"]').eq(i).val());
+		$("#jobendmm").val($('[name="tjobendmm"]').eq(i).val());
+		$("#offtimehh").val($('[name="tofftimehh"]').eq(i).val());
+		$("#offtimemm").val($('[name="tofftimemm"]').eq(i).val());
+		//근무시간 수정불가 추가(20200404)
+		$("#workhh").val($('[name="tworkhh"]').eq(i).val()).prop('disabled', true);
+		$("#workmm").val($('[name="tworkmm"]').eq(i).val()).prop('disabled', true);
+		$("#comment").val($('[name="tcomment"]').eq(i).val());
+		$("#bigo").val($('[name="tbigo"]').eq(i).val());
+
+		return true;
+
+
+
+	}
 
 	//====================================================================/// 
 	//=======function for bind change year month combo box==============//     
 	//============================================================///  
-
 	async function handleDateChange(selectedYear, selectedMonth) {
 		try {
 			await handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth);
@@ -555,32 +600,14 @@ include('../inc/message.php');
 
 
 	async function handlerDateChangeUpdateTotalWorkMonth(selectedYear, selectedMonth) {
-		// 	try {
-		// 	const response = await ajaxRequestPromise(
-		// 		'kintaiRegController.php?year=' + selectedYear + '&month=' + selectedMonth + '&type=' + TYPE_GET_WORK_YEAR_MONTH
-		// 	,'GET');
-		// 	let parsedResponse = null;
-		// 	try {
-		// 		parsedResponse = JSON.parse(response);
-		// 	} catch (error) { parsedResponse = null; console.log("GET_DATA_FAILD")}// JSON ERROR 
 
-		// 	if (parsedResponse === NO_DATA_KINTAI) {
-		// 		parsedResponse = null;
-		// 	}
 
-		// 	drawDataToTotalMonth();
-		// } catch (errorStatus) {
-		// 	console.error('Error: ' + errorStatus);
-		// 	drawDataToTotalMonth();
-		// }
-
-		// draw data total month 
 		drawDataToTotalMonth();
 	}
 	// ajax
 	function ajaxRequest(url, method, successCallback, errorCallback) {
 		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
+		xhr.onreadystatechange = function () {
 			if (xhr.readyState === XMLHttpRequest.DONE) {
 				if (xhr.status === 200) {
 					if (successCallback) {
@@ -598,19 +625,43 @@ include('../inc/message.php');
 	}
 
 	function ajaxRequestPromise(url, method) {
-		return new Promise(function(resolve, reject) {
+		return new Promise(function (resolve, reject) {
 			ajaxRequest(
 				url,
 				method,
-				function(response) {
+				function (response) {
 					resolve(response);
 				},
-				function(errorStatus) {
+				function (errorStatus) {
 					reject(errorStatus);
 				}
 			);
 		});
 	}
+
+
+	// Handler Select box of minute on popup
+	function handleInputFocus(input, select) {
+		input.value = "";
+		select.value = "";
+	}
+
+	function handleInputBlur(input, select) {
+		if (input.value === "") {
+			select.value = "";
+		} else {
+			select.value = "";
+		}
+	}
+	function handleSelect(input, select) {
+		var selectedValue = select.value;
+		if (selectedValue) {
+			input.value = selectedValue;
+			select.value = "";
+		}
+	}
+
+
 </script>
 
 <body>
@@ -625,7 +676,8 @@ include('../inc/message.php');
 			<div class="col-md-4 text-center">
 				<div class="title_condition">
 					<label>基準日:
-						<select id="selyy" name="selyy" class="seldate" style="padding:5px;" onchange="handleDateChange(this.value, document.getElementById('selmm').value)">
+						<select id="selyy" name="selyy" class="seldate" style="padding:5px;"
+							onchange="handleDateChange(this.value, document.getElementById('selmm').value)">
 							<?php
 
 							$currentYear = date('Y');
@@ -635,7 +687,8 @@ include('../inc/message.php');
 							}
 							?>
 						</select>
-						<select id="selmm" name="selmm" class="seldate" style="padding:5px;" onchange="handleDateChange(document.getElementById('selyy').value, this.value)">
+						<select id="selmm" name="selmm" class="seldate" style="padding:5px;"
+							onchange="handleDateChange(document.getElementById('selyy').value, this.value)">
 							<?php
 							for ($month = 1; $month <= 12; $month++) {
 								$formattedMonth = sprintf("%02d", $month);
@@ -648,7 +701,8 @@ include('../inc/message.php');
 			</div>
 			<div class="col-md-3 text-right">
 				<div class="title_btn">
-					<p><a href="http://localhost:8080/web/kintai/kintaiReg#" onclick="#" class="btn btn-default" style="width: 120px;">勤務表印刷</a></p>
+					<p><a href="http://localhost:8080/web/kintai/kintaiReg#" onclick="#" class="btn btn-default"
+							style="width: 120px;">勤務表印刷</a></p>
 				</div>
 			</div>
 		</div>
@@ -698,16 +752,302 @@ include('../inc/message.php');
 				</tr>
 				<tr>
 					<td><button type="button" class="btn btn-primary" id="btnUpdMonthly">月登録</button></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="jobhour" id="jobhour" maxlength="3" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="jobminute" id="jobminute" maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="workdays" id="workdays" maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="jobdays" id="jobdays" maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="offdays" id="offdays" maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="delaydays" id="delaydays" maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="earlydays" id="earlydays" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="jobhour" id="jobhour"
+							maxlength="3" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="jobminute"
+							id="jobminute" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="workdays" id="workdays"
+							maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="jobdays" id="jobdays"
+							maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="offdays" id="offdays"
+							maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="delaydays"
+							id="delaydays" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="earlydays"
+							id="earlydays" maxlength="2" value="0"></td>
 				</tr>
 			</tbody>
 		</table>
+	</div>
+
+	<!--=============================================-->
+	<!--===========Modal popup======================-->
+	<!--=============================================-->
+	<div class="row">
+		<div class="modal" id="modal2" tabindex="-2" data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						勤務時間変更(<span id="selkindate"></span>)
+						<button class="close" data-dismiss="modal">&times;</button>
+					</div>
+
+					<div class="modal-body" style="text-align: left">
+						<div class="row">
+							<div class="col-xs-4">
+								<label for="workymd">日付</label>
+								<input type="text" class="form-control" id="workymd" placeholder="" required="required"
+									style="text-align: center">
+								<input type="hidden" id="seq" value="">
+								<input type="hidden" id="uid">
+								<input type="hidden" id="genid">
+							</div>
+							<div class="col-xs-2">
+								<label>出社時刻</label>
+								<select class="form-control" id="daystarthh">
+									<option value="" selected></option>
+									<option value="01">01</option>
+									<option value="02">02</option>
+									<option value="03">03</option>
+									<option value="04">04</option>
+									<option value="05">05</option>
+									<option value="06">06</option>
+									<option value="07">07</option>
+									<option value="08">08</option>
+									<option value="09">09</option>
+									<option value="10">10</option>
+									<option value="11">11</option>
+									<option value="12">12</option>
+									<option value="13">13</option>
+									<option value="14">14</option>
+									<option value="15">15</option>
+									<option value="16">16</option>
+									<option value="17">17</option>
+									<option value="18">18</option>
+									<option value="19">19</option>
+									<option value="20">20</option>
+									<option value="21">21</option>
+									<option value="22">22</option>
+									<option value="23">23</option>
+									<option value="24">24</option>
+								</select>
+							</div>
+
+							<div class="col-xs-2">
+								<label>&nbsp;</label>
+								<input type="text" class="form-control" id="daystartmm"
+									onfocus="handleInputFocus(this, daystartmmSelect)"
+									onblur="handleInputBlur(this, daystartmmSelect)">
+								<select class="form-control" id="daystartmmSelect"
+									onchange="handleSelect(daystartmm, this)">
+									<option value="" selected></option>
+									<option value="00">00</option>
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="30">30</option>
+									<option value="40">40</option>
+									<option value="50">50</option>
+								</select>
+							</div>
+
+
+							<div class="col-xs-2">
+								<label>退社時刻</label>
+								<select class="form-control" id="dayendhh">
+									<option value="" selected></option>
+									<option value="01">01</option>
+									<option value="02">02</option>
+									<option value="03">03</option>
+									<option value="04">04</option>
+									<option value="05">05</option>
+									<option value="06">06</option>
+									<option value="07">07</option>
+									<option value="08">08</option>
+									<option value="09">09</option>
+									<option value="10">10</option>
+									<option value="11">11</option>
+									<option value="12">12</option>
+									<option value="13">13</option>
+									<option value="14">14</option>
+									<option value="15">15</option>
+									<option value="16">16</option>
+									<option value="17">17</option>
+									<option value="18">18</option>
+									<option value="19">19</option>
+									<option value="20">20</option>
+									<option value="21">21</option>
+									<option value="22">22</option>
+									<option value="23">23</option>
+									<option value="24">24</option>
+								</select>
+							</div>
+
+
+							<div class="col-xs-2">
+								<label>&nbsp;</label>
+								<input type="text" class="form-control" id="dayendmm"
+									onfocus="handleInputFocus(this, dayendmmSelect)"
+									onblur="handleInputBlur(this, dayendmmSelect)">
+								<select class="form-control" id="dayendmmSelect" 
+									onchange="handleSelect(dayendmm, this)">
+									<option value="" selected></option>
+									<option value="00">00</option>
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="30">30</option>
+									<option value="40">40</option>
+									<option value="50">50</option>
+								</select>
+							</div>
+
+
+
+
+
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-xs-4">
+							</div>
+							<div class="col-xs-2">
+								<label>業務開始</label>
+								<select class="form-control" id="jobstarthh">
+									<option value="" selected></option>
+									<option value="01">01</option>
+									<option value="02">02</option>
+									<option value="03">03</option>
+									<option value="04">04</option>
+									<option value="05">05</option>
+									<option value="06">06</option>
+									<option value="07">07</option>
+									<option value="08">08</option>
+									<option value="09">09</option>
+									<option value="10">10</option>
+									<option value="11">11</option>
+									<option value="12">12</option>
+									<option value="13">13</option>
+									<option value="14">14</option>
+									<option value="15">15</option>
+									<option value="16">16</option>
+									<option value="17">17</option>
+									<option value="18">18</option>
+									<option value="19">19</option>
+									<option value="20">20</option>
+									<option value="21">21</option>
+									<option value="22">22</option>
+									<option value="23">23</option>
+									<option value="24">24</option>
+								</select>
+							</div>
+							<div class="col-xs-2">
+								<label>&nbsp;</label>
+								<select class="form-control" id="jobstartmm">
+									<option value="" selected></option>
+									<option value="00">00</option>
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="30">30</option>
+									<option value="40">40</option>
+									<option value="50">50</option>
+								</select>
+							</div>
+
+
+
+							<div class="col-xs-2">
+								<label>業務終了</label>
+								<select class="form-control" id="jobendhh">
+									<option value="" selected></option>
+									<option value="" selected></option>
+									<option value="01">01</option>
+									<option value="02">02</option>
+									<option value="03">03</option>
+									<option value="04">04</option>
+									<option value="05">05</option>
+									<option value="06">06</option>
+									<option value="07">07</option>
+									<option value="08">08</option>
+									<option value="09">09</option>
+									<option value="10">10</option>
+									<option value="11">11</option>
+									<option value="12">12</option>
+									<option value="13">13</option>
+									<option value="14">14</option>
+									<option value="15">15</option>
+									<option value="16">16</option>
+									<option value="17">17</option>
+									<option value="18">18</option>
+									<option value="19">19</option>
+									<option value="20">20</option>
+									<option value="21">21</option>
+									<option value="22">22</option>
+									<option value="23">23</option>
+									<option value="24">24</option>
+								</select>
+							</div>
+							<div class="col-xs-2">
+								<label>&nbsp;</label>
+								<select class="form-control" id="jobendmm">
+									<option value="" selected></option>
+									<option value="00">00</option>
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="30">30</option>
+									<option value="40">40</option>
+									<option value="50">50</option>
+								</select>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-xs-4">
+							</div>
+							<div class="col-xs-2">
+								<label>休憩時間</label>
+								<select class="form-control" id="offtimehh">
+									<option value="" selected></option>
+									<option value="00">00</option>
+									<option value="01">01</option>
+									<option value="02">02</option>
+								</select>
+							</div>
+							<div class="col-xs-2">
+								<label>&nbsp;</label>
+								<select class="form-control" id="offtimemm">
+									<option value="" selected></option>
+									<option value="00">00</option>
+									<option value="10">10</option>
+									<option value="20">20</option>
+									<option value="30">30</option>
+									<option value="40">40</option>
+									<option value="50">50</option>
+								</select>
+							</div>
+							<div class="col-xs-2">
+								<label for="workhh">就業時間</label>
+								<input type="text" class="form-control" id="workhh" placeholder="0" required="required"
+									style="text-align: center">
+							</div>
+							<div class="col-xs-2">
+								<label for="workmm">&nbsp;</label>
+								<input type="text" class="form-control" id="workmm" placeholder="0" required="required"
+									style="text-align: center">
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-xs-6">
+								<label for="comment">業務内容</label>
+								<input type="text" class="form-control" id="comment" placeholder="" required="required"
+									style="text-align: left">
+							</div>
+							<div class="col-xs-6">
+								<label for="bigo">備考</label>
+								<input type="text" class="form-control" id="bigo" placeholder="" required="required"
+									style="text-align: left">
+							</div>
+						</div>
+					</div>
+					<br>
+					<div class="modal-footer" style="text-align: center">
+						<button type="button" class="btn btn-primary update" id="btnUpd">登録</button>
+						<button type="button" class="btn btn-primary" id="btnDel">削除</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 

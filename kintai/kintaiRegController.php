@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Include const.php
 require_once '../inc/const.php';
 require_once '../inc/query.php';
@@ -32,7 +33,9 @@ $type_get = isset($_GET['type']) ? htmlspecialchars($_GET['type']) : null;
 // Step 1: Check login session
 // ........ AFTER 
 // Get uid in Session 
-$uidCurrent = 'admin';
+
+// $_SESSION['auth'] == false;
+$uidCurrent = $_SESSION['auth_uid'];
 
 // GET request
 if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'otherType'])) { // get data for work year month day
