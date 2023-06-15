@@ -715,7 +715,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										<input type="hidden" id="oldcnt" name="oldcnt" value="<?= $key['oldcnt'] ?>">
 										<input type="hidden" id="newcnt" name="newcnt" value="<?= $key['newcnt'] ?>">
 										<input type="hidden" id="restcnt" name="restcnt" value="<?= $key['restcnt'] ?>">
-										<input type="hidden" name="updatecnt" value="<?= $key['updatecnt'] ?>">
 										<input type="hidden" id="kyukatimelimit" name="kyukatimelimit" value="<?= $key['kyukatimelimit'] ?>">
 									<?php endforeach; ?>
 								</div>
@@ -1045,6 +1044,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var kyukatype = $("input[name='kyukatype']:checked").val();
 		var strymd = $("#strymd").val();
 		var endymd = $("#endymd").val();
+		var ymdcnt = $("#ymdcnt").val();
 		var strtime = $("#strtime").val() * 1;
 		var endtime = $("#endtime").val() * 1;
 		var timecnt = $("#timecnt").val() * 1;
@@ -1062,6 +1062,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var restcnt = $("#restcnt").val() * 1;
 		var kyukatimelimit = $("#kyukatimelimit").val() * 1;
 
+		if (ymdcnt > (oldcnt + newcnt)) {
+			alert("休暇の申込日は(" + (oldcnt + newcnt) + "日)を超えるわけにはいきません。");
+			$("#ymdcnt").focus();
+			e.preventDefault();
+			return; //함수 종료
+		}
+
 		if (kyukaname == "") {
 			alert("休暇区分を入力してください。");
 			$("#kyukaname").focus();
@@ -1071,7 +1078,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 		// 년간 사용 가능한 휴가시간제한 체크 (당해년도사용시간+이번에신청한시간 > 년간사용제한시간 이면 에러)
 		if (usetime + timecnt > kyukatimelimit) {
-			alert("休暇の申込時間は(" + kyukatimelimit + ")を超えるわけにはいきません。");
+			alert("休暇の申込時間は(" + kyukatimelimit + "時間)を超えるわけにはいきません。");
 			e.preventDefault();
 			return;
 		}
@@ -1086,7 +1093,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		//残数(日)	 計算
 		restcnt = oldcnt + newcnt - usecnt - parseInt(usetime / 8);
 		if (restcnt < 0) {
-			alert("残数(日)を超える休暇は申し込む事はできません。。");
+			alert("残数(日)を超える休暇は申し込む事はできません。");
 			$("#strymd").focus();
 			e.preventDefault();
 			return; //함수 종료

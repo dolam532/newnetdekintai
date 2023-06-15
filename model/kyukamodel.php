@@ -25,7 +25,6 @@ if ($_SESSION['auth_type'] == constant('ADMIN')) {
     `tbl_vacationinfo`.`usecnt`,
     `tbl_vacationinfo`.`usetime`,
     `tbl_vacationinfo`.`restcnt`,
-    `tbl_vacationinfo`.`updatecnt`,
     `tbl_codebase`.`remark`,
     `tbl_manageinfo`.`kyukatimelimit`
 FROM
@@ -49,7 +48,6 @@ WHERE
     `tbl_vacationinfo`.`usecnt`,
     `tbl_vacationinfo`.`usetime`,
     `tbl_vacationinfo`.`restcnt`,
-    `tbl_vacationinfo`.`updatecnt`,
     `tbl_codebase`.`remark`,
     `tbl_manageinfo`.`kyukatimelimit`
 FROM
@@ -129,21 +127,32 @@ CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinf
 // Save data to tbl_userkyuka table of database
 if (isset($_POST['SaveKyuka'])) {
     if ($_POST['kyukatype'] == "0") {
-        $usecnt = $_POST['usecnt'] + 1;
+        if ($_POST['timecnt'] >= 8) {
+            $usecnt = $_POST['usecnt'] + 1;
+            $usetime = $_POST['usetime'];
+        } else {
+            $usecnt = $_POST['usecnt'];
+            $usetime = $_POST['usetime'] + $_POST['timecnt'];
+        }
         $restcnt = $_POST['restcnt'] + 1;
-        $updatecnt = $_POST['updatecnt'] + 1;
-        $usetime = $_POST['usetime'] + $_POST['timecnt'];
-        $havecnt = $_POST['oldcnt'] +  $_POST['newcnt'] - $usecnt;
-        $oldcnt = 0;
-        $newcnt = $havecnt;
     } elseif ($_POST['kyukatype'] == "1") {
         $usecnt = $_POST['usecnt'] + $_POST['ymdcnt'];
         $restcnt = $_POST['restcnt'] + $_POST['ymdcnt'];
-        $updatecnt = $_POST['updatecnt'] + 1;
-        $havecnt = $_POST['oldcnt'] +  $_POST['newcnt'] - $_POST['ymdcnt'];
-        $oldcnt = 0;
         $usetime = $_POST['usetime'];
-        $newcnt = $havecnt;
+
+        if ($_POST['oldcnt'] > 0) {
+            $oldcnt_result = $_POST['oldcnt'] - $_POST['ymdcnt'];
+            if ($oldcnt_result <= 0) {
+                $newcnt = $_POST['newcnt'] - $_POST['ymdcnt'] + $oldcnt_result;
+                $oldcnt = 0;
+            } elseif ($oldcnt_result > 0) {
+                $newcnt = $_POST['newcnt'];
+                $oldcnt = $oldcnt_result;
+            }
+        } elseif ($_POST['oldcnt'] <= 0) {
+            $newcnt = $_POST['newcnt'] - $_POST['ymdcnt'];
+            $oldcnt = 0;
+        }
     }
 
     $_POST['strtime'] = intval($_POST['strtime']);
@@ -172,12 +181,9 @@ if (isset($_POST['SaveKyuka'])) {
     VALUES ('$uid', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdt', '$reg_dt')");
 
     $sql_vacationinfo_update = mysqli_query($conn, "UPDATE tbl_vacationinfo SET 
-            oldcnt='$oldcnt',
-            newcnt=$newcnt,
             usecnt=$usecnt,
             usetime=$usetime,
-            restcnt=$restcnt,
-            updatecnt=$updatecnt
+            restcnt=$restcnt
         WHERE vacationid ='$vacationid'");
 
     if ($sql_userkyuka_insert && $sql_vacationinfo_update) {
