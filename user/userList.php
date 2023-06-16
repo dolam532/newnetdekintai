@@ -5,7 +5,7 @@ include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../model/usermodel.php');
 include('../inc/header.php');
-include('../model/inactive.php');
+// include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
@@ -92,32 +92,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<td colspan="8" align="center">登録されたデータがありません.</td>
 					</tr>
 					<?php } elseif (!empty($userlist_list)) {
-					foreach ($userlist_list as $user) {
+					foreach (@$userlist_list as $user) {
 					?>
 						<tr>
 							<td><a href="#"><span class="showModal"><?= $user['uid'] ?></span></a></td>
-							<td><span name="cpwd">********</span></td>
-							<td><span name="cname"><?= $user['name'] ?></span></td>
-							<td><span name="cemail"><?= $user['email'] ?></span></td>
-							<td><span name="cdept"><?= $user['dept'] ?></span></td>
-							<td><span name="cgrade"><?= $user['grade'] ?></span></td>
-							<td><span name="cgenbaname"><?= $user['genbaname'] ?></span></td>
-							<td><span name="cbigo"><?= $user['bigo'] ?></span>
-								<input type="hidden" name="uid" value="<?= $user['uid'] ?>">
-								<input type="hidden" name="companyid" value="<?= $user['companyid'] ?>">
-								<input type="hidden" name="type" value="<?= $user['type'] ?>">
-								<input type="hidden" name="pwd" value="<?= $user['pwd'] ?>">
-								<input type="hidden" name="name" value="<?= $user['name'] ?> 一郎">
-								<input type="hidden" name="email" value="<?= $user['email'] ?>">
-								<input type="hidden" name="dept" value="<?= $user['dept'] ?>">
-								<input type="hidden" name="grade" value="<?= $user['grade'] ?>">
-								<input type="hidden" name="bigo" value="<?= $user['bigo'] ?>">
-								<input type="hidden" name="genid" value="<?= $user['genid'] ?>">
-								<input type="hidden" name="genbaname" value="<?= $user['genbaname'] ?>">
-								<input type="hidden" name="genstrymd" value="<?= $user['genstrymd'] ?>">
-								<input type="hidden" name="genendymd" value="<?= $user['genendymd'] ?>">
-								<input type="hidden" name="inymd" value="<?= $user['inymd'] ?>">
-								<input type="hidden" name="outymd" value="<?= $user['outymd'] ?>">
+							<td><span name="pwd">********</span></td>
+							<td><span name="name"><?= $user['name'] ?></span></td>
+							<td><span name="email"><?= $user['email'] ?></span></td>
+							<td><span name="dept"><?= $user['dept'] ?></span></td>
+							<td><span name="grade"><?= $user['grade'] ?></span></td>
+							<td><span name="genbaname"><?= $user['genbaname'] ?></span></td>
+							<td><span name="bigo"><?= $user['bigo'] ?></span>
 							</td>
 						</tr>
 				<?php }
@@ -134,7 +119,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<div class="modal-header">社員登録(<span id="sname">New</span>)
 						<button class="close" data-dismiss="modal">&times;</button>
 					</div>
-
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-xs-3">
@@ -160,7 +144,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="email">email</label>
-								<input type="text" class="form-control" id="email" name="email" placeholder="email" required="required" maxlength="100" style="text-align: left">
+								<input type="email" class="form-control" id="email" name="email" placeholder="email" required="required" maxlength="100" style="text-align: left">
 							</div>
 							<div class="col-xs-6">
 								<label for="dept">部署</label>
@@ -226,6 +210,107 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		</div>
 	</div>
 </div>
+
+<div class="row">
+	<div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<form method="post">
+				<div class="modal-content">
+					<div class="modal-header">社員登録(<span id="ulsname"></span>)
+						<button class="close" data-dismiss="modal">&times;</button>
+					</div>
+
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-xs-3">
+								<label for="uid">ID</label>
+								<input type="text" class="form-control" id="uluid" name="uluid" placeholder="ID" required="required" maxlength="10" style="text-align: left">
+								<input type="hidden" id="ulcompanyid" name="ulcompanyid" value="">
+								<input type="hidden" id="ultype" name="ultype" value="">
+							</div>
+							<div class="col-xs-3">
+								<label for="pwd">PASSWORD</label>
+								<input type="password" class="form-control" id="ulpwd" name="ulpwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
+							</div>
+							<div class="col-xs-3">
+								<label for="name">社員名</label>
+								<input type="text" class="form-control" id="ulname" name="ulname" placeholder="name" required="required" maxlength="100" style="text-align: left">
+							</div>
+							<div class="col-xs-3">
+								<label for="grade">区分</label>
+								<input type="text" class="form-control" id="ulgrade" name="ulgrade" placeholder="役員/管理/社員" required="required" maxlength="30" style="text-align: left">
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-xs-6">
+								<label for="email">email</label>
+								<input type="email" class="form-control" id="ulemail" name="ulemail" placeholder="email" required="required" maxlength="100" style="text-align: left">
+							</div>
+							<div class="col-xs-6">
+								<label for="dept">部署</label>
+								<input type="text" class="form-control" id="uldept" name="uldept" placeholder="開発部" maxlength="50" style="text-align: left">
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-xs-6">
+								<label for="bigo">備考</label>
+								<input type="text" class="form-control" id="ulbigo" name="ulbigo" maxlength="1000" style="text-align: left">
+							</div>
+							<div class="col-xs-3">
+								<label for="inymd">入社日</label>
+								<input type="text" class="form-control" id="ulinymd" name="ulinymd" maxlength="10" placeholder="" style="text-align: left">
+							</div>
+							<div class="col-xs-3">
+								<label for="outymd">退社日</label>
+								<input type="text" class="form-control" id="uloutymd" name="uloutymd" maxlength="10" placeholder="" style="text-align: left">
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-xs-6">
+								<label for="genid">現場</label>
+								<select class="form-control" id="ulgenba_list" name="ulgenba_list">
+									<option value="" selected=""></option>
+									<?php
+									foreach ($genba_list_db as $key) {
+									?>
+										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["worktime1"] . ',' . $key["worktime2"] ?>"><?= $key["genbaname"] . $key["worktime1"] . $key["worktime2"] ?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
+							<div class="col-xs-3">
+								<label for="genstrymd">契約期間(F)</label>
+								<input type="text" class="form-control" id="ulgenstrymd" name="ulgenstrymd" maxlength="10" placeholder="" style="text-align: left">
+							</div>
+							<div class="col-xs-3">
+								<label for="genendymd">契約期間(T)</label>
+								<input type="text" class="form-control" id="ulgenendymd" name="ulgenendymd" maxlength="10" placeholder="" style="text-align: left">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer" style="text-align: center">
+						<div class="col-xs-4"></div>
+						<div class="col-xs-2">
+							<p class="text-center">
+								<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md" id="UpdatebtnReg" role="button" value="登録">
+							</p>
+						</div>
+						<div class="col-xs-2">
+							<p class="text-center">
+								<a class="btn btn-primary btn-md" id="btnRet" data-dismiss="modal">閉じる </a>
+							</p>
+						</div>
+						<div class="col-xs-4"></div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 <script>
 	//Datepeeker 설정
 	$("#genstrymd").datepicker({
@@ -248,6 +333,42 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	//신규버튼 : popup & clear 
 	$(document).on('click', '#btnNew', function(e) {
 		$('#modal').modal('toggle');
+	});
+
+	//그리드에서 사원ID클릭(수정) : popup & 내용표시 
+	$(document).on('click', '.showModal', function() {
+		$('#modal2').modal('toggle');
+		var Uid = $(this).text();
+		<?php
+		if (!empty($userlist_list)) {
+			foreach ($userlist_list as $key) {
+		?>
+				if ('<?php echo $key['uid'] ?>' == Uid) {
+					$("#ulsname").text('<?php echo $key['name'] ?>');
+					$("#uluid").text($('[name="uluid"]').val("<?php echo $key['uid'] ?>"));
+					var companyid = $("input[name=ulcompanyid]:hidden");
+					companyid.val("<?php echo $key['companyid'] ?>");
+					var companyid = companyid.val();
+					var type = $("input[name=ultype]:hidden");
+					type.val("<?php echo $key['type'] ?>");
+					var type = type.val();
+					$("#ulpwd").text($('[name="ulpwd"]').val("<?php echo $key['pwd'] ?>"));
+					$("#ulname").text($('[name="ulname"]').val("<?php echo $key['name'] ?>"));
+					$("#ulgrade").text($('[name="ulgrade"]').val("<?php echo $key['grade'] ?>"));
+					$("#ulemail").text($('[name="ulemail"]').val("<?php echo $key['email'] ?>"));
+					$("#uldept").text($('[name="uldept"]').val("<?php echo $key['dept'] ?>"));
+					$("#ulbigo").text($('[name="ulbigo"]').val("<?php echo $key['bigo'] ?>"));
+					$("#ulinymd").text($('[name="ulinymd"]').val("<?php echo $key['inymd'] ?>"));
+					$("#uloutymd").text($('[name="uloutymd"]').val("<?php echo $key['outymd'] ?>"));
+					$("#ulinymd").text($('[name="ulinymd"]').val("<?php echo $key['inymd'] ?>"));
+					$("#ulgenba_list option:selected").text("<?php echo $key["genbaname"] . $key["worktime1"] . $key["worktime2"] ?>").val("<?php echo $key['genid'] ?>");
+					$("#ulgenstrymd").text($('[name="ulgenstrymd"]').val("<?php echo $key['genstrymd'] ?>"));
+					$("#ulgenendymd").text($('[name="ulgenendymd"]').val("<?php echo $key['genendymd'] ?>"));
+				}
+		<?php
+			}
+		}
+		?>
 	});
 
 	//신규버튼 : popup & clear 

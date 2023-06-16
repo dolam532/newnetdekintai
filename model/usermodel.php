@@ -1,8 +1,17 @@
 <?php
 // Select database from tbl_user table
 // (userList.php)
-$sql_user_select_db = 'SELECT * FROM `tbl_user` 
-    WHERE `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+$sql_user_select_db = 'SELECT DISTINCT
+    `tbl_user`.*,
+    `tbl_genba`.`genbaname`,
+    `tbl_genba`.`worktime1`,
+    `tbl_genba`.`worktime2`
+FROM
+    `tbl_user`
+CROSS JOIN 
+    `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
+WHERE
+    `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
     AND `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
 $sql_user_select = mysqli_query($conn, $sql_user_select_db);
 $result_user_select = mysqli_fetch_all($sql_user_select, MYSQLI_ASSOC);
@@ -28,8 +37,17 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
     } else {
         $searchGrade = $_POST['searchGrade'];
     }
-    $sql_user = 'SELECT * FROM `tbl_user` 
-    WHERE `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+    $sql_user = 'SELECT DISTINCT
+    `tbl_user`.*,
+    `tbl_genba`.`genbaname`,
+    `tbl_genba`.`worktime1`,
+    `tbl_genba`.`worktime2`
+ FROM
+    `tbl_user`
+ CROSS JOIN 
+ `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
+WHERE 
+`tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
     AND `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
     AND `tbl_user`.`name` IN("' . $searchName . '") 
     AND `tbl_user`.`grade` IN("' . $searchGrade . '")';
@@ -53,6 +71,7 @@ if (isset($_POST['SaveUserList'])) {
     $pwd = mysqli_real_escape_string($conn, $_POST['pwd']);
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $grade = mysqli_real_escape_string($conn, $_POST['grade']);
+    $type = mysqli_real_escape_string($conn, $_POST['type']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $dept = mysqli_real_escape_string($conn, $_POST['dept']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
@@ -69,6 +88,41 @@ if (isset($_POST['SaveUserList'])) {
 	VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
     if (mysqli_query($conn, $sql_user_insert)) {
         $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Update data to tbl_user table of database
+if (isset($_POST['UpdateUserList'])) {
+    $reg_dt = date('Y-m-d H:i:s');
+    $uid = mysqli_real_escape_string($conn, $_POST['uluid']);
+    var_dump($_POST['uluid']);
+    $companyid = mysqli_real_escape_string($conn, $_POST['ulcompanyid']);
+    $pwd = mysqli_real_escape_string($conn, $_POST['ulpwd']);
+    $name = mysqli_real_escape_string($conn, $_POST['ulname']);
+    $grade = mysqli_real_escape_string($conn, $_POST['ulgrade']);
+    $type = mysqli_real_escape_string($conn, $_POST['ultype']);
+    $email = mysqli_real_escape_string($conn, $_POST['ulemail']);
+    $dept = mysqli_real_escape_string($conn, $_POST['uldept']);
+    $bigo = mysqli_real_escape_string($conn, $_POST['ulbigo']);
+    $inymd = mysqli_real_escape_string($conn, $_POST['ulinymd']);
+    $outymd = mysqli_real_escape_string($conn, $_POST['uloutymd']);
+    $genba_list = mysqli_real_escape_string($conn, $_POST['ulgenba_list']);
+    $genstrymd = mysqli_real_escape_string($conn, $_POST['ulgenstrymd']);
+    $genendymd = mysqli_real_escape_string($conn, $_POST['ulgenendymd']);
+
+    $gen_id_dev = explode(",", $genba_list);
+    $genid = $gen_id_dev[0];
+
+    $sql_user_update = mysqli_query($conn, "UPDATE tbl_user SET 
+        `name`=:AAA
+    WHERE `uid` ='".$uid."'");
+
+    if (mysqli_query($conn, $sql_user_update)) {
+        $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
