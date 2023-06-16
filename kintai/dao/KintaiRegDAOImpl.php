@@ -22,7 +22,7 @@ class KintaiRegDAOImpl implements KintaiRegDAO {
         return $kintaiRegRepository->selectById($id);
     }
 
-    public function insert($object){
+    public function insert($object , $uid){
         $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);
         return $kintaiRegRepository->insert($object);
     }
@@ -31,19 +31,27 @@ class KintaiRegDAOImpl implements KintaiRegDAO {
         $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);   
         return $kintaiRegRepository->insertMany($listObject , $uid);
     }
-    public function insertNewMonth($year, $month, $uid){
+
+    public function update($object ,  $uid){
         $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);   
-        return $kintaiRegRepository->insertNewMonth($year, $month, $uid);
+        return $kintaiRegRepository->update($object ,  $uid);
     }
 
-    public function delete($object){
-        $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);
-        return $kintaiRegRepository->delete($object);
+    public function updateMany($listObject ,$uid ){
+        $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);   
+        return $kintaiRegRepository->updateMany($listObject ,$uid);
     }
 
-    public function deleteMany($listObject){
+
+
+    public function delete($object , $uid){
         $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);
-        return $kintaiRegRepository->deleteMany($listObject);
+        return $kintaiRegRepository->delete($object , $uid);
+    }
+
+    public function deleteMany($listObject , $uid){
+        $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);
+        return $kintaiRegRepository->deleteMany($listObject , $uid);
     }
 
     public function getWorkOfMonth($year , $month , $uid) {
@@ -55,6 +63,34 @@ class KintaiRegDAOImpl implements KintaiRegDAO {
         $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);
         return $kintaiRegRepository->getTotalWorkMonth($year , $month , $uid);
     }
+    
+    public function insertNewMonth($year, $month, $uid){
+        $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);   
+        return $kintaiRegRepository->insertNewMonth($year, $month, $uid);
+    }
+
+
+    //==============================// 
+    //==Table Table workmonth ======// 
+    //==============================// 
+
+    public function selectMonthly($workym ,$uid ){
+        $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);   
+        return $kintaiRegRepository->selectMonthly($workym ,$uid);
+    }
+
+    public function insertMonthly($object ,$uid ){
+        $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);   
+        return $kintaiRegRepository->insertMonthly($object ,$uid);
+    }
+    public function updateMonthly($object ,$uid ){
+        $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);   
+        return $kintaiRegRepository->updateMonthly($object ,$uid);
+    }
+
+
+
+
 
 
 

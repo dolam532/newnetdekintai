@@ -20,4 +20,13 @@ class ConstArray
         '0' => '未決裁',
         '1' => '決裁完了'
     ];
+    
+    public static $kintai_print_title_option = [
+        'workYm' => '基準日',
+        'genId' => '現場番号',
+        'printTime' => '印刷日',
+        'department' => '所属',
+        'name' => '氏名',
+        'position' => '氏役割'
+    ];
 }

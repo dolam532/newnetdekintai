@@ -8,7 +8,6 @@ class KintaiRegRepository
 
     public function selectById($id)
     {
-        //==// Action connect to db get data -> return value = Object 
         global $conn;
         global $QUERY_SELECT_USER_BY_ID;
         $stmt = $conn->prepare($QUERY_SELECT_USER_BY_ID);
@@ -24,19 +23,16 @@ class KintaiRegRepository
         } else {
             return null;
         }
-
-
     }
 
-    public function insert($object)
+    public function insert($object, $uid)
     {
-
     }
-    public function insertMany($data, $uid)
+    public function insertMany($listData, $uid)
     {
         // Action connect to db get data -> return value = Object
         global $conn;
-        $listObject = json_decode($data, true);
+        $listObject = json_decode($listData, true);
         global $QUERY_INSERT_MANY_WORK_OF_MONTH;
         $affected_rows = 0;
         try {
@@ -60,30 +56,27 @@ class KintaiRegRepository
         } catch (Exception $e) {
             return null;
         }
-
     }
 
-    // inserttnew month to workyearmonth day
-    public function insertNewMonth($year, $month, $uid)
+    public function update($object, $uid)
     {
-        // Action connect to db get data -> return value = Object
         global $conn;
-        global $QUERY_INSERT_NEW_WORK_OF_MONTH;
-        global $DEFAULT_GENBA_ID;
+        $object = json_decode($object, true);
+        global $QUERY_UPDATE_DATA_WORK_OF_YMD;
         $affected_rows = 0;
-        $workymd = "$year/$month/01";
-        // add query
-        $query =  $QUERY_INSERT_NEW_WORK_OF_MONTH ;
-        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, intval(substr($workymd, 5, 2)), intval(substr($workymd, 0, 4)));
-        for ($i = 1; $i <= $daysInMonth; $i++) {
-            $day = str_pad($i, 2, '0', STR_PAD_LEFT);
-            $query .= " ('$uid', '$DEFAULT_GENBA_ID', CONCAT(SUBSTRING('$workymd', 1, 8), '$day'), null, null, null, null, null, null, null, null, null, null, null, null, null, null, NOW()),";
-        }
-        $query = rtrim($query, ','); // clear last , 
-        error_log($query , 0);
         try {
-            $stmt = $conn->prepare($query);
+            $stmt = $conn->prepare($QUERY_UPDATE_DATA_WORK_OF_YMD);
             if ($stmt) {
+                $stmt->bind_param(
+                    'ssssssssssssssssss', $object['daystarthh'], $object['daystartmm'],
+                    $object['dayendhh'], $object['dayendmm'], $object['jobstarthh'],
+                    $object['jobstartmm'], $object['jobendhh'], $object['jobendmm'],
+                    $object['offtimehh'], $object['offtimemm'], $object['workhh'],
+                    $object['workmm'], $object['janhh'], $object['janmm'],
+                    $object['comment'], $object['bigo'],
+                    $uid, $object['selectedDate']
+                );
+
                 $stmt->execute();
                 $affected_rows += $stmt->affected_rows;
                 $stmt->close();
@@ -101,12 +94,44 @@ class KintaiRegRepository
         }
     }
 
-    public function delete($object)
+    public function updateMany($listData, $uid)
     {
-
     }
 
-    public function deleteMany($listObject)
+
+
+
+    public function delete($object, $uid)
+    {
+        global $conn;
+        $object = json_decode($object, true);
+        global $QUERY_DELETE_DATA_WORK_OF_YMD;
+        $affected_rows = 0;
+        try {
+            $stmt = $conn->prepare($QUERY_DELETE_DATA_WORK_OF_YMD);
+            if ($stmt) {
+                $stmt->bind_param(
+                    'ss',
+                    $uid, $object['selectedDate']
+                );
+                $stmt->execute();
+                $affected_rows += $stmt->affected_rows;
+                $stmt->close();
+                // check success line
+                if ($affected_rows > 0) {
+                    return 1;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    public function deleteMany($listData, $uid)
     {
 
     }
@@ -114,7 +139,6 @@ class KintaiRegRepository
     //==// Select work of month 
     public function getWorkOfMonth($year, $month, $uid)
     {
-        // Action connect to db get data -> return value = Object 
         global $conn;
         global $QUERY_SELECT_WORKMD;
         // create statemennt
@@ -162,8 +186,144 @@ class KintaiRegRepository
         } else {
             return null;
         }
-
     }
+
+    // inserttnew month to workyearmonth day
+    public function insertNewMonth($year, $month, $uid)
+    {
+        // Action connect to db get data -> return value = Object
+        global $conn;
+        global $QUERY_INSERT_NEW_WORK_OF_MONTH;
+        global $DEFAULT_GENBA_ID;
+        $affected_rows = 0;
+        $workymd = "$year/$month/01";
+        // add query
+        $query = $QUERY_INSERT_NEW_WORK_OF_MONTH;
+        $daysInMonth = cal_days_in_month(CAL_GREGORIAN, intval(substr($workymd, 5, 2)), intval(substr($workymd, 0, 4)));
+        for ($i = 1; $i <= $daysInMonth; $i++) {
+            $day = str_pad($i, 2, '0', STR_PAD_LEFT);
+            $query .= " ('$uid', '$DEFAULT_GENBA_ID', CONCAT(SUBSTRING('$workymd', 1, 8), '$day'), null, null, null, null, null, null, null, null, null, null, null, null, null, null, NOW()),";
+        }
+        $query = rtrim($query, ','); // clear last , 
+
+        try {
+            $stmt = $conn->prepare($query);
+            if ($stmt) {
+                $stmt->execute();
+                $affected_rows += $stmt->affected_rows;
+                $stmt->close();
+                // check success line
+                if ($affected_rows > 0) {
+                    return 1;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    //==============================// 
+    //==Table Table workmonth ======// 
+    //==============================// 
+
+
+
+    public function updateMonthly($object, $uid)
+    {
+        global $conn;
+        $object = json_decode($object, true);
+        global $QUERY_UPDATE_DATA_WORK_OF_YM;
+        $affected_rows = 0;
+        try {
+            $stmt = $conn->prepare($QUERY_UPDATE_DATA_WORK_OF_YM);
+            if ($stmt) {
+                $stmt->bind_param(
+                    'sssssssssssssssssss', $object['genid'], $object['jobhour'],
+                    $object['jobminute'], $object['jobhour2'], $object['jobminute2'],
+                    $object['janhour'], $object['janminute'], $object['janhour2'],
+                    $object['janminute2'], $object['workdays'], $object['workdays2'],
+                    $object['jobdays'], $object['jobdays2'], $object['offdays'],
+                    $object['delaydays'],$object['earlydays'], $object['bigo'],
+                    $uid, $object['workym']
+                );
+                $stmt->execute();
+                $affected_rows += $stmt->affected_rows;
+                $stmt->close();
+                // check success line
+                if ($affected_rows > 0) {
+                    return 1;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    public function selectMonthly($workym, $uid)
+    {
+        global $conn;
+        global $QUERY_SELECT_WORK_OF_YM;
+        try {
+            $stmt = $conn->prepare($QUERY_SELECT_WORK_OF_YM);
+            if ($stmt) {
+                $stmt->bind_param('ss', $workym, $uid);
+                $stmt->execute();
+                $stmt->store_result(); 
+                $affected_rows = $stmt->num_rows; 
+                $stmt->close();
+                if ($affected_rows > 0) {
+                    return 1; 
+                } else {
+                    return 0; 
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    public function insertMonthly($object ,$uid ){
+        global $conn;
+        $object = json_decode($object, true);
+        global $QUERY_INSERT_NEW_WORK_OF_YM;
+        $affected_rows = 0;
+        try {
+            $stmt = $conn->prepare($QUERY_INSERT_NEW_WORK_OF_YM);
+            if ($stmt) {
+                $stmt->bind_param(
+                    'sssssssssssssssssss',  $object['workym'],$uid ,$object['genid'], 
+					$object['jobhour'],$object['jobminute'], $object['jobhour2'], 
+					$object['jobminute2'],$object['janhour'], $object['janminute'], 
+					$object['janhour2'],$object['janminute2'], $object['workdays'], 
+					$object['workdays2'],$object['jobdays'], $object['jobdays2'], 
+					$object['offdays'], $object['delaydays'],$object['earlydays'], $object['bigo']
+                );
+                $stmt->execute();
+                $affected_rows += $stmt->affected_rows;
+                $stmt->close();
+                if ($affected_rows > 0) {
+                    return 1;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
 }
 
 
