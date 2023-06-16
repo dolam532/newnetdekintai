@@ -141,6 +141,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<label for="uid">ID</label>
 								<input type="text" class="form-control" id="uid" name="uid" placeholder="ID" required="required" maxlength="10" style="text-align: left">
 								<input type="hidden" name="companyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
+								<input type="hidden" name="type" value="<?= constant('GANASYS_COMPANY_TYPE') ?>">
 							</div>
 							<div class="col-xs-3">
 								<label for="pwd">PASSWORD</label>
