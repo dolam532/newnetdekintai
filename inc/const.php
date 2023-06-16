@@ -6,12 +6,16 @@ DEFINE('DB_USER', 'ndk');
 DEFINE('DB_PASSWORD', 'ganandkadm2019');
 DEFINE('DB_NAME', 'newndk');
 
-// Login Admin or User
+// Loginout Admin, User, ADMINISTRATOR
 DEFINE('ADMIN', '9');
 DEFINE('USER', '1');
+DEFINE('ADMINISTRATOR', '3');
+
+// GANASYS COMPANY NOTE
+DEFINE('GANASYS_COMPANY_ID', '1');
 
 // kintai showyear start
-DEFINE('START_SHOW_YEAR_KINMUHYO' , '1950');
+DEFINE('START_SHOW_YEAR_KINMUHYO', '1950');
 
 // request_param_kintai
 $TYPE_GET_WORK_YEAR_MONTH_DAY = 'getKintaiymd';

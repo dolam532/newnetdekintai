@@ -1,28 +1,44 @@
 <?php
 // Select database from tbl_user table
 // (userList.php)
-if (isset($_POST['searchGrade']) || isset($_POST['searchName'])) {
-    $searchData = $_POST['searchGrade'];
-    $searchName = $_POST['searchName'];
-    $clear = $_POST['clear'];
+$sql_user_select_db = 'SELECT * FROM `tbl_user` 
+    WHERE `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+    AND `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
+$sql_user_select = mysqli_query($conn, $sql_user_select_db);
+$result_user_select = mysqli_fetch_all($sql_user_select, MYSQLI_ASSOC);
 
-    if ($clear !== NULL) {
-        unset($_POST);
-        $sql_user = 'SELECT * FROM `tbl_user`';
-    } elseif (!empty($searchData) && empty($searchName)) {
-        $sql_user = "SELECT * FROM `tbl_user` WHERE grade LIKE '%$searchData%'";
-    } elseif (!empty($searchName) && empty($searchData)) {
-        $sql_user = "SELECT * FROM `tbl_user` WHERE name LIKE '%$searchName%'";
-    } else if (!empty($searchData) && !empty($searchName)) {
-        $sql_user = "SELECT * FROM `tbl_user` WHERE grade LIKE '%$searchData%' AND name LIKE '%$searchName%'";
-    } else {
-        $sql_user = 'SELECT * FROM `tbl_user`';
+if (!empty($result_user_select)) {
+    foreach ($result_user_select as $key) {
+        $Grade[] = $key['grade'];
+        $Name[] = $key['name'];
     }
-} else {
-    $sql_userlist = 'SELECT * FROM `tbl_user`';
 }
-$result_userlist = mysqli_query($conn, $sql_userlist);
-$userlist_list = mysqli_fetch_all($result_userlist, MYSQLI_ASSOC);
+$Grade = array_unique($Grade);
+$Name = array_unique($Name);
+if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
+    $userlist_list = $result_user_select;
+    unset($_POST);
+} elseif ($_POST['SearchButton'] != NULL) {
+    if ($_POST['searchName'] == "") {
+        $searchName = implode('","', $Name);
+    } else {
+        $searchName = $_POST['searchName'];
+    }
+    if ($_POST['searchGrade'] == "") {
+        $searchGrade = implode('","', $Grade);
+    } else {
+        $searchGrade = $_POST['searchGrade'];
+    }
+    $sql_user = 'SELECT * FROM `tbl_user` 
+    WHERE `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+    AND `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
+    AND `tbl_user`.`name` IN("' . $searchName . '") 
+    AND `tbl_user`.`grade` IN("' . $searchGrade . '")';
+
+    $sql_user_re = mysqli_query($conn, $sql_user);
+    $userlist_list = mysqli_fetch_all($sql_user_re, MYSQLI_ASSOC);
+}
+
 
 // Select data from tbl_genba
 $sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN (1)';

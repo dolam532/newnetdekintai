@@ -64,8 +64,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			</div>
 			<div class="col-md-3 text-right">
 				<div class="title_btn">
-					<input type="submit" name="clear" value="クリア">&nbsp;&nbsp;&nbsp;
-					<input type="submit" value="検索">&nbsp;&nbsp;&nbsp;
+					<input type="submit" name="ClearButton" value="クリア">&nbsp;&nbsp;&nbsp;
+					<input type="submit" name="SearchButton" value="検索">&nbsp;&nbsp;&nbsp;
 					<input type="button" id="btnNew" value="新規">
 				</div>
 			</div>
