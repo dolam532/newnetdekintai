@@ -17,7 +17,6 @@ $Grade = array_unique($Grade);
 $Name = array_unique($Name);
 if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
     $userlist_list = $result_user_select;
-    unset($_POST);
 } elseif ($_POST['SearchButton'] != NULL) {
     if ($_POST['searchName'] == "") {
         $searchName = implode('","', $Name);
@@ -39,17 +38,13 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
     $userlist_list = mysqli_fetch_all($sql_user_re, MYSQLI_ASSOC);
 }
 
-
 // Select data from tbl_genba
-$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN (1)';
+$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . constant('GANASYS_COMPANY_ID') . '")';
 $result_genba = mysqli_query($conn, $sql_genba);
 $genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
 // Save data to tbl_user table of database
 if (isset($_POST['SaveUserList'])) {
-    if ($_POST['companyid'] = "") {
-        $_POST['companyid'] = "0";
-    }
     $_POST['companyid'] = intval($_POST['companyid']);
     $reg_dt = date('Y-m-d H:i:s');
 

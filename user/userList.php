@@ -54,17 +54,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<form method="post">
 			<div class="col-md-3 text-left">
 				<div class="title_condition">
-					<label>区分 : <input type="text" name="searchGrade" value="<?= $_POST['searchGrade'] ?>" style="width: 100px;"></label>
+					<label>区分 : <input type="text" id="searchGrade" name="searchGrade" value="<?= $_POST['searchGrade'] ?>" style="width: 100px;"></label>
 				</div>
 			</div>
 			<div class="col-md-3 text-left">
 				<div class="title_condition">
-					<label>社員名 : <input type="text" name="searchName" value="<?= $_POST['searchName'] ?>" style="width: 100px;"></label>
+					<label>社員名 : <input type="text" id="searchName" name="searchName" value="<?= $_POST['searchName'] ?>" style="width: 100px;"></label>
 				</div>
 			</div>
 			<div class="col-md-3 text-right">
 				<div class="title_btn">
-					<input type="submit" name="ClearButton" value="クリア">&nbsp;&nbsp;&nbsp;
+					<input type="submit" id="ClearButton" name="ClearButton" value="クリア">&nbsp;&nbsp;&nbsp;
 					<input type="submit" name="SearchButton" value="検索">&nbsp;&nbsp;&nbsp;
 					<input type="button" id="btnNew" value="新規">
 				</div>
@@ -103,21 +103,21 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<td><span name="cgrade"><?= $user['grade'] ?></span></td>
 							<td><span name="cgenbaname"><?= $user['genbaname'] ?></span></td>
 							<td><span name="cbigo"><?= $user['bigo'] ?></span>
-								<input type="hidden" name="tuid" value="<?= $user['uid'] ?>">
-								<input type="hidden" name="tcompanyid" value="<?= $user['companyid'] ?>">
-								<input type="hidden" name="ttype" value="<?= $user['type'] ?>">
-								<input type="hidden" name="tpwd" value="<?= $user['pwd'] ?>">
-								<input type="hidden" name="tname" value="<?= $user['name'] ?> 一郎">
-								<input type="hidden" name="temail" value="<?= $user['email'] ?>">
-								<input type="hidden" name="tdept" value="<?= $user['dept'] ?>">
-								<input type="hidden" name="tgrade" value="<?= $user['grade'] ?>">
-								<input type="hidden" name="tbigo" value="<?= $user['bigo'] ?>">
-								<input type="hidden" name="tgenid" value="<?= $user['genid'] ?>">
-								<input type="hidden" name="tgenbaname" value="<?= $user['genbaname'] ?>">
-								<input type="hidden" name="tgenstrymd" value="<?= $user['genstrymd'] ?>">
-								<input type="hidden" name="tgenendymd" value="<?= $user['genendymd'] ?>">
-								<input type="hidden" name="tinymd" value="<?= $user['inymd'] ?>">
-								<input type="hidden" name="toutymd" value="<?= $user['outymd'] ?>">
+								<input type="hidden" name="uid" value="<?= $user['uid'] ?>">
+								<input type="hidden" name="companyid" value="<?= $user['companyid'] ?>">
+								<input type="hidden" name="type" value="<?= $user['type'] ?>">
+								<input type="hidden" name="pwd" value="<?= $user['pwd'] ?>">
+								<input type="hidden" name="name" value="<?= $user['name'] ?> 一郎">
+								<input type="hidden" name="email" value="<?= $user['email'] ?>">
+								<input type="hidden" name="dept" value="<?= $user['dept'] ?>">
+								<input type="hidden" name="grade" value="<?= $user['grade'] ?>">
+								<input type="hidden" name="bigo" value="<?= $user['bigo'] ?>">
+								<input type="hidden" name="genid" value="<?= $user['genid'] ?>">
+								<input type="hidden" name="genbaname" value="<?= $user['genbaname'] ?>">
+								<input type="hidden" name="genstrymd" value="<?= $user['genstrymd'] ?>">
+								<input type="hidden" name="genendymd" value="<?= $user['genendymd'] ?>">
+								<input type="hidden" name="inymd" value="<?= $user['inymd'] ?>">
+								<input type="hidden" name="outymd" value="<?= $user['outymd'] ?>">
 							</td>
 						</tr>
 				<?php }
@@ -140,9 +140,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="col-xs-3">
 								<label for="uid">ID</label>
 								<input type="text" class="form-control" id="uid" name="uid" placeholder="ID" required="required" maxlength="10" style="text-align: left">
-								<input type="hidden" name="seq" value="">
-								<input type="hidden" name="companyid" value="">
-								<input type="hidden" name="type" value="">
+								<input type="hidden" name="companyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
 							</div>
 							<div class="col-xs-3">
 								<label for="pwd">PASSWORD</label>
@@ -249,6 +247,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	//신규버튼 : popup & clear 
 	$(document).on('click', '#btnNew', function(e) {
 		$('#modal').modal('toggle');
+	});
+
+	//신규버튼 : popup & clear 
+	$(document).on('click', '#ClearButton', function(e) {
+		$("#searchName").val("");
+		$("#searchGrade").val("");
 	});
 
 	// Check Error
