@@ -5,7 +5,7 @@ include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../model/usermodel.php');
 include('../inc/header.php');
-// include('../model/inactive.php');
+include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
@@ -224,7 +224,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-xs-3">
 								<label for="uid">ID</label>
-								<input type="text" class="form-control" id="uluid" name="uluid" placeholder="ID" required="required" maxlength="10" style="text-align: left">
+								<input type="text" class="form-control" id="uluid" name="uluid" style="text-align: left" readonly>
 								<input type="hidden" id="ulcompanyid" name="ulcompanyid" value="">
 								<input type="hidden" id="ultype" name="ultype" value="">
 							</div>
@@ -428,6 +428,45 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (grade == "") {
 			alert("区分を入力してください。.");
 			$("#grade").focus();
+			e.preventDefault();
+			return;
+		}
+	});
+
+	// Check Error
+	$(document).on('click', '#UpdatebtnReg', function(e) {
+		var pwd = $("#ulpwd").val();
+		var name = $("#ulname").val();
+		var email = $("#ulemail").val();
+		var dept = $("#uldept").val();
+		var grade = $("#ulgrade").val();
+
+		if (pwd == "") {
+			alert("Passwordを入力してください。");
+			$("#ulpwd").focus();
+			e.preventDefault();
+			return;
+		}
+		if (name == "") {
+			alert("社員名を入力してください。.");
+			$("#ulname").focus();
+			e.preventDefault();
+			return;
+		}
+		if (email == "") {
+			alert("E-mailを入力してください。");
+			$("#ulemail").focus();
+			return;
+		}
+		if (dept == "") {
+			alert("部署を入力してください。");
+			$("#uldept").focus();
+			e.preventDefault();
+			return;
+		}
+		if (grade == "") {
+			alert("区分を入力してください。.");
+			$("#ulgrade").focus();
 			e.preventDefault();
 			return;
 		}

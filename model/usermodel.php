@@ -65,7 +65,6 @@ $genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 if (isset($_POST['SaveUserList'])) {
     $_POST['companyid'] = intval($_POST['companyid']);
     $reg_dt = date('Y-m-d H:i:s');
-
     $uid = mysqli_real_escape_string($conn, $_POST['uid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
     $pwd = mysqli_real_escape_string($conn, $_POST['pwd']);
@@ -80,12 +79,11 @@ if (isset($_POST['SaveUserList'])) {
     $genba_list = mysqli_real_escape_string($conn, $_POST['genba_list']);
     $genstrymd = mysqli_real_escape_string($conn, $_POST['genstrymd']);
     $genendymd = mysqli_real_escape_string($conn, $_POST['genendymd']);
-
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
 
-    $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) 
-	VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
+    $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) 
+	VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
     if (mysqli_query($conn, $sql_user_insert)) {
         $_SESSION['save_success'] =  $save_success;
         header("Refresh:3");
@@ -96,9 +94,9 @@ if (isset($_POST['SaveUserList'])) {
 
 // Update data to tbl_user table of database
 if (isset($_POST['UpdateUserList'])) {
+    $_POST['ulcompanyid'] = intval($_POST['ulcompanyid']);
     $reg_dt = date('Y-m-d H:i:s');
     $uid = mysqli_real_escape_string($conn, $_POST['uluid']);
-    var_dump($_POST['uluid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['ulcompanyid']);
     $pwd = mysqli_real_escape_string($conn, $_POST['ulpwd']);
     $name = mysqli_real_escape_string($conn, $_POST['ulname']);
@@ -112,17 +110,29 @@ if (isset($_POST['UpdateUserList'])) {
     $genba_list = mysqli_real_escape_string($conn, $_POST['ulgenba_list']);
     $genstrymd = mysqli_real_escape_string($conn, $_POST['ulgenstrymd']);
     $genendymd = mysqli_real_escape_string($conn, $_POST['ulgenendymd']);
-
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
 
-    $sql_user_update = mysqli_query($conn, "UPDATE tbl_user SET 
-        `name`=:AAA
-    WHERE `uid` ='".$uid."'");
+    $sql = "UPDATE tbl_user SET 
+            companyid='$companyid',
+            pwd='$pwd',
+            name='$name',
+            grade='$grade',
+            type='$type',
+            email='$email',
+            dept='$dept',
+            bigo='$bigo',
+            genid='$genid',
+            inymd='$inymd',
+            outymd='$outymd',
+            genstrymd='$genstrymd',
+            genendymd='$genendymd',
+            reg_dt='$reg_dt'
+        WHERE uid ='$uid'";
+    $result = $conn->query($sql);
 
-    if (mysqli_query($conn, $sql_user_update)) {
+    if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
-        header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
