@@ -133,6 +133,7 @@ if (isset($_POST['UpdateUserList'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
