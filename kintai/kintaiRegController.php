@@ -44,9 +44,10 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
         // get data work year month 
         $result = $kintaiRegDAO->getWorkOfMonth($year, $month, $uidCurrent);
         returnValueTemplate($result);
-} else if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH, 'otherType'])) { // get data for year month 
-        // ??? now not use .... -> get total of month => kyukaMonthly.php ???
-        $result = $kintaiRegDAO->getTotalWorkMonth($year, $month, $uidCurrent);
+} else if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH, 'otherType'])) { // get data for year month -> TABLE_WORK_MONTH
+        //  get total of month => kyukaMonthly.php ???
+        $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
+        $result = $kintaiRegDAO->getTotalWorkMonth($data, $uidCurrent);
         returnValueTemplate($result);
 
 } else if (isset($type_get) && in_array($type_get, [$TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY, 'otherType'])) {

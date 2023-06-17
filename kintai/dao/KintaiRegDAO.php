@@ -13,7 +13,7 @@ interface KintaiRegDAO
     public function delete($object, $uid);
     public function deleteMany($listObject, $uid);
     public function getWorkOfMonth($year, $month, $uid);
-    public function getTotalWorkMonth($year, $month, $uid);
+    public function getTotalWorkMonth($data, $uid);
     public function insertNewMonth($year, $month, $uid);
 
 

@@ -163,12 +163,13 @@ class KintaiRegRepository
     }
 
     //==// after update work of day => update work month 
-    public function getTotalWorkMonth($year, $month, $uid)
+    public function getTotalWorkMonth($data, $uid)
     {
         global $conn;
         global $QUERY_SELECT_WORKYM;
+        $object = json_decode($data, true);
         // create statemennt
-        $workym = "$year$month";
+        $workym = $object['workym'];
         $stmt = $conn->prepare($QUERY_SELECT_WORKYM);
         if ($stmt) {
             $stmt->bind_param('sss', $uid, $uid, $workym);
@@ -178,7 +179,7 @@ class KintaiRegRepository
             $stmt->close();
             if (!empty($result_list)) {
                 return [
-                    'workym' => $result_list
+                    'workym' =>$result_list[0]
                 ];
             } else {
                 return null;

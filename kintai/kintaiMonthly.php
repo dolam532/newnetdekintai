@@ -1,5 +1,9 @@
 <?php
 session_start();
+include('../inc/const.php');
+include('../inc/message.php');
+include('../inc/header.php');
+include('../inc/menu.php');
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
 }
@@ -38,10 +42,139 @@ if ($_SESSION['auth'] == false) {
 			background-color: #4CAF50;
 		}
 	</style>
+
+	<script>
+		//================================/// 
+		//=========== init===============//     OK
+		//============================///  
+		window.onload = function () {
+			var currentDate = new Date();
+			var currentMonth = currentDate.getMonth() + 1; // Month is zero-based in JavaScript 
+			var currentYear = currentDate.getFullYear();
+			document.getElementById('selyy').value = currentYear;
+			document.getElementById('selmm').value = currentMonth < 10 ? '0' + currentMonth : currentMonth;
+			handleDateChange(currentYear, currentMonth);
+		};
+		// Message
+		var NO_DATA_KINTAI = "<?php echo $NO_DATA_KINTAI; ?>";
+		var CONNECT_ERROR = "<?php echo $CONNECT_ERROR; ?>"
+		var currentName = "<?php echo $_SESSION['auth_name']; ?>"
+
+		// TYPE
+		var TYPE_GET_WORK_YEAR_MONTH = "<?php echo $TYPE_GET_WORK_YEAR_MONTH; ?>"
+
+
+
+		//====================================================================/// 
+		//=======function for bind change year month combo box==============//     
+		//============================================================///  
+		 function handleDateChange(selectedYear, selectedMonth) {
+			var strMonth = selectedMonth.toString().padStart(2, '0');
+			handleDateChangeUpdateWorkMonth(selectedYear, strMonth);
+		}
+		 function handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth) {
+			var parsedResponse = null;
+			var dataObject = {
+				workym: selectedYear + selectedMonth
+			};
+			const data = JSON.stringify(dataObject); // convert to json 
+			const response = ajaxRequest(
+				'kintaiRegController.php?type=' + TYPE_GET_WORK_YEAR_MONTH + '&data=' + data,
+				'GET',
+				function (response) {
+					if (response === CONNECT_ERROR) {// connect faild
+						handlerDrawDataWorkOfMonth(null);
+						return;
+					}
+					handlerDrawDataWorkOfMonth(response);
+				},
+				function (errorStatus) {  // connect faild
+					console.log("Ajax Error");
+					handlerDrawDataWorkOfMonth(null);
+					return;
+				}
+			);
+
+		};
+
+		function handlerDrawDataWorkOfMonth(response) {
+			parsedResponse = JSON.parse(response);
+			if (parsedResponse === null || parsedResponse === NO_DATA_KINTAI) {
+				DrawWhiteTableWorkOfMonth();
+				return;
+			}
+			parsedResponse = parsedResponse['workym'];
+			DrawDataWorkOfMonth(parsedResponse);
+		}
+
+		function DrawDataWorkOfMonth(response) {
+			cusername.innerHTML = response['username'];
+			cworktime.innerHTML = response['workym'];
+			cdaytimehh.innerHTML = response['jobhour2'];
+			cdaytimemm.innerHTML = response['jobminute2'];
+			cjobdays.innerHTML = response['jobdays2'];
+			cworkdays.innerHTML = response['workdays2'];
+			janTime.innerHTML = response['janhour2'] +':'+ response['jobminute2'];;
+			coffdays.innerHTML = response['offdays'];
+			cdelaydays.innerHTML = response['delaydays'];
+			cearlydays.innerHTML = response['earlydays'];
+			cbigo.innerHTML = response['bigo'];
+		}
+		function DrawWhiteTableWorkOfMonth() {
+			cusername.innerHTML= currentName;
+			cworktime.innerHTML = '0';
+			cdaytimehh.innerHTML = '0';
+			cdaytimemm.innerHTML = '0';
+			cjobdays.innerHTML = '0';
+			cworkdays.innerHTML = '0';
+			janTime.innerHTML = '0:0';
+			coffdays.innerHTML = '0';
+			cdelaydays.innerHTML = '0';
+			cearlydays.innerHTML = '0';
+			cbigo.innerHTML = '';
+		}
+
+
+		//＝＝＝＝==========//
+		// =======ajax=====// OK
+		//＝＝＝＝==========//
+		function ajaxRequest(url, method, successCallback, errorCallback) {
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === XMLHttpRequest.DONE) {
+					if (xhr.status === 200) {
+						if (successCallback) {
+							successCallback(xhr.responseText);
+						}
+					} else {
+						if (errorCallback) {
+							errorCallback(xhr.status);
+						}
+					}
+				}
+			};
+			xhr.open(method, url, true);
+			xhr.send();
+		}
+
+		function ajaxRequestPromise(url, method) {
+			return new Promise(function (resolve, reject) {
+				ajaxRequest(
+					url,
+					method,
+					function (response) {
+						resolve(response);
+					},
+					function (errorStatus) {
+						reject(errorStatus);
+					}
+				);
+			});
+		}
+	</script>
 </head>
 
 <body>
-	<?php include('../inc/menu.php'); ?>
 	<div class="container">
 		<div class="row">
 			<div class="col-md-5 text-left">
@@ -51,30 +184,28 @@ if ($_SESSION['auth'] == false) {
 			</div>
 			<div class="col-md-4 text-center">
 				<div class="title_condition">
-					<label>基準日 :</label>
-					<select id="selyy" name="selyy" style="padding:5px;">
-						<option value="2019">2019</option>
-						<option value="2020">2020</option>
-						<option value="2021">2021</option>
-						<option value="2022">2022</option>
-						<option value="2023">2023</option>
-						<option value="2024">2024</option>
-						<option value="2025">2025</option>
-					</select>
-					<select id="selmm" name="selmm" style="padding:5px;">
-						<option>01</option>
-						<option>02</option>
-						<option>03</option>
-						<option>04</option>
-						<option>05</option>
-						<option>06</option>
-						<option>07</option>
-						<option>08</option>
-						<option>09</option>
-						<option>10</option>
-						<option>11</option>
-						<option>12</option>
-					</select>
+					<label>基準日:
+						<select id="selyy" name="selyy" class="seldate" style="padding:5px;"
+							onchange="handleDateChange(this.value, document.getElementById('selmm').value)">
+							<?php
+
+							$currentYear = date('Y');
+							$startYear = constant('START_SHOW_YEAR_KINMUHYO');
+							for ($year = $currentYear; $year >= $startYear; $year--) {
+								echo '<option value="' . $year . '">' . $year . '</option>';
+							}
+							?>
+						</select>
+						<select id="selmm" name="selmm" class="seldate" style="padding:5px;"
+							onchange="handleDateChange(document.getElementById('selyy').value, this.value)">
+							<?php
+							for ($month = 1; $month <= 12; $month++) {
+								$formattedMonth = sprintf("%02d", $month);
+								echo '<option value="' . $formattedMonth . '">' . $formattedMonth . '</option>';
+							}
+							?>
+						</select>
+					</label>
 				</div>
 			</div>
 			<div class="col-md-3 text-right"></div>
@@ -98,21 +229,19 @@ if ($_SESSION['auth'] == false) {
 
 			<tbody>
 
-
-
-
 				<tr>
-					<td><a href="http://localhost:8080/web/kintai/kintaiMonthly#"><span class="nameClick" name="cusername">GANASYS</span></a></td>
-					<td><span name="cweekday">202305</span></td>
-					<td><span name="cdaystart">0</span></td>
-					<td><span name="cdayend">0</span></td>
-					<td><span name="cjobstart">0</span></td>
-					<td><span name="cjobend">0</span></td>
-					<td><span>0:0</span></td>
-					<td><span name="cofftime">0</span></td>
-					<td><span name="cworkhh">0</span></td>
-					<td><span name="cworkmm">0</span></td>
-					<td><span name="cbigo"></span></td>
+					<td><a href="http://localhost:8080/web/kintai/kintaiMonthly#"><span class="nameClick"
+					name="cusername" id="cusername">NAME</span></a></td>
+					<td><span name="cworktime" id="cworktime">202305</span></td>
+					<td><span name="cdaytimehh" id="cdaytimehh">0</span></td>
+					<td><span name="cdaytimemm" id="cdaytimemm">0</span></td>
+					<td><span name="cjobdays" id="cjobdays">0</span></td>
+					<td><span name="cworkdays" id="cworkdays">0</span></td>
+					<td><span name="janTime" id="janTime">0:0</span></td>
+					<td><span name="coffdays" id="coffdays">0</span></td>
+					<td><span name="cdelaydays" id="cdelaydays">0</span></td>
+					<td><span name="cearlydays" id="cearlydays">0</span></td>
+					<td><span name="cbigo" id="cbigo"></span></td>
 				</tr>
 
 
