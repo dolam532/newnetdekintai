@@ -114,7 +114,7 @@ if ($_SESSION['auth'] == false) {
 			cdaytimemm.innerHTML = response['jobminute2'];
 			cjobdays.innerHTML = response['jobdays2'];
 			cworkdays.innerHTML = response['workdays2'];
-			janTime.innerHTML = response['janhour2'] +':'+ response['jobminute2'];;
+			janTime.innerHTML = response['janhour2'] +':'+ response['janminute2'];
 			coffdays.innerHTML = response['offdays'];
 			cdelaydays.innerHTML = response['delaydays'];
 			cearlydays.innerHTML = response['earlydays'];
