@@ -39,14 +39,14 @@
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li class="active"><a href="../index.php">Home</a></li>
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">勤怠 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li class="menu-level1"><a href="../kintai/kintaiReg.php">勤務表（本社用）</a></li>
                             <li class="menu-level1"><a href="../kintai/kintaiMonthly.php">月間勤怠</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown active">
+                    <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">休暇 <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li class="menu-level1"><a href="../kyuka/kyukaReg.php">休暇届</a></li>
@@ -54,7 +54,7 @@
                         </ul>
                     </li>
                     <?php if ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
-                        <li class="dropdown active" id="manager">
+                        <li class="dropdown" id="manager">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">基本情報
                                 <span class="caret"></span></a>
                             <ul class="dropdown-menu">
@@ -72,7 +72,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="dropdown active" id="gana">
+                        <li class="dropdown" id="gana">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true">GANASYS<span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="">使用者登録</a></li>
