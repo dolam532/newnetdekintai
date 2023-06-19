@@ -1,5 +1,9 @@
 <?php
 session_start();
+include '../inc/const.php';
+include '../inc/const_array.php';
+include('../inc/message.php');
+include('../inc/menu.php');
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
 }
@@ -80,10 +84,7 @@ if ($_SESSION['auth'] == false) {
 </head>
 <?php
 // Include const.php
-include '../inc/const.php';
-include '../inc/const_array.php';
-include('../inc/message.php');
-include('../inc/menu.php');
+
 
 $json_kintai_print_title_option = json_encode(ConstArray::$kintai_print_title_option);
 
@@ -91,7 +92,6 @@ $json_kintai_print_title_option = json_encode(ConstArray::$kintai_print_title_op
 <script>
 	// TYPE
 	var TYPE_GET_WORK_YEAR_MONTH_DAY = "<?php echo $TYPE_GET_WORK_YEAR_MONTH_DAY; ?>"
-	var TYPE_GET_WORK_YEAR_MONTH = "<?php echo $TYPE_GET_WORK_YEAR_MONTH; ?>"
 	var TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY = "<?php echo $TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY; ?>"
 	var TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY = "<?php echo $TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY; ?>"
 	var TYPE_DELETE_DATA_OF_SELETED_DAY = "<?php echo $TYPE_DELETE_DATA_OF_SELETED_DAY; ?>"
@@ -540,8 +540,8 @@ $json_kintai_print_title_option = json_encode(ConstArray::$kintai_print_title_op
 		earlydays.value = nCountEarlyOut;
 
 		// over time 
-		janhh_top.value = totalJanHours;
-		janmm_top.value = totalJanMinutes;
+		janhh_top.innerHTML = totalJanHours;
+		janmm_top.innerHTML = totalJanMinutes;
 		janhh.value = totalJanHours;
 		janmm.value = totalJanMinutes;
 
@@ -917,6 +917,7 @@ $json_kintai_print_title_option = json_encode(ConstArray::$kintai_print_title_op
 			earlydays: earlydays.value,
 			bigo: bigoText
 		};
+		console.log(dataObject)
 		// Call Ajax for delete data
 		const data = JSON.stringify(dataObject); // convert to json 
 		const response = ajaxRequest(
