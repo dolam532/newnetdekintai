@@ -556,12 +556,14 @@ if ($_SESSION['auth'] == false) {
 
 			if (listDataWorkymd === null) {
 				drawWhiteTable(showYear, showMonth);
+				return;
 			} else { //=====//PARAMETER listDataWorkymd not null 
 				var html = '';
 				// var jsonData = JSON.parse(listDataWorkymd);
 				var workYmdList = listDataWorkymd;
 				// Check List Month => If list  check the list of months if the list is missing or missing days then add it to the list
 				var isCheck = checkMonthMissingData(workYmdList, showYear, showMonth);
+
 				if (!isCheck) { // If future month => 
 					drawWhiteTable(showYear, showMonth);
 					return;
@@ -666,9 +668,9 @@ if ($_SESSION['auth'] == false) {
 				html += '<td><span name="cjobstarthh"></span>:<span name="cjobstartmm"></span></td>';
 				html += '<td><span name="cjobendhh"></span>:<span name="cjobendmm"></span></td>';
 				html += '<td><span name="cofftimehh"></span>:<span name="cofftimemm"></span></td>';
-				html += '<td><span name="cworkhh"></span></td>';
-				html += '<td><span name="cworkmm"></span></td>';
-				html += '<td><span name="cjanhh"></span>:<span name="cjanmm"></span></td>';
+				html += '<td><span name="cworkhh"></span>:<span name="cworkmm"></span></td>';
+
+				html += '<td style="display : none;"><span name="cjanhh"></span>:<span name="cjanmm"></span></td>';
 				html += '<td style="text-align:left"><span name="ccomment"></span></td>';
 				html += '<td style="text-align:left"><span name="cbigo"></span>';
 				html += '<input type="hidden" name="tuid" value="admin">';
@@ -715,12 +717,13 @@ if ($_SESSION['auth'] == false) {
 				}
 			}
 
+
 			if (workYmdList.length !== daysInMonth) {
 				var arrayMissingDay = [];
 				var arrayDayOfWorkList = [];
 				var genidDefault = 0;
 				// add value to ararymissing #
-				for (let i = 0, len = daysInMonth; i < len; i++) {
+				for (let i = 1; i <= daysInMonth; i++) {
 					var date = new Date(year, month - 1, i);
 					var formattedDate = date.getFullYear() + '/' + (date.getMonth() + 1).toString().padStart(2, '0') + '/' + date.getDate().toString().padStart(2, '0');
 					arrayMissingDay.push(formattedDate);
@@ -732,7 +735,6 @@ if ($_SESSION['auth'] == false) {
 						genid = workYmdList[i].genidDefault; // get genid of last day *** bad
 					}
 				}
-
 				var filteredArray = arrayMissingDay
 					.filter(function (date) {
 						return !arrayDayOfWorkList.includes(date);
@@ -766,10 +768,19 @@ if ($_SESSION['auth'] == false) {
 		//======================================================/// 
 		//======= Function insert data new month  ==============//     OK
 		//=====================================================/// 
-		function insertNewMonthData(year, month) {
+		function insertNewMonthData(selectedYear, selectedMonth) {
+
+			strMonth = selectedMonth < 10 ? '0' + selectedMonth : selectedMonth;
+			if (strMonth.length >= 3)
+				strMonth = strMonth.slice(-2);
+
+			var dataObject = {
+				workym: (selectedYear + strMonth)
+			};
+			const data = JSON.stringify(dataObject); // convert to json 
 			const response = ajaxRequest(
 				'kintaiRegController.php?type=' +
-				TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY + '&year=' + year + '&month=' + month,
+				TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY + '&data=' + data,
 				'GET',
 				function (response) {
 					console.log("INSERT" + response);
@@ -1238,300 +1249,319 @@ if ($_SESSION['auth'] == false) {
 		function handleDateChange(selectedYear, selectedMonth) {
 			try {
 				strMonth = selectedMonth < 10 ? '0' + selectedMonth : selectedMonth;
-				if (strMonth.length >= 3) 
-					strMonth = strMonth.slice(-2); 
-		
-					var dataObject = {
-						workym: (selectedYear + strMonth)
-					};
-					const data = JSON.stringify(dataObject); // convert to json 
-					const response = ajaxRequest(
-						'kintaiRegController.php?type=' + TYPE_GET_DATA_KINMUHYO + '&data=' + data,
-						'GET',
-						function (response) {
-							var jsonData = JSON.parse(response);
-							handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, jsonData['workYmdList']);
-							handlerDateChangeUpdateTotalWorkMonth(jsonData['workym'])
-							drawDataToTotalMonth();
-						},
-						function (errorStatus) {  // connect faild
-							handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
-							handlerDateChangeUpdateTotalWorkMonth(null)
-							return;
-						}
-					);
-				} catch (error) {
-					handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
-					handlerDateChangeUpdateTotalWorkMonth(null)
-					drawDataToTotalMonth();
-				}
-			}
-
-			
-				function handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, data) {
-				if (data === null || data === CONNECT_ERROR) {
-					drawDayOfMonth(selectedYear, selectedMonth, null);
-				} else {
-					drawDayOfMonth(selectedYear, selectedMonth, data);
-				}
-			}
-
-			function handlerDateChangeUpdateTotalWorkMonth(data) {
-				if (data === null || data === CONNECT_ERROR) {
-					drawInputDataTotalWorkMonth(null);
-				} else {
-					drawInputDataTotalWorkMonth(data);
-				}
-
-			}
-
-			function drawInputDataTotalWorkMonth(data) {
-				// jobhour.value = totalDayHours;
-				// jobminute.value = totalDayMinutes;
-				// workdays.value = nCountWorkDay;
-				// jobdays.value = nCountJobDay;
-				// offdays.value = offDay;
-				// delaydays.value = nCountDelayIn;
-				// earlydays.value = nCountEarlyOut;
-				
-
-				if (data === null) {
-					return;
-				}
-
-				console.log(data);
-				jobhour.value = data['jobhour2'];
-				jobminute.value = data['jobminute2'];
-				workdays.value = data['workdays2'];
-				jobdays.value = data['jobdays2'];
-				offdays.value = data['offdays'];
-				delaydays.value = data['delaydays'];
-				earlydays.value = data['earlydays'];
-
-			}
-
-
-			//＝＝＝＝==========//
-			// =======Handler Select box of minute on popup=====// OK
-			//＝＝＝＝==========//
-			function handleInputFocus(input, select) {
-				input.value = "";
-				select.value = "";
-			}
-
-			function handleInputBlur(input, select) {
-				if (input.value === "") {
-					select.value = "";
-				} else {
-					select.value = "";
-				}
-			}
-			function handleSelect(input, select, isReDrawWorkTime) {
-				var selectedValue = select.value;
-				if (selectedValue) {
-					input.value = selectedValue < 10 ? ('0' + selectedValue.toString()) : selectedValue;
-					select.value = "";
-					if (input.value === '000') {
-						input.value = '00';
-					}
-				}
-				// Check Re-Draw Work Time total
-				isReDrawWorkTime && updateChangeJobTimeModal();
-			}
-
-
-			//＝＝＝＝==============================================//
-			// ========================月登録Button==================// 
-			//＝＝＝＝==============================================//
-			function MonthDataRegister() {
-				//create object data 
-				var currentWorkYm = selyy.value + selmm.value;
-				var genId = document.getElementsByName('tgenid')[0].value; // get First value 
-				var bigoText = "";  // ???
+				if (strMonth.length >= 3)
+					strMonth = strMonth.slice(-2);
 
 				var dataObject = {
-					genid: genId,
-					workym: currentWorkYm,
-					jobhour: jobhour_top.innerText,
-					jobminute: jobminute_top.innerText,
-					jobhour2: jobhour.value,
-					jobminute2: jobminute.value,
-					janhour: janhh_top.innerText,
-					janminute: janmm_top.innerText,
-					janhour2: janhh.value,
-					janminute2: janmm.value,
-					workdays: workdays_top.innerText,
-					workdays2: workdays.value,
-					jobdays: jobdays_top.innerText,
-					jobdays2: jobdays.value,
-					offdays: offdays.value,
-					delaydays: delaydays.value,
-					earlydays: earlydays.value,
-					bigo: bigoText
+					workym: (selectedYear + strMonth)
 				};
-				console.log(dataObject)
-				// Call Ajax for delete data
 				const data = JSON.stringify(dataObject); // convert to json 
 				const response = ajaxRequest(
-					'kintaiRegController.php?type=' +
-					TYPE_REGISTER_DATA_OF_MONTH + '&data=' + data,
+					'kintaiRegController.php?type=' + TYPE_GET_DATA_KINMUHYO + '&data=' + data,
 					'GET',
 					function (response) {
-						if (response === CONNECT_ERROR) {
-							console.log("Connect ERROR: ");
+						// check data current month = null => if === current create new data -> else print white 
+						let parsedResponse = null;
+						try {
+							parsedResponse = JSON.parse(response);
+						} catch (error) {
+							parsedResponse = null;
+							// check if current time not data -> insert 
+							var currentDate = new Date();
+							var currentMonth = currentDate.getMonth() + 1; //
+							var currentYear = currentDate.getFullYear();
+							if (currentYear === selectedYear && selectedMonth === currentMonth) {
+								insertNewMonthData(currentYear, currentMonth);
+							}
+							handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+							handlerDateChangeUpdateTotalWorkMonth(null);
 							return;
 						}
-						dataChanged = false; // 登録した後、修正中場所がない
-						// if(dataChanged === true) {　　????　　// 月のデータが変更があれば次の月に切り替える前に確認
-						// 	
-						// }
+						if (parsedResponse === NO_DATA_KINTAI) {
+							parsedResponse = null;
+						}
 
-						// show OK Alert 　
-						window.alert(UPDATE_DATA_MONTH_SUCCESS);
+						handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, parsedResponse['workYmdList']);
+						handlerDateChangeUpdateTotalWorkMonth(parsedResponse['workym']);
+						drawDataToTotalMonth();
 					},
-					function (errorStatus) {
-						window.alert(UPDATE_DATA_MONTH_ERROR);
+					function (errorStatus) {  // connect faild
+
+						return;
 					}
 				);
-			}
-			//＝＝＝＝==========//
-			// =======ajax=====// OK
-			//＝＝＝＝==========//
-			function ajaxRequest(url, method, successCallback, errorCallback) {
-				var xhr = new XMLHttpRequest();
-				xhr.onreadystatechange = function () {
-					if (xhr.readyState === XMLHttpRequest.DONE) {
-						if (xhr.status === 200) {
-							if (successCallback) {
-								successCallback(xhr.responseText);
-							}
-						} else {
-							if (errorCallback) {
-								errorCallback(xhr.status);
-							}
-						}
-					}
-				};
-				xhr.open(method, url, true);
-				xhr.send();
+			} catch (error) {
+				handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+				handlerDateChangeUpdateTotalWorkMonth(null)
+				drawDataToTotalMonth();
 			}
 
-			function ajaxRequestPromise(url, method) {
-				return new Promise(function (resolve, reject) {
-					ajaxRequest(
-						url,
-						method,
-						function (response) {
-							resolve(response);
-						},
-						function (errorStatus) {
-							reject(errorStatus);
+		}
+
+		function handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, data) {
+			if (data === null || data === CONNECT_ERROR) {
+				drawDayOfMonth(selectedYear, selectedMonth, null);
+			} else {
+
+				drawDayOfMonth(selectedYear, selectedMonth, data);
+			}
+		}
+
+		function handlerDateChangeUpdateTotalWorkMonth(data) {
+			if (data === null || data === CONNECT_ERROR) {
+				drawInputDataTotalWorkMonth(null);
+			} else {
+				drawInputDataTotalWorkMonth(data);
+			}
+
+		}
+
+		function drawInputDataTotalWorkMonth(data) {
+			// jobhour.value = totalDayHours;
+			// jobminute.value = totalDayMinutes;
+			// workdays.value = nCountWorkDay;
+			// jobdays.value = nCountJobDay;
+			// offdays.value = offDay;
+			// delaydays.value = nCountDelayIn;
+			// earlydays.value = nCountEarlyOut;
+
+
+			if (data === null) {
+				return;
+			}
+
+			jobhour.value = data['jobhour2'];
+			jobminute.value = data['jobminute2'];
+			workdays.value = data['workdays2'];
+			jobdays.value = data['jobdays2'];
+			offdays.value = data['offdays'];
+			delaydays.value = data['delaydays'];
+			earlydays.value = data['earlydays'];
+
+		}
+
+
+		//＝＝＝＝==========//
+		// =======Handler Select box of minute on popup=====// OK
+		//＝＝＝＝==========//
+		function handleInputFocus(input, select) {
+			input.value = "";
+			select.value = "";
+		}
+
+		function handleInputBlur(input, select) {
+			if (input.value === "") {
+				select.value = "";
+			} else {
+				select.value = "";
+			}
+		}
+		function handleSelect(input, select, isReDrawWorkTime) {
+			var selectedValue = select.value;
+			if (selectedValue) {
+				input.value = selectedValue < 10 ? ('0' + selectedValue.toString()) : selectedValue;
+				select.value = "";
+				if (input.value === '000') {
+					input.value = '00';
+				}
+			}
+			// Check Re-Draw Work Time total
+			isReDrawWorkTime && updateChangeJobTimeModal();
+		}
+
+
+		//＝＝＝＝==============================================//
+		// ========================月登録Button==================// 
+		//＝＝＝＝==============================================//
+		function MonthDataRegister() {
+			//create object data 
+			var currentWorkYm = selyy.value + selmm.value;
+			var genId = document.getElementsByName('tgenid')[0].value; // get First value 
+			var bigoText = "";  // ???
+
+			var dataObject = {
+				genid: genId,
+				workym: currentWorkYm,
+				jobhour: jobhour_top.innerText,
+				jobminute: jobminute_top.innerText,
+				jobhour2: jobhour.value,
+				jobminute2: jobminute.value,
+				janhour: janhh_top.innerText,
+				janminute: janmm_top.innerText,
+				janhour2: janhh.value,
+				janminute2: janmm.value,
+				workdays: workdays_top.innerText,
+				workdays2: workdays.value,
+				jobdays: jobdays_top.innerText,
+				jobdays2: jobdays.value,
+				offdays: offdays.value,
+				delaydays: delaydays.value,
+				earlydays: earlydays.value,
+				bigo: bigoText
+			};
+			console.log(dataObject)
+			// Call Ajax for delete data
+			const data = JSON.stringify(dataObject); // convert to json 
+			const response = ajaxRequest(
+				'kintaiRegController.php?type=' +
+				TYPE_REGISTER_DATA_OF_MONTH + '&data=' + data,
+				'GET',
+				function (response) {
+					if (response === CONNECT_ERROR) {
+						console.log("Connect ERROR: ");
+						return;
+					}
+					dataChanged = false; // 登録した後、修正中場所がない
+					// if(dataChanged === true) {　　????　　// 月のデータが変更があれば次の月に切り替える前に確認
+					// 	
+					// }
+
+					// show OK Alert 　
+					window.alert(UPDATE_DATA_MONTH_SUCCESS);
+				},
+				function (errorStatus) {
+					window.alert(UPDATE_DATA_MONTH_ERROR);
+				}
+			);
+		}
+		//＝＝＝＝==========//
+		// =======ajax=====// OK
+		//＝＝＝＝==========//
+		function ajaxRequest(url, method, successCallback, errorCallback) {
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function () {
+				if (xhr.readyState === XMLHttpRequest.DONE) {
+					if (xhr.status === 200) {
+						if (successCallback) {
+							successCallback(xhr.responseText);
 						}
-					);
+					} else {
+						if (errorCallback) {
+							errorCallback(xhr.status);
+						}
+					}
+				}
+			};
+			xhr.open(method, url, true);
+			xhr.send();
+		}
+
+		function ajaxRequestPromise(url, method) {
+			return new Promise(function (resolve, reject) {
+				ajaxRequest(
+					url,
+					method,
+					function (response) {
+						resolve(response);
+					},
+					function (errorStatus) {
+						reject(errorStatus);
+					}
+				);
+			});
+		}
+
+		//=====================================//
+		//===========勤務表印刷================//
+		//====================================//
+
+		function preparePrint() {
+			// Create Clone 
+			var pageClone = document.documentElement.cloneNode(true);
+			// Modify clone
+			modifyPageClone(pageClone);
+			// Create new window 
+			var printWindow = window.open('', '_blank');
+			if (printWindow) {
+				// Write modified content to print page
+				printWindow.document.open();
+				printWindow.document.write(pageClone.outerHTML);
+				printWindow.document.close();
+
+				// print page completed
+				printWindow.addEventListener('load', function () {
+					// Print start
+					printWindow.print();
 				});
+				console.log(pageClone);
+				// Close new tab after print 
+				printWindow.addEventListener('afterprint', function () {
+					printWindow.close();
+				});
+			} else {
+				console.error(CAN_NOT_OPEN_NEW_TAB_PRINT);
+			}
+		}
+
+
+
+		function modifyPageClone(pageClone) {
+
+			var elementsToRemove = [];
+			// get element 
+			var headerElement = pageClone.querySelectorAll('.header_navbar');
+			var titleCondition = pageClone.querySelectorAll('.title_condition');
+			var pageHeaderText = pageClone.querySelectorAll('.page_header_text');
+			var printButton = pageClone.querySelectorAll('.print_btn');
+			var modal = pageClone.querySelectorAll('.modal');
+			var editInput = pageClone.querySelectorAll('#footer___table__edit_input');
+
+			addElementToList(elementsToRemove, headerElement);
+			addElementToList(elementsToRemove, titleCondition);
+			addElementToList(elementsToRemove, pageHeaderText);
+			addElementToList(elementsToRemove, printButton);
+			addElementToList(elementsToRemove, modal);
+			addElementToList(elementsToRemove, editInput);
+
+			// remove Element 
+			for (var i = 0; i < elementsToRemove.length; i++) {
+				elementsToRemove[i].remove();
 			}
 
-			//=====================================//
-			//===========勤務表印刷================//
-			//====================================//
+			// create new html
+			var infoRow = document.createElement('div');
+			infoRow.classList.add('row');
 
-			function preparePrint() {
-				// Create Clone 
-				var pageClone = document.documentElement.cloneNode(true);
-				// Modify clone
-				modifyPageClone(pageClone);
-				// Create new window 
-				var printWindow = window.open('', '_blank');
-				if (printWindow) {
-					// Write modified content to print page
-					printWindow.document.open();
-					printWindow.document.write(pageClone.outerHTML);
-					printWindow.document.close();
+			var infoColLeft = document.createElement('div');
+			infoColLeft.classList.add('col-md-3', 'text-left');
 
-					// print page completed
-					printWindow.addEventListener('load', function () {
-						// Print start
-						printWindow.print();
-					});
-					console.log(pageClone);
-					// Close new tab after print 
-					printWindow.addEventListener('afterprint', function () {
-						printWindow.close();
-					});
-				} else {
-					console.error(CAN_NOT_OPEN_NEW_TAB_PRINT);
+			var infoColRight = document.createElement('div');
+			infoColRight.classList.add('col-md-3', 'text-right');
+			var currentYm = selyy.value + '年' + selmm.value + '月';
+
+			// add content
+			var kintai_print_title_option = {
+				workYm: '基準日',
+				genId: '現場番号',
+				printTime: '印刷日',
+				department: '所属',
+				name: '氏名',
+				position: '氏役割'
+			};
+			infoColLeft.innerHTML = kintai_print_title_option.name + ' : ' + currentName;
+			infoColRight.innerHTML = kintai_print_title_option.workYm + ' : ' + currentYm;
+
+			// add children
+			infoRow.appendChild(infoColLeft);
+			infoRow.appendChild(infoColRight);
+
+			var titleElement = pageClone.querySelector('.print_Infotext_region');
+			titleElement.style.display = 'block';
+			titleElement.parentNode.insertBefore(infoRow, titleElement.nextSibling);
+
+			// Edit  Footer table 
+			var workInfoLabel = pageClone.querySelector('#footer___table_workInfoLabel');
+			if (workInfoLabel) {
+				workInfoLabel.setAttribute('rowspan', '2');
+			}
+
+			function addElementToList(list, element) {
+				for (var j = 0; j < element.length; j++) {
+					list.push(element[j]);
 				}
 			}
 
-
-
-			function modifyPageClone(pageClone) {
-
-				var elementsToRemove = [];
-				// get element 
-				var headerElement = pageClone.querySelectorAll('.header_navbar');
-				var titleCondition = pageClone.querySelectorAll('.title_condition');
-				var pageHeaderText = pageClone.querySelectorAll('.page_header_text');
-				var printButton = pageClone.querySelectorAll('.print_btn');
-				var modal = pageClone.querySelectorAll('.modal');
-				var editInput = pageClone.querySelectorAll('#footer___table__edit_input');
-
-				addElementToList(elementsToRemove, headerElement);
-				addElementToList(elementsToRemove, titleCondition);
-				addElementToList(elementsToRemove, pageHeaderText);
-				addElementToList(elementsToRemove, printButton);
-				addElementToList(elementsToRemove, modal);
-				addElementToList(elementsToRemove, editInput);
-
-				// remove Element 
-				for (var i = 0; i < elementsToRemove.length; i++) {
-					elementsToRemove[i].remove();
-				}
-
-				// create new html
-				var infoRow = document.createElement('div');
-				infoRow.classList.add('row');
-
-				var infoColLeft = document.createElement('div');
-				infoColLeft.classList.add('col-md-3', 'text-left');
-
-				var infoColRight = document.createElement('div');
-				infoColRight.classList.add('col-md-3', 'text-right');
-				var currentYm = selyy.value + '年' + selmm.value + '月';
-
-				// add content
-				var kintai_print_title_option = {
-					workYm: '基準日',
-					genId: '現場番号',
-					printTime: '印刷日',
-					department: '所属',
-					name: '氏名',
-					position: '氏役割'
-				};
-				infoColLeft.innerHTML = kintai_print_title_option.name + ' : ' + currentName;
-				infoColRight.innerHTML = kintai_print_title_option.workYm + ' : ' + currentYm;
-
-				// add children
-				infoRow.appendChild(infoColLeft);
-				infoRow.appendChild(infoColRight);
-
-				var titleElement = pageClone.querySelector('.print_Infotext_region');
-				titleElement.style.display = 'block';
-				titleElement.parentNode.insertBefore(infoRow, titleElement.nextSibling);
-
-				// Edit  Footer table 
-				var workInfoLabel = pageClone.querySelector('#footer___table_workInfoLabel');
-				if (workInfoLabel) {
-					workInfoLabel.setAttribute('rowspan', '2');
-				}
-
-				function addElementToList(list, element) {
-					for (var j = 0; j < element.length; j++) {
-						list.push(element[j]);
-					}
-				}
-
-			}
+		}
 
 // ***END Handler Script Region ****
 	</script>

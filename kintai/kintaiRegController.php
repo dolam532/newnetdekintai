@@ -84,8 +84,12 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
         // Delete this data year month day 
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
         $result = [];
-        $result = array_merge($kintaiRegDAO->getWorkOfMonth($data, $uidCurrent), $kintaiRegDAO->getTotalWorkMonth($data, $uidCurrent));
-        returnValueTemplate($result);
+        if ($data !== null) {
+                $result = array_merge($kintaiRegDAO->getWorkOfMonth($data, $uidCurrent), $kintaiRegDAO->getTotalWorkMonth($data, $uidCurrent));
+                returnValueTemplate($result);
+        } else {
+                returnValueTemplate(null);
+        }
 
 } else {
 
