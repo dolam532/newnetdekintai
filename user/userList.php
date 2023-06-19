@@ -5,7 +5,7 @@ include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../model/usermodel.php');
 include('../inc/header.php');
-include('../model/inactive.php');
+// include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
