@@ -91,4 +91,18 @@ include('../model/loginoutmodel.php');
         <p class="mt-5 mb-3 text-muted text-center" style="margin-top:40px">© 2019. GANASYS. All rights reserved.</p>
     </form>
 </div>
+<script>
+    //로그인 버튼 처리
+    $(document).on('click', '#btnLogin', function(e) {
+        var uid = $("#uid").val(); //태그의 value 속성값
+        var letters = /^[A-Za-z]+$/;
+
+        if (!uid.match(letters)) {
+            alert("IDをアルファベットで入力してください。");
+            e.preventDefault();
+            $("#uid").focus();
+            return true;
+        }
+    });
+</script>
 <?php include('../inc/footer.php'); ?>

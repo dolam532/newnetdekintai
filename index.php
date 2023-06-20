@@ -72,6 +72,7 @@ include('./model/indexmodel.php');
 				</div>
 			<?php
 				unset($_SESSION['logout_success']);
+				session_destroy();
 			endif;
 			?>
 			<div class="jumbotron" id="jumbo1">

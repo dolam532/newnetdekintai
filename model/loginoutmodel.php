@@ -55,7 +55,6 @@ if (isset($_POST['btnLogout'])) {
     unset($_SESSION['auth_uid']);
     unset($_SESSION['auth_pwd']);
     unset($_SESSION['auth_name']);
-    session_destroy();
 
     header("Location: ../index.php");
     $_SESSION['logout_success'] =  $logout_success;
