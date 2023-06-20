@@ -64,15 +64,38 @@ if ($_SESSION['auth'] == false) {
 	.colorError {
 		color: red
 	}
+
+	.table_hidden {
+		display: none;
+	}
+
+	.shorten-height {
+		height: 50%;
+	}
+
+	.double-width {
+		width: 200%;
+	}
+
+	.table{
+		margin-top:-10px;
+		margin-bottom: 0px;
+	}
 </style>
 
 <!-- Print Css -->
 <style type="text/css" media="print">
 	@page {
-		size: landscape;
+		/* //size: ; */
 		margin-top: .5rem;
 		margin-bottom: .3rem;
 	}
+
+	/* print one */
+  .page-two {
+    display: none;
+  }
+ 
 
 	.row {
 		display: flex;
@@ -82,6 +105,206 @@ if ($_SESSION['auth'] == false) {
 	.centered-text {
 		text-align: center;
 	}
+
+
+	.table>tbody>tr>td {
+		padding: 1px;
+		line-height: 1.8rem;
+	}
+
+	.table__topViewTable {
+		border: 2px solid black;
+
+		.info {
+			border: 2px solid black;
+		}
+	}
+
+
+	/* Header  */
+
+
+
+
+	.table-container {
+		display: flex;
+	}
+
+	.left-table,
+	.right-table {
+		flex: 1;
+		padding: 10px;
+	}
+
+	.left-table {
+		margin-right: 10px;
+	}
+
+	.right-table {
+		margin-left: 10px;
+		text-align: right;
+	}
+
+	.left-table p:not(:first-child) {
+		border-bottom: 1px dotted;
+		padding-bottom: 1px;
+		padding-top: auto;
+	}
+
+	.left-table p:nth-child(3) {
+		position: relative;
+	}
+
+	.left-table p:nth-child(3)::after {
+		content: "（印）";
+		position: absolute;
+		top: -1px;
+		right: 0;
+	}
+
+	.right-table {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		grid-template-rows: auto auto;
+		gap: 0;
+		position: relative;
+		margin-left: 0px;
+
+	}
+
+	.row1 {
+		position: relative;
+		left: 50px;
+		padding-left: 0px;
+	}
+	.row2 {
+		right: 50px;
+		padding-right: 0px;
+	}
+
+	.cell {
+		border: 1px solid black;
+		padding: 5px;
+	}
+
+	.cell-empty {
+		height: 7em;
+		border-top: none;
+		position: relative;
+		top: -10px;
+		width: 70%;
+		margin-left: 50px;
+	}
+
+	.cell-text {
+		grid-column: 1 / span 2;
+		position: relative;
+		text-align: center;
+		width: 70%;
+		margin-left: 50px;
+	}
+
+	.row2 .cell {
+		border-left: none;
+	}
+
+	.table-container {
+		position: relative;
+		margin-top: 0px;
+		/* Điều chỉnh giá trị này để đẩy phần tử bên dưới lên */
+
+	}
+
+
+	.table__topViewTable {
+		margin-top: -30px;
+	}
+
+
+
+
+
+	/* left */
+
+	#footer__workTime-label {
+		border: 2px solid black;
+		border-top: 2px solid black;
+		border-right: 0px;
+	}
+
+	#footer__workhh-label {
+		border: 2px solid black;
+		border-left: 1px solid gray;
+
+	}
+
+
+
+	/* show value */
+	#footer___table__show_value {
+		border: 1px solid gray;
+		border-bottom: 2px solid black;
+		border-right: 2px solid black;
+
+		#workdays_top {
+			border-right: 1px solid gray;
+		}
+
+		#jobdays_top {
+			border-right: 1px solid gray;
+		}
+
+		#offdays_top {
+			border-right: 1px solid gray;
+		}
+
+		#delaydays_top {
+			border-right: 1px solid gray;
+		}
+
+		#earlydays_top {
+			border-right: 1px solid gray;
+		}
+
+	}
+
+
+	/* right */
+
+	#footer__workStatus-label {
+		border: 2px solid black;
+		border-right: 1px solid gray;
+	}
+
+	#footer__jobDays-label {
+		border: 1px solid gray;
+	}
+
+	#footer__workDays-label {
+		border: 1px solid gray;
+	}
+
+	#footer__offDays-label {
+		border: 1px solid gray;
+	}
+
+	#footer__delayDays-label {
+		border: 1px solid gray;
+	}
+
+	#footer__earlyDays-label {
+		border: 1px solid gray;
+		border-right: 2px solid black;
+	}
+
+	#footer___table__title {
+		border: 2px solid black;
+		border-bottom: 1px solid gray;
+
+	}
+
+
+
 </style>
 
 <body>
@@ -116,6 +339,12 @@ if ($_SESSION['auth'] == false) {
 							}
 							?>
 						</select>
+
+						<select id="template_table" name="template_table" class="seldate" style="padding:5px;"
+							onchange="handlerChangeTemplate()">
+							<option value="1">Template A</option>
+							<option value="2">Template B</option>
+						</select>
 					</label>
 				</div>
 			</div>
@@ -127,24 +356,46 @@ if ($_SESSION['auth'] == false) {
 			</div>
 		</div>
 
-		<div class="row">
-			<div class="col-md-3 text-left print_Infotext_region" style="display: none;">
 
+		<div class="col-md-3 text-left print_Infotext_region" style="display: none;">
+			<div class="form-group">
+				<div class="table-container">
+					<div class="left-table">
+						<p>LLLLLLLLLLLL</p>
+						<p>LLLLLLLLLL</p>
+						<p>LLLLLLLLLLL</p>
+					</div>
+					<div class="right-table">
+						<div class="row1">
+							<p class="cell cell-text">RRRRRRRR</p>
+							<p class="cell cell-empty"></p>
+						</div>
+						<div class="row2">
+							<p class="cell cell-text">RRRRRRRR</p>
+							<p class="cell cell-empty"></p>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
 		<div class="form-group">
-			<table class="table table-bordered datatable">
+			<table class="table table-bordered datatable table__topViewTable">
 				<thead>
 					<tr class="info">
-						<th style="text-align: center; width: 8%;">日付</th>
-						<th style="text-align: center; width: 14%;" colspan="2">出退社時刻</th>
-						<th style="text-align: center; width: 14%;" colspan="2">業務時間</th>
-						<th style="text-align: center; width: 9%;">休憩時間</th>
-						<th style="text-align: center; width: 7%;">就業時間</th>
+						<th id="table__title--day" name="cDayTime_col" style="text-align: center; width: 8%;">日付</th>
+						<th id="table__title--inOutTime" name="cDayStartEnd_col" style="text-align: center; width: 14%;"
+							colspan="2">出退社時刻</th>
+						<th id="table__title--jobTime" name="cJobTime_col" style="text-align: center; width: 14%;"
+							colspan="2">業務時間</th>
+						<th id="table__title--offTime" name="cOffTime_col" style="text-align: center; width: 9%;">休憩時間
+						</th>
+						<th id="table__title--workTime" name="cWorkTime_col" style="text-align: center; width: 9%;">就業時間
+						</th>
 						<!-- <th style="text-align: center; width: 7%;">残業</th> -->
-						<th style="text-align: center; width: auto;">業務内容</th>
-						<th style="text-align: center; width: 20%;">備考</th>
+						<th id="table__title--workInfo" name="cWorkInfo_col" style="text-align: center; width: auto;">
+							業務内容</th>
+						<th id="table__title--bigo" name="cBigo_col" style="text-align: center; width: 20%;">備考</th>
 					</tr>
 				</thead>
 				<tbody id="dayOfMonthTableBody">
@@ -154,20 +405,20 @@ if ($_SESSION['auth'] == false) {
 		</div>
 	</div>
 	<div class="container" id="divmonthly">
-		<table class="table table-bordered datatable">
+		<table id="footer-Table" class="table table-bordered datatable">
 			<tbody class="sumtbl">
-				<tr>
-					<th style="width: 10%; padding-top: 30px;" rowspan="2">実働時間</th>
-					<th style="width: 10%; ">時 間</th>
-					<th style="width: 10%; ">分</th>
-					<th style="width: 10%; padding-top: 30px;" id="footer___table_workInfoLabel" rowspan="3">勤務状況</th>
-					<th style="width: 15%; ">所定勤務日数</th>
-					<th style="width: 12%; ">実勤務日数</th>
-					<th style="width: 10%; ">欠勤</th>
-					<th style="width: 10%; ">遅刻</th>
-					<th style="width: 10%; ">早退</th>
+				<tr id="footer___table__title">
+					<th id="footer__workTime-label" style="width: 10%; padding-top: 30px;" rowspan="2">実働時間</th>
+					<th id="footer__workhh-label" style="width: 10%; ">時 間</th>
+					<th id="footer__workmm-label" style="width: 10%; ">分</th>
+					<th id="footer__workStatus-label" style="width: 10%; padding-top: 30px;" rowspan="3">勤務状況</th>
+					<th id="footer__jobDays-label" style="width: 15%; ">所定勤務日数</th>
+					<th id="footer__workDays-label" style="width: 12%; ">実勤務日数</th>
+					<th id="footer__offDays-label" style="width: 10%; ">欠勤</th>
+					<th id="footer__delayDays-label" style="width: 10%; ">遅刻</th>
+					<th id="footer__earlyDays-label" style="width: 10%; ">早退</th>
 				</tr>
-				<tr>
+				<tr id="footer___table__show_value">
 					<td id="jobhour_top"><strong>0</strong></td>
 					<td id="jobminute_top"><strong>0</strong></td>
 					<td id="workdays_top"><strong>0</strong></td>
@@ -220,7 +471,7 @@ if ($_SESSION['auth'] == false) {
 					</div>
 
 					<div class="modal-body" style="text-align: left">
-						<div class="row">
+						<div class="row" name="templateB_Onshow">
 							<div class="col-xs-4">
 								<label for="workymd">日付</label>
 								<input type="text" class="form-control" id="workymd" placeholder="" required="required"
@@ -537,6 +788,7 @@ if ($_SESSION['auth'] == false) {
 			document.getElementById('selmm').value = currentMonth < 10 ? '0' + currentMonth : currentMonth;
 			handleDateChange(currentYear, currentMonth);
 
+
 		};
 
 		//==================================/// 
@@ -596,13 +848,71 @@ if ($_SESSION['auth'] == false) {
 					}
 					html += '</a>';
 					html += '</td>';
-					html += '<td><span name="cdaystarthh">' + (data.daystarthh || '') + '</span>:<span name="cdaystartmm">' + (data.daystartmm ? data.daystartmm.toString().padStart(2, '0') : '') + '</span></td>';
-					html += '<td><span name="cdayendhh">' + (data.dayendhh || '') + '</span>:<span name="cdayendmm">' + (data.dayendmm ? data.dayendmm.toString().padStart(2, '0') : '') + '</span></td>';
-					html += '<td><span name="cjobstarthh">' + (data.jobstarthh || '') + '</span>:<span name="cjobstartmm">' + (data.jobstartmm ? data.jobstartmm.toString().padStart(2, '0') : '') + '</span></td>';
-					html += '<td><span name="cjobendhh">' + (data.jobendhh || '') + '</span>:<span name="cjobendmm">' + (data.jobendmm ? data.jobendmm.toString().padStart(2, '0') : '') + '</span></td>';
-					html += '<td><span name="cofftimehh">' + (data.offtimehh ? data.offtimehh.toString() : '') + '</span>:<span name="cofftimemm">' + (data.offtimemm ? data.offtimemm.toString().padStart(2, '0') : '') + '</span></td>';
-					html += '<td><span name="cworkhh">' + (data.workhh ? data.workhh.toString().padStart(1, '0') : '') + '</span>:<span name="cworkmm">' + ((data.workhh !== 0 && data.workmm === 0) ? '00' : (data.workmm ? data.workmm.toString().padStart(2, '0') : '')) + '</span></td>';
-					html += '<td style="display:none;" ><span  name="cjanhh">' + (data.janhh ? data.janhh.toString().padStart(2, '0') : '') + '</span>:<span name="cjanmm">' + ((data.janhh !== 0 && data.janmm === 0) ? '00' : (data.janmm ? data.janmm.toString().padStart(2, '0') : '')) + '</span></td>';
+					// html += '<td name="templateB_Onshow"><span name="cdaystarthh">' + (data.daystarthh || '') + '</span>:<span name="cdaystartmm">' + (data.daystartmm ? data.daystartmm.toString().padStart(2, '0') : '') + '</span></td>';
+					// html += '<td name="templateB_Onshow"><span name="cdayendhh">' + (data.dayendhh || '') + '</span>:<span name="cdayendmm">' + (data.dayendmm ? data.dayendmm.toString().padStart(2, '0') : '') + '</span></td>';
+					// html += '<td><span name="cjobstarthh">' + (data.jobstarthh || '') + '</span>:<span name="cjobstartmm">' + (data.jobstartmm ? data.jobstartmm.toString().padStart(2, '0') : '') + '</span></td>';
+					// html += '<td><span name="cjobendhh">' + (data.jobendhh || '') + '</span>:<span name="cjobendmm">' + (data.jobendmm ? data.jobendmm.toString().padStart(2, '0') : '') + '</span></td>';
+					// html += '<td><span name="cofftimehh">' + (data.offtimehh ? data.offtimehh.toString() : '') + '</span>:<span name="cofftimemm">' + (data.offtimemm ? data.offtimemm.toString().padStart(2, '0') : '') + '</span></td>';
+					// html += '<td><span name="cworkhh">' + (data.workhh ? data.workhh.toString().padStart(1, '0') : '') + '</span>:<span name="cworkmm">' + ((data.workhh !== 0 && data.workmm === 0) ? '00' : (data.workmm ? data.workmm.toString().padStart(2, '0') : '')) + '</span></td>';
+					// html += '<td style="display:none;" ><span  name="cjanhh">' + (data.janhh ? data.janhh.toString().padStart(2, '0') : '') + '</span>:<span name="cjanmm">' + ((data.janhh !== 0 && data.janmm === 0) ? '00' : (data.janmm ? data.janmm.toString().padStart(2, '0') : '')) + '</span></td>';
+					html += '<td name="templateB_Onshow">';
+					if (data.daystarthh) {
+						html += '<span name="cdaystarthh">' + data.daystarthh + '</span>:';
+					}
+					html += '<span name="cdaystartmm">' + (data.daystartmm ? data.daystartmm.toString().padStart(2, '0') : '') + '</span>';
+					html += '</td>';
+
+					html += '<td name="templateB_Onshow">';
+					if (data.dayendhh) {
+						html += '<span name="cdayendhh">' + data.dayendhh + '</span>:';
+					}
+
+					html += '<span name="cdayendmm">' + (data.dayendmm ? data.dayendmm.toString().padStart(2, '0') : '') + '</span>';
+					html += '</td>';
+
+					html += '<td>';
+					if (data.jobstarthh) {
+						html += '<span name="cjobstarthh">' + data.jobstarthh + '</span>:';
+					}
+					html += '<span name="cjobstartmm">' + (data.jobstartmm ? data.jobstartmm.toString().padStart(2, '0') : '') + '</span>';
+					html += '</td>';
+
+					html += '<td>';
+					if (data.jobendhh) {
+						html += '<span name="cjobendhh">' + data.jobendhh + '</span>:';
+					}
+					html += '<span name="cjobendmm">' + (data.jobendmm ? data.jobendmm.toString().padStart(2, '0') : '') + '</span>';
+					html += '</td>';
+
+					html += '<td>';
+					if (data.offtimehh) {
+						html += '<span name="cofftimehh">' + data.offtimehh + '</span>:';
+					}
+					html += '<span name="cofftimemm">' + (data.offtimemm ? data.offtimemm.toString().padStart(2, '0') : '') + '</span>';
+					html += '</td>';
+
+					html += '<td>';
+					if (data.workhh !== 0 && data.workmm === 0) {
+						html += '<span name="cworkhh">' + data.workhh.toString().padStart(1, '0') + '</span>:00';
+					} else {
+						if (data.workhh) {
+							html += '<span name="cworkhh">' + data.workhh.toString().padStart(1, '0') + '</span>:';
+						}
+						html += '<span name="cworkmm">' + (data.workmm ? data.workmm.toString().padStart(2, '0') : '') + '</span>';
+					}
+					html += '</td>';
+
+					html += '<td style="display:none;">';
+					if (data.janhh !== 0 && data.janmm === 0) {
+						html += '<span name="cjanhh">' + data.janhh.toString().padStart(2, '0') + '</span>:00';
+					} else {
+						if (data.janhh) {
+							html += '<span name="cjanhh">' + data.janhh.toString().padStart(2, '0') + '</span>:';
+						}
+						html += '<span name="cjanmm">' + (data.janmm ? data.janmm.toString().padStart(2, '0') : '') + '</span>';
+					}
+					html += '</td>';
+
 					html += '<td><span name="ccomment">' + (data.comment || '') + '</span></td>';
 					html += '<td><span name="cbigo">' + (data.bigo || '') + '</span>';
 					html += '<input type="hidden" name="tuid" value="' + data.uid + '">';
@@ -626,6 +936,7 @@ if ($_SESSION['auth'] == false) {
 					html += '</tr>';
 				}
 				dayOfMonthTableBody.innerHTML = html;
+				handlerChangeTemplate();
 			}
 		}
 
@@ -663,14 +974,13 @@ if ($_SESSION['auth'] == false) {
 				}
 				html += '</a>';
 				html += '</td>';
-				html += '<td><span name="cdaystarthh"></span>:<span name="cdaystartmm"></span></td>';
-				html += '<td><span name="cdayendhh"></span>:<span name="cdayendmm"></span></td>';
-				html += '<td><span name="cjobstarthh"></span>:<span name="cjobstartmm"></span></td>';
-				html += '<td><span name="cjobendhh"></span>:<span name="cjobendmm"></span></td>';
-				html += '<td><span name="cofftimehh"></span>:<span name="cofftimemm"></span></td>';
-				html += '<td><span name="cworkhh"></span>:<span name="cworkmm"></span></td>';
-
-				html += '<td style="display : none;"><span name="cjanhh"></span>:<span name="cjanmm"></span></td>';
+				html += '<td name="templateB_Onshow"><span name="cdaystarthh"></span><span name="cdaystartmm"></span></td>';
+				html += '<td name="templateB_Onshow"><span name="cdayendhh"></span><span name="cdayendmm"></span></td>';
+				html += '<td><span name="cjobstarthh"></span><span name="cjobstartmm"></span></td>';
+				html += '<td><span name="cjobendhh"></span><span name="cjobendmm"></span></td>';
+				html += '<td><span name="cofftimehh"></span><span name="cofftimemm"></span></td>';
+				html += '<td><span name="cworkhh"></span><span name="cworkmm"></span></td>';
+				html += '<td style="display : none;"><span name="cjanhh"></span><span name="cjanmm"></span></td>';
 				html += '<td style="text-align:left"><span name="ccomment"></span></td>';
 				html += '<td style="text-align:left"><span name="cbigo"></span>';
 				html += '<input type="hidden" name="tuid" value="admin">';
@@ -695,6 +1005,88 @@ if ($_SESSION['auth'] == false) {
 
 			}
 			dayOfMonthTableBody.innerHTML = html;
+			handlerChangeTemplate();
+		}
+		//====================================================/// 
+		//======= Change Table Template  ===================//    
+		//=====================================================///  OK
+
+		function handlerChangeTemplate() {
+			var selectElement = document.getElementById('template_table');
+			var selectedValue = selectElement.value;
+
+			var listDayStartEnd = document.getElementsByName("templateB_Onshow");
+			var colDayStartEnd = document.getElementsByName("cDayStartEnd_col");
+
+			// var modalDayTime = document.getElementById('modal__dayTimeSelect');
+
+			var elements = [listDayStartEnd, colDayStartEnd];
+
+
+			if (selectedValue == 1) {  //Template A
+				console.log("add hidden");
+				// add class table_hidden
+				elements.forEach(function (elementList) {
+					elementList.forEach(function (element) {
+						if (!element.classList.contains('table_hidden')) {
+							element.classList.add('table_hidden');
+						}
+					});
+				});
+
+				// resize other column 
+
+
+			} else if (selectedValue == 2) {//Template B
+				// remove class table_hidden
+				console.log("remove hidden");
+				elements.forEach(function (elementList) {
+					elementList.forEach(function (element) {
+						if (element.classList.contains('table_hidden')) {
+							element.classList.remove('table_hidden');
+						}
+					});
+				});
+			}
+
+			resizeColumns(selectedValue);
+
+
+			// change Modal 
+
+
+
+		}
+
+
+		// resize column 
+		function resizeColumns(templateCode) {
+			var thDate = document.querySelector('th[name="cDayTime_col"]');
+			var thStartEnd = document.querySelector('th[name="cDayStartEnd_col"]');
+			var thWorkTime = document.querySelector('th[name="cJobTime_col"]');
+			var thBreakTime = document.querySelector('th[name="cOffTime_col"]');
+			var thWorkHours = document.querySelector('th[name="cWorkTime_col"]');
+
+			if (templateCode == 1) {
+				thDate.style.width = '13%';
+				// thStartEnd.style.width = '17%';
+				thWorkTime.style.width = '17%';
+				thBreakTime.style.width = '12%';
+				thWorkHours.style.width = '12%';
+
+			} else if (templateCode == 2) {
+				thDate.style.width = '9%';
+				thStartEnd.style.width = '16%';
+				thWorkTime.style.width = '16%';
+				thBreakTime.style.width = '9%';
+				thWorkHours.style.width = '9%';
+
+			}
+
+
+
+
+
 		}
 
 		//====================================================/// 
@@ -783,7 +1175,7 @@ if ($_SESSION['auth'] == false) {
 				TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY + '&data=' + data,
 				'GET',
 				function (response) {
-					console.log("INSERT" + response);
+					console.log("INSERTed");
 				},
 				function (errorStatus) {
 					console.log("Connect ERROR: " + errorStatus);
@@ -837,8 +1229,11 @@ if ($_SESSION['auth'] == false) {
 				var offTimeMinutes = parseInt(cofftimemmList[i].innerHTML);
 				var workHours = parseInt(cworkhhList[i].innerHTML);
 				var workMinutes = parseInt(cworkmmList[i].innerHTML);
-				var janHours = parseInt(cjanhhList[i].innerHTML);
-				var janMinutes = parseInt(cjanmmList[i].innerHTML);
+				// var janHours = parseInt(cjanhhList[i].innerHTML);
+				// var janMinutes = parseInt(cjanmmList[i].innerHTML);
+
+				var janHours = 0;
+				var janMinutes = 0;
 
 				// flag -> check delay and early 
 				isJobDay = false;
@@ -965,6 +1360,9 @@ if ($_SESSION['auth'] == false) {
 			janmm_top.innerHTML = totalJanMinutes;
 			janhh.value = totalJanHours;
 			janmm.value = totalJanMinutes;
+
+			// Template
+
 
 		}
 		//===============================================================// 
@@ -1106,7 +1504,6 @@ if ($_SESSION['auth'] == false) {
 					dataChanged = true;
 					changedDataCloseModal();
 					changeStatusMessageModal(true, UPDATE_DATA_SUCCESS);
-					console.log("UPDATED" + response);
 
 				},
 				function (errorStatus) {
@@ -1280,7 +1677,6 @@ if ($_SESSION['auth'] == false) {
 						if (parsedResponse === NO_DATA_KINTAI) {
 							parsedResponse = null;
 						}
-
 						handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, parsedResponse['workYmdList']);
 						handlerDateChangeUpdateTotalWorkMonth(parsedResponse['workym']);
 						drawDataToTotalMonth();
@@ -1295,7 +1691,6 @@ if ($_SESSION['auth'] == false) {
 				handlerDateChangeUpdateTotalWorkMonth(null)
 				drawDataToTotalMonth();
 			}
-
 		}
 
 		function handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, data) {
@@ -1313,23 +1708,12 @@ if ($_SESSION['auth'] == false) {
 			} else {
 				drawInputDataTotalWorkMonth(data);
 			}
-
 		}
 
 		function drawInputDataTotalWorkMonth(data) {
-			// jobhour.value = totalDayHours;
-			// jobminute.value = totalDayMinutes;
-			// workdays.value = nCountWorkDay;
-			// jobdays.value = nCountJobDay;
-			// offdays.value = offDay;
-			// delaydays.value = nCountDelayIn;
-			// earlydays.value = nCountEarlyOut;
-
-
 			if (data === null) {
 				return;
 			}
-
 			jobhour.value = data['jobhour2'];
 			jobminute.value = data['jobminute2'];
 			workdays.value = data['workdays2'];
@@ -1399,7 +1783,6 @@ if ($_SESSION['auth'] == false) {
 				earlydays: earlydays.value,
 				bigo: bigoText
 			};
-			console.log(dataObject)
 			// Call Ajax for delete data
 			const data = JSON.stringify(dataObject); // convert to json 
 			const response = ajaxRequest(
@@ -1473,20 +1856,26 @@ if ($_SESSION['auth'] == false) {
 			// Create new window 
 			var printWindow = window.open('', '_blank');
 			if (printWindow) {
+
+
+
+
+
 				// Write modified content to print page
 				printWindow.document.open();
 				printWindow.document.write(pageClone.outerHTML);
 				printWindow.document.close();
+
 
 				// print page completed
 				printWindow.addEventListener('load', function () {
 					// Print start
 					printWindow.print();
 				});
-				console.log(pageClone);
+				// console.log(pageClone);
 				// Close new tab after print 
 				printWindow.addEventListener('afterprint', function () {
-					printWindow.close();
+					// printWindow.close();
 				});
 			} else {
 				console.error(CAN_NOT_OPEN_NEW_TAB_PRINT);
@@ -1542,18 +1931,107 @@ if ($_SESSION['auth'] == false) {
 			infoColRight.innerHTML = kintai_print_title_option.workYm + ' : ' + currentYm;
 
 			// add children
-			infoRow.appendChild(infoColLeft);
-			infoRow.appendChild(infoColRight);
+			// infoRow.appendChild(infoColLeft);
+			// infoRow.appendChild(infoColRight);
 
 			var titleElement = pageClone.querySelector('.print_Infotext_region');
 			titleElement.style.display = 'block';
 			titleElement.parentNode.insertBefore(infoRow, titleElement.nextSibling);
 
 			// Edit  Footer table 
-			var workInfoLabel = pageClone.querySelector('#footer___table_workInfoLabel');
+			var workInfoLabel = pageClone.querySelector('#footer__workStatus-label');
 			if (workInfoLabel) {
 				workInfoLabel.setAttribute('rowspan', '2');
 			}
+			var workTimeLabel = pageClone.querySelector('#footer__workTime-label');
+			var workHoursLabel = pageClone.querySelector('#footer__workhh-label');
+			var workMinutesLabel = pageClone.querySelector('#footer__workmm-label');
+			var workStatusLabel = pageClone.querySelector('#footer__workStatus-label');
+			var jobDaysLabel = pageClone.querySelector('#footer__jobDays-label');
+			var workDaysLabel = pageClone.querySelector('#footer__workDays-label');
+			var offDaysLabel = pageClone.querySelector('#footer__offDays-label');
+			var delayDaysLabel = pageClone.querySelector('#footer__delayDays-label');
+			var earlyDaysLabel = pageClone.querySelector('#footer__earlyDays-label');
+
+
+
+			var workDaysShow = pageClone.querySelector('#workdays_top');
+			var jobDaysShow = pageClone.querySelector('#jobdays_top');
+			var offDaysShow = pageClone.querySelector('#offdays_top');
+			var delayDaysShow = pageClone.querySelector('#delaydays_top');
+			var earlydaysShow = pageClone.querySelector('#earlydays_top');
+
+			var listEditBottomElem = [workTimeLabel, workHoursLabel, workMinutesLabel, workStatusLabel,
+				jobDaysLabel, workDaysLabel, offDaysLabel, delayDaysLabel, earlyDaysLabel
+				, workDaysShow, jobDaysShow, offDaysShow, delayDaysShow, earlydaysShow];
+
+
+			for (var i = 0; i < listEditBottomElem.length; i++) {
+				var element = listEditBottomElem[i];
+				element.style.borderTop = '0px';
+			}
+
+			// value show 
+			workDaysShow.innerText = workdays.value;
+			jobDaysShow.innerText = jobdays.value;
+			offDaysShow.innerText = offdays.value;
+			delayDaysShow.innerText = delaydays.value;
+			earlydaysShow.innerText = earlydays.value;
+
+
+
+
+			// parrent table
+			var tableFooter = pageClone.querySelector('#footer-Table');
+			tableFooter.classList.remove('table-bordered');
+
+			var jobhour_top = pageClone.querySelector('#jobhour_top');
+			var jobminute_top = pageClone.querySelector('#jobminute_top');
+			var jobHours = document.querySelector('#jobhour').value;
+			var jobMinute = document.querySelector('#jobminute').value;
+
+
+			jobhour_top.remove();
+			jobminute_top.remove();
+
+
+			// workHoursLabel.remove();
+			workTimeLabel.style.padding = '1px';
+			workTimeLabel.style.verticalAlign = 'middle';
+
+			// workHoursLabel
+			workHoursLabel.setAttribute('rowspan', '2');
+			workHoursLabel.style.verticalAlign = 'middle';
+
+			// workMinutesLabel
+			workMinutesLabel.style.display = 'none';
+			workMinutesLabel.style.borderBottom = '1px';
+			workMinutesLabel.setAttribute('rowspan', '2');
+
+
+			// var workStatusLabel 
+
+
+			// var jobDaysLabel 
+
+			// var workDaysLabel 
+
+			// var offDaysLabel 
+
+			// var delayDaysLabel
+
+			// var earlyDaysLabel 
+
+			workTimeLabel.style.width = '20%';
+			workHoursLabel.style.width = 'auto';
+
+			if (jobMinute < 10) {
+				jobMinute = "05";
+			} else if (jobMinute === 0) {
+				jobMinute = "00";
+			}
+			workHoursLabel.innerText = jobHours + ':' + jobMinute;
+
 
 			function addElementToList(list, element) {
 				for (var j = 0; j < element.length; j++) {

@@ -29,6 +29,8 @@ $TYPE_REGISTER_DATA_OF_MONTH = 'monthDataRegister';
 $TYPE_GET_DATA_KINMUHYO = 'getDataKinmuhyo';
 
 
+
+
 $TIME_KINTAI_DELAY_IN = '15'; //遅刻　：　　業務開始時間（分） －  TIME_KINTAI_DELAY_IN（分）　ー　出社時間（分） < 0
 $TIME_KINTAI_EARLY_OUT = '0'; //早退　：　　業務終了時間（分） ＋　TIME_KINTAI_EARLY_OUT（分） － 退社時間 （分） > 0
 $DEFAULT_GENBA_ID = '0'; //
