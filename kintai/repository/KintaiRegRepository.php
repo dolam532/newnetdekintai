@@ -2,6 +2,7 @@
 include('.././inc/dbconnect.php');
 include('.././inc/query.php');
 include('.././inc/message.php');
+// include('../container.php');
 
 class KintaiRegRepository
 {
@@ -68,11 +69,11 @@ class KintaiRegRepository
             $stmt = $conn->prepare($QUERY_UPDATE_DATA_WORK_OF_YMD);
             if ($stmt) {
                 $stmt->bind_param(
-                    'ssssssssssssssssss', $object['daystarthh'], $object['daystartmm'],
+                    'ssssssssssssssss', $object['daystarthh'], $object['daystartmm'], // 'ssssssssssssssssss'
                     $object['dayendhh'], $object['dayendmm'], $object['jobstarthh'],
                     $object['jobstartmm'], $object['jobendhh'], $object['jobendmm'],
                     $object['offtimehh'], $object['offtimemm'], $object['workhh'],
-                    $object['workmm'], $object['janhh'], $object['janmm'],
+                    $object['workmm'], // $object['janhh'], $object['janmm'],  // iF INSERT ZANGYO
                     $object['comment'], $object['bigo'],
                     $uid, $object['selectedDate']
                 );
@@ -137,12 +138,14 @@ class KintaiRegRepository
     }
 
     //==// Select work of month 
-    public function getWorkOfMonth($year, $month, $uid)
+    public function getWorkOfMonth($data, $uid)
     {
         global $conn;
         global $QUERY_SELECT_WORKMD;
+        $object = json_decode($data, true);
         // create statemennt
-        $workymd = "$year/$month/01";
+        $workymd = substr_replace($object['workym'], '/', 4, 0) . '/01';
+
         $stmt = $conn->prepare($QUERY_SELECT_WORKMD);
         if ($stmt) {
             $stmt->bind_param('sss', $uid, $uid, $workymd);
@@ -190,14 +193,16 @@ class KintaiRegRepository
     }
 
     // inserttnew month to workyearmonth day
-    public function insertNewMonth($year, $month, $uid)
+    public function insertNewMonth($data, $uid)
     {
         // Action connect to db get data -> return value = Object
         global $conn;
         global $QUERY_INSERT_NEW_WORK_OF_MONTH;
         global $DEFAULT_GENBA_ID;
         $affected_rows = 0;
-        $workymd = "$year/$month/01";
+        $object = json_decode($data, true);
+        $workymd = substr_replace($object['workym'], '/', 4, 0) . '/01';
+        
         // add query
         $query = $QUERY_INSERT_NEW_WORK_OF_MONTH;
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, intval(substr($workymd, 5, 2)), intval(substr($workymd, 0, 4)));
@@ -231,8 +236,6 @@ class KintaiRegRepository
     //==Table Table workmonth ======// 
     //==============================// 
 
-
-
     public function updateMonthly($object, $uid)
     {
         global $conn;
@@ -243,13 +246,13 @@ class KintaiRegRepository
             $stmt = $conn->prepare($QUERY_UPDATE_DATA_WORK_OF_YM);
             if ($stmt) {
                 $stmt->bind_param(
-                    'sssssssssssssssssss', $object['genid'], $object['jobhour'],
+                    'sssssssssssssss', $object['genid'], $object['jobhour'],  // 'sssssssssssssssssss'
                     $object['jobminute'], $object['jobhour2'], $object['jobminute2'],
-                    $object['janhour'], $object['janminute'], $object['janhour2'],
-                    $object['janminute2'], $object['workdays'], $object['workdays2'],
+                    // $object['janhour'], $object['janminute'], $object['janhour2'], $object['janminute2'],  // if insert zangyo
+                     $object['workdays'], $object['workdays2'],
                     $object['jobdays'], $object['jobdays2'], $object['offdays'],
                     $object['delaydays'],$object['earlydays'], $object['bigo'],
-                    $uid, $object['workym']
+                     $uid, $object['workym']
                 );
                 $stmt->execute();
                 $affected_rows += $stmt->affected_rows;
@@ -302,10 +305,11 @@ class KintaiRegRepository
             $stmt = $conn->prepare($QUERY_INSERT_NEW_WORK_OF_YM);
             if ($stmt) {
                 $stmt->bind_param(
-                    'sssssssssssssssssss',  $object['workym'],$uid ,$object['genid'], 
+                    'sssssssssssssss',  $object['workym'],$uid ,$object['genid'], // 'sssssssssssssssssss'
 					$object['jobhour'],$object['jobminute'], $object['jobhour2'], 
-					$object['jobminute2'],$object['janhour'], $object['janminute'], 
-					$object['janhour2'],$object['janminute2'], $object['workdays'], 
+					$object['jobminute2'],
+                    // $object['janhour'], $object['janminute'], $object['janhour2'],$object['janminute2'], if insert zangyo
+                    $object['workdays'], 
 					$object['workdays2'],$object['jobdays'], $object['jobdays2'], 
 					$object['offdays'], $object['delaydays'],$object['earlydays'], $object['bigo']
                 );

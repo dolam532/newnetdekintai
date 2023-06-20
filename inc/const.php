@@ -26,6 +26,7 @@ $TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY = 'insertNewWorkYearMonthDay';
 $TYPE_REGISTER_DATA_OF_SELETED_DAY = 'registerDataSelectedDay';
 $TYPE_DELETE_DATA_OF_SELETED_DAY = 'deleteDataSelectedDay';
 $TYPE_REGISTER_DATA_OF_MONTH = 'monthDataRegister';
+$TYPE_GET_DATA_KINMUHYO = 'getDataKinmuhyo';
 
 
 $TIME_KINTAI_DELAY_IN = '15'; //遅刻　：　　業務開始時間（分） －  TIME_KINTAI_DELAY_IN（分）　ー　出社時間（分） < 0

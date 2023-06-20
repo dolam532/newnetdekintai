@@ -1,13 +1,15 @@
 <?php
+
 include('.././inc/dbconnect.php');
 include('.././inc/query.php');
 include('.././inc/message.php');
 include('./repository/KintaiRegRepository.php');
-include(__DIR__ . './KintaiRegDAO.php');
+include('KintaiRegDAO.php');
+// include('../container.php');
 
 
 //========================================================//
-// <!-- KintaiReg.php ->   
+// <!-- KintaiRegDaoImpl.php ->   
 //========================================================//
 class KintaiRegDAOImpl implements KintaiRegDAO {
 
@@ -54,9 +56,9 @@ class KintaiRegDAOImpl implements KintaiRegDAO {
         return $kintaiRegRepository->deleteMany($listObject , $uid);
     }
 
-    public function getWorkOfMonth($year , $month , $uid) {
+    public function getWorkOfMonth($data, $uid) {
         $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);
-        return $kintaiRegRepository->getWorkOfMonth($year , $month , $uid);
+        return $kintaiRegRepository->getWorkOfMonth($data, $uid);
     }
 
     public function getTotalWorkMonth($data , $uid) {
@@ -64,9 +66,9 @@ class KintaiRegDAOImpl implements KintaiRegDAO {
         return $kintaiRegRepository->getTotalWorkMonth($data , $uid);
     }
     
-    public function insertNewMonth($year, $month, $uid){
+    public function insertNewMonth($data, $uid){
         $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);   
-        return $kintaiRegRepository->insertNewMonth($year, $month, $uid);
+        return $kintaiRegRepository->insertNewMonth($data, $uid);
     }
 
 

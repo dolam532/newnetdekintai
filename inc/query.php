@@ -38,8 +38,12 @@ VALUES ";
 //==//                  <!-- update data of month    --> 
 $QUERY_UPDATE_DATA_WORK_OF_YMD = "UPDATE tbl_worktime SET daystarthh = ?, daystartmm = ?, 
   dayendhh = ?, dayendmm = ?, jobstarthh = ?, jobstartmm = ?, jobendhh = ?, jobendmm = ?, 
-  offtimehh = ?, offtimemm = ?, workhh = ?, workmm = ?, janhh = ? , janmm = ? ,  comment = ?, bigo = ?, REG_DT = NOW() 
+  offtimehh = ?, offtimemm = ?, workhh = ?, workmm = ?,  comment = ?, bigo = ?, REG_DT = NOW() 
   WHERE uid = ? AND workymd = ?";
+  // $QUERY_UPDATE_DATA_WORK_OF_YMD = "UPDATE tbl_worktime SET daystarthh = ?, daystartmm = ?, // insert zangyo
+  // dayendhh = ?, dayendmm = ?, jobstarthh = ?, jobstartmm = ?, jobendhh = ?, jobendmm = ?, 
+  // offtimehh = ?, offtimemm = ?, workhh = ?, workmm = ?, janhh = ? , janmm = ? ,  comment = ?, bigo = ?, REG_DT = NOW() 
+  // WHERE uid = ? AND workymd = ?";
 
 
 
@@ -50,16 +54,27 @@ $QUERY_SELECT_WORK_OF_YM = "SELECT * FROM tbl_workmonth WHERE workym = ?
 //==//                  <!-- insert data of monthly -> Table workmonth    --> 
 $QUERY_INSERT_NEW_WORK_OF_YM = "INSERT INTO tbl_workmonth 
   (workym, uid, genid, jobhour, jobminute, jobhour2, jobminute2, 
-  janhour, janminute, janhour2, janminute2, workdays, workdays2, 
+   workdays, workdays2, 
   jobdays, jobdays2, offdays, delaydays, earlydays, bigo, REG_DT)
   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
+  // $QUERY_INSERT_NEW_WORK_OF_YM = "INSERT INTO tbl_workmonth   // insert zangyo
+  // (workym, uid, genid, jobhour, jobminute, jobhour2, jobminute2, 
+  // janhour, janminute, janhour2, janminute2, workdays, workdays2, 
+  // jobdays, jobdays2, offdays, delaydays, earlydays, bigo, REG_DT)
+  // VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW());";
 
 //==//                  <!-- update data of Monthly-> Table workmonth   --> 
 $QUERY_UPDATE_DATA_WORK_OF_YM = "UPDATE tbl_workmonth SET genid = ?, jobhour = ?, 
-  jobminute = ?, jobhour2 = ?, jobminute2 = ?, janhour = ?, janminute = ?, janhour2 = ?, 
-  janminute2 = ?, workdays = ?, workdays2 = ?, jobdays = ?, jobdays2 = ? , offdays = ? , 
+  jobminute = ?, jobhour2 = ?, 
+  jobminute2 = ?, workdays = ?, workdays2 = ?, jobdays = ?, jobdays2 = ? , offdays = ? , 
   delaydays = ?, earlydays = ? , bigo = ?, REG_DT = NOW() 
   WHERE uid = ? AND workym = ?";
+
+// $QUERY_UPDATE_DATA_WORK_OF_YM = "UPDATE tbl_workmonth SET genid = ?, jobhour = ?,   // insert zangyo
+// jobminute = ?, jobhour2 = ?, jobminute2 = ?, janhour = ?, janminute = ?, janhour2 = ?, 
+// janminute2 = ?, workdays = ?, workdays2 = ?, jobdays = ?, jobdays2 = ? , offdays = ? , 
+// delaydays = ?, earlydays = ? , bigo = ?, REG_DT = NOW() 
+// WHERE uid = ? AND workym = ?";
 
 
 

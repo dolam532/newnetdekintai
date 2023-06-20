@@ -1,5 +1,4 @@
 <?php
-
 //========================================================//
 // <!-- KintaiDAO  --> 
 //========================================================//
@@ -12,9 +11,9 @@ interface KintaiRegDAO
     public function updateMany($listObject, $uid);
     public function delete($object, $uid);
     public function deleteMany($listObject, $uid);
-    public function getWorkOfMonth($year, $month, $uid);
+    public function getWorkOfMonth($data, $uid);
     public function getTotalWorkMonth($data, $uid);
-    public function insertNewMonth($year, $month, $uid);
+    public function insertNewMonth($data, $uid);
 
 
 
