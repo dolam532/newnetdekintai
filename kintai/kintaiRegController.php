@@ -86,11 +86,42 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
         // Delete this data year month day 
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
         $result = [];
-        if ($data !== null) {
-                $result = array_merge($kintaiRegDAO->getWorkOfMonth($data, $uidCurrent), $kintaiRegDAO->getTotalWorkMonth($data, $uidCurrent));
-                returnValueTemplate($result);
-        } else {
+       
+        try {
+                if ($data !== null) {
+                        $workOfMonth = $kintaiRegDAO->getWorkOfMonth($data, $uidCurrent);
+                        $totalWorkMonth = $kintaiRegDAO->getTotalWorkMonth($data, $uidCurrent);
+                        //error_log("**Connect Error**" . var_dump($workOfMonth) , 0);
+                        if ($workOfMonth !== null && $totalWorkMonth !== null) {
+                                $result = array_merge($workOfMonth, $totalWorkMonth);
+                                returnValueTemplate($result);
+                                return;
+                        } else if ($workOfMonth !== null && $totalWorkMonth === null) {
+
+                                returnValueTemplate($WORK_MOTH_IS_MISSING);
+                                return;
+                        } else if ($workOfMonth === null && $totalWorkMonth !== null) {
+                                returnValueTemplate($WORK_TIME_IS_MISSING);
+                                return;
+                        } else if ($workOfMonth === null && $totalWorkMonth === null) {
+                                returnValueTemplate($WORK_TIME_MONTH_IS_MISSING);
+                           
+                                return;
+                        } else {
+                                $result = $CONNECT_ERROR;
+                               
+                                returnValueTemplate(null);
+                                return;
+                        }
+
+                } else {
+                        returnValueTemplate(null);
+                      
+                }
+        } catch (Exception $e) {
+           
                 returnValueTemplate(null);
+                echo "Đã xảy ra lỗi: " . $e->getMessage();
         }
 
 } else if (isset($type_get) && in_array($type_get, [$TYPE_REGISTER_NEW_DATA_OF_MONTH, 'otherType'])) {

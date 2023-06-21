@@ -771,7 +771,12 @@ if ($_SESSION['auth'] == false) {
 		var DELETE_DATA_SUCCESS = "<?php echo $DELETE_DATA_SUCCESS; ?>";
 		var CONNECT_ERROR = "<?php echo $CONNECT_ERROR; ?>";
 		var UPDATE_DATA_MONTH_SUCCESS = "<?php echo $UPDATE_DATA_MONTH_SUCCESS; ?>";
-		var CAN_NOT_OPEN_NEW_TAB_PRINT = "<?php echo $CAN_NOT_OPEN_NEW_TAB_PRINT; ?>";
+
+		var WORK_TIME_IS_MISSING = "<?php echo $WORK_TIME_IS_MISSING; ?>";
+		var WORK_MOTH_IS_MISSING = "<?php echo $WORK_MOTH_IS_MISSING; ?>";
+		var WORK_TIME_MONTH_IS_MISSING = "<?php echo $WORK_TIME_MONTH_IS_MISSING; ?>";
+
+
 
 		// CONS 
 		var TIME_KINTAI_DELAY_IN = parseInt("<?php echo $TIME_KINTAI_DELAY_IN; ?>");
@@ -1678,6 +1683,11 @@ if ($_SESSION['auth'] == false) {
 		//=======function for bind change year month combo box==============//     
 		//============================================================///  
 		function handleDateChange(selectedYear, selectedMonth) {
+
+			var currentDate = new Date();
+			var currentMonth = currentDate.getMonth() + 1; //
+			var currentYear = currentDate.getFullYear();
+			var isCurrentMonth = currentYear === selectedYear && selectedMonth === currentMonth;
 			try {
 				strMonth = selectedMonth < 10 ? '0' + selectedMonth : selectedMonth;
 				if (strMonth.length >= 3)
@@ -1695,47 +1705,54 @@ if ($_SESSION['auth'] == false) {
 						let parsedResponse = null;
 						try {
 							parsedResponse = JSON.parse(response);
-						} catch (error) {
-							console.log(response);    // param 1 ... month data , param 2 : total 
-							parsedResponse = null;
-							// check if current time not data -> insert 
-							var currentDate = new Date();
-							var currentMonth = currentDate.getMonth() + 1; //
-							var currentYear = currentDate.getFullYear();
-							var isCurrentMonth = currentYear === selectedYear && selectedMonth === currentMonth;
-
-							//** No Insert Before Month ??  管理者作成必要 */
-							// check Month data Missing -> current Month => add new 
-							var isMissingMonthData = false;
-							if (response.includes("Expected parameter 1 to be an array")) {
-								console.log("DATA MONTH MISSING");
+							if (parsedResponse.includes(WORK_TIME_IS_MISSING)) {
 								if (isCurrentMonth) {
+									console.log("Inserted Time data");
 									insertNewMonthData(currentYear, currentMonth);
 									return;
 								}
-								// check Month total data Missing -> current Month => add new 
-							} else if (response.includes("Expected parameter 2 to be an array")) {
+							} else if (parsedResponse.includes(WORK_MOTH_IS_MISSING)) {
 								if (isCurrentMonth) {
+									console.log("Inserted month data");
 									insertNewMonthTotalData(currentYear, currentMonth);
 									return;
 								}
-
-							} else {
+							} else if (parsedResponse.includes(WORK_TIME_MONTH_IS_MISSING)) {
+								if (isCurrentMonth) {
+									console.log("Inserted month and timedata");
+									insertNewMonthData(currentYear, currentMonth);
+									insertNewMonthTotalData(currentYear, currentMonth);
+									return;
+								}
+							} else if (parsedResponse.includes(CONNECT_ERROR)) {
 								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
 								handlerDateChangeUpdateTotalWorkMonth(null);
+								drawDataToTotalMonth();
+								console.log("接続エラーが発生しました。");
+								return;
+							} else if (parsedResponse.includes(NO_DATA_KINTAI)) {
+								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+								handlerDateChangeUpdateTotalWorkMonth(null);
+								drawDataToTotalMonth();
+								console.log("データが存在しませんでした。又はエラーが発生しました。");
+								return;
+							} else {
+								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, parsedResponse['workYmdList']);
+								handlerDateChangeUpdateTotalWorkMonth(parsedResponse['workym']);
+								drawDataToTotalMonth();
+								console.log("DRAW DATA");
 								return;
 							}
 
+						} catch (error) {
+							handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+								handlerDateChangeUpdateTotalWorkMonth(null);
+								return;
 						}
-						if (parsedResponse === NO_DATA_KINTAI) {
-							parsedResponse = null;
-						}
-						handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, parsedResponse['workYmdList']);
-						handlerDateChangeUpdateTotalWorkMonth(parsedResponse['workym']);
-						drawDataToTotalMonth();
+
+
 					},
 					function (errorStatus) {  // connect faild
-
 						return;
 					}
 				);
@@ -1747,7 +1764,7 @@ if ($_SESSION['auth'] == false) {
 		}
 
 		function handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, data) {
-			if (data === null || data === CONNECT_ERROR) {
+			if (data === null || data === CONNECT_ERROR || data === undefined) {
 				drawDayOfMonth(selectedYear, selectedMonth, null);
 			} else {
 
@@ -1756,7 +1773,7 @@ if ($_SESSION['auth'] == false) {
 		}
 
 		function handlerDateChangeUpdateTotalWorkMonth(data) {
-			if (data === null || data === CONNECT_ERROR) {
+			if (data === null || data === CONNECT_ERROR || data === undefined) {
 				drawInputDataTotalWorkMonth(null);
 			} else {
 				drawInputDataTotalWorkMonth(data);
@@ -1764,7 +1781,7 @@ if ($_SESSION['auth'] == false) {
 		}
 
 		function drawInputDataTotalWorkMonth(data) {
-			if (data === null) {
+			if (data === null || data === undefined) {
 				return;
 			}
 			jobhour.value = data['jobhour2'];

@@ -68,7 +68,7 @@ $QUERY_INSERT_NEW_WORK_OF_YM = "INSERT INTO tbl_workmonth
   (workym, uid, genid, jobhour, jobminute, jobhour2, jobminute2, 
    janhour, janminute, janhour2, janminute2, workdays, workdays2, 
    jobdays, jobdays2, offdays, delaydays, earlydays, bigo, REG_DT)
-   VALUES (?, ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NOW());";
+   VALUES (?, ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, null, NOW());";
 //==//                  <!-- update data of Monthly-> Table workmonth   --> 
 $QUERY_UPDATE_DATA_WORK_OF_YM = "UPDATE tbl_workmonth SET genid = ?, jobhour = ?, 
   jobminute = ?, jobhour2 = ?, 
