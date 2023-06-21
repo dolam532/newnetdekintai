@@ -34,7 +34,11 @@ CROSS JOIN `tbl_manageinfo` ON `tbl_user`.`companyid` = `tbl_manageinfo`.`compan
 CROSS JOIN `tbl_codebase` ON `tbl_userkyuka`.`kyukacode` = `tbl_codebase`.`code`
 CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinfo`.`vacationid`
 WHERE
-`tbl_codebase`.`typecode` = 02';
+`tbl_codebase`.`typecode` = 02
+AND
+`tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+AND 
+    `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_userkyuka_select_db = 'SELECT DISTINCT
     `tbl_userkyuka`.*,
@@ -81,6 +85,30 @@ $UId = array_unique($UId);
 $KyukaY = array_unique($KyukaY);
 $Name = array_unique($Name);
 $VacationY = array_unique($VacationY);
+
+if ($_SESSION['auth_type'] == constant('ADMIN')) {
+    $sql_vacationinfo = 'SELECT DISTINCT
+    `tbl_user`.*,
+    `tbl_vacationinfo`.`vacationid`,
+    `tbl_vacationinfo`.`vacationstr`,
+    `tbl_vacationinfo`.`vacationend`,
+    `tbl_vacationinfo`.`oldcnt`,
+    `tbl_vacationinfo`.`newcnt`,
+    `tbl_vacationinfo`.`usecnt`,
+    `tbl_vacationinfo`.`usetime`,
+    `tbl_vacationinfo`.`restcnt`,
+    `tbl_vacationinfo`.`reg_dt`
+FROM
+    `tbl_user`
+LEFT JOIN 
+`tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
+WHERE
+    `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+AND 
+    `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
+    $result_vacationinfo = mysqli_query($conn, $sql_vacationinfo);
+    $vacationinfo_list = mysqli_fetch_all($result_vacationinfo, MYSQLI_ASSOC);
+}
 
 if ($_POST['btnSearchReg'] == NULL) {
     $_POST['searchAllowok'] = "9";
