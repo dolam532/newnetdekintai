@@ -24,7 +24,7 @@ interface KintaiRegDAO
     public function selectMonthly($workym, $uid);
     public function insertMonthly($object, $uid);
 
-
+    public function insertNewMonthly($object, $uid);
 
 }
 

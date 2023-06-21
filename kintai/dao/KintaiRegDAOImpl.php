@@ -90,6 +90,11 @@ class KintaiRegDAOImpl implements KintaiRegDAO {
         return $kintaiRegRepository->updateMonthly($object ,$uid);
     }
 
+    public function insertNewMonthly($object ,$uid ){
+        $kintaiRegRepository  = $this->container->get(KintaiRegRepository::class);   
+        return $kintaiRegRepository->insertNewMonthly($object ,$uid);
+    }
+
 
 
 

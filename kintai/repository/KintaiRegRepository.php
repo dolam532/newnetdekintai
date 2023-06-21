@@ -315,6 +315,35 @@ class KintaiRegRepository
                 );
                 $stmt->execute();
                 $affected_rows += $stmt->affected_rows;
+              
+                $stmt->close();
+                if ($affected_rows > 0) {
+                    return 1;
+                } else {
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        } catch (Exception $e) {
+            return null;
+        }
+    }
+
+    public function insertNewMonthly($object ,$uid ){
+        global $conn;
+        $object = json_decode($object, true);
+        global $QUERY_CREATE_NEW_WORK_OF_YM;
+        $affected_rows = 0;
+        try {
+            $stmt = $conn->prepare($QUERY_CREATE_NEW_WORK_OF_YM);
+            if ($stmt) {
+                error_log("Connect Ted_NewInserted", 0);
+                $stmt->bind_param(
+                    'ss',  $object['workym'],$uid 
+                );
+                $stmt->execute();
+                $affected_rows += $stmt->affected_rows;
                 $stmt->close();
                 if ($affected_rows > 0) {
                     return 1;

@@ -77,8 +77,8 @@ if ($_SESSION['auth'] == false) {
 		width: 200%;
 	}
 
-	.table{
-		margin-top:-10px;
+	.table {
+		margin-top: -10px;
 		margin-bottom: 0px;
 	}
 </style>
@@ -92,10 +92,10 @@ if ($_SESSION['auth'] == false) {
 	}
 
 	/* print one */
-  .page-two {
-    display: none;
-  }
- 
+	.page-two {
+		display: none;
+	}
+
 
 	.row {
 		display: flex;
@@ -124,8 +124,6 @@ if ($_SESSION['auth'] == false) {
 	/* Header  */
 
 
-
-
 	.table-container {
 		display: flex;
 	}
@@ -136,11 +134,13 @@ if ($_SESSION['auth'] == false) {
 		padding: 10px;
 	}
 
-	.left-table {
-		margin-right: 10px;
+	.left-table p {
+		position: relative;
+		margin-bottom: 30px;
 	}
 
 	.right-table {
+		position: relative;
 		margin-left: 10px;
 		text-align: right;
 	}
@@ -149,17 +149,21 @@ if ($_SESSION['auth'] == false) {
 		border-bottom: 1px dotted;
 		padding-bottom: 1px;
 		padding-top: auto;
+
 	}
 
 	.left-table p:nth-child(3) {
 		position: relative;
+
 	}
+
 
 	.left-table p:nth-child(3)::after {
 		content: "（印）";
 		position: absolute;
 		top: -1px;
 		right: 0;
+		/* margin-bottom: 40px; */
 	}
 
 	.right-table {
@@ -177,6 +181,7 @@ if ($_SESSION['auth'] == false) {
 		left: 50px;
 		padding-left: 0px;
 	}
+
 	.row2 {
 		right: 50px;
 		padding-right: 0px;
@@ -302,9 +307,6 @@ if ($_SESSION['auth'] == false) {
 		border-bottom: 1px solid gray;
 
 	}
-
-
-
 </style>
 
 <body>
@@ -361,17 +363,27 @@ if ($_SESSION['auth'] == false) {
 			<div class="form-group">
 				<div class="table-container">
 					<div class="left-table">
-						<p>LLLLLLLLLLLL</p>
-						<p>LLLLLLLLLL</p>
-						<p>LLLLLLLLLLL</p>
+						<p>
+							<?php echo $COMPANY_NAME; ?> 御中
+						</p>
+						<p>所属：
+							<?php echo $_SESSION['auth_dept']; ?>
+						</p>
+						<p>氏名：
+							<?php echo $_SESSION['auth_name']; ?>
+						</p>
 					</div>
 					<div class="right-table">
 						<div class="row1">
-							<p class="cell cell-text">RRRRRRRR</p>
+							<p class="cell cell-text">
+								<?php echo $SIGN_TITLE1; ?>
+							</p>
 							<p class="cell cell-empty"></p>
 						</div>
 						<div class="row2">
-							<p class="cell cell-text">RRRRRRRR</p>
+							<p class="cell cell-text">
+								<?php echo $SIGN_TITLE2; ?>
+							</p>
 							<p class="cell cell-empty"></p>
 						</div>
 					</div>
@@ -749,6 +761,7 @@ if ($_SESSION['auth'] == false) {
 		var TYPE_REGISTER_DATA_OF_SELETED_DAY = "<?php echo $TYPE_REGISTER_DATA_OF_SELETED_DAY; ?>";
 		var TYPE_REGISTER_DATA_OF_MONTH = "<?php echo $TYPE_REGISTER_DATA_OF_MONTH; ?>";
 		var TYPE_GET_DATA_KINMUHYO = "<?php echo $TYPE_GET_DATA_KINMUHYO; ?>";
+		var TYPE_REGISTER_NEW_DATA_OF_MONTH = "<?php echo $TYPE_REGISTER_NEW_DATA_OF_MONTH; ?>";
 
 
 		// Message
@@ -766,12 +779,18 @@ if ($_SESSION['auth'] == false) {
 		var LIST_DELAY_IN_DATE = [];
 		var LIST_DELAY_OUT_DATE = [];
 
+
+
+
 		// info
 		var currentName = "<?php echo $_SESSION['auth_name']; ?>";
 
 
 		// check modal data changed ? 
 		dataChanged = false;
+
+		rerunCreateNewMonthFlag = false;
+		rerunCreateNewTotalMonthFlag = false;
 
 
 		// ***Handler Script Region ****
@@ -1021,8 +1040,6 @@ if ($_SESSION['auth'] == false) {
 			// var modalDayTime = document.getElementById('modal__dayTimeSelect');
 
 			var elements = [listDayStartEnd, colDayStartEnd];
-
-
 			if (selectedValue == 1) {  //Template A
 				console.log("add hidden");
 				// add class table_hidden
@@ -1035,8 +1052,6 @@ if ($_SESSION['auth'] == false) {
 				});
 
 				// resize other column 
-
-
 			} else if (selectedValue == 2) {//Template B
 				// remove class table_hidden
 				console.log("remove hidden");
@@ -1048,17 +1063,9 @@ if ($_SESSION['auth'] == false) {
 					});
 				});
 			}
-
 			resizeColumns(selectedValue);
-
-
 			// change Modal 
-
-
-
 		}
-
-
 		// resize column 
 		function resizeColumns(templateCode) {
 			var thDate = document.querySelector('th[name="cDayTime_col"]');
@@ -1066,7 +1073,6 @@ if ($_SESSION['auth'] == false) {
 			var thWorkTime = document.querySelector('th[name="cJobTime_col"]');
 			var thBreakTime = document.querySelector('th[name="cOffTime_col"]');
 			var thWorkHours = document.querySelector('th[name="cWorkTime_col"]');
-
 			if (templateCode == 1) {
 				thDate.style.width = '13%';
 				// thStartEnd.style.width = '17%';
@@ -1161,7 +1167,6 @@ if ($_SESSION['auth'] == false) {
 		//======= Function insert data new month  ==============//     OK
 		//=====================================================/// 
 		function insertNewMonthData(selectedYear, selectedMonth) {
-
 			strMonth = selectedMonth < 10 ? '0' + selectedMonth : selectedMonth;
 			if (strMonth.length >= 3)
 				strMonth = strMonth.slice(-2);
@@ -1181,6 +1186,35 @@ if ($_SESSION['auth'] == false) {
 					console.log("Connect ERROR: " + errorStatus);
 				}
 			);
+			setTimeout(function () {
+				handleDateChange(selectedYear, selectedMonth);
+			}, 1000);
+		}
+
+		function insertNewMonthTotalData(selectedYear, selectedMonth) {
+			strMonth = selectedMonth < 10 ? '0' + selectedMonth : selectedMonth;
+			if (strMonth.length >= 3)
+				strMonth = strMonth.slice(-2);
+			var dataObject = {
+				workym: (selectedYear + strMonth)
+			};
+			const data = JSON.stringify(dataObject); // convert to json 
+			const response = ajaxRequest(
+				'kintaiRegController.php?type=' +
+				TYPE_REGISTER_NEW_DATA_OF_MONTH + '&data=' + data,
+				'GET',
+				function (response) {
+					console.log("Inserted new Total Month" + response);
+				},
+				function (errorStatus) {
+					console.log("Connect ERROR: " + errorStatus);
+				}
+			);
+
+			// reload 
+			setTimeout(function () {
+				handleDateChange(selectedYear, selectedMonth);
+			}, 1000);
 		}
 
 		//====================================================/// 
@@ -1662,17 +1696,36 @@ if ($_SESSION['auth'] == false) {
 						try {
 							parsedResponse = JSON.parse(response);
 						} catch (error) {
+							console.log(response);    // param 1 ... month data , param 2 : total 
 							parsedResponse = null;
 							// check if current time not data -> insert 
 							var currentDate = new Date();
 							var currentMonth = currentDate.getMonth() + 1; //
 							var currentYear = currentDate.getFullYear();
-							if (currentYear === selectedYear && selectedMonth === currentMonth) {
-								insertNewMonthData(currentYear, currentMonth);
+							var isCurrentMonth = currentYear === selectedYear && selectedMonth === currentMonth;
+
+							//** No Insert Before Month ??  管理者作成必要 */
+							// check Month data Missing -> current Month => add new 
+							var isMissingMonthData = false;
+							if (response.includes("Expected parameter 1 to be an array")) {
+								console.log("DATA MONTH MISSING");
+								if (isCurrentMonth) {
+									insertNewMonthData(currentYear, currentMonth);
+									return;
+								}
+								// check Month total data Missing -> current Month => add new 
+							} else if (response.includes("Expected parameter 2 to be an array")) {
+								if (isCurrentMonth) {
+									insertNewMonthTotalData(currentYear, currentMonth);
+									return;
+								}
+
+							} else {
+								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+								handlerDateChangeUpdateTotalWorkMonth(null);
+								return;
 							}
-							handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
-							handlerDateChangeUpdateTotalWorkMonth(null);
-							return;
+
 						}
 						if (parsedResponse === NO_DATA_KINTAI) {
 							parsedResponse = null;
@@ -1916,7 +1969,7 @@ if ($_SESSION['auth'] == false) {
 
 			var infoColRight = document.createElement('div');
 			infoColRight.classList.add('col-md-3', 'text-right');
-			var currentYm = selyy.value + '年' + selmm.value + '月';
+			var currentYm = selyy.value + '年' + selmm.value + '月    ';
 
 			// add content
 			var kintai_print_title_option = {
@@ -1953,6 +2006,11 @@ if ($_SESSION['auth'] == false) {
 			var delayDaysLabel = pageClone.querySelector('#footer__delayDays-label');
 			var earlyDaysLabel = pageClone.querySelector('#footer__earlyDays-label');
 
+			// header text
+			var titleElem = pageClone.querySelector('div[name="workYm_page_title"] .text-left');
+			titleElem.innerText = currentYm + titleElem.innerText;
+			titleElem.style.position = 'relative';
+			titleElem.style.borderBottom = '2px double black';
 
 
 			var workDaysShow = pageClone.querySelector('#workdays_top');

@@ -70,13 +70,15 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
         if ($checkDataNotExists === 1) { // update 
                 $result = $kintaiRegDAO->updateMonthly($data, $uidCurrent);
                 $result === 1 ? $UPDATE_DATA_MONTH_SUCCESS : $ADD_DATA_ERROR_KINTAI;
-
         } else if ($checkDataNotExists === 0) { // insert 
                 $result = $kintaiRegDAO->insertMonthly($data, $uidCurrent);
                 $result === 1 ? $INSERT_DATA_MONTH_SUCCESS : $ADD_DATA_ERROR_KINTAI;
+
         } else {
                 $result = $ADD_DATA_ERROR_KINTAI;
         }
+
+
         returnValueTemplate($result);
         // result == null => Net work Error , DB Error ...
 
@@ -91,6 +93,17 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
                 returnValueTemplate(null);
         }
 
+} else if (isset($type_get) && in_array($type_get, [$TYPE_REGISTER_NEW_DATA_OF_MONTH, 'otherType'])) {
+        // Delete this data year month day 
+        $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
+        $result = "";
+        if ($data !== null) {
+                $result = $kintaiRegDAO->insertNewMonthly($data, $uidCurrent);
+                $result === 1 ? $UPDATE_DATA_MONTH_SUCCESS : $ADD_DATA_ERROR_KINTAI;
+        } else {
+                $result = null;
+        }
+        returnValueTemplate($result);
 } else {
 
         // Handle other types of requests
