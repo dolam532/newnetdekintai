@@ -1712,12 +1712,20 @@ if ($_SESSION['auth'] == false) {
 									console.log("Inserted Time data");
 									insertNewMonthData(currentYear, currentMonth);
 									return;
+								} else {
+									handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+									handlerDateChangeUpdateTotalWorkMonth(null);
+									drawDataToTotalMonth();
 								}
 							} else if (parsedResponse.includes(WORK_MOTH_IS_MISSING)) {
 								if (isCurrentMonth) {
 									console.log("Inserted month data");
 									insertNewMonthTotalData(currentYear, currentMonth);
 									return;
+								} else {
+									handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+									handlerDateChangeUpdateTotalWorkMonth(null);
+									drawDataToTotalMonth();
 								}
 							} else if (parsedResponse.includes(WORK_TIME_MONTH_IS_MISSING)) {
 								if (isCurrentMonth) {
@@ -1725,6 +1733,10 @@ if ($_SESSION['auth'] == false) {
 									insertNewMonthData(currentYear, currentMonth);
 									insertNewMonthTotalData(currentYear, currentMonth);
 									return;
+								} else {
+									handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+									handlerDateChangeUpdateTotalWorkMonth(null);
+									drawDataToTotalMonth();
 								}
 							} else if (parsedResponse.includes(CONNECT_ERROR)) {
 								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
@@ -1738,11 +1750,11 @@ if ($_SESSION['auth'] == false) {
 								drawDataToTotalMonth();
 								console.log("データが存在しませんでした。又はエラーが発生しました。");
 								return;
-							} else  {
-								
+							} else {
+
 							}
 						} catch (error) {
-							if(response.includes('workYmdList')){
+							if (response.includes('workYmdList')) {
 								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, parsedResponse['workYmdList']);
 								handlerDateChangeUpdateTotalWorkMonth(parsedResponse['workym']);
 								drawDataToTotalMonth();
