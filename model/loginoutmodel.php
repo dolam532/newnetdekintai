@@ -31,12 +31,7 @@ if (isset($_POST['btnLogin'])) {
             $_SESSION['auth_name'] = "$user_name";
             $_SESSION['auth_dept'] = "$user_dept";
 
-            if ($_SESSION['auth_type'] == constant('ADMIN')) {
-                header("Location: ../index.php");
-                $_SESSION['login_success'] =  $login_success;
-                $_SESSION['last_login_timestamp'] =  time();
-                header("Location: ../index.php");
-            } elseif ($_SESSION['auth_type'] == constant('USER')) {
+            if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('USER') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
                 header("Location: ../index.php");
                 $_SESSION['login_success'] =  $login_success;
                 $_SESSION['last_login_timestamp'] =  time();
