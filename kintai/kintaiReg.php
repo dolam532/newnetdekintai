@@ -1703,8 +1703,10 @@ if ($_SESSION['auth'] == false) {
 					function (response) {
 						// check data current month = null => if === current create new data -> else print white 
 						let parsedResponse = null;
+						let parsedResponse2 = null;
 						try {
 							parsedResponse = JSON.parse(response);
+							parsedResponse2 = parsedResponse;
 							if (parsedResponse.includes(WORK_TIME_IS_MISSING)) {
 								if (isCurrentMonth) {
 									console.log("Inserted Time data");
@@ -1736,21 +1738,21 @@ if ($_SESSION['auth'] == false) {
 								drawDataToTotalMonth();
 								console.log("データが存在しませんでした。又はエラーが発生しました。");
 								return;
-							} else {
+							} else  {
+								
+							}
+						} catch (error) {
+							if(response.includes('workYmdList')){
 								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, parsedResponse['workYmdList']);
 								handlerDateChangeUpdateTotalWorkMonth(parsedResponse['workym']);
 								drawDataToTotalMonth();
-								console.log("DRAW DATA");
 								return;
 							}
 
-						} catch (error) {
 							handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
-								handlerDateChangeUpdateTotalWorkMonth(null);
-								return;
+							handlerDateChangeUpdateTotalWorkMonth(null);
+							return;
 						}
-
-
 					},
 					function (errorStatus) {  // connect faild
 						return;
