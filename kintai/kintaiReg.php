@@ -77,8 +77,8 @@ if ($_SESSION['auth'] == false) {
 		width: 200%;
 	}
 
-	.table{
-		margin-top:-10px;
+	.table {
+		margin-top: -10px;
 		margin-bottom: 0px;
 	}
 </style>
@@ -92,10 +92,10 @@ if ($_SESSION['auth'] == false) {
 	}
 
 	/* print one */
-  .page-two {
-    display: none;
-  }
- 
+	.page-two {
+		display: none;
+	}
+
 
 	.row {
 		display: flex;
@@ -124,8 +124,6 @@ if ($_SESSION['auth'] == false) {
 	/* Header  */
 
 
-
-
 	.table-container {
 		display: flex;
 	}
@@ -136,11 +134,13 @@ if ($_SESSION['auth'] == false) {
 		padding: 10px;
 	}
 
-	.left-table {
-		margin-right: 10px;
+	.left-table p {
+		position: relative;
+		margin-bottom: 30px;
 	}
 
 	.right-table {
+		position: relative;
 		margin-left: 10px;
 		text-align: right;
 	}
@@ -149,17 +149,21 @@ if ($_SESSION['auth'] == false) {
 		border-bottom: 1px dotted;
 		padding-bottom: 1px;
 		padding-top: auto;
+
 	}
 
 	.left-table p:nth-child(3) {
 		position: relative;
+
 	}
+
 
 	.left-table p:nth-child(3)::after {
 		content: "（印）";
 		position: absolute;
 		top: -1px;
 		right: 0;
+		/* margin-bottom: 40px; */
 	}
 
 	.right-table {
@@ -177,6 +181,7 @@ if ($_SESSION['auth'] == false) {
 		left: 50px;
 		padding-left: 0px;
 	}
+
 	.row2 {
 		right: 50px;
 		padding-right: 0px;
@@ -302,9 +307,6 @@ if ($_SESSION['auth'] == false) {
 		border-bottom: 1px solid gray;
 
 	}
-
-
-
 </style>
 
 <body>
@@ -361,17 +363,27 @@ if ($_SESSION['auth'] == false) {
 			<div class="form-group">
 				<div class="table-container">
 					<div class="left-table">
-						<p>LLLLLLLLLLLL</p>
-						<p>LLLLLLLLLL</p>
-						<p>LLLLLLLLLLL</p>
+						<p>
+							<?php echo $COMPANY_NAME; ?> 御中
+						</p>
+						<p>所属：
+							<?php echo $_SESSION['auth_dept']; ?>
+						</p>
+						<p>氏名：
+							<?php echo $_SESSION['auth_name']; ?>
+						</p>
 					</div>
 					<div class="right-table">
 						<div class="row1">
-							<p class="cell cell-text">RRRRRRRR</p>
+							<p class="cell cell-text">
+								<?php echo $SIGN_TITLE1; ?>
+							</p>
 							<p class="cell cell-empty"></p>
 						</div>
 						<div class="row2">
-							<p class="cell cell-text">RRRRRRRR</p>
+							<p class="cell cell-text">
+								<?php echo $SIGN_TITLE2; ?>
+							</p>
 							<p class="cell cell-empty"></p>
 						</div>
 					</div>
@@ -749,6 +761,7 @@ if ($_SESSION['auth'] == false) {
 		var TYPE_REGISTER_DATA_OF_SELETED_DAY = "<?php echo $TYPE_REGISTER_DATA_OF_SELETED_DAY; ?>";
 		var TYPE_REGISTER_DATA_OF_MONTH = "<?php echo $TYPE_REGISTER_DATA_OF_MONTH; ?>";
 		var TYPE_GET_DATA_KINMUHYO = "<?php echo $TYPE_GET_DATA_KINMUHYO; ?>";
+		var TYPE_REGISTER_NEW_DATA_OF_MONTH = "<?php echo $TYPE_REGISTER_NEW_DATA_OF_MONTH; ?>";
 
 
 		// Message
@@ -758,7 +771,12 @@ if ($_SESSION['auth'] == false) {
 		var DELETE_DATA_SUCCESS = "<?php echo $DELETE_DATA_SUCCESS; ?>";
 		var CONNECT_ERROR = "<?php echo $CONNECT_ERROR; ?>";
 		var UPDATE_DATA_MONTH_SUCCESS = "<?php echo $UPDATE_DATA_MONTH_SUCCESS; ?>";
-		var CAN_NOT_OPEN_NEW_TAB_PRINT = "<?php echo $CAN_NOT_OPEN_NEW_TAB_PRINT; ?>";
+
+		var WORK_TIME_IS_MISSING = "<?php echo $WORK_TIME_IS_MISSING; ?>";
+		var WORK_MOTH_IS_MISSING = "<?php echo $WORK_MOTH_IS_MISSING; ?>";
+		var WORK_TIME_MONTH_IS_MISSING = "<?php echo $WORK_TIME_MONTH_IS_MISSING; ?>";
+
+
 
 		// CONS 
 		var TIME_KINTAI_DELAY_IN = parseInt("<?php echo $TIME_KINTAI_DELAY_IN; ?>");
@@ -766,12 +784,18 @@ if ($_SESSION['auth'] == false) {
 		var LIST_DELAY_IN_DATE = [];
 		var LIST_DELAY_OUT_DATE = [];
 
+
+
+
 		// info
 		var currentName = "<?php echo $_SESSION['auth_name']; ?>";
 
 
 		// check modal data changed ? 
 		dataChanged = false;
+
+		rerunCreateNewMonthFlag = false;
+		rerunCreateNewTotalMonthFlag = false;
 
 
 		// ***Handler Script Region ****
@@ -1021,8 +1045,6 @@ if ($_SESSION['auth'] == false) {
 			// var modalDayTime = document.getElementById('modal__dayTimeSelect');
 
 			var elements = [listDayStartEnd, colDayStartEnd];
-
-
 			if (selectedValue == 1) {  //Template A
 				console.log("add hidden");
 				// add class table_hidden
@@ -1035,8 +1057,6 @@ if ($_SESSION['auth'] == false) {
 				});
 
 				// resize other column 
-
-
 			} else if (selectedValue == 2) {//Template B
 				// remove class table_hidden
 				console.log("remove hidden");
@@ -1048,17 +1068,9 @@ if ($_SESSION['auth'] == false) {
 					});
 				});
 			}
-
 			resizeColumns(selectedValue);
-
-
 			// change Modal 
-
-
-
 		}
-
-
 		// resize column 
 		function resizeColumns(templateCode) {
 			var thDate = document.querySelector('th[name="cDayTime_col"]');
@@ -1066,7 +1078,6 @@ if ($_SESSION['auth'] == false) {
 			var thWorkTime = document.querySelector('th[name="cJobTime_col"]');
 			var thBreakTime = document.querySelector('th[name="cOffTime_col"]');
 			var thWorkHours = document.querySelector('th[name="cWorkTime_col"]');
-
 			if (templateCode == 1) {
 				thDate.style.width = '13%';
 				// thStartEnd.style.width = '17%';
@@ -1161,7 +1172,6 @@ if ($_SESSION['auth'] == false) {
 		//======= Function insert data new month  ==============//     OK
 		//=====================================================/// 
 		function insertNewMonthData(selectedYear, selectedMonth) {
-
 			strMonth = selectedMonth < 10 ? '0' + selectedMonth : selectedMonth;
 			if (strMonth.length >= 3)
 				strMonth = strMonth.slice(-2);
@@ -1181,6 +1191,35 @@ if ($_SESSION['auth'] == false) {
 					console.log("Connect ERROR: " + errorStatus);
 				}
 			);
+			setTimeout(function () {
+				handleDateChange(selectedYear, selectedMonth);
+			}, 1000);
+		}
+
+		function insertNewMonthTotalData(selectedYear, selectedMonth) {
+			strMonth = selectedMonth < 10 ? '0' + selectedMonth : selectedMonth;
+			if (strMonth.length >= 3)
+				strMonth = strMonth.slice(-2);
+			var dataObject = {
+				workym: (selectedYear + strMonth)
+			};
+			const data = JSON.stringify(dataObject); // convert to json 
+			const response = ajaxRequest(
+				'kintaiRegController.php?type=' +
+				TYPE_REGISTER_NEW_DATA_OF_MONTH + '&data=' + data,
+				'GET',
+				function (response) {
+					console.log("Inserted new Total Month" + response);
+				},
+				function (errorStatus) {
+					console.log("Connect ERROR: " + errorStatus);
+				}
+			);
+
+			// reload 
+			setTimeout(function () {
+				handleDateChange(selectedYear, selectedMonth);
+			}, 1000);
 		}
 
 		//====================================================/// 
@@ -1644,6 +1683,11 @@ if ($_SESSION['auth'] == false) {
 		//=======function for bind change year month combo box==============//     
 		//============================================================///  
 		function handleDateChange(selectedYear, selectedMonth) {
+
+			var currentDate = new Date();
+			var currentMonth = currentDate.getMonth() + 1; //
+			var currentYear = currentDate.getFullYear();
+			var isCurrentMonth = currentYear === selectedYear && selectedMonth === currentMonth;
 			try {
 				strMonth = selectedMonth < 10 ? '0' + selectedMonth : selectedMonth;
 				if (strMonth.length >= 3)
@@ -1659,30 +1703,70 @@ if ($_SESSION['auth'] == false) {
 					function (response) {
 						// check data current month = null => if === current create new data -> else print white 
 						let parsedResponse = null;
+						let parsedResponse2 = null;
 						try {
 							parsedResponse = JSON.parse(response);
-						} catch (error) {
-							parsedResponse = null;
-							// check if current time not data -> insert 
-							var currentDate = new Date();
-							var currentMonth = currentDate.getMonth() + 1; //
-							var currentYear = currentDate.getFullYear();
-							if (currentYear === selectedYear && selectedMonth === currentMonth) {
-								insertNewMonthData(currentYear, currentMonth);
+							parsedResponse2 = parsedResponse;
+							if (parsedResponse.includes(WORK_TIME_IS_MISSING)) {
+								if (isCurrentMonth) {
+									console.log("Inserted Time data");
+									insertNewMonthData(currentYear, currentMonth);
+									return;
+								} else {
+									handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+									handlerDateChangeUpdateTotalWorkMonth(null);
+									drawDataToTotalMonth();
+								}
+							} else if (parsedResponse.includes(WORK_MOTH_IS_MISSING)) {
+								if (isCurrentMonth) {
+									console.log("Inserted month data");
+									insertNewMonthTotalData(currentYear, currentMonth);
+									return;
+								} else {
+									handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+									handlerDateChangeUpdateTotalWorkMonth(null);
+									drawDataToTotalMonth();
+								}
+							} else if (parsedResponse.includes(WORK_TIME_MONTH_IS_MISSING)) {
+								if (isCurrentMonth) {
+									console.log("Inserted month and timedata");
+									insertNewMonthData(currentYear, currentMonth);
+									insertNewMonthTotalData(currentYear, currentMonth);
+									return;
+								} else {
+									handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+									handlerDateChangeUpdateTotalWorkMonth(null);
+									drawDataToTotalMonth();
+								}
+							} else if (parsedResponse.includes(CONNECT_ERROR)) {
+								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+								handlerDateChangeUpdateTotalWorkMonth(null);
+								drawDataToTotalMonth();
+								console.log("接続エラーが発生しました。");
+								return;
+							} else if (parsedResponse.includes(NO_DATA_KINTAI)) {
+								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
+								handlerDateChangeUpdateTotalWorkMonth(null);
+								drawDataToTotalMonth();
+								console.log("データが存在しませんでした。又はエラーが発生しました。");
+								return;
+							} else {
+
 							}
+						} catch (error) {
+							if (response.includes('workYmdList')) {
+								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, parsedResponse['workYmdList']);
+								handlerDateChangeUpdateTotalWorkMonth(parsedResponse['workym']);
+								drawDataToTotalMonth();
+								return;
+							}
+
 							handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
 							handlerDateChangeUpdateTotalWorkMonth(null);
 							return;
 						}
-						if (parsedResponse === NO_DATA_KINTAI) {
-							parsedResponse = null;
-						}
-						handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, parsedResponse['workYmdList']);
-						handlerDateChangeUpdateTotalWorkMonth(parsedResponse['workym']);
-						drawDataToTotalMonth();
 					},
 					function (errorStatus) {  // connect faild
-
 						return;
 					}
 				);
@@ -1694,7 +1778,7 @@ if ($_SESSION['auth'] == false) {
 		}
 
 		function handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, data) {
-			if (data === null || data === CONNECT_ERROR) {
+			if (data === null || data === CONNECT_ERROR || data === undefined) {
 				drawDayOfMonth(selectedYear, selectedMonth, null);
 			} else {
 
@@ -1703,7 +1787,7 @@ if ($_SESSION['auth'] == false) {
 		}
 
 		function handlerDateChangeUpdateTotalWorkMonth(data) {
-			if (data === null || data === CONNECT_ERROR) {
+			if (data === null || data === CONNECT_ERROR || data === undefined) {
 				drawInputDataTotalWorkMonth(null);
 			} else {
 				drawInputDataTotalWorkMonth(data);
@@ -1711,7 +1795,7 @@ if ($_SESSION['auth'] == false) {
 		}
 
 		function drawInputDataTotalWorkMonth(data) {
-			if (data === null) {
+			if (data === null || data === undefined) {
 				return;
 			}
 			jobhour.value = data['jobhour2'];
@@ -1875,7 +1959,7 @@ if ($_SESSION['auth'] == false) {
 				// console.log(pageClone);
 				// Close new tab after print 
 				printWindow.addEventListener('afterprint', function () {
-					// printWindow.close();
+					printWindow.close();
 				});
 			} else {
 				console.error(CAN_NOT_OPEN_NEW_TAB_PRINT);
@@ -1916,7 +2000,7 @@ if ($_SESSION['auth'] == false) {
 
 			var infoColRight = document.createElement('div');
 			infoColRight.classList.add('col-md-3', 'text-right');
-			var currentYm = selyy.value + '年' + selmm.value + '月';
+			var currentYm = selyy.value + '年' + selmm.value + '月    ';
 
 			// add content
 			var kintai_print_title_option = {
@@ -1953,6 +2037,11 @@ if ($_SESSION['auth'] == false) {
 			var delayDaysLabel = pageClone.querySelector('#footer__delayDays-label');
 			var earlyDaysLabel = pageClone.querySelector('#footer__earlyDays-label');
 
+			// header text
+			var titleElem = pageClone.querySelector('div[name="workYm_page_title"] .text-left');
+			titleElem.innerText = currentYm + titleElem.innerText;
+			titleElem.style.position = 'relative';
+			titleElem.style.borderBottom = '2px double black';
 
 
 			var workDaysShow = pageClone.querySelector('#workdays_top');
