@@ -538,7 +538,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<div class="title_condition">
 					<label>社員名 :
 						<select id="searchUid" name="searchUid" style="padding:5px;">
-							<?php if ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
+							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
 								<option value="" selected="">選択なし</option>
 								<?php
 								foreach ($user_list as $value) {
@@ -583,9 +583,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			<div class="col-md-2 col-sm-2 col-sx-2 sub-bar text-right all-div last" style="width: 20.8%">
 				<div class="title_btn">
 					<input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
-					<?php if ($_SESSION['auth_type'] == constant('USER')) : ?>
-						<input type="button" id="btnNew" value="新規 ">&nbsp;
-					<?php endif; ?>
+					<input type="button" id="btnNew" value="新規 ">&nbsp;
 					<input type="button" id="btnAnnt" value="お知らせ ">
 				</div>
 			</div>
@@ -609,7 +607,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<tbody>
 					<?php if (empty($userkyuka_list)) { ?>
 						<tr>
-							<td colspan="8" align="center">登録されたデータがありません.</td>
+							<td colspan="12" align="center">登録されたデータがありません.</td>
 						</tr>
 						<?php } elseif (!empty($userkyuka_list)) {
 						foreach ($userkyuka_list as $userkyuka) {
@@ -670,7 +668,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<tbody>
 						<?php if (empty($vacationinfo_list)) { ?>
 							<tr>
-								<td colspan="8" align="center">登録されたデータがありません.</td>
+								<td colspan="12" align="center">登録されたデータがありません.</td>
 							</tr>
 							<?php } elseif (!empty($vacationinfo_list)) {
 							foreach ($vacationinfo_list as $vacationinfo) {
@@ -767,24 +765,56 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<br>
 							<div class="row three">
 								<?php
-								$last_key = end($result_userkyuka_select);
-								foreach ($result_userkyuka_select as $key) {
-									if ($key == $last_key) {
+								if (!empty($result_userkyuka_select)) {
+									foreach ($result_userkyuka_select as $key) {
+										if ($key['uid'] == $_SESSION['auth_uid']) {
 								?>
-										<div class="col-md-2 col-sm-2 col-sx-2 no">
-											<label for="totcnt">当年付与</label>
-											<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="<?= $key['oldcnt'] + $key['newcnt'] ?>">
-										</div>
-										<div class="col-md-2 col-sm-2 col-sx-2 no">
-											<label for="usecnt">使用日数</label>
-											<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="<?= $key['usecnt'] ?>">
-										</div>
-										<div class=" col-md-2 col-sm-2 col-sx-2 no">
-											<label for="usetime">使用時間</label>
-											<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="<?= $key['usetime'] ?>">
-										</div>
-								<?php
+											<div class="col-md-2 col-sm-2 col-sx-2 no">
+												<label for="totcnt">当年付与</label>
+												<input type="hidden" id="va_uid" name="va_uid" value="<?= $key['uid'] ?>">
+												<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="<?= $key['oldcnt'] + $key['newcnt'] ?>">
+											</div>
+											<div class="col-md-2 col-sm-2 col-sx-2 no">
+												<label for="usecnt">使用日数</label>
+												<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="<?= $key['usecnt'] ?>">
+											</div>
+											<div class=" col-md-2 col-sm-2 col-sx-2 no">
+												<label for="usetime">使用時間</label>
+												<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="<?= $key['usetime'] ?>">
+											</div>
+										<?php
+										} else {
+										?>
+											<div class="col-md-2 col-sm-2 col-sx-2 no">
+												<label for="totcnt">当年付与</label>
+												<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="0">
+											</div>
+											<div class="col-md-2 col-sm-2 col-sx-2 no">
+												<label for="usecnt">使用日数</label>
+												<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="0">
+											</div>
+											<div class=" col-md-2 col-sm-2 col-sx-2 no">
+												<label for="usetime">使用時間</label>
+												<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="0">
+											</div>
+									<?php
+										}
 									}
+								} else {
+									?>
+									<div class="col-md-2 col-sm-2 col-sx-2 no">
+										<label for="totcnt">当年付与</label>
+										<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="0">
+									</div>
+									<div class="col-md-2 col-sm-2 col-sx-2 no">
+										<label for="usecnt">使用日数</label>
+										<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="0">
+									</div>
+									<div class=" col-md-2 col-sm-2 col-sx-2 no">
+										<label for="usetime">使用時間</label>
+										<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="0">
+									</div>
+								<?php
 								}
 								?>
 								<div class="col-md-2 col-sm-2 col-sx-2 no">
@@ -1070,6 +1100,25 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 <script>
 	//신규버튼 
 	$(document).on('click', '#btnNew', function(e) {
+		var totcnt = $("#totcnt").val();
+		var usecnt = $("#usecnt").val();
+		var usetime = $("#usetime").val();
+		var va_uid = $("#va_uid").val();
+		// var auth_uid = '<!?php echo $_SESSION['auth_uid'] ?>';
+		// alert(auth_uid);
+		// alert(va_uid);
+		// if (va_uid === 'tarang') {
+		// 	alert("休暇はまだもらえません。");
+		// 	e.preventDefault();
+		// 	return;
+		// }
+
+		if (totcnt == '0' && usecnt == '0' && usetime == '0') {
+			alert("休暇はまだもらえません。");
+			e.preventDefault();
+			return;
+		}
+
 		$('#modal').modal('toggle');
 
 		//신규때는 신청구분 선택하기 전에는 사용 불가

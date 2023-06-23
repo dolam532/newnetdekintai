@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../inc/header.php');
+include('../inc/message.php');
 include('../model/loginoutmodel.php');
 
 ?>
@@ -42,23 +43,6 @@ include('../model/loginoutmodel.php');
 <div id="tile_body">
     <!-- loginout form {s} -->
     <form action="" method="post">
-        <?php if (isset($_SESSION['login_empty'])) : ?>
-            <div class="alert alert-warning alert-dismissible" role="alert" auto-close="3000">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                <?php echo $_SESSION['login_empty']; ?>
-            </div>
-        <?php
-            unset($_SESSION['login_empty']);
-        elseif (isset($_SESSION['login_fail'])) :
-        ?>
-            <div class="alert alert-warning alert-dismissible" role="alert" auto-close="3000">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                <?php echo $_SESSION['login_fail']; ?>
-            </div>
-        <?php
-            unset($_SESSION['login_fail']);
-        endif;
-        ?>
         <div class="text-center mb-4">
             <h1 class="h2 mb-3 font-weight-normal" style="margin-bottom:40px">NETDEKINTAI.COM</h1>
         </div>
@@ -95,10 +79,25 @@ include('../model/loginoutmodel.php');
     //로그인 버튼 처리
     $(document).on('click', '#btnLogin', function(e) {
         var uid = $("#uid").val(); //태그의 value 속성값
+        var pwd = $("#pwd").val();
         var letters = /^[A-Za-z]+$/;
 
+        if (uid == "") {
+            alert("<?php echo $login_empty_id; ?>");
+            e.preventDefault();
+            $("#uid").focus();
+            return true;
+        }
+
+        if (pwd == "") {
+            alert("<?php echo $login_empty_pwd; ?>");
+            e.preventDefault();
+            $("#uid").focus();
+            return true;
+        }
+
         if (!uid.match(letters)) {
-            alert("IDをアルファベットで入力してください。");
+            alert("<?php echo $login_alphabet; ?>");
             e.preventDefault();
             $("#uid").focus();
             return true;

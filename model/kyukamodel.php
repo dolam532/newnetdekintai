@@ -12,7 +12,7 @@ $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
 // Select data from tbl_userkyuka
-if ($_SESSION['auth_type'] == constant('ADMIN')) {
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $sql_userkyuka_select_db = 'SELECT DISTINCT
     `tbl_userkyuka`.*,
     `tbl_user`.`companyid`,
@@ -38,7 +38,7 @@ WHERE
 AND
 `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
 AND 
-    `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
+    `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_userkyuka_select_db = 'SELECT DISTINCT
     `tbl_userkyuka`.*,

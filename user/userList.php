@@ -389,7 +389,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<?php foreach ($userlist_list as $user) : ?>
 			var user_uid = '<?php echo $user["uid"] ?>';
 			if (uid == user_uid) {
-				alert("他の社員が使用しているidです。");
+				alert("<?php echo $user_id_same; ?>");
 				$("#uid").focus(); //입력 포커스 이동
 				e.preventDefault();
 				return; //함수 종료
@@ -397,36 +397,36 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<?php endforeach; ?>
 
 		if (uid == "") {
-			alert("IDを入力してください。");
+			alert("<?php echo $user_id_empty; ?>");
 			$("#uid").focus(); //입력 포커스 이동
 			e.preventDefault();
 			return; //함수 종료
 		}
 		if (pwd == "") {
-			alert("Passwordを入力してください。");
+			alert("<?php echo $user_pwd_empty; ?>");
 			$("#pwd").focus();
 			e.preventDefault();
 			return;
 		}
 		if (name == "") {
-			alert("社員名を入力してください。.");
+			alert("<?php echo $user_name_empty; ?>");
 			$("#name").focus();
 			e.preventDefault();
 			return;
 		}
 		if (email == "") {
-			alert("E-mailを入力してください。");
+			alert("<?php echo $user_email_empty; ?>");
 			$("#email").focus();
 			return;
 		}
 		if (dept == "") {
-			alert("部署を入力してください。");
+			alert("<?php echo $user_dept_empty; ?>");
 			$("#dept").focus();
 			e.preventDefault();
 			return;
 		}
 		if (grade == "") {
-			alert("区分を入力してください。.");
+			alert("<?php echo $user_grade_empty; ?>");
 			$("#grade").focus();
 			e.preventDefault();
 			return;
@@ -442,30 +442,30 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var grade = $("#ulgrade").val();
 
 		if (pwd == "") {
-			alert("Passwordを入力してください。");
+			alert("<?php echo $user_pwd_empty; ?>");
 			$("#ulpwd").focus();
 			e.preventDefault();
 			return;
 		}
 		if (name == "") {
-			alert("社員名を入力してください。.");
+			alert("<?php echo $user_name_empty; ?>");
 			$("#ulname").focus();
 			e.preventDefault();
 			return;
 		}
 		if (email == "") {
-			alert("E-mailを入力してください。");
+			alert("<?php echo $user_email_empty; ?>");
 			$("#ulemail").focus();
 			return;
 		}
 		if (dept == "") {
-			alert("部署を入力してください。");
+			alert("<?php echo $user_dept_empty; ?>");
 			$("#uldept").focus();
 			e.preventDefault();
 			return;
 		}
 		if (grade == "") {
-			alert("区分を入力してください。.");
+			alert("<?php echo $user_grade_empty; ?>");
 			$("#ulgrade").focus();
 			e.preventDefault();
 			return;
