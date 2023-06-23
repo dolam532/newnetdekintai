@@ -53,7 +53,7 @@
                             <li class="menu-level3"><a href="../kyuka/kyukaMonthly.php">休暇使用現状</a></li>
                         </ul>
                     </li>
-                    <?php if ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
+                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                         <li class="dropdown" id="manager">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">基本情報
                                 <span class="caret"></span></a>

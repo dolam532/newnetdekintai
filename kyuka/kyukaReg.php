@@ -641,7 +641,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		</div>
 	</form>
 
-	<?php if ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
+	<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
 		<form method="post">
 			<div class="row">
 				<div class="col-md-1 col-sm-1 col-sx-1 text-left all-div" style="width: 15%">
@@ -766,38 +766,41 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="row three">
 								<?php
 								if (!empty($result_userkyuka_select)) {
+									$last_key = end($result_userkyuka_select);
 									foreach ($result_userkyuka_select as $key) {
-										if ($key['uid'] == $_SESSION['auth_uid']) {
+										if ($key == $last_key) {
+											if ($key['uid'] == $_SESSION['auth_uid']) {
 								?>
-											<div class="col-md-2 col-sm-2 col-sx-2 no">
-												<label for="totcnt">当年付与</label>
-												<input type="hidden" id="va_uid" name="va_uid" value="<?= $key['uid'] ?>">
-												<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="<?= $key['oldcnt'] + $key['newcnt'] ?>">
-											</div>
-											<div class="col-md-2 col-sm-2 col-sx-2 no">
-												<label for="usecnt">使用日数</label>
-												<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="<?= $key['usecnt'] ?>">
-											</div>
-											<div class=" col-md-2 col-sm-2 col-sx-2 no">
-												<label for="usetime">使用時間</label>
-												<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="<?= $key['usetime'] ?>">
-											</div>
-										<?php
-										} else {
-										?>
-											<div class="col-md-2 col-sm-2 col-sx-2 no">
-												<label for="totcnt">当年付与</label>
-												<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="0">
-											</div>
-											<div class="col-md-2 col-sm-2 col-sx-2 no">
-												<label for="usecnt">使用日数</label>
-												<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="0">
-											</div>
-											<div class=" col-md-2 col-sm-2 col-sx-2 no">
-												<label for="usetime">使用時間</label>
-												<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="0">
-											</div>
+												<div class="col-md-2 col-sm-2 col-sx-2 no">
+													<label for="totcnt">当年付与</label>
+													<input type="hidden" id="va_uid" name="va_uid" value="<?= $key['uid'] ?>">
+													<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="<?= $key['oldcnt'] + $key['newcnt'] ?>">
+												</div>
+												<div class="col-md-2 col-sm-2 col-sx-2 no">
+													<label for="usecnt">使用日数</label>
+													<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="<?= $key['usecnt'] ?>">
+												</div>
+												<div class=" col-md-2 col-sm-2 col-sx-2 no">
+													<label for="usetime">使用時間</label>
+													<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="<?= $key['usetime'] ?>">
+												</div>
+											<?php
+											} else {
+											?>
+												<div class="col-md-2 col-sm-2 col-sx-2 no">
+													<label for="totcnt">当年付与</label>
+													<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="0">
+												</div>
+												<div class="col-md-2 col-sm-2 col-sx-2 no">
+													<label for="usecnt">使用日数</label>
+													<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="0">
+												</div>
+												<div class=" col-md-2 col-sm-2 col-sx-2 no">
+													<label for="usetime">使用時間</label>
+													<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="0">
+												</div>
 									<?php
+											}
 										}
 									}
 								} else {

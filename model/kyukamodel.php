@@ -86,7 +86,7 @@ $KyukaY = array_unique($KyukaY);
 $Name = array_unique($Name);
 $VacationY = array_unique($VacationY);
 
-if ($_SESSION['auth_type'] == constant('ADMIN')) {
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $sql_vacationinfo = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_vacationinfo`.`vacationid`,
@@ -105,7 +105,7 @@ LEFT JOIN
 WHERE
     `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
 AND 
-    `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
+    `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '", "' . constant('ADMIN') . '")';
     $result_vacationinfo = mysqli_query($conn, $sql_vacationinfo);
     $vacationinfo_list = mysqli_fetch_all($result_vacationinfo, MYSQLI_ASSOC);
 }
