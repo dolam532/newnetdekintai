@@ -656,13 +656,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<tr class="info">
 							<th class="th0" style="text-align: center; width: 2%;">ID</th>
 							<th class="th1" style="text-align: center; width: 8%;">休暇ID</th>
-							<th class="th2" style="text-align: center; width: 10%;">始まり</th>
-							<th class="th3" style="text-align: center; width: 16%;">終わり</th>
-							<th class="th4" style="text-align: center; width: 10%;">古い数</th>
-							<th class="th5" style="text-align: center; width: 16%;">新しい数</th>
-							<th class="th6" style="text-align: center; width: 8%;">使用数</th>
-							<th class="th7" style="text-align: center; width: 8%;">使用時間</th>
-							<th class="th8" style="text-align: center; width: auto;">休憩回数</th>
+							<th class="th2" style="text-align: center; width: 10%;">休暇開始日</th>
+							<th class="th3" style="text-align: center; width: 16%;">休暇終了日</th>
+							<th class="th4" style="text-align: center; width: 10%;">休暇古い数</th>
+							<th class="th5" style="text-align: center; width: 16%;">休暇新しい数</th>
+							<th class="th6" style="text-align: center; width: 8%;">休暇使用数</th>
+							<th class="th7" style="text-align: center; width: 8%;">休暇使用時間</th>
+							<th class="th8" style="text-align: center; width: auto;">休暇休憩回数</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -955,128 +955,52 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			<div class="modal-dialog">
 				<form method="post">
 					<div class="modal-content">
-						<div class="modal-header">休年届登録(<span id="sname">New</span>)
+						<div class="modal-header">
+							<span id="ustitle"></span>
+							(<span id="usname"></span>)
 							<button class="close" data-dismiss="modal">x</button>
 						</div>
 
 						<div class="modal-body" style="text-align: left">
 							<div class="row one">
-								<div class="col-md-3 col-sm-3 col-sx-3 kyukaymd">
-									<label for="kyukaymd">申請日</label>
-									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
-									<?php foreach ($result_userkyuka_select as $key) : ?>
-										<input type="hidden" name="companyid" value="<?= $key['companyid'] ?>">
-										<input type="hidden" name="uid" value="<?= $key['uid'] ?>">
-										<input type="hidden" name="allowid" value="<?= $key['allowid'] ?>">
-										<input type="hidden" name="allowdt" value="<?= $key['allowdt'] ?>">
-										<input type="hidden" name="vacationid" value="<?= $key['vacationid'] ?>">
-										<input type="hidden" id="vacationstr" name="vacationstr" value="<?= $key['vacationstr'] ?>">
-										<input type="hidden" id="vacationend" name="vacationend" value="<?= $key['vacationend'] ?>">
-										<input type="hidden" id="oldcnt" name="oldcnt" value="<?= $key['oldcnt'] ?>">
-										<input type="hidden" id="newcnt" name="newcnt" value="<?= $key['newcnt'] ?>">
-										<input type="hidden" id="restcnt" name="restcnt" value="<?= $key['restcnt'] ?>">
-										<input type="hidden" id="kyukatimelimit" name="kyukatimelimit" value="<?= $key['kyukatimelimit'] ?>">
-									<?php endforeach; ?>
+								<div class="col-md-4 col-sm-4 col-sx-4 uid">
+									<label for="uid">ID</label>
+									<input type="text" class="form-control" id="usuid" name="usuid" style="text-align: left" readonly>
+									<input type="hidden" id="usvacationid" name="usvacationid">
 								</div>
-								<div class="col-md-5 col-sm-5 col-sx-5 kyukacode">
-									<label for="kyukacode">休暇区分</label>
-									<select class="form-control" id="kyukaname" name="kyukacode">
-										<option value=""></option>
-										<?php
-										foreach ($codebase_list as $key) {
-										?>
-											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
-										<?php
-										}
-										?>
-									</select>
+								<div class="col-md-4 col-sm-4 col-sx-4 vacationstr">
+									<label for="vacationstr">休暇開始日</label>
+									<input type="text" class="form-control" id="usvacationstr" name="usvacationstr" maxlength="10" placeholder="日付け" style="text-align: left">
 								</div>
-								<div class="col-md-4 col-sm-4 col-sx-4 kyukatype">
-									<label for="kyukatype">申込区分</label>
-									<div class="custom-control custom-radio">
-										&nbsp;
-										<input type="radio" name="kyukatype" value="0">時間
-										&nbsp;&nbsp;
-										<input type="radio" name="kyukatype" value="1">日付
-									</div>
+								<div class="col-md-4 col-sm-4 col-sx-4 vacationend">
+									<label for="vacationend">休暇終了日</label>
+									<input type="text" class="form-control" id="usvacationend" name="usvacationend" maxlength="10" placeholder="日付け" style="text-align: left">
 								</div>
 							</div>
 							<br>
 							<div class="row two">
-								<div class="col-md-3 col-sm-3 col-sx-3 day">
-									<label for="strymd">期間(F)</label>
-									<input type="text" class="form-control" id="strymd" name="strymd" placeholder="" required="required" maxlength="10" style="text-align: center">
+								<div class="col-md-6 col-sm-6 col-sx-6 vacation">
+									<label for="oldcnt">休暇使用数</label>
+									<input type="text" class="form-control" id="usoldcnt" name="usoldcnt" placeholder="番号" required="required" maxlength="10" style="text-align: center">
 								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 day">
-									<label for="endymd">期間(T)</label>
-									<input type="text" class="form-control" id="endymd" name="endymd" placeholder="" required="required" maxlength="10" style="text-align: center">
-								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 day">
-									<label for="strtime">時間(F)</label>
-									<input type="text" class="form-control" id="strtime" name="strtime" placeholder="" required="required" maxlength="2" style="text-align: center">
-								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 day">
-									<label for="endtime">時間(T)</label>
-									<input type="text" class="form-control" id="endtime" name="endtime" placeholder="" required="required" maxlength="2" style="text-align: center">
+								<div class="col-md-6 col-sm-6 col-sx-6 vacation">
+									<label for="newcnt">休暇新しい数</label>
+									<input type="text" class="form-control" id="usnewcnt" name="usnewcnt" placeholder="番号" required="required" maxlength="10" style="text-align: center">
 								</div>
 							</div>
 							<br>
 							<div class="row three">
-								<?php
-								$last_key = end($result_userkyuka_select);
-								foreach ($result_userkyuka_select as $key) {
-									if ($key == $last_key) {
-								?>
-										<div class="col-md-2 col-sm-2 col-sx-2 no">
-											<label for="totcnt">当年付与</label>
-											<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="<?= $key['oldcnt'] + $key['newcnt'] ?>">
-										</div>
-										<div class="col-md-2 col-sm-2 col-sx-2 no">
-											<label for="usecnt">使用日数</label>
-											<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="<?= $key['usecnt'] ?>">
-										</div>
-										<div class=" col-md-2 col-sm-2 col-sx-2 no">
-											<label for="usetime">使用時間</label>
-											<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="<?= $key['usetime'] ?>">
-										</div>
-								<?php
-									}
-								}
-								?>
-								<div class="col-md-2 col-sm-2 col-sx-2 no">
-									<label for="ymdcnt">申込日</label>
-									<input type="text" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="" style="text-align: center" readonly>
+								<div class="col-md-4 col-sm-4 col-sx-4 vacation">
+									<label for="usecnt">休暇使用数</label>
+									<input type="text" class="form-control" id="ususecnt" name="ususecnt" placeholder="番号" required="required" maxlength="10" style="text-align: center">
 								</div>
-								<div class="col-md-2 col-sm-2 col-sx-2 no">
-									<label for="timecnt">申込時間</label>
-									<input type="text" class="form-control" id="timecnt" name="timecnt" placeholder="" style="text-align: center" readonly>
+								<div class="col-md-4 col-sm-4 col-sx-4 vacation">
+									<label for="usetime">休暇使用時間</label>
+									<input type="text" class="form-control" id="ususetime" name="ususetime" placeholder="番号" required="required" maxlength="10" style="text-align: center">
 								</div>
-								<div class="col-md-2 col-sm-2 col-sx-2 no">
-									<label for="allowok">決裁</label>
-									<div class="custom-control custom-radio">
-										<input type="radio" name="allowok" value="0">未決裁
-										<input type="radio" name="allowok" value="1">決裁完了
-									</div>
-								</div>
-							</div>
-							<br>
-							<div class="row four">
-								<div class="col-md-4 col-sm-4 col-sx-4 address">
-									<label for="destcode">暇中居る連絡先</label>
-									<div class="custom-control custom-radio">
-										&nbsp;&nbsp;
-										<input type="radio" name="destcode" value="0">日本
-										<input type="radio" name="destcode" value="1">韓国
-										<input type="radio" name="destcode" value="2">その他
-									</div>
-								</div>
-								<div class="col-md-4 col-sm-4 col-sx-4 address">
-									<label for="destplace">場所</label>
-									<input type="text" class="form-control" name="destplace" id="destplace" placeholder="" required="required" style="text-align: left">
-								</div>
-								<div class="col-md-4 col-sm-4 col-sx-4 address">
-									<label for="desttel">Tel</label>
-									<input type="text" class="form-control" name="desttel" id="desttel" placeholder="" required="required" style="text-align: left">
+								<div class="col-md-4 col-sm-4 col-sx-4 vacation">
+									<label for="restcnt">休暇休憩回数</label>
+									<input type="text" class="form-control" id="usrestcnt" name="usrestcnt" placeholder="番号" required="required" maxlength="10" style="text-align: center">
 								</div>
 							</div>
 						</div>
@@ -1084,7 +1008,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="col-md-4 col-sm-4 col-sx-4"></div>
 							<div class="col-md-2 col-sm-2 col-sx-2 btn">
 								<p class="text-center">
-									<input type="submit" name="SaveKyuka" class="btn btn-primary btn-md" id="btnReg" role="button" value="登録">
+									<input type="submit" name="SaveUpdateKyuka" class="btn btn-primary btn-md" id="btnRegSaveUpdate" role="button" value="登録">
 								</p>
 							</div>
 							<div class="col-md-2 col-sm-2 col-sx-2 btn">
@@ -1107,14 +1031,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var usecnt = $("#usecnt").val();
 		var usetime = $("#usetime").val();
 		var va_uid = $("#va_uid").val();
-		// var auth_uid = '<!?php echo $_SESSION['auth_uid'] ?>';
-		// alert(auth_uid);
-		// alert(va_uid);
-		// if (va_uid === 'tarang') {
-		// 	alert("休暇はまだもらえません。");
-		// 	e.preventDefault();
-		// 	return;
-		// }
 
 		if (totcnt == '0' && usecnt == '0' && usetime == '0') {
 			alert("<?php echo $kyuka_no_receive; ?>");
@@ -1237,6 +1153,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	$("#endymd").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+
+	$("#usvacationstr").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+	$("#usvacationend").datepicker({
 		changeYear: true,
 		dateFormat: 'yy/mm/dd'
 	});
@@ -1377,7 +1302,93 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	$(document).on('click', '.showModal', function() {
 		$('#modal3').modal('toggle');
 		var Uid = $(this).text();
-		// alert(Uid);
+		<?php
+		if (!empty($result_userkyuka_select)) {
+			foreach ($result_userkyuka_select as $key) {
+		?>
+				if ('<?php echo $key['uid'] ?>' == Uid) {
+					$("#ustitle").text('休年届編集');
+					$("#usname").text('<?php echo $key['name'] ?>');
+					$("#usuid").text($('[name="usuid"]').val("<?php echo $key['uid'] ?>"));
+					var vacationid = $("input[name=usvacationid]:hidden");
+					vacationid.val("<?php echo $key['vacationid'] ?>");
+					var vacationid = vacationid.val();
+					$("#usvacationstr").text($('[name="usvacationstr"]').val("<?php echo $key['vacationstr'] ?>"));
+					$("#usvacationend").text($('[name="usvacationend"]').val("<?php echo $key['vacationend'] ?>"));
+					$("#usoldcnt").text($('[name="usoldcnt"]').val("<?php echo $key['oldcnt'] ?>"));
+					$("#usnewcnt").text($('[name="usnewcnt"]').val("<?php echo $key['newcnt'] ?>"));
+					$("#ususecnt").text($('[name="ususecnt"]').val("<?php echo $key['usecnt'] ?>"));
+					$("#ususetime").text($('[name="ususetime"]').val("<?php echo $key['usetime'] ?>"));
+					$("#usrestcnt").text($('[name="usrestcnt"]').val("<?php echo $key['restcnt'] ?>"));
+				} else {
+					$("#ustitle").text('休年届登録');
+					$("#usname").text('New');
+					$("#usuid").text($('[name="usuid"]').val(Uid));
+					var vacationid = $("input[name=usvacationid]:hidden");
+					vacationid.val("0");
+					var vacationid = vacationid.val();
+					$("#usnewcnt").text($('[name="usnewcnt"]').val("0"));
+					$("#ususecnt").text($('[name="ususecnt"]').val("0"));
+					$("#ususetime").text($('[name="ususetime"]').val("0"));
+					$("#usrestcnt").text($('[name="usrestcnt"]').val("0"));
+				}
+		<?php
+			}
+		}
+		?>
+	});
+
+	// Check Error
+	$(document).on('click', '#btnRegSaveUpdate', function(e) {
+		var vacationstr = $("#usvacationstr").val();
+		var vacationend = $("#usvacationend").val();
+		var oldcnt = $("#usoldcnt").val();
+		var newcnt = $("#usnewcnt").val();
+		var usecnt = $("#ususecnt").val();
+		var usetime = $("#ususetime").val();
+		var restcnt = $("#usrestcnt").val();
+
+		if (vacationstr == "") {
+			alert("<?php echo $kyuka_vacationstr_empty; ?>");
+			$("#usvacationstr").focus();
+			e.preventDefault();
+			return;
+		}
+		if (vacationend == "") {
+			alert("<?php echo $kyuka_vacationend_empty; ?>");
+			$("#usvacationend").focus();
+			e.preventDefault();
+			return;
+		}
+		if (oldcnt == "") {
+			alert("<?php echo $kyuka_oldcnt_empty; ?>");
+			$("#usoldcnt").focus();
+			return;
+		}
+		if (newcnt == "") {
+			alert("<?php echo $kyuka_newcnt_empty; ?>");
+			$("#usnewcnt").focus();
+			e.preventDefault();
+			return;
+		}
+		if (usecnt == "") {
+			alert("<?php echo $kyuka_usecnt_empty; ?>");
+			$("#ususecnt").focus();
+			e.preventDefault();
+			return;
+		}
+		if (usetime == "") {
+			alert("<?php echo $kyuka_usetime_empty; ?>");
+			$("#ususetime").focus();
+			e.preventDefault();
+			return;
+		}
+		if (restcnt == "") {
+			alert("<?php echo $kyuka_restcnt_empty; ?>");
+			$("#usrestcnt").focus();
+			e.preventDefault();
+			return;
+		}
 	});
 </script>
 <?php include('../inc/footer.php'); ?>

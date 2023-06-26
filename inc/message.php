@@ -38,6 +38,13 @@ $kyuka_allowok_select = '決裁を選択してください。';
 $kyuka_destcode_select = '暇中居る場所を選択してください。';
 $kyuka_destplace_empty = '場所を入力してください。';
 $kyuka_desttel_empty = '電話番号を入力してください。';
+$kyuka_vacationstr_empty = '休暇開始日を入力してください。';
+$kyuka_vacationend_empty = '休暇終了日を入力してください。';
+$kyuka_oldcnt_empty = '休暇使用数を入力してください。';
+$kyuka_newcnt_empty = '休暇新しい数を入力してください。';
+$kyuka_usecnt_empty = '休暇使用数を入力してください。';
+$kyuka_usetime_empty = '休暇使用時間を入力してください。';
+$kyuka_restcnt_empty = '休暇休憩回数を入力してください。';
 
 // Kintai
 $NO_DATA_KINTAI = 'データが存在しませんでした。';
