@@ -607,7 +607,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<tbody>
 					<?php if (empty($userkyuka_list)) { ?>
 						<tr>
-							<td colspan="12" align="center">登録されたデータがありません.</td>
+							<td colspan="12" align="center"><?php echo $data_save_no; ?></td>
 						</tr>
 						<?php } elseif (!empty($userkyuka_list)) {
 						foreach ($userkyuka_list as $userkyuka) {
@@ -668,7 +668,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<tbody>
 						<?php if (empty($vacationinfo_list)) { ?>
 							<tr>
-								<td colspan="12" align="center">登録されたデータがありません.</td>
+								<td colspan="12" align="center"><?php echo $data_save_no; ?></td>
 							</tr>
 							<?php } elseif (!empty($vacationinfo_list)) {
 							foreach ($vacationinfo_list as $vacationinfo) {
@@ -1117,7 +1117,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		// }
 
 		if (totcnt == '0' && usecnt == '0' && usetime == '0') {
-			alert("休暇はまだもらえません。");
+			alert("<?php echo $kyuka_no_receive; ?>");
 			e.preventDefault();
 			return;
 		}
@@ -1269,87 +1269,87 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var kyukatimelimit = $("#kyukatimelimit").val() * 1;
 
 		if (ymdcnt > (oldcnt + newcnt)) {
-			alert("休暇の申込日は(" + (oldcnt + newcnt) + "日)を超えるわけにはいきません。");
+			alert("<?php echo $kyuka_ymdcnt_01; ?>" + (oldcnt + newcnt) + "<?php echo $kyuka_ymdcnt_02; ?>");
 			$("#ymdcnt").focus();
 			return false; //함수 종료
 		}
 
 		if (kyukaname == "") {
-			alert("休暇区分を入力してください。");
+			alert("<?php echo $kyuka_name_select; ?>");
 			$("#kyukaname").focus();
 			return false; //함수 종료
 		}
 
 		// 년간 사용 가능한 휴가시간제한 체크 (당해년도사용시간+이번에신청한시간 > 년간사용제한시간 이면 에러)
 		if (usetime + timecnt > kyukatimelimit) {
-			alert("休暇の申込時間は(" + kyukatimelimit + "時間)を超えるわけにはいきません。");
+			alert("<?php echo $kyuka_time_limit_01; ?>" + kyukatimelimit + "<?php echo $kyuka_time_limit_02; ?>");
 			return false;
 		}
 
 		// 휴가신청기간은 휴가를 부여받은 기간 안에서만 가능해야 하기 때문에 더 큰 경우는 2개로 나눠서 신청하게한다. 
 		if (endymd > vacationend) {
-			alert("休暇の申込は(" + vacationstr + " ~ " + vacationend + "の内だけに可能です。");
+			alert("<?php echo $kyuka_endymd_01; ?>" + vacationstr + " ~ " + vacationend + "<?php echo $kyuka_endymd_02; ?>");
 			return false;
 		}
 
 		//残数(日)	 計算
 		restcnt = oldcnt + newcnt - usecnt - parseInt(usetime / 8);
 		if (restcnt < 0) {
-			alert("残数(日)を超える休暇は申し込む事はできません。");
+			alert("<?php echo $kyuka_strymd; ?>");
 			$("#strymd").focus();
 			return false; //함수 종료
 		}
 
 		if (kyukatype != "0" && kyukatype != "1") {
-			alert("申込区分を入力してください。");
+			alert("<?php echo $kyuka_type_select; ?>");
 			$("#kyukatype").focus();
 			return false; //함수 종료
 		}
 
 		if (strymd == "") {
-			alert("期間(F)を入力してください。");
+			alert("<?php echo $kyuka_strymd_empty; ?>");
 			$("#strymd").focus(); //입력 포커스 이동
 			return false; //함수 종료
 		}
 
 		if (kyukatype == "1" && endymd == "") {
-			alert("期間(T)を入力してください。");
+			alert("<?php echo $kyuka_endymd_empty; ?>");
 			$("#endymd").focus();
 			return false;
 		}
 
 		if (kyukatype == "0" && (strtime == "" || strtime == "0")) {
-			alert("時間(F)を入力してください。");
+			alert("<?php echo $kyuka_strtime_empty; ?>");
 			$("#strtime").focus();
 			return false;
 		}
 
 		if (kyukatype == "0" && (endtime == "" || endtime == "0")) {
-			alert("時間(T)を入力してください。");
+			alert("<?php echo $kyuka_endtime_empty; ?>");
 			$("#endtime").focus();
 			return false;
 		}
 
 		if (allowok != "0" && allowok != "1") {
-			alert("決裁を入力してください。");
+			alert("<?php echo $kyuka_allowok_select; ?>");
 			$("#allowok").focus(); //입력 포커스 이동
 			return false; //함수 종료
 		}
 
 		if (destcode != "0" && destcode != "1" && destcode != "2") {
-			alert("暇中居る場所を入力してください。");
+			alert("<?php echo $kyuka_destcode_select; ?>");
 			$("#destcode").focus();
 			return false; //함수 종료
 		}
 
 		if (destplace == "") {
-			alert("場所を入力してください。");
+			alert("<?php echo $kyuka_destplace_empty; ?>");
 			$("#destplace").focus(); //입력 포커스 이동
 			return false; //함수 종료
 		}
 
 		if (desttel == "") {
-			alert("電話番号を入力してください。");
+			alert("<?php echo $kyuka_desttel_empty; ?>");
 			$("#desttel").focus(); //입력 포커스 이동
 			return false; //함수 종료
 		}
