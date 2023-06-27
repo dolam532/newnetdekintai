@@ -768,61 +768,29 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<br>
 							<div class="row three">
 								<?php
-								if (!empty($result_userkyuka_select)) {
-									$last_key = end($result_userkyuka_select);
-									foreach ($result_userkyuka_select as $key) {
-										if ($key == $last_key) {
-											if ($key['uid'] == $_SESSION['auth_uid']) {
+								if (!empty($vacationinfo_list)) {
+									foreach ($vacationinfo_list as $key) {
+										if ($key['uid'] == $_SESSION['auth_uid']) {
 								?>
-												<div class="col-md-2 col-sm-2 col-sx-2 no">
-													<label for="totcnt">当年付与</label>
-													<input type="hidden" id="va_uid" name="va_uid" value="<?= $key['uid'] ?>">
-													<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="<?= $key['oldcnt'] + $key['newcnt'] ?>">
-												</div>
-												<div class="col-md-2 col-sm-2 col-sx-2 no">
-													<label for="usecnt">使用日数</label>
-													<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="<?= $key['usecnt'] ?>">
-												</div>
-												<div class=" col-md-2 col-sm-2 col-sx-2 no">
-													<label for="usetime">使用時間</label>
-													<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="<?= $key['usetime'] ?>">
-												</div>
-											<?php
-											} else {
-											?>
-												<div class="col-md-2 col-sm-2 col-sx-2 no">
-													<label for="totcnt">当年付与</label>
-													<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="0">
-												</div>
-												<div class="col-md-2 col-sm-2 col-sx-2 no">
-													<label for="usecnt">使用日数</label>
-													<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="0">
-												</div>
-												<div class=" col-md-2 col-sm-2 col-sx-2 no">
-													<label for="usetime">使用時間</label>
-													<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="0">
-												</div>
-									<?php
-											}
+											<div class="col-md-2 col-sm-2 col-sx-2 no">
+												<label for="totcnt">当年付与</label>
+												<input type="hidden" id="va_uid" name="va_uid" value="<?= $key['uid'] ?>">
+												<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="<?= $key['oldcnt'] + $key['newcnt'] ?>">
+											</div>
+											<div class="col-md-2 col-sm-2 col-sx-2 no">
+												<label for="usecnt">使用日数</label>
+												<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="<?= $key['usecnt'] ?>">
+											</div>
+											<div class=" col-md-2 col-sm-2 col-sx-2 no">
+												<label for="usetime">使用時間</label>
+												<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="<?= $key['usetime'] ?>">
+											</div>
+								<?php
 										}
 									}
-								} else {
-									?>
-									<div class="col-md-2 col-sm-2 col-sx-2 no">
-										<label for="totcnt">当年付与</label>
-										<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="0">
-									</div>
-									<div class="col-md-2 col-sm-2 col-sx-2 no">
-										<label for="usecnt">使用日数</label>
-										<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="0">
-									</div>
-									<div class=" col-md-2 col-sm-2 col-sx-2 no">
-										<label for="usetime">使用時間</label>
-										<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="0">
-									</div>
-								<?php
 								}
 								?>
+
 								<div class="col-md-2 col-sm-2 col-sx-2 no">
 									<label for="ymdcnt">申込日</label>
 									<input type="text" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="" style="text-align: center" readonly>
@@ -1035,7 +1003,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var usetime = $("#usetime").val();
 		var va_uid = $("#va_uid").val();
 
-		if (totcnt == '0' && usecnt == '0' && usetime == '0') {
+		if (totcnt == '0' && usecnt == '' && usetime == '') {
 			alert("<?php echo $kyuka_no_receive; ?>");
 			e.preventDefault();
 			return;
@@ -1404,39 +1372,39 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		}
 
 		if (!oldcnt.match(number_no)) {
-            alert("<?php echo $kyuka_oldcnt_no; ?>");
-            e.preventDefault();
-            $("#usoldcnt").focus();
-            return true;
-        }
+			alert("<?php echo $kyuka_oldcnt_no; ?>");
+			e.preventDefault();
+			$("#usoldcnt").focus();
+			return true;
+		}
 
 		if (!newcnt.match(number_no)) {
-            alert("<?php echo $kyuka_newcnt_no; ?>");
-            e.preventDefault();
-            $("#usnewcnt").focus();
-            return true;
-        }
-		
+			alert("<?php echo $kyuka_newcnt_no; ?>");
+			e.preventDefault();
+			$("#usnewcnt").focus();
+			return true;
+		}
+
 		if (!usecnt.match(number_no)) {
-            alert("<?php echo $kyuka_usecnt_no; ?>");
-            e.preventDefault();
-            $("#ususecnt").focus();
-            return true;
-        }
+			alert("<?php echo $kyuka_usecnt_no; ?>");
+			e.preventDefault();
+			$("#ususecnt").focus();
+			return true;
+		}
 
 		if (!usetime.match(number_no)) {
-            alert("<?php echo $kyuka_usetime_no; ?>");
-            e.preventDefault();
-            $("#ususetime").focus();
-            return true;
-        }
+			alert("<?php echo $kyuka_usetime_no; ?>");
+			e.preventDefault();
+			$("#ususetime").focus();
+			return true;
+		}
 
 		if (!restcnt.match(number_no)) {
-            alert("<?php echo $kyuka_restcnt_no; ?>");
-            e.preventDefault();
-            $("#usrestcnt").focus();
-            return true;
-        }
+			alert("<?php echo $kyuka_restcnt_no; ?>");
+			e.preventDefault();
+			$("#usrestcnt").focus();
+			return true;
+		}
 	});
 </script>
 <?php include('../inc/footer.php'); ?>
