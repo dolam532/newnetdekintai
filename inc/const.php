@@ -28,6 +28,9 @@ $TYPE_DELETE_DATA_OF_SELETED_DAY = 'deleteDataSelectedDay';
 $TYPE_REGISTER_DATA_OF_MONTH = 'monthDataRegister';
 $TYPE_GET_DATA_KINMUHYO = 'getDataKinmuhyo';
 $TYPE_REGISTER_NEW_DATA_OF_MONTH  = 'monthDataNewRegister';
+$TYPE_GETCURRENT_USER  = 'getCurrentUser';
+
+
 
 // name 
 $COMPANY_NAME = 'ガナシス株式会社';
