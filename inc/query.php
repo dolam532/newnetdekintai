@@ -36,7 +36,7 @@ jobendhh, jobendmm, offtimehh, offtimemm, workhh, workmm, comment, bigo, REG_DT)
 VALUES ";
 
 //==//                  <!-- update data of month    --> 
-$QUERY_UPDATE_DATA_WORK_OF_YMD = "UPDATE tbl_worktime SET daystarthh = ?, daystartmm = ?, 
+$QUERY_UPDATE_DATA_WORK_OF_YMD = "UPDATE tbl_worktime SET genid = ? , daystarthh = ?, daystartmm = ?, 
   dayendhh = ?, dayendmm = ?, jobstarthh = ?, jobstartmm = ?, jobendhh = ?, jobendmm = ?, 
   offtimehh = ?, offtimemm = ?, workhh = ?, workmm = ?,  comment = ?, bigo = ?, REG_DT = NOW() 
   WHERE uid = ? AND workymd = ?";

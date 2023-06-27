@@ -3,10 +3,8 @@ include('.././inc/dbconnect.php');
 include('.././inc/query.php');
 include('.././inc/message.php');
 // include('../container.php');
-
 class KintaiRegRepository
 {
-
     public function selectById($id)
     {
         global $conn;
@@ -69,7 +67,7 @@ class KintaiRegRepository
             $stmt = $conn->prepare($QUERY_UPDATE_DATA_WORK_OF_YMD);
             if ($stmt) {
                 $stmt->bind_param(
-                    'ssssssssssssssss', $object['daystarthh'], $object['daystartmm'], // 'ssssssssssssssssss'
+                    'sssssssssssssssss',$object['genid'],  $object['daystarthh'], $object['daystartmm'], // 'ssssssssssssssssss'
                     $object['dayendhh'], $object['dayendmm'], $object['jobstarthh'],
                     $object['jobstartmm'], $object['jobendhh'], $object['jobendmm'],
                     $object['offtimehh'], $object['offtimemm'], $object['workhh'],
@@ -191,7 +189,6 @@ class KintaiRegRepository
             return null;
         }
     }
-
     // inserttnew month to workyearmonth day
     public function insertNewMonth($data, $uid)
     {
@@ -202,7 +199,6 @@ class KintaiRegRepository
         $affected_rows = 0;
         $object = json_decode($data, true);
         $workymd = substr_replace($object['workym'], '/', 4, 0) . '/01';
-        
         // add query
         $query = $QUERY_INSERT_NEW_WORK_OF_MONTH;
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, intval(substr($workymd, 5, 2)), intval(substr($workymd, 0, 4)));

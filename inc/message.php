@@ -17,3 +17,7 @@ $CONNECT_ERROR = '接続エラー。';
 $WORK_TIME_IS_MISSING = '時間のデータが存在しませんでした。-11111601';
 $WORK_MOTH_IS_MISSING = '月のデータが存在しませんでした。-11111602';
 $WORK_TIME_MONTH_IS_MISSING = '時間と月のデータが存在しませんでした。-11111603';
+$JOBSTART_INVALID_INPUT = '業務開始時間入力しないと登録出来ません。';
+$JOBEND_INVALID_INPUT = '業務終了時間入力しないと登録出来ません。';
+$DAYSTART_INVALID_INPUT = '出社時間入力しないと登録出来ません。';
+$DAYEND_INVALID_INPUT = "退社終了時間入力しないと登録出来ません。";

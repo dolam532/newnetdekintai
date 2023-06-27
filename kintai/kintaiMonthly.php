@@ -1,4 +1,5 @@
 <?php
+// include('../inc/menu.php');
 session_start();
 include('../inc/const.php');
 include('../inc/message.php');
@@ -41,6 +42,10 @@ if ($_SESSION['auth'] == false) {
 			height: 30px;
 			background-color: #4CAF50;
 		}
+
+		.hidden {
+			display: none;
+		}
 	</style>
 
 	<script>
@@ -56,33 +61,26 @@ if ($_SESSION['auth'] == false) {
 			handleDateChange(currentYear, currentMonth);
 		};
 		// Message
-		var NO_DATA_KINTAI = "<?php echo $NO_DATA_KINTAI; ?>";
-		var CONNECT_ERROR = "<?php echo $CONNECT_ERROR; ?>"
 		var currentName = "<?php echo $_SESSION['auth_name']; ?>"
-
-		// TYPE
-		var TYPE_GET_WORK_YEAR_MONTH = "<?php echo $TYPE_GET_WORK_YEAR_MONTH; ?>"
-
-
 
 		//====================================================================/// 
 		//=======function for bind change year month combo box==============//     
 		//============================================================///  
-		 function handleDateChange(selectedYear, selectedMonth) {
+		function handleDateChange(selectedYear, selectedMonth) {
 			var strMonth = selectedMonth.toString().padStart(2, '0');
 			handleDateChangeUpdateWorkMonth(selectedYear, strMonth);
 		}
-		 function handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth) {
+		function handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth) {
 			var parsedResponse = null;
 			var dataObject = {
 				workym: selectedYear + selectedMonth
 			};
 			const data = JSON.stringify(dataObject); // convert to json 
 			const response = ajaxRequest(
-				'kintaiRegController.php?type=' + TYPE_GET_WORK_YEAR_MONTH + '&data=' + data,
+				'kintaiRegController.php?type=<?php echo $TYPE_GET_WORK_YEAR_MONTH; ?>' + '&data=' + data,
 				'GET',
 				function (response) {
-					if (response === CONNECT_ERROR) {// connect faild
+					if (response === "<?php echo $CONNECT_ERROR; ?>") {// connect faild
 						handlerDrawDataWorkOfMonth(null);
 						return;
 					}
@@ -94,12 +92,11 @@ if ($_SESSION['auth'] == false) {
 					return;
 				}
 			);
-
 		};
 
 		function handlerDrawDataWorkOfMonth(response) {
 			parsedResponse = JSON.parse(response);
-			if (parsedResponse === null || parsedResponse === NO_DATA_KINTAI) {
+			if (parsedResponse === null || parsedResponse === "<?php echo $NO_DATA_KINTAI; ?>") {
 				DrawWhiteTableWorkOfMonth();
 				return;
 			}
@@ -108,33 +105,48 @@ if ($_SESSION['auth'] == false) {
 		}
 
 		function DrawDataWorkOfMonth(response) {
-			cusername.innerHTML = response['username'];
+			changeViewForm(1);
+			cusername.innerHTML = currentName;
 			cworktime.innerHTML = response['workym'];
 			cdaytimehh.innerHTML = response['jobhour2'];
 			cdaytimemm.innerHTML = response['jobminute2'];
 			cjobdays.innerHTML = response['jobdays2'];
 			cworkdays.innerHTML = response['workdays2'];
-			janTime.innerHTML = response['janhour2'] +':'+ response['janminute2'];
+			janTime.innerHTML = response['janhour2'] + ':' + response['janminute2'];
 			coffdays.innerHTML = response['offdays'];
 			cdelaydays.innerHTML = response['delaydays'];
 			cearlydays.innerHTML = response['earlydays'];
 			cbigo.innerHTML = response['bigo'];
 		}
 		function DrawWhiteTableWorkOfMonth() {
-			cusername.innerHTML= currentName;
-			cworktime.innerHTML = '0';
-			cdaytimehh.innerHTML = '0';
-			cdaytimemm.innerHTML = '0';
-			cjobdays.innerHTML = '0';
-			cworkdays.innerHTML = '0';
-			janTime.innerHTML = '0:0';
-			coffdays.innerHTML = '0';
-			cdelaydays.innerHTML = '0';
-			cearlydays.innerHTML = '0';
-			cbigo.innerHTML = '';
+			changeViewForm(0);
+			cusername2.innerHTML = currentName;
 		}
 
+		function changeViewForm(status) {
+			// 1 has data 
+			// 0 no data
+			var tablesNoData = document.querySelectorAll(".nodata-show");
+			var tablesHasData = document.querySelectorAll(".data-show");
+			if (status === 0) {
+				tablesNoData.forEach(element => {
+					element.classList.remove('hidden');
+				});
 
+				tablesHasData.forEach(element => {
+					element.classList.add('hidden');
+				});
+
+			} else if (status === 1) {
+				tablesHasData.forEach(element => {
+					element.classList.remove('hidden');
+				});
+
+				tablesNoData.forEach(element => {
+					element.classList.add('hidden');
+				});
+			}
+		}
 		//＝＝＝＝==========//
 		// =======ajax=====// OK
 		//＝＝＝＝==========//
@@ -171,6 +183,14 @@ if ($_SESSION['auth'] == false) {
 				);
 			});
 		}
+
+		function fowardToKintaiRegister() {
+			var selectedDate = selyy.value + selmm.value; 
+			console.log(selectedDate);
+			var url = 'kintaiReg.php?date=' + encodeURIComponent(selectedDate);
+			window.location.href = url;
+		}
+		
 	</script>
 </head>
 
@@ -212,7 +232,7 @@ if ($_SESSION['auth'] == false) {
 		</div>
 		<table class="table table-bordered datatable">
 			<thead>
-				<tr class="info">
+				<tr class="info data-show">
 					<th style="text-align: center; width: 14%;">名前</th>
 					<th style="text-align: center; width: 8%;">作業年月</th>
 					<th style="text-align: center; width: 8%;">実働時間</th>
@@ -225,25 +245,38 @@ if ($_SESSION['auth'] == false) {
 					<th style="text-align: center; width: 6%;">早退</th>
 					<th style="text-align: center; width: auto;">備考</th>
 				</tr>
+
+				<tr class="info nodata-show hidden">
+					<th style="text-align: center; width: 14%;">名前</th>
+					<th style="text-align: center; width: auto;">データ状態</th>
+				</tr>
+
 			</thead>
 
 			<tbody>
 
-				<tr>
-					<td><a href="http://localhost:8080/web/kintai/kintaiMonthly#"><span class="nameClick"
-					name="cusername" id="cusername">NAME</span></a></td>
-					<td><span name="cworktime" id="cworktime">202305</span></td>
-					<td><span name="cdaytimehh" id="cdaytimehh">0</span></td>
-					<td><span name="cdaytimemm" id="cdaytimemm">0</span></td>
-					<td><span name="cjobdays" id="cjobdays">0</span></td>
-					<td><span name="cworkdays" id="cworkdays">0</span></td>
-					<td><span name="janTime" id="janTime">0:0</span></td>
-					<td><span name="coffdays" id="coffdays">0</span></td>
-					<td><span name="cdelaydays" id="cdelaydays">0</span></td>
-					<td><span name="cearlydays" id="cearlydays">0</span></td>
-					<td><span name="cbigo" id="cbigo"></span></td>
+				<tr class="data-show">
+					<td onclick="fowardToKintaiRegister()"><a href="#"><span class="nameClick"
+								name="cusername" id="cusername">Loading...</span></a></td>
+					<td><span class="data-cell" name="cworktime" id="cworktime"></span></td>
+					<td><span class="data-cell" name="cdaytimehh" id="cdaytimehh"></span></td>
+					<td><span class="data-cell" name="cdaytimemm" id="cdaytimemm"></span></td>
+					<td><span class="data-cell" name="cjobdays" id="cjobdays"></span></td>
+					<td><span class="data-cell" name="cworkdays" id="cworkdays"></span></td>
+					<td><span class="data-cell" name="janTime" id="janTime"></span></td>
+					<td><span class="data-cell" name="coffdays" id="coffdays"></span></td>
+					<td><span class="data-cell" name="cdelaydays" id="cdelaydays"></span></td>
+					<td><span class="data-cell" name="cearlydays" id="cearlydays"></span></td>
+					<td><span class="data-cell" name="cbigo" id="cbigo"></span></td>
 				</tr>
 
+				<tr class="nodata-show hidden" >
+					<td onclick="fowardToKintaiRegister()"><a href="#"><span class="nameClick" 
+								name="cusername" id="cusername2">NAME</span></a></td>
+					<td><span name="no_dataText" id="no_dataText" style="color:red; font-weight:bold;">
+							<?php echo $NO_DATA_KINTAI ?>
+						</span></td>
+				</tr>
 
 
 			</tbody>
