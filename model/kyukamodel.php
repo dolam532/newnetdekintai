@@ -174,6 +174,29 @@ CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinf
         AND `tbl_codebase`.`typecode` = 02';
 }
 
+// Select data from tbl_user, tbl_vacationinfo and tbl_manageinfo of table
+$sql_select_table3_db = 'SELECT DISTINCT
+`tbl_user`.*,
+`tbl_vacationinfo`.`vacationid`,
+`tbl_vacationinfo`.`vacationstr`,
+`tbl_vacationinfo`.`vacationend`,
+`tbl_vacationinfo`.`oldcnt`,
+`tbl_vacationinfo`.`newcnt`,
+`tbl_vacationinfo`.`usecnt`,
+`tbl_vacationinfo`.`usetime`,
+`tbl_vacationinfo`.`restcnt`,
+`tbl_manageinfo`.`kyukatimelimit`
+FROM
+`tbl_vacationinfo`
+CROSS JOIN `tbl_user` ON `tbl_vacationinfo`.`uid` = `tbl_user`.`uid`
+CROSS JOIN `tbl_manageinfo` ON `tbl_user`.`companyid` = `tbl_manageinfo`.`companyid`
+WHERE
+`tbl_user`.`type` = "' . $_SESSION['auth_type'] . '"
+AND
+`tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"';
+$sql_table3_select = mysqli_query($conn, $sql_select_table3_db);
+$result_uservacationmanage_select = mysqli_fetch_all($sql_table3_select, MYSQLI_ASSOC);
+
 // Save data to tbl_userkyuka table of database
 if (isset($_POST['SaveKyuka'])) {
     if ($_POST['kyukatype'] == "0") {
@@ -191,6 +214,7 @@ if (isset($_POST['SaveKyuka'])) {
         $usetime = $_POST['usetime'];
     }
 
+    $_POST['vacationid'] = intval($_POST['vacationid']);
     $_POST['strtime'] = intval($_POST['strtime']);
     $_POST['endtime'] = intval($_POST['endtime']);
 
@@ -208,21 +232,14 @@ if (isset($_POST['SaveKyuka'])) {
     $destcode = mysqli_real_escape_string($conn, $_POST['destcode']);
     $destplace = mysqli_real_escape_string($conn, $_POST['destplace']);
     $desttel = mysqli_real_escape_string($conn, $_POST['desttel']);
-    $allowok = mysqli_real_escape_string($conn, $_POST['allowok']);
-    $allowid = mysqli_real_escape_string($conn, $_POST['allowid']);
-    $allowdt = mysqli_real_escape_string($conn, $_POST['allowdt']);
-    $reg_dt = date('Y-m-d H:i:s');
+    $allowok = "0";
+    $allowid = "0";
+    $allowdt = $reg_dt = date('Y-m-d H:i:s');
 
     $sql_userkyuka_insert = mysqli_query($conn, "INSERT INTO `tbl_userkyuka` (`uid`, `vacationid`, `kyukaymd`, `kyukatype`, `strymd`, `endymd`, `ymdcnt`, `strtime`, `endtime`, `timecnt`, `kyukacode`, `destcode`, `destplace`, `desttel`, `allowok`, `allowid`, `allowdt`, `reg_dt`) 
     VALUES ('$uid', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdt', '$reg_dt')");
 
-    $sql_vacationinfo_update = mysqli_query($conn, "UPDATE tbl_vacationinfo SET 
-            usecnt=$usecnt,
-            usetime=$usetime,
-            restcnt=$restcnt
-        WHERE vacationid ='$vacationid'");
-
-    if ($sql_userkyuka_insert && $sql_vacationinfo_update) {
+    if ($sql_userkyuka_insert) {
         $_SESSION['save_success'] =  $save_success;
         header("Refresh:3");
     } else {

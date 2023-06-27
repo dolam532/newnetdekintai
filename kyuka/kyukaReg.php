@@ -626,7 +626,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<td class="td5"><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
 								<td class="td6"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
 								<td class="td7"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] - $userkyuka['usecnt'] - (int)($userkyuka['usetime'] / 8) ?></span></td>
-								<td class="td8"><span name="callowok">
+								<td class="td8"><span name="allowok">
 										<?php
 										if ($userkyuka['allowok'] == "0") { ?>
 											<span style="color:red">未決裁</span>
@@ -709,11 +709,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukaymd">
 									<label for="kyukaymd">申請日</label>
 									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
-									<?php foreach ($result_userkyuka_select as $key) : ?>
+									<?php foreach ($result_uservacationmanage_select as $key) : ?>
 										<input type="hidden" name="companyid" value="<?= $key['companyid'] ?>">
 										<input type="hidden" name="uid" value="<?= $key['uid'] ?>">
-										<input type="hidden" name="allowid" value="<?= $key['allowid'] ?>">
-										<input type="hidden" name="allowdt" value="<?= $key['allowdt'] ?>">
 										<input type="hidden" name="vacationid" value="<?= $key['vacationid'] ?>">
 										<input type="hidden" id="vacationstr" name="vacationstr" value="<?= $key['vacationstr'] ?>">
 										<input type="hidden" id="vacationend" name="vacationend" value="<?= $key['vacationend'] ?>">
@@ -790,7 +788,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									}
 								}
 								?>
-
+								<div class="col-md-2 col-sm-2 col-sx-2 no"></div>
 								<div class="col-md-2 col-sm-2 col-sx-2 no">
 									<label for="ymdcnt">申込日</label>
 									<input type="text" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="" style="text-align: center" readonly>
@@ -798,13 +796,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<div class="col-md-2 col-sm-2 col-sx-2 no">
 									<label for="timecnt">申込時間</label>
 									<input type="text" class="form-control" id="timecnt" name="timecnt" placeholder="" style="text-align: center" readonly>
-								</div>
-								<div class="col-md-2 col-sm-2 col-sx-2 no">
-									<label for="allowok">決裁</label>
-									<div class="custom-control custom-radio">
-										<input type="radio" name="allowok" value="0">未決裁
-										<input type="radio" name="allowok" value="1">決裁完了
-									</div>
 								</div>
 							</div>
 							<br>
@@ -1151,7 +1142,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var endtime = $("#endtime").val() * 1;
 		var timecnt = $("#timecnt").val() * 1;
 		var kyukaname = $("#kyukaname option:selected").text();
-		var allowok = $("input[name='allowok']:checked").val();
 		var destcode = $("input[name='destcode']:checked").val();
 		var destplace = $("#destplace").val();
 		var desttel = $("#desttel").val();
@@ -1226,12 +1216,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			return false;
 		}
 
-		if (allowok != "0" && allowok != "1") {
-			alert("<?php echo $kyuka_allowok_select; ?>");
-			$("#allowok").focus(); //입력 포커스 이동
-			return false; //함수 종료
-		}
-
 		if (destcode != "0" && destcode != "1" && destcode != "2") {
 			alert("<?php echo $kyuka_destcode_select; ?>");
 			$("#destcode").focus();
@@ -1263,7 +1247,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$('#usetime').val('');
 		$('#ymdcnt').val('');
 		$('#timecnt').val('');
-		$("input[name='allowok']").prop('checked', false);
 		$("input[name='destcode']").prop('checked', false);
 		$('#destplace').val('');
 		$('#desttel').val('');
