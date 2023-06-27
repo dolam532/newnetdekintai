@@ -1,6 +1,7 @@
 <?php
 // All
 $data_save_no = '登録されたデータがありません。';
+$save_success = '入力情報保存しました。';
 
 // Login & Logout
 $login_empty_id = 'ログイン失敗！  idを入力してください。';
@@ -8,7 +9,6 @@ $login_empty_pwd = 'ログイン失敗！  PWDを入力してください。';
 $login_alphabet = 'IDをアルファベットで入力してください。';
 $login_success = 'ログインに成功しました。';
 $logout_success = 'ログアウトに成功しました。';
-$save_success = '入力情報保存しました。';
 
 // User
 $user_id_same = '他の社員が使用しているidです。';
@@ -45,6 +45,11 @@ $kyuka_newcnt_empty = '休暇新しい数を入力してください。';
 $kyuka_usecnt_empty = '休暇使用数を入力してください。';
 $kyuka_usetime_empty = '休暇使用時間を入力してください。';
 $kyuka_restcnt_empty = '休暇休憩回数を入力してください。';
+$kyuka_oldcnt_no = '休暇古い数を番号で入力してください。';
+$kyuka_newcnt_no = '休暇新しい数を番号で入力してください。';
+$kyuka_usecnt_no = '休暇使用数を番号で入力してください。';
+$kyuka_usetime_no = '休暇使用時間を番号で入力してください。';
+$kyuka_restcnt_no = '休暇休憩回数を番号で入力してください。';
 
 // Kintai
 $NO_DATA_KINTAI = 'データが存在しませんでした。';

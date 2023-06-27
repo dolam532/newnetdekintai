@@ -45,6 +45,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		font-weight: bold;
 	}
 
+	span.vacationid_class {
+		display: none;
+	}
 
 	/* For Mobile Landscape View iPhone XR,12Pro */
 	@media screen and (max-device-width: 896px) and (orientation: landscape) {
@@ -674,7 +677,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							foreach ($vacationinfo_list as $vacationinfo) {
 							?>
 								<tr>
-									<td class="td0"><a href="#"><span class="showModal"><?= $vacationinfo['uid'] ?></span></td>
+									<td class="td0"><a href="#"><span class="showModal"><?= $vacationinfo['uid'] ?><span class="vacationid_class"><?= ',' . $vacationinfo['vacationid'] ?></span></span></td>
 									<td class="td1"><span><?= $vacationinfo['vacationid'] ?></span></td>
 									<td class="td2"><span><?= $vacationinfo['vacationstr'] ?></span></td>
 									<td class="td3"><span><?= $vacationinfo['vacationend'] ?></span></td>
@@ -956,8 +959,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<form method="post">
 					<div class="modal-content">
 						<div class="modal-header">
-							<span id="ustitle"></span>
-							(<span id="usname"></span>)
+							<span id="ustitle">休年届登録</span>
+							(<span id="usname">New</span>)
 							<button class="close" data-dismiss="modal">x</button>
 						</div>
 
@@ -1301,41 +1304,50 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	//그리드에서 사원ID클릭(수정) : popup & 내용표시 
 	$(document).on('click', '.showModal', function() {
 		$('#modal3').modal('toggle');
-		var Uid = $(this).text();
-		<?php
-		if (!empty($result_userkyuka_select)) {
-			foreach ($result_userkyuka_select as $key) {
-		?>
-				if ('<?php echo $key['uid'] ?>' == Uid) {
-					$("#ustitle").text('休年届編集');
-					$("#usname").text('<?php echo $key['name'] ?>');
-					$("#usuid").text($('[name="usuid"]').val("<?php echo $key['uid'] ?>"));
-					var vacationid = $("input[name=usvacationid]:hidden");
-					vacationid.val("<?php echo $key['vacationid'] ?>");
-					var vacationid = vacationid.val();
-					$("#usvacationstr").text($('[name="usvacationstr"]').val("<?php echo $key['vacationstr'] ?>"));
-					$("#usvacationend").text($('[name="usvacationend"]').val("<?php echo $key['vacationend'] ?>"));
-					$("#usoldcnt").text($('[name="usoldcnt"]').val("<?php echo $key['oldcnt'] ?>"));
-					$("#usnewcnt").text($('[name="usnewcnt"]').val("<?php echo $key['newcnt'] ?>"));
-					$("#ususecnt").text($('[name="ususecnt"]').val("<?php echo $key['usecnt'] ?>"));
-					$("#ususetime").text($('[name="ususetime"]').val("<?php echo $key['usetime'] ?>"));
-					$("#usrestcnt").text($('[name="usrestcnt"]').val("<?php echo $key['restcnt'] ?>"));
-				} else {
-					$("#ustitle").text('休年届登録');
-					$("#usname").text('New');
-					$("#usuid").text($('[name="usuid"]').val(Uid));
-					var vacationid = $("input[name=usvacationid]:hidden");
-					vacationid.val("0");
-					var vacationid = vacationid.val();
-					$("#usnewcnt").text($('[name="usnewcnt"]').val("0"));
-					$("#ususecnt").text($('[name="ususecnt"]').val("0"));
-					$("#ususetime").text($('[name="ususetime"]').val("0"));
-					$("#usrestcnt").text($('[name="usrestcnt"]').val("0"));
+		var ArrayID = $(this).text();
+		var SeparateArrID = ArrayID.split(',');
+		var Uid = SeparateArrID[0];
+		var Vacationid = SeparateArrID[1];
+		if (Vacationid != "") {
+			<?php
+			if (!empty($vacationinfo_list)) {
+				foreach ($vacationinfo_list as $key) {
+			?>
+					if ('<?php echo $key['uid'] ?>' == Uid) {
+						$("#ustitle").text('休年届編集');
+						$("#usname").text('<?php echo $key['name'] ?>');
+						$("#usuid").text($('[name="usuid"]').val("<?php echo $key['uid'] ?>"));
+						var vacationid = $("input[name=usvacationid]:hidden");
+						vacationid.val("<?php echo $key['vacationid'] ?>");
+						var vacationid = vacationid.val();
+						$("#usvacationstr").text($('[name="usvacationstr"]').val("<?php echo $key['vacationstr'] ?>"));
+						$("#usvacationend").text($('[name="usvacationend"]').val("<?php echo $key['vacationend'] ?>"));
+						$("#usoldcnt").text($('[name="usoldcnt"]').val("<?php echo $key['oldcnt'] ?>"));
+						$("#usnewcnt").text($('[name="usnewcnt"]').val("<?php echo $key['newcnt'] ?>"));
+						$("#ususecnt").text($('[name="ususecnt"]').val("<?php echo $key['usecnt'] ?>"));
+						$("#ususetime").text($('[name="ususetime"]').val("<?php echo $key['usetime'] ?>"));
+						$("#usrestcnt").text($('[name="usrestcnt"]').val("<?php echo $key['restcnt'] ?>"));
+					}
+			<?php
 				}
-		<?php
 			}
+			?>
 		}
-		?>
+		if (Vacationid == "") {
+			$("#ustitle").text('休年届登録');
+			$("#usname").text('New');
+			$("#usuid").text($('[name="usuid"]').val(Uid));
+			var vacationid = $("input[name=usvacationid]:hidden");
+			vacationid.val("0");
+			var vacationid = vacationid.val();
+			$("#usvacationstr").text($('[name="usvacationstr"]').val(""));
+			$("#usvacationend").text($('[name="usvacationend"]').val(""));
+			$("#usoldcnt").text($('[name="usoldcnt"]').val(""));
+			$("#usnewcnt").text($('[name="usnewcnt"]').val(""));
+			$("#ususecnt").text($('[name="ususecnt"]').val(""));
+			$("#ususetime").text($('[name="ususetime"]').val(""));
+			$("#usrestcnt").text($('[name="usrestcnt"]').val(""));
+		}
 	});
 
 	// Check Error
@@ -1347,6 +1359,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var usecnt = $("#ususecnt").val();
 		var usetime = $("#ususetime").val();
 		var restcnt = $("#usrestcnt").val();
+		var number_no = /^[0-9]+$/;
 
 		if (vacationstr == "") {
 			alert("<?php echo $kyuka_vacationstr_empty; ?>");
@@ -1389,6 +1402,41 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			e.preventDefault();
 			return;
 		}
+
+		if (!oldcnt.match(number_no)) {
+            alert("<?php echo $kyuka_oldcnt_no; ?>");
+            e.preventDefault();
+            $("#usoldcnt").focus();
+            return true;
+        }
+
+		if (!newcnt.match(number_no)) {
+            alert("<?php echo $kyuka_newcnt_no; ?>");
+            e.preventDefault();
+            $("#usnewcnt").focus();
+            return true;
+        }
+		
+		if (!usecnt.match(number_no)) {
+            alert("<?php echo $kyuka_usecnt_no; ?>");
+            e.preventDefault();
+            $("#ususecnt").focus();
+            return true;
+        }
+
+		if (!usetime.match(number_no)) {
+            alert("<?php echo $kyuka_usetime_no; ?>");
+            e.preventDefault();
+            $("#ususetime").focus();
+            return true;
+        }
+
+		if (!restcnt.match(number_no)) {
+            alert("<?php echo $kyuka_restcnt_no; ?>");
+            e.preventDefault();
+            $("#usrestcnt").focus();
+            return true;
+        }
 	});
 </script>
 <?php include('../inc/footer.php'); ?>

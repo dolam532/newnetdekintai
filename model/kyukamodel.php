@@ -269,3 +269,46 @@ WHERE
 }
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
+
+// Save data to tbl_vacationinfo table of database
+if (isset($_POST['SaveUpdateKyuka'])) {
+    $reg_dt = date('Y-m-d H:i:s');
+    $uid = mysqli_real_escape_string($conn, $_POST['usuid']);
+    $vacationstr = mysqli_real_escape_string($conn, $_POST['usvacationstr']);
+    $vacationend = mysqli_real_escape_string($conn, $_POST['usvacationend']);
+    $oldcnt = mysqli_real_escape_string($conn, $_POST['usoldcnt']);
+    $newcnt = mysqli_real_escape_string($conn, $_POST['usnewcnt']);
+    $usecnt = mysqli_real_escape_string($conn, $_POST['ususecnt']);
+    $usetime = mysqli_real_escape_string($conn, $_POST['ususetime']);
+    $restcnt = mysqli_real_escape_string($conn, $_POST['usrestcnt']);
+    if ($_POST['usvacationid'] != "0") {
+        $vacationid = mysqli_real_escape_string($conn, $_POST['usvacationid']);
+        $sql = "UPDATE tbl_vacationinfo SET 
+            vacationstr='$vacationstr',
+            vacationend='$vacationend',
+            oldcnt='$oldcnt',
+            newcnt='$newcnt',
+            usecnt='$usecnt',
+            usetime='$usetime',
+            restcnt='$restcnt',
+            reg_dt='$reg_dt'
+        WHERE uid ='$uid' AND vacationid ='$vacationid'";
+        $result = $conn->query($sql);
+
+        if ($conn->query($sql) === TRUE) {
+            $_SESSION['save_success'] =  $save_success;
+            header("Refresh:3");
+        } else {
+            echo 'query error: ' . mysqli_error($conn);
+        }
+    } elseif ($_POST['usvacationid'] == "0") {
+        $sql_vacationinfo_insert = "INSERT INTO `tbl_vacationinfo` (`uid`, `vacationstr`, `vacationend`, `oldcnt`, `newcnt`, `usecnt`, `usetime`, `restcnt`, `reg_dt`) 
+	        VALUES('$uid', '$vacationstr' ,'$vacationend' ,'$oldcnt', '$newcnt', '$usecnt', '$usetime', '$restcnt', '$reg_dt')";
+        if (mysqli_query($conn, $sql_vacationinfo_insert)) {
+            $_SESSION['save_success'] =  $save_success;
+            header("Refresh:3");
+        } else {
+            echo 'query error: ' . mysqli_error($conn);
+        }
+    }
+}
