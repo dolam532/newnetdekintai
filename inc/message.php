@@ -51,8 +51,9 @@ $kyuka_usetime_no = '休暇使用時間を番号で入力してください。';
 $kyuka_restcnt_no = '休暇休憩回数を番号で入力してください。';
 
 // Kintai
-$NO_DATA_KINTAI = 'データが存在しませんでした。';
-$ADD_DATA_ERROR_KINTAI = 'データ存在がエラー発生しました。';
+$save_fail = '入力情報保存できませんでした。';
+$NO_DATA = 'データが存在しませんでした。';
+$ADD_DATA_ERROR = 'データ存在がエラー発生しました。';
 $UPDATE_DATA_SUCCESS = '登録成功しました。';
 $UPDATE_DATA_MONTH_SUCCESS = '月登録成功しました。';
 $UPDATE_DATA_MONTH_ERROR = '月登録失敗しました。失敗です。';

@@ -10,8 +10,10 @@ if ($_SESSION['auth'] == false) {
 }
 
 ?>
+
 <!DOCTYPE html>
 <html>
+
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -81,6 +83,13 @@ if ($_SESSION['auth'] == false) {
 		margin-top: -10px;
 		margin-bottom: 0px;
 	}
+
+	/* No Wrap text */
+	.overflow-ellipsis {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 </style>
 
 <!-- Print Css -->
@@ -95,7 +104,6 @@ if ($_SESSION['auth'] == false) {
 	.page-two {
 		display: none;
 	}
-
 
 	.row {
 		display: flex;
@@ -120,10 +128,7 @@ if ($_SESSION['auth'] == false) {
 		}
 	}
 
-
 	/* Header  */
-
-
 	.table-container {
 		display: flex;
 	}
@@ -215,11 +220,10 @@ if ($_SESSION['auth'] == false) {
 
 	.table-container {
 		position: relative;
-		margin-top: 0px;
+		margin-top: 5px;
 		/* Điều chỉnh giá trị này để đẩy phần tử bên dưới lên */
 
 	}
-
 
 	.table__topViewTable {
 		margin-top: -30px;
@@ -227,10 +231,7 @@ if ($_SESSION['auth'] == false) {
 
 
 
-
-
 	/* left */
-
 	#footer__workTime-label {
 		border: 2px solid black;
 		border-top: 2px solid black;
@@ -242,8 +243,6 @@ if ($_SESSION['auth'] == false) {
 		border-left: 1px solid gray;
 
 	}
-
-
 
 	/* show value */
 	#footer___table__show_value {
@@ -305,7 +304,15 @@ if ($_SESSION['auth'] == false) {
 	#footer___table__title {
 		border: 2px solid black;
 		border-bottom: 1px solid gray;
+		padding: 0px;
+	}
 
+	#dayOfMonthTableBody {
+		padding: 0px;
+	}
+
+	.container {
+		padding-right: 0px;
 	}
 </style>
 
@@ -315,7 +322,7 @@ if ($_SESSION['auth'] == false) {
 		<div class="row">
 			<div class="col-md-5 text-left" name="workYm_page_title">
 				<div class="title_name text-center">
-					<span class="text-left">勤 務 表</span>
+					<span id="workYm_page_title" class="text-left">勤 務 表</span>
 				</div>
 			</div>
 			<div class="col-md-4 text-center" name="workYm_page_condition">
@@ -352,35 +359,34 @@ if ($_SESSION['auth'] == false) {
 			</div>
 			<div class="col-md-3 text-right">
 				<div class="title_btn print_btn">
-					<p><a href="#" onclick="preparePrint()" class="btn btn-default" style="width: 120px;">勤務表印刷</a></p>
+					<p><a id="btn--pagePrint" href="#" onclick="preparePrint()" class="btn btn-default"
+							style="width: 120px;">勤務表印刷</a></p>
 
 				</div>
 			</div>
 		</div>
 
-
+		<!-- Print only view top -->
 		<div class="col-md-3 text-left print_Infotext_region" style="display: none;">
 			<div class="form-group">
 				<div class="table-container">
 					<div class="left-table">
-						<p>
+						<p id="company_name--print">
 							<?php echo $COMPANY_NAME; ?> 御中
 						</p>
-						<p>所属：
-							<?php echo $_SESSION['auth_dept']; ?>
+						<p id="user_dept--print">
 						</p>
-						<p>氏名：
-							<?php echo $_SESSION['auth_name']; ?>
+						<p id="user-name--print">
 						</p>
 					</div>
 					<div class="right-table">
 						<div class="row1">
-							<p class="cell cell-text">
+							<p id="sign1--print" class="cell cell-text">
 								<?php echo $SIGN_TITLE1; ?>
 							</p>
 							<p class="cell cell-empty"></p>
 						</div>
-						<div class="row2">
+						<div id="sign2--print" class="row2">
 							<p class="cell cell-text">
 								<?php echo $SIGN_TITLE2; ?>
 							</p>
@@ -483,16 +489,16 @@ if ($_SESSION['auth'] == false) {
 					</div>
 
 					<div class="modal-body" style="text-align: left">
-						<div class="row" name="templateB_Onshow">
-							<div class="col-xs-4">
-								<label for="workymd">日付</label>
+						<div class="row">
+						<div class="col-xs-4" name="templateB_Onshow">
+						<label for="workymd">日付</label>
 								<input type="text" class="form-control" id="workymd" placeholder="" required="required"
 									style="text-align: center">
 								<input type="hidden" id="seq" value="">
 								<input type="hidden" id="uid">
 								<input type="hidden" id="genid">
-							</div>
-							<div class="col-xs-2">
+						</div>
+							<div class="col-xs-2" name="templateB_Onshow">
 								<label>出社時刻</label>
 								<select class="form-control" id="daystarthh">
 									<option value="" selected></option>
@@ -522,7 +528,7 @@ if ($_SESSION['auth'] == false) {
 									<option value="24">24</option>
 								</select>
 							</div>
-							<div class="col-xs-2">
+							<div class="col-xs-2" name="templateB_Onshow">
 								<label>&nbsp;</label>
 								<input type="text" class="form-control" id="daystartmm"
 									onfocus="handleInputFocus(this, daystartmmSelect)"
@@ -538,7 +544,7 @@ if ($_SESSION['auth'] == false) {
 									<option value="50">50</option>
 								</select>
 							</div>
-							<div class="col-xs-2">
+							<div class="col-xs-2" name="templateB_Onshow">
 								<label>退社時刻</label>
 								<select class="form-control" id="dayendhh">
 									<option value="" selected></option>
@@ -568,7 +574,7 @@ if ($_SESSION['auth'] == false) {
 									<option value="24">24</option>
 								</select>
 							</div>
-							<div class="col-xs-2">
+							<div class="col-xs-2" name="templateB_Onshow">
 								<label>&nbsp;</label>
 								<input type="text" class="form-control" id="dayendmm"
 									onfocus="handleInputFocus(this, dayendmmSelect)"
@@ -588,7 +594,15 @@ if ($_SESSION['auth'] == false) {
 						</div>
 						<br>
 						<div class="row">
-							<div class="col-xs-4">
+							<div class="col-xs-4 "> 
+						<div id="modal__selectTime-bottom" class="hidden">
+								<label for="workymd2">日付</label>
+								<input type="text" class="form-control" id="workymd2" readonly="readonly"  placeholder="" required="required"
+									style="text-align: center">
+								<input type="hidden" id="seq" value="">
+								<input type="hidden" id="uid">
+								<input type="hidden" id="genid">
+							</div>
 							</div>
 							<div class="col-xs-2">
 								<label>業務開始</label>
@@ -752,52 +766,24 @@ if ($_SESSION['auth'] == false) {
 	</div>
 
 
+
+
+
 	<script>
-		// TYPE
-		var TYPE_GET_WORK_YEAR_MONTH_DAY = "<?php echo $TYPE_GET_WORK_YEAR_MONTH_DAY; ?>";
-		var TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY = "<?php echo $TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY; ?>";
-		var TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY = "<?php echo $TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY; ?>";
-		var TYPE_DELETE_DATA_OF_SELETED_DAY = "<?php echo $TYPE_DELETE_DATA_OF_SELETED_DAY; ?>";
-		var TYPE_REGISTER_DATA_OF_SELETED_DAY = "<?php echo $TYPE_REGISTER_DATA_OF_SELETED_DAY; ?>";
-		var TYPE_REGISTER_DATA_OF_MONTH = "<?php echo $TYPE_REGISTER_DATA_OF_MONTH; ?>";
-		var TYPE_GET_DATA_KINMUHYO = "<?php echo $TYPE_GET_DATA_KINMUHYO; ?>";
-		var TYPE_REGISTER_NEW_DATA_OF_MONTH = "<?php echo $TYPE_REGISTER_NEW_DATA_OF_MONTH; ?>";
-
-
-		// Message
-		var NO_DATA_KINTAI = "<?php echo $NO_DATA_KINTAI; ?>";
-		var ADD_DATA_ERROR_KINTAI = "<?php echo $ADD_DATA_ERROR_KINTAI; ?>";
-		var UPDATE_DATA_SUCCESS = "<?php echo $UPDATE_DATA_SUCCESS; ?>";
-		var DELETE_DATA_SUCCESS = "<?php echo $DELETE_DATA_SUCCESS; ?>";
-		var CONNECT_ERROR = "<?php echo $CONNECT_ERROR; ?>";
-		var UPDATE_DATA_MONTH_SUCCESS = "<?php echo $UPDATE_DATA_MONTH_SUCCESS; ?>";
-
-		var WORK_TIME_IS_MISSING = "<?php echo $WORK_TIME_IS_MISSING; ?>";
-		var WORK_MOTH_IS_MISSING = "<?php echo $WORK_MOTH_IS_MISSING; ?>";
-		var WORK_TIME_MONTH_IS_MISSING = "<?php echo $WORK_TIME_MONTH_IS_MISSING; ?>";
-
-
-
 		// CONS 
 		var TIME_KINTAI_DELAY_IN = parseInt("<?php echo $TIME_KINTAI_DELAY_IN; ?>");
 		var TIME_KINTAI_EARLY_OUT = parseInt("<?php echo $TIME_KINTAI_EARLY_OUT; ?>");
 		var LIST_DELAY_IN_DATE = [];
 		var LIST_DELAY_OUT_DATE = [];
 
-
-
-
 		// info
-		var currentName = "<?php echo $_SESSION['auth_name']; ?>";
-
+		// var currentName = "<?php echo $_SESSION['auth_name']; ?>";
+		var currentUser;
 
 		// check modal data changed ? 
 		dataChanged = false;
-
 		rerunCreateNewMonthFlag = false;
 		rerunCreateNewTotalMonthFlag = false;
-
-
 		// ***Handler Script Region ****
 
 		//================================/// 
@@ -805,15 +791,39 @@ if ($_SESSION['auth'] == false) {
 		//============================///  
 
 		window.onload = function () {
+			getCurrentUser();
+			// check request 
+			<?php
+			if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['date'])) {
+				$date = $_GET['date'];
+				$year = substr($date, 0, 4);
+				$month = substr($date, 4, 2);
+				echo 'document.getElementById("selyy").value = ' . json_encode($year) . ';';
+				echo 'document.getElementById("selmm").value = ' . json_encode($month) . ';';
+				echo ' handleDateChange(' . json_encode($year) . ', ' . json_encode($month) . ');';
+
+			} else { ?>
 			var currentDate = new Date();
 			var currentMonth = currentDate.getMonth() + 1; // Month is zero-based in JavaScript 
 			var currentYear = currentDate.getFullYear();
 			document.getElementById('selyy').value = currentYear;
 			document.getElementById('selmm').value = currentMonth < 10 ? '0' + currentMonth : currentMonth;
 			handleDateChange(currentYear, currentMonth);
-
+			<?php } ?>
 
 		};
+		function getCurrentUser() {
+			const response = ajaxRequest(
+				'kintaiRegController.php?type=<?php echo $TYPE_GETCURRENT_USER ?>',
+				'GET',
+				function (response) {
+					//html_entity_decode($data);
+					currentUser = JSON.parse(response)['user'];
+				},
+				function (errorStatus) {
+				}
+			);
+		}
 
 		//==================================/// 
 		//======= Draw data to table  ======//      OK
@@ -872,18 +882,15 @@ if ($_SESSION['auth'] == false) {
 					}
 					html += '</a>';
 					html += '</td>';
-					// html += '<td name="templateB_Onshow"><span name="cdaystarthh">' + (data.daystarthh || '') + '</span>:<span name="cdaystartmm">' + (data.daystartmm ? data.daystartmm.toString().padStart(2, '0') : '') + '</span></td>';
-					// html += '<td name="templateB_Onshow"><span name="cdayendhh">' + (data.dayendhh || '') + '</span>:<span name="cdayendmm">' + (data.dayendmm ? data.dayendmm.toString().padStart(2, '0') : '') + '</span></td>';
-					// html += '<td><span name="cjobstarthh">' + (data.jobstarthh || '') + '</span>:<span name="cjobstartmm">' + (data.jobstartmm ? data.jobstartmm.toString().padStart(2, '0') : '') + '</span></td>';
-					// html += '<td><span name="cjobendhh">' + (data.jobendhh || '') + '</span>:<span name="cjobendmm">' + (data.jobendmm ? data.jobendmm.toString().padStart(2, '0') : '') + '</span></td>';
-					// html += '<td><span name="cofftimehh">' + (data.offtimehh ? data.offtimehh.toString() : '') + '</span>:<span name="cofftimemm">' + (data.offtimemm ? data.offtimemm.toString().padStart(2, '0') : '') + '</span></td>';
-					// html += '<td><span name="cworkhh">' + (data.workhh ? data.workhh.toString().padStart(1, '0') : '') + '</span>:<span name="cworkmm">' + ((data.workhh !== 0 && data.workmm === 0) ? '00' : (data.workmm ? data.workmm.toString().padStart(2, '0') : '')) + '</span></td>';
-					// html += '<td style="display:none;" ><span  name="cjanhh">' + (data.janhh ? data.janhh.toString().padStart(2, '0') : '') + '</span>:<span name="cjanmm">' + ((data.janhh !== 0 && data.janmm === 0) ? '00' : (data.janmm ? data.janmm.toString().padStart(2, '0') : '')) + '</span></td>';
 					html += '<td name="templateB_Onshow">';
 					if (data.daystarthh) {
 						html += '<span name="cdaystarthh">' + data.daystarthh + '</span>:';
 					}
-					html += '<span name="cdaystartmm">' + (data.daystartmm ? data.daystartmm.toString().padStart(2, '0') : '') + '</span>';
+
+					if (data.cdaystartmm === '00' || data.cdaystartmm === '0') {
+						data.cdaystartmm = '';
+					}
+					html += '<span name="cdaystartmm">' + (data.cdaystartmm ? data.cdaystartmm.toString().padStart(2, '0') : '') + '</span>';
 					html += '</td>';
 
 					html += '<td name="templateB_Onshow">';
@@ -891,9 +898,11 @@ if ($_SESSION['auth'] == false) {
 						html += '<span name="cdayendhh">' + data.dayendhh + '</span>:';
 					}
 
-					html += '<span name="cdayendmm">' + (data.dayendmm ? data.dayendmm.toString().padStart(2, '0') : '') + '</span>';
+					if (data.cdayendmm === '00' || data.cdayendmm === '0') {
+						data.cdayendmm = '';
+					}
+					html += '<span name="cdayendmm">' + (data.cdayendmm ? data.cdayendmm.toString().padStart(2, '0') : '') + '</span>';
 					html += '</td>';
-
 					html += '<td>';
 					if (data.jobstarthh) {
 						html += '<span name="cjobstarthh">' + data.jobstarthh + '</span>:';
@@ -937,8 +946,8 @@ if ($_SESSION['auth'] == false) {
 					}
 					html += '</td>';
 
-					html += '<td><span name="ccomment">' + (data.comment || '') + '</span></td>';
-					html += '<td><span name="cbigo">' + (data.bigo || '') + '</span>';
+					html += '<td><span class="overflow-ellipsis" style="max-width: 50px; name="ccomment">' + (data.comment || '') + '</span></td>';
+					html += '<td><span class="overflow-ellipsis" style="max-width: 50px; name="cbigo">' + (data.bigo || '') + '</span>';
 					html += '<input type="hidden" name="tuid" value="' + data.uid + '">';
 					html += '<input type="hidden" name="tgenid" value="' + data.genid + '">';
 					html += '<input type="hidden" name="tworkymd" value="' + showYear + '/' + ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2) + '">';
@@ -1034,44 +1043,41 @@ if ($_SESSION['auth'] == false) {
 		//====================================================/// 
 		//======= Change Table Template  ===================//    
 		//=====================================================///  OK
-
 		function handlerChangeTemplate() {
 			var selectElement = document.getElementById('template_table');
+		
 			var selectedValue = selectElement.value;
 
 			var listDayStartEnd = document.getElementsByName("templateB_Onshow");
 			var colDayStartEnd = document.getElementsByName("cDayStartEnd_col");
+			var modalTimeBottom = document.getElementById('modal__selectTime-bottom');
 
 			// var modalDayTime = document.getElementById('modal__dayTimeSelect');
-
-			var elements = [listDayStartEnd, colDayStartEnd];
+			var elements = [listDayStartEnd, colDayStartEnd ];
 			if (selectedValue == 1) {  //Template A
-				console.log("add hidden");
 				// add class table_hidden
 				elements.forEach(function (elementList) {
 					elementList.forEach(function (element) {
 						if (!element.classList.contains('table_hidden')) {
 							element.classList.add('table_hidden');
+							modalTimeBottom.classList.remove('hidden');
 						}
 					});
 				});
 
 				// resize other column 
 			} else if (selectedValue == 2) {//Template B
-				// remove class table_hidden
-				console.log("remove hidden");
 				elements.forEach(function (elementList) {
 					elementList.forEach(function (element) {
 						if (element.classList.contains('table_hidden')) {
 							element.classList.remove('table_hidden');
+							modalTimeBottom.classList.add('hidden');
 						}
 					});
 				});
 			}
 			resizeColumns(selectedValue);
-			// change Modal 
 		}
-		// resize column 
 		function resizeColumns(templateCode) {
 			var thDate = document.querySelector('th[name="cDayTime_col"]');
 			var thStartEnd = document.querySelector('th[name="cDayStartEnd_col"]');
@@ -1091,13 +1097,21 @@ if ($_SESSION['auth'] == false) {
 				thWorkTime.style.width = '16%';
 				thBreakTime.style.width = '9%';
 				thWorkHours.style.width = '9%';
-
 			}
+			// handler check width text > over print ...
+			const elements = document.getElementsByClassName("overflow-ellipsis");
+			handlerFixCommentBigoTextSize(45, elements);
+		}
 
-
-
-
-
+		function handlerFixCommentBigoTextSize(size, elements) {
+			Array.from(elements).forEach(element => {
+				const maxWidth = size; // max width
+				const content = element.textContent;
+				if (content.length > maxWidth) {
+					const truncatedContent = content.substring(0, maxWidth - 3) + "...";
+					element.textContent = truncatedContent;
+				}
+			});
 		}
 
 		//====================================================/// 
@@ -1119,12 +1133,12 @@ if ($_SESSION['auth'] == false) {
 					return false;
 				}
 			}
-
-
 			if (workYmdList.length !== daysInMonth) {
 				var arrayMissingDay = [];
 				var arrayDayOfWorkList = [];
-				var genidDefault = 0;
+
+
+				var genidDefault = currentUser['genid'];
 				// add value to ararymissing #
 				for (let i = 1; i <= daysInMonth; i++) {
 					var date = new Date(year, month - 1, i);
@@ -1149,18 +1163,17 @@ if ($_SESSION['auth'] == false) {
 						};
 					});
 
+
 				// call AJAX　　
 				const data = JSON.stringify(filteredArray); // convert to json 
 				const response = ajaxRequest(
-					'kintaiRegController.php?type=' +
-					TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY + '&data=' + data,
+					'kintaiRegController.php?type=<?php echo $TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY ?>&data=' + data,
 					'GET',
 					function (response) {
 						//html_entity_decode($data);
 						console.log(response);
 					},
 					function (errorStatus) {
-						console.log("Connect ERROR: " + errorStatus);
 					}
 				);
 				return false;
@@ -1181,19 +1194,16 @@ if ($_SESSION['auth'] == false) {
 			};
 			const data = JSON.stringify(dataObject); // convert to json 
 			const response = ajaxRequest(
-				'kintaiRegController.php?type=' +
-				TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY + '&data=' + data,
+				'kintaiRegController.php?type=<?php echo $TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY ?>&data=' + data,
 				'GET',
 				function (response) {
-					console.log("INSERTed");
 				},
 				function (errorStatus) {
-					console.log("Connect ERROR: " + errorStatus);
 				}
 			);
 			setTimeout(function () {
 				handleDateChange(selectedYear, selectedMonth);
-			}, 1000);
+			}, 500);
 		}
 
 		function insertNewMonthTotalData(selectedYear, selectedMonth) {
@@ -1205,14 +1215,11 @@ if ($_SESSION['auth'] == false) {
 			};
 			const data = JSON.stringify(dataObject); // convert to json 
 			const response = ajaxRequest(
-				'kintaiRegController.php?type=' +
-				TYPE_REGISTER_NEW_DATA_OF_MONTH + '&data=' + data,
+				'kintaiRegController.php?type=<?php echo $TYPE_REGISTER_NEW_DATA_OF_MONTH ?>&data=' + data,
 				'GET',
 				function (response) {
-					console.log("Inserted new Total Month" + response);
 				},
 				function (errorStatus) {
-					console.log("Connect ERROR: " + errorStatus);
 				}
 			);
 
@@ -1250,16 +1257,28 @@ if ($_SESSION['auth'] == false) {
 			var cjanhhList = document.getElementsByName('cjanhh');
 			var cjanmmList = document.getElementsByName('cjanmm');
 
-			var rowCount = cdaystarthhList.length;
+			var rowCount = cjobstarthhList.length;
 			var nCountJobDay = 0;
 			var nCountWorkDay = 0;
 			var nCountDelayIn = 0;
 			var nCountEarlyOut = 0;
+			// get template 
+			var selectElement = document.getElementById('template_table');
+			var selectedValue = selectElement.value;
 			for (var i = 0; i < rowCount; i++) {
-				var dayStartHours = parseInt(cdaystarthhList[i].innerHTML);
-				var dayStartMinutes = parseInt(cdaystartmmList[i].innerHTML);
-				var dayEndHours = parseInt(cdayendhhList[i].innerHTML);
-				var dayEndMinutes = parseInt(cdayendmmList[i].innerHTML);
+				var dayStartHours = 0;
+				var dayStartMinutes = 0;
+				var dayEndHours = 0;
+				var dayEndMinutes = 0;
+				// check template A 
+				if (selectedValue == 2) {
+					if (typeof (cdaystarthhList[i]) !== undefined && typeof (cdayendhhList[i]) !== undefined) {
+						dayStartHours = parseInt(cdaystarthhList[i].innerHTML);
+						dayStartMinutes = parseInt(cdaystartmmList[i].innerHTML);
+						dayEndHours = parseInt(cdayendhhList[i].innerHTML);
+						dayEndMinutes = parseInt(cdayendmmList[i].innerHTML);
+					}
+				}
 				var jobStartHours = parseInt(cjobstarthhList[i].innerHTML);
 				var jobStartMinutes = parseInt(cjobstartmmList[i].innerHTML);
 				var jobEndHours = parseInt(cjobendhhList[i].innerHTML);
@@ -1309,7 +1328,7 @@ if ($_SESSION['auth'] == false) {
 				if (!isNaN(janMinutes)) {
 					totalJanMinutes += janMinutes;
 				}
-
+				//*** BACK UP CHECK JANGYO  */
 				// 欠席、相対、遅刻自動計算
 				// if (isJobDay && isWorkDay) {
 				// 	// check 夜勤 
@@ -1369,39 +1388,17 @@ if ($_SESSION['auth'] == false) {
 			totalJanMinutes = totalJanMinutes % 60;
 			var offDay = nCountJobDay - nCountWorkDay;
 
-			// //show area
+			// 
 			jobhour_top.innerHTML = "<strong>" + totalDayHours + "</strong>";
 			jobminute_top.innerHTML = "<strong>" + totalDayMinutes + "</strong>";
 			// workdays_top.innerHTML = "<strong>" + nCountWorkDay + "</strong>";  //  ??? 
 			workdays_top.innerHTML = "<strong>" + nCountJobDay + "</strong>";
 			jobdays_top.innerHTML = "<strong>" + nCountJobDay + "</strong>";
 
-			// offdays_top.innerHTML = "<strong>" + offDay + "</strong>";
-			// delaydays_top.innerHTML = "<strong>" + nCountDelayIn + "</strong>";
-			// earlydays_top.innerHTML = "<strong>" + nCountEarlyOut + "</strong>";
-
-			//edit area // get value from db 
-
-
-			// jobhour.value = totalDayHours;
-			// jobminute.value = totalDayMinutes;
-			// workdays.value = nCountWorkDay;
-			// jobdays.value = nCountJobDay;
-			// offdays.value = offDay;
-			// delaydays.value = nCountDelayIn;
-			// earlydays.value = nCountEarlyOut;
-
-
-
-
-			// over time 
 			janhh_top.innerHTML = totalJanHours;
 			janmm_top.innerHTML = totalJanMinutes;
 			janhh.value = totalJanHours;
 			janmm.value = totalJanMinutes;
-
-			// Template
-
 
 		}
 		//===============================================================// 
@@ -1501,16 +1498,46 @@ if ($_SESSION['auth'] == false) {
 
 				overTime = workDayTime - jobTime - TIME_KINTAI_DELAY_IN; // 仕事前　15分TIME_KINTAI_DELAY_IN　計算？？？　=> 残業　＝　残業　－　TIME_KINTAI_DELAY_IN　　
 				//overTime = workDayTime - jobTime;    ***確認必要*** 残業の計算仕方
-
 				if (overTime > 0) {
 					overTimehh = Math.floor(overTime / 60);
 					overTimemm = overTime % 60;
 				}
+			}
+			// check time == 0 => can't register 
+			// if()
+			var isJobHoursInvalid = (jobstarthh.value === '00' || jobstarthh.value === '') ? true : false;
+			var isJobMinutesInvalid = (jobstartmm.value === '00' || jobstartmm.value === '0') ? true : false;
+			var isJobHoursInvalid2 = (jobendhh.value === '00' || jobendhh.value === '') ? true : false;
+			var isJobMinutesInvalid2 = (jobendmm.value === '00' || jobendmm.value === '0') ? true : false;
 
+			if (isJobHoursInvalid && isJobMinutesInvalid) {
+				alert("<?php echo $JOBSTART_INVALID_INPUT ?>")
+				return;
+			} else if (isJobHoursInvalid2 && isJobMinutesInvalid2) {
+				alert("<?php echo $JOBEND_INVALID_INPUT ?>")
+				return;
+			}
+			// check if Template B 
+			if (selectedValue == 2) {  //Template B => check input 
+				var selectElement = document.getElementById('template_table');
+				var selectedValue = selectElement.value;
+				var isDayStartHours = (daystarthh.value === '00' || daystarthh.value === '') ? true : false;
+				var isDayStartMinutes = (daystartmm.value === '00' || daystartmm.value === '0') ? true : false;
+				var isDayEndHours = (dayendhh.value === '00' || dayendhh.value === '0') ? true : false;
+				var isDayEndMinutes = (dayendmm.value === '00' || dayendmm.value === '0') ? true : false;
+				if (isDayStartHours && isDayStartMinutes) {
+					alert("<?php echo $DAYSTART_INVALID_INPUT ?>")
+					return;
+				} else if (isDayEndHours && isDayEndMinutes) {
+					alert("<?php echo $DAYEND_INVALID_INPUT ?>")
+					return;
+				}
 			}
 			//create object data 
+			var  workymText = selyy.value + selmm.value;
 			var dataObject = {
 				selectedDate: workymd.value,
+				genid: currentUser['genid'],
 				daystarthh: daystarthh.value,
 				daystartmm: daystartmm.value,
 				dayendhh: dayendhh.value,
@@ -1526,28 +1553,26 @@ if ($_SESSION['auth'] == false) {
 				janhh: overTimehh,
 				janmm: overTimemm,
 				comment: comment.value,
-				bigo: bigo.value
+				bigo: bigo.value,
+				workym : workymText
 			};
+
 			// Call Ajax for delete data
 			const data = JSON.stringify(dataObject); // convert to json 
 			const response = ajaxRequest(
-				'kintaiRegController.php?type=' +
-				TYPE_REGISTER_DATA_OF_SELETED_DAY + '&data=' + data,
+				'kintaiRegController.php?type=<?php echo $TYPE_REGISTER_DATA_OF_SELETED_DAY ?>&data=' + data,
 				'GET',
 				function (response) {
-					if (response === CONNECT_ERROR) {
-						changeStatusMessageModal(false, ADD_DATA_ERROR_KINTAI);
-						console.log("Connect ERROR: ");
+					if (response === "<?php echo $CONNECT_ERROR; ?>") {
+						changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 						return;
-					}
+					} 
 					dataChanged = true;
 					changedDataCloseModal();
-					changeStatusMessageModal(true, UPDATE_DATA_SUCCESS);
-
+					changeStatusMessageModal(true, "<?php echo $UPDATE_DATA_SUCCESS; ?>");
 				},
 				function (errorStatus) {
-					changeStatusMessageModal(false, ADD_DATA_ERROR_KINTAI);
-					console.log("Connect ERROR: ");
+					changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 				}
 			);
 		}
@@ -1556,7 +1581,6 @@ if ($_SESSION['auth'] == false) {
 		// Popupの削除ボタン// OK
 		//＝＝＝＝==========//
 		function deleteDataSelected() {
-			console.log("DELETE");
 			var parts = workymd.value.split("/");
 			var year = parts[0];
 			var month = parts[1];
@@ -1567,29 +1591,30 @@ if ($_SESSION['auth'] == false) {
 			if (confirmation) {
 				// Call Ajax for delete data
 				var dataObject = {
-					selectedDate: workymd.value,
+					selectedDate: workymd.value
+					
 				};
 				const data = JSON.stringify(dataObject); // convert to json 
 				const response = ajaxRequest(
-					'kintaiRegController.php?type=' +
-					TYPE_DELETE_DATA_OF_SELETED_DAY + '&data=' + data,
+					'kintaiRegController.php?type=<?php echo $TYPE_DELETE_DATA_OF_SELETED_DAY ?>&data=' + data,
 					'GET',
 					function (response) {
-						if (response === CONNECT_ERROR) {
-							changeStatusMessageModal(false, ADD_DATA_ERROR_KINTAI);
-							console.log("Connect ERROR: " + errorStatus);
+						if (response === "<?php echo $CONNECT_ERROR; ?>") {
+							changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 							return;
-						}
+						} 
+						if (response === "<?php echo $NO_DATA; ?>") {
+							changeStatusMessageModal(false, "<?php echo $NO_DATA; ?>");
+							return;
+						} 
+						
 						dataChanged = true;
 						changedDataCloseModal();
 						resetInputOfModal();
-						changeStatusMessageModal(true, DELETE_DATA_SUCCESS);
-						console.log("DELETED" + response);
-
+						changeStatusMessageModal(true, "<?php echo $DELETE_DATA_SUCCESS; ?>");
 					},
 					function (errorStatus) {
-						changeStatusMessageModal(false, ADD_DATA_ERROR_KINTAI);
-						console.log("Connect ERROR: " + errorStatus);
+						changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 					}
 				);
 			}
@@ -1698,7 +1723,7 @@ if ($_SESSION['auth'] == false) {
 				};
 				const data = JSON.stringify(dataObject); // convert to json 
 				const response = ajaxRequest(
-					'kintaiRegController.php?type=' + TYPE_GET_DATA_KINMUHYO + '&data=' + data,
+					'kintaiRegController.php?type=<?php echo $TYPE_GET_DATA_KINMUHYO ?>&data=' + data,
 					'GET',
 					function (response) {
 						// check data current month = null => if === current create new data -> else print white 
@@ -1707,48 +1732,38 @@ if ($_SESSION['auth'] == false) {
 						try {
 							parsedResponse = JSON.parse(response);
 							parsedResponse2 = parsedResponse;
-							if (parsedResponse.includes(WORK_TIME_IS_MISSING)) {
+							if (parsedResponse.includes("<?php echo $WORK_TIME_IS_MISSING; ?>")) {
 								if (isCurrentMonth) {
-									console.log("Inserted Time data");
 									insertNewMonthData(currentYear, currentMonth);
 									return;
 								} else {
 									handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
 									handlerDateChangeUpdateTotalWorkMonth(null);
-									drawDataToTotalMonth();
 								}
-							} else if (parsedResponse.includes(WORK_MOTH_IS_MISSING)) {
+							} else if (parsedResponse.includes("<?php echo $WORK_MOTH_IS_MISSING; ?>")) {
 								if (isCurrentMonth) {
-									console.log("Inserted month data");
 									insertNewMonthTotalData(currentYear, currentMonth);
 									return;
 								} else {
 									handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
 									handlerDateChangeUpdateTotalWorkMonth(null);
-									drawDataToTotalMonth();
 								}
-							} else if (parsedResponse.includes(WORK_TIME_MONTH_IS_MISSING)) {
+							} else if (parsedResponse.includes("<?php echo $WORK_TIME_MONTH_IS_MISSING; ?>")) {
 								if (isCurrentMonth) {
-									console.log("Inserted month and timedata");
 									insertNewMonthData(currentYear, currentMonth);
 									insertNewMonthTotalData(currentYear, currentMonth);
 									return;
 								} else {
 									handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
 									handlerDateChangeUpdateTotalWorkMonth(null);
-									drawDataToTotalMonth();
 								}
-							} else if (parsedResponse.includes(CONNECT_ERROR)) {
+							} else if (parsedResponse.includes("<?php echo $CONNECT_ERROR; ?>")) {
 								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
 								handlerDateChangeUpdateTotalWorkMonth(null);
-								drawDataToTotalMonth();
-								console.log("接続エラーが発生しました。");
 								return;
-							} else if (parsedResponse.includes(NO_DATA_KINTAI)) {
+							} else if (parsedResponse.includes("<?php echo $NO_DATA; ?>")) {
 								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
 								handlerDateChangeUpdateTotalWorkMonth(null);
-								drawDataToTotalMonth();
-								console.log("データが存在しませんでした。又はエラーが発生しました。");
 								return;
 							} else {
 
@@ -1757,10 +1772,8 @@ if ($_SESSION['auth'] == false) {
 							if (response.includes('workYmdList')) {
 								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, parsedResponse['workYmdList']);
 								handlerDateChangeUpdateTotalWorkMonth(parsedResponse['workym']);
-								drawDataToTotalMonth();
 								return;
 							}
-
 							handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
 							handlerDateChangeUpdateTotalWorkMonth(null);
 							return;
@@ -1773,24 +1786,24 @@ if ($_SESSION['auth'] == false) {
 			} catch (error) {
 				handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
 				handlerDateChangeUpdateTotalWorkMonth(null)
-				drawDataToTotalMonth();
 			}
 		}
 
 		function handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, data) {
-			if (data === null || data === CONNECT_ERROR || data === undefined) {
+			if (data === null || data === "<?php echo $CONNECT_ERROR; ?>" || data === undefined) {
 				drawDayOfMonth(selectedYear, selectedMonth, null);
 			} else {
-
 				drawDayOfMonth(selectedYear, selectedMonth, data);
 			}
 		}
 
 		function handlerDateChangeUpdateTotalWorkMonth(data) {
-			if (data === null || data === CONNECT_ERROR || data === undefined) {
+			if (data === null || data === "<?php echo $CONNECT_ERROR; ?>" || data === undefined) {
 				drawInputDataTotalWorkMonth(null);
+				drawDataToTotalMonth();
 			} else {
 				drawInputDataTotalWorkMonth(data);
+				drawDataToTotalMonth();
 			}
 		}
 
@@ -1805,10 +1818,7 @@ if ($_SESSION['auth'] == false) {
 			offdays.value = data['offdays'];
 			delaydays.value = data['delaydays'];
 			earlydays.value = data['earlydays'];
-
 		}
-
-
 		//＝＝＝＝==========//
 		// =======Handler Select box of minute on popup=====// OK
 		//＝＝＝＝==========//
@@ -1844,7 +1854,7 @@ if ($_SESSION['auth'] == false) {
 		function MonthDataRegister() {
 			//create object data 
 			var currentWorkYm = selyy.value + selmm.value;
-			var genId = document.getElementsByName('tgenid')[0].value; // get First value 
+			var genId = currentUser['genid'];
 			var bigoText = "";  // ???
 
 			var dataObject = {
@@ -1870,24 +1880,21 @@ if ($_SESSION['auth'] == false) {
 			// Call Ajax for delete data
 			const data = JSON.stringify(dataObject); // convert to json 
 			const response = ajaxRequest(
-				'kintaiRegController.php?type=' +
-				TYPE_REGISTER_DATA_OF_MONTH + '&data=' + data,
+				'kintaiRegController.php?type=<?php echo $TYPE_REGISTER_DATA_OF_MONTH ?>&data=' + data,
 				'GET',
 				function (response) {
-					if (response === CONNECT_ERROR) {
-						console.log("Connect ERROR: ");
+					if (response === "<?php echo $CONNECT_ERROR; ?>") {
 						return;
 					}
 					dataChanged = false; // 登録した後、修正中場所がない
 					// if(dataChanged === true) {　　????　　// 月のデータが変更があれば次の月に切り替える前に確認
 					// 	
 					// }
-
 					// show OK Alert 　
-					window.alert(UPDATE_DATA_MONTH_SUCCESS);
+					window.alert("<?php echo $UPDATE_DATA_MONTH_SUCCESS; ?>");
 				},
 				function (errorStatus) {
-					window.alert(UPDATE_DATA_MONTH_ERROR);
+					window.alert("<?php echo $UPDATE_DATA_MONTH_ERROR; ?>");
 				}
 			);
 		}
@@ -1942,9 +1949,6 @@ if ($_SESSION['auth'] == false) {
 			if (printWindow) {
 
 
-
-
-
 				// Write modified content to print page
 				printWindow.document.open();
 				printWindow.document.write(pageClone.outerHTML);
@@ -1962,7 +1966,7 @@ if ($_SESSION['auth'] == false) {
 					printWindow.close();
 				});
 			} else {
-				console.error(CAN_NOT_OPEN_NEW_TAB_PRINT);
+				console.error("<?php echo $CAN_NOT_OPEN_NEW_TAB_PRINT; ?>");
 			}
 		}
 
@@ -2011,12 +2015,9 @@ if ($_SESSION['auth'] == false) {
 				name: '氏名',
 				position: '氏役割'
 			};
-			infoColLeft.innerHTML = kintai_print_title_option.name + ' : ' + currentName;
+			infoColLeft.innerHTML = kintai_print_title_option.name + ' : ' + currentUser['name'];
 			infoColRight.innerHTML = kintai_print_title_option.workYm + ' : ' + currentYm;
 
-			// add children
-			// infoRow.appendChild(infoColLeft);
-			// infoRow.appendChild(infoColRight);
 
 			var titleElement = pageClone.querySelector('.print_Infotext_region');
 			titleElement.style.display = 'block';
@@ -2068,8 +2069,6 @@ if ($_SESSION['auth'] == false) {
 			earlydaysShow.innerText = earlydays.value;
 
 
-
-
 			// parrent table
 			var tableFooter = pageClone.querySelector('#footer-Table');
 			tableFooter.classList.remove('table-bordered');
@@ -2078,11 +2077,8 @@ if ($_SESSION['auth'] == false) {
 			var jobminute_top = pageClone.querySelector('#jobminute_top');
 			var jobHours = document.querySelector('#jobhour').value;
 			var jobMinute = document.querySelector('#jobminute').value;
-
-
 			jobhour_top.remove();
 			jobminute_top.remove();
-
 
 			// workHoursLabel.remove();
 			workTimeLabel.style.padding = '1px';
@@ -2097,20 +2093,6 @@ if ($_SESSION['auth'] == false) {
 			workMinutesLabel.style.borderBottom = '1px';
 			workMinutesLabel.setAttribute('rowspan', '2');
 
-
-			// var workStatusLabel 
-
-
-			// var jobDaysLabel 
-
-			// var workDaysLabel 
-
-			// var offDaysLabel 
-
-			// var delayDaysLabel
-
-			// var earlyDaysLabel 
-
 			workTimeLabel.style.width = '20%';
 			workHoursLabel.style.width = 'auto';
 
@@ -2120,21 +2102,26 @@ if ($_SESSION['auth'] == false) {
 				jobMinute = "00";
 			}
 			workHoursLabel.innerText = jobHours + ':' + jobMinute;
-
-
 			function addElementToList(list, element) {
 				for (var j = 0; j < element.length; j++) {
 					list.push(element[j]);
 				}
 			}
+			// add value to user__dept--print company_name--print
+			var userDeptPrint = pageClone.querySelector('#user_dept--print');
+			var userNamePrint = pageClone.querySelector('#user-name--print');
+			userDeptPrint.innerText = '所属：' + currentUser['dept'];
+			userNamePrint.innerText = '氏名：' + currentUser['name'];
 
+			// fix size text bigo and comment 
+			const elements = pageClone.getElementsByClassName("overflow-ellipsis");
+			handlerFixCommentBigoTextSize(20, elements);
 		}
 
 // ***END Handler Script Region ****
 	</script>
 
-
 	<?php include('../inc/footer.php'); ?>
 	<!-- </body>
-
-</html> -->
+	
+	</html> -->

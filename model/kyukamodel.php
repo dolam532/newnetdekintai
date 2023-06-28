@@ -5,11 +5,13 @@ $sql_user = 'SELECT `uid`, `name` FROM `tbl_user`';
 $result_user = mysqli_query($conn, $sql_user);
 $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 
+
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
 WHERE `tbl_codebase`.`typecode` = 02 GROUP BY `code`, `name`';
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
+
 
 // Select data from tbl_userkyuka
 if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
@@ -174,6 +176,7 @@ CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinf
         AND `tbl_codebase`.`typecode` = 02';
 }
 
+
 // Select data from tbl_user, tbl_vacationinfo and tbl_manageinfo of table
 $sql_select_table3_db = 'SELECT DISTINCT
 `tbl_user`.*,
@@ -197,22 +200,23 @@ AND
 $sql_table3_select = mysqli_query($conn, $sql_select_table3_db);
 $result_uservacationmanage_select = mysqli_fetch_all($sql_table3_select, MYSQLI_ASSOC);
 
+
 // Save data to tbl_userkyuka table of database
 if (isset($_POST['SaveKyuka'])) {
-    if ($_POST['kyukatype'] == "0") {
-        if ($_POST['timecnt'] >= 8) {
-            $usecnt = $_POST['usecnt'] + 1;
-            $usetime = $_POST['usetime'];
-        } elseif ($_POST['timecnt'] < 8) {
-            $usecnt = $_POST['usecnt'];
-            $usetime = $_POST['usetime'] + $_POST['timecnt'];
-        }
-        $restcnt = $_POST['restcnt'] + 1;
-    } elseif ($_POST['kyukatype'] == "1") {
-        $usecnt = $_POST['usecnt'] + $_POST['ymdcnt'];
-        $restcnt = $_POST['restcnt'] + 1;
-        $usetime = $_POST['usetime'];
-    }
+    // if ($_POST['kyukatype'] == "0") {
+    //     if ($_POST['timecnt'] >= 8) {
+    //         $usecnt = $_POST['usecnt'] + 1;
+    //         $usetime = $_POST['usetime'];
+    //     } elseif ($_POST['timecnt'] < 8) {
+    //         $usecnt = $_POST['usecnt'];
+    //         $usetime = $_POST['usetime'] + $_POST['timecnt'];
+    //     }
+    //     $restcnt = $_POST['restcnt'] + 1;
+    // } elseif ($_POST['kyukatype'] == "1") {
+    //     $usecnt = $_POST['usecnt'] + $_POST['ymdcnt'];
+    //     $restcnt = $_POST['restcnt'] + 1;
+    //     $usetime = $_POST['usetime'];
+    // }
 
     $_POST['vacationid'] = intval($_POST['vacationid']);
     $_POST['strtime'] = intval($_POST['strtime']);
@@ -234,10 +238,11 @@ if (isset($_POST['SaveKyuka'])) {
     $desttel = mysqli_real_escape_string($conn, $_POST['desttel']);
     $allowok = "0";
     $allowid = "0";
+    $allowdecide = "0";
     $allowdt = $reg_dt = date('Y-m-d H:i:s');
 
-    $sql_userkyuka_insert = mysqli_query($conn, "INSERT INTO `tbl_userkyuka` (`uid`, `vacationid`, `kyukaymd`, `kyukatype`, `strymd`, `endymd`, `ymdcnt`, `strtime`, `endtime`, `timecnt`, `kyukacode`, `destcode`, `destplace`, `desttel`, `allowok`, `allowid`, `allowdt`, `reg_dt`) 
-    VALUES ('$uid', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdt', '$reg_dt')");
+    $sql_userkyuka_insert = mysqli_query($conn, "INSERT INTO `tbl_userkyuka` (`uid`, `vacationid`, `kyukaymd`, `kyukatype`, `strymd`, `endymd`, `ymdcnt`, `strtime`, `endtime`, `timecnt`, `kyukacode`, `destcode`, `destplace`, `desttel`, `allowok`, `allowid`, `allowdecide`, `allowdt`, `reg_dt`) 
+    VALUES ('$uid', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdecide', '$allowdt', '$reg_dt')");
 
     if ($sql_userkyuka_insert) {
         $_SESSION['save_success'] =  $save_success;
@@ -309,6 +314,49 @@ WHERE
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 
+
+// Update data to tbl_userkyuka table of database
+if (isset($_POST['DecideUpdateKyuka'])) {
+    $allowdt = date('Y-m-d H:i:s');
+    $uid = mysqli_real_escape_string($conn, $_POST['duid']);
+    $allowid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
+    $allowok = mysqli_real_escape_string($conn, $_POST['allowok']);
+    $allowdecide = mysqli_real_escape_string($conn, $_POST['decide_allowok']);
+    if ($_POST['decide_allowok'] == "0") {
+        $sql = "UPDATE tbl_userkyuka SET 
+        allowid='$allowid',
+        allowok='$allowok',
+        allowdecide='$allowdecide',
+        allowdt='$allowdt'
+    WHERE uid ='$uid'";
+        $result = $conn->query($sql);
+
+        if ($conn->query($sql) === TRUE) {
+            $_SESSION['save_success'] =  $save_success;
+            header("Refresh:3");
+        } else {
+            echo 'query error: ' . mysqli_error($conn);
+        }
+    } elseif ($_POST['decide_allowok'] == "1") {
+        $sql_userkyuka = "UPDATE tbl_userkyuka SET 
+        allowid='$allowid',
+        allowok='$allowok',
+        allowdecide='$allowdecide',
+        allowdt='$allowdt'
+    WHERE uid ='$uid'";
+        $result_userkyuka = $conn->query($sql_userkyuka);
+
+        if ($conn->query($result_userkyuka) === TRUE) {
+            $_SESSION['save_success'] =  $save_success;
+            header("Refresh:3");
+        } else {
+            echo 'query error: ' . mysqli_error($conn);
+        }
+    }
+}
+
+
+// vacactionReg.php
 // Save data to tbl_vacationinfo table of database
 if (isset($_POST['SaveUpdateKyuka'])) {
     $reg_dt = date('Y-m-d H:i:s');
