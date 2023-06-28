@@ -1,7 +1,5 @@
 <?php
 
-
-
 session_start();
 
 // Include const.php
@@ -43,13 +41,13 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
         // insert data of month if data missing
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
         $result = $kintaiRegDAO->insertMany($data, $uidCurrent);
-        $result === 1 ? returnValueTemplate($result) : returnValueTemplate($ADD_DATA_ERROR_KINTAI);
+        $result === 1 ? returnValueTemplate($result) : returnValueTemplate($ADD_DATA_ERROR);
 
 } else if (isset($type_get) && in_array($type_get, [$TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY, 'otherType'])) {
         // add current month to db if current month data is not exists in db 
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
         $result = $kintaiRegDAO->insertNewMonth($data, $uidCurrent);
-        $result === 1 ? returnValueTemplate($result) : returnValueTemplate($ADD_DATA_ERROR_KINTAI);
+        $result === 1 ? returnValueTemplate($result) : returnValueTemplate($ADD_DATA_ERROR);
 
 } else if (isset($type_get) && in_array($type_get, [$TYPE_REGISTER_DATA_OF_SELETED_DAY, 'otherType'])) {
         // register , update work year month day 
@@ -64,7 +62,7 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
                         $RsInsertNewMonth = $kintaiRegDAO->insertNewMonth($data, $uidCurrent);
                         $RsInsertNewMonthly = $kintaiRegDAO->insertNewMonthly($data, $uidCurrent);
                         if ($RsInsertNewMonth === 1 && $RsInsertNewMonthly === 1) {
-                              $result = $kintaiRegDAO->update($data, $uidCurrent);
+                                $result = $kintaiRegDAO->update($data, $uidCurrent);
                         }
                         $checkFlagAddedNewData = true;
                         return;
@@ -75,7 +73,7 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
         // Delete this data year month day 
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
         $result = $kintaiRegDAO->delete($data, $uidCurrent);
-        $result === 1 ? returnValueTemplate($result) : returnValueTemplate($ADD_DATA_ERROR_KINTAI);
+        $result === 1 ? returnValueTemplate($result) : returnValueTemplate($ADD_DATA_ERROR);
 
 } else if (isset($type_get) && in_array($type_get, [$TYPE_REGISTER_DATA_OF_MONTH, 'otherType'])) {
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
@@ -85,13 +83,13 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
         $result = "";
         if ($checkDataNotExists === 1) { // update 
                 $result = $kintaiRegDAO->updateMonthly($data, $uidCurrent);
-                $result === 1 ? $UPDATE_DATA_MONTH_SUCCESS : $ADD_DATA_ERROR_KINTAI;
+                $result === 1 ? $UPDATE_DATA_MONTH_SUCCESS : $ADD_DATA_ERROR;
         } else if ($checkDataNotExists === 0) { // insert 
                 $result = $kintaiRegDAO->insertMonthly($data, $uidCurrent);
-                $result === 1 ? $INSERT_DATA_MONTH_SUCCESS : $ADD_DATA_ERROR_KINTAI;
+                $result === 1 ? $INSERT_DATA_MONTH_SUCCESS : $ADD_DATA_ERROR;
 
         } else {
-                $result = $ADD_DATA_ERROR_KINTAI;
+                $result = $ADD_DATA_ERROR;
         }
         returnValueTemplate($result);
 
@@ -139,7 +137,7 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
         $result = "";
         if ($data !== null) {
                 $result = $kintaiRegDAO->insertNewMonthly($data, $uidCurrent);
-                $result === 1 ? $UPDATE_DATA_MONTH_SUCCESS : $ADD_DATA_ERROR_KINTAI;
+                $result === 1 ? $UPDATE_DATA_MONTH_SUCCESS : $ADD_DATA_ERROR;
         } else {
                 $result = null;
         }
@@ -157,15 +155,15 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
 }
 function returnValueTemplate($result)
 {
-        global $NO_DATA_KINTAI;
-        global $ADD_DATA_ERROR_KINTAI;
+        global $NO_DATA;
+        global $ADD_DATA_ERROR;
         // ***  Delete Cache ***
         header('Content-Type: application/json');
         header('Cache-Control: no-cache, no-store, must-revalidate');
         header('Pragma: no-cache');
         header('Expires: 0');
-        if ($result == null || empty($result) || $result == $ADD_DATA_ERROR_KINTAI) {
-                echo json_encode($NO_DATA_KINTAI);
+        if ($result == null || empty($result) || $result == $ADD_DATA_ERROR) {
+                echo json_encode($NO_DATA);
         } else {
                 echo json_encode($result);
         }

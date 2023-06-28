@@ -11,9 +11,6 @@ if ($_SESSION['auth'] == false) {
 
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html>
 
@@ -1573,7 +1570,7 @@ if ($_SESSION['auth'] == false) {
 				'GET',
 				function (response) {
 					if (response === "<?php echo $CONNECT_ERROR; ?>") {
-						changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR_KINTAI; ?>");
+						changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 						return;
 					} 
 					dataChanged = true;
@@ -1581,7 +1578,7 @@ if ($_SESSION['auth'] == false) {
 					changeStatusMessageModal(true, "<?php echo $UPDATE_DATA_SUCCESS; ?>");
 				},
 				function (errorStatus) {
-					changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR_KINTAI; ?>");
+					changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 				}
 			);
 		}
@@ -1609,11 +1606,11 @@ if ($_SESSION['auth'] == false) {
 					'GET',
 					function (response) {
 						if (response === "<?php echo $CONNECT_ERROR; ?>") {
-							changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR_KINTAI; ?>");
+							changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 							return;
 						} 
-						if (response === "<?php echo $NO_DATA_KINTAI; ?>") {
-							changeStatusMessageModal(false, "<?php echo $NO_DATA_KINTAI; ?>");
+						if (response === "<?php echo $NO_DATA; ?>") {
+							changeStatusMessageModal(false, "<?php echo $NO_DATA; ?>");
 							return;
 						} 
 						
@@ -1623,7 +1620,7 @@ if ($_SESSION['auth'] == false) {
 						changeStatusMessageModal(true, "<?php echo $DELETE_DATA_SUCCESS; ?>");
 					},
 					function (errorStatus) {
-						changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR_KINTAI; ?>");
+						changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 					}
 				);
 			}
@@ -1770,7 +1767,7 @@ if ($_SESSION['auth'] == false) {
 								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
 								handlerDateChangeUpdateTotalWorkMonth(null);
 								return;
-							} else if (parsedResponse.includes("<?php echo $NO_DATA_KINTAI; ?>")) {
+							} else if (parsedResponse.includes("<?php echo $NO_DATA; ?>")) {
 								handleDateChangeUpdateWorkMonth(selectedYear, selectedMonth, null);
 								handlerDateChangeUpdateTotalWorkMonth(null);
 								return;

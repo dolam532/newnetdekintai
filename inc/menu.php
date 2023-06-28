@@ -63,7 +63,8 @@
                                 <li class="menu-level3"><a href="">祝日登録</a></li>
                                 <li class="menu-level3"><a href="../user/userList.php">社員登録</a></li>
                                 <li class="menu-level3"><a href="">年次休暇登録</a></li>
-                                <li class="menu-level3"><a href="">現場登録</a></li>
+                                <!-- <li class="menu-level3"><a href="">現場登録</a></li> 社長の指示で 現場登録　ー＞　勤務管理表-->
+                                <li class="menu-level3"><a href="./kintai/kinmuManager.php">勤務管理表</a></li>
                                 <li class="menu-level3"><a href="">現場別勤務社員</a></li>
                                 <li class="menu-level3"><a href="">社員ログイン内訳</a></li>
                                 <li class="menu-level3"><a href="">管理情報登録</a>

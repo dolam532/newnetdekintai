@@ -30,6 +30,10 @@ $TYPE_GET_DATA_KINMUHYO = 'getDataKinmuhyo';
 $TYPE_REGISTER_NEW_DATA_OF_MONTH  = 'monthDataNewRegister';
 $TYPE_GETCURRENT_USER  = 'getCurrentUser';
 
+// request_param_kinmu
+$TYPE_GET_ALL_DATA_KINMU = 'getAllDataKinmu';
+
+
 
 
 // name 

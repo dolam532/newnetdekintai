@@ -82,13 +82,17 @@ $QUERY_UPDATE_DATA_WORK_OF_YM = "UPDATE tbl_workmonth SET genid = ?, jobhour = ?
 // delaydays = ?, earlydays = ? , bigo = ?, REG_DT = NOW() 
 // WHERE uid = ? AND workym = ?";
 
-
-
 //==//                  <!-- delete    --> 
 $QUERY_DELETE_DATA_WORK_OF_YMD = "UPDATE tbl_worktime SET daystarthh = null, daystartmm = null, 
 dayendhh = null, dayendmm = null, jobstarthh = null, jobstartmm = null, jobendhh = null, jobendmm = null, 
 offtimehh = null, offtimemm = null, workhh = null, workmm = null, comment = null, bigo = null, janhh=null , janmm = null, REG_DT = NOW() 
   WHERE uid = ? AND workymd = ?";
+
+
+//========================================================//
+// <!-- Query kintaimanager  <2>  --> 
+//========================================================//
+$QUERY_GET_ALL_KINTAI = "SELECT * FROM tbl_genba ORDER BY genid ;";
 
 
 ?>
