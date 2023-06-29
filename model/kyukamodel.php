@@ -203,21 +203,6 @@ $result_uservacationmanage_select = mysqli_fetch_all($sql_table3_select, MYSQLI_
 
 // Save data to tbl_userkyuka table of database
 if (isset($_POST['SaveKyuka'])) {
-    // if ($_POST['kyukatype'] == "0") {
-    //     if ($_POST['timecnt'] >= 8) {
-    //         $usecnt = $_POST['usecnt'] + 1;
-    //         $usetime = $_POST['usetime'];
-    //     } elseif ($_POST['timecnt'] < 8) {
-    //         $usecnt = $_POST['usecnt'];
-    //         $usetime = $_POST['usetime'] + $_POST['timecnt'];
-    //     }
-    //     $restcnt = $_POST['restcnt'] + 1;
-    // } elseif ($_POST['kyukatype'] == "1") {
-    //     $usecnt = $_POST['usecnt'] + $_POST['ymdcnt'];
-    //     $restcnt = $_POST['restcnt'] + 1;
-    //     $usetime = $_POST['usetime'];
-    // }
-
     $_POST['vacationid'] = intval($_POST['vacationid']);
     $_POST['strtime'] = intval($_POST['strtime']);
     $_POST['endtime'] = intval($_POST['endtime']);
@@ -314,7 +299,6 @@ WHERE
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 
-
 // Update data to tbl_userkyuka table of database
 if (isset($_POST['DecideUpdateKyuka'])) {
     $allowdt = date('Y-m-d H:i:s');
@@ -322,6 +306,7 @@ if (isset($_POST['DecideUpdateKyuka'])) {
     $allowid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
     $allowok = mysqli_real_escape_string($conn, $_POST['allowok']);
     $allowdecide = mysqli_real_escape_string($conn, $_POST['decide_allowok']);
+
     if ($_POST['decide_allowok'] == "0") {
         $sql = "UPDATE tbl_userkyuka SET 
         allowid='$allowid',
@@ -338,15 +323,25 @@ if (isset($_POST['DecideUpdateKyuka'])) {
             echo 'query error: ' . mysqli_error($conn);
         }
     } elseif ($_POST['decide_allowok'] == "1") {
-        $sql_userkyuka = "UPDATE tbl_userkyuka SET 
+        $usecnt = $_POST['oldusecnt'] + $_POST['newymdcnt'];
+        $usetime = $_POST['oldusetime'] + $_POST['newtimecnt'];
+        $restcnt = $_POST['oldrestcnt'] + 1;
+
+        $queries[] = "UPDATE tbl_userkyuka SET 
         allowid='$allowid',
         allowok='$allowok',
         allowdecide='$allowdecide',
         allowdt='$allowdt'
     WHERE uid ='$uid'";
-        $result_userkyuka = $conn->query($sql_userkyuka);
 
-        if ($conn->query($result_userkyuka) === TRUE) {
+        $queries[] = "UPDATE tbl_vacationinfo SET 
+        usecnt='$usecnt',
+        usetime='$usetime',
+        restcnt='$restcnt'
+    WHERE uid ='$uid'";
+
+        $sql=implode( ';', $queries );
+        if ($conn->multi_query( $sql ) === TRUE) {
             $_SESSION['save_success'] =  $save_success;
             header("Refresh:3");
         } else {
