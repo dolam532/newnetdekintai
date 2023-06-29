@@ -77,7 +77,7 @@ include('./model/indexmodel.php');
 			?>
 			<div class="jumbotron" id="jumbo1">
 				<h1 class="text-center">ネットDE勤怠</h1>
-				<p class="text-center">ネット上の勤怠管理システム</p>
+				<p class="text-center">ネット上の勤怠管理システム1</p>
 			</div>
 			<div class="row">
 				<div class="col-md-4 text-center" style="margin-bottom: 5px;">
