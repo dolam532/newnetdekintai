@@ -175,7 +175,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<?php
 									foreach ($genba_list_db as $key) {
 									?>
-										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["worktime1"] . ',' . $key["worktime2"] ?>"><?= $key["genbaname"] . $key["worktime1"] . $key["worktime2"] ?></option>
+										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["workstrtime"] . ',' . $key["workendtime"] ?>"><?= $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?></option>
 									<?php
 									}
 									?>
@@ -276,7 +276,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<?php
 									foreach ($genba_list_db as $key) {
 									?>
-										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["worktime1"] . ',' . $key["worktime2"] ?>"><?= $key["genbaname"] . $key["worktime1"] . $key["worktime2"] ?></option>
+										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["workstrtime"] . ',' . $key["workendtime"] ?>"><?= $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?></option>
 									<?php
 									}
 									?>
@@ -361,7 +361,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#ulinymd").text($('[name="ulinymd"]').val("<?php echo $key['inymd'] ?>"));
 					$("#uloutymd").text($('[name="uloutymd"]').val("<?php echo $key['outymd'] ?>"));
 					$("#ulinymd").text($('[name="ulinymd"]').val("<?php echo $key['inymd'] ?>"));
-					$("#ulgenba_list option:selected").text("<?php echo $key["genbaname"] . $key["worktime1"] . $key["worktime2"] ?>").val("<?php echo $key['genid'] ?>");
+					$("#ulgenba_list option:selected").text("<?php echo $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?>").val("<?php echo $key['genid'] ?>");
 					$("#ulgenstrymd").text($('[name="ulgenstrymd"]').val("<?php echo $key['genstrymd'] ?>"));
 					$("#ulgenendymd").text($('[name="ulgenendymd"]').val("<?php echo $key['genendymd'] ?>"));
 				}

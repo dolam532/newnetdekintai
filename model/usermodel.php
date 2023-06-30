@@ -4,8 +4,8 @@
 $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
-    `tbl_genba`.`worktime1`,
-    `tbl_genba`.`worktime2`
+    `tbl_genba`.`workstrtime`,
+    `tbl_genba`.`workendtime`
 FROM
     `tbl_user`
 CROSS JOIN 
@@ -40,8 +40,8 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
     $sql_user = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
-    `tbl_genba`.`worktime1`,
-    `tbl_genba`.`worktime2`
+    `tbl_genba`.`workstrtime`,
+    `tbl_genba`.`workendtime`
  FROM
     `tbl_user`
  CROSS JOIN 
