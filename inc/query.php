@@ -86,7 +86,7 @@ offtimehh = null, offtimemm = null, workhh = null, workmm = null, comment = null
 //========================================================//
 // <!-- Query kintaimanager  <2>  --> 
 //========================================================//
-$QUERY_GET_ALL_KINTAI = "SELECT * FROM tbl_genba ORDER BY genid ;";
+$QUERY_GET_ALL_KINTAI = "SELECT * FROM tbl_genba ORDER BY genid ;" ;
 
 
 ?>

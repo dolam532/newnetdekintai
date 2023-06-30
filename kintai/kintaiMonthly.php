@@ -21,7 +21,7 @@ if ($_SESSION['auth'] == false) {
 	<script src="../assets/js/bootstrap.min.js"></script>
 
 	<!-- common Javascript -->
-	<script type="text/javascript" src="../assets/js/common.js"> </script>
+	<script type="text/javascript" src="../assets/js/common.js"> </script> 
 
 	<!-- Datepeeker 위한 link -->
 	<link rel="stylesheet" href="../assets/css/jquery-ui.min.css">

@@ -39,7 +39,7 @@ function returnValueTemplate($result)
         if ($result == null || empty($result) || $result == $ADD_DATA_ERROR) {
                 echo json_encode($NO_DATA);
         } else {
-                echo json_encode($result);
+                echo json_encode($result); 
         }
         exit;
 }

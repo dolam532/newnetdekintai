@@ -2049,7 +2049,7 @@ if ($_SESSION['auth'] == false) {
 			var jobDaysShow = pageClone.querySelector('#jobdays_top');
 			var offDaysShow = pageClone.querySelector('#offdays_top');
 			var delayDaysShow = pageClone.querySelector('#delaydays_top');
-			var earlydaysShow = pageClone.querySelector('#earlydays_top');
+			var earlydaysShow = pageClone.querySelector('#earlydays_top'); 
 
 			var listEditBottomElem = [workTimeLabel, workHoursLabel, workMinutesLabel, workStatusLabel,
 				jobDaysLabel, workDaysLabel, offDaysLabel, delayDaysLabel, earlyDaysLabel
