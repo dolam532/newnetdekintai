@@ -103,7 +103,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                 <thead>
                     <tr class="info">
                         <th style="text-align: center; width: 5%;">ID</th>
-                        <th style="text-align: center; width: 20%;">現場名</th>
+                        <th style="text-align: center; width: 20%;">勤務時間タイプ</th>
                         <!-- <th style="text-align: center; width: 16%;" colspan="2">作業期間</th> -->
                         <th style="text-align: center; width: 13%;">勤務開始時間</th>
                         <th style="text-align: center; width: 13%;">勤務終了時間</th>
@@ -142,7 +142,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-9">
-                                <label for="genbaname--cmodal">現場名</label>
+                                <label for="genbaname--cmodal">勤務時間タイプ</label>
                                 <input type="text" class="form-control" id="genbaname--cmodal" placeholder="現場名">
                                 <input type="hidden" id="genbaid--cmodal">
                             </div>
@@ -225,7 +225,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-9">
-                                <label for="genbaname--rmodal">現場名</label>
+                                <label for="genbaname--rmodal">勤務時間タイプ</label>
                                 <input type="text" class="form-control" id="genbaname--rmodal" placeholder="現場名">
                                 <input type="hidden" id="genbaid--rmodal">
                             </div>
