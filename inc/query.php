@@ -88,5 +88,16 @@ offtimehh = null, offtimemm = null, workhh = null, workmm = null, comment = null
 //========================================================//
 $QUERY_GET_ALL_KINTAI = "SELECT * FROM tbl_genba ORDER BY genid ;" ;
 
+$QUERY_INSERT_KINMU = "INSERT INTO tbl_genba
+                     (genbaname ,workstrtime , workendtime ,offtime1 ,offtime2 , bigo  , use_yn , REG_DT ) 
+                      VALUES (? , ? , ? , ? , ? , ? , ? , NOW()) ";
+
+$QUERY_UPDATE_KINMU = "UPDATE tbl_genba SET genbaname = ?, workstrtime = ?, 
+workendtime = ?, offtime1 = ?, offtime2 = ?, bigo = ?, use_yn = ?, REG_DT = NOW() 
+WHERE genid = ?" ;
+
+
+
+$QUERY_DELETE_KINMU = "DELETE FROM tbl_genba WHERE genid = ?" ; 
 
 ?>

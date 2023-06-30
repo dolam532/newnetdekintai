@@ -53,9 +53,9 @@ class kinmuDAOImpl implements kinmuDAO {
     }
 
 
-    public function delete($listObject) {
+    public function delete($object) {
         $kinmuRepository  = $this->container->get(KinmuRepository::class);
-        return $kinmuRepository->delete($listObject);
+        return $kinmuRepository->delete($object);
     }
 
     public function deleteMany($listObject) {

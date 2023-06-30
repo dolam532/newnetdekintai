@@ -9,6 +9,8 @@ if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
 }
 
+
+
 ?>
 
 <!DOCTYPE html>
@@ -354,10 +356,17 @@ if ($_SESSION['auth'] == false) {
 							<option value="1">Template A</option>
 							<option value="2">Template B</option>
 						</select>
+
 					</label>
 				</div>
 			</div>
 			<div class="col-md-3 text-right">
+				<div class="title_btn print_btn">
+					<p><a id="btn_auto-input" href="#" onclick="autoInputHandle()" class="btn btn-default"
+							style="width: 120px;">自動入力</a>
+					</p>
+				</div>
+
 				<div class="title_btn print_btn">
 					<p><a id="btn--pagePrint" href="#" onclick="preparePrint()" class="btn btn-default"
 							style="width: 120px;">勤務表印刷</a></p>
@@ -474,9 +483,81 @@ if ($_SESSION['auth'] == false) {
 			</tbody>
 		</table>
 	</div>
+	<!--=============================================-->
+	<!--===========Modal 自動入力 ======================-->
+	<!--=============================================-->
+	<div class="row">
+		<div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						自動入力設定<span id=""></span>
+						<button class="close" data-dismiss="modal" onclick="handlerCloseModal(1)">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-9">
+								<label for="genbaname--rmodal">勤務時間</label>
+								<select class="form-control" id="genba_selection-rmodal">
+									<option value="">-- 現場を選択してください --</option>
+
+								</select>
+
+							</div>
+							<div class="col-md-3">
+								<label for="use_weekofday"><strong>曜日</strong></label>
+								<div class="custom-control custom-checkbox">
+									<input type="checkbox" id="weekdayCheckbox" value="1">平日
+									<input type="checkbox" id="weekendCheckbox" value="0">土日
+								</div>
+							</div>
+						</div>
+						<br>
+
+						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<label for="workcontent--rmodal">業務内容</label>
+								<input type="text" class="form-control" id="workcontent--rmodal" placeholder="業務内容"
+									required="required" style="text-align: center">
+							</div>
+
+							<div class="col-md-6">
+								<label for="bigo--rmodal">備考</label>
+								<input type="text" class="form-control" id="bigo--rmodal" placeholder="備考"
+									required="required" style="text-align: left">
+							</div>
+						</div>
+
+
+					</div>
+					<div class="row" style="text-align: center">
+						<p style="visibility: hidden;" id="statusText--rmodal"></p>
+					</div>
+
+					<div class="modal-footer" style="text-align: center">
+						<div class="col-md-3"></div>
+						<div class="col-md-3">
+							<p class="text-center"><a class="btn btn-primary btn-md" id="btnDel--rmodal" href="#"
+									onclick="autoInputbtnClick()" role="button">入力確定 </a></p>
+						</div>
+						<div class="col-md-3">
+							<p class="text-center"><a class="btn btn-warning btn-md" id="btnRet--rmodal" href="#"
+									onclick="handlerCloseModal(1)" role="button" data-dismiss="modal">閉じる </a></p>
+						</div>
+						<div class="col-md-3"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
 
 	<!--=============================================-->
-	<!--===========Modal ======================-->
+	<!--===========Modal 勤務時間変更 ======================-->
 	<!--=============================================-->
 	<div class="row">
 		<div class="modal" id="modal2" tabindex="-2" data-backdrop="static" data-keyboard="false">
@@ -490,14 +571,14 @@ if ($_SESSION['auth'] == false) {
 
 					<div class="modal-body" style="text-align: left">
 						<div class="row">
-						<div class="col-xs-4" name="templateB_Onshow">
-						<label for="workymd">日付</label>
+							<div class="col-xs-4" name="templateB_Onshow">
+								<label for="workymd">日付</label>
 								<input type="text" class="form-control" id="workymd" placeholder="" required="required"
 									style="text-align: center">
 								<input type="hidden" id="seq" value="">
 								<input type="hidden" id="uid">
 								<input type="hidden" id="genid">
-						</div>
+							</div>
 							<div class="col-xs-2" name="templateB_Onshow">
 								<label>出社時刻</label>
 								<select class="form-control" id="daystarthh">
@@ -594,15 +675,15 @@ if ($_SESSION['auth'] == false) {
 						</div>
 						<br>
 						<div class="row">
-							<div class="col-xs-4 "> 
-						<div id="modal__selectTime-bottom" class="hidden">
-								<label for="workymd2">日付</label>
-								<input type="text" class="form-control" id="workymd2" readonly="readonly"  placeholder="" required="required"
-									style="text-align: center">
-								<input type="hidden" id="seq" value="">
-								<input type="hidden" id="uid">
-								<input type="hidden" id="genid">
-							</div>
+							<div class="col-xs-4 ">
+								<div id="modal__selectTime-bottom" class="hidden">
+									<label for="workymd2">日付</label>
+									<input type="text" class="form-control" id="workymd2" readonly="readonly"
+										placeholder="" required="required" style="text-align: center">
+									<input type="hidden" id="seq" value="">
+									<input type="hidden" id="uid">
+									<input type="hidden" id="genid">
+								</div>
 							</div>
 							<div class="col-xs-2">
 								<label>業務開始</label>
@@ -786,6 +867,10 @@ if ($_SESSION['auth'] == false) {
 		rerunCreateNewTotalMonthFlag = false;
 		// ***Handler Script Region ****
 
+
+		// list genba
+		var listGenba;
+
 		//================================/// 
 		//=========== init===============//     OK
 		//============================///  
@@ -803,12 +888,12 @@ if ($_SESSION['auth'] == false) {
 				echo ' handleDateChange(' . json_encode($year) . ', ' . json_encode($month) . ');';
 
 			} else { ?>
-			var currentDate = new Date();
-			var currentMonth = currentDate.getMonth() + 1; // Month is zero-based in JavaScript 
-			var currentYear = currentDate.getFullYear();
-			document.getElementById('selyy').value = currentYear;
-			document.getElementById('selmm').value = currentMonth < 10 ? '0' + currentMonth : currentMonth;
-			handleDateChange(currentYear, currentMonth);
+				var currentDate = new Date();
+				var currentMonth = currentDate.getMonth() + 1; // Month is zero-based in JavaScript 
+				var currentYear = currentDate.getFullYear();
+				document.getElementById('selyy').value = currentYear;
+				document.getElementById('selmm').value = currentMonth < 10 ? '0' + currentMonth : currentMonth;
+				handleDateChange(currentYear, currentMonth);
 			<?php } ?>
 
 		};
@@ -1045,7 +1130,7 @@ if ($_SESSION['auth'] == false) {
 		//=====================================================///  OK
 		function handlerChangeTemplate() {
 			var selectElement = document.getElementById('template_table');
-		
+
 			var selectedValue = selectElement.value;
 
 			var listDayStartEnd = document.getElementsByName("templateB_Onshow");
@@ -1053,7 +1138,7 @@ if ($_SESSION['auth'] == false) {
 			var modalTimeBottom = document.getElementById('modal__selectTime-bottom');
 
 			// var modalDayTime = document.getElementById('modal__dayTimeSelect');
-			var elements = [listDayStartEnd, colDayStartEnd ];
+			var elements = [listDayStartEnd, colDayStartEnd];
 			if (selectedValue == 1) {  //Template A
 				// add class table_hidden
 				elements.forEach(function (elementList) {
@@ -1162,7 +1247,6 @@ if ($_SESSION['auth'] == false) {
 							workymd: date
 						};
 					});
-
 
 				// call AJAX　　
 				const data = JSON.stringify(filteredArray); // convert to json 
@@ -1328,51 +1412,6 @@ if ($_SESSION['auth'] == false) {
 				if (!isNaN(janMinutes)) {
 					totalJanMinutes += janMinutes;
 				}
-				//*** BACK UP CHECK JANGYO  */
-				// 欠席、相対、遅刻自動計算
-				// if (isJobDay && isWorkDay) {
-				// 	// check 夜勤 
-				// 	var startDayTime = dayStartHours * 60 + (!isNaN(dayStartMinutes) ? dayStartMinutes : 0);
-				// 	var endDayTime = dayEndHours * 60 + dayEndMinutes;
-				// 	var startJobTime = jobStartHours * 60 + (!isNaN(jobStartMinutes) ? jobStartMinutes : 0);
-				// 	var endJobTime = jobEndHours * 60 + jobEndMinutes;
-				// 	var isDayYakin = false;
-				// 	var isJobYakin = false;
-
-				// 	if (startDayTime > endDayTime) {
-				// 		endDayTime += 1440;
-				// 		isDayYakin = true;
-				// 	}
-				// 	if (startJobTime > endJobTime) {
-				// 		endJobTime += 1440;
-				// 		isJobYakin = true;
-				// 		if (!isDayYakin && isJobYakin) {
-				// 			endDayTime += 1440;
-				// 			startDayTime += 1440;
-				// 		}
-				// 	}
-				// 	// Delay Count
-				// 	if ((startDayTime + TIME_KINTAI_DELAY_IN) > (startJobTime) && isJobYakin) {
-				// 		nCountDelayIn += 1
-				// 		LIST_DELAY_IN_DATE.push(i);
-				// 	}
-				// 	// Early off count  
-				// 	if ((endDayTime + TIME_KINTAI_EARLY_OUT) < (endJobTime)) {
-				// 		nCountEarlyOut += 1;
-				// 		LIST_DELAY_OUT_DATE.push(i);
-				// 	}
-
-				// 	// not yakin 
-				// 	if (!isJobYakin && !isDayYakin) {
-				// 		if ((startDayTime + TIME_KINTAI_DELAY_IN) > (startJobTime)) {
-				// 			nCountDelayIn += 1
-				// 			LIST_DELAY_IN_DATE.push(i);
-				// 		}
-				// 	}
-				// 	// total day time 
-				// 	totalDayTime += (endJobTime - startDayTime);
-				// 	//totalDayTime = endJobTime - startDayTime - (totalOffTimeHours*60 + totalOffTimeMinutes +TIME_KINTAI_DELAY_IN) ; // 総合勤務時間は毎日15分引く？　仕事準備
-				// }
 
 			}
 
@@ -1534,7 +1573,7 @@ if ($_SESSION['auth'] == false) {
 				}
 			}
 			//create object data 
-			var  workymText = selyy.value + selmm.value;
+			var workymText = selyy.value + selmm.value;
 			var dataObject = {
 				selectedDate: workymd.value,
 				genid: currentUser['genid'],
@@ -1554,7 +1593,7 @@ if ($_SESSION['auth'] == false) {
 				janmm: overTimemm,
 				comment: comment.value,
 				bigo: bigo.value,
-				workym : workymText
+				workym: workymText
 			};
 
 			// Call Ajax for delete data
@@ -1566,7 +1605,7 @@ if ($_SESSION['auth'] == false) {
 					if (response === "<?php echo $CONNECT_ERROR; ?>") {
 						changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 						return;
-					} 
+					}
 					dataChanged = true;
 					changedDataCloseModal();
 					changeStatusMessageModal(true, "<?php echo $UPDATE_DATA_SUCCESS; ?>");
@@ -1592,7 +1631,7 @@ if ($_SESSION['auth'] == false) {
 				// Call Ajax for delete data
 				var dataObject = {
 					selectedDate: workymd.value
-					
+
 				};
 				const data = JSON.stringify(dataObject); // convert to json 
 				const response = ajaxRequest(
@@ -1602,12 +1641,12 @@ if ($_SESSION['auth'] == false) {
 						if (response === "<?php echo $CONNECT_ERROR; ?>") {
 							changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 							return;
-						} 
+						}
 						if (response === "<?php echo $NO_DATA; ?>") {
 							changeStatusMessageModal(false, "<?php echo $NO_DATA; ?>");
 							return;
-						} 
-						
+						}
+
 						dataChanged = true;
 						changedDataCloseModal();
 						resetInputOfModal();
@@ -1886,11 +1925,7 @@ if ($_SESSION['auth'] == false) {
 					if (response === "<?php echo $CONNECT_ERROR; ?>") {
 						return;
 					}
-					dataChanged = false; // 登録した後、修正中場所がない
-					// if(dataChanged === true) {　　????　　// 月のデータが変更があれば次の月に切り替える前に確認
-					// 	
-					// }
-					// show OK Alert 　
+					dataChanged = false;
 					window.alert("<?php echo $UPDATE_DATA_MONTH_SUCCESS; ?>");
 				},
 				function (errorStatus) {
@@ -1934,6 +1969,159 @@ if ($_SESSION['auth'] == false) {
 				);
 			});
 		}
+
+		//=====================================//
+		//===========自動入力================//
+		//====================================//
+		function autoInputHandle() {
+			$('#modal').modal('toggle');
+			$("#weekdayCheckbox").prop('checked', true);
+			// get list genba   const response = ajaxRequest(
+			const response = ajaxRequest(
+				'kinmuController.php?type=<?php echo $TYPE_GET_ALL_DATA_KINMU ?>',
+				'GET',
+				function (response) {
+					if (response === "<?php echo $NO_DATA; ?>") {
+						// nodata => 
+						listGenba = null;
+						return;
+					}
+					try {
+						listGenba = JSON.parse(response);
+					} catch (error) {
+						listGenba = null;
+						return;
+					}
+					return;
+				},
+				function (errorStatus) {
+					listGenba = null;
+				}
+			);
+
+			setTimeout(function () {
+				genbaListShow(listGenba)
+
+			}, 300);
+
+		}
+
+		function genbaListShow(listGenba) {
+			if (listGenba === undefined)
+				return;
+
+			var data = listGenba['genbaList'];
+			// set to select
+			var selectionElement = document.getElementById("genba_selection-rmodal");
+			for (var i = 0; i < data.length; i++) {
+				var option = document.createElement("option");
+				option.value = i;
+				option.text = data[i]['genbaname'] + ' : ' + data[i]['workstrtime'] + '-' + data[i]['workendtime'] + '  || (昼休)' + data[i]['offtime1'] + '  || (夜休)' + data[i]['offtime2'];
+				selectionElement.appendChild(option);
+			}
+		}
+
+		function handlerCloseModal(modalNum) {
+			if (modalNum === 1) {  // auto input modal 
+				var selectionElement = document.getElementById("genba_selection-rmodal");
+				for (var i = selectionElement.options.length - 1; i >= 0; i--) {
+					var option = selectionElement.options[i];
+					if (option.value !== "") {
+						option.remove();
+					}
+				}
+				$("#weekdayCheckbox").prop('checked', true);
+				$("#workcontent--rmodal").val("");
+				$("#bigo--rmodal").val("");
+			}
+		}
+
+		function autoInputbtnClick() {
+
+			if (listGenba === undefined) {
+				// list error -> 
+				return;
+			}
+			listData = listGenba['genbaList'];
+			//
+			var weekdayCheckbox = document.getElementById("weekdayCheckbox");
+			var weekendCheckbox = document.getElementById("weekendCheckbox");
+			if (!weekdayCheckbox.checked && !weekendCheckbox.checked) {
+				alert("<?php echo $KINTAI_CHECK_AUTO_INPUT_INVALID ?>");
+				return;
+			}
+			// create data -> update -> read ->draw
+			var selectedIndex = parseInt(document.getElementById('genba_selection-rmodal').value);
+			var selectGenba = listData[selectedIndex];
+			console.log(selectGenba);
+
+			var dataObject = null;
+			var currentWorkYm = selyy.value + selmm.value;
+			var genId = currentUser['genid'];
+			// add all Month 
+
+			// Lấy giá trị năm và tháng từ các phần tử select
+			var year = selyy.value;
+			var month = selmm.value;
+
+			// Tạo mảng chứa ngày từ thứ 2 đến thứ 6 với phần tử genbaname = "A"
+			var weekdays = [];
+			var startDate = new Date(year, month - 1, 1); // Tạo ngày đầu tiên của tháng
+			while (startDate.getMonth() == month - 1) {
+				if (startDate.getDay() >= 1 && startDate.getDay() <= 5) {
+					var day = startDate.getDate();
+					var dateStr = year + '/' + ('0' + month).slice(-2) + '/' + ('0' + day).slice(-2);
+					var weekdayObj = {
+						workymd: dateStr,
+						genbaname: "A"
+					};
+					weekdays.push(weekdayObj);
+				}
+				startDate.setDate(startDate.getDate() + 1); // Tăng ngày lên 1
+			}
+
+			// Tạo mảng chứa ngày thứ 7 và chủ nhật với phần tử genbaname = "A"
+			var weekends = [];
+			startDate = new Date(year, month - 1, 1); // Reset lại ngày đầu tiên của tháng
+			while (startDate.getMonth() == month - 1) {
+				if (startDate.getDay() == 6 || startDate.getDay() == 0) {
+					var day = startDate.getDate();
+					var dateStr = year + '/' + ('0' + month).slice(-2) + '/' + ('0' + day).slice(-2);
+					var weekendObj = {
+						workymd: dateStr,
+						genbaname: "A"
+					};
+					weekends.push(weekendObj);
+				}
+				startDate.setDate(startDate.getDate() + 1); // Tăng ngày lên 1
+			}
+
+			console.log('Weekdays:', weekdays);
+			console.log('Weekends:', weekends);
+
+
+
+			if (weekdayCheckbox.checked) {
+
+
+			}
+
+			if (weekendCheckbox.checked) {
+
+			}
+
+
+
+
+
+
+
+
+
+			// console.log(listGenba['genbaList']);
+		}
+
+
 
 		//=====================================//
 		//===========勤務表印刷================//
