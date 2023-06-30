@@ -1,7 +1,8 @@
 <?php
 // Select database from tbl_user table
 // (userList.php)
-$sql_user_select_db = 'SELECT DISTINCT
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
     `tbl_genba`.`workstrtime`,
@@ -12,7 +13,23 @@ CROSS JOIN
     `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
 WHERE
     `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
-    AND `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
+    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
+} elseif ($_SESSION['auth_type'] == constant('USER')) {
+    $sql_user_select_db = 'SELECT DISTINCT
+    `tbl_user`.*,
+    `tbl_genba`.`genbaname`,
+    `tbl_genba`.`workstrtime`,
+    `tbl_genba`.`workendtime`
+FROM
+    `tbl_user`
+CROSS JOIN 
+    `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
+WHERE
+    `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"
+    AND `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
+}
+
 $sql_user_select = mysqli_query($conn, $sql_user_select_db);
 $result_user_select = mysqli_fetch_all($sql_user_select, MYSQLI_ASSOC);
 

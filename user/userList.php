@@ -66,7 +66,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<div class="title_btn">
 					<input type="submit" id="ClearButton" name="ClearButton" value="クリア">&nbsp;&nbsp;&nbsp;
 					<input type="submit" name="SearchButton" value="検索">&nbsp;&nbsp;&nbsp;
-					<input type="button" id="btnNew" value="新規">
+					<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+						<input type="button" id="btnNew" value="新規">
+					<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+						<!-- <a href="#"><span class="showModal"><!?= $_SESSION['auth_uid'] ?></span></a> -->
+						<!-- <input type="button" value="編集" class="showModal"><span><!?= $_SESSION['auth_type'] ?></span> -->
+					<?php endif; ?>
 				</div>
 			</div>
 		</form>
@@ -216,7 +221,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<div class="modal-dialog">
 			<form method="post">
 				<div class="modal-content">
-					<div class="modal-header">社員編集(<span id="ulname"></span>)
+					<div class="modal-header">社員編集(<span id="ulnametitle"></span>)
 						<button class="close" data-dismiss="modal">&times;</button>
 					</div>
 
@@ -230,7 +235,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<div class="col-xs-3">
 								<label for="pwd">PASSWORD</label>
-								<input type="password" class="form-control" id="ulpwd" name="ulpwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
+								<input type="text" class="form-control" id="ulpwd" name="ulpwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
 							</div>
 							<div class="col-xs-3">
 								<label for="name">社員名</label>
@@ -339,12 +344,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	$(document).on('click', '.showModal', function() {
 		$('#modal2').modal('toggle');
 		var Uid = $(this).text();
+		alert(Uid);
 		<?php
 		if (!empty($userlist_list)) {
 			foreach ($userlist_list as $key) {
 		?>
 				if ('<?php echo $key['uid'] ?>' == Uid) {
-					$("#ulname").text('<?php echo $key['name'] ?>');
+					$("#ulnametitle").text('<?php echo $key['name'] ?>');
 					$("#uluid").text($('[name="uluid"]').val("<?php echo $key['uid'] ?>"));
 					var companyid = $("input[name=ulcompanyid]:hidden");
 					companyid.val("<?php echo $key['companyid'] ?>");
