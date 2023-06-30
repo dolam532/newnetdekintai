@@ -326,7 +326,7 @@ if ($_SESSION['auth'] == false) {
                     cgenidSpan.classList.add("colorRed");
                 }
                 cgenidCell.appendChild(cgenidSpan);
-                row.appendChild(cgenidCell);
+                row.appendChild(cgenidCell) ;
 
                 //cbigo
                 var cgenidCell = document.createElement("td");

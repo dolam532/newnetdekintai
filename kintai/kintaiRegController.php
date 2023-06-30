@@ -55,7 +55,7 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
         $result = $kintaiRegDAO->update($data, $uidCurrent);
         // check this month data exists ? -> not current month -> new resgister 
         if ($result === 1) {
-                returnValueTemplate($result);
+                returnValueTemplate($result); 
         } else {
                 // add new tbl_worktime and tblworkmonth 
                 if (!$checkFlagAddedNewData) {

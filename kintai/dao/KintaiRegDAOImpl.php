@@ -11,7 +11,7 @@ include('KintaiRegDAO.php');
 //========================================================//
 // <!-- KintaiRegDaoImpl.php ->   
 //========================================================//
-class KintaiRegDAOImpl implements KintaiRegDAO {
+class KintaiRegDAOImpl implements KintaiRegDAO { 
 
     private $container;
 

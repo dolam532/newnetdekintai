@@ -17,7 +17,7 @@ class Container
         // Logic
         switch ($class) {
             case KintaiRegDAOImpl::class:
-                return new KintaiRegDAOImpl($this);
+                return new KintaiRegDAOImpl($this); 
             case KintaiRegRepository::class:
                 return new KintaiRegRepository();
                 

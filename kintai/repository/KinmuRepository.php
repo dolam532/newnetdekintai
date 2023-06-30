@@ -47,7 +47,7 @@ class KinmuRepository{
     public function delete($object){
 
     }
-    public function deleteMany($listObject){
+    public function deleteMany($listObject){ 
 
     }
 

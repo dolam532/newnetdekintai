@@ -73,7 +73,7 @@ class KintaiRegRepository
                     $object['offtimehh'], $object['offtimemm'], $object['workhh'],
                     $object['workmm'], // $object['janhh'], $object['janmm'],  // iF INSERT ZANGYO
                     $object['comment'], $object['bigo'],
-                    $uid, $object['selectedDate']
+                    $uid, $object['selectedDate'] 
                 );
 
                 $stmt->execute();

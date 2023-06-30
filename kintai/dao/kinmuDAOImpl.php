@@ -11,7 +11,7 @@ include('kinmuDAO.php');
 //========================================================//
 // <!-- kinmuDAOImpl.php ->   
 //========================================================//
-class kinmuDAOImpl implements kinmuDAO {
+class kinmuDAOImpl implements kinmuDAO { 
 
     private $container;
 

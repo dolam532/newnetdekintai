@@ -4,7 +4,7 @@
 //========================================================//
 interface KintaiRegDAO
 {
-    public function selectById($id);
+    public function selectById($id); 
     public function insert($object, $uid);
     public function insertMany($listObject, $uid);
     public function update($object, $uid);

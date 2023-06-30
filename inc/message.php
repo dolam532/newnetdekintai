@@ -20,4 +20,4 @@ $WORK_TIME_MONTH_IS_MISSING = '時間と月のデータが存在しませんで�
 $JOBSTART_INVALID_INPUT = '業務開始時間入力しないと登録出来ません。';
 $JOBEND_INVALID_INPUT = '業務終了時間入力しないと登録出来ません。';
 $DAYSTART_INVALID_INPUT = '出社時間入力しないと登録出来ません。';
-$DAYEND_INVALID_INPUT = "退社終了時間入力しないと登録出来ません。";
+$DAYEND_INVALID_INPUT = "退社終了時間入力しないと登録出来ません。" ;
