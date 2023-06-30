@@ -96,7 +96,7 @@ if ($_SESSION['auth'] == false) {
 
 		function handlerDrawDataWorkOfMonth(response) {
 			parsedResponse = JSON.parse(response);
-			if (parsedResponse === null || parsedResponse === "<?php echo $NO_DATA_KINTAI; ?>") {
+			if (parsedResponse === null || parsedResponse === "<?php echo $NO_DATA; ?>") {
 				DrawWhiteTableWorkOfMonth();
 				return;
 			}
@@ -274,7 +274,7 @@ if ($_SESSION['auth'] == false) {
 					<td onclick="fowardToKintaiRegister()"><a href="#"><span class="nameClick" 
 								name="cusername" id="cusername2">NAME</span></a></td>
 					<td><span name="no_dataText" id="no_dataText" style="color:red; font-weight:bold;">
-							<?php echo $NO_DATA_KINTAI ?>
+							<?php echo $NO_DATA ?>
 						</span></td>
 				</tr>
 

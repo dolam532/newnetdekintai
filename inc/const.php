@@ -32,6 +32,9 @@ $TYPE_GETCURRENT_USER  = 'getCurrentUser';
 
 // request_param_kinmu
 $TYPE_GET_ALL_DATA_KINMU = 'getAllDataKinmu';
+$TYPE_UPDATE_DATA_KINMU = 'updateDataKinmu';
+$TYPE_INSERT_DATA_KINMU = 'insertDataKinmu';
+$TYPE_DELETE_DATA_KINMU = 'deleteDataKinmu';
 
 
 
