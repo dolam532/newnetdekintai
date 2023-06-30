@@ -68,9 +68,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<input type="submit" name="SearchButton" value="検索">&nbsp;&nbsp;&nbsp;
 					<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
 						<input type="button" id="btnNew" value="新規">
-					<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
-						<!-- <a href="#"><span class="showModal"><!?= $_SESSION['auth_uid'] ?></span></a> -->
-						<!-- <input type="button" value="編集" class="showModal"><span><!?= $_SESSION['auth_type'] ?></span> -->
 					<?php endif; ?>
 				</div>
 			</div>
@@ -344,7 +341,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	$(document).on('click', '.showModal', function() {
 		$('#modal2').modal('toggle');
 		var Uid = $(this).text();
-		alert(Uid);
 		<?php
 		if (!empty($userlist_list)) {
 			foreach ($userlist_list as $key) {
