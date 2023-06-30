@@ -2,6 +2,7 @@
 // All
 $data_save_no = '登録されたデータがありません。';
 $save_success = '入力情報保存しました。';
+$connect_error = '接続エラー: ';
 
 // Login & Logout
 $login_empty_id = 'ログイン失敗！  idを入力してください。';

@@ -8,14 +8,10 @@ include('../inc/const_array.php');
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
 }
-
-
-
 ?>
 
 <!DOCTYPE html>
 <html>
-
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -37,8 +33,6 @@ if ($_SESSION['auth'] == false) {
 	<link rel="stylesheet" href="../assets/css/common.css">
 
 </head>
-
-
 <style type="text/css">
 	.sumtbl tr th {
 		background-color: #D9EDF7;
@@ -124,10 +118,10 @@ if ($_SESSION['auth'] == false) {
 
 	.table__topViewTable {
 		border: 2px solid black;
+	}
 
-		.info {
-			border: 2px solid black;
-		}
+	.info {
+		border: 2px solid black;
 	}
 
 	/* Header  */
@@ -170,7 +164,6 @@ if ($_SESSION['auth'] == false) {
 		position: absolute;
 		top: -1px;
 		right: 0;
-		/* margin-bottom: 40px; */
 	}
 
 	.right-table {
@@ -180,7 +173,6 @@ if ($_SESSION['auth'] == false) {
 		gap: 0;
 		position: relative;
 		margin-left: 0px;
-
 	}
 
 	.row1 {
@@ -223,15 +215,12 @@ if ($_SESSION['auth'] == false) {
 	.table-container {
 		position: relative;
 		margin-top: 5px;
-		/* Điều chỉnh giá trị này để đẩy phần tử bên dưới lên */
 
 	}
 
 	.table__topViewTable {
 		margin-top: -30px;
 	}
-
-
 
 	/* left */
 	#footer__workTime-label {
@@ -243,7 +232,6 @@ if ($_SESSION['auth'] == false) {
 	#footer__workhh-label {
 		border: 2px solid black;
 		border-left: 1px solid gray;
-
 	}
 
 	/* show value */
@@ -251,32 +239,29 @@ if ($_SESSION['auth'] == false) {
 		border: 1px solid gray;
 		border-bottom: 2px solid black;
 		border-right: 2px solid black;
-
-		#workdays_top {
-			border-right: 1px solid gray;
-		}
-
-		#jobdays_top {
-			border-right: 1px solid gray;
-		}
-
-		#offdays_top {
-			border-right: 1px solid gray;
-		}
-
-		#delaydays_top {
-			border-right: 1px solid gray;
-		}
-
-		#earlydays_top {
-			border-right: 1px solid gray;
-		}
-
 	}
 
+	#workdays_top {
+		border-right: 1px solid gray;
+	}
+
+	#jobdays_top {
+		border-right: 1px solid gray;
+	}
+
+	#offdays_top {
+		border-right: 1px solid gray;
+	}
+
+	#delaydays_top {
+		border-right: 1px solid gray;
+	}
+
+	#earlydays_top {
+		border-right: 1px solid gray;
+	}
 
 	/* right */
-
 	#footer__workStatus-label {
 		border: 2px solid black;
 		border-right: 1px solid gray;
@@ -330,10 +315,8 @@ if ($_SESSION['auth'] == false) {
 			<div class="col-md-4 text-center" name="workYm_page_condition">
 				<div class="title_condition">
 					<label>基準日:
-						<select id="selyy" name="selyy" class="seldate" style="padding:5px;"
-							onchange="handleDateChange(this.value, document.getElementById('selmm').value)">
+						<select id="selyy" name="selyy" class="seldate" style="padding:5px;" onchange="handleDateChange(this.value, document.getElementById('selmm').value)">
 							<?php
-
 							$currentYear = date('Y');
 							$startYear = constant('START_SHOW_YEAR_KINMUHYO');
 							for ($year = $currentYear; $year >= $startYear; $year--) {
@@ -341,8 +324,7 @@ if ($_SESSION['auth'] == false) {
 							}
 							?>
 						</select>
-						<select id="selmm" name="selmm" class="seldate" style="padding:5px;"
-							onchange="handleDateChange(document.getElementById('selyy').value, this.value)">
+						<select id="selmm" name="selmm" class="seldate" style="padding:5px;" onchange="handleDateChange(document.getElementById('selyy').value, this.value)">
 							<?php
 							for ($month = 1; $month <= 12; $month++) {
 								$formattedMonth = sprintf("%02d", $month);
@@ -350,27 +332,24 @@ if ($_SESSION['auth'] == false) {
 							}
 							?>
 						</select>
-
-						<select id="template_table" name="template_table" class="seldate" style="padding:5px;"
-							onchange="handlerChangeTemplate()">
+						<select id="template_table" name="template_table" class="seldate" style="padding:5px;" onchange="handlerChangeTemplate()">
 							<option value="1">Template A</option>
 							<option value="2">Template B</option>
 						</select>
-
 					</label>
 				</div>
 			</div>
 			<div class="col-md-3 text-right">
 				<div class="title_btn print_btn">
-					<p><a id="btn_auto-input" href="#" onclick="autoInputHandle()" class="btn btn-default"
-							style="width: 120px;">自動入力</a>
+					<p>
+						<a id="btn_auto-input" href="#" onclick="autoInputHandle()" class="btn btn-default" style="width: 120px;">自動入力</a>
 					</p>
 				</div>
 
 				<div class="title_btn print_btn">
-					<p><a id="btn--pagePrint" href="#" onclick="preparePrint()" class="btn btn-default"
-							style="width: 120px;">勤務表印刷</a></p>
-
+					<p>
+						<a id="btn--pagePrint" href="#" onclick="preparePrint()" class="btn btn-default" style="width: 120px;">勤務表印刷</a>
+					</p>
 				</div>
 			</div>
 		</div>
@@ -383,10 +362,8 @@ if ($_SESSION['auth'] == false) {
 						<p id="company_name--print">
 							<?php echo $COMPANY_NAME; ?> 御中
 						</p>
-						<p id="user_dept--print">
-						</p>
-						<p id="user-name--print">
-						</p>
+						<p id="user_dept--print"></p>
+						<p id="user-name--print"></p>
 					</div>
 					<div class="right-table">
 						<div class="row1">
@@ -411,23 +388,15 @@ if ($_SESSION['auth'] == false) {
 				<thead>
 					<tr class="info">
 						<th id="table__title--day" name="cDayTime_col" style="text-align: center; width: 8%;">日付</th>
-						<th id="table__title--inOutTime" name="cDayStartEnd_col" style="text-align: center; width: 14%;"
-							colspan="2">出退社時刻</th>
-						<th id="table__title--jobTime" name="cJobTime_col" style="text-align: center; width: 14%;"
-							colspan="2">業務時間</th>
-						<th id="table__title--offTime" name="cOffTime_col" style="text-align: center; width: 9%;">休憩時間
-						</th>
-						<th id="table__title--workTime" name="cWorkTime_col" style="text-align: center; width: 9%;">就業時間
-						</th>
-						<!-- <th style="text-align: center; width: 7%;">残業</th> -->
-						<th id="table__title--workInfo" name="cWorkInfo_col" style="text-align: center; width: auto;">
-							業務内容</th>
+						<th id="table__title--inOutTime" name="cDayStartEnd_col" style="text-align: center; width: 14%;" colspan="2">出退社時刻</th>
+						<th id="table__title--jobTime" name="cJobTime_col" style="text-align: center; width: 14%;" colspan="2">業務時間</th>
+						<th id="table__title--offTime" name="cOffTime_col" style="text-align: center; width: 9%;">休憩時間</th>
+						<th id="table__title--workTime" name="cWorkTime_col" style="text-align: center; width: 9%;">就業時間</th>
+						<th id="table__title--workInfo" name="cWorkInfo_col" style="text-align: center; width: auto;">業務内容</th>
 						<th id="table__title--bigo" name="cBigo_col" style="text-align: center; width: 20%;">備考</th>
 					</tr>
 				</thead>
-				<tbody id="dayOfMonthTableBody">
-
-				</tbody>
+				<tbody id="dayOfMonthTableBody"></tbody>
 			</table>
 		</div>
 	</div>
@@ -455,30 +424,18 @@ if ($_SESSION['auth'] == false) {
 					<td id="earlydays_top"><strong>0</strong></td>
 					<td id="janhh_top" style="display: none;"><strong>0</strong></td>
 					<td id="janmm_top" style="display: none;"><strong>0</strong></td>
-
 				</tr>
 				<tr id="footer___table__edit_input">
-					<td><button type="button" class="btn btn-primary" id="btnUpdMonthly"
-							onclick=MonthDataRegister()>月登録</button></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="jobhour" id="jobhour"
-							maxlength="3" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="jobminute"
-							id="jobminute" maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="workdays" id="workdays"
-							maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="jobdays" id="jobdays"
-							maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="offdays" id="offdays"
-							maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="delaydays"
-							id="delaydays" maxlength="2" value="0"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="earlydays"
-							id="earlydays" maxlength="2" value="0"></td>
-
-					<td style="display: none;"><input type="text" class="form-control" style="text-align: center;"
-							name="janhh" id="janhh" maxlength="2" value="0"></td>
-					<td style="display: none;"><input type="text" class="form-control" style="text-align: center;"
-							name="janmm" id="janmm" maxlength="2" value="0"></td>
+					<td><button type="button" class="btn btn-primary" id="btnUpdMonthly" onclick=MonthDataRegister()>月登録</button></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="jobhour" id="jobhour" maxlength="3" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="jobminute" id="jobminute" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="workdays" id="workdays" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="jobdays" id="jobdays" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="offdays" id="offdays" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="delaydays" id="delaydays" maxlength="2" value="0"></td>
+					<td><input type="text" class="form-control" style="text-align: center" name="earlydays" id="earlydays" maxlength="2" value="0"></td>
+					<td style="display: none;"><input type="text" class="form-control" style="text-align: center;" name="janhh" id="janhh" maxlength="2" value="0"></td>
+					<td style="display: none;"><input type="text" class="form-control" style="text-align: center;" name="janmm" id="janmm" maxlength="2" value="0"></td>
 				</tr>
 			</tbody>
 		</table>
@@ -500,9 +457,7 @@ if ($_SESSION['auth'] == false) {
 								<label for="genbaname--rmodal">勤務時間</label>
 								<select class="form-control" id="genba_selection-rmodal">
 									<option value="">-- 現場を選択してください --</option>
-
 								</select>
-
 							</div>
 							<div class="col-md-3">
 								<label for="use_weekofday"><strong>曜日</strong></label>
@@ -513,37 +468,28 @@ if ($_SESSION['auth'] == false) {
 							</div>
 						</div>
 						<br>
-
 						<br>
 						<div class="row">
 							<div class="col-md-6">
 								<label for="workcontent--rmodal">業務内容</label>
-								<input type="text" class="form-control" id="workcontent--rmodal" placeholder="業務内容"
-									required="required" style="text-align: center">
+								<input type="text" class="form-control" id="workcontent--rmodal" placeholder="業務内容" required="required" style="text-align: center">
 							</div>
-
 							<div class="col-md-6">
 								<label for="bigo--rmodal">備考</label>
-								<input type="text" class="form-control" id="bigo--rmodal" placeholder="備考"
-									required="required" style="text-align: left">
+								<input type="text" class="form-control" id="bigo--rmodal" placeholder="備考" required="required" style="text-align: left">
 							</div>
 						</div>
-
-
 					</div>
 					<div class="row" style="text-align: center">
 						<p style="visibility: hidden;" id="statusText--rmodal"></p>
 					</div>
-
 					<div class="modal-footer" style="text-align: center">
 						<div class="col-md-3"></div>
 						<div class="col-md-3">
-							<p class="text-center"><a class="btn btn-primary btn-md" id="btnDel--rmodal" href="#"
-									onclick="autoInputbtnClick()" role="button">入力確定 </a></p>
+							<p class="text-center"><a class="btn btn-primary btn-md" id="btnDel--rmodal" href="#" onclick="autoInputbtnClick()" role="button">入力確定 </a></p>
 						</div>
 						<div class="col-md-3">
-							<p class="text-center"><a class="btn btn-warning btn-md" id="btnRet--rmodal" href="#"
-									onclick="handlerCloseModal(1)" role="button" data-dismiss="modal">閉じる </a></p>
+							<p class="text-center"><a class="btn btn-warning btn-md" id="btnRet--rmodal" href="#" onclick="handlerCloseModal(1)" role="button" data-dismiss="modal">閉じる </a></p>
 						</div>
 						<div class="col-md-3"></div>
 					</div>
@@ -551,11 +497,6 @@ if ($_SESSION['auth'] == false) {
 			</div>
 		</div>
 	</div>
-
-
-
-
-
 	<!--=============================================-->
 	<!--===========Modal 勤務時間変更 ======================-->
 	<!--=============================================-->
@@ -565,16 +506,13 @@ if ($_SESSION['auth'] == false) {
 				<div class="modal-content">
 					<div class="modal-header">
 						勤務時間変更(<span id="selkindate"></span>)
-						<button class="close" onclick="changeStatusMessageModal(null , null)"
-							data-dismiss="modal">&times;</button>
+						<button class="close" onclick="changeStatusMessageModal(null , null)" data-dismiss="modal">&times;</button>
 					</div>
-
 					<div class="modal-body" style="text-align: left">
 						<div class="row">
 							<div class="col-xs-4" name="templateB_Onshow">
 								<label for="workymd">日付</label>
-								<input type="text" class="form-control" id="workymd" placeholder="" required="required"
-									style="text-align: center">
+								<input type="text" class="form-control" id="workymd" placeholder="" required="required" style="text-align: center">
 								<input type="hidden" id="seq" value="">
 								<input type="hidden" id="uid">
 								<input type="hidden" id="genid">
@@ -611,11 +549,8 @@ if ($_SESSION['auth'] == false) {
 							</div>
 							<div class="col-xs-2" name="templateB_Onshow">
 								<label>&nbsp;</label>
-								<input type="text" class="form-control" id="daystartmm"
-									onfocus="handleInputFocus(this, daystartmmSelect)"
-									onblur="handleInputBlur(this, daystartmmSelect)">
-								<select class="form-control" id="daystartmmSelect"
-									oninput="handleSelect(daystartmm, this , false)">
+								<input type="text" class="form-control" id="daystartmm" onfocus="handleInputFocus(this, daystartmmSelect)" onblur="handleInputBlur(this, daystartmmSelect)">
+								<select class="form-control" id="daystartmmSelect" oninput="handleSelect(daystartmm, this , false)">
 									<option value="" selected></option>
 									<option value="00">00</option>
 									<option value="10">10</option>
@@ -657,11 +592,8 @@ if ($_SESSION['auth'] == false) {
 							</div>
 							<div class="col-xs-2" name="templateB_Onshow">
 								<label>&nbsp;</label>
-								<input type="text" class="form-control" id="dayendmm"
-									onfocus="handleInputFocus(this, dayendmmSelect)"
-									onblur="handleInputBlur(this, dayendmmSelect)">
-								<select class="form-control" id="dayendmmSelect"
-									oninput="handleSelect(dayendmm, this , false)">
+								<input type="text" class="form-control" id="dayendmm" onfocus="handleInputFocus(this, dayendmmSelect)" onblur="handleInputBlur(this, dayendmmSelect)">
+								<select class="form-control" id="dayendmmSelect" oninput="handleSelect(dayendmm, this , false)">
 									<option value="" selected></option>
 									<option value="00">00</option>
 									<option value="10">10</option>
@@ -671,15 +603,13 @@ if ($_SESSION['auth'] == false) {
 									<option value="50">50</option>
 								</select>
 							</div>
-
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-xs-4 ">
 								<div id="modal__selectTime-bottom" class="hidden">
 									<label for="workymd2">日付</label>
-									<input type="text" class="form-control" id="workymd2" readonly="readonly"
-										placeholder="" required="required" style="text-align: center">
+									<input type="text" class="form-control" id="workymd2" readonly="readonly" placeholder="" required="required" style="text-align: center">
 									<input type="hidden" id="seq" value="">
 									<input type="hidden" id="uid">
 									<input type="hidden" id="genid">
@@ -717,12 +647,8 @@ if ($_SESSION['auth'] == false) {
 							</div>
 							<div class="col-xs-2">
 								<label>&nbsp;</label>
-								<input type="text" class="form-control" id="jobstartmm"
-									onfocus="handleInputFocus(this, jobstartmmSelect)"
-									onblur="handleInputBlur(this, jobstartmmSelect)"
-									oninput="updateChangeJobTimeModal()">
-								<select class="form-control" id="jobstartmmSelect"
-									oninput="handleSelect(jobstartmm, this , true)">
+								<input type="text" class="form-control" id="jobstartmm" onfocus="handleInputFocus(this, jobstartmmSelect)" onblur="handleInputBlur(this, jobstartmmSelect)" oninput="updateChangeJobTimeModal()">
+								<select class="form-control" id="jobstartmmSelect" oninput="handleSelect(jobstartmm, this , true)">
 									<option value="" selected></option>
 									<option value="00">00</option>
 									<option value="10">10</option>
@@ -732,7 +658,6 @@ if ($_SESSION['auth'] == false) {
 									<option value="50">50</option>
 								</select>
 							</div>
-
 							<div class="col-xs-2">
 								<label>業務終了</label>
 								<select class="form-control" id="jobendhh" oninput="updateChangeJobTimeModal()">
@@ -765,11 +690,8 @@ if ($_SESSION['auth'] == false) {
 							</div>
 							<div class="col-xs-2">
 								<label>&nbsp;</label>
-								<input type="text" class="form-control" id="jobendmm"
-									onfocus="handleInputFocus(this, jobendmmSelect)"
-									onblur="handleInputBlur(this, jobendmmSelect)" oninput="updateChangeJobTimeModal()">
-								<select class="form-control" id="jobendmmSelect"
-									oninput="handleSelect(jobendmm, this , true)">
+								<input type="text" class="form-control" id="jobendmm" onfocus="handleInputFocus(this, jobendmmSelect)" onblur="handleInputBlur(this, jobendmmSelect)" oninput="updateChangeJobTimeModal()">
+								<select class="form-control" id="jobendmmSelect" oninput="handleSelect(jobendmm, this , true)">
 									<option value="" selected></option>
 									<option value="00">00</option>
 									<option value="10">10</option>
@@ -782,8 +704,7 @@ if ($_SESSION['auth'] == false) {
 						</div>
 						<br>
 						<div class="row">
-							<div class="col-xs-4">
-							</div>
+							<div class="col-xs-4"></div>
 							<div class="col-xs-2">
 								<label>休憩時間</label>
 								<select class="form-control" id="offtimehh" oninput="updateChangeJobTimeModal()">
@@ -807,26 +728,22 @@ if ($_SESSION['auth'] == false) {
 							</div>
 							<div class="col-xs-2">
 								<label for="workhh">就業時間</label>
-								<input type="text" class="form-control" id="workhh" placeholder="0" required="required"
-									style="text-align: center">
+								<input type="text" class="form-control" id="workhh" placeholder="0" required="required" style="text-align: center">
 							</div>
 							<div class="col-xs-2">
 								<label for="workmm">&nbsp;</label>
-								<input type="text" class="form-control" id="workmm" placeholder="0" required="required"
-									style="text-align: center">
+								<input type="text" class="form-control" id="workmm" placeholder="0" required="required" style="text-align: center">
 							</div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="comment">業務内容</label>
-								<input type="text" class="form-control" id="comment" placeholder="" required="required"
-									style="text-align: left">
+								<input type="text" class="form-control" id="comment" placeholder="" required="required" style="text-align: left">
 							</div>
 							<div class="col-xs-6">
 								<label for="bigo">備考</label>
-								<input type="text" class="form-control" id="bigo" placeholder="" required="required"
-									style="text-align: left">
+								<input type="text" class="form-control" id="bigo" placeholder="" required="required" style="text-align: left">
 							</div>
 						</div>
 					</div>
@@ -834,22 +751,14 @@ if ($_SESSION['auth'] == false) {
 						Status Message
 					</div>
 					<div class="modal-footer" style="text-align: center">
-						<button type="button" class="btn btn-primary update" onclick="updateDataSeletedDay()"
-							id="btnUpd">登録</button>
-						<button type="button" class="btn btn-primary" onclick="deleteDataSelected()"
-							id="btnDel">削除</button>
-						<button type="button" class="btn btn-default" data-dismiss="modal"
-							onclick="changeStatusMessageModal(null , null)" id="modalClose">閉じる</button>
+						<button type="button" class="btn btn-primary update" onclick="updateDataSeletedDay()" id="btnUpd">登録</button>
+						<button type="button" class="btn btn-primary" onclick="deleteDataSelected()" id="btnDel">削除</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal" onclick="changeStatusMessageModal(null , null)" id="modalClose">閉じる</button>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-
-
-
-
-
 	<script>
 		// CONS 
 		var TIME_KINTAI_DELAY_IN = parseInt("<?php echo $TIME_KINTAI_DELAY_IN; ?>");
@@ -867,7 +776,6 @@ if ($_SESSION['auth'] == false) {
 		rerunCreateNewTotalMonthFlag = false;
 		// ***Handler Script Region ****
 
-
 		// list genba
 		var listGenba;
 
@@ -875,7 +783,7 @@ if ($_SESSION['auth'] == false) {
 		//=========== init===============//     OK
 		//============================///  
 
-		window.onload = function () {
+		window.onload = function() {
 			getCurrentUser();
 			// check request 
 			<?php
@@ -886,7 +794,6 @@ if ($_SESSION['auth'] == false) {
 				echo 'document.getElementById("selyy").value = ' . json_encode($year) . ';';
 				echo 'document.getElementById("selmm").value = ' . json_encode($month) . ';';
 				echo ' handleDateChange(' . json_encode($year) . ', ' . json_encode($month) . ');';
-
 			} else { ?>
 				var currentDate = new Date();
 				var currentMonth = currentDate.getMonth() + 1; // Month is zero-based in JavaScript 
@@ -897,16 +804,16 @@ if ($_SESSION['auth'] == false) {
 			<?php } ?>
 
 		};
+
 		function getCurrentUser() {
 			const response = ajaxRequest(
 				'kintaiRegController.php?type=<?php echo $TYPE_GETCURRENT_USER ?>',
 				'GET',
-				function (response) {
+				function(response) {
 					//html_entity_decode($data);
 					currentUser = JSON.parse(response)['user'];
 				},
-				function (errorStatus) {
-				}
+				function(errorStatus) {}
 			);
 		}
 
@@ -1139,10 +1046,10 @@ if ($_SESSION['auth'] == false) {
 
 			// var modalDayTime = document.getElementById('modal__dayTimeSelect');
 			var elements = [listDayStartEnd, colDayStartEnd];
-			if (selectedValue == 1) {  //Template A
+			if (selectedValue == 1) { //Template A
 				// add class table_hidden
-				elements.forEach(function (elementList) {
-					elementList.forEach(function (element) {
+				elements.forEach(function(elementList) {
+					elementList.forEach(function(element) {
 						if (!element.classList.contains('table_hidden')) {
 							element.classList.add('table_hidden');
 							modalTimeBottom.classList.remove('hidden');
@@ -1151,9 +1058,9 @@ if ($_SESSION['auth'] == false) {
 				});
 
 				// resize other column 
-			} else if (selectedValue == 2) {//Template B
-				elements.forEach(function (elementList) {
-					elementList.forEach(function (element) {
+			} else if (selectedValue == 2) { //Template B
+				elements.forEach(function(elementList) {
+					elementList.forEach(function(element) {
 						if (element.classList.contains('table_hidden')) {
 							element.classList.remove('table_hidden');
 							modalTimeBottom.classList.add('hidden');
@@ -1163,6 +1070,7 @@ if ($_SESSION['auth'] == false) {
 			}
 			resizeColumns(selectedValue);
 		}
+
 		function resizeColumns(templateCode) {
 			var thDate = document.querySelector('th[name="cDayTime_col"]');
 			var thStartEnd = document.querySelector('th[name="cDayStartEnd_col"]');
@@ -1238,10 +1146,10 @@ if ($_SESSION['auth'] == false) {
 					}
 				}
 				var filteredArray = arrayMissingDay
-					.filter(function (date) {
+					.filter(function(date) {
 						return !arrayDayOfWorkList.includes(date);
 					})
-					.map(function (date) {
+					.map(function(date) {
 						return {
 							genid: genidDefault, // genIdDefault
 							workymd: date
@@ -1253,12 +1161,11 @@ if ($_SESSION['auth'] == false) {
 				const response = ajaxRequest(
 					'kintaiRegController.php?type=<?php echo $TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY ?>&data=' + data,
 					'GET',
-					function (response) {
+					function(response) {
 						//html_entity_decode($data);
 						console.log(response);
 					},
-					function (errorStatus) {
-					}
+					function(errorStatus) {}
 				);
 				return false;
 			}
@@ -1280,12 +1187,10 @@ if ($_SESSION['auth'] == false) {
 			const response = ajaxRequest(
 				'kintaiRegController.php?type=<?php echo $TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY ?>&data=' + data,
 				'GET',
-				function (response) {
-				},
-				function (errorStatus) {
-				}
+				function(response) {},
+				function(errorStatus) {}
 			);
-			setTimeout(function () {
+			setTimeout(function() {
 				handleDateChange(selectedYear, selectedMonth);
 			}, 500);
 		}
@@ -1301,14 +1206,12 @@ if ($_SESSION['auth'] == false) {
 			const response = ajaxRequest(
 				'kintaiRegController.php?type=<?php echo $TYPE_REGISTER_NEW_DATA_OF_MONTH ?>&data=' + data,
 				'GET',
-				function (response) {
-				},
-				function (errorStatus) {
-				}
+				function(response) {},
+				function(errorStatus) {}
 			);
 
 			// reload 
-			setTimeout(function () {
+			setTimeout(function() {
 				handleDateChange(selectedYear, selectedMonth);
 			}, 1000);
 		}
@@ -1356,7 +1259,7 @@ if ($_SESSION['auth'] == false) {
 				var dayEndMinutes = 0;
 				// check template A 
 				if (selectedValue == 2) {
-					if (typeof (cdaystarthhList[i]) !== undefined && typeof (cdayendhhList[i]) !== undefined) {
+					if (typeof(cdaystarthhList[i]) !== undefined && typeof(cdayendhhList[i]) !== undefined) {
 						dayStartHours = parseInt(cdaystarthhList[i].innerHTML);
 						dayStartMinutes = parseInt(cdaystartmmList[i].innerHTML);
 						dayEndHours = parseInt(cdayendhhList[i].innerHTML);
@@ -1467,7 +1370,7 @@ if ($_SESSION['auth'] == false) {
 			$("#daystarthh").val($('[name="tdaystarthh"]').eq(i).val());
 			$("#daystartmm").val($('[name="tdaystartmm"]').eq(i).val()); // 
 			$("#dayendhh").val($('[name="tdayendhh"]').eq(i).val());
-			$("#dayendmm").val($('[name="tdayendmm"]').eq(i).val());     // 
+			$("#dayendmm").val($('[name="tdayendmm"]').eq(i).val()); // 
 			$("#jobstarthh").val($('[name="tjobstarthh"]').eq(i).val());
 			$("#jobstartmm").val($('[name="tjobstartmm"]').eq(i).val());
 			$("#jobendhh").val($('[name="tjobendhh"]').eq(i).val());
@@ -1484,6 +1387,7 @@ if ($_SESSION['auth'] == false) {
 			updateChangeJobTimeModal();
 			return true;
 		}
+
 		function setDefaultValueOfModal() {
 			daystartmm.value = daystartmm.value === "" ? '00' : daystartmm.value;
 			dayendmm.value = dayendmm.value === "" ? '00' : dayendmm.value;
@@ -1496,8 +1400,8 @@ if ($_SESSION['auth'] == false) {
 
 		function getWorkTime(startHH, startMM, endHH, endMM, offTimeHour, offTimeMinute) {
 			var totalWork = 0;
-			if (!isNaN(startHH) && !isNaN(startMM) && !isNaN(endHH) && !isNaN(endMM)
-				&& !isNaN(offTimeHour) && !isNaN(offTimeMinute)) {
+			if (!isNaN(startHH) && !isNaN(startMM) && !isNaN(endHH) && !isNaN(endMM) &&
+				!isNaN(offTimeHour) && !isNaN(offTimeMinute)) {
 				startHH = parseInt(startHH, 10);
 				startMM = parseInt(startMM, 10);
 				endHH = parseInt(endHH, 10);
@@ -1557,7 +1461,7 @@ if ($_SESSION['auth'] == false) {
 				return;
 			}
 			// check if Template B 
-			if (selectedValue == 2) {  //Template B => check input 
+			if (selectedValue == 2) { //Template B => check input 
 				var selectElement = document.getElementById('template_table');
 				var selectedValue = selectElement.value;
 				var isDayStartHours = (daystarthh.value === '00' || daystarthh.value === '') ? true : false;
@@ -1601,7 +1505,7 @@ if ($_SESSION['auth'] == false) {
 			const response = ajaxRequest(
 				'kintaiRegController.php?type=<?php echo $TYPE_REGISTER_DATA_OF_SELETED_DAY ?>&data=' + data,
 				'GET',
-				function (response) {
+				function(response) {
 					if (response === "<?php echo $CONNECT_ERROR; ?>") {
 						changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 						return;
@@ -1610,7 +1514,7 @@ if ($_SESSION['auth'] == false) {
 					changedDataCloseModal();
 					changeStatusMessageModal(true, "<?php echo $UPDATE_DATA_SUCCESS; ?>");
 				},
-				function (errorStatus) {
+				function(errorStatus) {
 					changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 				}
 			);
@@ -1637,7 +1541,7 @@ if ($_SESSION['auth'] == false) {
 				const response = ajaxRequest(
 					'kintaiRegController.php?type=<?php echo $TYPE_DELETE_DATA_OF_SELETED_DAY ?>&data=' + data,
 					'GET',
-					function (response) {
+					function(response) {
 						if (response === "<?php echo $CONNECT_ERROR; ?>") {
 							changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 							return;
@@ -1652,7 +1556,7 @@ if ($_SESSION['auth'] == false) {
 						resetInputOfModal();
 						changeStatusMessageModal(true, "<?php echo $DELETE_DATA_SUCCESS; ?>");
 					},
-					function (errorStatus) {
+					function(errorStatus) {
 						changeStatusMessageModal(false, "<?php echo $ADD_DATA_ERROR; ?>");
 					}
 				);
@@ -1685,7 +1589,6 @@ if ($_SESSION['auth'] == false) {
 			workmm.value = "";
 			comment.value = "";
 			bigo.value = "";
-
 		}
 		//====// draw message text after register or clear
 		function changeStatusMessageModal(status, text) {
@@ -1742,7 +1645,6 @@ if ($_SESSION['auth'] == false) {
 			}
 		}
 
-
 		//====================================================================/// 
 		//=======function for bind change year month combo box==============//     
 		//============================================================///  
@@ -1764,7 +1666,7 @@ if ($_SESSION['auth'] == false) {
 				const response = ajaxRequest(
 					'kintaiRegController.php?type=<?php echo $TYPE_GET_DATA_KINMUHYO ?>&data=' + data,
 					'GET',
-					function (response) {
+					function(response) {
 						// check data current month = null => if === current create new data -> else print white 
 						let parsedResponse = null;
 						let parsedResponse2 = null;
@@ -1818,7 +1720,7 @@ if ($_SESSION['auth'] == false) {
 							return;
 						}
 					},
-					function (errorStatus) {  // connect faild
+					function(errorStatus) { // connect faild
 						return;
 					}
 				);
@@ -1873,6 +1775,7 @@ if ($_SESSION['auth'] == false) {
 				select.value = "";
 			}
 		}
+
 		function handleSelect(input, select, isReDrawWorkTime) {
 			var selectedValue = select.value;
 			if (selectedValue) {
@@ -1886,7 +1789,6 @@ if ($_SESSION['auth'] == false) {
 			isReDrawWorkTime && updateChangeJobTimeModal();
 		}
 
-
 		//＝＝＝＝==============================================//
 		// ========================月登録Button==================// 
 		//＝＝＝＝==============================================//
@@ -1894,7 +1796,7 @@ if ($_SESSION['auth'] == false) {
 			//create object data 
 			var currentWorkYm = selyy.value + selmm.value;
 			var genId = currentUser['genid'];
-			var bigoText = "";  // ???
+			var bigoText = ""; // ???
 
 			var dataObject = {
 				genid: genId,
@@ -1921,14 +1823,14 @@ if ($_SESSION['auth'] == false) {
 			const response = ajaxRequest(
 				'kintaiRegController.php?type=<?php echo $TYPE_REGISTER_DATA_OF_MONTH ?>&data=' + data,
 				'GET',
-				function (response) {
+				function(response) {
 					if (response === "<?php echo $CONNECT_ERROR; ?>") {
 						return;
 					}
 					dataChanged = false;
 					window.alert("<?php echo $UPDATE_DATA_MONTH_SUCCESS; ?>");
 				},
-				function (errorStatus) {
+				function(errorStatus) {
 					window.alert("<?php echo $UPDATE_DATA_MONTH_ERROR; ?>");
 				}
 			);
@@ -1938,7 +1840,7 @@ if ($_SESSION['auth'] == false) {
 		//＝＝＝＝==========//
 		function ajaxRequest(url, method, successCallback, errorCallback) {
 			var xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function () {
+			xhr.onreadystatechange = function() {
 				if (xhr.readyState === XMLHttpRequest.DONE) {
 					if (xhr.status === 200) {
 						if (successCallback) {
@@ -1956,14 +1858,14 @@ if ($_SESSION['auth'] == false) {
 		}
 
 		function ajaxRequestPromise(url, method) {
-			return new Promise(function (resolve, reject) {
+			return new Promise(function(resolve, reject) {
 				ajaxRequest(
 					url,
 					method,
-					function (response) {
+					function(response) {
 						resolve(response);
 					},
-					function (errorStatus) {
+					function(errorStatus) {
 						reject(errorStatus);
 					}
 				);
@@ -1980,7 +1882,7 @@ if ($_SESSION['auth'] == false) {
 			const response = ajaxRequest(
 				'kinmuController.php?type=<?php echo $TYPE_GET_ALL_DATA_KINMU ?>',
 				'GET',
-				function (response) {
+				function(response) {
 					if (response === "<?php echo $NO_DATA; ?>") {
 						// nodata => 
 						listGenba = null;
@@ -1994,12 +1896,12 @@ if ($_SESSION['auth'] == false) {
 					}
 					return;
 				},
-				function (errorStatus) {
+				function(errorStatus) {
 					listGenba = null;
 				}
 			);
 
-			setTimeout(function () {
+			setTimeout(function() {
 				genbaListShow(listGenba)
 
 			}, 300);
@@ -2022,7 +1924,7 @@ if ($_SESSION['auth'] == false) {
 		}
 
 		function handlerCloseModal(modalNum) {
-			if (modalNum === 1) {  // auto input modal 
+			if (modalNum === 1) { // auto input modal 
 				var selectionElement = document.getElementById("genba_selection-rmodal");
 				for (var i = selectionElement.options.length - 1; i >= 0; i--) {
 					var option = selectionElement.options[i];
@@ -2099,8 +2001,6 @@ if ($_SESSION['auth'] == false) {
 			console.log('Weekdays:', weekdays);
 			console.log('Weekends:', weekends);
 
-
-
 			if (weekdayCheckbox.checked) {
 
 
@@ -2111,17 +2011,8 @@ if ($_SESSION['auth'] == false) {
 			}
 
 
-
-
-
-
-
-
-
 			// console.log(listGenba['genbaList']);
 		}
-
-
 
 		//=====================================//
 		//===========勤務表印刷================//
@@ -2144,13 +2035,13 @@ if ($_SESSION['auth'] == false) {
 
 
 				// print page completed
-				printWindow.addEventListener('load', function () {
+				printWindow.addEventListener('load', function() {
 					// Print start
 					printWindow.print();
 				});
 				// console.log(pageClone);
 				// Close new tab after print 
-				printWindow.addEventListener('afterprint', function () {
+				printWindow.addEventListener('afterprint', function() {
 					printWindow.close();
 				});
 			} else {
@@ -2237,11 +2128,11 @@ if ($_SESSION['auth'] == false) {
 			var jobDaysShow = pageClone.querySelector('#jobdays_top');
 			var offDaysShow = pageClone.querySelector('#offdays_top');
 			var delayDaysShow = pageClone.querySelector('#delaydays_top');
-			var earlydaysShow = pageClone.querySelector('#earlydays_top'); 
+			var earlydaysShow = pageClone.querySelector('#earlydays_top');
 
 			var listEditBottomElem = [workTimeLabel, workHoursLabel, workMinutesLabel, workStatusLabel,
-				jobDaysLabel, workDaysLabel, offDaysLabel, delayDaysLabel, earlyDaysLabel
-				, workDaysShow, jobDaysShow, offDaysShow, delayDaysShow, earlydaysShow];
+				jobDaysLabel, workDaysLabel, offDaysLabel, delayDaysLabel, earlyDaysLabel, workDaysShow, jobDaysShow, offDaysShow, delayDaysShow, earlydaysShow
+			];
 
 
 			for (var i = 0; i < listEditBottomElem.length; i++) {
@@ -2290,6 +2181,7 @@ if ($_SESSION['auth'] == false) {
 				jobMinute = "00";
 			}
 			workHoursLabel.innerText = jobHours + ':' + jobMinute;
+
 			function addElementToList(list, element) {
 				for (var j = 0; j < element.length; j++) {
 					list.push(element[j]);
@@ -2306,10 +2198,7 @@ if ($_SESSION['auth'] == false) {
 			handlerFixCommentBigoTextSize(20, elements);
 		}
 
-// ***END Handler Script Region ****
+		// ***END Handler Script Region ****
 	</script>
 
 	<?php include('../inc/footer.php'); ?>
-	<!-- </body>
-	
-	</html> -->

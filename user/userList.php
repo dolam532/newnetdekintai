@@ -82,7 +82,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<th style="text-align: center; width: 14%;">Email</th>
 					<th style="text-align: center; width: 10%;">部署</th>
 					<th style="text-align: center; width: 8%;">区分</th>
-					<th style="text-align: center; width: 16%;">現場</th>
+					<th style="text-align: center; width: 16%;">勤務時間タイプ</th>
 					<th style="text-align: center; width: auto;">備考</th>
 				</tr>
 			</thead>
@@ -96,7 +96,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					?>
 						<tr>
 							<td><a href="#"><span class="showModal"><?= $user['uid'] ?></span></a></td>
-							<td><span name="pwd">********</span></td>
+							<td><span name="pwd"><?= $user['pwd'] ?></span></td>
 							<td><span name="name"><?= $user['name'] ?></span></td>
 							<td><span name="email"><?= $user['email'] ?></span></td>
 							<td><span name="dept"><?= $user['dept'] ?></span></td>
@@ -129,7 +129,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<div class="col-xs-3">
 								<label for="pwd">PASSWORD</label>
-								<input type="password" class="form-control" id="pwd" name="pwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
+								<input type="text" class="form-control" id="pwd" name="pwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left" value="1111" readonly>
 							</div>
 							<div class="col-xs-3">
 								<label for="name">社員名</label>
@@ -169,13 +169,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<br>
 						<div class="row">
 							<div class="col-xs-6">
-								<label for="genid">現場</label>
+								<label for="genid">勤務時間タイプ</label>
 								<select class="form-control" name="genba_list">
 									<option value="" selected=""></option>
 									<?php
 									foreach ($genba_list_db as $key) {
 									?>
-										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["workstrtime"] . ',' . $key["workendtime"] ?>"><?= $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?></option>
+										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["workstrtime"] . ',' . $key["workendtime"] ?>"><?= $key["genbaname"] .  '(' . $key["workstrtime"] . '-' . $key["workendtime"]  . ')' ?></option>
 									<?php
 									}
 									?>
@@ -270,7 +270,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<br>
 						<div class="row">
 							<div class="col-xs-6">
-								<label for="genid">現場</label>
+								<label for="genid">勤務時間タイプ</label>
 								<select class="form-control" id="ulgenba_list" name="ulgenba_list">
 									<option value="" selected=""></option>
 									<?php
