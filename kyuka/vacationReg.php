@@ -99,9 +99,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<th class="th1" style="text-align: center; width: 8%;">休暇ID</th>
 						<th class="th2" style="text-align: center; width: 10%;">休暇開始日</th>
 						<th class="th3" style="text-align: center; width: 16%;">休暇終了日</th>
-						<th class="th4" style="text-align: center; width: 10%;">休暇古い数</th>
-						<th class="th5" style="text-align: center; width: 16%;">休暇新しい数</th>
-						<th class="th6" style="text-align: center; width: 8%;">休暇使用数</th>
+						<th class="th4" style="text-align: center; width: 10%;">前回の休暇日数</th>
+						<th class="th5" style="text-align: center; width: 16%;">休暇残日数</th>
+						<th class="th6" style="text-align: center; width: 8%;">休暇使用日数</th>
 						<th class="th7" style="text-align: center; width: 8%;">休暇使用時間</th>
 						<th class="th8" style="text-align: center; width: auto;">休暇休憩回数</th>
 					</tr>
@@ -166,7 +166,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<input type="text" class="form-control" id="usoldcnt" name="usoldcnt" placeholder="番号" required="required" maxlength="10" style="text-align: center">
 								</div>
 								<div class="col-md-6 col-sm-6 col-sx-6 vacation">
-									<label for="newcnt">休暇新しい数</label>
+									<label for="newcnt">休暇残日数</label>
 									<input type="text" class="form-control" id="usnewcnt" name="usnewcnt" placeholder="番号" required="required" maxlength="10" style="text-align: center">
 								</div>
 							</div>
