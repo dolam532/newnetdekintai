@@ -76,9 +76,9 @@ include('../model/loginoutmodel.php');
     </form>
 </div>
 <script>
-    //로그인 버튼 처리
+    // Login button handling
     $(document).on('click', '#btnLogin', function(e) {
-        var uid = $("#uid").val(); //태그의 value 속성값
+        var uid = $("#uid").val();
         var pwd = $("#pwd").val();
         var letters = /^[A-Za-z]+$/;
 

@@ -19,6 +19,7 @@ $user_name_empty = '社員名を入力してください。';
 $user_email_empty = 'mailを入力してください。';
 $user_dept_empty = '部署を入力してください。';
 $user_grade_empty = '区分を入力してください。';
+$user_genba_list_empty = '勤務時間タイプを選択してください。';
 
 // Kyuka
 $kyuka_no_receive = '休暇はまだもらえません。';

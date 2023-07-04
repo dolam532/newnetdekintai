@@ -217,7 +217,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		dateFormat: 'yy/mm/dd'
 	});
 
-	//그리드에서 사원ID클릭(수정) : popup & 내용표시 
+	// Click (modify) employee ID in the grid: popup & display contents
 	$(document).on('click', '.showModal', function() {
 		$('#modal').modal('toggle');
 		var ArrayID = $(this).text();

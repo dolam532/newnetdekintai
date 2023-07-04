@@ -109,10 +109,10 @@ if (isset($_POST['SaveUserList'])) {
     }
 }
 
-// Update data to tbl_user table of database
+// Update data to tbl_user table of database(ADMIN & ADMINISTRATOR)
 if (isset($_POST['UpdateUserList'])) {
     $_POST['ulcompanyid'] = intval($_POST['ulcompanyid']);
-    $reg_dt = date('Y-m-d H:i:s');
+    $upt_dt = date('Y-m-d H:i:s');
     $uid = mysqli_real_escape_string($conn, $_POST['uluid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['ulcompanyid']);
     $pwd = mysqli_real_escape_string($conn, $_POST['ulpwd']);
@@ -144,7 +144,31 @@ if (isset($_POST['UpdateUserList'])) {
             outymd='$outymd',
             genstrymd='$genstrymd',
             genendymd='$genendymd',
-            reg_dt='$reg_dt'
+            upt_dt='$upt_dt'
+        WHERE uid ='$uid'";
+    $result = $conn->query($sql);
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Update data to tbl_user table of database(USER)
+if (isset($_POST['UpdateUser'])) {
+    $upt_dt = date('Y-m-d H:i:s');
+    $uid = mysqli_real_escape_string($conn, $_POST['useruid']);
+    $pwd = mysqli_real_escape_string($conn, $_POST['userpwd']);
+    $genba_list = mysqli_real_escape_string($conn, $_POST['usergenba_list']);
+    $gen_id_dev = explode(",", $genba_list);
+    $genid = $gen_id_dev[0];
+
+    $sql = "UPDATE tbl_user SET 
+            pwd='$pwd',
+            genid='$genid',
+            upt_dt='$upt_dt'
         WHERE uid ='$uid'";
     $result = $conn->query($sql);
 
