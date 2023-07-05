@@ -590,9 +590,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
 					<input type="button" id="btnNew" value="新規 ">&nbsp;
 					<input type="button" id="btnAnnt" value="お知らせ ">&nbsp;
-					<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-						<input type="button" onclick="window.location.href='./vacationReg.php'" value="休暇登録 ">
-					<?php endif; ?>
+					<input type="button" onclick="window.location.href='./vacationReg.php'" value="休暇登録 ">
 				</div>
 			</div>
 		</div>

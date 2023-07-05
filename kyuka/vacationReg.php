@@ -114,17 +114,35 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<?php } elseif (!empty($vacationinfo_list)) {
 						foreach ($vacationinfo_list as $vacationinfo) {
 						?>
-							<tr>
-								<td class="td0"><a href="#"><span class="showModal" style="text-decoration-line: underline;"><?= $vacationinfo['uid'] ?><span class="vacationid_class"><?= ',' . $vacationinfo['vacationid'] ?></span></span></td>
-								<td class="td1"><span><?= $vacationinfo['vacationid'] ?></span></td>
-								<td class="td2"><span><?= $vacationinfo['vacationstr'] ?></span></td>
-								<td class="td3"><span><?= $vacationinfo['vacationend'] ?></span></td>
-								<td class="td4"><span><?= $vacationinfo['oldcnt'] ?></td>
-								<td class="td5"><span><?= $vacationinfo['newcnt'] ?></span></td>
-								<td class="td6"><span><?= $vacationinfo['usecnt'] ?></span></td>
-								<td class="td7"><span><?= $vacationinfo['usetime'] ?></span></td>
-								<td class="td8"><span><?= $vacationinfo['restcnt'] ?></span></td>
-							</tr>
+							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+								<tr>
+									<td class="td0"><a href="#"><span class="showModal" style="text-decoration-line: underline;"><?= $vacationinfo['uid'] ?><span class="vacationid_class"><?= ',' . $vacationinfo['vacationid'] ?></span></span></td>
+									<td class="td1"><span><?= $vacationinfo['vacationid'] ?></span></td>
+									<td class="td2"><span><?= $vacationinfo['vacationstr'] ?></span></td>
+									<td class="td3"><span><?= $vacationinfo['vacationend'] ?></span></td>
+									<td class="td4"><span><?= $vacationinfo['oldcnt'] ?></td>
+									<td class="td5"><span><?= $vacationinfo['newcnt'] ?></span></td>
+									<td class="td6"><span><?= $vacationinfo['usecnt'] ?></span></td>
+									<td class="td7"><span><?= $vacationinfo['usetime'] ?></span></td>
+									<td class="td8"><span><?= $vacationinfo['restcnt'] ?></span></td>
+								</tr>
+							<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+								<?php
+								if ($vacationinfo['type'] == $_SESSION['auth_type'] && $vacationinfo['uid'] == $_SESSION['auth_uid']) {
+								?>
+									<tr>
+										<td class="td0"><a href="#"><span class="showModal" style="text-decoration-line: underline;"><?= $vacationinfo['uid'] ?><span class="vacationid_class"><?= ',' . $vacationinfo['vacationid'] ?></span></span></td>
+										<td class="td1"><span><?= $vacationinfo['vacationid'] ?></span></td>
+										<td class="td2"><span><?= $vacationinfo['vacationstr'] ?></span></td>
+										<td class="td3"><span><?= $vacationinfo['vacationend'] ?></span></td>
+										<td class="td4"><span><?= $vacationinfo['oldcnt'] ?></td>
+										<td class="td5"><span><?= $vacationinfo['newcnt'] ?></span></td>
+										<td class="td6"><span><?= $vacationinfo['usecnt'] ?></span></td>
+										<td class="td7"><span><?= $vacationinfo['usetime'] ?></span></td>
+										<td class="td8"><span><?= $vacationinfo['restcnt'] ?></span></td>
+									</tr>
+								<?php } ?>
+							<?php endif; ?>
 					<?php }
 					} ?>
 				</tbody>
