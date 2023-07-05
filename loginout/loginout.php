@@ -43,6 +43,17 @@ include('../model/loginoutmodel.php');
 <div id="tile_body">
     <!-- loginout form {s} -->
     <form action="" method="post">
+        <?php
+        if (isset($_SESSION['login_fail'])) {
+        ?>
+            <div class="alert alert-warning alert-dismissible" role="alert" auto-close="3000">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <?php echo $_SESSION['login_fail']; ?>
+            </div>
+        <?php
+            unset($_SESSION['login_fail']);
+        }
+        ?>
         <div class="text-center mb-4">
             <h1 class="h2 mb-3 font-weight-normal" style="margin-bottom:40px">NETDEKINTAI.COM</h1>
         </div>

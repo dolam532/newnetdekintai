@@ -10,6 +10,7 @@ $login_empty_pwd = 'ログイン失敗！  PWDを入力してください。';
 $login_alphabet = 'IDをアルファベットで入力してください。';
 $login_success = 'ログインに成功しました。';
 $logout_success = 'ログアウトに成功しました。';
+$login_fail = 'ログイン失敗！  idとPWDを確認してください。';
 
 // User
 $user_id_same = '他の社員が使用しているidです。';
