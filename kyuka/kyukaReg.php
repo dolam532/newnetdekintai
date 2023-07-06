@@ -590,7 +590,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
 					<input type="button" id="btnNew" value="新規 ">&nbsp;
 					<input type="button" id="btnAnnt" value="お知らせ ">&nbsp;
-					<input type="button" onclick="window.location.href='./vacationReg.php'" value="休暇登録 ">
+					<input type="button" onclick="window.location.href='./vacationReg.php'" value="休暇情報 ">
 				</div>
 			</div>
 		</div>
