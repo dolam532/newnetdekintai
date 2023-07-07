@@ -1847,28 +1847,6 @@ if ($_SESSION['auth'] == false) {
 				listGenba = null;
 			}
 		);
-
-		setTimeout(function() {
-			genbaListShow(listGenba)
-
-		}, 300);
-	}
-
-	function genbaListShow(listGenba) {
-		if (listGenba === undefined)
-			return;
-
-		var data = listGenba['genbaList'];
-		// set to select
-		var selectElement = $("#genba_selection_rmodal")[0]; // Get the raw DOM element
-		var valueToSelect = "<?php echo $_SESSION['auth_genid'] ?>"; // Value of the option to be selected
-
-		$(selectElement).children("option").each(function() {
-			if ($(this).val() === valueToSelect) {
-				$(this).prop("selected", true);
-				return false; // Exit the loop
-			}
-		});
 	}
 
 	function handlerCloseModal(modalNum) {
