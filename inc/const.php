@@ -16,7 +16,7 @@ DEFINE('GANASYS_COMPANY_ID', '1');
 DEFINE('GANASYS_COMPANY_TYPE', '1');
 
 // kintai showyear start
-DEFINE('START_SHOW_YEAR_KINMUHYO', '1950');
+DEFINE('START_SHOW_YEAR_KINMUHYO', '2010');
 
 // request_param_kintai
 $TYPE_GET_WORK_YEAR_MONTH_DAY = 'getKintaiymd';
