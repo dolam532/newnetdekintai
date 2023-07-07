@@ -5,64 +5,62 @@ include('.././inc/query.php');
 include('.././inc/message.php');
 include('./repository/KinmuRepository.php');
 include('kinmuDAO.php');
-// include('../container.php');
 
-
-//========================================================//
-// <!-- kinmuDAOImpl.php ->   
-//========================================================//
-class kinmuDAOImpl implements kinmuDAO { 
+// kinmuDAOImpl.php
+class kinmuDAOImpl implements kinmuDAO
+{
 
     private $container;
 
-    public function __construct($container){
+    public function __construct($container)
+    {
         $this->container = $container;
     }
-    
-    public function selectAll() {
+
+    public function selectAll()
+    {
         $kinmuRepository  = $this->container->get(KinmuRepository::class);
         return $kinmuRepository->selectAll();
     }
-    public function selectById($id) {
+    public function selectById($id)
+    {
         $kinmuRepository  = $this->container->get(KinmuRepository::class);
         return $kinmuRepository->selectById($id);
     }
 
-    
-    public function insert($object) {
+    public function insert($object)
+    {
         $kinmuRepository  = $this->container->get(KinmuRepository::class);
         return $kinmuRepository->insert($object);
     }
 
-    
-    public function insertMany($listObject) {
+    public function insertMany($listObject)
+    {
         $kinmuRepository  = $this->container->get(KinmuRepository::class);
         return $kinmuRepository->insertMany($listObject);
     }
 
-    
-    public function update($object) {
+    public function update($object)
+    {
         $kinmuRepository  = $this->container->get(KinmuRepository::class);
         return $kinmuRepository->update($object);
     }
 
-        
-    public function updateMany($listObject) {
+    public function updateMany($listObject)
+    {
         $kinmuRepository  = $this->container->get(KinmuRepository::class);
         return $kinmuRepository->updateMany($listObject);
     }
 
-
-    public function delete($object) {
+    public function delete($object)
+    {
         $kinmuRepository  = $this->container->get(KinmuRepository::class);
         return $kinmuRepository->delete($object);
     }
 
-    public function deleteMany($listObject) {
+    public function deleteMany($listObject)
+    {
         $kinmuRepository  = $this->container->get(KinmuRepository::class);
         return $kinmuRepository->deleteMany($listObject);
     }
-
 }
-
-?>

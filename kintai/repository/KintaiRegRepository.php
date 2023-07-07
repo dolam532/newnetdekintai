@@ -2,11 +2,9 @@
 include('.././inc/dbconnect.php');
 include('.././inc/query.php');
 include('.././inc/message.php');
-// include('../container.php');
 
 class KintaiRegRepository
 {
-
     public function selectById($id)
     {
         global $conn;
@@ -69,13 +67,23 @@ class KintaiRegRepository
             $stmt = $conn->prepare($QUERY_UPDATE_DATA_WORK_OF_YMD);
             if ($stmt) {
                 $stmt->bind_param(
-                    'ssssssssssssssss', $object['daystarthh'], $object['daystartmm'], // 'ssssssssssssssssss'
-                    $object['dayendhh'], $object['dayendmm'], $object['jobstarthh'],
-                    $object['jobstartmm'], $object['jobendhh'], $object['jobendmm'],
-                    $object['offtimehh'], $object['offtimemm'], $object['workhh'],
+                    'ssssssssssssssss',
+                    $object['daystarthh'],
+                    $object['daystartmm'], // 'ssssssssssssssssss'
+                    $object['dayendhh'],
+                    $object['dayendmm'],
+                    $object['jobstarthh'],
+                    $object['jobstartmm'],
+                    $object['jobendhh'],
+                    $object['jobendmm'],
+                    $object['offtimehh'],
+                    $object['offtimemm'],
+                    $object['workhh'],
                     $object['workmm'], // $object['janhh'], $object['janmm'],  // iF INSERT ZANGYO
-                    $object['comment'], $object['bigo'],
-                    $uid, $object['selectedDate'] 
+                    $object['comment'],
+                    $object['bigo'],
+                    $uid,
+                    $object['selectedDate']
                 );
 
                 $stmt->execute();
@@ -99,9 +107,6 @@ class KintaiRegRepository
     {
     }
 
-
-
-
     public function delete($object, $uid)
     {
         global $conn;
@@ -113,7 +118,8 @@ class KintaiRegRepository
             if ($stmt) {
                 $stmt->bind_param(
                     'ss',
-                    $uid, $object['selectedDate']
+                    $uid,
+                    $object['selectedDate']
                 );
                 $stmt->execute();
                 $affected_rows += $stmt->affected_rows;
@@ -134,10 +140,9 @@ class KintaiRegRepository
 
     public function deleteMany($listData, $uid)
     {
-
     }
 
-    //==// Select work of month 
+    // Select work of month 
     public function getWorkOfMonth($data, $uid)
     {
         global $conn;
@@ -165,7 +170,7 @@ class KintaiRegRepository
         }
     }
 
-    //==// after update work of day => update work month 
+    // after update work of day => update work month 
     public function getTotalWorkMonth($data, $uid)
     {
         global $conn;
@@ -182,7 +187,7 @@ class KintaiRegRepository
             $stmt->close();
             if (!empty($result_list)) {
                 return [
-                    'workym' =>$result_list[0]
+                    'workym' => $result_list[0]
                 ];
             } else {
                 return null;
@@ -202,7 +207,7 @@ class KintaiRegRepository
         $affected_rows = 0;
         $object = json_decode($data, true);
         $workymd = substr_replace($object['workym'], '/', 4, 0) . '/01';
-        
+
         // add query
         $query = $QUERY_INSERT_NEW_WORK_OF_MONTH;
         $daysInMonth = cal_days_in_month(CAL_GREGORIAN, intval(substr($workymd, 5, 2)), intval(substr($workymd, 0, 4)));
@@ -232,10 +237,7 @@ class KintaiRegRepository
         }
     }
 
-    //==============================// 
-    //==Table Table workmonth ======// 
-    //==============================// 
-
+    // Table Table workmonth
     public function updateMonthly($object, $uid)
     {
         global $conn;
@@ -246,13 +248,23 @@ class KintaiRegRepository
             $stmt = $conn->prepare($QUERY_UPDATE_DATA_WORK_OF_YM);
             if ($stmt) {
                 $stmt->bind_param(
-                    'sssssssssssssss', $object['genid'], $object['jobhour'],  // 'sssssssssssssssssss'
-                    $object['jobminute'], $object['jobhour2'], $object['jobminute2'],
+                    'sssssssssssssss',
+                    $object['genid'],
+                    $object['jobhour'],  // 'sssssssssssssssssss'
+                    $object['jobminute'],
+                    $object['jobhour2'],
+                    $object['jobminute2'],
                     // $object['janhour'], $object['janminute'], $object['janhour2'], $object['janminute2'],  // if insert zangyo
-                     $object['workdays'], $object['workdays2'],
-                    $object['jobdays'], $object['jobdays2'], $object['offdays'],
-                    $object['delaydays'],$object['earlydays'], $object['bigo'],
-                     $uid, $object['workym']
+                    $object['workdays'],
+                    $object['workdays2'],
+                    $object['jobdays'],
+                    $object['jobdays2'],
+                    $object['offdays'],
+                    $object['delaydays'],
+                    $object['earlydays'],
+                    $object['bigo'],
+                    $uid,
+                    $object['workym']
                 );
                 $stmt->execute();
                 $affected_rows += $stmt->affected_rows;
@@ -280,13 +292,13 @@ class KintaiRegRepository
             if ($stmt) {
                 $stmt->bind_param('ss', $workym, $uid);
                 $stmt->execute();
-                $stmt->store_result(); 
-                $affected_rows = $stmt->num_rows; 
+                $stmt->store_result();
+                $affected_rows = $stmt->num_rows;
                 $stmt->close();
                 if ($affected_rows > 0) {
-                    return 1; 
+                    return 1;
                 } else {
-                    return 0; 
+                    return 0;
                 }
             } else {
                 return null;
@@ -296,7 +308,8 @@ class KintaiRegRepository
         }
     }
 
-    public function insertMonthly($object ,$uid ){
+    public function insertMonthly($object, $uid)
+    {
         global $conn;
         $object = json_decode($object, true);
         global $QUERY_INSERT_NEW_WORK_OF_YM;
@@ -305,13 +318,23 @@ class KintaiRegRepository
             $stmt = $conn->prepare($QUERY_INSERT_NEW_WORK_OF_YM);
             if ($stmt) {
                 $stmt->bind_param(
-                    'sssssssssssssss',  $object['workym'],$uid ,$object['genid'], // 'sssssssssssssssssss'
-					$object['jobhour'],$object['jobminute'], $object['jobhour2'], 
-					$object['jobminute2'],
+                    'sssssssssssssss',
+                    $object['workym'],
+                    $uid,
+                    $object['genid'], // 'sssssssssssssssssss'
+                    $object['jobhour'],
+                    $object['jobminute'],
+                    $object['jobhour2'],
+                    $object['jobminute2'],
                     // $object['janhour'], $object['janminute'], $object['janhour2'],$object['janminute2'], if insert zangyo
-                    $object['workdays'], 
-					$object['workdays2'],$object['jobdays'], $object['jobdays2'], 
-					$object['offdays'], $object['delaydays'],$object['earlydays'], $object['bigo']
+                    $object['workdays'],
+                    $object['workdays2'],
+                    $object['jobdays'],
+                    $object['jobdays2'],
+                    $object['offdays'],
+                    $object['delaydays'],
+                    $object['earlydays'],
+                    $object['bigo']
                 );
                 $stmt->execute();
                 $affected_rows += $stmt->affected_rows;
@@ -328,8 +351,4 @@ class KintaiRegRepository
             return null;
         }
     }
-
 }
-
-
-?>

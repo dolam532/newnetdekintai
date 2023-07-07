@@ -2,12 +2,10 @@
 include('.././inc/dbconnect.php');
 include('.././inc/query.php');
 include('.././inc/message.php');
-// include('../container.php');
 class KinmuRepository
 {
     public function selectAll()
     {
-
         global $conn;
         global $QUERY_GET_ALL_KINTAI;
         $stmt = $conn->prepare($QUERY_GET_ALL_KINTAI);
@@ -24,7 +22,6 @@ class KinmuRepository
             } else {
                 return null;
             }
-
         } else {
             return null;
         }
@@ -32,7 +29,6 @@ class KinmuRepository
 
     public function selectById($id)
     {
-
     }
 
     public function insert($object)
@@ -45,9 +41,14 @@ class KinmuRepository
             $stmt = $conn->prepare($QUERY_INSERT_KINMU);
             if ($stmt) {
                 $stmt->bind_param(
-                    'sssssss',$object['genbaname'], $object['workstrtime'], $object['workendtime'],
-                    $object['offtime1'], $object['offtime2'], $object['bigo'],
-                    $object['use_yn'] 
+                    'sssssss',
+                    $object['genbaname'],
+                    $object['workstrtime'],
+                    $object['workendtime'],
+                    $object['offtime1'],
+                    $object['offtime2'],
+                    $object['bigo'],
+                    $object['use_yn']
                 );
                 $stmt->execute();
                 $affected_rows += $stmt->affected_rows;
@@ -67,7 +68,6 @@ class KinmuRepository
     }
     public function insertMany($listObject)
     {
-
     }
     public function update($object)
     {
@@ -79,9 +79,15 @@ class KinmuRepository
             $stmt = $conn->prepare($QUERY_UPDATE_KINMU);
             if ($stmt) {
                 $stmt->bind_param(
-                    'ssssssss', $object['genbaname'], $object['workstrtime'], $object['workendtime'],
-                    $object['offtime1'], $object['offtime2'], $object['bigo'],
-                    $object['use_yn'], $object['genid']
+                    'ssssssss',
+                    $object['genbaname'],
+                    $object['workstrtime'],
+                    $object['workendtime'],
+                    $object['offtime1'],
+                    $object['offtime2'],
+                    $object['bigo'],
+                    $object['use_yn'],
+                    $object['genid']
                 );
 
                 $stmt->execute();
@@ -99,11 +105,9 @@ class KinmuRepository
         } catch (Exception $e) {
             return null;
         }
-
     }
     public function updateMany($listObject)
     {
-
     }
     public function delete($object)
     {
@@ -115,7 +119,8 @@ class KinmuRepository
             $stmt = $conn->prepare($QUERY_DELETE_KINMU);
             if ($stmt) {
                 $stmt->bind_param(
-                    's', $object['genid']
+                    's',
+                    $object['genid']
                 );
                 $stmt->execute();
                 $affected_rows += $stmt->affected_rows;
@@ -132,15 +137,9 @@ class KinmuRepository
         } catch (Exception $e) {
             return null;
         }
-
-
     }
 
     public function deleteMany($listObject)
     {
-
     }
-
-
-
 }

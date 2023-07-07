@@ -1,11 +1,8 @@
 <?php
-
 session_start();
-
 // Include const.php
 include '../inc/const.php';
 include '../inc/query.php';
-// Include kintaoDAO -> Data access Object 
 include('../inc/message.php');
 include('./container.php');
 include('dao/KintaiRegDAOImpl.php');
@@ -36,26 +33,23 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
         $result = $kintaiRegDAO->getTotalWorkMonth($data, $uidCurrent);
         returnValueTemplate($result);
-
 } else if (isset($type_get) && in_array($type_get, [$TYPE_INSERT_MISSING_WORK_YEAR_MONTH_DAY, 'otherType'])) {
         // insert data of month if data missing
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
         $result = $kintaiRegDAO->insertMany($data, $uidCurrent);
         $result === 1 ? returnValueTemplate($result) : returnValueTemplate($ADD_DATA_ERROR);
-
 } else if (isset($type_get) && in_array($type_get, [$TYPE_INSERT_NEW_WORK_YEAR_MONTH_DAY, 'otherType'])) {
         // add current month to db if current month data is not exists in db 
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
         $result = $kintaiRegDAO->insertNewMonth($data, $uidCurrent);
         $result === 1 ? returnValueTemplate($result) : returnValueTemplate($ADD_DATA_ERROR);
-
 } else if (isset($type_get) && in_array($type_get, [$TYPE_REGISTER_DATA_OF_SELETED_DAY, 'otherType'])) {
         // register , update work year month day 
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
         $result = $kintaiRegDAO->update($data, $uidCurrent);
         // check this month data exists ? -> not current month -> new resgister 
         if ($result === 1) {
-                returnValueTemplate($result); 
+                returnValueTemplate($result);
         } else {
                 // add new tbl_worktime and tblworkmonth 
                 if (!$checkFlagAddedNewData) {
@@ -74,7 +68,6 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
         $result = $kintaiRegDAO->delete($data, $uidCurrent);
         $result === 1 ? returnValueTemplate($result) : returnValueTemplate($ADD_DATA_ERROR);
-
 } else if (isset($type_get) && in_array($type_get, [$TYPE_REGISTER_DATA_OF_MONTH, 'otherType'])) {
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
         // check Insert - update ?
@@ -87,12 +80,10 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
         } else if ($checkDataNotExists === 0) { // insert 
                 $result = $kintaiRegDAO->insertMonthly($data, $uidCurrent);
                 $result === 1 ? $INSERT_DATA_MONTH_SUCCESS : $ADD_DATA_ERROR;
-
         } else {
                 $result = $ADD_DATA_ERROR;
         }
         returnValueTemplate($result);
-
 } else if (isset($type_get) && in_array($type_get, [$TYPE_GET_DATA_KINMUHYO, 'otherType'])) {
         // Delete this data year month day 
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
@@ -130,7 +121,6 @@ if (isset($type_get) && in_array($type_get, [$TYPE_GET_WORK_YEAR_MONTH_DAY, 'oth
                 returnValueTemplate(null);
                 echo "Have Error" . $e->getMessage();
         }
-
 } else if (isset($type_get) && in_array($type_get, [$TYPE_REGISTER_NEW_DATA_OF_MONTH, 'otherType'])) {
         // Delete this data year month day 
         $data = isset($_GET['data']) ? htmlspecialchars_decode($_GET['data']) : null;
@@ -169,5 +159,3 @@ function returnValueTemplate($result)
         }
         exit;
 }
-
-?>

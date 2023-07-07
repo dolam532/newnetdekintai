@@ -1,7 +1,5 @@
 <?php
-//========================================================//
-// <!-- KintaiDAO  --> 
-//========================================================//
+// KintaiDAO 
 interface KintaiRegDAO
 {
     public function selectById($id); 
@@ -15,18 +13,8 @@ interface KintaiRegDAO
     public function getTotalWorkMonth($data, $uid);
     public function insertNewMonth($data, $uid);
 
-
-
-    //==============================// 
-    //==Table Table workmonth ======// 
-    //==============================// 
+    // Table Table workmonth
     public function updateMonthly($object, $uid);
     public function selectMonthly($workym, $uid);
     public function insertMonthly($object, $uid);
-
-
-
 }
-
-
-?>
