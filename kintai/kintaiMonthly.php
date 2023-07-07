@@ -147,6 +147,7 @@ if ($_SESSION['auth'] == false) {
 		});
 	}
 </script>
+<title>月勤務表</title>
 <div class="container">
 	<div class="row">
 		<div class="col-md-5 text-left">

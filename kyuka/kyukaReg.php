@@ -499,6 +499,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		}
 	}
 </style>
+<title>休暇届</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
 	<?php

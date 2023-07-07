@@ -58,6 +58,7 @@ include('../model/loginoutmodel.php');
             <h1 class="h2 mb-3 font-weight-normal" style="margin-bottom:40px">NETDEKINTAI.COM</h1>
         </div>
         <?php if (isset($_SESSION['auth'])) : ?>
+            <title>ログアウト</title>
             <div class="form-label-group">
                 <input id="uid" name="uid" placeholder="User ID" class="form-control" type="text" value="<?= $_SESSION['auth_uid'] ?>">
                 <label for="uid" class="sr-only">User ID</label>
@@ -70,6 +71,7 @@ include('../model/loginoutmodel.php');
             <br>
             <input class="btn btn-lg btn-primary btn-block" type="submit" id="btnLogout" name="btnLogout" value="Sign out">
         <?php else : ?>
+            <title>ログイン</title>
             <div class="form-label-group">
                 <input id="uid" name="uid" placeholder="User ID" class="form-control" type="text" value="<?= $_POST['uid'] ?>">
                 <label for="uid" class="sr-only">User ID</label>

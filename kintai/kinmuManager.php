@@ -57,6 +57,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
         color: red
     }
 </style>
+<title>勤務管理表</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
     <div class="row">

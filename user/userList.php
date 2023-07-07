@@ -36,6 +36,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		width: 6ch;
 	}
 </style>
+<title>社員登録</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
 	<?php

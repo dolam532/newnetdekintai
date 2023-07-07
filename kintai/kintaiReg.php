@@ -280,7 +280,7 @@ if ($_SESSION['auth'] == false) {
 		padding-right: 0px;
 	}
 </style>
-
+<title>勤 務 表</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top: -20px;">
 	<div class="row">

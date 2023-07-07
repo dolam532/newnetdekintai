@@ -65,6 +65,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	/* For Mobile portrait View iPhone X,6,7,8 PLUS */
 	@media screen and (max-device-width: 375px) and (orientation: portrait) {}
 </style>
+<title>休暇情報</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
 	<?php
