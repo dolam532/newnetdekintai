@@ -10,7 +10,7 @@ WHERE `tbl_codebase`.`typecode` = 02 GROUP BY `code`, `name`';
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
-// Select data from tbl_user
+// Select data from tbl_genba
 $sql_genba = 'SELECT * FROM `tbl_genba`';
 $result_genba = mysqli_query($conn, $sql_genba);
 $genba_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
