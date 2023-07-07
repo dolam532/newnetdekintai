@@ -5,6 +5,7 @@ include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../inc/const_array.php');
 include('../inc/header.php');
+include('../model/commonmodel.php');
 // include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
@@ -431,8 +432,19 @@ if ($_SESSION['auth'] == false) {
 					<div class="row">
 						<div class="col-md-9">
 							<label for="genbaname--rmodal">勤務時間</label>
-							<select class="form-control" id="genba_selection-rmodal">
-								<option value="">-- 現場を選択してください --</option>
+							<select class="form-control" id="genba_selection_rmodal" name="genba_selection_rmodal">
+								<option value="" selected="">現場を選択してください。</option>
+								<?php
+								foreach ($genba_list as $value) {
+								?>
+									<option value="<?= $value['genid'] ?>" <?php if ($value['genid'] == $_SESSION['auth_genid']) {
+																				echo ' selected="selected"';
+																			} ?>>
+										<?= $value['genbaname'] . ':' . $value['genid'] . '-' . $value['workendtime'] . '  || (昼休)' . $value['offtime1'] . '  || (夜休)' . $value['offtime2'] ?>
+									</option>
+								<?php
+								}
+								?>
 							</select>
 						</div>
 						<div class="col-md-3">
@@ -1840,7 +1852,6 @@ if ($_SESSION['auth'] == false) {
 			genbaListShow(listGenba)
 
 		}, 300);
-
 	}
 
 	function genbaListShow(listGenba) {
@@ -1849,18 +1860,20 @@ if ($_SESSION['auth'] == false) {
 
 		var data = listGenba['genbaList'];
 		// set to select
-		var selectionElement = document.getElementById("genba_selection-rmodal");
-		for (var i = 0; i < data.length; i++) {
-			var option = document.createElement("option");
-			option.value = i;
-			option.text = data[i]['genbaname'] + ' : ' + data[i]['workstrtime'] + '-' + data[i]['workendtime'] + '  || (昼休)' + data[i]['offtime1'] + '  || (夜休)' + data[i]['offtime2'];
-			selectionElement.appendChild(option);
-		}
+		var selectElement = $("#genba_selection_rmodal")[0]; // Get the raw DOM element
+		var valueToSelect = "<?php echo $_SESSION['auth_genid'] ?>"; // Value of the option to be selected
+
+		$(selectElement).children("option").each(function() {
+			if ($(this).val() === valueToSelect) {
+				$(this).prop("selected", true);
+				return false; // Exit the loop
+			}
+		});
 	}
 
 	function handlerCloseModal(modalNum) {
 		if (modalNum === 1) { // auto input modal 
-			var selectionElement = document.getElementById("genba_selection-rmodal");
+			var selectionElement = document.getElementById("genba_selection_rmodal");
 			for (var i = selectionElement.options.length - 1; i >= 0; i--) {
 				var option = selectionElement.options[i];
 				if (option.value !== "") {
@@ -1888,7 +1901,7 @@ if ($_SESSION['auth'] == false) {
 			return;
 		}
 		// create data -> update -> read ->draw
-		var selectedIndex = parseInt(document.getElementById('genba_selection-rmodal').value);
+		var selectedIndex = parseInt(document.getElementById('genba_selection_rmodal').value);
 		var selectGenba = listData[selectedIndex];
 		console.log(selectGenba);
 
@@ -1944,9 +1957,6 @@ if ($_SESSION['auth'] == false) {
 		if (weekendCheckbox.checked) {
 
 		}
-
-
-		// console.log(listGenba['genbaList']);
 	}
 
 	// 勤務表印刷

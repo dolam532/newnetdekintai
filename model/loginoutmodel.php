@@ -19,12 +19,14 @@ if (isset($_POST['btnLogin'])) {
             $user_pwd = $data['pwd'];
             $user_name = $data['name'];
             $user_type = $data['type'];
+            $user_genid = $data['genid'];
         }
         $_SESSION['auth'] = true;
         $_SESSION['auth_type'] = "$user_type"; //9=admin, 3=管理者, 1=user
         $_SESSION['auth_uid'] = "$user_uid";
         $_SESSION['auth_pwd'] = "$user_pwd";
         $_SESSION['auth_name'] = "$user_name";
+        $_SESSION['auth_genid'] = "$user_genid";
 
         if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('USER') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
             header("Location: ../index.php");
@@ -46,6 +48,7 @@ if (isset($_POST['btnLogout'])) {
     unset($_SESSION['auth_uid']);
     unset($_SESSION['auth_pwd']);
     unset($_SESSION['auth_name']);
+    unset($_SESSION['auth_genid']);
 
     header("Location: ../index.php");
     $_SESSION['logout_success'] =  $logout_success;
