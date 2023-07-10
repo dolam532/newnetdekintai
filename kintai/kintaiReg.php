@@ -6,7 +6,7 @@ include('../inc/message.php');
 include('../inc/const_array.php');
 include('../inc/header.php');
 include('../model/commonmodel.php');
-// include('../model/inactive.php');
+include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
@@ -26,11 +26,11 @@ if ($_SESSION['auth'] == false) {
 		text-align: center;
 	}
 
-	.day-of-week-saturday {
+	.day_of_week_saturday {
 		color: blue;
 	}
 
-	.day-of-week-sunday {
+	.day_of_week_sunday {
 		color: red;
 	}
 
@@ -46,16 +46,7 @@ if ($_SESSION['auth'] == false) {
 		display: none;
 	}
 
-	.shorten-height {
-		height: 50%;
-	}
-
-	.double-width {
-		width: 200%;
-	}
-
-	/* No Wrap text */
-	.overflow-ellipsis {
+	.overflow_ellipsis {
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -70,14 +61,8 @@ if ($_SESSION['auth'] == false) {
 <!-- Print Css -->
 <style type="text/css" media="print">
 	@page {
-		/* //size: ; */
 		margin-top: .5rem;
 		margin-bottom: .3rem;
-	}
-
-	/* print one */
-	.page-two {
-		display: none;
 	}
 
 	.row {
@@ -85,17 +70,12 @@ if ($_SESSION['auth'] == false) {
 		justify-content: center;
 	}
 
-	.centered-text {
-		text-align: center;
-	}
-
-
 	.table>tbody>tr>td {
 		padding: 1px;
 		line-height: 1.8rem;
 	}
 
-	.table__topViewTable {
+	.table_topViewTable {
 		border: 2px solid black;
 	}
 
@@ -197,24 +177,23 @@ if ($_SESSION['auth'] == false) {
 
 	}
 
-	.table__topViewTable {
+	.table_topViewTable {
 		margin-top: -30px;
 	}
 
 	/* left */
-	#footer__workTime-label {
+	#footer_workTime_label {
 		border: 2px solid black;
 		border-top: 2px solid black;
 		border-right: 0px;
 	}
 
-	#footer__workhh-label {
+	#footer_workhh_label {
 		border: 2px solid black;
 		border-left: 1px solid gray;
 	}
 
-	/* show value */
-	#footer___table__show_value {
+	#footer_table_show_value {
 		border: 1px solid gray;
 		border-bottom: 2px solid black;
 		border-right: 2px solid black;
@@ -241,33 +220,33 @@ if ($_SESSION['auth'] == false) {
 	}
 
 	/* right */
-	#footer__workStatus-label {
+	#footer_workStatus_label {
 		border: 2px solid black;
 		border-right: 1px solid gray;
 	}
 
-	#footer__jobDays-label {
+	#footer_jobDays_label {
 		border: 1px solid gray;
 	}
 
-	#footer__workDays-label {
+	#footer_workDays_label {
 		border: 1px solid gray;
 	}
 
-	#footer__offDays-label {
+	#footer_offDays_label {
 		border: 1px solid gray;
 	}
 
-	#footer__delayDays-label {
+	#footer_delayDays_label {
 		border: 1px solid gray;
 	}
 
-	#footer__earlyDays-label {
+	#footer_earlyDays_label {
 		border: 1px solid gray;
 		border-right: 2px solid black;
 	}
 
-	#footer___table__title {
+	#footer_table_title {
 		border: 2px solid black;
 		border-bottom: 1px solid gray;
 		padding: 0px;
@@ -320,13 +299,13 @@ if ($_SESSION['auth'] == false) {
 		<div class="col-md-3 text-right">
 			<div class="print_btn">
 				<p>
-					<a id="btn_auto-input" href="#" onclick="autoInputHandle()" class="btn btn-default" style="width: 120px;">自動入力</a>
+					<a href="#" onclick="autoInputHandle()" class="btn btn-default" style="width: 120px;">自動入力</a>
 				</p>
 			</div>
 
 			<div class="print_btn">
 				<p>
-					<a id="btn--pagePrint" href="#" onclick="preparePrint()" class="btn btn-default" style="width: 120px;">勤務表印刷</a>
+					<a href="#" onclick="preparePrint()" class="btn btn-default" style="width: 120px;">勤務表印刷</a>
 				</p>
 			</div>
 		</div>
@@ -337,20 +316,20 @@ if ($_SESSION['auth'] == false) {
 		<div class="form-group">
 			<div class="table-container">
 				<div class="left-table">
-					<p id="company_name--print">
+					<p id="company_name_print">
 						<?php echo $COMPANY_NAME; ?> 御中
 					</p>
-					<p id="user_dept--print"></p>
-					<p id="user-name--print"></p>
+					<p id="user_dept_print"></p>
+					<p id="user_name_print"></p>
 				</div>
 				<div class="right-table">
 					<div class="row1">
-						<p id="sign1--print" class="cell cell-text">
+						<p class="cell cell-text">
 							<?php echo $SIGN_TITLE1; ?>
 						</p>
 						<p class="cell cell-empty"></p>
 					</div>
-					<div id="sign2--print" class="row2">
+					<div class="row2">
 						<p class="cell cell-text">
 							<?php echo $SIGN_TITLE2; ?>
 						</p>
@@ -362,16 +341,16 @@ if ($_SESSION['auth'] == false) {
 	</div>
 
 	<div class="form-group">
-		<table class="table table-bordered datatable table__topViewTable">
+		<table class="table table-bordered datatable table_topViewTable">
 			<thead>
 				<tr class="info">
-					<th id="table__title--day" name="cDayTime_col" style="text-align: center; width: 8%;">日付</th>
-					<th id="table__title--inOutTime" name="cDayStartEnd_col" style="text-align: center; width: 14%;" colspan="2">出退社時刻</th>
-					<th id="table__title--jobTime" name="cJobTime_col" style="text-align: center; width: 14%;" colspan="2">業務時間</th>
-					<th id="table__title--offTime" name="cOffTime_col" style="text-align: center; width: 9%;">休憩時間</th>
-					<th id="table__title--workTime" name="cWorkTime_col" style="text-align: center; width: 9%;">就業時間</th>
-					<th id="table__title--workInfo" name="cWorkInfo_col" style="text-align: center; width: auto;">業務内容</th>
-					<th id="table__title--bigo" name="cBigo_col" style="text-align: center; width: 20%;">備考</th>
+					<th name="cDayTime_col" style="text-align: center; width: 8%;">日付</th>
+					<th name="cDayStartEnd_col" style="text-align: center; width: 14%;" colspan="2">出退社時刻</th>
+					<th name="cJobTime_col" style="text-align: center; width: 14%;" colspan="2">業務時間</th>
+					<th name="cOffTime_col" style="text-align: center; width: 9%;">休憩時間</th>
+					<th name="cWorkTime_col" style="text-align: center; width: 9%;">就業時間</th>
+					<th name="cWorkInfo_col" style="text-align: center; width: auto;">業務内容</th>
+					<th name="cBigo_col" style="text-align: center; width: 20%;">備考</th>
 				</tr>
 			</thead>
 			<tbody id="dayOfMonthTableBody"></tbody>
@@ -381,18 +360,18 @@ if ($_SESSION['auth'] == false) {
 <div class="container" id="divmonthly">
 	<table id="footer-Table" class="table table-bordered datatable">
 		<tbody class="sumtbl">
-			<tr id="footer___table__title">
-				<th id="footer__workTime-label" style="width: 10%; padding-top: 30px;" rowspan="2">実働時間</th>
-				<th id="footer__workhh-label" style="width: 10%; ">時 間</th>
-				<th id="footer__workmm-label" style="width: 10%; ">分</th>
-				<th id="footer__workStatus-label" style="width: 10%; padding-top: 30px;" rowspan="3">勤務状況</th>
-				<th id="footer__jobDays-label" style="width: 15%; ">所定勤務日数</th>
-				<th id="footer__workDays-label" style="width: 12%; ">実勤務日数</th>
-				<th id="footer__offDays-label" style="width: 10%; ">欠勤</th>
-				<th id="footer__delayDays-label" style="width: 10%; ">遅刻</th>
-				<th id="footer__earlyDays-label" style="width: 10%; ">早退</th>
+			<tr id="footer_table_title">
+				<th id="footer_workTime_label" style="width: 10%; padding-top: 30px;" rowspan="2">実働時間</th>
+				<th id="footer_workhh_label" style="width: 10%; ">時 間</th>
+				<th id="footer_workmm_label" style="width: 10%; ">分</th>
+				<th id="footer_workStatus_label" style="width: 10%; padding-top: 30px;" rowspan="3">勤務状況</th>
+				<th id="footer_jobDays_label" style="width: 15%; ">所定勤務日数</th>
+				<th id="footer_workDays_label" style="width: 12%; ">実勤務日数</th>
+				<th id="footer_offDays_label" style="width: 10%; ">欠勤</th>
+				<th id="footer_delayDays_label" style="width: 10%; ">遅刻</th>
+				<th id="footer_earlyDays_label" style="width: 10%; ">早退</th>
 			</tr>
-			<tr id="footer___table__show_value">
+			<tr id="footer_table_show_value">
 				<td id="jobhour_top"><strong>0</strong></td>
 				<td id="jobminute_top"><strong>0</strong></td>
 				<td id="workdays_top"><strong>0</strong></td>
@@ -403,7 +382,7 @@ if ($_SESSION['auth'] == false) {
 				<td id="janhh_top" style="display: none;"><strong>0</strong></td>
 				<td id="janmm_top" style="display: none;"><strong>0</strong></td>
 			</tr>
-			<tr id="footer___table__edit_input">
+			<tr id="footer_table_edit_input">
 				<td><button type="button" class="btn btn-primary" id="btnUpdMonthly" onclick=MonthDataRegister()>月登録</button></td>
 				<td><input type="text" class="form-control" style="text-align: center" name="jobhour" id="jobhour" maxlength="3" value="0"></td>
 				<td><input type="text" class="form-control" style="text-align: center" name="jobminute" id="jobminute" maxlength="2" value="0"></td>
@@ -431,7 +410,7 @@ if ($_SESSION['auth'] == false) {
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-md-9">
-							<label for="genbaname--rmodal">勤務時間</label>
+							<label for="genbaname_rmodal">勤務時間</label>
 							<select class="form-control" id="genba_selection_rmodal" name="genba_selection_rmodal">
 								<option value="" selected="">現場を選択してください。</option>
 								<?php
@@ -459,17 +438,17 @@ if ($_SESSION['auth'] == false) {
 					<br>
 					<div class="row">
 						<div class="col-md-6">
-							<label for="workcontent--rmodal">業務内容</label>
-							<input type="text" class="form-control" id="workcontent--rmodal" placeholder="業務内容" required="required" style="text-align: left">
+							<label for="workcontent_rmodal">業務内容</label>
+							<input type="text" class="form-control" id="workcontent_rmodal" placeholder="業務内容" required="required" style="text-align: left">
 						</div>
 						<div class="col-md-6">
-							<label for="bigo--rmodal">備考</label>
-							<input type="text" class="form-control" id="bigo--rmodal" placeholder="備考" required="required" style="text-align: left">
+							<label for="bigo_rmodal">備考</label>
+							<input type="text" class="form-control" id="bigo_rmodal" placeholder="備考" required="required" style="text-align: left">
 						</div>
 					</div>
 				</div>
 				<div class="row" style="text-align: center">
-					<p style="visibility: hidden;" id="statusText--rmodal"></p>
+					<p style="visibility: hidden;"></p>
 				</div>
 				<div class="modal-footer" style="text-align: center">
 					<div class="col-md-3"></div>
@@ -594,7 +573,7 @@ if ($_SESSION['auth'] == false) {
 					<br>
 					<div class="row">
 						<div class="col-xs-4 ">
-							<div id="modal__selectTime-bottom" class="hidden">
+							<div id="modal_selectTime_bottom" class="hidden">
 								<label for="workymd2">日付</label>
 								<input type="text" class="form-control" id="workymd2" readonly="readonly" placeholder="" required="required" style="text-align: center">
 								<input type="hidden" id="seq" value="">
@@ -842,9 +821,9 @@ if ($_SESSION['auth'] == false) {
 				html += '<td>';
 				html += '<a href="#" onclick="fnClickTitle(' + i + '); return false;">';
 				if (dayOfWeekJapanese === '土') {
-					html += '<span class="day-of-week-saturday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+					html += '<span class="day_of_week_saturday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
 				} else if (dayOfWeekJapanese === '日') {
-					html += '<span class="day-of-week-sunday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+					html += '<span class="day_of_week_sunday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
 				} else {
 					html += '<span>' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
 				}
@@ -914,8 +893,8 @@ if ($_SESSION['auth'] == false) {
 				}
 				html += '</td>';
 
-				html += '<td><span class="overflow-ellipsis" style="max-width: 50px; name="ccomment">' + (data.comment || '') + '</span></td>';
-				html += '<td><span class="overflow-ellipsis" style="max-width: 50px; name="cbigo">' + (data.bigo || '') + '</span>';
+				html += '<td><span class="overflow_ellipsis" style="max-width: 50px; name="ccomment">' + (data.comment || '') + '</span></td>';
+				html += '<td><span class="overflow_ellipsis" style="max-width: 50px; name="cbigo">' + (data.bigo || '') + '</span>';
 				html += '<input type="hidden" name="tuid" value="' + data.uid + '">';
 				html += '<input type="hidden" name="tgenid" value="' + data.genid + '">';
 				html += '<input type="hidden" name="tworkymd" value="' + showYear + '/' + ('0' + showMonth).slice(-2) + '/' + ('0' + day).slice(-2) + '">';
@@ -965,9 +944,9 @@ if ($_SESSION['auth'] == false) {
 			html += '<td>';
 			html += '<a href="#" onclick="fnClickTitle(' + (day - 1) + '); return false;">';
 			if (dayOfWeekJapanese === '土') {
-				html += '<span class="day-of-week-saturday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+				html += '<span class="day_of_week_saturday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
 			} else if (dayOfWeekJapanese === '日') {
-				html += '<span class="day-of-week-sunday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
+				html += '<span class="day_of_week_sunday">' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
 			} else {
 				html += '<span>' + formattedDate + '(' + dayOfWeekJapanese + ')</span>';
 			}
@@ -1015,7 +994,7 @@ if ($_SESSION['auth'] == false) {
 
 		var listDayStartEnd = document.getElementsByName("templateB_Onshow");
 		var colDayStartEnd = document.getElementsByName("cDayStartEnd_col");
-		var modalTimeBottom = document.getElementById('modal__selectTime-bottom');
+		var modalTimeBottom = document.getElementById('modal_selectTime_bottom');
 
 		var elements = [listDayStartEnd, colDayStartEnd];
 		if (selectedValue == 1) { //Template A
@@ -1063,7 +1042,7 @@ if ($_SESSION['auth'] == false) {
 			thWorkHours.style.width = '9%';
 		}
 		// handler check width text > over print ...
-		const elements = document.getElementsByClassName("overflow-ellipsis");
+		const elements = document.getElementsByClassName("overflow_ellipsis");
 		handlerFixCommentBigoTextSize(45, elements);
 	}
 
@@ -1859,8 +1838,9 @@ if ($_SESSION['auth'] == false) {
 				}
 			}
 			$("#weekdayCheckbox").prop('checked', true);
-			$("#workcontent--rmodal").val("");
-			$("#bigo--rmodal").val("");
+			$("#workcontent_rmodal").val("");
+			$("#bigo_rmodal").val("");
+			location.reload();
 		}
 	}
 
@@ -1975,7 +1955,7 @@ if ($_SESSION['auth'] == false) {
 		var pageHeaderText = pageClone.querySelectorAll('.page_header_text');
 		var printButton = pageClone.querySelectorAll('.print_btn');
 		var modal = pageClone.querySelectorAll('.modal');
-		var editInput = pageClone.querySelectorAll('#footer___table__edit_input');
+		var editInput = pageClone.querySelectorAll('#footer_table_edit_input');
 
 		addElementToList(elementsToRemove, headerElement);
 		addElementToList(elementsToRemove, titleCondition);
@@ -2018,19 +1998,19 @@ if ($_SESSION['auth'] == false) {
 		titleElement.parentNode.insertBefore(infoRow, titleElement.nextSibling);
 
 		// Edit  Footer table 
-		var workInfoLabel = pageClone.querySelector('#footer__workStatus-label');
+		var workInfoLabel = pageClone.querySelector('#footer_workStatus_label');
 		if (workInfoLabel) {
 			workInfoLabel.setAttribute('rowspan', '2');
 		}
-		var workTimeLabel = pageClone.querySelector('#footer__workTime-label');
-		var workHoursLabel = pageClone.querySelector('#footer__workhh-label');
-		var workMinutesLabel = pageClone.querySelector('#footer__workmm-label');
-		var workStatusLabel = pageClone.querySelector('#footer__workStatus-label');
-		var jobDaysLabel = pageClone.querySelector('#footer__jobDays-label');
-		var workDaysLabel = pageClone.querySelector('#footer__workDays-label');
-		var offDaysLabel = pageClone.querySelector('#footer__offDays-label');
-		var delayDaysLabel = pageClone.querySelector('#footer__delayDays-label');
-		var earlyDaysLabel = pageClone.querySelector('#footer__earlyDays-label');
+		var workTimeLabel = pageClone.querySelector('#footer_workTime_label');
+		var workHoursLabel = pageClone.querySelector('#footer_workhh_label');
+		var workMinutesLabel = pageClone.querySelector('#footer_workmm_label');
+		var workStatusLabel = pageClone.querySelector('#footer_workStatus_label');
+		var jobDaysLabel = pageClone.querySelector('#footer_jobDays_label');
+		var workDaysLabel = pageClone.querySelector('#footer_workDays_label');
+		var offDaysLabel = pageClone.querySelector('#footer_offDays_label');
+		var delayDaysLabel = pageClone.querySelector('#footer_delayDays_label');
+		var earlyDaysLabel = pageClone.querySelector('#footer_earlyDays_label');
 
 		// header text
 		var titleElem = pageClone.querySelector('div[name="workYm_page_title"] .text-left');
@@ -2098,14 +2078,14 @@ if ($_SESSION['auth'] == false) {
 				list.push(element[j]);
 			}
 		}
-		// add value to user__dept--print company_name--print
-		var userDeptPrint = pageClone.querySelector('#user_dept--print');
-		var userNamePrint = pageClone.querySelector('#user-name--print');
+		// add value to user_dept_print company_name_print
+		var userDeptPrint = pageClone.querySelector('#user_dept_print');
+		var userNamePrint = pageClone.querySelector('#user_name_print');
 		userDeptPrint.innerText = '所属：' + currentUser['dept'];
 		userNamePrint.innerText = '氏名：' + currentUser['name'];
 
 		// fix size text bigo and comment 
-		const elements = pageClone.getElementsByClassName("overflow-ellipsis");
+		const elements = pageClone.getElementsByClassName("overflow_ellipsis");
 		handlerFixCommentBigoTextSize(20, elements);
 	}
 </script>
