@@ -146,7 +146,6 @@ if (isset($_POST['UpdateUserList'])) {
             genendymd='$genendymd',
             upt_dt='$upt_dt'
         WHERE uid ='$uid'";
-    $result = $conn->query($sql);
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
@@ -170,7 +169,6 @@ if (isset($_POST['UpdateUser'])) {
             genid='$genid',
             upt_dt='$upt_dt'
         WHERE uid ='$uid'";
-    $result = $conn->query($sql);
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;

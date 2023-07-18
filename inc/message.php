@@ -2,7 +2,11 @@
 // All
 $data_save_no = '登録されたデータがありません。';
 $save_success = '入力情報保存しました。';
+$autosave_success = '自動入力情報保存しました。';
+$update_success = '入力情報が更新されます。';
 $connect_error = '接続エラー: ';
+$save_fail = '入力情報保存できませんでした。';
+$delete_success = '削除成功しました。';
 
 // Login & Logout
 $login_empty_id = 'ログイン失敗！  idを入力してください。';
@@ -53,28 +57,25 @@ $kyuka_usecnt_no = '休暇使用数を番号で入力してください。';
 $kyuka_usetime_no = '休暇使用時間を番号で入力してください。';
 $kyuka_restcnt_no = '休暇休憩回数を番号で入力してください。';
 
-// Kintai
-$save_fail = '入力情報保存できませんでした。';
+// KintaiReg
+$kintai_start_empty = '出社時刻を入力してください。';
+$kintai_end_empty = '退社時刻を入力してください。';
+$kintai_bstart_empty = '業務開始を入力してください。';
+$kintai_bend_empty = '業務終了を入力してください。';
+$kintai_bend_empty = '業務終了を入力してください。';
+$kintai_offtime_empty = '休憩時間を入力してください。';
+
+// KintaiMonthly
 $NO_DATA = 'データが存在しませんでした。';
-$ADD_DATA_ERROR = 'データ存在がエラー発生しました。';
-$UPDATE_DATA_SUCCESS = '登録成功しました。';
-$UPDATE_DATA_MONTH_SUCCESS = '月登録成功しました。';
-$UPDATE_DATA_MONTH_ERROR = '月登録失敗しました。失敗です。';
-$INSERT_DATA_MONTH_SUCCESS = '新規月登録成功しました。';
-$DELETE_DATA_SUCCESS = '削除成功しました。';
-$CAN_NOT_OPEN_NEW_TAB_PRINT = '印刷タブが開けられません。';
 $CONNECT_ERROR = '接続エラー。';
-$WORK_TIME_IS_MISSING = '時間のデータが存在しませんでした。-11111601';
-$WORK_MOTH_IS_MISSING = '月のデータが存在しませんでした。-11111602';
-$WORK_TIME_MONTH_IS_MISSING = '時間と月のデータが存在しませんでした。-11111603';
-$JOBSTART_INVALID_INPUT = '業務開始時間入力しないと登録出来ません。';
-$JOBEND_INVALID_INPUT = '業務終了時間入力しないと登録出来ません。';
-$DAYSTART_INVALID_INPUT = '出社時間入力しないと登録出来ません。';
-$DAYEND_INVALID_INPUT = "退社終了時間入力しないと登録出来ません。";
-$KINMU_UPDATE_SUCCESS = "勤務管理編集成功しました。";
-$KINMU_DELETE_SUCCESS = "削除成功しました。";
-$KINMU_INSERT_SUCCESS = "作成成功しました。";
-$KINMU_NAME_IS_INVALID = "現場名を入力してください";
-$KINMU_DEFAULT_VALUE_USE = "基本的な勤務時間を設定します。";
-$KINMU_CHECK_INPUT_TIME = "正しく時間を入力してください";
-$KINTAI_CHECK_AUTO_INPUT_INVALID = "平日又は土日をせめて一つ選択してください";
+
+// KinmuManager
+$kinmu_genbaname_empty = '勤務時間タイプを入力してください。';
+$kinmu_workstr_empty = '業務開始時間を入力してください。';
+$kinmu_workend_empty = '業務終了時間を入力してください。';
+$kinmu_offtime1_empty = '昼休(時:分)を入力してください。';
+$kinmu_offtime2_empty = '夜休(時:分)を入力してください。';
+$kinmu_workstr_incorrect = '業務開始時間を正しく入力してください。';
+$kinmu_workend_incorrect = '業務終了時間を正しく入力してください。';
+$kinmu_offtime1_incorrect = '昼休(時:分)を正しく入力してください。';
+$kinmu_offtime2_incorrect = '夜休(時:分)を正しく入力してください。';

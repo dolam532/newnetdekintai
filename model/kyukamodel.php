@@ -301,7 +301,6 @@ if (isset($_POST['DecideUpdateKyuka'])) {
         allowdecide='$allowdecide',
         allowdt='$allowdt'
     WHERE uid ='$uid'";
-        $result = $conn->query($sql);
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['save_success'] =  $save_success;
@@ -362,7 +361,6 @@ if (isset($_POST['SaveUpdateKyuka'])) {
             restcnt='$restcnt',
             reg_dt='$reg_dt'
         WHERE uid ='$uid' AND vacationid ='$vacationid'";
-        $result = $conn->query($sql);
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['save_success'] =  $save_success;
