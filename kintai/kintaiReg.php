@@ -4,9 +4,9 @@ session_start();
 include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../inc/const_array.php');
-include('../inc/header.php');
 include('../model/commonmodel.php');
 include('../model/kintaimodel.php');
+include('../inc/header.php');
 include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
@@ -548,7 +548,7 @@ if ($_SESSION['auth'] == false) {
 									<?php
 									foreach (ConstArray::$rest_hour as $key => $value) {
 									?>
-										<option value="<?= $key ?>" <?php if ($value == $_POST['offtimehh'] ?? '01') {
+										<option value="<?= $key ?>" <?php if ($value == $_POST['offtimehh']) {
 																		echo ' selected="selected"';
 																	} ?>>
 											<?= $value ?>
@@ -635,11 +635,11 @@ if ($_SESSION['auth'] == false) {
 		?>
 			if ('<?php echo $key['workymd'] ?>' === date_show) {
 				document.getElementById("jobstarthh").value = "<?php echo $key['jobstarthh'] ?>";
-				document.getElementById("jobstartmm").value = "<?php echo $key['jobstartmm'] ?? '00'; ?>";
+				document.getElementById("jobstartmm").value = "<?php echo empty($key['jobstartmm']) ? "00" : $key['jobstartmm']; ?>";
 				document.getElementById("jobendhh").value = "<?php echo $key['jobendhh'] ?>";
-				document.getElementById("jobendmm").value = "<?php echo $key['jobendmm'] ?? '00'; ?>";
+				document.getElementById("jobendmm").value = "<?php echo empty($key['jobendmm']) ? "00" : $key['jobendmm']; ?>";
 				document.getElementById("offtimehh").value = "<?php echo $key['offtimehh'] ?>";
-				document.getElementById("offtimemm").value = "<?php echo $key['offtimemm'] ?? '00'; ?>";
+				document.getElementById("offtimemm").value = "<?php echo empty($key['offtimemm']) ? "00" : $key['offtimemm']; ?>";
 				document.getElementById("workhh").value = "<?php echo $key['workhh'] ?>";
 				document.getElementById("workmm").value = "<?php echo $key['workmm'] ?>";
 				$("#comment").text($('[name="comment"]').val("<?php echo $key['comment'] ?>"));

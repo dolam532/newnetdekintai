@@ -11,9 +11,9 @@ if ($_POST['selmm'] == NULL && $_POST['selyy'] == NULL && $_POST['template_table
 
 $reg_dt = date('Y-m-d H:i:s');
 $upt_dt = date('Y-m-d H:i:s');
-$year = $_POST["selyy"] ?? date('Y');
-$month = $_POST['selmm'] ?? date('m');
-$decide_template_ = $_POST["template_table"] ?? '1';
+$year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
+$month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
+$decide_template_ = isset($_POST["template_table"]) ? $_POST["template_table"] : '1';
 
 // Create a date string in "YYYY-MM" format
 $dateString = $year . "-" . $month;
