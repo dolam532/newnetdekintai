@@ -489,4 +489,3 @@ WHERE
 
 $result_workmonth = mysqli_query($conn, $sql_workmonth);
 $workmonth_list = mysqli_fetch_all($result_workmonth, MYSQLI_ASSOC);
-var_dump($workmonth_list);
