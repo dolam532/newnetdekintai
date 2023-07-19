@@ -104,7 +104,7 @@ foreach ($worktime_list as $work) {
     $totalWorkHours += $workHours;
     $totalWorkMinutes += $workMinutes;
 }
-
+$countJobAct = $countJobStartHH - $countDayStartHH;
 // Adjust minutes to hours if necessary
 if ($totalWorkMinutes >= 60) {
     $additionalHours = floor($totalWorkMinutes / 60);
@@ -400,38 +400,47 @@ if (isset($_POST['AutoUpdateKintai'])) {
     }
 }
 
-// Save data to tbl_worktime table of database
+// Save data to tbl_workmonth table of database
 if (isset($_POST['MonthSaveKintai'])) {
     $_SESSION['selmm'] = $_POST['month'];
     $_SESSION['selyy'] = $_POST["year"];
+    $yearmonth = $_POST["year"] . $_POST["month"];
     $_SESSION['template_table'] = $_POST["template_table_"];
 
-    $uid = mysqli_real_escape_string($conn, $_POST['workhh_bottom']);
-    $genid = mysqli_real_escape_string($conn, $_POST['genid']);
-    $workymd = mysqli_real_escape_string($conn, $_POST['date_show']);
-    $jobstarthh = mysqli_real_escape_string($conn, $_POST['jobstarthh']);
-    $jobstartmm = mysqli_real_escape_string($conn, $_POST['jobstartmm']);
-    $jobendhh = mysqli_real_escape_string($conn, $_POST['jobendhh']);
-    $jobendmm = mysqli_real_escape_string($conn, $_POST['jobendmm']);
-    $daystarthh = mysqli_real_escape_string($conn, $_POST['daystarthh']);
-    $daystartmm = mysqli_real_escape_string($conn, $_POST['daystartmm']);
-    $dayendhh = mysqli_real_escape_string($conn, $_POST['dayendhh']);
-    $dayendmm = mysqli_real_escape_string($conn, $_POST['dayendmm']);
-    $offtimehh = mysqli_real_escape_string($conn, $_POST['offtimehh']);
-    $offtimemm = mysqli_real_escape_string($conn, $_POST['offtimemm']);
-    $workhh = mysqli_real_escape_string($conn, $_POST['workhh']);
-    $workmm = mysqli_real_escape_string($conn, $_POST['workmm']);
-    $comment = mysqli_real_escape_string($conn, $_POST['comment']);
-    $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
+    $uid = mysqli_real_escape_string($conn, $_SESSION['uid']);
+    $genid = mysqli_real_escape_string($conn, $_SESSION['genid']);
+    $workym = mysqli_real_escape_string($conn, $yearmonth);
 
-    $sql = "INSERT INTO `tbl_worktime` (`uid`, `genid`, `workymd`, `daystarthh`, `daystartmm`, `dayendhh`, `dayendmm`, `jobstarthh`, `jobstartmm`,
-                `jobendhh`, `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `janhh`, `janmm`, `comment`, `bigo`, `reg_dt`, `upt_dt`)
-                VALUES ('$uid', '$genid', '$workymd', '$daystarthh', '$daystartmm', '$dayendhh', '$dayendmm', '$jobstarthh', '$jobstartmm',
-                '$jobendhh', '$jobendmm', '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$janhh', '$janmm', '$comment', '$bigo', '$reg_dt', '$upt_dt')
+    $jobhour = mysqli_real_escape_string($conn, $_POST['workhh_top']);
+    $jobminute = mysqli_real_escape_string($conn, $_POST['workmm_top']);
+    $jobhour2 = mysqli_real_escape_string($conn, $_POST['workhh_bottom']);
+    $jobminute2 = mysqli_real_escape_string($conn, $_POST['workmm_bottom']);
+    $janhour = mysqli_real_escape_string($conn, $_POST['janhh_top']);
+    $janminute = mysqli_real_escape_string($conn, $_POST['janmm_top']);
+    $janhour2 = mysqli_real_escape_string($conn, $_POST['janhh_bottom']);
+    $janminute2 = mysqli_real_escape_string($conn, $_POST['janmm_bottom']);
+
+    $jobdays = mysqli_real_escape_string($conn, $_POST['jobdays_top']);
+    $jobdays2 = mysqli_real_escape_string($conn, $_POST['jobdays_bottom']);
+    $workdays = mysqli_real_escape_string($conn, $_POST['workdays_top']);
+    $workdays2 = mysqli_real_escape_string($conn, $_POST['workdays_bottom']);
+    $holydays = mysqli_real_escape_string($conn, $_POST['holydays_top']);
+    $holydays2 = mysqli_real_escape_string($conn, $_POST['holydays_bottom']);
+    $offdays = mysqli_real_escape_string($conn, $_POST['offdays_top']);
+    $offdays2 = mysqli_real_escape_string($conn, $_POST['offdays_bottom']);
+    $delaydays = mysqli_real_escape_string($conn, $_POST['delaydays_top']);
+    $delaydays2 = mysqli_real_escape_string($conn, $_POST['delaydays_bottom']);
+    $earlydays = mysqli_real_escape_string($conn, $_POST['earlydays_top']);
+    $earlydays2 = mysqli_real_escape_string($conn, $_POST['earlydays_bottom']);
+
+    $sql = "INSERT INTO `tbl_workmonth` (`uid`, `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
+                `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `reg_dt`)
+                VALUES ('$uid', '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
+                '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$reg_dt')
                 ON DUPLICATE KEY UPDATE
-                genid='$genid', daystarthh='$daystarthh', daystartmm='$daystartmm', dayendhh='$dayendhh', dayendmm='$dayendmm', jobstarthh='$jobstarthh', jobstartmm='$jobstartmm',
-                jobendhh='$jobendhh', jobendmm='$jobendmm', offtimehh='$offtimehh', offtimemm='$offtimemm', workhh='$workhh', workmm='$workmm', janhh='$janhh',
-                janmm='$janmm', comment='$comment', bigo='$bigo', upt_dt='$upt_dt'";
+                genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2', janhour='$janhour', janminute='$janminute',
+                janhour2='$janhour2', janminute2='$janminute2', jobdays='$jobdays', jobdays2='$jobdays2', workdays='$workdays', workdays2='$workdays2', holydays='$holydays',
+                holydays2='$holydays2', offdays='$offdays', offdays2='$offdays2', delaydays='$delaydays', delaydays2='$delaydays2', reg_dt='$reg_dt'";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
@@ -440,3 +449,15 @@ if (isset($_POST['MonthSaveKintai'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+// Get Data From tbl_workmonth
+$sql_workmonth = 'SELECT
+    *
+FROM
+    `tbl_workmonth`
+WHERE
+    `tbl_workmonth`.`uid` IN("' . $_SESSION['auth_uid'] . '")  
+    AND LEFT(`tbl_workmonth`.`workym`, 6) IN("' .  $Year_ . $month_ . '")';
+
+$result_workmonth = mysqli_query($conn, $sql_workmonth);
+$workmonth_list = mysqli_fetch_all($result_workmonth, MYSQLI_ASSOC);

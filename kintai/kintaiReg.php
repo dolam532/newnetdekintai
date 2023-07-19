@@ -254,35 +254,40 @@ if ($_SESSION['auth'] == false) {
 	<table id="footer-Table" class="table table-bordered datatable">
 		<tbody class="sumtbl">
 			<tr id="footer_table_title">
-				<th id="footer_workTime_label" style="width: 10%; padding-top: 30px;" rowspan="2">実働時間</th>
-				<th id="footer_workhh_label" style="width: 8%;">時間</th>
-				<th id="footer_workmm_label" style="width: 8%;">分</th>
-				<th id="footer_workStatus_label" style="width: 10%; padding-top: 30px;" rowspan="3">勤務状況</th>
-				<th id="footer_jobDay_label" style="width: 12%;">所定勤務日数</th>
-				<th id="footer_workDay_label" style="width: 12%;">実勤務日数</th>
-				<th id="footer_holyDay_label" style="width: 10%;">休暇</th>
-				<th id="footer_offDay_label" style="width: 10%;">欠勤</th>
-				<th id="footer_delayDay_label" style="width: 10%;">遅刻</th>
-				<th id="footer_earlyDay_label" style="width: auto;">早退</th>
+				<th style="width: 10%; padding-top: 30px;" rowspan="2">実働時間</th>
+				<th style="width: 8%;">時間</th>
+				<th style="width: 8%;">分</th>
+				<th style="width: 10%; padding-top: 30px;" rowspan="3">勤務状況</th>
+				<th style="width: 12%;">所定勤務日数</th>
+				<th style="width: 12%;">実勤務日数</th>
+				<th style="width: 10%;">休暇</th>
+				<th style="width: 10%;">欠勤</th>
+				<th style="width: 10%;">遅刻</th>
+				<th style="width: auto;">早退</th>
 			</tr>
 			<tr id="footer_table_show_value">
-				<td id="workhh_top"><strong><?= $totalWorkHours ?></strong></td>
-				<td id="workmm_top"><strong><?= $totalWorkMinutes ?></strong></td>
-				<td id="jobday_top"><strong><?= $countJobStartHH ?></strong></td>
-
-				<?php if ($decide_template_ == "1") : ?>
-					<td id="workday_top"><strong><?= $countJobStartHH ?></strong></td>
-					<td id="holyday_top"><strong>0</strong></td>
-					<td id="offday_top"><strong><?= $countJobStartHH - $countJobStartHH ?></strong></td>
-					<td id="delayday_top"><strong>0</strong></td>
-					<td id="earlyday_top"><strong>0</strong></td>
-				<?php elseif ($decide_template_ == "2") : ?>
-					<td id="workday_top"><strong><?= $countDayStartHH ?></strong></td>
-					<td id="holyday_top"><strong>0</strong></td>
-					<td id="offday_top"><strong><?= $countJobStartHH - $countDayStartHH ?></strong></td>
-					<td id="delayday_top"><strong><?= $countLate ?></strong></td>
-					<td id="earlyday_top"><strong><?= $countEarly ?></strong></td>
-				<?php endif; ?>
+				<?php
+				foreach ($workmonth_list as $key) {
+				?>
+					<td><strong><?= $totalworkhh_top = isset($totalWorkHours) ? $totalWorkHours : $key['jobhour2']; ?></strong></td>
+					<td><strong><?= $totalworkmm_top = isset($totalWorkMinutes) ? $totalWorkMinutes : $key['jobminute2']; ?></strong></td>
+					<td><strong><?= $cnprejob_top = isset($countJobStartHH) ? $countJobStartHH : $key['cn_pre_job2']; ?></strong></td>
+					<?php if ($decide_template_ == "1") : ?>
+						<td><strong><?= $cnactjobp_top = isset($countJobStartHH) ? $countJobStartHH : $key['cn_act_job2']; ?></strong></td>
+						<td><strong>0</strong></td>
+						<td><strong>0</strong></td>
+						<td><strong>0</strong></td>
+						<td><strong>0</strong></td>
+					<?php elseif ($decide_template_ == "2") : ?>
+						<td><strong><?= $cnactjoba_top = isset($countDayStartHH) ? $countDayStartHH : $key['cn_act_job2']; ?></strong></td>
+						<td><strong>0</strong></td>
+						<td><strong><?= $offdayswork_top = isset($countJobAct) ? $countJobAct : $key['offdays2']; ?></strong></td>
+						<td><strong><?= $delaydayswork_top = isset($countLate) ? $countLate : $key['delaydays2']; ?></strong></td>
+						<td><strong><?= $earlydayswork_top = isset($countEarly) ? $countEarly : $key['earlydays2']; ?></strong></td>
+					<?php endif; ?>
+				<?php
+				}
+				?>
 			</tr>
 			<tr id="footer_table_edit_input">
 				<form method="post">
@@ -290,24 +295,50 @@ if ($_SESSION['auth'] == false) {
 						<input type="hidden" value="<?= $year ?>" name="year">
 						<input type="hidden" value="<?= $month ?>" name="month">
 						<input type="hidden" value="<?= $decide_template_ ?>" name="template_table_">
+						<input type="hidden" value="<?= $totalworkhh_top ?>" name="workhh_top">
+						<input type="hidden" value="<?= $totalworkmm_top ?>" name="workmm_top">
+						<input type="hidden" value="<?= $cnprejob_top ?>" name="jobdays_top">
+						<?php if ($decide_template_ == "1") : ?>
+							<input type="hidden" value="0" name="janhh_top">
+							<input type="hidden" value="0" name="janmm_top">
+							<input type="hidden" value="<?= $cnactjobp_top ?>" name="workdays_top">
+							<input type="hidden" value="0" name="holydays_top">
+							<input type="hidden" value="0" name="offdays_top">
+							<input type="hidden" value="0" name="delaydays_top">
+							<input type="hidden" value="0" name="earlydays_top">
+						<?php elseif ($decide_template_ == "2") : ?>
+							<input type="hidden" value="" name="janhh_top">
+							<input type="hidden" value="" name="janmm_top">
+							<input type="hidden" value="<?= $cnactjoba_top ?>" name="workdays_top">
+							<input type="hidden" value="0" name="holydays_top">
+							<input type="hidden" value="<?= $offdayswork_top ?>" name="offdays_top">
+							<input type="hidden" value="<?= $delaydayswork_top ?>" name="delaydays_top">
+							<input type="hidden" value="<?= $earlydayswork_top ?>" name="earlydays_top">
+						<?php endif; ?>
 						<input type="submit" name="MonthSaveKintai" class="btn btn-primary" id="btnSaveMonth" role="button" value="月登録">
 					</td>
-					<td><input type="text" class="form-control" style="text-align: center" name="workhh_bottom" id="workhh_bottom" maxlength="2" value="<?= $totalWorkHours ?>"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="workmm_bottom" id="workmm_bottom" maxlength="2" value="<?= $totalWorkMinutes ?>"></td>
-					<td><input type="text" class="form-control" style="text-align: center" name="jobday_bottom" id="jobday_bottom" maxlength="2" value="<?= $countJobStartHH ?>"></td>
-					<?php if ($decide_template_ == "1") : ?>
-						<td><input type="text" class="form-control" style="text-align: center" name="workday_bottom" id="workday_bottom" maxlength="2" value="<?= $countJobStartHH ?>"></td>
-						<td><input type="text" class="form-control" style="text-align: center" name="holyday_bottom" id="holyday_bottom" maxlength="2" value="0"></td>
-						<td><input type="text" class="form-control" style="text-align: center" name="offday_bottom" id="offday_bottom" maxlength="2" value="<?= $countJobStartHH - $countJobStartHH ?>"></td>
-						<td><input type="text" class="form-control" style="text-align: center" name="delayday_bottom" id="delayday_bottom" maxlength="2" value="0"></td>
-						<td><input type="text" class="form-control" style="text-align: center;" name="earlyday_top" id="earlyday_top" maxlength="2" value="0"></td>
-					<?php elseif ($decide_template_ == "2") : ?>
-						<td><input type="text" class="form-control" style="text-align: center" name="workday_bottom" id="workday_bottom" maxlength="2" value="<?= $countDayStartHH ?>"></td>
-						<td><input type="text" class="form-control" style="text-align: center" name="holyday_bottom" id="holyday_bottom" maxlength="2" value="0"></td>
-						<td><input type="text" class="form-control" style="text-align: center" name="offday_bottom" id="offday_bottom" maxlength="2" value="<?= $countJobStartHH - $countDayStartHH ?>"></td>
-						<td><input type="text" class="form-control" style="text-align: center" name="delayday_bottom" id="delayday_bottom" maxlength="2" value="<?= $countLate ?>"></td>
-						<td><input type="text" class="form-control" style="text-align: center;" name="earlyday_top" id="earlyday_top" maxlength="2" value="<?= $countEarly ?>"></td>
-					<?php endif; ?>
+					<?php
+					foreach ($workmonth_list as $key) {
+					?>
+						<td><input type="text" class="form-control" style="text-align: center" name="workhh_bottom" id="workhh_bottom" maxlength="2" value="<?= isset($totalworkhh_top) ? $totalworkhh_top : $key['jobhour']; ?>"></td>
+						<td><input type="text" class="form-control" style="text-align: center" name="workmm_bottom" id="workmm_bottom" maxlength="2" value="<?= isset($totalworkmm_top) ? $totalworkmm_top : $key['jobminute']; ?>"></td>
+						<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= isset($cnprejob_top) ? $cnprejob_top : $key['cn_pre_job']; ?>"></td>
+						<?php if ($decide_template_ == "1") : ?>
+							<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= isset($cnactjobp_top) ? $cnactjobp_top : $key['cn_act_job']; ?>"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="holydays_bottom" id="holydays_bottom" maxlength="2" value="0"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom" id="offdays_bottom" maxlength="2" value="0"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom" id="delaydays_bottom" maxlength="2" value="0"></td>
+							<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom" id="earlydays_bottom" maxlength="2" value="0"></td>
+						<?php elseif ($decide_template_ == "2") : ?>
+							<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= isset($cnactjoba_top) ? $cnactjoba_top : $key['cn_act_job']; ?>"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="holydays_bottom" id="holydays_bottom" maxlength="2" value="0"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom" id="offdays_bottom" maxlength="2" value="<?= isset($offdayswork_top) ? $offdayswork_top : $key['offdays']; ?>"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom" id="delaydays_bottom" maxlength="2" value="<?= isset($delaydayswork_top) ? $delaydayswork_top : $key['delaydays']; ?>"></td>
+							<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom" id="earlydays_bottom" maxlength="2" value="<?= isset($earlydayswork_top) ? $earlydayswork_top : $key['earlydays']; ?>"></td>
+						<?php endif; ?>
+					<?php
+					}
+					?>
 				</form>
 			</tr>
 		</tbody>
