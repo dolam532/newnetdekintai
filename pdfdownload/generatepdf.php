@@ -11,6 +11,7 @@ $dept = json_decode($_POST['dept'], true);
 $date_show = json_decode($_POST['date_show'], true);
 $template = json_decode($_POST['template'], true);
 $data = json_decode($_POST['data'], true);
+$workmonth_list = json_decode($_POST['workmonth_list'], true);
 
 // Define your CSS styles
 $style_bold = 'font-weight: 700;';
@@ -106,7 +107,17 @@ $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the hea
 $tcpdf->Cell(25, 13.6, '実働時間', 1, 0, 'C', true);
 $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
-$tcpdf->Cell(20, 13.6, '', 1, 0, 'C', true);
+if (!empty($workmonth_list)) {
+	foreach ($workmonth_list as $key) {
+		if ($template == "1") {
+			$tcpdf->Cell(20, 13.6, $key['jobhour'] . ':' . $key['jobminute'], 1, 0, 'C', true);
+		} elseif ($template == "2") {
+			$tcpdf->Cell(20, 13.6, $key['jobhour'] . ':' . $key['jobminute'], 1, 0, 'C', true);
+		}
+	}
+} else {
+	$tcpdf->Cell(20, 13.6, '', 1, 0, 'C', true);
+}
 $tcpdf->SetFillColor(240, 240, 240); // Set the fill color for the header
 $tcpdf->SetTextColor(0, 0, 0); // Set the text color for the header
 $tcpdf->Cell(25, 13.6, '勤務状況', 1, 0, 'C', true);
@@ -121,12 +132,27 @@ $tcpdf->Cell(15, 6.8, '早退', 1, 1, 'C', true); // Add 1 to move to the next l
 $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data
-$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
-$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
-$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
-$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
-$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
-$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
-$tcpdf->Cell(15, 6.8, '', 1, 1, 'C', true);
+if (!empty($workmonth_list)) {
+	foreach ($workmonth_list as $key) {
+		if ($template == "1") {
+			$tcpdf->Cell(70, 6.8, $key['jobhour'], 0, 0, 'C', false);
+			$tcpdf->Cell(30, 6.8, $key['jobhour'], 1, 0, 'C', true);
+			$tcpdf->Cell(30, 6.8, $key['jobhour'], 1, 0, 'C', true);
+			$tcpdf->Cell(15, 6.8, $key['jobhour'], 1, 0, 'C', true);
+			$tcpdf->Cell(15, 6.8, $key['jobhour'], 1, 0, 'C', true);
+			$tcpdf->Cell(15, 6.8, $key['jobhour'], 1, 0, 'C', true);
+			$tcpdf->Cell(15, 6.8, $key['jobhour'], 1, 1, 'C', true);
+		} elseif ($template == "2") {
+		}
+	}
+} else {
+	$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(15, 6.8, '', 1, 1, 'C', true);
+}
 
 $tcpdf->Output("download.pdf", "I");

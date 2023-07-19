@@ -60,6 +60,10 @@ $worktime_list = mysqli_fetch_all($result_worktime, MYSQLI_ASSOC);
 
 $totalWorkHours = 0;
 $totalWorkMinutes = 0;
+$totalJanHours = 0;
+$totalJanMinutes = 0;
+$totalDayHours = 0;
+$totalDayMinutes = 0;
 $countJobStartHH = 0;
 $countDayStartHH = 0;
 $countLate = 0;
@@ -71,6 +75,11 @@ foreach ($worktime_list as $work) {
 
     if (isset($work['daystarthh']) && !empty($work['daystarthh'])) {
         $countDayStartHH++;
+
+        $dayHours = isset($work['workhh']) ? intval($work['workhh']) : 0;
+        $dayMinutes = isset($work['workmm']) ? intval($work['workmm']) : 0;
+        $totalDayHours += $dayHours;
+        $totalDayMinutes += $dayMinutes;
     }
 
     if (!empty($work['daystarthh']) && !empty($work['daystartmm']) && !empty($work['dayendhh']) && !empty($work['dayendhh'])) {
@@ -103,13 +112,31 @@ foreach ($worktime_list as $work) {
     $workMinutes = isset($work['workmm']) ? intval($work['workmm']) : 0;
     $totalWorkHours += $workHours;
     $totalWorkMinutes += $workMinutes;
+
+    $janHours = isset($work['janhh']) ? intval($work['janhh']) : 0;
+    $janMinutes = isset($work['janmm']) ? intval($work['janmm']) : 0;
+    $totalJanHours += $janHours;
+    $totalJanMinutes += $janMinutes;
 }
 $countJobAct = $countJobStartHH - $countDayStartHH;
+
 // Adjust minutes to hours if necessary
 if ($totalWorkMinutes >= 60) {
-    $additionalHours = floor($totalWorkMinutes / 60);
-    $totalWorkHours += $additionalHours;
+    $additionalWHours = floor($totalWorkMinutes / 60);
+    $totalWorkHours += $additionalWHours;
     $totalWorkMinutes %= 60;
+}
+
+if ($totalJanMinutes >= 60) {
+    $additionalJHours = floor($totalJanMinutes / 60);
+    $totalJanHours += $additionalJHours;
+    $totalJanMinutes %= 60;
+}
+
+if ($totalDayMinutes >= 60) {
+    $additionalDHours = floor($totalDayMinutes / 60);
+    $totalDayHours += $additionalDHours;
+    $totalDayMinutes %= 60;
 }
 
 $keyed = array_column($worktime_list, NULL, 'workymd'); // replace indexes with ur_user_id values
@@ -406,15 +433,16 @@ if (isset($_POST['MonthSaveKintai'])) {
     $_SESSION['selyy'] = $_POST["year"];
     $yearmonth = $_POST["year"] . $_POST["month"];
     $_SESSION['template_table'] = $_POST["template_table_"];
-
+    $gen_id_ = intval($_SESSION['genid']);
     $uid = mysqli_real_escape_string($conn, $_SESSION['uid']);
-    $genid = mysqli_real_escape_string($conn, $_SESSION['genid']);
+    $genid = mysqli_real_escape_string($conn, $gen_id_);
     $workym = mysqli_real_escape_string($conn, $yearmonth);
 
     $jobhour = mysqli_real_escape_string($conn, $_POST['workhh_top']);
     $jobminute = mysqli_real_escape_string($conn, $_POST['workmm_top']);
     $jobhour2 = mysqli_real_escape_string($conn, $_POST['workhh_bottom']);
     $jobminute2 = mysqli_real_escape_string($conn, $_POST['workmm_bottom']);
+
     $janhour = mysqli_real_escape_string($conn, $_POST['janhh_top']);
     $janminute = mysqli_real_escape_string($conn, $_POST['janmm_top']);
     $janhour2 = mysqli_real_escape_string($conn, $_POST['janhh_bottom']);
@@ -461,3 +489,4 @@ WHERE
 
 $result_workmonth = mysqli_query($conn, $sql_workmonth);
 $workmonth_list = mysqli_fetch_all($result_workmonth, MYSQLI_ASSOC);
+var_dump($workmonth_list);
