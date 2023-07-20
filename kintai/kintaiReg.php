@@ -98,8 +98,19 @@ if ($_SESSION['auth'] == false) {
 		unset($_SESSION['save_success']);
 	}
 	?>
+	<?php
+	if (isset($_SESSION['delete_all_success']) && isset($_POST['DeleteAll'])) {
+	?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['delete_all_success']; ?>
+		</div>
+	<?php
+		unset($_SESSION['delete_all_success']);
+	}
+	?>
 	<div class="row">
-		<div class="col-md-5 text-left" name="workYm_page_title">
+		<div class="col-md-3 text-left" name="workYm_page_title">
 			<div class="title_name text-center">
 				<span id="workYm_page_title" class="text-left">勤 務 表</span>
 			</div>
@@ -151,10 +162,19 @@ if ($_SESSION['auth'] == false) {
 				</div>
 			</div>
 		</form>
-		<div class="col-md-3 text-right">
+		<div class="col-md-5 text-right">
 			<div class="print_btn">
 				<p>
-					<a href="#" onclick="autoInputHandle()" class="btn btn-default" style="width: 120px;">自動入力</a>
+				<form method="post">
+					<input type="hidden" value="<?= $year ?>" name="year">
+					<input type="hidden" value="<?= $month ?>" name="month">
+					<button id="delete_all" name="DeleteAll" class="btn btn-default" style="width: auto;" type="submit">すべて削除</button>
+				</form>
+				</p>
+			</div>
+			<div class="print_btn">
+				<p>
+					<a href="#" onclick="autoInputHandle()" class="btn btn-default" style="width: auto;">自動入力</a>
 				</p>
 			</div>
 
@@ -167,7 +187,7 @@ if ($_SESSION['auth'] == false) {
 					<input type="hidden" name="date_show" value="<?php echo htmlspecialchars(json_encode($date_show)); ?>">
 					<input type="hidden" name="template" value="<?php echo htmlspecialchars(json_encode($decide_template_)); ?>">
 					<input type="hidden" name="workmonth_list" value="<?php echo htmlspecialchars(json_encode($workmonth_list)); ?>">
-					<button id="submit-button" class="btn btn-default" style="width: 120px;" type="button">勤務表印刷</button>
+					<button id="submit-button" class="btn btn-default" style="width: auto;" type="button">勤務表印刷</button>
 				</form>
 				</p>
 			</div>

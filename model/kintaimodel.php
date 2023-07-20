@@ -499,3 +499,39 @@ WHERE
 
 $result_workmonth = mysqli_query($conn, $sql_workmonth);
 $workmonth_list = mysqli_fetch_all($result_workmonth, MYSQLI_ASSOC);
+
+// Delete data to tbl_worktime table and tbl_workmonth of database
+if (isset($_POST['DeleteAll'])) {
+    $deleteAllData = false;
+    $_SESSION['selmm'] = $_POST['month'];
+    $_SESSION['selyy'] = $_POST['year'];
+    $_SESSION['template_table'] = $_POST["template_table_"];
+    $yearmonthSlet = $_POST["year"] . '/' . $_POST["month"];
+    $yearmonth = $_POST["year"] . $_POST["month"];
+
+    $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
+    $workymS = mysqli_real_escape_string($conn, $yearmonthSlet);
+    $workym = mysqli_real_escape_string($conn, $yearmonth);
+    $sql = "DELETE FROM `tbl_worktime` 
+            WHERE uid ='$uid' 
+            AND LEFT(`tbl_worktime`.`workymd`, 7) IN('$workymS')";
+
+    if ($conn->query($sql) === TRUE) {
+        $deleteAllData = true;
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+    if ($deleteAllData = true) {
+        $sql2 = "DELETE FROM `tbl_workmonth` 
+            WHERE uid ='$uid' 
+            AND LEFT(`tbl_workmonth`.`workym`, 6) IN('$workym')";
+
+        if ($conn->query($sql2) === TRUE) {
+            $_SESSION['delete_all_success'] =  $delete_all_success;
+            $_SESSION['decide_show'] = "1";
+            header("Refresh:3");
+        } else {
+            echo 'query error: ' . mysqli_error($conn);
+        }
+    }
+}

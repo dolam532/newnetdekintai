@@ -7,6 +7,7 @@ $update_success = '入力情報が更新されます。';
 $connect_error = '接続エラー: ';
 $save_fail = '入力情報保存できませんでした。';
 $delete_success = '削除成功しました。';
+$delete_all_success = 'すべて削除成功しました。';
 
 // Login & Logout
 $login_empty_id = 'ログイン失敗！  idを入力してください。';
