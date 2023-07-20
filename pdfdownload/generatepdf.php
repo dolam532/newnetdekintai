@@ -112,7 +112,7 @@ if (!empty($workmonth_list)) {
 		if ($template == "1") {
 			$tcpdf->Cell(20, 13.6, $key['jobhour'] . ':' . $key['jobminute'], 1, 0, 'C', true);
 		} elseif ($template == "2") {
-			$tcpdf->Cell(20, 13.6, $key['jobhour'] . ':' . $key['jobminute'], 1, 0, 'C', true);
+			$tcpdf->Cell(20, 13.6, $key['workhour'] . ':' . $key['workhour'], 1, 0, 'C', true);
 		}
 	}
 } else {
@@ -135,14 +135,21 @@ $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the dat
 if (!empty($workmonth_list)) {
 	foreach ($workmonth_list as $key) {
 		if ($template == "1") {
-			$tcpdf->Cell(70, 6.8, $key['jobhour'], 0, 0, 'C', false);
-			$tcpdf->Cell(30, 6.8, $key['jobhour'], 1, 0, 'C', true);
-			$tcpdf->Cell(30, 6.8, $key['jobhour'], 1, 0, 'C', true);
-			$tcpdf->Cell(15, 6.8, $key['jobhour'], 1, 0, 'C', true);
-			$tcpdf->Cell(15, 6.8, $key['jobhour'], 1, 0, 'C', true);
-			$tcpdf->Cell(15, 6.8, $key['jobhour'], 1, 0, 'C', true);
-			$tcpdf->Cell(15, 6.8, $key['jobhour'], 1, 1, 'C', true);
+			$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+			$tcpdf->Cell(30, 6.8, $key['jobdays'], 1, 0, 'C', true);
+			$tcpdf->Cell(30, 6.8, $key['workdays'], 1, 0, 'C', true);
+			$tcpdf->Cell(15, 6.8, $key['holydays'], 1, 0, 'C', true);
+			$tcpdf->Cell(15, 6.8, $key['offdays'], 1, 0, 'C', true);
+			$tcpdf->Cell(15, 6.8, $key['delaydays'], 1, 0, 'C', true);
+			$tcpdf->Cell(15, 6.8, $key['earlydays'], 1, 1, 'C', true);
 		} elseif ($template == "2") {
+			$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+			$tcpdf->Cell(30, 6.8, $key['jobdays'], 1, 0, 'C', true);
+			$tcpdf->Cell(30, 6.8, $key['workdays'], 1, 0, 'C', true);
+			$tcpdf->Cell(15, 6.8, $key['holydays'], 1, 0, 'C', true);
+			$tcpdf->Cell(15, 6.8, $key['offdays'], 1, 0, 'C', true);
+			$tcpdf->Cell(15, 6.8, $key['delaydays'], 1, 0, 'C', true);
+			$tcpdf->Cell(15, 6.8, $key['earlydays'], 1, 1, 'C', true);
 		}
 	}
 } else {

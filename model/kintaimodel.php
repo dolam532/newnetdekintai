@@ -433,41 +433,56 @@ if (isset($_POST['MonthSaveKintai'])) {
     $_SESSION['selyy'] = $_POST["year"];
     $yearmonth = $_POST["year"] . $_POST["month"];
     $_SESSION['template_table'] = $_POST["template_table_"];
-    $gen_id_ = intval($_SESSION['genid']);
-    $uid = mysqli_real_escape_string($conn, $_SESSION['uid']);
+
+    $gen_id_ = intval($_SESSION['auth_genid']);
+    $workhh_top_ = intval($_POST['workhh_top']);
+    $workmm_top_ = intval($_POST['workmm_top']);
+    $jobhh_top_ = intval($_POST['jobhh_top']);
+    $jobmm_top_ = intval($_POST['jobmm_top']);
+    $jobhh_bottom_ = intval($_POST['jobhh_bottom']);
+    $jobmm_bottom_ = intval($_POST['jobmm_bottom']);
+    $workhh_bottom_ = intval($_POST['workhh_bottom']);
+    $workmm_bottom_ = intval($_POST['workmm_bottom']);
+
+    $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
     $genid = mysqli_real_escape_string($conn, $gen_id_);
     $workym = mysqli_real_escape_string($conn, $yearmonth);
 
-    $jobhour = mysqli_real_escape_string($conn, $_POST['workhh_top']);
-    $jobminute = mysqli_real_escape_string($conn, $_POST['workmm_top']);
-    $jobhour2 = mysqli_real_escape_string($conn, $_POST['workhh_bottom']);
-    $jobminute2 = mysqli_real_escape_string($conn, $_POST['workmm_bottom']);
+    $jobhour2 = mysqli_real_escape_string($conn, $jobhh_top_);
+    $jobminute2 = mysqli_real_escape_string($conn, $jobmm_top_);
+    $jobhour = mysqli_real_escape_string($conn, $jobhh_bottom_);
+    $jobminute = mysqli_real_escape_string($conn, $jobmm_bottom_);
 
-    $janhour = mysqli_real_escape_string($conn, $_POST['janhh_top']);
-    $janminute = mysqli_real_escape_string($conn, $_POST['janmm_top']);
-    $janhour2 = mysqli_real_escape_string($conn, $_POST['janhh_bottom']);
-    $janminute2 = mysqli_real_escape_string($conn, $_POST['janmm_bottom']);
+    $workhour2 = mysqli_real_escape_string($conn, $workhh_top_);
+    $workminute2 = mysqli_real_escape_string($conn, $workmm_top_);
+    $workhour = mysqli_real_escape_string($conn, $workhh_bottom_);
+    $workminute = mysqli_real_escape_string($conn, $workmm_bottom_);
 
-    $jobdays = mysqli_real_escape_string($conn, $_POST['jobdays_top']);
-    $jobdays2 = mysqli_real_escape_string($conn, $_POST['jobdays_bottom']);
-    $workdays = mysqli_real_escape_string($conn, $_POST['workdays_top']);
-    $workdays2 = mysqli_real_escape_string($conn, $_POST['workdays_bottom']);
-    $holydays = mysqli_real_escape_string($conn, $_POST['holydays_top']);
-    $holydays2 = mysqli_real_escape_string($conn, $_POST['holydays_bottom']);
-    $offdays = mysqli_real_escape_string($conn, $_POST['offdays_top']);
-    $offdays2 = mysqli_real_escape_string($conn, $_POST['offdays_bottom']);
-    $delaydays = mysqli_real_escape_string($conn, $_POST['delaydays_top']);
-    $delaydays2 = mysqli_real_escape_string($conn, $_POST['delaydays_bottom']);
-    $earlydays = mysqli_real_escape_string($conn, $_POST['earlydays_top']);
-    $earlydays2 = mysqli_real_escape_string($conn, $_POST['earlydays_bottom']);
+    $janhour2 = mysqli_real_escape_string($conn, $_POST['janhh_top']);
+    $janminute2 = mysqli_real_escape_string($conn, $_POST['janmm_top']);
+    $janhour = mysqli_real_escape_string($conn, $_POST['janhh_bottom']);
+    $janminute = mysqli_real_escape_string($conn, $_POST['janmm_bottom']);
 
-    $sql = "INSERT INTO `tbl_workmonth` (`uid`, `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
+    $jobdays2 = mysqli_real_escape_string($conn, $_POST['jobdays_top']);
+    $jobdays = mysqli_real_escape_string($conn, $_POST['jobdays_bottom']);
+    $workdays2 = mysqli_real_escape_string($conn, $_POST['workdays_top']);
+    $workdays = mysqli_real_escape_string($conn, $_POST['workdays_bottom']);
+    $holydays2 = mysqli_real_escape_string($conn, $_POST['holydays_top']);
+    $holydays = mysqli_real_escape_string($conn, $_POST['holydays_bottom']);
+    $offdays2 = mysqli_real_escape_string($conn, $_POST['offdays_top']);
+    $offdays = mysqli_real_escape_string($conn, $_POST['offdays_bottom']);
+    $delaydays2 = mysqli_real_escape_string($conn, $_POST['delaydays_top']);
+    $delaydays = mysqli_real_escape_string($conn, $_POST['delaydays_bottom']);
+    $earlydays2 = mysqli_real_escape_string($conn, $_POST['earlydays_top']);
+    $earlydays = mysqli_real_escape_string($conn, $_POST['earlydays_bottom']);
+
+    $sql = "INSERT INTO `tbl_workmonth` (`uid`, `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `workhour`, `workminute`, `workhour2`, `workminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
                 `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `reg_dt`)
-                VALUES ('$uid', '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
+                VALUES ('$uid', '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$workhour', '$workminute', '$workhour2', '$workminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
                 '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$reg_dt')
                 ON DUPLICATE KEY UPDATE
-                genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2', janhour='$janhour', janminute='$janminute',
-                janhour2='$janhour2', janminute2='$janminute2', jobdays='$jobdays', jobdays2='$jobdays2', workdays='$workdays', workdays2='$workdays2', holydays='$holydays',
+                genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2', workhour='$workhour', workminute='$workminute', workhour2='$workhour2', workminute2='$workminute2',
+                janhour='$janhour', janminute='$janminute', janhour2='$janhour2', janminute2='$janminute2', jobdays='$jobdays', jobdays2='$jobdays2', workdays='$workdays', workdays2='$workdays2', holydays='$holydays',
                 holydays2='$holydays2', offdays='$offdays', offdays2='$offdays2', delaydays='$delaydays', delaydays2='$delaydays2', reg_dt='$reg_dt'";
 
     if ($conn->query($sql) === TRUE) {
