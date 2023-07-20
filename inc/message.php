@@ -64,6 +64,7 @@ $kintai_bstart_empty = '業務開始を入力してください。';
 $kintai_bend_empty = '業務終了を入力してください。';
 $kintai_bend_empty = '業務終了を入力してください。';
 $kintai_offtime_empty = '休憩時間を入力してください。';
+$kintai_click_month = '月登録まだ保存されてないです。確認してください。';
 
 // KintaiMonthly
 $NO_DATA = 'データが存在しませんでした。';

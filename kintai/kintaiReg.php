@@ -160,14 +160,14 @@ if ($_SESSION['auth'] == false) {
 
 			<div class="print_btn">
 				<p>
-				<form action="../pdfdownload/generatepdf.php" method="post" target="_blank">
+				<form id="autopdf" action="../pdfdownload/generatepdf.php" method="post" target="_blank">
 					<input type="hidden" name="data" value="<?php echo htmlspecialchars(json_encode($datas)); ?>">
 					<input type="hidden" name="name" value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_name'])); ?>">
 					<input type="hidden" name="dept" value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_dept'])); ?>">
 					<input type="hidden" name="date_show" value="<?php echo htmlspecialchars(json_encode($date_show)); ?>">
 					<input type="hidden" name="template" value="<?php echo htmlspecialchars(json_encode($decide_template_)); ?>">
 					<input type="hidden" name="workmonth_list" value="<?php echo htmlspecialchars(json_encode($workmonth_list)); ?>">
-					<button class="btn btn-default" style="width: 120px;" type="submit">勤務表印刷</button>
+					<button id="submit-button" class="btn btn-default" style="width: 120px;" type="button">勤務表印刷</button>
 				</form>
 				</p>
 			</div>
@@ -292,8 +292,8 @@ if ($_SESSION['auth'] == false) {
 							<td><strong>0</strong></td>
 							<td><strong>0</strong></td>
 						<?php elseif ($decide_template_ == "2") : ?>
-							<td><strong><?= $totaldayhh_top = isset($totalDayHours) ? $totalDayHours : (isset($key['workhour2']) ? $key['workhour2'] : '0'); ?></strong></td>
-							<td><strong><?= $totaldaymm_top = isset($totalDayMinutes) ? $totalDayMinutes : (isset($key['workminute2']) ? $key['workminute2'] : '0'); ?></strong></td>
+							<td><strong><?= $totaldayhh_top = isset($totalDayHours) ? $totalDayHours : (isset($key['jobhour2']) ? $key['jobhour2'] : '0'); ?></strong></td>
+							<td><strong><?= $totaldaymm_top = isset($totalDayMinutes) ? $totalDayMinutes : (isset($key['jobminute2']) ? $key['jobminute2'] : '0'); ?></strong></td>
 							<td><strong><?= $cnprejob_top = isset($countJobStartHH) ? $countJobStartHH : (isset($key['jobdays2']) ? $key['jobdays2'] : '0'); ?></strong></td>
 							<td><strong><?= $cnactjob_top = isset($countDayStartHH) ? $countDayStartHH : (isset($key['workdays2']) ? $key['workdays2'] : '0'); ?></strong></td>
 							<td><strong>0</strong></td>
@@ -346,8 +346,8 @@ if ($_SESSION['auth'] == false) {
 							<input type="hidden" value="0" name="delaydays_top">
 							<input type="hidden" value="0" name="earlydays_top">
 						<?php elseif ($decide_template_ == "2") : ?>
-							<input type="hidden" value="<?= $totaldayhh_top ?>" name="workhh_top">
-							<input type="hidden" value="<?= $totaldaymm_top ?>" name="workmm_top">
+							<input type="hidden" value="<?= $totaldayhh_top ?>" name="jobhh_top">
+							<input type="hidden" value="<?= $totaldaymm_top ?>" name="jobmm_top">
 							<input type="hidden" value="<?= $cnprejob_top ?>" name="jobdays_top">
 							<input type="hidden" value="<?= isset($totalJanHours) ? $totalJanHours : '0'; ?>" name="janhh_top">
 							<input type="hidden" value="<?= isset($totalJanMinutes) ? $totalJanMinutes : '0'; ?>" name="janmm_top">
@@ -364,27 +364,53 @@ if ($_SESSION['auth'] == false) {
 						foreach ($workmonth_list as $key) {
 					?>
 							<?php if ($decide_template_ == "1") : ?>
-								<input type="hidden" value="0" name="janhh_bottom">
-								<input type="hidden" value="0" name="janmm_bottom">
-								<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="2" value="<?= isset($totalworkhh_top) ? $totalworkhh_top : (isset($key['jobhour']) ? $key['jobhour'] : '0'); ?>"></td>
-								<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= isset($totalworkmm_top) ? $totalworkmm_top : (isset($key['jobminute']) ? $key['jobminute'] : '0'); ?>"></td>
-								<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= isset($cnprejob_top) ? $cnprejob_top : (isset($key['jobdays']) ? $key['cn_pre_job'] : '0'); ?>"></td>
-								<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= isset($cnactjob_top) ? $cnactjob_top : (isset($key['workdays']) ? $key['cn_act_job'] : '0'); ?>"></td>
-								<td><input type="text" class="form-control" style="text-align: center" name="holydays_bottom" id="holydays_bottom" maxlength="2" value="0"></td>
-								<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom" id="offdays_bottom" maxlength="2" value="0"></td>
-								<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom" id="delaydays_bottom" maxlength="2" value="0"></td>
-								<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom" id="earlydays_bottom" maxlength="2" value="0"></td>
+								<?php if ($_SESSION['decide_show'] == "1") : ?>
+									<input type="hidden" value="0" name="janhh_bottom">
+									<input type="hidden" value="0" name="janmm_bottom">
+									<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= isset($totalworkhh_top) ? $totalworkhh_top : (isset($key['jobhour']) ? $key['jobhour'] : '0'); ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= isset($totalworkmm_top) ? $totalworkmm_top : (isset($key['jobminute']) ? $key['jobminute'] : '0'); ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= isset($cnprejob_top) ? $cnprejob_top : (isset($key['jobdays']) ? $key['cn_pre_job'] : '0'); ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= isset($cnactjob_top) ? $cnactjob_top : (isset($key['workdays']) ? $key['cn_act_job'] : '0'); ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="holydays_bottom" id="holydays_bottom" maxlength="2" value="0"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom" id="offdays_bottom" maxlength="2" value="0"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom" id="delaydays_bottom" maxlength="2" value="0"></td>
+									<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom" id="earlydays_bottom" maxlength="2" value="0"></td>
+								<?php elseif ($_SESSION['decide_show'] == "2") : ?>
+									<input type="hidden" value="<?= $key['janhour'] ?>" name="janhh_bottom">
+									<input type="hidden" value="<?= $key['janminute'] ?>" name="janmm_bottom">
+									<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= $key['jobhour'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= $key['jobminute'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= $key['jobdays'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= $key['workdays'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="holydays_bottom" id="holydays_bottom" maxlength="2" value="<?= $key['holydays'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom" id="offdays_bottom" maxlength="2" value="<?= $key['offdays'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom" id="delaydays_bottom" maxlength="2" value="<?= $key['delaydays'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom" id="earlydays_bottom" maxlength="2" value="<?= $key['earlydays'] ?>"></td>
+								<?php endif; ?>
 							<?php elseif ($decide_template_ == "2") : ?>
-								<input type="hidden" value="<?= isset($totalJanHours) ? $totalJanHours : '0'; ?>" name="janhh_bottom">
-								<input type="hidden" value="<?= isset($totalJanMinutes) ? $totalJanMinutes : '0'; ?>" name="janmm_bottom">
-								<td><input type="text" class="form-control" style="text-align: center" name="workhh_bottom" id="workhh_bottom" maxlength="2" value="<?= isset($totaldayhh_top) ? $totaldayhh_top : (isset($key['jobhour']) ? $key['jobhour'] : '0'); ?>"></td>
-								<td><input type="text" class="form-control" style="text-align: center" name="workmm_bottom" id="workmm_bottom" maxlength="2" value="<?= isset($totaldaymm_top) ? $totaldaymm_top : (isset($key['jobminute']) ? $key['jobminute'] : '0'); ?>"></td>
-								<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= isset($cnprejob_top) ? $cnprejob_top : (isset($key['jobdays']) ? $key['cn_pre_job'] : '0'); ?>"></td>
-								<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= isset($cnactjob_top) ? $cnactjob_top : (isset($key['workdays']) ? $key['cn_act_job'] : '0'); ?>"></td>
-								<td><input type="text" class="form-control" style="text-align: center" name="holydays_bottom" id="holydays_bottom" maxlength="2" value="0"></td>
-								<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom" id="offdays_bottom" maxlength="2" value="<?= isset($offdayswork_top) ? $offdayswork_top : (isset($key['offdays']) ? $key['offdays'] : '0'); ?>"></td>
-								<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom" id="delaydays_bottom" maxlength="2" value="<?= isset($delaydayswork_top) ? $delaydayswork_top : (isset($key['delaydays']) ? $key['delaydays'] : '0'); ?>"></td>
-								<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom" id="earlydays_bottom" maxlength="2" value="<?= isset($earlydayswork_top) ? $earlydayswork_top : (isset($key['earlydays']) ? $key['earlydays'] : '0'); ?>"></td>
+								<?php if ($_SESSION['decide_show'] == "1") : ?>
+									<input type="hidden" value="<?= isset($totalJanHours) ? $totalJanHours : '0'; ?>" name="janhh_bottom">
+									<input type="hidden" value="<?= isset($totalJanMinutes) ? $totalJanMinutes : '0'; ?>" name="janmm_bottom">
+									<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= isset($totaldayhh_top) ? $totaldayhh_top : (isset($key['jobhour']) ? $key['jobhour'] : '0'); ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= isset($totaldaymm_top) ? $totaldaymm_top : (isset($key['jobminute']) ? $key['jobminute'] : '0'); ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= isset($cnprejob_top) ? $cnprejob_top : (isset($key['jobdays']) ? $key['cn_pre_job'] : '0'); ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= isset($cnactjob_top) ? $cnactjob_top : (isset($key['workdays']) ? $key['cn_act_job'] : '0'); ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="holydays_bottom" id="holydays_bottom" maxlength="2" value="0"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom" id="offdays_bottom" maxlength="2" value="<?= isset($offdayswork_top) ? $offdayswork_top : (isset($key['offdays']) ? $key['offdays'] : '0'); ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom" id="delaydays_bottom" maxlength="2" value="<?= isset($delaydayswork_top) ? $delaydayswork_top : (isset($key['delaydays']) ? $key['delaydays'] : '0'); ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom" id="earlydays_bottom" maxlength="2" value="<?= isset($earlydayswork_top) ? $earlydayswork_top : (isset($key['earlydays']) ? $key['earlydays'] : '0'); ?>"></td>
+								<?php elseif ($_SESSION['decide_show'] == "2") : ?>
+									<input type="hidden" value="<?= $key['janhour'] ?>" name="janhh_bottom">
+									<input type="hidden" value="<?= $key['janminute'] ?>" name="janmm_bottom">
+									<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= $key['jobhour'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= $key['jobminute'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= $key['jobdays'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= $key['workdays'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="holydays_bottom" id="holydays_bottom" maxlength="2" value="<?= $key['holydays'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom" id="offdays_bottom" maxlength="2" value="<?= $key['offdays'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom" id="delaydays_bottom" maxlength="2" value="<?= $key['delaydays'] ?>"></td>
+									<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom" id="earlydays_bottom" maxlength="2" value="<?= $key['earlydays'] ?>"></td>
+								<?php endif; ?>
 							<?php endif; ?>
 						<?php
 						}
@@ -404,8 +430,8 @@ if ($_SESSION['auth'] == false) {
 						<?php elseif ($decide_template_ == "2") : ?>
 							<input type="hidden" value="<?= isset($totalJanHours) ? $totalJanHours : '0'; ?>" name="janhh_bottom">
 							<input type="hidden" value="<?= isset($totalJanMinutes) ? $totalJanMinutes : '0'; ?>" name="janmm_bottom">
-							<td><input type="text" class="form-control" style="text-align: center" name="workhh_bottom" id="workhh_bottom" maxlength="2" value="<?= isset($totaldayhh_top) ? $totaldayhh_top : '0'; ?>"></td>
-							<td><input type="text" class="form-control" style="text-align: center" name="workmm_bottom" id="workmm_bottom" maxlength="2" value="<?= isset($totaldaymm_top) ? $totaldaymm_top : '0'; ?>"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="2" value="<?= isset($totaldayhh_top) ? $totaldayhh_top : '0'; ?>"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= isset($totaldaymm_top) ? $totaldaymm_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= isset($cnprejob_top) ? $cnprejob_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= isset($cnactjob_top) ? $cnactjob_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="holydays_bottom" id="holydays_bottom" maxlength="2" value="0"></td>
@@ -851,6 +877,22 @@ if ($_SESSION['auth'] == false) {
 		$('#modal').modal('toggle');
 		$("#weekdayCheckbox").prop('checked', true);
 	}
+
+	// Submit for 自動入力 Error Check
+	$("#submit-button").click(function(event) {
+		event.preventDefault(); // Prevent the default form submission
+		<?php
+		if ($_SESSION['decide_show'] == "1") {
+		?>
+			alert("<?php echo $kintai_click_month; ?>");
+		<?php
+		} elseif ($_SESSION['decide_show'] == "2") {
+		?>
+			$("#autopdf").submit();
+		<?php
+		}
+		?>
+	});
 </script>
 
 <?php include('../inc/footer.php'); ?>

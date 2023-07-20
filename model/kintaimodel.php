@@ -204,6 +204,7 @@ if (isset($_POST['SaveUpdateKintai'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
+        $_SESSION['decide_show'] = "1";
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -224,6 +225,7 @@ if (isset($_POST['DeleteKintai'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] =  $delete_success;
+        $_SESSION['decide_show'] = "1";
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -420,6 +422,7 @@ if (isset($_POST['AutoUpdateKintai'])) {
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['autosave_success'] =  $autosave_success;
+            $_SESSION['decide_show'] = "1";
             header("Refresh:3");
         } else {
             echo 'query error: ' . mysqli_error($conn);
@@ -435,14 +438,10 @@ if (isset($_POST['MonthSaveKintai'])) {
     $_SESSION['template_table'] = $_POST["template_table_"];
 
     $gen_id_ = intval($_SESSION['auth_genid']);
-    $workhh_top_ = intval($_POST['workhh_top']);
-    $workmm_top_ = intval($_POST['workmm_top']);
     $jobhh_top_ = intval($_POST['jobhh_top']);
     $jobmm_top_ = intval($_POST['jobmm_top']);
     $jobhh_bottom_ = intval($_POST['jobhh_bottom']);
     $jobmm_bottom_ = intval($_POST['jobmm_bottom']);
-    $workhh_bottom_ = intval($_POST['workhh_bottom']);
-    $workmm_bottom_ = intval($_POST['workmm_bottom']);
 
     $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
     $genid = mysqli_real_escape_string($conn, $gen_id_);
@@ -452,11 +451,6 @@ if (isset($_POST['MonthSaveKintai'])) {
     $jobminute2 = mysqli_real_escape_string($conn, $jobmm_top_);
     $jobhour = mysqli_real_escape_string($conn, $jobhh_bottom_);
     $jobminute = mysqli_real_escape_string($conn, $jobmm_bottom_);
-
-    $workhour2 = mysqli_real_escape_string($conn, $workhh_top_);
-    $workminute2 = mysqli_real_escape_string($conn, $workmm_top_);
-    $workhour = mysqli_real_escape_string($conn, $workhh_bottom_);
-    $workminute = mysqli_real_escape_string($conn, $workmm_bottom_);
 
     $janhour2 = mysqli_real_escape_string($conn, $_POST['janhh_top']);
     $janminute2 = mysqli_real_escape_string($conn, $_POST['janmm_top']);
@@ -476,17 +470,18 @@ if (isset($_POST['MonthSaveKintai'])) {
     $earlydays2 = mysqli_real_escape_string($conn, $_POST['earlydays_top']);
     $earlydays = mysqli_real_escape_string($conn, $_POST['earlydays_bottom']);
 
-    $sql = "INSERT INTO `tbl_workmonth` (`uid`, `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `workhour`, `workminute`, `workhour2`, `workminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
+    $sql = "INSERT INTO `tbl_workmonth` (`uid`, `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
                 `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `reg_dt`)
-                VALUES ('$uid', '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$workhour', '$workminute', '$workhour2', '$workminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
+                VALUES ('$uid', '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
                 '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$reg_dt')
                 ON DUPLICATE KEY UPDATE
-                genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2', workhour='$workhour', workminute='$workminute', workhour2='$workhour2', workminute2='$workminute2',
+                genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2',
                 janhour='$janhour', janminute='$janminute', janhour2='$janhour2', janminute2='$janminute2', jobdays='$jobdays', jobdays2='$jobdays2', workdays='$workdays', workdays2='$workdays2', holydays='$holydays',
                 holydays2='$holydays2', offdays='$offdays', offdays2='$offdays2', delaydays='$delaydays', delaydays2='$delaydays2', reg_dt='$reg_dt'";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
+        $_SESSION['decide_show'] = "2";
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);

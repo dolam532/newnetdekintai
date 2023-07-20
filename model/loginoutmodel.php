@@ -29,6 +29,7 @@ if (isset($_POST['btnLogin'])) {
         $_SESSION['auth_name'] = "$user_name";
         $_SESSION['auth_genid'] = "$user_genid";
         $_SESSION['auth_dept'] = "$user_dept";
+        $_SESSION['decide_show'] = "1";
 
         if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('USER') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
             header("Location: ../index.php");
@@ -52,6 +53,7 @@ if (isset($_POST['btnLogout'])) {
     unset($_SESSION['auth_name']);
     unset($_SESSION['auth_genid']);
     unset($_SESSION['auth_dept']);
+    unset($_SESSION['decide_show']);
 
     header("Location: ../index.php");
     $_SESSION['logout_success'] =  $logout_success;
