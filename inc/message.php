@@ -9,6 +9,9 @@ $save_fail = '入力情報保存できませんでした。';
 $delete_success = '削除成功しました。';
 $delete_all_success = 'すべて削除成功しました。';
 
+// Index
+$login_is_not = '詳細情報はログイン後可能です。';
+
 // Login & Logout
 $login_empty_id = 'ログイン失敗！  idを入力してください。';
 $login_empty_pwd = 'ログイン失敗！  PWDを入力してください。';
