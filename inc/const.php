@@ -10,6 +10,8 @@ DEFINE('DB_NAME', 'newndk');
 DEFINE('ADMIN', '9');
 DEFINE('USER', '1');
 DEFINE('ADMINISTRATOR', '3');
+$domainName = 'new.netdekintai.com';
+$url_all = 'http://new.netdekintai.com/index.php';
 
 // GANASYS COMPANY NOTE
 DEFINE('GANASYS_COMPANY_ID', '1');

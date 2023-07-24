@@ -35,11 +35,35 @@ if (isset($_POST['btnLogin'])) {
             header("Location: ../index.php");
             $_SESSION['login_success'] =  $login_success;
             $_SESSION['last_login_timestamp'] =  time();
-            header("Location: ../index.php");
+
+            $uid = $_SESSION['auth_uid'];
+            $workymd = date('Y/m/d');
+            $logtype = $_SESSION['auth_type'];
+            $logtime = date('Y-m-d H:i:s');
+            $ipaddress = gethostbyname($domainName);
+
+            function getDomainFromURL($url)
+            {
+                $parsedURL = parse_url($url);
+                if (isset($parsedURL['host'])) {
+                    $domain = $parsedURL['host'];
+                } else {
+                    $domain = '';
+                }
+                return $domain;
+            }
+            $domain = getDomainFromURL($url_all);
+
+            $sql_userlogin_insert = "INSERT INTO `tbl_userlogin` (`uid`, `workymd`, `logtype`, `logtime`, `ipaddress`, `domain`) 
+            VALUES('$uid', '$workymd' ,'$logtype' ,'$logtime', '$ipaddress', '$domain')";
+            if (mysqli_query($conn, $sql_userlogin_insert)) {
+            } else {
+                echo 'query error: ' . mysqli_error($conn);
+            }
         } else {
             $_SESSION['login_fail'] =  $login_fail;
         }
-    }else{
+    } else {
         $_SESSION['login_fail'] =  $login_fail;
     }
 }

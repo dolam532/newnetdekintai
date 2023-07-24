@@ -204,7 +204,6 @@ include('./model/inactive.php');
 		$(".submit_viewcnt").click(function() {
 			var bidValue = $(".bid_").text();
 			var viewcntValue = $(".viewcnt_").text();
-			viewcntValue = viewcntValue;
 			$(".bid_").val(bidValue);
 			$(".viewcnt_").val(viewcntValue);
 			$("#form_id").submit();
