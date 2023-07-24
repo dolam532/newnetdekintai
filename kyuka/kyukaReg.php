@@ -4,7 +4,6 @@ session_start();
 include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../inc/const_array.php');
-include('../model/commonmodel.php');
 include('../model/kyukamodel.php');
 include('../inc/header.php');
 include('../model/inactive.php');
@@ -500,7 +499,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		}
 	}
 </style>
-<title>休暇届</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
 	<?php
@@ -592,7 +590,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
 					<input type="button" id="btnNew" value="新規 ">&nbsp;
 					<input type="button" id="btnAnnt" value="お知らせ ">&nbsp;
-					<input type="button" onclick="window.location.href='./vacationReg.php'" value="休暇情報 ">
+					<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+						<input type="button" onclick="window.location.href='./vacationReg.php'" value="休暇登録 ">
+					<?php endif; ?>
 				</div>
 			</div>
 		</div>
@@ -932,7 +932,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	</div>
 </div>
 <script>
-	// New button
+	//신규버튼 
 	$(document).on('click', '#btnNew', function(e) {
 		var totcnt = $("#totcnt").val();
 		var usecnt = $("#usecnt").val();
@@ -947,19 +947,19 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 		$('#modal').modal('toggle');
 
-		// In the case of a new application, it cannot be used until the application category is selected.
+		//신규때는 신청구분 선택하기 전에는 사용 불가
 		$("#strymd").val("").prop('disabled', true);
 		$("#endymd").val("").prop('disabled', true);
 
-		// In the case of a new application, it cannot be used until the application category is selected.
+		//신규때는 신청구분 선택하기 전에는 사용 불가
 		$("#strtime").val("").prop('disabled', true);
 		$("#endtime").val("").prop('disabled', true);
 	});
 
-	// Lock and unlock items when selecting vacation request type (day/hour)
+	//휴가신청 타입(일/시간) 선택시 항목 잠그고 풀기  
 	$('input[type=radio][name=kyukatype]').change(function() {
 		if (this.value == '1') {
-			// Select day
+			//일 선택
 			$("#strymd").prop('disabled', false);
 			$("#endymd").prop('disabled', false);
 			$("#strtime").prop('disabled', true);
@@ -967,7 +967,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			$("#ymdcnt").val("NaN");
 			$("#timecnt").val(0);
 		} else if (this.value == '0') {
-			// Time selection
+			//시간 선택
 			$("#strymd").prop('disabled', false);
 			$("#endymd").prop('disabled', true);
 			$("#strtime").prop('disabled', false);
@@ -979,21 +979,21 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		}
 	});
 
-	// Contact while on vacation
+	//휴가중 연락처
 	$('input[type=radio][name=destcode]').change(function() {
 		if (this.value == '0') {
-			// Japan
+			//일본
 			$("#destplace").val("日本").prop('readonly', true);
 		} else if (this.value == '1') {
-			// Korea
+			//한국
 			$("#destplace").val("韓国").prop('readonly', true);
 		} else {
-			// Other
+			//기타
 			$("#destplace").val("").prop('readonly', false);
 		}
 	});
 
-	// Calculation of vacation days when vacation days (str) change
+	//휴가일(str) 변경시 휴가일 계산
 	$("#strymd").change(function() {
 		var str = new Date($("#strymd").val());
 		var end = new Date($("#endymd").val());
@@ -1003,7 +1003,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			end = new Date($("#endymd").val());
 		}
 
-		// If hours are selected, the number of days is set to 0.
+		//시간을 선택하면 일수는 0으로 한다. 
 		if ($("input[name='kyukatype']:checked").val() == "0") {
 			$("#ymdcnt").val("0");
 			$("#endymd").val($("#strymd").val());
@@ -1013,7 +1013,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$("#ymdcnt").val(dateDiff + 1);
 	});
 
-	// Calculation of vacation days when vacation days (end) change
+	//휴가일(end) 변경시 휴가일 계산
 	$("#endymd").change(function() {
 		var str = new Date($("#strymd").val());
 		var end = new Date($("#endymd").val());
@@ -1027,32 +1027,33 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$("#ymdcnt").val(dateDiff + 1);
 	});
 
-	// Calculation of vacation time change
+	//휴가시간 변경시 계산
 	$("#strtime").on("change keyup paste", function() {
 		if (($("#strtime").val() * 1 > $("#endtime").val() * 1) && ($("#endtime").val().length == 2)) {
 			$("#endtime").val($("#strtime").val());
 		}
 		var timeDiff = $("#endtime").val() - $("#strtime").val()
 
-		timeDiff = timeDiff > 4 ? timeDiff - 1 : timeDiff; // Excluding lunch time
-		timeDiff = timeDiff > 8 ? 8 : timeDiff; // Up to 8 hours of application time at a time
+		timeDiff = timeDiff > 4 ? timeDiff - 1 : timeDiff; //점심시간 제외
+		timeDiff = timeDiff > 8 ? 8 : timeDiff; //한번에 신청 가능한 시간 최대 8시간
+
 		$("#timecnt").val(timeDiff);
 	});
 
-	// Calculation of vacation time change
+	//휴가시간 변경시 계산
 	$("#endtime").on("change keyup paste", function() {
 		if (($("#strtime").val() * 1 > $("#endtime").val() * 1) && ($("#endtime").val().length == 2)) {
 			$("#endtime").val($("#strtime").val());
 		}
 		var timeDiff = $("#endtime").val() - $("#strtime").val()
 
-		timeDiff = timeDiff > 4 ? timeDiff - 1 : timeDiff; // Excluding lunch time
-		timeDiff = timeDiff > 8 ? 8 : timeDiff; // Up to 8 hours of application time at a time
+		timeDiff = timeDiff > 4 ? timeDiff - 1 : timeDiff; //점심시간 제외
+		timeDiff = timeDiff > 8 ? 8 : timeDiff; //한번에 신청 가능한 시간 최대 8시간
 
 		$("#timecnt").val(timeDiff);
 	});
 
-	// Datepeeker Calender
+	//Datepeeker 설정 strtime
 	$("#strymd").datepicker({
 		changeYear: true,
 		dateFormat: 'yy/mm/dd'
@@ -1067,7 +1068,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$('#modal2').modal('toggle');
 	});
 
-	// Long button treatment
+	//저장버튼 처리
 	$(document).on('click', '#btnReg', function(e) {
 		var kyukatype = $("input[name='kyukatype']:checked").val();
 		var strymd = $("#strymd").val();
@@ -1092,45 +1093,45 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (ymdcnt > (oldcnt + newcnt)) {
 			alert("<?php echo $kyuka_ymdcnt_01; ?>" + (oldcnt + newcnt) + "<?php echo $kyuka_ymdcnt_02; ?>");
 			$("#ymdcnt").focus();
-			return false;
+			return false; //함수 종료
 		}
 
 		if (kyukaname == "") {
 			alert("<?php echo $kyuka_name_select; ?>");
 			$("#kyukaname").focus();
-			return false;
+			return false; //함수 종료
 		}
 
-		// Check the vacation time limit available for the year (use time in the current year + time requested this time > error if annual use limit time)
+		// 년간 사용 가능한 휴가시간제한 체크 (당해년도사용시간+이번에신청한시간 > 년간사용제한시간 이면 에러)
 		if (usetime + timecnt > kyukatimelimit) {
 			alert("<?php echo $kyuka_time_limit_01; ?>" + kyukatimelimit + "<?php echo $kyuka_time_limit_02; ?>");
 			return false;
 		}
 
-		// Since the vacation request period must be available only within the period granted, in the case of a larger vacation, divide the application into two.
+		// 휴가신청기간은 휴가를 부여받은 기간 안에서만 가능해야 하기 때문에 더 큰 경우는 2개로 나눠서 신청하게한다. 
 		if (endymd > vacationend) {
 			alert("<?php echo $kyuka_endymd_01; ?>" + vacationstr + " ~ " + vacationend + "<?php echo $kyuka_endymd_02; ?>");
 			return false;
 		}
 
-		// 残数(日)計算
+		//残数(日)	 計算
 		restcnt = oldcnt + newcnt - usecnt - parseInt(usetime / 8);
 		if (restcnt < 0) {
 			alert("<?php echo $kyuka_strymd; ?>");
 			$("#strymd").focus();
-			return false;
+			return false; //함수 종료
 		}
 
 		if (kyukatype != "0" && kyukatype != "1") {
 			alert("<?php echo $kyuka_type_select; ?>");
 			$("#kyukatype").focus();
-			return false;
+			return false; //함수 종료
 		}
 
 		if (strymd == "") {
 			alert("<?php echo $kyuka_strymd_empty; ?>");
-			$("#strymd").focus();
-			return false;
+			$("#strymd").focus(); //입력 포커스 이동
+			return false; //함수 종료
 		}
 
 		if (kyukatype == "1" && endymd == "") {
@@ -1154,23 +1155,23 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (destcode != "0" && destcode != "1" && destcode != "2") {
 			alert("<?php echo $kyuka_destcode_select; ?>");
 			$("#destcode").focus();
-			return false;
+			return false; //함수 종료
 		}
 
 		if (destplace == "") {
 			alert("<?php echo $kyuka_destplace_empty; ?>");
-			$("#destplace").focus();
-			return false;
+			$("#destplace").focus(); //입력 포커스 이동
+			return false; //함수 종료
 		}
 
 		if (desttel == "") {
 			alert("<?php echo $kyuka_desttel_empty; ?>");
-			$("#desttel").focus();
-			return false;
+			$("#desttel").focus(); //입력 포커스 이동
+			return false; //함수 종료
 		}
 	});
 
-	// Clear Input Tag Data
+	//삭제버튼 : Delete 
 	$(document).on('click', '#btnClear', function(e) {
 		$('#kyukaname').val('');
 		$("input[name='kyukatype']").prop('checked', false);
@@ -1187,7 +1188,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$('#desttel').val('');
 	});
 
-	// Click (modify) employee ID in the grid: popup & display contents
+	//그리드에서 사원ID클릭(수정) : popup & 내용표시 
 	$(document).on('click', '.showModal', function() {
 		$('#modal3').modal('toggle');
 		var ArrayData = $(this).text();

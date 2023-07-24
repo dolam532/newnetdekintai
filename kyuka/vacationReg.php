@@ -65,7 +65,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	/* For Mobile portrait View iPhone X,6,7,8 PLUS */
 	@media screen and (max-device-width: 375px) and (orientation: portrait) {}
 </style>
-<title>休暇情報</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
 	<?php
@@ -100,9 +99,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<th class="th1" style="text-align: center; width: 8%;">休暇ID</th>
 						<th class="th2" style="text-align: center; width: 10%;">休暇開始日</th>
 						<th class="th3" style="text-align: center; width: 16%;">休暇終了日</th>
-						<th class="th4" style="text-align: center; width: 10%;">前回の休暇日数</th>
-						<th class="th5" style="text-align: center; width: 16%;">休暇残日数</th>
-						<th class="th6" style="text-align: center; width: 8%;">休暇使用日数</th>
+						<th class="th4" style="text-align: center; width: 10%;">休暇古い数</th>
+						<th class="th5" style="text-align: center; width: 16%;">休暇新しい数</th>
+						<th class="th6" style="text-align: center; width: 8%;">休暇使用数</th>
 						<th class="th7" style="text-align: center; width: 8%;">休暇使用時間</th>
 						<th class="th8" style="text-align: center; width: auto;">休暇休憩回数</th>
 					</tr>
@@ -115,35 +114,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<?php } elseif (!empty($vacationinfo_list)) {
 						foreach ($vacationinfo_list as $vacationinfo) {
 						?>
-							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-								<tr>
-									<td class="td0"><a href="#"><span class="showModal" style="text-decoration-line: underline;"><?= $vacationinfo['uid'] ?><span class="vacationid_class"><?= ',' . $vacationinfo['vacationid'] ?></span></span></td>
-									<td class="td1"><span><?= $vacationinfo['vacationid'] ?></span></td>
-									<td class="td2"><span><?= $vacationinfo['vacationstr'] ?></span></td>
-									<td class="td3"><span><?= $vacationinfo['vacationend'] ?></span></td>
-									<td class="td4"><span><?= $vacationinfo['oldcnt'] ?></td>
-									<td class="td5"><span><?= $vacationinfo['newcnt'] ?></span></td>
-									<td class="td6"><span><?= $vacationinfo['usecnt'] ?></span></td>
-									<td class="td7"><span><?= $vacationinfo['usetime'] ?></span></td>
-									<td class="td8"><span><?= $vacationinfo['restcnt'] ?></span></td>
-								</tr>
-							<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
-								<?php
-								if ($vacationinfo['type'] == $_SESSION['auth_type'] && $vacationinfo['uid'] == $_SESSION['auth_uid']) {
-								?>
-									<tr>
-										<td class="td0"><a href="#"><span class="showModal" style="text-decoration-line: underline;"><?= $vacationinfo['uid'] ?><span class="vacationid_class"><?= ',' . $vacationinfo['vacationid'] ?></span></span></td>
-										<td class="td1"><span><?= $vacationinfo['vacationid'] ?></span></td>
-										<td class="td2"><span><?= $vacationinfo['vacationstr'] ?></span></td>
-										<td class="td3"><span><?= $vacationinfo['vacationend'] ?></span></td>
-										<td class="td4"><span><?= $vacationinfo['oldcnt'] ?></td>
-										<td class="td5"><span><?= $vacationinfo['newcnt'] ?></span></td>
-										<td class="td6"><span><?= $vacationinfo['usecnt'] ?></span></td>
-										<td class="td7"><span><?= $vacationinfo['usetime'] ?></span></td>
-										<td class="td8"><span><?= $vacationinfo['restcnt'] ?></span></td>
-									</tr>
-								<?php } ?>
-							<?php endif; ?>
+							<tr>
+								<td class="td0"><a href="#"><span class="showModal" style="text-decoration-line: underline;"><?= $vacationinfo['uid'] ?><span class="vacationid_class"><?= ',' . $vacationinfo['vacationid'] ?></span></span></td>
+								<td class="td1"><span><?= $vacationinfo['vacationid'] ?></span></td>
+								<td class="td2"><span><?= $vacationinfo['vacationstr'] ?></span></td>
+								<td class="td3"><span><?= $vacationinfo['vacationend'] ?></span></td>
+								<td class="td4"><span><?= $vacationinfo['oldcnt'] ?></td>
+								<td class="td5"><span><?= $vacationinfo['newcnt'] ?></span></td>
+								<td class="td6"><span><?= $vacationinfo['usecnt'] ?></span></td>
+								<td class="td7"><span><?= $vacationinfo['usetime'] ?></span></td>
+								<td class="td8"><span><?= $vacationinfo['restcnt'] ?></span></td>
+							</tr>
 					<?php }
 					} ?>
 				</tbody>
@@ -185,7 +166,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<input type="text" class="form-control" id="usoldcnt" name="usoldcnt" placeholder="番号" required="required" maxlength="10" style="text-align: center">
 								</div>
 								<div class="col-md-6 col-sm-6 col-sx-6 vacation">
-									<label for="newcnt">休暇残日数</label>
+									<label for="newcnt">休暇新しい数</label>
 									<input type="text" class="form-control" id="usnewcnt" name="usnewcnt" placeholder="番号" required="required" maxlength="10" style="text-align: center">
 								</div>
 							</div>
@@ -236,7 +217,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		dateFormat: 'yy/mm/dd'
 	});
 
-	// Click (modify) employee ID in the grid: popup & display contents
+	//그리드에서 사원ID클릭(수정) : popup & 내용표시 
 	$(document).on('click', '.showModal', function() {
 		$('#modal').modal('toggle');
 		var ArrayID = $(this).text();

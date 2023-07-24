@@ -43,22 +43,10 @@ include('../model/loginoutmodel.php');
 <div id="tile_body">
     <!-- loginout form {s} -->
     <form action="" method="post">
-        <?php
-        if (isset($_SESSION['login_fail'])) {
-        ?>
-            <div class="alert alert-warning alert-dismissible" role="alert" auto-close="3000">
-                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                <?php echo $_SESSION['login_fail']; ?>
-            </div>
-        <?php
-            unset($_SESSION['login_fail']);
-        }
-        ?>
         <div class="text-center mb-4">
             <h1 class="h2 mb-3 font-weight-normal" style="margin-bottom:40px">NETDEKINTAI.COM</h1>
         </div>
         <?php if (isset($_SESSION['auth'])) : ?>
-            <title>ログアウト</title>
             <div class="form-label-group">
                 <input id="uid" name="uid" placeholder="User ID" class="form-control" type="text" value="<?= $_SESSION['auth_uid'] ?>">
                 <label for="uid" class="sr-only">User ID</label>
@@ -71,7 +59,6 @@ include('../model/loginoutmodel.php');
             <br>
             <input class="btn btn-lg btn-primary btn-block" type="submit" id="btnLogout" name="btnLogout" value="Sign out">
         <?php else : ?>
-            <title>ログイン</title>
             <div class="form-label-group">
                 <input id="uid" name="uid" placeholder="User ID" class="form-control" type="text" value="<?= $_POST['uid'] ?>">
                 <label for="uid" class="sr-only">User ID</label>
@@ -89,9 +76,9 @@ include('../model/loginoutmodel.php');
     </form>
 </div>
 <script>
-    // Login button handling
+    //로그인 버튼 처리
     $(document).on('click', '#btnLogin', function(e) {
-        var uid = $("#uid").val();
+        var uid = $("#uid").val(); //태그의 value 속성값
         var pwd = $("#pwd").val();
         var letters = /^[A-Za-z]+$/;
 

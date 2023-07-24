@@ -1,35 +1,18 @@
 <?php
 // Select database from tbl_user table
 // (userList.php)
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
-    $sql_user_select_db = 'SELECT DISTINCT
+$sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
-    `tbl_genba`.`workstrtime`,
-    `tbl_genba`.`workendtime`
+    `tbl_genba`.`worktime1`,
+    `tbl_genba`.`worktime2`
 FROM
     `tbl_user`
 CROSS JOIN 
     `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
 WHERE
     `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
-    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
-} elseif ($_SESSION['auth_type'] == constant('USER')) {
-    $sql_user_select_db = 'SELECT DISTINCT
-    `tbl_user`.*,
-    `tbl_genba`.`genbaname`,
-    `tbl_genba`.`workstrtime`,
-    `tbl_genba`.`workendtime`
-FROM
-    `tbl_user`
-CROSS JOIN 
-    `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
-WHERE
-    `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"
-    AND `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
-    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
-}
-
+    AND `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
 $sql_user_select = mysqli_query($conn, $sql_user_select_db);
 $result_user_select = mysqli_fetch_all($sql_user_select, MYSQLI_ASSOC);
 
@@ -57,8 +40,8 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
     $sql_user = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
-    `tbl_genba`.`workstrtime`,
-    `tbl_genba`.`workendtime`
+    `tbl_genba`.`worktime1`,
+    `tbl_genba`.`worktime2`
  FROM
     `tbl_user`
  CROSS JOIN 
@@ -109,10 +92,10 @@ if (isset($_POST['SaveUserList'])) {
     }
 }
 
-// Update data to tbl_user table of database(ADMIN & ADMINISTRATOR)
+// Update data to tbl_user table of database
 if (isset($_POST['UpdateUserList'])) {
     $_POST['ulcompanyid'] = intval($_POST['ulcompanyid']);
-    $upt_dt = date('Y-m-d H:i:s');
+    $reg_dt = date('Y-m-d H:i:s');
     $uid = mysqli_real_escape_string($conn, $_POST['uluid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['ulcompanyid']);
     $pwd = mysqli_real_escape_string($conn, $_POST['ulpwd']);
@@ -144,31 +127,9 @@ if (isset($_POST['UpdateUserList'])) {
             outymd='$outymd',
             genstrymd='$genstrymd',
             genendymd='$genendymd',
-            upt_dt='$upt_dt'
+            reg_dt='$reg_dt'
         WHERE uid ='$uid'";
-
-    if ($conn->query($sql) === TRUE) {
-        $_SESSION['save_success'] =  $save_success;
-        header("Refresh:3");
-    } else {
-        echo 'query error: ' . mysqli_error($conn);
-    }
-}
-
-// Update data to tbl_user table of database(USER)
-if (isset($_POST['UpdateUser'])) {
-    $upt_dt = date('Y-m-d H:i:s');
-    $uid = mysqli_real_escape_string($conn, $_POST['useruid']);
-    $pwd = mysqli_real_escape_string($conn, $_POST['userpwd']);
-    $genba_list = mysqli_real_escape_string($conn, $_POST['usergenba_list']);
-    $gen_id_dev = explode(",", $genba_list);
-    $genid = $gen_id_dev[0];
-
-    $sql = "UPDATE tbl_user SET 
-            pwd='$pwd',
-            genid='$genid',
-            upt_dt='$upt_dt'
-        WHERE uid ='$uid'";
+    $result = $conn->query($sql);
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;

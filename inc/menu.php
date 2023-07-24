@@ -17,7 +17,7 @@
             }
         }
 
-        /* modal popup lock */
+        /* 모달 팝업 lock */
         .modal-dialog {
             display: inline-block;
             text-align: left;
@@ -53,31 +53,34 @@
                             <li class="menu-level3"><a href="../kyuka/kyukaMonthly.php">休暇使用現状</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown" id="manager">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">基本情報
-                            <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li class="menu-level3"><a href="">基礎コード登録</a></li>
-                            <li class="menu-level3"><a href="">勤務日登録</a></li>
-                            <li class="menu-level3"><a href="">祝日登録</a></li>
-                            <li class="menu-level3"><a href="../user/userList.php">社員登録</a></li>
-                            <li class="menu-level3"><a href="">年次休暇登録</a></li>
-                            <li class="menu-level3"><a href="../kinmu/kinmuManager.php">勤務管理表</a></li>
-                            <li class="menu-level3"><a href="">現場別勤務社員</a></li>
-                            <li class="menu-level3"><a href="">社員ログイン内訳</a></li>
-                            <li class="menu-level3"><a href="">管理情報登録</a>
-                            </li>
-                            <li class="menu-level3"><a href="">お知らせ登録</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown" id="gana">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true">GANASYS<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="">使用者登録</a></li>
-                            <li><a href="">管理者登録</a></li>
-                        </ul>
-                    </li>
+                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                        <li class="dropdown" id="manager">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">基本情報
+                                <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li class="menu-level3"><a href="">基礎コード登録</a></li>
+                                <li class="menu-level3"><a href="">勤務日登録</a></li>
+                                <li class="menu-level3"><a href="">祝日登録</a></li>
+                                <li class="menu-level3"><a href="../user/userList.php">社員登録</a></li>
+                                <li class="menu-level3"><a href="">年次休暇登録</a></li>
+                                <!-- <li class="menu-level3"><a href="">現場登録</a></li> 社長の指示で 現場登録　ー＞　勤務管理表-->
+                                <li class="menu-level3"><a href="./kintai/kinmuManager.php">勤務管理表</a></li>
+                                <li class="menu-level3"><a href="">現場別勤務社員</a></li>
+                                <li class="menu-level3"><a href="">社員ログイン内訳</a></li>
+                                <li class="menu-level3"><a href="">管理情報登録</a>
+                                </li>
+                                <li class="menu-level3"><a href="">お知らせ登録</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="dropdown" id="gana">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true">GANASYS<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="">使用者登録</a></li>
+                                <li><a href="">管理者登録</a></li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <?php if (isset($_SESSION['auth'])) : ?>
