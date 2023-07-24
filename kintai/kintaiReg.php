@@ -908,7 +908,58 @@ if ($_SESSION['auth'] == false) {
 		<?php
 		} elseif ($_SESSION['decide_show'] == "2") {
 		?>
-			$("#autopdf").submit();
+			var jobhh_bottom = $('#jobhh_bottom').val();
+			var jobmm_bottom = $('#jobmm_bottom').val();
+			var jobdays_bottom = $('#jobdays_bottom').val();
+			var workdays_bottom = $('#workdays_bottom').val();
+			var holydays_bottom = $('#holydays_bottom').val();
+			var offdays_bottom = $('#offdays_bottom').val();
+			var delaydays_bottom = $('#delaydays_bottom').val();
+			var earlydays_bottom = $('#earlydays_bottom').val();
+
+			$("#jobhh_bottom").on("change", function() {
+				var jobhh_bottom = parseInt($(this).val()); 
+			});
+			$("#jobmm_bottom").on("change", function() {
+				var jobmm_bottom = parseInt($(this).val()); 
+			});
+			$("#jobdays_bottom").on("change", function() {
+				var jobdays_bottom = parseInt($(this).val()); 
+			});
+			$("#workdays_bottom").on("change", function() {
+				var workdays_bottom = parseInt($(this).val()); 
+			});
+			$("#holydays_bottom").on("change", function() {
+				var holydays_bottom = parseInt($(this).val()); 
+			});
+			$("#offdays_bottom").on("change", function() {
+				var offdays_bottom = parseInt($(this).val()); 
+			});
+			$("#delaydays_bottom").on("change", function() {
+				var delaydays_bottom = parseInt($(this).val()); 
+			});
+			$("#earlydays_bottom").on("change", function() {
+				var earlydays_bottom = parseInt($(this).val()); 
+			});
+			
+			<?php
+			if (!empty($workmonth_list)) {
+				foreach ($workmonth_list as $key) {
+			?>
+					if (
+						'<?php echo $key['jobhour'] ?>' == jobhh_bottom && '<?php echo $key['jobminute'] ?>' == jobmm_bottom &&
+						'<?php echo $key['jobdays'] ?>' == jobdays_bottom && '<?php echo $key['workdays'] ?>' == workdays_bottom &&
+						'<?php echo $key['holydays'] ?>' == holydays_bottom && '<?php echo $key['offdays'] ?>' == offdays_bottom &&
+						'<?php echo $key['delaydays'] ?>' == delaydays_bottom && '<?php echo $key['earlydays'] ?>' == earlydays_bottom
+					) {
+						$("#autopdf").submit();
+					} else {
+						alert("<?php echo $kintai_click_month; ?>");
+					}
+			<?php
+				}
+			}
+			?>
 		<?php
 		}
 		?>

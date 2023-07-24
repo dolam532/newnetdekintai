@@ -535,3 +535,25 @@ if (isset($_POST['DeleteAll'])) {
         }
     }
 }
+
+// kintaiMonthly.php
+if (isset($_POST['selyyM']) && isset($_POST['selmmM'])) {
+    $yearM = $_SESSION['selyy'] = $_POST['selyyM'];
+    $monthM = $_SESSION['selmm'] = $_POST['selmmM'];
+    header("Refresh: 0.0001;");
+} else {
+    $yearM = $year;
+    $monthM =  $month;
+}
+$sql_workmonth_select = 'SELECT
+    `tbl_workmonth`.*,
+    `tbl_user`.`name`
+FROM
+    `tbl_workmonth`
+CROSS JOIN `tbl_user` ON `tbl_workmonth`.`uid` = `tbl_user`.`uid`
+WHERE
+    `tbl_workmonth`.`uid` IN("' . $_SESSION['auth_uid'] . '")  
+    AND LEFT(`tbl_workmonth`.`workym`, 6) IN("' .  $yearM . $monthM . '")';
+
+$result_workmonth_select = mysqli_query($conn, $sql_workmonth_select);
+$workmonth_select_list = mysqli_fetch_all($result_workmonth_select, MYSQLI_ASSOC);

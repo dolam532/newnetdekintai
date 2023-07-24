@@ -19,7 +19,7 @@ if (isset($_POST['bid_']) && isset($_POST['viewcnt_'])) {
         WHERE bid ='$bid_'";
 
     if ($conn->query($sql) === TRUE) {
-        header("Refresh:1");
+        header("Refresh: 0.0001;");
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }

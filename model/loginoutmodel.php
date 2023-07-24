@@ -40,7 +40,7 @@ if (isset($_POST['btnLogin'])) {
             $workymd = date('Y/m/d');
             $logtype = $_SESSION['auth_type'];
             $logtime = date('Y-m-d H:i:s');
-            $ipaddress = gethostbyname($domainName);
+            $ipaddress = gethostbyname(constant('DOMAIN_NAME'));
 
             function getDomainFromURL($url)
             {
@@ -52,7 +52,7 @@ if (isset($_POST['btnLogin'])) {
                 }
                 return $domain;
             }
-            $domain = getDomainFromURL($url_all);
+            $domain = getDomainFromURL(constant('URL_NAME'));
 
             $sql_userlogin_insert = "INSERT INTO `tbl_userlogin` (`uid`, `workymd`, `logtype`, `logtime`, `ipaddress`, `domain`) 
             VALUES('$uid', '$workymd' ,'$logtype' ,'$logtime', '$ipaddress', '$domain')";
