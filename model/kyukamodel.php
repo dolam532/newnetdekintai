@@ -1,18 +1,5 @@
 <?php
-// Select data from tbl_user
-// (kyakaReg.php)
-$sql_user = 'SELECT `uid`, `name` FROM `tbl_user`';
-$result_user = mysqli_query($conn, $sql_user);
-$user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
-
-
-// Select data from tbl_codebase
-$sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
-WHERE `tbl_codebase`.`typecode` = 02 GROUP BY `code`, `name`';
-$result_codebase = mysqli_query($conn, $sql_codebase);
-$codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
-
-
+// kyukaReg.php
 // Select data from tbl_userkyuka
 if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $sql_userkyuka_select_db = 'SELECT DISTINCT
@@ -314,7 +301,6 @@ if (isset($_POST['DecideUpdateKyuka'])) {
         allowdecide='$allowdecide',
         allowdt='$allowdt'
     WHERE uid ='$uid'";
-        $result = $conn->query($sql);
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['save_success'] =  $save_success;
@@ -375,7 +361,6 @@ if (isset($_POST['SaveUpdateKyuka'])) {
             restcnt='$restcnt',
             reg_dt='$reg_dt'
         WHERE uid ='$uid' AND vacationid ='$vacationid'";
-        $result = $conn->query($sql);
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['save_success'] =  $save_success;

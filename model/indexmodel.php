@@ -8,3 +8,19 @@ ORDER BY `tbl_notice`.`bid`';
 
 $result_notice = mysqli_query($conn, $sql_notice);
 $notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
+
+if (isset($_POST['bid_']) && isset($_POST['viewcnt_'])) {
+    $bid = intval($_POST["bid_"]);
+    $viewcnt = intval($_POST["viewcnt_"]) + 1;
+    $bid_ = mysqli_real_escape_string($conn, $bid);
+    $viewcnt_ = mysqli_real_escape_string($conn, $viewcnt);
+    $sql = "UPDATE tbl_notice SET 
+            viewcnt='$viewcnt_'
+        WHERE bid ='$bid_'";
+
+    if ($conn->query($sql) === TRUE) {
+        header("Refresh:1");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}

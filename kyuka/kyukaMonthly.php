@@ -143,6 +143,7 @@ if ($_SESSION['auth'] == false) {
 		}
 	}
 </style>
+<title>休暇使用現状</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
 	<?php

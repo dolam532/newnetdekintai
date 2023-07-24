@@ -2,8 +2,9 @@
 session_start();
 include('./inc/dbconnect.php');
 include('./model/indexmodel.php');
+include('./inc/message.php');
+include('./model/inactive.php');
 ?>
-
 <!DOCTYPE html>
 <html>
 
@@ -31,7 +32,7 @@ include('./model/indexmodel.php');
 		body {
 			padding: 0px;
 			font-family: helvetica, meiryo, gulim;
-			/* 반드시 영문폰트, 일본어 폰트, 한글 폰트 순서로 */
+			/* Must be English font, Japanese font, Korean font in order */
 		}
 
 		#tile_header {
@@ -77,7 +78,7 @@ include('./model/indexmodel.php');
 			?>
 			<div class="jumbotron" id="jumbo1">
 				<h1 class="text-center">ネットDE勤怠</h1>
-				<p class="text-center">ネット上の勤怠管理システム-TEST</p>
+				<p class="text-center">ネット上の勤怠管理システム</p>
 			</div>
 			<div class="row">
 				<div class="col-md-4 text-center" style="margin-bottom: 5px;">
@@ -128,76 +129,87 @@ include('./model/indexmodel.php');
 		<div class="row">
 			<div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
 				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<div style="width:30px; float:left;"><img src="./assets/images/30_file.png" width="25" height="25"></div>
-							<div style="float:left; margin-top:-7px;">
-								<h4><span id="title"></span></h4>
+					<form id="form_id" method="post">
+						<div class="modal-content">
+							<div class="modal-header">
+								<div style="width:30px; float:left;"><img src="./assets/images/30_file.png" width="25" height="25"></div>
+								<div style="float:left; margin-top:-7px;">
+									<h4><span id="title"></span></h4>
+								</div>
+								<button class="close submit_viewcnt" data-dismiss="modal">&times;</button>
 							</div>
-							<button class="close" data-dismiss="modal">&times;</button>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-xs-12">
+										<p id="content" style="background-color: #F8F9F9;"></p>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-xs-12">
+										<label>確認者</label>
+										<p id="reader" style="background-color: #F8F9F9;"></p>
+									</div>
+								</div>
+								<hr>
+								<div class="row">
+									<div class="col-xs-4">
+										<label>作成者</label>
+										<input type="hidden" class="bid_" name="bid_">
+										<input type="hidden" class="viewcnt_" name="viewcnt_">
+										<p id="bid" class="bid_" style="display:none;"></p>
+										<p id="name" style="background-color: #F8F9F9;"></p>
+									</div>
+									<div class="col-xs-4">
+										<label>作成日</label>
+										<p id="reg_dt" style="background-color: #F8F9F9;"></p>
+									</div>
+									<div class="col-xs-4">
+										<label>view Cnt</label>
+										<p id="viewcnt" class="viewcnt_" style="background-color: #F8F9F9;"></p>
+									</div>
+								</div>
+								<div class="modal-footer" style="text-align: center">
+									<button type="button" class="btn btn-default submit_viewcnt" data-dismiss="modal">閉じる</button>
+								</div>
+							</div>
 						</div>
-						<div class="modal-body">
-							<div class="row">
-								<div class="col-xs-12">
-									<p id="content" style="background-color: #F8F9F9;"></p>
-								</div>
-							</div>
-							<hr>
-							<div class="row">
-								<div class="col-xs-12">
-									<label>確認者</label>
-									<p id="reader" style="background-color: #F8F9F9;"></p>
-								</div>
-							</div>
-							<hr>
-							<div class="row">
-								<div class="col-xs-4">
-									<label>作成者</label>
-									<p id="name" style="background-color: #F8F9F9;"></p>
-								</div>
-								<div class="col-xs-4">
-									<label>作成日</label>
-									<p id="reg_dt" style="background-color: #F8F9F9;"></p>
-								</div>
-								<div class="col-xs-4">
-									<label>view Cnt</label>
-									<p id="viewcnt" style="background-color: #F8F9F9;"></p>
-								</div>
-							</div>
-							<div class="modal-footer" style="text-align: center">
-								<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
-							</div>
-						</div>
-					</div>
+					</form>
 				</div>
 			</div>
 		</div>
 	</div>
 </body>
+
 <script>
 	function fn_showNotice(bid, imagenum, title, reader, name, viewcnt, reg_dt, content) {
 		var auth = '<?php echo $_SESSION['auth'] ?>';
 		if (auth == "") {
-			alert("詳細情報はログイン後可能です。")
+			alert("<?php echo $login_is_not; ?>");
 			return;
 		} else {
 			$('#modal').modal('toggle');
+			$('#bid').text(bid);
 			$('#title').text(title);
 			$('#reader').text(reader);
 			$('#content').text(content);
 			$('#name').text(name);
-
-			//조회수를 다시 읽지 않고 화면상에서만 더해서 표시하게 한다. 
-			if ($('#viewcnt').text() > " ") {
-				var cnt = $('#viewcnt').text();
-				cnt = (cnt * 1) + 1;
-				$('#viewcnt').text(cnt);
-			} else {
-				$('#viewcnt').text(viewcnt);
-			}
 			$('#reg_dt').text(reg_dt);
+			$('#viewcnt').text(viewcnt);
 		}
 	}
+
+	// Submit for viewcnt
+	$(document).ready(function() {
+		$(".submit_viewcnt").click(function() {
+			var bidValue = $(".bid_").text();
+			var viewcntValue = $(".viewcnt_").text();
+			viewcntValue = viewcntValue;
+			$(".bid_").val(bidValue);
+			$(".viewcnt_").val(viewcntValue);
+			$("#form_id").submit();
+		});
+	});
 </script>
 
 </html>

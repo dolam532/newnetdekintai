@@ -31,7 +31,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	div label {
 		padding: 5px;
 	}
+
+	#edituser {
+		width: 6ch;
+	}
 </style>
+<title>社員登録</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
 	<?php
@@ -66,7 +71,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<div class="title_btn">
 					<input type="submit" id="ClearButton" name="ClearButton" value="クリア">&nbsp;&nbsp;&nbsp;
 					<input type="submit" name="SearchButton" value="検索">&nbsp;&nbsp;&nbsp;
-					<input type="button" id="btnNew" value="新規">
+					<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+						<input type="button" id="btnNew" value="新規">
+					<?php else : ?>
+						<?php if (!empty($userlist_list)) {
+							foreach (@$userlist_list as $user) {
+						?>
+								<input type="button" id="edituser" class="showModal2" value="編集  ,<?= $user['uid'] ?>">
+						<?php }
+						} ?>
+					<?php endif; ?>
 				</div>
 			</div>
 		</form>
@@ -82,7 +96,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<th style="text-align: center; width: 14%;">Email</th>
 					<th style="text-align: center; width: 10%;">部署</th>
 					<th style="text-align: center; width: 8%;">区分</th>
-					<th style="text-align: center; width: 16%;">現場</th>
+					<th style="text-align: center; width: 16%;">勤務時間タイプ</th>
 					<th style="text-align: center; width: auto;">備考</th>
 				</tr>
 			</thead>
@@ -95,8 +109,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					foreach (@$userlist_list as $user) {
 					?>
 						<tr>
-							<td><a href="#"><span class="showModal"><?= $user['uid'] ?></span></a></td>
-							<td><span name="pwd">********</span></td>
+							<td>
+								<a href="#">
+									<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+										<span class="showModal"><?= $user['uid'] ?></span>
+									<?php else : ?>
+										<span class="showModal2"><?= $user['uid'] ?></span>
+									<?php endif; ?>
+								</a>
+							</td>
+							<td><span name="pwd"><?= $user['pwd'] ?></span></td>
 							<td><span name="name"><?= $user['name'] ?></span></td>
 							<td><span name="email"><?= $user['email'] ?></span></td>
 							<td><span name="dept"><?= $user['dept'] ?></span></td>
@@ -129,7 +151,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<div class="col-xs-3">
 								<label for="pwd">PASSWORD</label>
-								<input type="password" class="form-control" id="pwd" name="pwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
+								<input type="text" class="form-control" id="pwd" name="pwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left" value="1111" readonly>
 							</div>
 							<div class="col-xs-3">
 								<label for="name">社員名</label>
@@ -169,13 +191,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<br>
 						<div class="row">
 							<div class="col-xs-6">
-								<label for="genid">現場</label>
-								<select class="form-control" name="genba_list">
+								<label for="genid">勤務時間タイプ</label>
+								<select class="form-control" id="genba_list" name="genba_list">
 									<option value="" selected=""></option>
 									<?php
 									foreach ($genba_list_db as $key) {
 									?>
-										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["worktime1"] . ',' . $key["worktime2"] ?>"><?= $key["genbaname"] . $key["worktime1"] . $key["worktime2"] ?></option>
+										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["workstrtime"] . ',' . $key["workendtime"] ?>"><?= $key["genbaname"] .  '(' . $key["workstrtime"] . '-' . $key["workendtime"]  . ')' ?></option>
 									<?php
 									}
 									?>
@@ -216,7 +238,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<div class="modal-dialog">
 			<form method="post">
 				<div class="modal-content">
-					<div class="modal-header">社員編集(<span id="ulname"></span>)
+					<div class="modal-header">社員編集(<span id="ulnametitle"></span>)
 						<button class="close" data-dismiss="modal">&times;</button>
 					</div>
 
@@ -230,7 +252,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<div class="col-xs-3">
 								<label for="pwd">PASSWORD</label>
-								<input type="password" class="form-control" id="ulpwd" name="ulpwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
+								<input type="text" class="form-control" id="ulpwd" name="ulpwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
 							</div>
 							<div class="col-xs-3">
 								<label for="name">社員名</label>
@@ -270,13 +292,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<br>
 						<div class="row">
 							<div class="col-xs-6">
-								<label for="genid">現場</label>
+								<label for="genid">勤務時間タイプ</label>
 								<select class="form-control" id="ulgenba_list" name="ulgenba_list">
 									<option value="" selected=""></option>
 									<?php
 									foreach ($genba_list_db as $key) {
 									?>
-										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["worktime1"] . ',' . $key["worktime2"] ?>"><?= $key["genbaname"] . $key["worktime1"] . $key["worktime2"] ?></option>
+										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["workstrtime"] . ',' . $key["workendtime"] ?>"><?= $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?></option>
 									<?php
 									}
 									?>
@@ -311,8 +333,62 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		</div>
 	</div>
 </div>
+
+<div class="row">
+	<div class="modal" id="modal3" tabindex="-1" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<form method="post">
+				<div class="modal-content">
+					<div class="modal-header">社員編集(<span id="usernametitle"></span>)
+						<button class="close" data-dismiss="modal">&times;</button>
+					</div>
+
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-xs-3">
+								<label for="uid">ID</label>
+								<input type="text" class="form-control" id="useruid" name="useruid" style="text-align: left" readonly>
+							</div>
+							<div class="col-xs-3">
+								<label for="pwd">PASSWORD</label>
+								<input type="text" class="form-control" id="userpwd" name="userpwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
+							</div>
+							<div class="col-xs-6">
+								<label for="genid">勤務時間タイプ</label>
+								<select class="form-control" id="usergenba_list" name="usergenba_list">
+									<option value="" selected=""></option>
+									<?php
+									foreach ($genba_list_db as $key) {
+									?>
+										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["workstrtime"] . ',' . $key["workendtime"] ?>"><?= $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?></option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer" style="text-align: center">
+						<div class="col-xs-4"></div>
+						<div class="col-xs-2">
+							<p class="text-center">
+								<input type="submit" name="UpdateUser" class="btn btn-primary btn-md" id="UserbtnReg" role="button" value="登録">
+							</p>
+						</div>
+						<div class="col-xs-2">
+							<p class="text-center">
+								<a class="btn btn-primary btn-md" id="btnRet" data-dismiss="modal">閉じる </a>
+							</p>
+						</div>
+						<div class="col-xs-4"></div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 <script>
-	//Datepeeker 설정
+	// Datepicker Calender
 	$("#genstrymd").datepicker({
 		changeYear: true,
 		dateFormat: 'yy/mm/dd'
@@ -330,12 +406,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		dateFormat: 'yy/mm/dd'
 	});
 
-	//신규버튼 : popup & clear 
+	// 社員登録 POP UP (ADMIN & ADMINISTRATOR)
 	$(document).on('click', '#btnNew', function(e) {
 		$('#modal').modal('toggle');
 	});
 
-	//그리드에서 사원ID클릭(수정) : popup & 내용표시 
+	//社員編集 POP UP (ADMIN & ADMINISTRATOR)
 	$(document).on('click', '.showModal', function() {
 		$('#modal2').modal('toggle');
 		var Uid = $(this).text();
@@ -344,7 +420,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			foreach ($userlist_list as $key) {
 		?>
 				if ('<?php echo $key['uid'] ?>' == Uid) {
-					$("#ulname").text('<?php echo $key['name'] ?>');
+					$("#ulnametitle").text('<?php echo $key['name'] ?>');
 					$("#uluid").text($('[name="uluid"]').val("<?php echo $key['uid'] ?>"));
 					var companyid = $("input[name=ulcompanyid]:hidden");
 					companyid.val("<?php echo $key['companyid'] ?>");
@@ -361,7 +437,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#ulinymd").text($('[name="ulinymd"]').val("<?php echo $key['inymd'] ?>"));
 					$("#uloutymd").text($('[name="uloutymd"]').val("<?php echo $key['outymd'] ?>"));
 					$("#ulinymd").text($('[name="ulinymd"]').val("<?php echo $key['inymd'] ?>"));
-					$("#ulgenba_list option:selected").text("<?php echo $key["genbaname"] . $key["worktime1"] . $key["worktime2"] ?>").val("<?php echo $key['genid'] ?>");
+					$("#ulgenba_list option:selected").text("<?php echo $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?>").val("<?php echo $key['genid'] ?>");
 					$("#ulgenstrymd").text($('[name="ulgenstrymd"]').val("<?php echo $key['genstrymd'] ?>"));
 					$("#ulgenendymd").text($('[name="ulgenendymd"]').val("<?php echo $key['genendymd'] ?>"));
 				}
@@ -371,13 +447,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		?>
 	});
 
-	//신규버튼 : popup & clear 
+	// Clear Input Tag
 	$(document).on('click', '#ClearButton', function(e) {
 		$("#searchName").val("");
 		$("#searchGrade").val("");
 	});
 
-	// Check Error
+	// Check Error 社員登録(ADMIN & ADMINISTRATOR)
 	$(document).on('click', '#btnReg', function(e) {
 		var uid = $("#uid").val();
 		var pwd = $("#pwd").val();
@@ -385,22 +461,23 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var email = $("#email").val();
 		var dept = $("#dept").val();
 		var grade = $("#grade").val();
+		var genba_list = $("#genba_list").val();
 
 		<?php foreach ($userlist_list as $user) : ?>
 			var user_uid = '<?php echo $user["uid"] ?>';
 			if (uid == user_uid) {
 				alert("<?php echo $user_id_same; ?>");
-				$("#uid").focus(); //입력 포커스 이동
+				$("#uid").focus();
 				e.preventDefault();
-				return; //함수 종료
+				return;
 			}
 		<?php endforeach; ?>
 
 		if (uid == "") {
 			alert("<?php echo $user_id_empty; ?>");
-			$("#uid").focus(); //입력 포커스 이동
+			$("#uid").focus();
 			e.preventDefault();
-			return; //함수 종료
+			return;
 		}
 		if (pwd == "") {
 			alert("<?php echo $user_pwd_empty; ?>");
@@ -431,15 +508,22 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			e.preventDefault();
 			return;
 		}
+		if (genba_list == "") {
+			alert("<?php echo $user_genba_list_empty; ?>");
+			$("#genba_list").focus();
+			e.preventDefault();
+			return;
+		}
 	});
 
-	// Check Error
+	// Check Error 社員編集(ADMIN & ADMINISTRATOR)
 	$(document).on('click', '#UpdatebtnReg', function(e) {
 		var pwd = $("#ulpwd").val();
 		var name = $("#ulname").val();
 		var email = $("#ulemail").val();
 		var dept = $("#uldept").val();
 		var grade = $("#ulgrade").val();
+		var genba_list = $("#ulgenba_list").val();
 
 		if (pwd == "") {
 			alert("<?php echo $user_pwd_empty; ?>");
@@ -467,6 +551,60 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (grade == "") {
 			alert("<?php echo $user_grade_empty; ?>");
 			$("#ulgrade").focus();
+			e.preventDefault();
+			return;
+		}
+		if (genba_list == "") {
+			alert("<?php echo $user_genba_list_empty; ?>");
+			$("#ulgenba_list").focus();
+			e.preventDefault();
+			return;
+		}
+	});
+
+	// 社員登録 POP UP (USER)
+	$(document).on('click', '.showModal2', function() {
+		$('#modal3').modal('toggle');
+		var Uid = $(this).text();
+		var ArrayData = $('#edituser').val();
+		var SeparateArr = ArrayData.split(',');
+		var edituser = SeparateArr[1];
+		if (typeof(edituser) != "undefined" && edituser !== null) {
+			var UserUid = edituser;
+		} else if (typeof(Uid) != "undefined" && Uid !== null) {
+			var UserUid = Uid;
+		}
+
+		<?php
+		if (!empty($userlist_list)) {
+			foreach ($userlist_list as $key) {
+		?>
+				if ('<?php echo $key['uid'] ?>' == UserUid) {
+					$("#usernametitle").text('<?php echo $key['name'] ?>');
+					$("#useruid").text($('[name="useruid"]').val("<?php echo $key['uid'] ?>"));
+					$("#userpwd").text($('[name="userpwd"]').val("<?php echo $key['pwd'] ?>"));
+					$("#usergenba_list option:selected").text("<?php echo $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?>").val("<?php echo $key['genid'] ?>");
+				}
+		<?php
+			}
+		}
+		?>
+	});
+
+	// Check Error 社員編集(USER)
+	$(document).on('click', '#UserbtnReg', function(e) {
+		var pwd = $("#userpwd").val();
+		var genba_list = $("#usergenba_list").val();
+
+		if (pwd == "") {
+			alert("<?php echo $user_pwd_empty; ?>");
+			$("#userpwd").focus();
+			e.preventDefault();
+			return;
+		}
+		if (genba_list == "") {
+			alert("<?php echo $user_genba_list_empty; ?>");
+			$("#usergenba_list").focus();
 			e.preventDefault();
 			return;
 		}
