@@ -258,3 +258,14 @@ if (isset($_POST['DeleteKinmu'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+// genbaUserList.php
+// Select data from tbl_user
+$sql_user_g = 'SELECT
+        `tbl_user`.*,
+        `tbl_genba`.`genbaname`
+    FROM
+    `tbl_user`
+    LEFT JOIN `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`';
+$result_user_g = mysqli_query($conn, $sql_user_g);
+$user_list_g = mysqli_fetch_all($result_user_g, MYSQLI_ASSOC);
