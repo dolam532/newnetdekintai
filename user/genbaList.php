@@ -4,8 +4,8 @@ include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../inc/const_array.php');
 include('../inc/header.php');
-include('../model/kimumodel.php');
-// include('../model/inactive.php');
+include('../model/usermodel.php');
+include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
@@ -95,12 +95,12 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 	}
 	?>
 	<div class="row">
-		<div class="col-md-2">
+		<div class="col-md-4">
 			<div class="title_name">
 				<span class="text-left">勤務管理表</span>
 			</div>
 		</div>
-		<div class="col-md-8"></div>
+		<div class="col-md-6"></div>
 		<div class="col-md-2 text-right">
 			<div class="title_btn">
 				<input type="button" id="btnNew" value=" 新規 ">
