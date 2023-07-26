@@ -115,7 +115,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
             <div class="modal-content">
                 <div class="modal-header">
                     勤務日登録<span id="sname">(New)</span>
-                    <button class="close" data-dismiss="modal">×</button>
+                    <button class="close" data-dismiss="modal">x</button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -125,8 +125,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                             <label for="workyear">勤務年</label>
                         </div>
                         <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workyear" placeholder="" maxlength="4" onkeyup="this.value=this.value.replace(/[^0-9]/g,&#39;&#39;);">
-                            <input type="hidden" id="seq" value="">
+                            <input type="text" class="form-control text-center" id="workyear" placeholder="" maxlength="4">
                             <input type="hidden" id="companyid" value="1">
                         </div>
                         <div class="col-xs-6">

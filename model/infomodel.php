@@ -1,6 +1,7 @@
 <?php
 // Select database from tbl_workday table
 // (workdayList.php)
+$ganasys_company_id = constant('GANASYS_COMPANY_ID');
 $sql_workday = "SELECT workyear,
     MAX(CASE WHEN workmonth = '01' THEN workmonth END) AS one_month,
     MAX(CASE WHEN workmonth = '01' THEN workdays END) AS one_monthwd,
@@ -27,7 +28,7 @@ $sql_workday = "SELECT workyear,
     MAX(CASE WHEN workmonth = '12' THEN workmonth END) AS twelve_month,
     MAX(CASE WHEN workmonth = '12' THEN workdays END) AS twelve_monthwd
     FROM `tbl_workday`
-    WHERE `companyid` = '1'
+    WHERE `companyid` = $ganasys_company_id
     GROUP BY workyear
     ORDER BY workyear DESC, one_month ASC";
 $result_workday = mysqli_query($conn, $sql_workday);
