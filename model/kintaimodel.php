@@ -1,4 +1,9 @@
 <?php
+// Select data from tbl_genba
+$sql_genba = 'SELECT * FROM `tbl_genba`';
+$result_genba = mysqli_query($conn, $sql_genba);
+$genba_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
+
 // Include the PDO connection file
 require_once '../inc/dbconnect.php';
 

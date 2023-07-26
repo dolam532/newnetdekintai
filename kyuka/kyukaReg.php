@@ -4,7 +4,6 @@ session_start();
 include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../inc/const_array.php');
-include('../model/commonmodel.php');
 include('../model/kyukamodel.php');
 include('../inc/header.php');
 include('../model/inactive.php');
