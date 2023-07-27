@@ -112,136 +112,139 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 <div class="row">
     <div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false" style="display: none;">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    勤務日登録<span id="sname">(New)</span>
-                    <button class="close" data-dismiss="modal">x</button>
+            <form method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        勤務日登録<span id="sname">(New)</span>
+                        <button class="close" data-dismiss="modal">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-1">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workyear">勤務年</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" id="workyear" name="workyear" placeholder="" maxlength="4">
+                                <input type="hidden" id="companyid" name="companyid" value="1">
+                            </div>
+                            <div class="col-xs-6">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday01">01月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="workday01" id="workday01" maxlength="2">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday02">02月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="workday02" id="workday02" maxlength="2">
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday03">03月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="workday03" id="workday03" maxlength="2">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday04">04月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="workday04" id="workday04" maxlength="2">
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday05">05月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="workday05" id="workday05" maxlength="2">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday06">06月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="workday06" id="workday06" maxlength="2">
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday07">07月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="workday07" id="workday07" maxlength="2">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday08">08月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="workday08" id="workday08" maxlength="2">
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday09">09月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="workday09" id="workday09" maxlength="2">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday10">10月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="workday10" id="workday10" maxlength="2">
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday11">11月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="workday11" id="workday11" maxlength="2">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday12">12月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="workday12" id="workday12" maxlength="2">
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: center">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-2">
+                            <p class="text-center">
+                                <input type="submit" name="btnRegWdl" class="btn btn-primary" id="btnReg" role="button" value="登録">
+                            </p>
+                        </div>
+                        <div class="col-xs-2">
+                            <p class="text-center">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                            </p>
+                        </div>
+                        <div class="col-xs-4"></div>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-xs-1">
-                        </div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workyear">勤務年</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workyear" placeholder="" maxlength="4">
-                            <input type="hidden" id="companyid" value="1">
-                        </div>
-                        <div class="col-xs-6">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-1"></div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workday01">01月</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workday01" maxlength="2" onkeypress="chkMonthday(this.value);">
-                        </div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workday02">02月</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workday02" maxlength="2" onkeypress="chkMonthday(this.value);">
-                        </div>
-                        <div class="col-xs-1"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-1"></div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workday03">03月</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workday03" maxlength="2" onkeypress="chkMonthday(this.value);">
-                        </div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workday04">04月</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workday04" maxlength="2" onkeypress="chkMonthday(this.value);">
-                        </div>
-                        <div class="col-xs-1"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-1"></div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workday05">05月</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workday05" maxlength="2" onkeypress="chkMonthday(this.value);">
-                        </div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workday06">06月</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workday06" maxlength="2" onkeypress="chkMonthday(this.value);">
-                        </div>
-                        <div class="col-xs-1"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-1"></div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workday07">07月</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workday07" maxlength="2" onkeypress="chkMonthday(this.value);">
-                        </div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workday08">08月</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workday08" maxlength="2" onkeypress="chkMonthday(this.value);">
-                        </div>
-                        <div class="col-xs-1"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-1"></div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workday09">09月</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workday09" maxlength="2" onkeypress="chkMonthday(this.value);">
-                        </div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workday10">10月</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workday10" maxlength="2" onkeypress="chkMonthday(this.value);">
-                        </div>
-                        <div class="col-xs-1"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-1"></div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workday11">11月</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workday11" maxlength="2" onkeypress="chkMonthday(this.value);">
-                        </div>
-                        <div class="col-xs-2 text-right">
-                            <label for="workday12">12月</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center" id="workday12" maxlength="2" onkeypress="chkMonthday(this.value);">
-                        </div>
-                        <div class="col-xs-1"></div>
-                    </div>
-                </div>
-                <div class="modal-footer" style="text-align: center">
-                    <div class="col-xs-3"></div>
-                    <div class="col-xs-2">
-                        <p class="text-center"><a class="btn btn-primary btn-md" id="btnReg" href="http://old.netdekintai.com/netdekintai/info/workdayList#" role="button">登録 </a></p>
-                    </div>
-                    <div class="col-xs-2">
-                        <p class="text-center"><a class="btn btn-primary btn-md" id="btnDel" href="http://old.netdekintai.com/netdekintai/info/workdayList#" role="button">削除 </a></p>
-                    </div>
-                    <div class="col-xs-2">
-                        <p class="text-center"><a class="btn btn-warning btn-md" id="btnRet" href="http://old.netdekintai.com/netdekintai/info/workdayList#" role="button">閉じる </a></p>
-                    </div>
-                    <div class="col-xs-3"></div>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -249,6 +252,24 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
     // New button: popup & clear 
     $(document).on('click', '#btnNew', function(e) {
         $('#modal').modal('toggle');
+    });
+
+    // Check Error
+    $(document).on('click', '#btnReg', function(e) {
+        var workyear = $("#workyear").val();
+        var number_no = /^[0-9]+$/;
+
+        if (workyear == "") {
+            alert("<?php echo $info_workyear_empty; ?>");
+            $("#workyear").focus();
+            return false;
+        }
+        if (!workyear.match(number_no)) {
+            alert("<?php echo $info_workyear_no; ?>");
+            e.preventDefault();
+            $("#workyear").focus();
+            return false;
+        }
     });
 
     // Year/month click on grid (edit): popup & content display

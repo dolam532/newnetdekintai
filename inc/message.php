@@ -9,10 +9,10 @@ $save_fail = '入力情報保存できませんでした。';
 $delete_success = '削除成功しました。';
 $delete_all_success = 'すべて削除成功しました。';
 
-// Index
+// index
 $login_is_not = '詳細情報はログイン後可能です。';
 
-// Login & Logout
+// loginout
 $login_empty_id = 'ログイン失敗！  idを入力してください。';
 $login_empty_pwd = 'ログイン失敗！  PWDを入力してください。';
 $login_alphabet = 'IDをアルファベットで入力してください。';
@@ -20,7 +20,7 @@ $login_success = 'ログインに成功しました。';
 $logout_success = 'ログアウトに成功しました。';
 $login_fail = 'ログイン失敗！  idとPWDを確認してください。';
 
-// User
+// userList
 $user_id_same = '他の社員が使用しているidです。';
 $user_id_empty = 'IDを入力してください。';
 $user_pwd_empty = 'Passwordを入力してください。';
@@ -30,7 +30,7 @@ $user_dept_empty = '部署を入力してください。';
 $user_grade_empty = '区分を入力してください。';
 $user_genba_list_empty = '勤務時間タイプを選択してください。';
 
-// Kyuka
+// KyukaReg
 $kyuka_no_receive = '休暇はまだもらえません。';
 $kyuka_ymdcnt_01 = '休暇の申込日は(';
 $kyuka_ymdcnt_02 = '日)を超えるわけにはいきません。';
@@ -50,6 +50,8 @@ $kyuka_destplace_empty = '場所を入力してください。';
 $kyuka_desttel_empty = '電話番号を入力してください。';
 $kyuka_vacationstr_empty = '休暇開始日を入力してください。';
 $kyuka_vacationend_empty = '休暇終了日を入力してください。';
+
+// vacationReg
 $kyuka_oldcnt_empty = '休暇使用数を入力してください。';
 $kyuka_newcnt_empty = '休暇新しい数を入力してください。';
 $kyuka_usecnt_empty = '休暇使用数を入力してください。';
@@ -70,17 +72,17 @@ $kintai_bend_empty = '業務終了を入力してください。';
 $kintai_offtime_empty = '休憩時間を入力してください。';
 $kintai_click_month = '月登録まだ保存されてないです。確認してください。';
 
-// KintaiMonthly
-$NO_DATA = 'データが存在しませんでした。';
-$CONNECT_ERROR = '接続エラー。';
+// genbaList
+$user_genbaname_empty = '勤務時間タイプを入力してください。';
+$user_workstr_empty = '業務開始時間を入力してください。';
+$user_workend_empty = '業務終了時間を入力してください。';
+$user_offtime1_empty = '昼休(時:分)を入力してください。';
+$user_offtime2_empty = '夜休(時:分)を入力してください。';
+$user_workstr_incorrect = '業務開始時間を正しく入力してください。';
+$user_workend_incorrect = '業務終了時間を正しく入力してください。';
+$user_offtime1_incorrect = '昼休(時:分)を正しく入力してください。';
+$user_offtime2_incorrect = '夜休(時:分)を正しく入力してください。';
 
-// KinmuManager
-$kinmu_genbaname_empty = '勤務時間タイプを入力してください。';
-$kinmu_workstr_empty = '業務開始時間を入力してください。';
-$kinmu_workend_empty = '業務終了時間を入力してください。';
-$kinmu_offtime1_empty = '昼休(時:分)を入力してください。';
-$kinmu_offtime2_empty = '夜休(時:分)を入力してください。';
-$kinmu_workstr_incorrect = '業務開始時間を正しく入力してください。';
-$kinmu_workend_incorrect = '業務終了時間を正しく入力してください。';
-$kinmu_offtime1_incorrect = '昼休(時:分)を正しく入力してください。';
-$kinmu_offtime2_incorrect = '夜休(時:分)を正しく入力してください。';
+// workdayList
+$info_workyear_empty = '勤務年は必須です。';
+$info_workyear_no = '勤務年を番号で入力してください。';

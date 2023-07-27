@@ -348,31 +348,31 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 		var offtime2_rmodal = $("#offtime2_rmodal").val();
 
 		if (genbaname_rmodal == "") {
-			alert("<?php echo $kinmu_genbaname_empty; ?>");
+			alert("<?php echo $user_genbaname_empty; ?>");
 			$("#genbaname_rmodal").focus();
 			return false;
 		}
 
 		if (workstr_rmodal == "") {
-			alert("<?php echo $kinmu_workstr_empty; ?>");
+			alert("<?php echo $user_workstr_empty; ?>");
 			$("#workstr_rmodal").focus();
 			return false;
 		}
 
 		if (workend_rmodal == "") {
-			alert("<?php echo $kinmu_workend_empty; ?>");
+			alert("<?php echo $user_workend_empty; ?>");
 			$("#workend_rmodal").focus();
 			return false;
 		}
 
 		if (offtime1_rmodal == "") {
-			alert("<?php echo $kinmu_offtime1_empty; ?>");
+			alert("<?php echo $user_offtime1_empty; ?>");
 			$("#offtime1_rmodal").focus();
 			return false;
 		}
 
 		if (offtime2_rmodal == "") {
-			alert("<?php echo $kinmu_offtime2_empty; ?>");
+			alert("<?php echo $user_offtime2_empty; ?>");
 			$("#offtime2_rmodal").focus();
 			return false;
 		}
@@ -384,28 +384,28 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 
 		var isValid_workstr = validateTimeFormat(workstr_rmodal);
 		if (!isValid_workstr) {
-			alert("<?php echo $kinmu_workstr_incorrect; ?>");
+			alert("<?php echo $user_workstr_incorrect; ?>");
 			$("#workstr_rmodal").focus();
 			return false;
 		}
 
 		var isValid_workend = validateTimeFormat(workend_rmodal);
 		if (!isValid_workend) {
-			alert("<?php echo $kinmu_workend_incorrect; ?>");
+			alert("<?php echo $user_workend_incorrect; ?>");
 			$("#workend_rmodal").focus();
 			return false;
 		}
 
 		var isValid_offtime1 = validateTimeFormat(offtime1_rmodal);
 		if (!isValid_offtime1) {
-			alert("<?php echo $kinmu_offtime1_incorrect; ?>");
+			alert("<?php echo $user_offtime1_incorrect; ?>");
 			$("#offtime1_rmodal").focus();
 			return false;
 		}
 
 		var isValid_offtime2 = validateTimeFormat(offtime2_rmodal);
 		if (!isValid_offtime2) {
-			alert("<?php echo $kinmu_offtime2_incorrect; ?>");
+			alert("<?php echo $user_offtime2_incorrect; ?>");
 			$("#offtime2_rmodal").focus();
 			return false;
 		}
@@ -420,31 +420,31 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 		var offtime2_cmodal = $("#offtime2_cmodal").val();
 
 		if (genbaname_cmodal == "") {
-			alert("<?php echo $kinmu_genbaname_empty; ?>");
+			alert("<?php echo $user_genbaname_empty; ?>");
 			$("#genbaname_cmodal").focus();
 			return false;
 		}
 
 		if (workstr_cmodal == "") {
-			alert("<?php echo $kinmu_workstr_empty; ?>");
+			alert("<?php echo $user_workstr_empty; ?>");
 			$("#workstr_cmodal").focus();
 			return false;
 		}
 
 		if (workend_cmodal == "") {
-			alert("<?php echo $kinmu_workend_empty; ?>");
+			alert("<?php echo $user_workend_empty; ?>");
 			$("#workend_cmodal").focus();
 			return false;
 		}
 
 		if (offtime1_cmodal == "") {
-			alert("<?php echo $kinmu_offtime1_empty; ?>");
+			alert("<?php echo $user_offtime1_empty; ?>");
 			$("#offtime1_cmodal").focus();
 			return false;
 		}
 
 		if (offtime2_cmodal == "") {
-			alert("<?php echo $kinmu_offtime2_empty; ?>");
+			alert("<?php echo $user_offtime2_empty; ?>");
 			$("#offtime2_cmodal").focus();
 			return false;
 		}
@@ -456,28 +456,28 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 
 		var isValid_workstr = validateTimeFormat(workstr_cmodal);
 		if (!isValid_workstr) {
-			alert("<?php echo $kinmu_workstr_incorrect; ?>");
+			alert("<?php echo $user_workstr_incorrect; ?>");
 			$("#workstr_cmodal").focus();
 			return false;
 		}
 
 		var isValid_workend = validateTimeFormat(workend_cmodal);
 		if (!isValid_workend) {
-			alert("<?php echo $kinmu_workend_incorrect; ?>");
+			alert("<?php echo $user_workend_incorrect; ?>");
 			$("#workend_cmodal").focus();
 			return false;
 		}
 
 		var isValid_offtime1 = validateTimeFormat(offtime1_cmodal);
 		if (!isValid_offtime1) {
-			alert("<?php echo $kinmu_offtime1_incorrect; ?>");
+			alert("<?php echo $user_offtime1_incorrect; ?>");
 			$("#offtime1_cmodal").focus();
 			return false;
 		}
 
 		var isValid_offtime2 = validateTimeFormat(offtime2_cmodal);
 		if (!isValid_offtime2) {
-			alert("<?php echo $kinmu_offtime2_incorrect; ?>");
+			alert("<?php echo $user_offtime2_incorrect; ?>");
 			$("#offtime2_cmodal").focus();
 			return false;
 		}
