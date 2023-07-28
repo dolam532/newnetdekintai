@@ -284,7 +284,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 							<input type="submit" name="UpdateKinmu" class="btn btn-primary" id="btnUpd_cmodel" role="button" value="編集">
 						</div>
 						<div class="col-md-2">
-							<input type="submit" name="DeleteKinmu" class="btn btn-primary" id="btnDel_cmodel" role="button" value="削除">
+							<input type="submit" name="DeleteKinmu" class="btn btn-warning" id="btnDel_cmodel" role="button" value="削除">
 						</div>
 						<div class="col-md-2">
 							<button type="button" class="btn btn-warning" data-dismiss="modal" id="modalClose">閉じる</button>

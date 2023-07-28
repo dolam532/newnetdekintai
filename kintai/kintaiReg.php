@@ -750,7 +750,7 @@ if ($_SESSION['auth'] == false) {
 					</div>
 					<div class="modal-footer" style="text-align: center">
 						<input type="submit" name="SaveUpdateKintai" class="btn btn-primary" id="btnReg" role="button" value="登録">
-						<input type="submit" name="DeleteKintai" class="btn btn-primary" id="btnDel" role="button" value="削除">
+						<input type="submit" name="DeleteKintai" class="btn btn-warning" id="btnDel" role="button" value="削除">
 						<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
 					</div>
 				</div>

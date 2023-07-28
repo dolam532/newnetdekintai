@@ -110,7 +110,6 @@ if (isset($_POST['btnRegWdl'])) {
 
     // Prepare the SQL query to insert all data in a single query
     $sql = "INSERT INTO `tbl_workday` (`companyid`, `workyear`, `workmonth`, `workdays`) VALUES " . implode(",", $work_data);
-    // Execute the SQL query
     $result = mysqli_query($conn, $sql);
 
     if ($result) {
@@ -118,5 +117,56 @@ if (isset($_POST['btnRegWdl'])) {
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Update data to tbl_workday table of database
+if (isset($_POST['btnUpdateWdl'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $workyear = mysqli_real_escape_string($conn, $_POST['udworkyear']);
+
+    $workmonth[1] = $_POST['udmonth01'];
+    $workdays[1] = $_POST['udworkday01'];
+    $workmonth[2] = $_POST['udmonth02'];
+    $workdays[2] = $_POST['udworkday02'];
+    $workmonth[3] = $_POST['udmonth03'];
+    $workdays[3] = $_POST['udworkday03'];
+    $workmonth[4] = $_POST['udmonth04'];
+    $workdays[4] = $_POST['udworkday04'];
+    $workmonth[5] = $_POST['udmonth05'];
+    $workdays[5] = $_POST['udworkday05'];
+    $workmonth[6] = $_POST['udmonth06'];
+    $workdays[6] = $_POST['udworkday06'];
+    $workmonth[7] = $_POST['udmonth07'];
+    $workdays[7] = $_POST['udworkday07'];
+    $workmonth[8] = $_POST['udmonth08'];
+    $workdays[8] = $_POST['udworkday08'];
+    $workmonth[9] = $_POST['udmonth09'];
+    $workdays[9] = $_POST['udworkday09'];
+    $workmonth[10] = $_POST['udmonth10'];
+    $workdays[10] = $_POST['udworkday10'];
+    $workmonth[11] = $_POST['udmonth11'];
+    $workdays[11] = $_POST['udworkday11'];
+    $workmonth[12] = $_POST['udmonth12'];
+    $workdays[12] = $_POST['udworkday12'];
+
+    $workmonth_arr = [];
+    $workdays_arr = [];
+    for ($month = 1; $month <= 12; $month++) {
+        $workmonth_arr[$month] = mysqli_real_escape_string($conn, $workmonth[$month]);
+        $workdays_arr[$month] = mysqli_real_escape_string($conn, $workdays[$month]);
+    }
+    $sql = "UPDATE tbl_workday SET workmonth = ?, workdays = ? WHERE companyid = ? AND workyear = ?";
+    $stmt = $conn->prepare($sql);
+
+    for ($month = 1; $month <= 12; $month++) {
+        $stmt->bind_param("ssss", $workmonth_arr[$month], $workdays_arr[$month], $companyid, $workyear);
+        if ($stmt->execute()) {
+            $_SESSION['save_success'] =  $save_success;
+            header("Refresh:3");
+        } else {
+            echo 'query error: ' . $conn->error;
+            break; // Stop the loop if there is an error in executing the query
+        }
     }
 }

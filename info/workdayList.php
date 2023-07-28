@@ -120,6 +120,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
     </div>
 </div>
 
+<!-- 新規 -->
 <div class="row">
     <div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false" style="display: none;">
         <div class="modal-dialog">
@@ -271,6 +272,165 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
         </div>
     </div>
 </div>
+
+<!-- 編集 -->
+<div class="row">
+    <div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false" style="display: none;">
+        <div class="modal-dialog">
+            <form method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        勤務日編集
+                        (<span id="usname"></span>)
+                        <button class="close" data-dismiss="modal">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-1">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workyear">勤務年</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" id="udworkyear" name="udworkyear" placeholder="" maxlength="4">
+                                <input type="hidden" name="udcompanyid">
+                            </div>
+                            <div class="col-xs-6">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday01">01月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" name="udmonth01">
+                                <input type="text" class="form-control text-center" name="udworkday01" id="udworkday01" maxlength="2">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday02">02月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" name="udmonth02">
+                                <input type="text" class="form-control text-center" name="udworkday02" id="udworkday02" maxlength="2">
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday03">03月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" name="udmonth03">
+                                <input type="text" class="form-control text-center" name="udworkday03" id="udworkday03" maxlength="2">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday04">04月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" name="udmonth04">
+                                <input type="text" class="form-control text-center" name="udworkday04" id="udworkday04" maxlength="2">
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday05">05月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" name="udmonth05">
+                                <input type="text" class="form-control text-center" name="udworkday05" id="udworkday05" maxlength="2">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday06">06月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" name="udmonth06">
+                                <input type="text" class="form-control text-center" name="udworkday06" id="udworkday06" maxlength="2">
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday07">07月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" name="udmonth07">
+                                <input type="text" class="form-control text-center" name="udworkday07" id="udworkday07" maxlength="2">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday08">08月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" name="udmonth08">
+                                <input type="text" class="form-control text-center" name="udworkday08" id="udworkday08" maxlength="2">
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday09">09月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" name="udmonth09">
+                                <input type="text" class="form-control text-center" name="udworkday09" id="udworkday09" maxlength="2">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <input type="hidden" name="udmonth10">
+                                <label for="workday10">10月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="udworkday10" id="udworkday10" maxlength="2">
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday11">11月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" name="udmonth11">
+                                <input type="text" class="form-control text-center" name="udworkday11" id="udworkday11" maxlength="2">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="workday12">12月</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="hidden" name="udmonth12">
+                                <input type="text" class="form-control text-center" name="udworkday12" id="udworkday12" maxlength="2">
+                            </div>
+                            <div class="col-xs-1"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: center">
+                        <div class="col-xs-3"></div>
+                        <div class="col-xs-2">
+                            <p class="text-center">
+                                <input type="submit" name="btnUpdateWdl" class="btn btn-primary" id="btnUpdate" role="button" value="登録">
+                            </p>
+                        </div>
+                        <div class="col-xs-2">
+                            <p class="text-center">
+                                <input type="submit" name="btnDelWdl" class="btn btn-warning" id="btnDel" role="button" value="削除">
+                            </p>
+                        </div>
+                        <div class="col-xs-2">
+                            <p class="text-center">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                            </p>
+                        </div>
+                        <div class="col-xs-3"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
     // New button: popup & clear 
     $(document).on('click', '#btnNew', function(e) {
@@ -280,6 +440,18 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
     // Check Error
     $(document).on('click', '#btnReg', function(e) {
         var workyear = $("#workyear").val();
+        var workday01 = $("#workday01").val();
+        var workday02 = $("#workday02").val();
+        var workday03 = $("#workday03").val();
+        var workday04 = $("#workday04").val();
+        var workday05 = $("#workday05").val();
+        var workday06 = $("#workday06").val();
+        var workday07 = $("#workday07").val();
+        var workday08 = $("#workday08").val();
+        var workday09 = $("#workday09").val();
+        var workday10 = $("#workday10").val();
+        var workday11 = $("#workday11").val();
+        var workday12 = $("#workday12").val();
         var number_no = /^[0-9]+$/;
 
         if (workyear == "") {
@@ -291,6 +463,78 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
             alert("<?php echo $info_workyear_no; ?>");
             e.preventDefault();
             $("#workyear").focus();
+            return false;
+        }
+        if (!workday01.match(number_no)) {
+            alert("<?php echo $info_workday01_no; ?>");
+            e.preventDefault();
+            $("#workday01").focus();
+            return false;
+        }
+        if (!workday02.match(number_no)) {
+            alert("<?php echo $info_workday02_no; ?>");
+            e.preventDefault();
+            $("#workday02").focus();
+            return false;
+        }
+        if (!workday03.match(number_no)) {
+            alert("<?php echo $info_workday03_no; ?>");
+            e.preventDefault();
+            $("#workday03").focus();
+            return false;
+        }
+        if (!workday04.match(number_no)) {
+            alert("<?php echo $info_workday04_no; ?>");
+            e.preventDefault();
+            $("#workday04").focus();
+            return false;
+        }
+        if (!workday05.match(number_no)) {
+            alert("<?php echo $info_workday05_no; ?>");
+            e.preventDefault();
+            $("#workday05").focus();
+            return false;
+        }
+        if (!workday06.match(number_no)) {
+            alert("<?php echo $info_workday06_no; ?>");
+            e.preventDefault();
+            $("#workday06").focus();
+            return false;
+        }
+        if (!workday07.match(number_no)) {
+            alert("<?php echo $info_workday07_no; ?>");
+            e.preventDefault();
+            $("#workday07").focus();
+            return false;
+        }
+        if (!workday08.match(number_no)) {
+            alert("<?php echo $info_workday08_no; ?>");
+            e.preventDefault();
+            $("#workday08").focus();
+            return false;
+        }
+        if (!workday09.match(number_no)) {
+            alert("<?php echo $info_workday09_no; ?>");
+            e.preventDefault();
+            $("#workday09").focus();
+            return false;
+        }
+        if (!workday10.match(number_no)) {
+            alert("<?php echo $info_workday10_no; ?>");
+            e.preventDefault();
+            $("#workday10").focus();
+            return false;
+        }
+        if (!workday11.match(number_no)) {
+            alert("<?php echo $info_workday11_no; ?>");
+            e.preventDefault();
+            $("#workday11").focus();
+            return false;
+        }
+        if (!workday12.match(number_no)) {
+            alert("<?php echo $info_workday12_no; ?>");
+            e.preventDefault();
+            $("#workday12").focus();
             return false;
         }
         <?php
@@ -310,11 +554,175 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 
     // Year/month click on grid (edit): popup & content display
     $(document).on('click', '.showModal', function() {
-        // your function here
-        var i = $(".showModal").index(this); // Index based on all showModal that exists
-        console.log(i);
+        var Workyear = $(this).text();
+        $('#modal2').modal('toggle');
 
-        $('#modal').modal('toggle');
+        <?php
+        if (!empty($workday_list)) {
+            foreach ($workday_list as $key) {
+        ?>
+                if ('<?php echo $key['workyear'] ?>' == Workyear) {
+                    $("#usname").text('<?php echo $key['workyear'] ?>');
+                    $("#udworkyear").text($('[name="udworkyear"]').val("<?php echo $key['workyear'] ?>"));
+                    var udcompanyid = $("input[name=udcompanyid]:hidden");
+                    udcompanyid.val("<?php echo $key['companyid'] ?>");
+                    var udcompanyid = udcompanyid.val();
+
+                    var udmonth01 = $("input[name=udmonth01]:hidden");
+                    udmonth01.val("<?php echo $key['one_month'] ?>");
+                    var udmonth01 = udmonth01.val();
+                    $("#udworkday01").text($('[name="udworkday01"]').val("<?php echo isset($key['one_monthwd']) ? $key['one_monthwd']  : '0'; ?>"));
+                    var udmonth02 = $("input[name=udmonth02]:hidden");
+                    udmonth02.val("<?php echo $key['two_month'] ?>");
+                    var udmonth02 = udmonth02.val();
+                    $("#udworkday02").text($('[name="udworkday02"]').val("<?php echo isset($key['two_monthwd']) ? $key['two_monthwd']  : '0'; ?>"));
+                    var udmonth03 = $("input[name=udmonth03]:hidden");
+                    udmonth03.val("<?php echo $key['three_month'] ?>");
+                    var udmonth03 = udmonth03.val();
+                    $("#udworkday03").text($('[name="udworkday03"]').val("<?php echo isset($key['three_monthwd']) ? $key['three_monthwd']  : '0'; ?>"));
+                    var udmonth04 = $("input[name=udmonth04]:hidden");
+                    udmonth04.val("<?php echo $key['four_month'] ?>");
+                    var udmonth04 = udmonth04.val();
+                    $("#udworkday04").text($('[name="udworkday04"]').val("<?php echo isset($key['four_monthwd']) ? $key['four_monthwd']  : '0'; ?>"));
+                    var udmonth05 = $("input[name=udmonth05]:hidden");
+                    udmonth05.val("<?php echo $key['five_month'] ?>");
+                    var udmonth05 = udmonth05.val();
+                    $("#udworkday05").text($('[name="udworkday05"]').val("<?php echo isset($key['five_monthwd']) ? $key['five_monthwd']  : '0'; ?>"));
+                    var udmonth06 = $("input[name=udmonth06]:hidden");
+                    udmonth06.val("<?php echo $key['six_month'] ?>");
+                    var udmonth06 = udmonth06.val();
+                    $("#udworkday06").text($('[name="udworkday06"]').val("<?php echo isset($key['six_monthwd']) ? $key['six_monthwd']  : '0'; ?>"));
+                    var udmonth07 = $("input[name=udmonth07]:hidden");
+                    udmonth07.val("<?php echo $key['seven_month'] ?>");
+                    var udmonth07 = udmonth07.val();
+                    $("#udworkday07").text($('[name="udworkday07"]').val("<?php echo isset($key['seven_monthwd']) ? $key['seven_monthwd']  : '0'; ?>"));
+                    var udmonth08 = $("input[name=udmonth08]:hidden");
+                    udmonth08.val("<?php echo $key['eight_month'] ?>");
+                    var udmonth08 = udmonth08.val();
+                    $("#udworkday08").text($('[name="udworkday08"]').val("<?php echo isset($key['eight_monthwd']) ? $key['eight_monthwd']  : '0'; ?>"));
+                    var udmonth09 = $("input[name=udmonth09]:hidden");
+                    udmonth09.val("<?php echo $key['nine_month'] ?>");
+                    var udmonth09 = udmonth09.val();
+                    $("#udworkday09").text($('[name="udworkday09"]').val("<?php echo isset($key['nine_monthwd']) ? $key['nine_monthwd']  : '0'; ?>"));
+                    var udmonth10 = $("input[name=udmonth10]:hidden");
+                    udmonth10.val("<?php echo $key['ten_month'] ?>");
+                    var udmonth10 = udmonth10.val();
+                    $("#udworkday10").text($('[name="udworkday10"]').val("<?php echo isset($key['ten_monthwd']) ? $key['ten_monthwd']  : '0'; ?>"));
+                    var udmonth11 = $("input[name=udmonth11]:hidden");
+                    udmonth11.val("<?php echo $key['eleven_month'] ?>");
+                    var udmonth11 = udmonth11.val();
+                    $("#udworkday11").text($('[name="udworkday11"]').val("<?php echo isset($key['eleven_monthwd']) ? $key['eleven_monthwd']  : '0'; ?>"));
+                    var udmonth12 = $("input[name=udmonth12]:hidden");
+                    udmonth12.val("<?php echo $key['twelve_month'] ?>");
+                    var udmonth12 = udmonth12.val();
+                    $("#udworkday12").text($('[name="udworkday12"]').val("<?php echo isset($key['twelve_monthwd']) ? $key['twelve_monthwd']  : '0'; ?>"));
+                }
+        <?php
+            }
+        }
+        ?>
+    });
+
+    // Check Error
+    $(document).on('click', '#btnUpdate', function(e) {
+        var udworkyear = $("#udworkyear").val();
+        var udworkday01 = $("#udworkday01").val();
+        var udworkday02 = $("#udworkday02").val();
+        var udworkday03 = $("#udworkday03").val();
+        var udworkday04 = $("#udworkday04").val();
+        var udworkday05 = $("#udworkday05").val();
+        var udworkday06 = $("#udworkday06").val();
+        var udworkday07 = $("#udworkday07").val();
+        var udworkday08 = $("#udworkday08").val();
+        var udworkday09 = $("#udworkday09").val();
+        var udworkday10 = $("#udworkday10").val();
+        var udworkday11 = $("#udworkday11").val();
+        var udworkday12 = $("#udworkday12").val();
+        var number_no = /^[0-9]+$/;
+
+        if (udworkyear == "") {
+            alert("<?php echo $info_workyear_empty; ?>");
+            $("#udworkyear").focus();
+            return false;
+        }
+        if (!udworkyear.match(number_no)) {
+            alert("<?php echo $info_workyear_no; ?>");
+            e.preventDefault();
+            $("#udworkyear").focus();
+            return false;
+        }
+        if (!udworkday01.match(number_no)) {
+            alert("<?php echo $info_workday01_no; ?>");
+            e.preventDefault();
+            $("#udworkday01").focus();
+            return false;
+        }
+        if (!udworkday02.match(number_no)) {
+            alert("<?php echo $info_workday02_no; ?>");
+            e.preventDefault();
+            $("#udworkday02").focus();
+            return false;
+        }
+        if (!udworkday03.match(number_no)) {
+            alert("<?php echo $info_workday03_no; ?>");
+            e.preventDefault();
+            $("#udworkday03").focus();
+            return false;
+        }
+        if (!udworkday04.match(number_no)) {
+            alert("<?php echo $info_workday04_no; ?>");
+            e.preventDefault();
+            $("#udworkday04").focus();
+            return false;
+        }
+        if (!udworkday05.match(number_no)) {
+            alert("<?php echo $info_workday05_no; ?>");
+            e.preventDefault();
+            $("#udworkday05").focus();
+            return false;
+        }
+        if (!udworkday06.match(number_no)) {
+            alert("<?php echo $info_workday06_no; ?>");
+            e.preventDefault();
+            $("#udworkday06").focus();
+            return false;
+        }
+        if (!udworkday07.match(number_no)) {
+            alert("<?php echo $info_workday07_no; ?>");
+            e.preventDefault();
+            $("#udworkday07").focus();
+            return false;
+        }
+        if (!udworkday08.match(number_no)) {
+            alert("<?php echo $info_workday08_no; ?>");
+            e.preventDefault();
+            $("#udworkday08").focus();
+            return false;
+        }
+        if (!udworkday09.match(number_no)) {
+            alert("<?php echo $info_workday09_no; ?>");
+            e.preventDefault();
+            $("#udworkday09").focus();
+            return false;
+        }
+        if (!udworkday10.match(number_no)) {
+            alert("<?php echo $info_workday10_no; ?>");
+            e.preventDefault();
+            $("#udworkday10").focus();
+            return false;
+        }
+        if (!udworkday11.match(number_no)) {
+            alert("<?php echo $info_workday11_no; ?>");
+            e.preventDefault();
+            $("#udworkday11").focus();
+            return false;
+        }
+        if (!udworkday12.match(number_no)) {
+            alert("<?php echo $info_workday12_no; ?>");
+            e.preventDefault();
+            $("#udworkday12").focus();
+            return false;
+        }
     });
 </script>
 <?php include('../inc/footer.php'); ?>
