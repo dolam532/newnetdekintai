@@ -86,3 +86,4 @@ $user_offtime2_incorrect = '夜休(時:分)を正しく入力してください�
 // workdayList
 $info_workyear_empty = '勤務年は必須です。';
 $info_workyear_no = '勤務年を番号で入力してください。';
+$info_workyear_have = '登録済み年月です。';

@@ -5,7 +5,7 @@ include('../inc/message.php');
 include('../inc/const_array.php');
 include('../inc/header.php');
 include('../model/infomodel.php');
-// include('../model/inactive.php');
+include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
     header("Location: ../loginout/loginout.php");
@@ -44,6 +44,17 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 <title>勤務日登録</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
+    <?php
+    if (isset($_SESSION['save_success']) && isset($_POST['btnRegWdl'])) {
+    ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['save_success']; ?>
+        </div>
+    <?php
+        unset($_SESSION['save_success']);
+    }
+    ?>
     <div class="row">
         <div class="col-md-4">
             <div class="title_name">
@@ -127,7 +138,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                             </div>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control text-center" id="workyear" name="workyear" placeholder="" maxlength="4">
-                                <input type="hidden" id="companyid" name="companyid" value="1">
+                                <input type="hidden" name="companyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
                             </div>
                             <div class="col-xs-6">
                             </div>
@@ -138,12 +149,14 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                                 <label for="workday01">01月</label>
                             </div>
                             <div class="col-xs-3">
+                                <input type="hidden" name="month01" value="01">
                                 <input type="text" class="form-control text-center" name="workday01" id="workday01" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday02">02月</label>
                             </div>
                             <div class="col-xs-3">
+                                <input type="hidden" name="month02" value="02">
                                 <input type="text" class="form-control text-center" name="workday02" id="workday02" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
@@ -154,12 +167,14 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                                 <label for="workday03">03月</label>
                             </div>
                             <div class="col-xs-3">
+                                <input type="hidden" name="month03" value="03">
                                 <input type="text" class="form-control text-center" name="workday03" id="workday03" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday04">04月</label>
                             </div>
                             <div class="col-xs-3">
+                                <input type="hidden" name="month04" value="04">
                                 <input type="text" class="form-control text-center" name="workday04" id="workday04" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
@@ -170,12 +185,14 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                                 <label for="workday05">05月</label>
                             </div>
                             <div class="col-xs-3">
+                                <input type="hidden" name="month05" value="05">
                                 <input type="text" class="form-control text-center" name="workday05" id="workday05" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday06">06月</label>
                             </div>
                             <div class="col-xs-3">
+                                <input type="hidden" name="month06" value="06">
                                 <input type="text" class="form-control text-center" name="workday06" id="workday06" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
@@ -186,12 +203,14 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                                 <label for="workday07">07月</label>
                             </div>
                             <div class="col-xs-3">
+                                <input type="hidden" name="month07" value="07">
                                 <input type="text" class="form-control text-center" name="workday07" id="workday07" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday08">08月</label>
                             </div>
                             <div class="col-xs-3">
+                                <input type="hidden" name="month08" value="08">
                                 <input type="text" class="form-control text-center" name="workday08" id="workday08" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
@@ -202,9 +221,11 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                                 <label for="workday09">09月</label>
                             </div>
                             <div class="col-xs-3">
+                                <input type="hidden" name="month09" value="09">
                                 <input type="text" class="form-control text-center" name="workday09" id="workday09" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
+                                <input type="hidden" name="month10" value="10">
                                 <label for="workday10">10月</label>
                             </div>
                             <div class="col-xs-3">
@@ -218,12 +239,14 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                                 <label for="workday11">11月</label>
                             </div>
                             <div class="col-xs-3">
+                                <input type="hidden" name="month11" value="11">
                                 <input type="text" class="form-control text-center" name="workday11" id="workday11" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday12">12月</label>
                             </div>
                             <div class="col-xs-3">
+                                <input type="hidden" name="month12" value="12">
                                 <input type="text" class="form-control text-center" name="workday12" id="workday12" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
@@ -270,6 +293,19 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
             $("#workyear").focus();
             return false;
         }
+        <?php
+        if (!empty($workday_list)) {
+            foreach ($workday_list as $key) {
+        ?>
+                if ('<?php echo $key['workyear'] ?>' == workyear) {
+                    alert("<?php echo $info_workyear_have; ?>");
+                    $("#workyear").focus();
+                    return false;
+                }
+        <?php
+            }
+        }
+        ?>
     });
 
     // Year/month click on grid (edit): popup & content display
