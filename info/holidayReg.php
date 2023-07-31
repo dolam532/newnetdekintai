@@ -5,7 +5,7 @@ include('../inc/message.php');
 include('../inc/const_array.php');
 include('../inc/header.php');
 include('../model/infomodel.php');
-include('../model/inactive.php');
+// include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
     header("Location: ../loginout/loginout.php");
@@ -44,7 +44,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <?php
-    if (isset($_SESSION['save_success']) && isset($_POST['btnUpdateWdl'])) {
+    if (isset($_SESSION['save_success']) && isset($_POST['btnRegHdr'])) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -121,41 +121,43 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 <div class="row">
     <div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false" style="display: none;">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    祝日登録<span id="sname"></span>
-                    <button class="close" data-dismiss="modal">x</button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-xs-2 text-right">
-                            <label for="holiday">祝日</label>
-                        </div>
-                        <div class="col-xs-3">
-                            <input type="text" class="form-control text-center hasDatepicker" id="holiday" maxlength="10">
-                            <input type="hidden" name="companyid" id="companyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
-                        </div>
-                        <div class="col-xs-2 text-right">
-                            <label for="holiremark">Remark</label>
-                        </div>
-                        <div class="col-xs-5">
-                            <input type="text" class="form-control text-left" name="holiremark" id="holiremark" maxlength="20">
+            <form method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        祝日登録<span id="sname"></span>
+                        <button class="close" data-dismiss="modal">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-2 text-right">
+                                <label for="holiday">祝日</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="holiday" id="holiday" maxlength="10">
+                                <input type="hidden" name="companyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="holiremark">Remark</label>
+                            </div>
+                            <div class="col-xs-5">
+                                <input type="text" class="form-control text-left" name="holiremark" id="holiremark" maxlength="20">
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer" style="text-align: center">
-                    <div class="col-xs-4"></div>
-                    <div class="col-xs-2">
-                        <p class="text-center">
-                            <input type="submit" name="btnRegWdl" class="btn btn-primary" id="btnReg" role="button" value="登録">
-                        </p>
+                    <div class="modal-footer" style="text-align: center">
+                        <div class="col-xs-4"></div>
+                        <div class="col-xs-2">
+                            <p class="text-center">
+                                <input type="submit" name="btnRegHdr" class="btn btn-primary" id="btnReg" role="button" value="登録">
+                            </p>
+                        </div>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                        </div>
+                        <div class="col-xs-4"></div>
                     </div>
-                    <div class="col-xs-2">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
-                    </div>
-                    <div class="col-xs-4"></div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>
@@ -170,6 +172,23 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
     // New button: popup & clear 
     $(document).on('click', '#btnNew', function(e) {
         $('#modal').modal('toggle');
+    });
+
+    // Datepeeker Calender
+    $("#holiday").datepicker({
+        changeYear: true,
+        dateFormat: 'yy/mm/dd'
+    });
+
+    // Check Error
+    $(document).on('click', '#btnReg', function(e) {
+        var holiday = $("#holiday").val();
+
+        if (holiday == "") {
+            alert("<?php echo $info_holiday_empty; ?>");
+            $("#holiday").focus();
+            return false;
+        }
     });
 </script>
 <?php include('../inc/footer.php'); ?>

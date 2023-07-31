@@ -193,11 +193,34 @@ if (isset($_POST['btnDelWdl'])) {
     }
 }
 
+
 // (holidayReg.php)
+if ($_POST['selyy'] == NULL) {
+    $_POST["selyy"] = $_SESSION['year_Hdr'];
+}
 $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
+
 // Select database from tbl_holiday table
 $sql_holiday = 'SELECT * FROM `tbl_holiday` 
     WHERE `tbl_holiday`.`companyid` IN("' . $ganasys_company_id . '")
     AND `tbl_holiday`.`holiyear` IN("' . $year . '")';
 $result_holiday = mysqli_query($conn, $sql_holiday);
 $holiday_list = mysqli_fetch_all($result_holiday, MYSQLI_ASSOC);
+
+// Save database to tbl_holiday table
+if (isset($_POST['btnRegHdr'])) {
+    $_SESSION['year_Hdr'] = $year_Hdr = substr($_POST['holiday'], 0, 4);
+    $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
+    $holiyear = mysqli_real_escape_string($conn, $year_Hdr);
+    $holiday = mysqli_real_escape_string($conn, $_POST['holiday']);
+    $holiremark = mysqli_real_escape_string($conn, $_POST['holiremark']);
+
+    $sql_holiday_insert = "INSERT INTO `tbl_holiday` (`companyid`, `holiyear`, `holiday`, `holiremark`) 
+	VALUES('$companyid', '$holiyear', '$holiday', '$holiremark')";
+    if (mysqli_query($conn, $sql_holiday_insert)) {
+        $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}

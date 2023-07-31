@@ -99,3 +99,6 @@ $info_workday09_no = '09月に項目を番号で入力してください。';
 $info_workday10_no = '10月に項目を番号で入力してください。';
 $info_workday11_no = '11月に項目を番号で入力してください。';
 $info_workday12_no = '12月に項目を番号で入力してください。';
+
+// holidayReg
+$info_holiday_empty = '祝日を正しく入力してください。';
