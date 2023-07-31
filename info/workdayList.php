@@ -45,7 +45,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <?php
-    if (isset($_SESSION['save_success']) && isset($_POST['btnRegWdl'])) {
+    if (isset($_SESSION['save_success']) && isset($_POST['btnUpdateWdl'])) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -293,7 +293,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                             </div>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control text-center" id="udworkyear" name="udworkyear" placeholder="" maxlength="4">
-                                <input type="hidden" name="udcompanyid">
+                                <input type="hidden" name="udcompanyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
                             </div>
                             <div class="col-xs-6">
                             </div>
@@ -564,9 +564,6 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                 if ('<?php echo $key['workyear'] ?>' == Workyear) {
                     $("#usname").text('<?php echo $key['workyear'] ?>');
                     $("#udworkyear").text($('[name="udworkyear"]').val("<?php echo $key['workyear'] ?>"));
-                    var udcompanyid = $("input[name=udcompanyid]:hidden");
-                    udcompanyid.val("<?php echo $key['companyid'] ?>");
-                    var udcompanyid = udcompanyid.val();
 
                     var udmonth01 = $("input[name=udmonth01]:hidden");
                     udmonth01.val("<?php echo $key['one_month'] ?>");

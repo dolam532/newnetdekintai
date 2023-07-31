@@ -150,23 +150,29 @@ if (isset($_POST['btnUpdateWdl'])) {
     $workmonth[12] = $_POST['udmonth12'];
     $workdays[12] = $_POST['udworkday12'];
 
-    $workmonth_arr = [];
-    $workdays_arr = [];
+    $workmonth_arr = array();
+    $workdays_arr = array();
     for ($month = 1; $month <= 12; $month++) {
         $workmonth_arr[$month] = mysqli_real_escape_string($conn, $workmonth[$month]);
         $workdays_arr[$month] = mysqli_real_escape_string($conn, $workdays[$month]);
     }
-    $sql = "UPDATE tbl_workday SET workmonth = ?, workdays = ? WHERE companyid = ? AND workyear = ?";
-    $stmt = $conn->prepare($sql);
 
+    $update_queries = array();
     for ($month = 1; $month <= 12; $month++) {
-        $stmt->bind_param("ssss", $workmonth_arr[$month], $workdays_arr[$month], $companyid, $workyear);
-        if ($stmt->execute()) {
-            $_SESSION['save_success'] =  $save_success;
-            header("Refresh:3");
-        } else {
-            echo 'query error: ' . $conn->error;
-            break; // Stop the loop if there is an error in executing the query
-        }
+        $update_queries[] = "workmonth = '$workmonth_arr[$month]', workdays = '$workdays_arr[$month]'";
+    }
+
+    $combined_sql = "INSERT INTO tbl_workday (companyid, workyear, workmonth, workdays) VALUES ";
+    $insert_values = array();
+    for ($month = 1; $month <= 12; $month++) {
+        $insert_values[] = "('$companyid', '$workyear', '$workmonth_arr[$month]', '$workdays_arr[$month]')";
+    }
+    $combined_sql .= implode(", ", $insert_values) . " ON DUPLICATE KEY UPDATE workmonth = VALUES(workmonth), workdays = VALUES(workdays)";
+    $result = mysqli_query($conn, $combined_sql);
+    if ($result) {
+        $_SESSION['save_success'] = $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
     }
 }
