@@ -59,7 +59,7 @@
                         <ul class="dropdown-menu">
                             <li class="menu-level3"><a href="">基礎コード登録</a></li>
                             <li class="menu-level3"><a href="../info/workdayList.php">勤務日登録</a></li>
-                            <li class="menu-level3"><a href="">祝日登録</a></li>
+                            <li class="menu-level3"><a href="../info/holidayReg.php">祝日登録</a></li>
                             <li class="menu-level3"><a href="../user/userList.php">社員登録</a></li>
                             <li class="menu-level3"><a href="">年次休暇登録</a></li>
                             <li class="menu-level3"><a href="../user/genbaList.php">勤務管理表</a></li>

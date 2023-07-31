@@ -1,6 +1,6 @@
 <?php
-// Select database from tbl_workday table
 // (workdayList.php)
+// Select database from tbl_workday table
 $ganasys_company_id = constant('GANASYS_COMPANY_ID');
 $sql_workday = "SELECT workyear,
     MAX(CASE WHEN workmonth = '01' THEN workmonth END) AS one_month,
@@ -176,3 +176,28 @@ if (isset($_POST['btnUpdateWdl'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+// Delete data to tbl_workday table of database
+if (isset($_POST['btnDelWdl'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $workyear = mysqli_real_escape_string($conn, $_POST['udworkyear']);
+
+    $sql = "DELETE FROM `tbl_workday` 
+    WHERE companyid ='$companyid' AND workyear ='$workyear'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['delete_success'] =  $delete_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// (holidayReg.php)
+$year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
+// Select database from tbl_holiday table
+$sql_holiday = 'SELECT * FROM `tbl_holiday` 
+    WHERE `tbl_holiday`.`companyid` IN("' . $ganasys_company_id . '")
+    AND `tbl_holiday`.`holiyear` IN("' . $year . '")';
+$result_holiday = mysqli_query($conn, $sql_holiday);
+$holiday_list = mysqli_fetch_all($result_holiday, MYSQLI_ASSOC);

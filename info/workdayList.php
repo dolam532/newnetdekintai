@@ -45,7 +45,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <?php
-    if (isset($_SESSION['save_success']) && isset($_POST['btnUpdateWdl'])) {
+    if ((isset($_SESSION['save_success']) && isset($_POST['btnUpdateWdl'])) || (isset($_SESSION['save_success']) && isset($_POST['btnRegWdl']))) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -53,6 +53,17 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
         </div>
     <?php
         unset($_SESSION['save_success']);
+    }
+    ?>
+    <?php
+    if (isset($_SESSION['delete_success']) && isset($_POST['btnDelWdl'])) {
+    ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['delete_success']; ?>
+        </div>
+    <?php
+        unset($_SESSION['delete_success']);
     }
     ?>
     <div class="row">
@@ -452,86 +463,85 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
         var workday10 = $("#workday10").val();
         var workday11 = $("#workday11").val();
         var workday12 = $("#workday12").val();
-        var number_no = /^[0-9]+$/;
 
         if (workyear == "") {
             alert("<?php echo $info_workyear_empty; ?>");
             $("#workyear").focus();
             return false;
         }
-        if (!workyear.match(number_no)) {
+        if (isNaN(workyear)) {
             alert("<?php echo $info_workyear_no; ?>");
             e.preventDefault();
             $("#workyear").focus();
             return false;
         }
-        if (!workday01.match(number_no)) {
+        if (isNaN(workday01)) {
             alert("<?php echo $info_workday01_no; ?>");
             e.preventDefault();
             $("#workday01").focus();
             return false;
         }
-        if (!workday02.match(number_no)) {
+        if (isNaN(workday02)) {
             alert("<?php echo $info_workday02_no; ?>");
             e.preventDefault();
             $("#workday02").focus();
             return false;
         }
-        if (!workday03.match(number_no)) {
+        if (isNaN(workday03)) {
             alert("<?php echo $info_workday03_no; ?>");
             e.preventDefault();
             $("#workday03").focus();
             return false;
         }
-        if (!workday04.match(number_no)) {
+        if (isNaN(workday04)) {
             alert("<?php echo $info_workday04_no; ?>");
             e.preventDefault();
             $("#workday04").focus();
             return false;
         }
-        if (!workday05.match(number_no)) {
+        if (isNaN(workday05)) {
             alert("<?php echo $info_workday05_no; ?>");
             e.preventDefault();
             $("#workday05").focus();
             return false;
         }
-        if (!workday06.match(number_no)) {
+        if (isNaN(workday06)) {
             alert("<?php echo $info_workday06_no; ?>");
             e.preventDefault();
             $("#workday06").focus();
             return false;
         }
-        if (!workday07.match(number_no)) {
+        if (isNaN(workday07)) {
             alert("<?php echo $info_workday07_no; ?>");
             e.preventDefault();
             $("#workday07").focus();
             return false;
         }
-        if (!workday08.match(number_no)) {
+        if (isNaN(workday08)) {
             alert("<?php echo $info_workday08_no; ?>");
             e.preventDefault();
             $("#workday08").focus();
             return false;
         }
-        if (!workday09.match(number_no)) {
+        if (isNaN(workday09)) {
             alert("<?php echo $info_workday09_no; ?>");
             e.preventDefault();
             $("#workday09").focus();
             return false;
         }
-        if (!workday10.match(number_no)) {
+        if (isNaN(workday10)) {
             alert("<?php echo $info_workday10_no; ?>");
             e.preventDefault();
             $("#workday10").focus();
             return false;
         }
-        if (!workday11.match(number_no)) {
+        if (isNaN(workday11)) {
             alert("<?php echo $info_workday11_no; ?>");
             e.preventDefault();
             $("#workday11").focus();
             return false;
         }
-        if (!workday12.match(number_no)) {
+        if (isNaN(workday12)) {
             alert("<?php echo $info_workday12_no; ?>");
             e.preventDefault();
             $("#workday12").focus();
@@ -635,86 +645,85 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
         var udworkday10 = $("#udworkday10").val();
         var udworkday11 = $("#udworkday11").val();
         var udworkday12 = $("#udworkday12").val();
-        var number_no = /^[0-9]+$/;
 
         if (udworkyear == "") {
             alert("<?php echo $info_workyear_empty; ?>");
             $("#udworkyear").focus();
             return false;
         }
-        if (!udworkyear.match(number_no)) {
+        if (isNaN(udworkyear)) {
             alert("<?php echo $info_workyear_no; ?>");
             e.preventDefault();
             $("#udworkyear").focus();
             return false;
         }
-        if (!udworkday01.match(number_no)) {
+        if (isNaN(udworkday01)) {
             alert("<?php echo $info_workday01_no; ?>");
             e.preventDefault();
             $("#udworkday01").focus();
             return false;
         }
-        if (!udworkday02.match(number_no)) {
+        if (isNaN(udworkday02)) {
             alert("<?php echo $info_workday02_no; ?>");
             e.preventDefault();
             $("#udworkday02").focus();
             return false;
         }
-        if (!udworkday03.match(number_no)) {
+        if (isNaN(udworkday03)) {
             alert("<?php echo $info_workday03_no; ?>");
             e.preventDefault();
             $("#udworkday03").focus();
             return false;
         }
-        if (!udworkday04.match(number_no)) {
+        if (isNaN(udworkday04)) {
             alert("<?php echo $info_workday04_no; ?>");
             e.preventDefault();
             $("#udworkday04").focus();
             return false;
         }
-        if (!udworkday05.match(number_no)) {
+        if (isNaN(udworkday05)) {
             alert("<?php echo $info_workday05_no; ?>");
             e.preventDefault();
             $("#udworkday05").focus();
             return false;
         }
-        if (!udworkday06.match(number_no)) {
+        if (isNaN(udworkday06)) {
             alert("<?php echo $info_workday06_no; ?>");
             e.preventDefault();
             $("#udworkday06").focus();
             return false;
         }
-        if (!udworkday07.match(number_no)) {
+        if (isNaN(udworkday07)) {
             alert("<?php echo $info_workday07_no; ?>");
             e.preventDefault();
             $("#udworkday07").focus();
             return false;
         }
-        if (!udworkday08.match(number_no)) {
+        if (isNaN(udworkday08)) {
             alert("<?php echo $info_workday08_no; ?>");
             e.preventDefault();
             $("#udworkday08").focus();
             return false;
         }
-        if (!udworkday09.match(number_no)) {
+        if (isNaN(udworkday09)) {
             alert("<?php echo $info_workday09_no; ?>");
             e.preventDefault();
             $("#udworkday09").focus();
             return false;
         }
-        if (!udworkday10.match(number_no)) {
+        if (isNaN(udworkday10)) {
             alert("<?php echo $info_workday10_no; ?>");
             e.preventDefault();
             $("#udworkday10").focus();
             return false;
         }
-        if (!udworkday11.match(number_no)) {
+        if (isNaN(udworkday11)) {
             alert("<?php echo $info_workday11_no; ?>");
             e.preventDefault();
             $("#udworkday11").focus();
             return false;
         }
-        if (!udworkday12.match(number_no)) {
+        if (isNaN(udworkday12)) {
             alert("<?php echo $info_workday12_no; ?>");
             e.preventDefault();
             $("#udworkday12").focus();
