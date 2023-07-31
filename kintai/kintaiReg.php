@@ -917,30 +917,30 @@ if ($_SESSION['auth'] == false) {
 			var earlydays_bottom = $('#earlydays_bottom').val();
 
 			$("#jobhh_bottom").on("change", function() {
-				var jobhh_bottom = parseInt($(this).val()); 
+				var jobhh_bottom = parseInt($(this).val());
 			});
 			$("#jobmm_bottom").on("change", function() {
-				var jobmm_bottom = parseInt($(this).val()); 
+				var jobmm_bottom = parseInt($(this).val());
 			});
 			$("#jobdays_bottom").on("change", function() {
-				var jobdays_bottom = parseInt($(this).val()); 
+				var jobdays_bottom = parseInt($(this).val());
 			});
 			$("#workdays_bottom").on("change", function() {
-				var workdays_bottom = parseInt($(this).val()); 
+				var workdays_bottom = parseInt($(this).val());
 			});
 			$("#holydays_bottom").on("change", function() {
-				var holydays_bottom = parseInt($(this).val()); 
+				var holydays_bottom = parseInt($(this).val());
 			});
 			$("#offdays_bottom").on("change", function() {
-				var offdays_bottom = parseInt($(this).val()); 
+				var offdays_bottom = parseInt($(this).val());
 			});
 			$("#delaydays_bottom").on("change", function() {
-				var delaydays_bottom = parseInt($(this).val()); 
+				var delaydays_bottom = parseInt($(this).val());
 			});
 			$("#earlydays_bottom").on("change", function() {
-				var earlydays_bottom = parseInt($(this).val()); 
+				var earlydays_bottom = parseInt($(this).val());
 			});
-			
+
 			<?php
 			if (!empty($workmonth_list)) {
 				foreach ($workmonth_list as $key) {
@@ -955,8 +955,12 @@ if ($_SESSION['auth'] == false) {
 					} else {
 						alert("<?php echo $kintai_click_month; ?>");
 					}
-			<?php
+				<?php
 				}
+			} else {
+				?>
+				$("#autopdf").submit();
+			<?php
 			}
 			?>
 		<?php

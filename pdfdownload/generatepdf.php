@@ -112,7 +112,7 @@ if (!empty($workmonth_list)) {
 		$tcpdf->Cell(20, 13.6, $key['jobhour'] . ':' . $key['jobminute'], 1, 0, 'C', true);
 	}
 } else {
-	$tcpdf->Cell(20, 13.6, '', 1, 0, 'C', true);
+	$tcpdf->Cell(20, 13.6, ':', 1, 0, 'C', true);
 }
 $tcpdf->SetFillColor(240, 240, 240); // Set the fill color for the header
 $tcpdf->SetTextColor(0, 0, 0); // Set the text color for the header
