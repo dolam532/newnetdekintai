@@ -14,7 +14,7 @@ if ($_SESSION['auth'] == false) {
 if ($_SESSION['auth_type'] == 1) { // if not admin 
     header("Location: ./../../index.php");
 }
-
+echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css'>";
 ?>
 
 <!-- ****CSS*****  -->
@@ -52,6 +52,28 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
         </div>
     <?php
         unset($_SESSION['save_success']);
+    }
+    ?>
+    <?php
+    if (isset($_SESSION['update_success']) && isset($_POST['btnUpdateHdr'])) {
+    ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['update_success']; ?>
+        </div>
+    <?php
+        unset($_SESSION['update_success']);
+    }
+    ?>
+    <?php
+    if (isset($_SESSION['delete_success']) && isset($_POST['btnDelHdr'])) {
+    ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['delete_success']; ?>
+        </div>
+    <?php
+        unset($_SESSION['delete_success']);
     }
     ?>
     <div class="row">
@@ -161,6 +183,58 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
         </div>
     </div>
 </div>
+
+<!-- 編集 -->
+<div class="row">
+    <div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false" style="display: none;">
+        <div class="modal-dialog">
+            <form method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        勤務日編集
+                        (<span id="usname"></span>)
+                        <button class="close" data-dismiss="modal">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-xs-2 text-right">
+                                <label for="holiday">祝日</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" name="udholiday" id="udholiday" maxlength="10" readonly>
+                                <input type="hidden" name="udcompanyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
+                                <input type="hidden" name="udholiyear" id="udholiyear">
+                            </div>
+                            <div class="col-xs-2 text-right">
+                                <label for="holiremark">Remark</label>
+                            </div>
+                            <div class="col-xs-5">
+                                <input type="text" class="form-control text-left" name="udholiremark" id="udholiremark" maxlength="20">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: center">
+                        <div class="col-xs-3"></div>
+                        <div class="col-xs-2">
+                            <p class="text-center">
+                                <input type="submit" name="btnUpdateHdr" class="btn btn-primary" id="btnUpdate" role="button" value="登録">
+                            </p>
+                        </div>
+                        <div class="col-xs-2">
+                            <p class="text-center">
+                                <input type="submit" name="btnDelHdr" class="btn btn-warning" id="btnDel" role="button" value="削除">
+                            </p>
+                        </div>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                        </div>
+                        <div class="col-xs-3"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
     // Submit for select
     jQuery(function() {
@@ -182,13 +256,51 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 
     // Check Error
     $(document).on('click', '#btnReg', function(e) {
-        var holiday = $("#holiday").val();
+        var Holiday = $("#holiday").val();
 
-        if (holiday == "") {
+        if (Holiday == "") {
             alert("<?php echo $info_holiday_empty; ?>");
             $("#holiday").focus();
             return false;
         }
+
+        <?php
+        if (!empty($holiday_list)) {
+            foreach ($holiday_list as $key) {
+        ?>
+                if ('<?php echo $key['holiday'] ?>' == Holiday) {
+                    alert("<?php echo $info_holiday_have; ?>");
+                    $("#holiday").focus();
+                    return false;
+                }
+        <?php
+            }
+        }
+        ?>
+    });
+
+    // Year/month click on grid (edit): popup & content display
+    $(document).on('click', '.showModal', function() {
+        var Holiday = $(this).text();
+        $('#modal2').modal('toggle');
+
+        <?php
+        if (!empty($holiday_list)) {
+            foreach ($holiday_list as $key) {
+        ?>
+                if ('<?php echo $key['holiday'] ?>' == Holiday) {
+                    $("#usname").text('<?php echo $key['holiday'] ?>');
+                    $("#udholiday").text($('[name="udholiday"]').val("<?php echo $key['holiday'] ?>"));
+                    $("#udholiremark").text($('[name="udholiremark"]').val("<?php echo $key['holiremark'] ?>"));
+
+                    var udholiyear = $("input[name=udholiyear]:hidden");
+                    udholiyear.val("<?php echo $key['holiyear'] ?>");
+                    var udholiyear = udholiyear.val();
+                }
+        <?php
+            }
+        }
+        ?>
     });
 </script>
 <?php include('../inc/footer.php'); ?>

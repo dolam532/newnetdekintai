@@ -170,7 +170,7 @@ if (isset($_POST['btnUpdateWdl'])) {
     $combined_sql .= implode(", ", $insert_values) . " ON DUPLICATE KEY UPDATE workmonth = VALUES(workmonth), workdays = VALUES(workdays)";
     $result = mysqli_query($conn, $combined_sql);
     if ($result) {
-        $_SESSION['save_success'] = $save_success;
+        $_SESSION['update_success'] = $update_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -219,6 +219,46 @@ if (isset($_POST['btnRegHdr'])) {
 	VALUES('$companyid', '$holiyear', '$holiday', '$holiremark')";
     if (mysqli_query($conn, $sql_holiday_insert)) {
         $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Update database to tbl_holiday table
+if (isset($_POST['btnUpdateHdr'])) {
+    $_SESSION['year_Hdr'] = $_POST['udholiyear'];
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $holiyear = mysqli_real_escape_string($conn, $_POST['udholiyear']);
+    $holiday = mysqli_real_escape_string($conn, $_POST['udholiday']);
+    $holiremark = mysqli_real_escape_string($conn, $_POST['udholiremark']);
+
+    $sql = "UPDATE tbl_holiday SET 
+                holiremark='$holiremark'
+            WHERE companyid ='$companyid'
+            AND holiyear ='$holiyear'
+            AND holiday ='$holiday'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['update_success'] =  $update_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Delete database to tbl_holiday table
+if (isset($_POST['btnDelHdr'])) {
+    $_SESSION['year_Hdr'] = $_POST['udholiyear'];
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $holiyear = mysqli_real_escape_string($conn, $_POST['udholiyear']);
+    $holiday = mysqli_real_escape_string($conn, $_POST['udholiday']);
+
+    $sql = "DELETE FROM `tbl_holiday` 
+    WHERE companyid ='$companyid' AND holiyear ='$holiyear' AND holiday ='$holiday'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['delete_success'] =  $delete_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);

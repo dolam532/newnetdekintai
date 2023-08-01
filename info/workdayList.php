@@ -45,7 +45,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <?php
-    if ((isset($_SESSION['save_success']) && isset($_POST['btnUpdateWdl'])) || (isset($_SESSION['save_success']) && isset($_POST['btnRegWdl']))) {
+    if (isset($_SESSION['save_success']) && isset($_POST['btnRegWdl'])) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -53,6 +53,17 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
         </div>
     <?php
         unset($_SESSION['save_success']);
+    }
+    ?>
+    <?php
+    if (isset($_SESSION['update_success']) && isset($_POST['btnUpdateWdl'])) {
+    ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['update_success']; ?>
+        </div>
+    <?php
+        unset($_SESSION['update_success']);
     }
     ?>
     <?php
@@ -303,7 +314,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                                 <label for="workyear">勤務年</label>
                             </div>
                             <div class="col-xs-3">
-                                <input type="text" class="form-control text-center" id="udworkyear" name="udworkyear" placeholder="" maxlength="4">
+                                <input type="text" class="form-control text-center" id="udworkyear" name="udworkyear" placeholder="" maxlength="4" readonly>
                                 <input type="hidden" name="udcompanyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
                             </div>
                             <div class="col-xs-6">

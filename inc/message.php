@@ -3,7 +3,7 @@
 $data_save_no = '登録されたデータがありません。';
 $save_success = '入力情報保存しました。';
 $autosave_success = '自動入力情報保存しました。';
-$update_success = '入力情報が更新されます。';
+$update_success = '入力情報が更新されました。';
 $connect_error = '接続エラー: ';
 $save_fail = '入力情報保存できませんでした。';
 $delete_success = '削除成功しました。';
@@ -102,3 +102,4 @@ $info_workday12_no = '12月に項目を番号で入力してください。';
 
 // holidayReg
 $info_holiday_empty = '祝日を正しく入力してください。';
+$info_holiday_have = '登録済み祝日です。';
