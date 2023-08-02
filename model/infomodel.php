@@ -264,3 +264,20 @@ if (isset($_POST['btnDelHdr'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+// (uservacationList.php)
+// Select data from tbl_user & tbl_vacationinfo
+$sql_uservacation = 'SELECT DISTINCT
+`tbl_user`.*,
+`tbl_vacationinfo`.`vacationstr`,
+`tbl_vacationinfo`.`vacationend`,
+`tbl_vacationinfo`.`oldcnt`,
+`tbl_vacationinfo`.`newcnt`,
+`tbl_vacationinfo`.`usecnt`,
+`tbl_vacationinfo`.`usetime`,
+`tbl_vacationinfo`.`restcnt`
+FROM
+`tbl_user`
+LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`';
+$result_uservacation = mysqli_query($conn, $sql_uservacation);
+$uservacation_list = mysqli_fetch_all($result_uservacation, MYSQLI_ASSOC);

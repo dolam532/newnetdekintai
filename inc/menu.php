@@ -57,11 +57,11 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">基本情報
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li class="menu-level3"><a href="">基礎コード登録</a></li>
+                            <li class="menu-level3"><a href="../info/codemasterList.php">基礎コード登録</a></li>
                             <li class="menu-level3"><a href="../info/workdayList.php">勤務日登録</a></li>
                             <li class="menu-level3"><a href="../info/holidayReg.php">祝日登録</a></li>
                             <li class="menu-level3"><a href="../user/userList.php">社員登録</a></li>
-                            <li class="menu-level3"><a href="">年次休暇登録</a></li>
+                            <li class="menu-level3"><a href="../info/uservacationList.php">年次休暇登録</a></li>
                             <li class="menu-level3"><a href="../user/genbaList.php">勤務管理表</a></li>
                             <li class="menu-level3"><a href="../user/genbaUserList.php">現場別勤務社員</a></li>
                             <li class="menu-level3"><a href="">社員ログイン内訳</a></li>
