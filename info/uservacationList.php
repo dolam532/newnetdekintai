@@ -94,9 +94,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                         <tr>
                             <td><span><?= $key['name'] ?></span></td>
                             <td><span><?= $key['inymd'] ?></span></td>
-                            <td align="center"><?= $key['vacationstr'] ?></td>
-                            <td><a href="#"><span class="showModal"><?= $key['holiday'] ?></span></a></td>
-                            <td align="center"><span><?= $key['holiyear'] ?></span></td>
+                            <td align="center"><?= $key['inymd'] ?></td>
+                            <td><a href="#"><span class="showModal"><?= $key['vacationstr'] ?></span></a></td>
+                            <td align="center"><span><?= $key['vacationend'] ?></span></td>
                             <td align="center"><span><?= $key['holiyear'] ?></span></td>
                             <td align="center"><span><?= $key['holiyear'] ?></span></td>
                             <td align="center"><span><?= $key['holiyear'] ?></span></td>

@@ -438,7 +438,7 @@ if ($_SESSION['auth'] == false) {
 						<?php if ($decide_template_ == "1") : ?>
 							<input type="hidden" value="0" name="janhh_bottom">
 							<input type="hidden" value="0" name="janmm_bottom">
-							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="2" value="<?= isset($totalworkhh_top) ? $totalworkhh_top : '0'; ?>"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= isset($totalworkhh_top) ? $totalworkhh_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= isset($totalworkmm_top) ? $totalworkmm_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= isset($cnprejob_top) ? $cnprejob_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= isset($cnactjob_top) ? $cnactjob_top : '0'; ?>"></td>
@@ -449,7 +449,7 @@ if ($_SESSION['auth'] == false) {
 						<?php elseif ($decide_template_ == "2") : ?>
 							<input type="hidden" value="<?= isset($totalJanHours) ? $totalJanHours : '0'; ?>" name="janhh_bottom">
 							<input type="hidden" value="<?= isset($totalJanMinutes) ? $totalJanMinutes : '0'; ?>" name="janmm_bottom">
-							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="2" value="<?= isset($totaldayhh_top) ? $totaldayhh_top : '0'; ?>"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= isset($totaldayhh_top) ? $totaldayhh_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= isset($totaldaymm_top) ? $totaldaymm_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= isset($cnprejob_top) ? $cnprejob_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= isset($cnactjob_top) ? $cnactjob_top : '0'; ?>"></td>
