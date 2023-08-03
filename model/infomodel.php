@@ -267,7 +267,7 @@ if (isset($_POST['btnDelHdr'])) {
 
 // (uservacationList.php)
 // Select data from tbl_user & tbl_vacationinfo
-$sql_uservacation = 'SELECT DISTINCT
+$sql_uservacation_select = 'SELECT DISTINCT
 `tbl_user`.*,
 `tbl_vacationinfo`.`vacationstr`,
 `tbl_vacationinfo`.`vacationend`,
@@ -278,6 +278,47 @@ $sql_uservacation = 'SELECT DISTINCT
 `tbl_vacationinfo`.`restcnt`
 FROM
 `tbl_user`
-LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`';
-$result_uservacation = mysqli_query($conn, $sql_uservacation);
-$uservacation_list = mysqli_fetch_all($result_uservacation, MYSQLI_ASSOC);
+LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
+WHERE `tbl_user`.`companyid` IN ("' . $ganasys_company_id . '")';
+$result_uservacation_select = mysqli_query($conn, $sql_uservacation_select);
+$uservacation_list_select = mysqli_fetch_all($result_uservacation_select, MYSQLI_ASSOC);
+if ($_POST['uservacationListSearch'] == NULL) {
+    $uservacation_list = $uservacation_list_select;
+} elseif (isset($_POST['uservacationListSearch'])) {
+    if (!empty($uservacation_list_select)) {
+        foreach ($uservacation_list_select as $key) {
+            $Name[] = $key['name'];
+            $Inymd[] = $key['inymd'];
+        }
+    }
+    $Name = array_unique($Name);
+    $Inymd = array_unique($Inymd);
+
+    if ($_POST['searchName'] == "") {
+        $searchName = implode('","', $Name);
+    } else {
+        $searchName = trim($_POST['searchName']);
+    }
+    if ($_POST['searchYmd'] == "") {
+        $searchYmd = implode('","', $Inymd);
+    } else {
+        $searchYmd = trim($_POST['searchYmd']);
+    }
+    $sql_uservacation = 'SELECT DISTINCT
+`tbl_user`.*,
+`tbl_vacationinfo`.`vacationstr`,
+`tbl_vacationinfo`.`vacationend`,
+`tbl_vacationinfo`.`oldcnt`,
+`tbl_vacationinfo`.`newcnt`,
+`tbl_vacationinfo`.`usecnt`,
+`tbl_vacationinfo`.`usetime`,
+`tbl_vacationinfo`.`restcnt`
+FROM
+`tbl_user`
+LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
+WHERE `tbl_user`.`companyid` IN ("' . $ganasys_company_id . '")
+AND `tbl_user`.`name` IN ("' . $searchName . '") 
+AND `tbl_user`.`inymd` IN ("' . $searchYmd . '")';
+    $result_uservacation = mysqli_query($conn, $sql_uservacation);
+    $uservacation_list = mysqli_fetch_all($result_uservacation, MYSQLI_ASSOC);
+}

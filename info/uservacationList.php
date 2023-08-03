@@ -5,7 +5,7 @@ include('../inc/message.php');
 include('../inc/const_array.php');
 include('../inc/header.php');
 include('../model/infomodel.php');
-// include('../model/inactive.php');
+include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
     header("Location: ../loginout/loginout.php");
@@ -43,28 +43,30 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 <title>年次休暇登録</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
-    <div class="row">
-        <div class="col-md-3 text-left">
-            <div class="title_name">
-                <span class="text-left">年次休暇登録</span>
+    <form method="post">
+        <div class="row">
+            <div class="col-md-3 text-left">
+                <div class="title_name">
+                    <span class="text-left">年次休暇登録</span>
+                </div>
+            </div>
+            <div class="col-md-3 text-left">
+                <div class="title_condition">
+                    <label>入社日 : <input type="text" id="searchYmd" name="searchYmd" value="<?= $_POST['searchYmd']?>" style="width: 100px; text-align:center"></label>
+                </div>
+            </div>
+            <div class="col-md-3 text-left">
+                <div class="title_condition">
+                    <label>社員名 : <input type="text" id="searchName" name="searchName" value="<?= $_POST['searchName']?>" style="width: 100px; text-align:center"></label>
+                </div>
+            </div>
+            <div class="col-md-3 text-right">
+                <div class="title_btn">
+                    <input type="submit" name="uservacationListSearch" value="検索 ">&nbsp;
+                </div>
             </div>
         </div>
-        <div class="col-md-3 text-left">
-            <div class="title_condition">
-                <label>基準日 : <input type="text" id="searchYmd" name="searchYmd" value="" style="width: 100px; text-align:center" class="hasDatepicker"></label>
-            </div>
-        </div>
-        <div class="col-md-3 text-left">
-            <div class="title_condition">
-                <label>社員名 : <input type="text" id="searchName" name="searchName" value="" style="width: 100px;"></label>
-            </div>
-        </div>
-        <div class="col-md-3 text-right">
-            <div class="title_btn">
-                <input type="button" id="btnSearch" value="検索 ">
-            </div>
-        </div>
-    </div>
+    </form>
 
     <div class="form-group">
         <table class="table table-bordered datatable">
@@ -94,15 +96,23 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                         <tr>
                             <td><span><?= $key['name'] ?></span></td>
                             <td><span><?= $key['inymd'] ?></span></td>
-                            <td align="center"><?= $key['inymd'] ?></td>
+                            <td align="center">
+                                <?php
+                                $targetDate = new DateTime($key['inymd']);
+                                $currentDate = new DateTime();
+                                $interval = $currentDate->diff($targetDate);
+                                $years = $interval->y;
+                                echo $years;
+                                ?>
+                            </td>
                             <td><a href="#"><span class="showModal"><?= $key['vacationstr'] ?></span></a></td>
                             <td align="center"><span><?= $key['vacationend'] ?></span></td>
-                            <td align="center"><span><?= $key['holiyear'] ?></span></td>
-                            <td align="center"><span><?= $key['holiyear'] ?></span></td>
-                            <td align="center"><span><?= $key['holiyear'] ?></span></td>
-                            <td align="center"><span><?= $key['holiyear'] ?></span></td>
-                            <td align="center"><span><?= $key['holiyear'] ?></span></td>
-                            <td><span><?= $key['holiyear'] ?></span></td>
+                            <td align="center"><span><?= $key['oldcnt'] ?></span></td>
+                            <td align="center"><span><?= $key['newcnt'] ?></span></td>
+                            <td align="center"><span><?= $key['usecnt'] ?></span></td>
+                            <td align="center"><span><?= $key['usetime'] ?></span></td>
+                            <td align="center"><span><?= $key['oldcnt'] ?></span></td>
+                            <td><span><?= $key['bigo'] ?></span></td>
                         </tr>
                 <?php
                     }
