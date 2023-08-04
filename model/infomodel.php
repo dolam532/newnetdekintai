@@ -327,7 +327,8 @@ AND `tbl_user`.`inymd` IN ("' . $searchYmd . '")';
 }
 
 if (isset($_POST['btnUpdateUvl'])) {
-    $vacationid = mysqli_real_escape_string($conn, $_POST['udvacationid']);
+    $udvacationid=intval($_POST['udvacationid']);
+    $vacationid = mysqli_real_escape_string($conn, $udvacationid);
     $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
     $vacationstr = mysqli_real_escape_string($conn, $_POST['udvacationstr']);
     $vacationend = mysqli_real_escape_string($conn, $_POST['udvacationend']);
