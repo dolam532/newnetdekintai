@@ -103,3 +103,6 @@ $info_workday12_no = '12月に項目を番号で入力してください。';
 // holidayReg
 $info_holiday_empty = '祝日を正しく入力してください。';
 $info_holiday_have = '登録済み祝日です。';
+
+// uservacationList
+$info_uvl_joincompany_empty = '入社日が登録されていない社員は休暇登録はできません。';

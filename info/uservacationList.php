@@ -39,6 +39,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         text-align: left;
         vertical-align: middle;
     }
+
+    span.uservacationList_class {
+        display: none;
+    }
 </style>
 <title>年次休暇登録</title>
 <?php include('../inc/menu.php'); ?>
@@ -52,12 +56,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             </div>
             <div class="col-md-3 text-left">
                 <div class="title_condition">
-                    <label>入社日 : <input type="text" id="searchYmd" name="searchYmd" value="<?= $_POST['searchYmd']?>" style="width: 100px; text-align:center"></label>
+                    <label>入社日 : <input type="text" id="searchYmd" name="searchYmd" value="<?= $_POST['searchYmd'] ?>" style="width: 100px; text-align:center"></label>
                 </div>
             </div>
             <div class="col-md-3 text-left">
                 <div class="title_condition">
-                    <label>社員名 : <input type="text" id="searchName" name="searchName" value="<?= $_POST['searchName']?>" style="width: 100px; text-align:center"></label>
+                    <label>社員名 : <input type="text" id="searchName" name="searchName" value="<?= $_POST['searchName'] ?>" style="width: 100px; text-align:center"></label>
                 </div>
             </div>
             <div class="col-md-3 text-right">
@@ -105,7 +109,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 echo $years;
                                 ?>
                             </td>
-                            <td><a href="#"><span class="showModal"><?= $key['vacationstr'] ?></span></a></td>
+                            <td><a href="#"><span class="showModal"><?= isset($key['vacationstr']) ? $key['vacationstr']  : '未登錄'; ?><span class="uservacationList_class"><?= ',' . $key['uid'] . ',' . $key['inymd'] ?></span></span></a></td>
                             <td align="center"><span><?= $key['vacationend'] ?></span></td>
                             <td align="center"><span><?= $key['oldcnt'] ?></span></td>
                             <td align="center"><span><?= $key['newcnt'] ?></span></td>
@@ -127,75 +131,79 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    年次休暇登録(<span id="sname"></span>)
+                    年次休暇登録
+                    (<span id="usname"></span>)
                     <button class="close" data-dismiss="modal">x</button>
                 </div>
-
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-3">
                             <label for="uid">ID</label>
-                            <input type="text" class="form-control" id="uid" placeholder="" style="text-align: left">
-                            <input type="hidden" id="vacationid" value="">
+                            <input type="text" class="form-control" name="uduid" id="uduid" style="text-align: left" readonly>
+                            <input type="hidden" name="udvacationid" id="udvacationid">
                         </div>
                         <div class="col-md-3">
                             <label for="name">名</label>
-                            <input type="text" class="form-control" id="name" placeholder="" style="text-align: center">
+                            <input type="text" class="form-control" name="udname" id="udname" style="text-align: center" readonly>
                         </div>
                         <div class="col-md-3">
                             <label for="inymd">入社日</label>
-                            <input type="text" class="form-control" id="inymd" placeholder="" style="text-align: center">
+                            <input type="text" class="form-control" name="udinymd" id="udinymd" style="text-align: center" readonly>
                         </div>
                         <div class="col-md-3">
                             <label for="yearcnt">勤続年数</label>
-                            <input type="text" class="form-control" id="yearcnt" placeholder="" style="text-align: center">
+                            <input type="text" class="form-control" name="udyearcnt" id="udyearcnt" style="text-align: center" readonly>
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-md-3">
                             <label for="vacationstr">年次開始日</label>
-                            <input type="text" class="form-control hasDatepicker" id="vacationstr" placeholder="" required="required" maxlength="10" style="text-align: center">
+                            <input type="text" class="form-control" name="udvacationstr" id="udvacationstr" maxlength="10" style="text-align: center">
                         </div>
                         <div class="col-md-3">
                             <label for="vacationend">年次終了日</label>
-                            <input type="text" class="form-control hasDatepicker" id="vacationend" placeholder="" required="required" maxlength="10" style="text-align: center">
+                            <input type="text" class="form-control" name="udvacationend" id="udvacationend" maxlength="10" style="text-align: center">
                         </div>
                         <div class="col-md-3">
                             <label for="oldcnt">前年残数</label>
-                            <input type="text" class="form-control" id="oldcnt" placeholder="" required="required" maxlength="2" style="text-align: center">
+                            <input type="text" class="form-control" name="udoldcnt" id="udoldcnt" maxlength="2" style="text-align: center">
                         </div>
                         <div class="col-md-3">
                             <label for="newcnt">当年付与</label>
-                            <input type="text" class="form-control" id="newcnt" required="required" placeholder="" maxlength="2" style="text-align: center">
+                            <input type="text" class="form-control" name="udnewcnt" id="udnewcnt" maxlength="2" style="text-align: center">
                         </div>
                     </div>
                     <br>
                     <div class="row">
                         <div class="col-md-3">
                             <label for="usecnt">使用(日)</label>
-                            <input type="text" class="form-control" id="usecnt" placeholder="" required="required" maxlength="2" style="text-align: center">
+                            <input type="text" class="form-control" name="udusecnt" id="udusecnt" maxlength="2" style="text-align: center">
                         </div>
                         <div class="col-md-3">
                             <label for="usetime">使用(時)</label>
-                            <input type="text" class="form-control" id="usetime" placeholder="" required="required" maxlength="2" style="text-align: center">
+                            <input type="text" class="form-control" name="udusetime" id="udusetime" maxlength="2" style="text-align: center">
                         </div>
                         <div class="col-md-3">
                             <label for="restcnt">残数(日)</label>
-                            <input type="text" class="form-control" id="restcnt" placeholder="" required="required" maxlength="2" style="text-align: center">
+                            <input type="text" class="form-control" name="udrestcnt" id="udrestcnt" maxlength="2" style="text-align: center" readonly>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer" style="text-align: center">
                     <div class="col-md-3"></div>
                     <div class="col-md-2">
-                        <p class="text-center"><a class="btn btn-primary btn-md" id="btnReg" href="http://old.netdekintai.com/netdekintai/info/searchUserVacationList?searchYmd=2023/08/02&amp;searchName=%E6%96%B0%E4%BA%95%20%E4%B8%80%E9%83%8E#" role="button">登録 </a></p>
+                        <p class="text-center">
+                            <input type="submit" name="btnUpdateUvl" class="btn btn-primary" id="btnUpdateUvl" role="button" value="登録">
+                        </p>
                     </div>
                     <div class="col-md-2">
-                        <p class="text-center"><a class="btn btn-primary btn-md" id="btnDel" href="http://old.netdekintai.com/netdekintai/info/searchUserVacationList?searchYmd=2023/08/02&amp;searchName=%E6%96%B0%E4%BA%95%20%E4%B8%80%E9%83%8E#" role="button">削除 </a></p>
+                        <p class="text-center">
+                            <input type="submit" name="btnDelUvl" class="btn btn-warning" id="btnDel" role="button" value="削除">
+                        </p>
                     </div>
                     <div class="col-md-2">
-                        <p class="text-center"><a class="btn btn-primary btn-md" id="btnRet" href="http://old.netdekintai.com/netdekintai/info/searchUserVacationList?searchYmd=2023/08/02&amp;searchName=%E6%96%B0%E4%BA%95%20%E4%B8%80%E9%83%8E#" role="button">閉じる </a></p>
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
                     </div>
                     <div class="col-md-3"></div>
                 </div>
@@ -204,6 +212,64 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     </div>
 </div>
 <script>
+    // Year/month click on grid (edit): popup & content display
+    $(document).on('click', '.showModal', function() {
+        var ArrayData = $(this).text();
+        var SeparateArr = ArrayData.split(',');
+        var Vacationstr = SeparateArr[0];
+        var Uid = SeparateArr[1];
+        var Inymd = SeparateArr[2];
+        if (Inymd == "") {
+            alert("<?php echo $info_uvl_joincompany_empty; ?>");
+            return false;
+        } else {
+            $('#modal').modal('toggle');
+            $("#usname").text(Uid);
+            $("#uduid").text($('[name="uduid"]').val(Uid));
+            $("#udinymd").text($('[name="udinymd"]').val(Inymd));
+            <?php
+            if (!empty($uservacation_list)) {
+                foreach ($uservacation_list as $key) {
+            ?>
+                    if ('<?php echo $key['uid'] ?>' == Uid) {
+                        $("#udvacationstr").text($('[name="udvacationstr"]').val("<?php echo $key['vacationstr'] ?>"));
+                        $("#udname").text($('[name="udname"]').val("<?php echo $key['name'] ?>"));
+                        var targetDate = new Date("<?php echo $key['inymd']; ?>");
+                        var currentDate = new Date();
+                        var yearDifference = currentDate.getFullYear() - targetDate.getFullYear();
+                        var currentMonth = currentDate.getMonth();
+                        var targetMonth = targetDate.getMonth();
+                        if (currentMonth < targetMonth || (currentMonth === targetMonth && currentDate.getDate() < targetDate.getDate())) {
+                            yearDifference--;
+                        }
+                        $("#udyearcnt").text($('[name="udyearcnt"]').val(yearDifference));
+                        $("#udvacationend").text($('[name="udvacationend"]').val("<?php echo $key['vacationend'] ?>"));
+                        $("#udoldcnt").text($('[name="udoldcnt"]').val("<?php echo $key['oldcnt'] ?>"));
+                        $("#udnewcnt").text($('[name="udnewcnt"]').val("<?php echo $key['newcnt'] ?>"));
+                        $("#udusecnt").text($('[name="udusecnt"]').val("<?php echo $key['usecnt'] ?>"));
+                        $("#udusetime").text($('[name="udusetime"]').val("<?php echo $key['usetime'] ?>"));
+                        $("#udrestcnt").text($('[name="udrestcnt"]').val("<?php echo $key['restcnt'] ?>"));
+                        var udvacationid = $("input[name=udvacationid]:hidden");
+                        udvacationid.val("<?php echo $key['vacationid'] ?>");
+                        var udvacationid = udvacationid.val();
+                    }
+            <?php
+                }
+            }
+            ?>
+        }
 
+    });
+
+    // Datepicker Calender
+    $("#udvacationstr").datepicker({
+        changeYear: true,
+        dateFormat: 'yy/mm/dd'
+    });
+
+    $("#udvacationend").datepicker({
+        changeYear: true,
+        dateFormat: 'yy/mm/dd'
+    });
 </script>
 <?php include('../inc/footer.php'); ?>

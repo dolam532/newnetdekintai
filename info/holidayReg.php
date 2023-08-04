@@ -248,7 +248,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         $('#modal').modal('toggle');
     });
 
-    // Datepeeker Calender
+    // Datepicker Calender
     $("#holiday").datepicker({
         changeYear: true,
         dateFormat: 'yy/mm/dd'
