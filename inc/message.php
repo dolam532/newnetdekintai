@@ -106,3 +106,5 @@ $info_holiday_have = '登録済み祝日です。';
 
 // uservacationList
 $info_uvl_joincompany_empty = '入社日が登録されていない社員は休暇登録はできません。';
+$info_uvlvacationstr_empty = '年次開始日を入力してください。';
+$info_uvlvacationend_empty = '年次終了日を入力してください。';

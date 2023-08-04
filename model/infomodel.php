@@ -1,6 +1,7 @@
 <?php
 // (workdayList.php)
 // Select database from tbl_workday table
+$reg_dt = date('Y-m-d H:i:s');
 $ganasys_company_id = constant('GANASYS_COMPANY_ID');
 $sql_workday = "SELECT workyear,
     MAX(CASE WHEN workmonth = '01' THEN workmonth END) AS one_month,
@@ -269,6 +270,7 @@ if (isset($_POST['btnDelHdr'])) {
 // Select data from tbl_user & tbl_vacationinfo
 $sql_uservacation_select = 'SELECT DISTINCT
 `tbl_user`.*,
+`tbl_vacationinfo`.`vacationid`,
 `tbl_vacationinfo`.`vacationstr`,
 `tbl_vacationinfo`.`vacationend`,
 `tbl_vacationinfo`.`oldcnt`,
@@ -306,6 +308,7 @@ if ($_POST['uservacationListSearch'] == NULL) {
     }
     $sql_uservacation = 'SELECT DISTINCT
 `tbl_user`.*,
+`tbl_vacationinfo`.`vacationid`,
 `tbl_vacationinfo`.`vacationstr`,
 `tbl_vacationinfo`.`vacationend`,
 `tbl_vacationinfo`.`oldcnt`,
@@ -321,4 +324,28 @@ AND `tbl_user`.`name` IN ("' . $searchName . '")
 AND `tbl_user`.`inymd` IN ("' . $searchYmd . '")';
     $result_uservacation = mysqli_query($conn, $sql_uservacation);
     $uservacation_list = mysqli_fetch_all($result_uservacation, MYSQLI_ASSOC);
+}
+
+if (isset($_POST['btnUpdateUvl'])) {
+    $vacationid = mysqli_real_escape_string($conn, $_POST['udvacationid']);
+    $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+    $vacationstr = mysqli_real_escape_string($conn, $_POST['udvacationstr']);
+    $vacationend = mysqli_real_escape_string($conn, $_POST['udvacationend']);
+    $oldcnt = mysqli_real_escape_string($conn, $_POST['udoldcnt']);
+    $newcnt = mysqli_real_escape_string($conn, $_POST['udnewcnt']);
+    $usecnt = mysqli_real_escape_string($conn, $_POST['udusecnt']);
+    $usetime = mysqli_real_escape_string($conn, $_POST['udusetime']);
+    $restcnt = mysqli_real_escape_string($conn, $_POST['udrestcnt']);
+
+    $sql = "INSERT INTO `tbl_vacationinfo` (`vacationid`, `uid`, `vacationstr`, `vacationend`, `oldcnt`, `newcnt`, `usecnt`, `usetime`, `restcnt`, `reg_dt`)
+                VALUES ('$vacationid', '$uid', '$vacationstr', '$vacationend', '$oldcnt', '$newcnt', '$usecnt', '$usetime', '$restcnt', '$reg_dt')
+                ON DUPLICATE KEY UPDATE
+                vacationstr='$vacationstr', vacationend='$vacationend', oldcnt='$oldcnt', newcnt='$newcnt', usecnt='$usecnt', usetime='$usetime', restcnt='$restcnt'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
 }
