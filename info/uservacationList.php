@@ -58,6 +58,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         unset($_SESSION['save_success']);
     }
     ?>
+    <?php
+    if (isset($_SESSION['delete_success']) && isset($_POST['btnDelUvl'])) {
+    ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['delete_success']; ?>
+        </div>
+    <?php
+        unset($_SESSION['delete_success']);
+    }
+    ?>
     <form method="post">
         <div class="row">
             <div class="col-md-3 text-left">

@@ -327,7 +327,7 @@ AND `tbl_user`.`inymd` IN ("' . $searchYmd . '")';
 }
 
 if (isset($_POST['btnUpdateUvl'])) {
-    $udvacationid=intval($_POST['udvacationid']);
+    $udvacationid = intval($_POST['udvacationid']);
     $vacationid = mysqli_real_escape_string($conn, $udvacationid);
     $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
     $vacationstr = mysqli_real_escape_string($conn, $_POST['udvacationstr']);
@@ -345,6 +345,21 @@ if (isset($_POST['btnUpdateUvl'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+if (isset($_POST['btnDelUvl'])) {
+    $vacationid = mysqli_real_escape_string($conn, $_POST['udvacationid']);
+    $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+
+    $sql = "DELETE FROM `tbl_vacationinfo` 
+    WHERE vacationid ='$vacationid' AND uid ='$uid'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['delete_success'] =  $delete_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
