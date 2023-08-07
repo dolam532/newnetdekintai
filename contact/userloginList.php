@@ -5,7 +5,7 @@ include('../inc/message.php');
 include('../inc/const_array.php');
 include('../inc/header.php');
 include('../model/contactmodel.php');
-// include('../model/inactive.php');
+include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
     header("Location: ../loginout/loginout.php");
@@ -105,23 +105,23 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                     <th style="text-align: center; width: 15%;">日付</th>
                     <th style="text-align: center; width: 20%;">login time</th>
                     <th style="text-align: center; width: 20%;">IP</th>
-                    <th style="text-align: center; width: auto;">Remark</th>
+                    <th style="text-align: center; width: auto;">Domain</th>
                 </tr>
             </thead>
             <tbody>
-                <?php if (empty($uservacation_list)) { ?>
+                <?php if (empty($userlogin_list)) { ?>
                     <tr>
                         <td colspan="5" align="center"><?php echo $data_save_no; ?></td>
                     </tr>
-                    <?php } elseif (!empty($uservacation_list)) {
-                    foreach ($uservacation_list as $key) {
+                    <?php } elseif (!empty($userlogin_list)) {
+                    foreach ($userlogin_list as $key) {
                     ?>
                         <tr>
-                            <td><span><?= $key['name'] ?></span></td>
-                            <td><span><?= $key['inymd'] ?></span></td>
-                            <td><span><?= $key['name'] ?></span></td>
-                            <td><span><?= $key['inymd'] ?></span></td>
-                            <td><span><?= $key['name'] ?></span></td>
+                            <td><span><?= $key['uid'] ?></span></td>
+                            <td><span><?= $key['workymd'] ?></span></td>
+                            <td><span><?= $key['logtime'] ?></span></td>
+                            <td><span><?= $key['ipaddress'] ?></span></td>
+                            <td><span><?= $key['domain'] ?></span></td>
                         </tr>
                 <?php
                     }
