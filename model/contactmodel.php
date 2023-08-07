@@ -7,7 +7,8 @@ $day = isset($_POST["seldd"]) ? $_POST["seldd"] : date('d');
 $sql_userlogin = 'SELECT * FROM `tbl_userlogin` 
     WHERE YEAR(`tbl_userlogin`.`workymd`) IN("' . $year . '")
     AND MONTH(`tbl_userlogin`.`workymd`) IN("' . $month . '")
-    AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '")';
+    AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '")
+    AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '")';
 $result_userlogin = mysqli_query($conn, $sql_userlogin);
 $userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
 
