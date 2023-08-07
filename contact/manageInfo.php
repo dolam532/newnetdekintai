@@ -14,6 +14,7 @@ if ($_SESSION['auth'] == false) {
 if ($_SESSION['auth_type'] == 1) { // if not admin 
     header("Location: ./../../index.php");
 }
+echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css'>";
 ?>
 
 <!-- ****CSS*****  -->
@@ -119,12 +120,44 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
     // Datepicker Calender
     $("#magamYm").datepicker({
         changeYear: true,
-        dateFormat: 'yy/mm/dd'
+        dateFormat: 'yy/mm'
     });
 
     $("#magamYmd").datepicker({
         changeYear: true,
         dateFormat: 'yy/mm/dd'
+    });
+
+    // Check Error
+    $(document).on('click', '#btnReg', function(e) {
+        var magamYm = $("#magamYm").val();
+        var magamYmd = $("#magamYmd").val();
+        var kyukatimeLimit = $("#kyukatimelimit").val();
+
+        if (magamYm == "") {
+            alert("<?php echo $contact_magamym_empty; ?>");
+            $("#magamYm").focus();
+            return false;
+        }
+
+        if (magamYmd == "") {
+            alert("<?php echo $contact_magamymd_empty; ?>");
+            $("#magamYmd").focus();
+            return false;
+        }
+
+        if (kyukatimeLimit == "") {
+            alert("<?php echo $contact_kyukatimelimit_empty; ?>");
+            $("#kyukatimelimit").focus();
+            return false;
+        }
+
+        if (isNaN(kyukatimeLimit)) {
+            alert("<?php echo $contact_kyukatimelimit_no; ?>");
+            e.preventDefault();
+            $("#kyukatimelimit").focus();
+            return false;
+        }
     });
 </script>
 <?php include('../inc/footer.php'); ?>

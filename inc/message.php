@@ -111,3 +111,7 @@ $info_uvlvacationend_empty = '年次終了日を入力してください。';
 
 // manageInfo
 $update_mi_success = '変更登録完了。';
+$contact_magamym_empty = '締切（月）を入力してください。';
+$contact_magamymd_empty = '締切（日）を入力してください。';
+$contact_kyukatimelimit_empty = '年間休暇時間を入力してください。';
+$contact_kyukatimelimit_no = '年間休暇時間を番号で入力してください。';
