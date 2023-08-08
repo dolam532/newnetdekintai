@@ -43,3 +43,12 @@ if (isset($_POST['btnRegMi'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+// Select database from tbl_notice table
+$sql_notice = 'SELECT DISTINCT
+        `tbl_notice`.*,
+        `tbl_user`.`name`
+        FROM `tbl_notice`
+        LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`';
+$result_notice = mysqli_query($conn, $sql_notice);
+$notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);

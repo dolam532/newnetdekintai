@@ -66,7 +66,7 @@
                             <li class="menu-level3"><a href="../user/genbaUserList.php">現場別勤務社員</a></li>
                             <li class="menu-level3"><a href="../contact/userloginList.php">社員ログイン内訳</a></li>
                             <li class="menu-level3"><a href="../contact/manageInfo.php">管理情報登録</a></li>
-                            <li class="menu-level3"><a href="">お知らせ登録</a></li>
+                            <li class="menu-level3"><a href="../contact/noticeList.php">お知らせ登録</a></li>
                         </ul>
                     </li>
                     <li class="dropdown" id="gana">
