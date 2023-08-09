@@ -113,7 +113,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                         <?php else : ?>
                             タイトル :
                         <?php endif; ?>
-                        <input type="text" id="searchKeyword" name="searchKeywordTC" value="" style="width: 200px;">
+                        <input type="text" id="searchKeyword" name="searchKeywordTC" value="<?= $_POST['searchKeywordTC'] ?>" style="width: 200px;">
                         <input type="hidden" name="rdoSearch" value="<?= $_POST['rdoSearch'] ?>">
                     </label>
                 </div>
