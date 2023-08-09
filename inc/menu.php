@@ -65,14 +65,14 @@
                             <li class="menu-level3"><a href="../user/genbaList.php">勤務管理表</a></li>
                             <li class="menu-level3"><a href="../user/genbaUserList.php">現場別勤務社員</a></li>
                             <li class="menu-level3"><a href="../contact/userloginList.php">社員ログイン内訳</a></li>
-                            <li class="menu-level3"><a href="../contact/manageInfo.php">管理情報登録</a></li>
+                            <li class="menu-level3"><a href="../manage/manageInfo.php">管理情報登録</a></li>
                             <li class="menu-level3"><a href="../contact/noticeList.php">お知らせ登録</a></li>
                         </ul>
                     </li>
                     <li class="dropdown" id="gana">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true">GANASYS<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="">使用者登録</a></li>
+                            <li><a href="../manage/companyList.php">使用者登録</a></li>
                             <li><a href="">管理者登録</a></li>
                         </ul>
                     </li>

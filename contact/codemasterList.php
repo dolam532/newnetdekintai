@@ -169,9 +169,8 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                 <div class="modal-content">
                     <div class="modal-header">
                         基礎コード登録(<span id="sname">New</span>)
-                        <button class="close" data-dismiss="modal">×</button>
+                        <button class="close" data-dismiss="modal">x</button>
                     </div>
-
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-2">
