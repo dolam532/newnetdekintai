@@ -44,11 +44,47 @@ if (isset($_POST['btnRegMi'])) {
     }
 }
 
+// noticeList.php
 // Select database from tbl_notice table
-$sql_notice = 'SELECT DISTINCT
+$sql_notice_select = 'SELECT DISTINCT
         `tbl_notice`.*,
         `tbl_user`.`name`
         FROM `tbl_notice`
         LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`';
-$result_notice = mysqli_query($conn, $sql_notice);
-$notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
+$result_notice_select = mysqli_query($conn, $sql_notice_select);
+$notice_list_select = mysqli_fetch_all($result_notice_select, MYSQLI_ASSOC);
+
+if ($_POST['SearchButtonNL'] == NULL) {
+    $notice_list = $notice_list_select;
+} elseif (isset($_POST['SearchButtonNL'])) {
+    if (!empty($notice_list_select)) {
+        foreach ($notice_list_select as $key) {
+            $Title[] = $key['title'];
+            $Content[] = $key['content'];
+        }
+    }
+    $Title = array_unique($Title);
+    $Content = array_unique($Content);
+
+    if ($_POST['searchKeywordTC'] == "") {
+        $searchTitle = implode('","', $Title);
+        $searchContent = implode('","', $Content);
+    } else {
+        if ($_POST['rdoSearch'] == "1") {
+            $searchTitle = implode('","', $Title);
+            $searchContent = trim($_POST['searchKeywordTC']);
+        } else {
+            $searchTitle = trim($_POST['searchKeywordTC']);
+            $searchContent = implode('","', $Content);
+        }
+    }
+    $sql_notice = 'SELECT DISTINCT
+        `tbl_notice`.*,
+        `tbl_user`.`name`
+        FROM `tbl_notice`
+        LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+        WHERE `tbl_notice`.`title` IN ("' . $searchTitle . '")
+        AND `tbl_notice`.`content` IN ("' . $searchContent . '")';
+    $result_notice = mysqli_query($conn, $sql_notice);
+    $notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
+}

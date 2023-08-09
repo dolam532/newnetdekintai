@@ -178,4 +178,8 @@ class ConstArray
         '0' => '未決裁',
         '1' => '決裁完了'
     ];
+    public static $search_notice = [
+        '0' => 'タイトル',
+        '1' => '内容'
+    ];
 }
