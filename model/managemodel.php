@@ -31,3 +31,43 @@ if (isset($_POST['btnRegMi'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+// Select database from tbl_company table
+$sql_company_select = 'SELECT * FROM `tbl_company`';
+$result_company_select = mysqli_query($conn, $sql_company_select);
+$company_list_select = mysqli_fetch_all($result_company_select, MYSQLI_ASSOC);
+
+// Search Data tbl_company
+if ($_POST['SearchButtonCL'] == NULL) {
+    $company_list = $company_list_select;
+} elseif (isset($_POST['SearchButtonCL'])) {
+    if (!empty($company_list_select)) {
+        foreach ($company_list_select as $key) {
+            $Companyname[] = $key['companyname'];
+            $Use_yn[] = $key['use_yn'];
+        }
+    }
+    $Companyname = array_unique($Companyname);
+    $Use_yn = array_unique($Use_yn);
+
+    if ($_POST['searchCompanyname'] != "") {
+        $searchCompanyname = trim($_POST['searchCompanyname']);
+    } else {
+        $searchCompanyname = implode('","', $Companyname);
+    }
+
+    if ($_POST['searchUseyn'] == "0") {
+        $searchUse_yn = implode('","', $Use_yn);
+    } elseif ($_POST['searchUseyn'] == "1") {
+        $searchUse_yn = $_POST['searchUseyn'];
+    } elseif ($_POST['searchUseyn'] == "2") {
+        $searchUse_yn = "0";
+    }
+
+    $sql_company = 'SELECT *
+        FROM `tbl_company`
+        WHERE `tbl_company`.`companyname` IN ("' . $searchCompanyname . '")
+        AND `tbl_company`.`use_yn` IN ("' . $searchUse_yn . '")';
+    $result_company = mysqli_query($conn, $sql_company);
+    $company_list = mysqli_fetch_all($result_company, MYSQLI_ASSOC);
+}

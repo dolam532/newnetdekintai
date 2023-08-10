@@ -33,7 +33,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         }
     }
 
-    /* 모달 팝업 lock */
+    /* modal popup lock */
     .modal-dialog {
         display: inline-block;
         text-align: left;
@@ -135,25 +135,25 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         var kyukatimeLimit = $("#kyukatimelimit").val();
 
         if (magamYm == "") {
-            alert("<?php echo $contact_magamym_empty; ?>");
+            alert("<?php echo $manage_magamym_empty; ?>");
             $("#magamYm").focus();
             return false;
         }
 
         if (magamYmd == "") {
-            alert("<?php echo $contact_magamymd_empty; ?>");
+            alert("<?php echo $manage_magamymd_empty; ?>");
             $("#magamYmd").focus();
             return false;
         }
 
         if (kyukatimeLimit == "") {
-            alert("<?php echo $contact_kyukatimelimit_empty; ?>");
+            alert("<?php echo $manage_kyukatimelimit_empty; ?>");
             $("#kyukatimelimit").focus();
             return false;
         }
 
         if (isNaN(kyukatimeLimit)) {
-            alert("<?php echo $contact_kyukatimelimit_no; ?>");
+            alert("<?php echo $manage_kyukatimelimit_no; ?>");
             e.preventDefault();
             $("#kyukatimelimit").focus();
             return false;

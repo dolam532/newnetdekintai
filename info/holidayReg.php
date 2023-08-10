@@ -33,7 +33,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         }
     }
 
-    /* 모달 팝업 lock */
+    /* modal popup lock */
     .modal-dialog {
         display: inline-block;
         text-align: left;

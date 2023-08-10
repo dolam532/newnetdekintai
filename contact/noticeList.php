@@ -32,7 +32,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
         }
     }
 
-    /* 모달 팝업 lock */
+    /* modal popup lock */
     .modal-dialog {
         display: inline-block;
         text-align: left;
@@ -388,6 +388,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
         ?>
     });
 
+    // Datepicker Calender
     $("#udreg_dt").datepicker({
         changeYear: true,
         dateFormat: 'yy-mm-dd'

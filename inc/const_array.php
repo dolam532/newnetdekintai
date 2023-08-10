@@ -182,4 +182,9 @@ class ConstArray
         '0' => 'タイトル',
         '1' => '内容'
     ];
+    public static $search_company = [
+        '0' => '全部',
+        '1' => '使用',
+        '2' => '中止'
+    ];
 }

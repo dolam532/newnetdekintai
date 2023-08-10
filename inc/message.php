@@ -111,10 +111,10 @@ $info_uvlvacationend_empty = '年次終了日を入力してください。';
 
 // manageInfo
 $update_mi_success = '変更登録完了。';
-$contact_magamym_empty = '締切（月）を入力してください。';
-$contact_magamymd_empty = '締切（日）を入力してください。';
-$contact_kyukatimelimit_empty = '年間休暇時間を入力してください。';
-$contact_kyukatimelimit_no = '年間休暇時間を番号で入力してください。';
+$manage_magamym_empty = '締切（月）を入力してください。';
+$manage_magamymd_empty = '締切（日）を入力してください。';
+$manage_kyukatimelimit_empty = '年間休暇時間を入力してください。';
+$manage_kyukatimelimit_no = '年間休暇時間を番号で入力してください。';
 
 // noticeList
 $content_noteT_empty = 'タイトルを入力してください。';
@@ -122,3 +122,14 @@ $content_noteC_empty = '内容を入力してください。';
 $content_noteR_empty = '確認者を入力してください。';
 $content_noteRegdt_empty = '作成日を入力してください。';
 $content_noteViewcnt_empty = 'view Cntを入力してください。';
+
+// companyList
+$manage_Ccode_empty = 'IDを入力してください。';
+$manage_Ccode_no = 'IDを番号で入力してください。';
+$manage_Cname_empty = '会社名を入力してください。';
+$manage_staff_empty = '担当者名を入力してください。';
+$manage_telno_empty = '電話番号を入力してください。';
+$manage_strymd_empty = '契約期間(F)を入力してください。';
+$manage_endymd_empty = '契約期間(T)を入力してください。';
+$manage_address_empty = '住所を入力してください。';
+$manage_joken_empty = '契約条件を入力してください。';
