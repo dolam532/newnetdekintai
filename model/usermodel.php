@@ -50,12 +50,12 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
     if ($_POST['searchName'] == "") {
         $searchName = implode('","', $Name);
     } else {
-        $searchName = $_POST['searchName'];
+        $searchName = trim($_POST['searchName']);
     }
     if ($_POST['searchGrade'] == "") {
         $searchGrade = implode('","', $Grade);
     } else {
-        $searchGrade = $_POST['searchGrade'];
+        $searchGrade = trim($_POST['searchGrade']);
     }
     $sql_user = 'SELECT DISTINCT
     `tbl_user`.*,
@@ -68,7 +68,7 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
  `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
 WHERE 
 `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
-    AND `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
+    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
     AND `tbl_user`.`name` IN("' . $searchName . '") 
     AND `tbl_user`.`grade` IN("' . $searchGrade . '")';
 
