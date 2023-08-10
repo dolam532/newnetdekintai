@@ -1,4 +1,6 @@
 <?php
+$reg_dt = date('Y-m-d H:i:s');
+
 // manageInfo.php
 // Select database from tbl_manageinfo table
 $sql_manageinfo = 'SELECT DISTINCT
@@ -70,4 +72,30 @@ if ($_POST['SearchButtonCL'] == NULL) {
         AND `tbl_company`.`use_yn` IN ("' . $searchUse_yn . '")';
     $result_company = mysqli_query($conn, $sql_company);
     $company_list = mysqli_fetch_all($result_company, MYSQLI_ASSOC);
+}
+
+// Save Data to tbl_company
+if (isset($_POST['btnRegCL'])) {
+    $companycode = mysqli_real_escape_string($conn, $_POST['companycode']);
+    $companyname = mysqli_real_escape_string($conn, $_POST['companyname']);
+    $staff = mysqli_real_escape_string($conn, $_POST['staff']);
+    $telno = mysqli_real_escape_string($conn, $_POST['telno']);
+    $strymd = mysqli_real_escape_string($conn, $_POST['strymd']);
+    $endymd = mysqli_real_escape_string($conn, $_POST['endymd']);
+    $address = mysqli_real_escape_string($conn, $_POST['address']);
+    $use_yn = mysqli_real_escape_string($conn, $_POST['use_yn']);
+    $joken = mysqli_real_escape_string($conn, $_POST['joken']);
+    $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
+
+    $sql = "INSERT INTO `tbl_company` (`companycode`, `companyname`, `staff`, `telno`,
+                `strymd`, `endymd`, `address`, `use_yn`, `joken`, `bigo`, `reg_dt`)
+                VALUES ('$companycode', '$companyname', '$staff', '$telno',
+                '$strymd', '$endymd', '$address', '$use_yn', '$joken', '$bigo', '$reg_dt')";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
 }

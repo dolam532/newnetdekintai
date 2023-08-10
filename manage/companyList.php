@@ -43,6 +43,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 <title>使用者登録</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
+    <?php
+    if (isset($_SESSION['save_success']) && isset($_POST['btnRegCL'])) {
+    ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['save_success']; ?>
+        </div>
+    <?php
+        unset($_SESSION['save_success']);
+    }
+    ?>
     <form method="post">
         <div class="row">
             <div class="col-md-3 text-left">
@@ -144,7 +155,95 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 <div class="col-xs-3">
                                     <label for="companycode">ID</label>
                                     <input type="text" class="form-control" name="companycode" id="companycode" placeholder="ID" maxlength="10" style="text-align: left">
-                                    <input type="hidden" name="companyid" id="companyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
+                                </div>
+                                <div class="col-xs-9">
+                                    <label for="companyname">会社名</label>
+                                    <input type="text" class="form-control" name="companyname" id="companyname" placeholder="companyname" maxlength="20" style="text-align: left">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <label for="staff">担当者名</label>
+                                    <input type="text" class="form-control" name="staff" id="staff" placeholder="staff" maxlength="100" style="text-align: left">
+                                </div>
+                                <div class="col-xs-3">
+                                    <label for="telno">電話番号</label>
+                                    <input type="text" class="form-control" name="telno" id="telno" placeholder="telno" maxlength="100" style="text-align: left">
+                                </div>
+                                <div class="col-xs-3">
+                                    <label for="strymd">契約期間(F)</label>
+                                    <input type="text" class="form-control" name="strymd" id="strymd" maxlength="10" placeholder="2019/01/01" style="text-align: left">
+                                </div>
+                                <div class="col-xs-3">
+                                    <label for="endymd">契約期間(T)</label>
+                                    <input type="text" class="form-control" name="endymd" id="endymd" maxlength="10" placeholder="2019/01/01" style="text-align: left">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-9">
+                                    <label for="address">住所</label>
+                                    <input type="text" class="form-control" name="address" id="address" maxlength="150" style="text-align: left">
+                                </div>
+                                <div class="col-xs-3">
+                                    <label for="use_yn"><strong>使用</strong></label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" name="use_yn" value="1" checked>使用
+                                        <input type="radio" name="use_yn" value="0">中止
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <label for="joken">契約条件</label>
+                                    <input type="text" class="form-control" name="joken" id="joken" maxlength="200" style="text-align: left">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <label for="bigo">備考</label>
+                                    <input type="text" class="form-control" name="bigo" id="bigo" maxlength="300" style="text-align: left">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" style="text-align: center">
+                            <div class="col-xs-4"></div>
+                            <div class="col-xs-2">
+                                <p class="text-center">
+                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="登録">
+                                </p>
+                            </div>
+                            <div class="col-xs-2">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                            </div>
+                            <div class="col-xs-4"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 編集 -->
+    <div class="row">
+        <div class="modal" id="modal" tabindex="-1" style="display: none;">
+            <div class="modal-dialog">
+                <form method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            使用者登録(<span>New</span>)
+                            <button class="close" data-dismiss="modal">x</button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <label for="companycode">ID</label>
+                                    <input type="text" class="form-control" name="companycode" id="companycode" placeholder="ID" maxlength="10" style="text-align: left">
+                                    <input type="hidden" name="companyid" id="companyid">
                                 </div>
                                 <div class="col-xs-9">
                                     <label for="companyname">会社名</label>
@@ -288,6 +387,20 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             $("#joken").focus();
             return false;
         }
+
+        <?php
+        if (!empty($company_list)) {
+            foreach ($company_list as $key) {
+        ?>
+                if ('<?php echo $key['companycode'] ?>' == Companycode) {
+                    alert("<?php echo $manage_Ccode_have; ?>");
+                    $("#holiday").focus();
+                    return false;
+                }
+        <?php
+            }
+        }
+        ?>
     });
 
     // Datepicker Calender

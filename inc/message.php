@@ -126,6 +126,7 @@ $content_noteViewcnt_empty = 'view Cntを入力してください。';
 // companyList
 $manage_Ccode_empty = 'IDを入力してください。';
 $manage_Ccode_no = 'IDを番号で入力してください。';
+$manage_Ccode_have='登録済みIDです。';
 $manage_Cname_empty = '会社名を入力してください。';
 $manage_staff_empty = '担当者名を入力してください。';
 $manage_telno_empty = '電話番号を入力してください。';
