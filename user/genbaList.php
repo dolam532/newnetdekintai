@@ -98,9 +98,11 @@ if ($_SESSION['auth'] == false) {
 		</div>
 		<div class="col-md-6"></div>
 		<div class="col-md-2 text-right">
-			<div class="title_btn">
-				<input type="button" id="btnNew" value=" 新規 ">
-			</div>
+			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+				<div class="title_btn">
+					<input type="button" id="btnNew" value=" 新規 ">
+				</div>
+			<?php endif; ?>
 		</div>
 	</div>
 

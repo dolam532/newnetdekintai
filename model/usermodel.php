@@ -179,9 +179,16 @@ if (isset($_POST['UpdateUser'])) {
 }
 
 // Select data from tbl_genba
-$sql_genba = 'SELECT * FROM `tbl_genba`';
-$result_genba = mysqli_query($conn, $sql_genba);
-$genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_genba = 'SELECT * FROM `tbl_genba`';
+    $result_genba = mysqli_query($conn, $sql_genba);
+    $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
+} elseif ($_SESSION['auth_type'] == constant('USER')) {
+    $sql_genba = 'SELECT * FROM `tbl_genba`
+        WHERE `tbl_genba`.`genid` IN ("' . $_SESSION['auth_genid'] . '")';
+    $result_genba = mysqli_query($conn, $sql_genba);
+    $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
+}
 
 // Save data to tbl_genba table of database
 if (isset($_POST['SaveKinmu'])) {
