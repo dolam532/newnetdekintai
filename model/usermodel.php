@@ -261,11 +261,23 @@ if (isset($_POST['DeleteKinmu'])) {
 
 // genbaUserList.php
 // Select data from tbl_user
-$sql_user_g = 'SELECT
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_user_g = 'SELECT
         `tbl_user`.*,
         `tbl_genba`.`genbaname`
     FROM
     `tbl_user`
     LEFT JOIN `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`';
-$result_user_g = mysqli_query($conn, $sql_user_g);
-$user_list_g = mysqli_fetch_all($result_user_g, MYSQLI_ASSOC);
+    $result_user_g = mysqli_query($conn, $sql_user_g);
+    $user_list_g = mysqli_fetch_all($result_user_g, MYSQLI_ASSOC);
+} elseif ($_SESSION['auth_type'] == constant('USER')) {
+    $sql_user_g = 'SELECT
+        `tbl_user`.*,
+        `tbl_genba`.`genbaname`
+    FROM
+    `tbl_user`
+    LEFT JOIN `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`
+    WHERE `tbl_user`.`uid` IN ("' . $_SESSION['auth_uid'] . '")';
+    $result_user_g = mysqli_query($conn, $sql_user_g);
+    $user_list_g = mysqli_fetch_all($result_user_g, MYSQLI_ASSOC);
+}
