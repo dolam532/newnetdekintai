@@ -5,13 +5,24 @@ $month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
 $day = isset($_POST["seldd"]) ? $_POST["seldd"] : date('d');
 
 // Select database from tbl_userlogin table
-$sql_userlogin = 'SELECT * FROM `tbl_userlogin` 
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_userlogin = 'SELECT * FROM `tbl_userlogin` 
     WHERE YEAR(`tbl_userlogin`.`workymd`) IN("' . $year . '")
     AND MONTH(`tbl_userlogin`.`workymd`) IN("' . $month . '")
     AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '")
     AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '")';
-$result_userlogin = mysqli_query($conn, $sql_userlogin);
-$userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
+    $result_userlogin = mysqli_query($conn, $sql_userlogin);
+    $userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
+} elseif ($_SESSION['auth_type'] == constant('USER')) {
+    $sql_userlogin = 'SELECT * FROM `tbl_userlogin` 
+    WHERE YEAR(`tbl_userlogin`.`workymd`) IN("' . $year . '")
+    AND MONTH(`tbl_userlogin`.`workymd`) IN("' . $month . '")
+    AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '")
+    AND `tbl_userlogin`.`uid` IN("' . $_SESSION['auth_uid'] . '")
+    AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '")';
+    $result_userlogin = mysqli_query($conn, $sql_userlogin);
+    $userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
+}
 
 
 // noticeList.php
