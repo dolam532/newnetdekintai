@@ -10,11 +10,6 @@ include('../model/inactive.php');
 if ($_SESSION['auth'] == false) {
     header("Location: ../loginout/loginout.php");
 }
-
-if ($_SESSION['auth_type'] == 1) { // if not admin 
-    header("Location: ./../../index.php");
-}
-
 ?>
 
 <!-- ****CSS*****  -->
