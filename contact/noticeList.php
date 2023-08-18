@@ -10,10 +10,6 @@ include('../model/inactive.php');
 if ($_SESSION['auth'] == false) {
     header("Location: ../loginout/loginout.php");
 }
-
-if ($_SESSION['auth_type'] == 1) { // if not admin 
-    header("Location: ./../../index.php");
-}
 ?>
 
 <!-- ****CSS*****  -->
@@ -120,8 +116,12 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
             </div>
             <div class="col-md-3 text-right">
                 <div class="title_btn">
-                    <input type="submit" name="SearchButtonNL" value="検索">&nbsp;&nbsp;&nbsp;
-                    <input type="button" id="btnNewNL" value="新規">
+                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                        <input type="submit" name="SearchButtonNL" value="検索">&nbsp;&nbsp;&nbsp;
+                        <input type="button" id="btnNewNL" value="新規">
+                    <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+                        <input type="submit" name="SearchButtonNL" value="検索">
+                    <?php endif; ?>
                 </div>
             </div>
         </form>
@@ -154,16 +154,24 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
                             <tr>
                                 <td><span><?= $key['bid'] ?></span></td>
                                 <td style="text-align:left">
-                                    <a href="#">
-                                        <span class="showModal">
-                                            <span class="noticeList_class"><?= $key['bid'] . ',' . $key['uid'] . ',' ?></span>
-                                            <?php if ($_POST['rdoSearch'] == "1") : ?>
-                                                <?= $key['content'] ?>
-                                            <?php else : ?>
-                                                <?= $key['title'] ?>
-                                            <?php endif; ?>
-                                        </span>
-                                    </a>
+                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                                        <a href="#">
+                                            <span class="showModal">
+                                                <span class="noticeList_class"><?= $key['bid'] . ',' . $key['uid'] . ',' ?></span>
+                                                <?php if ($_POST['rdoSearch'] == "1") : ?>
+                                                    <?= $key['content'] ?>
+                                                <?php else : ?>
+                                                    <?= $key['title'] ?>
+                                                <?php endif; ?>
+                                            </span>
+                                        </a>
+                                    <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+                                        <?php if ($_POST['rdoSearch'] == "1") : ?>
+                                            <span><?= $key['content'] ?></span>
+                                        <?php else : ?>
+                                            <span><?= $key['title'] ?></span>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
                                 </td>
                                 <td><span><?= $key['name'] ?></span></td>
                                 <td><span><?= $key['reg_dt'] ?></span></td>

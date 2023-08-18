@@ -10,10 +10,6 @@ include('../model/inactive.php');
 if ($_SESSION['auth'] == false) {
     header("Location: ../loginout/loginout.php");
 }
-
-if ($_SESSION['auth_type'] == 1) { // if not admin 
-    header("Location: ./../../index.php");
-}
 echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css'>";
 ?>
 
@@ -104,9 +100,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             </div>
         </form>
         <div class="col-md-3 text-right">
-            <div class="title_btn">
-                <input type="button" id="btnNew" value=" 新規  ">
-            </div>
+            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                <div class="title_btn">
+                    <input type="button" id="btnNew" value="新規 ">
+                </div>
+            <?php endif; ?>
         </div>
     </div>
     <div class="form-group">
@@ -128,7 +126,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                     ?>
                         <tr>
                             <td><span><?= $key['holiyear'] ?></span></td>
-                            <td><a href="#"><span class="showModal"><?= $key['holiday'] ?></span></a></td>
+                            <td>
+                                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                                    <a href="#"><span class="showModal"><?= $key['holiday'] ?></span></a>
+                                <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+                                    <?= $key['holiday'] ?></span>
+                                <?php endif; ?>
+                            </td>
                             <td><span><?= $key['holiremark'] ?></span></td>
                         </tr>
                 <?php
