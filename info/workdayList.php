@@ -80,9 +80,11 @@ if ($_SESSION['auth'] == false) {
         </div>
         <div class="col-md-6"></div>
         <div class="col-md-2 text-right">
-            <div class="title_btn">
-                <input type="button" id="btnNew" value="新規 ">
-            </div>
+            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                <div class="title_btn">
+                    <input type="button" id="btnNew" value="新規 ">
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -115,7 +117,13 @@ if ($_SESSION['auth'] == false) {
                     foreach ($workday_list as $key) {
                     ?>
                         <tr>
-                            <td><a href="#"><span class="showModal"><?= $key['workyear'] ?></span></a></td>
+                            <td>
+                                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                                    <a href="#"><span class="showModal"><?= $key['workyear'] ?></span></a>
+                                <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+                                    <span class="showModal"><?= $key['workyear'] ?></span>
+                                <?php endif; ?>
+                            </td>
                             <td><span><?= isset($key['one_monthwd']) ? $key['one_monthwd']  : '0'; ?></span></td>
                             <td><span><?= isset($key['two_monthwd']) ? $key['two_monthwd'] : '0'; ?></span></td>
                             <td><span><?= isset($key['three_monthwd']) ? $key['three_monthwd'] : '0'; ?></span></td>
