@@ -436,7 +436,7 @@ if ($_SESSION['auth'] == false) {
                         <div class="col-xs-3"></div>
                         <div class="col-xs-2">
                             <p class="text-center">
-                                <input type="submit" name="btnUpdateWdl" class="btn btn-primary" id="btnUpdate" role="button" value="登録">
+                                <input type="submit" name="btnUpdateWdl" class="btn btn-primary" id="btnUpdate" role="button" value="編集">
                             </p>
                         </div>
                         <div class="col-xs-2">

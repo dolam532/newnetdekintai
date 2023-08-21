@@ -49,6 +49,10 @@ if ($_SESSION['auth'] == false) {
 		display: inline-block;
 		padding-top: 30px;
 	}
+
+	span.kintaiReg_class {
+		display: none;
+	}
 </style>
 <title>勤 務 表</title>
 <?php include('../inc/menu.php'); ?>
@@ -220,15 +224,15 @@ if ($_SESSION['auth'] == false) {
 							<td>
 								<?php if ($key['decide_color'] == "土") : ?>
 									<a href="#" style="color:blue;">
-										<span class="showModal"><?= $key['date']; ?></span>
+										<span class="showModal"><?= $key['date']; ?><span class="kintaiReg_class"><?= ',' . $key['jobstarthh'] ?></span></span>
 									</a>
 								<?php elseif ($key['decide_color'] == "日") : ?>
 									<a href="#" style="color:red;">
-										<span class="showModal"><?= $key['date']; ?></span>
+										<span class="showModal"><?= $key['date']; ?><span class="kintaiReg_class"><?= ',' . $key['jobstarthh'] ?></span></span>
 									</a>
 								<?php else : ?>
 									<a href="#">
-										<span class="showModal"><?= $key['date']; ?></span>
+										<span class="showModal"><?= $key['date']; ?><span class="kintaiReg_class"><?= ',' . $key['jobstarthh'] ?></span></span>
 									</a>
 								<?php endif; ?>
 							</td>
@@ -251,15 +255,15 @@ if ($_SESSION['auth'] == false) {
 							<td>
 								<?php if ($key['decide_color'] == "土") : ?>
 									<a href="#" style="color:blue;">
-										<span class="showModal"><?= $key['date']; ?></span>
+										<span class="showModal"><?= $key['date']; ?><span class="kintaiReg_class"><?= ',' . $key['jobstarthh'] ?></span></span>
 									</a>
 								<?php elseif ($key['decide_color'] == "日") : ?>
 									<a href="#" style="color:red;">
-										<span class="showModal"><?= $key['date']; ?></span>
+										<span class="showModal"><?= $key['date']; ?><span class="kintaiReg_class"><?= ',' . $key['jobstarthh'] ?></span></span>
 									</a>
 								<?php else : ?>
 									<a href="#">
-										<span class="showModal"><?= $key['date']; ?></span>
+										<span class="showModal"><?= $key['date']; ?><span class="kintaiReg_class"><?= ',' . $key['jobstarthh'] ?></span></span>
 									</a>
 								<?php endif; ?>
 							</td>
@@ -749,7 +753,7 @@ if ($_SESSION['auth'] == false) {
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
-						<input type="submit" name="SaveUpdateKintai" class="btn btn-primary" id="btnReg" role="button" value="登録">
+						<input type="submit" name="SaveUpdateKintai" class="btn btn-primary" id="btnReg" role="button">
 						<input type="submit" name="DeleteKintai" class="btn btn-warning" id="btnDel" role="button" value="削除">
 						<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
 					</div>
@@ -772,6 +776,15 @@ if ($_SESSION['auth'] == false) {
 		var ArrayData = $(this).text();
 		var SeparateArr = ArrayData.split('/');
 		var Date_ = SeparateArr[1].substr(0, 2);
+
+		var SeparateArr2 = ArrayData.split(',');
+		var CheckData = SeparateArr2[1];
+		if (CheckData === "") {
+			$('#btnReg').val("登録");
+		} else {
+			$('#btnReg').val("編集");
+		}
+
 		var uid = $("input[name=uid]:hidden");
 		uid.val("<?php echo $_SESSION['auth_uid'] ?>");
 		var uid = uid.val();

@@ -221,9 +221,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</p>
 						</div>
 						<div class="col-xs-2">
-							<p class="text-center">
-								<a class="btn btn-primary btn-md" id="btnRet" data-dismiss="modal">閉じる </a>
-							</p>
+							<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
 						</div>
 						<div class="col-xs-4"></div>
 					</div>
@@ -318,13 +316,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="col-xs-4"></div>
 						<div class="col-xs-2">
 							<p class="text-center">
-								<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md" id="UpdatebtnReg" role="button" value="登録">
+								<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md" id="UpdatebtnReg" role="button" value="編集">
 							</p>
 						</div>
 						<div class="col-xs-2">
-							<p class="text-center">
-								<a class="btn btn-primary btn-md" id="btnRet" data-dismiss="modal">閉じる </a>
-							</p>
+							<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
 						</div>
 						<div class="col-xs-4"></div>
 					</div>

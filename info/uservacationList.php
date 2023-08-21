@@ -131,7 +131,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 echo $years;
                                 ?>
                             </td>
-                            <td><a href="#"><span class="showModal"><?= isset($key['vacationstr']) ? $key['vacationstr']  : '未登錄'; ?><span class="uservacationList_class"><?= ',' . $key['uid'] . ',' . $key['inymd'] ?></span></span></a></td>
+                            <td><a href="#"><span class="showModal"><?= isset($key['vacationstr']) ? $key['vacationstr']  : '未登錄'; ?><span class="uservacationList_class"><?= ',' . $key['uid'] . ',' . $key['inymd'] . ',' . $key['vacationstr'] ?></span></span></a></td>
                             <td align="center"><span><?= $key['vacationend'] ?></span></td>
                             <td align="center"><span><?= $key['oldcnt'] ?></span></td>
                             <td align="center"><span><?= $key['newcnt'] ?></span></td>
@@ -217,7 +217,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                         <div class="col-md-3"></div>
                         <div class="col-md-2">
                             <p class="text-center">
-                                <input type="submit" name="btnUpdateUvl" class="btn btn-primary" id="btnUpdateUvl" role="button" value="登録">
+                                <input type="submit" name="btnUpdateUvl" class="btn btn-primary" id="btnUpdateUvl" role="button">
                             </p>
                         </div>
                         <div class="col-md-2">
@@ -243,6 +243,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         var Vacationstr = SeparateArr[0];
         var Uid = SeparateArr[1];
         var Inymd = SeparateArr[2];
+        var CheckData = SeparateArr[3];
+        if (CheckData === "") {
+			$('#btnUpdateUvl').val("登録");
+		} else {
+			$('#btnUpdateUvl').val("編集");
+		}
         if (Inymd == "") {
             alert("<?php echo $info_uvl_joincompany_empty; ?>");
             return false;

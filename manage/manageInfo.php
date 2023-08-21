@@ -106,7 +106,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                 </p>
             </div>
             <div class="col-xs-2">
-                <p class="text-center"><a class="btn btn-warning btn-md" id="btnClose" href="../contact/noticeList.php" role="button">閉じる </a></p>
+                <p class="text-center"><a class="btn btn-default btn-md" id="btnClose" href="../contact/noticeList.php" role="button">閉じる </a></p>
             </div>
             <div class="col-xs-4"></div>
         </div>

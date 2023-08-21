@@ -212,7 +212,7 @@ if ($_SESSION['auth'] == false) {
 							<input type="submit" name="SaveKinmu" class="btn btn-primary" id="btnReg_rmodal" role="button" value="登録">
 						</div>
 						<div class="col-md-2">
-							<button type="button" class="btn btn-warning" data-dismiss="modal" id="modalClose">閉じる</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
 						</div>
 						<div class="col-md-4"></div>
 					</div>
@@ -285,7 +285,7 @@ if ($_SESSION['auth'] == false) {
 							<input type="submit" name="DeleteKinmu" class="btn btn-warning" id="btnDel_cmodel" role="button" value="削除">
 						</div>
 						<div class="col-md-2">
-							<button type="button" class="btn btn-warning" data-dismiss="modal" id="modalClose">閉じる</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
 						</div>
 						<div class="col-md-3"></div>
 					</div>
