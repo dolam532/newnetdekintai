@@ -72,21 +72,25 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                     <span class="text-left">年次休暇登録</span>
                 </div>
             </div>
-            <div class="col-md-3 text-left">
-                <div class="title_condition">
-                    <label>入社日 : <input type="text" id="searchYmd" name="searchYmd" value="<?= $_POST['searchYmd'] ?>" style="width: 100px; text-align:center"></label>
+            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                <div class="col-md-3 text-left">
+                    <div class="title_condition">
+                        <label>入社日 : <input type="text" id="searchYmd" name="searchYmd" value="<?= $_POST['searchYmd'] ?>" style="width: 100px; text-align:center"></label>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 text-left">
-                <div class="title_condition">
-                    <label>社員名 : <input type="text" id="searchName" name="searchName" value="<?= $_POST['searchName'] ?>" style="width: 100px; text-align:center"></label>
+                <div class="col-md-3 text-left">
+                    <div class="title_condition">
+                        <label>社員名 : <input type="text" id="searchName" name="searchName" value="<?= $_POST['searchName'] ?>" style="width: 100px; text-align:center"></label>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 text-right">
-                <div class="title_btn">
-                    <input type="submit" name="uservacationListSearch" value="検索 ">&nbsp;
+                <div class="col-md-3 text-right">
+                    <div class="title_btn">
+                        <input type="submit" name="uservacationListSearch" value="検索 ">&nbsp;
+                    </div>
                 </div>
-            </div>
+            <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+                <div class="col-md-9 text-right"></div>
+            <?php endif; ?>
         </div>
     </form>
 

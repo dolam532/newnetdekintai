@@ -268,22 +268,43 @@ if (isset($_POST['btnDelHdr'])) {
 
 // (uservacationList.php)
 // Select data from tbl_user & tbl_vacationinfo
-$sql_uservacation_select = 'SELECT DISTINCT
-`tbl_user`.*,
-`tbl_vacationinfo`.`vacationid`,
-`tbl_vacationinfo`.`vacationstr`,
-`tbl_vacationinfo`.`vacationend`,
-`tbl_vacationinfo`.`oldcnt`,
-`tbl_vacationinfo`.`newcnt`,
-`tbl_vacationinfo`.`usecnt`,
-`tbl_vacationinfo`.`usetime`,
-`tbl_vacationinfo`.`restcnt`
-FROM
-`tbl_user`
-LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
-WHERE `tbl_user`.`companyid` IN ("' . $ganasys_company_id . '")';
-$result_uservacation_select = mysqli_query($conn, $sql_uservacation_select);
-$uservacation_list_select = mysqli_fetch_all($result_uservacation_select, MYSQLI_ASSOC);
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_uservacation_select = 'SELECT DISTINCT
+    `tbl_user`.*,
+    `tbl_vacationinfo`.`vacationid`,
+    `tbl_vacationinfo`.`vacationstr`,
+    `tbl_vacationinfo`.`vacationend`,
+    `tbl_vacationinfo`.`oldcnt`,
+    `tbl_vacationinfo`.`newcnt`,
+    `tbl_vacationinfo`.`usecnt`,
+    `tbl_vacationinfo`.`usetime`,
+    `tbl_vacationinfo`.`restcnt`
+    FROM
+    `tbl_user`
+    LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
+    WHERE `tbl_user`.`companyid` IN ("' . $ganasys_company_id . '")';
+    $result_uservacation_select = mysqli_query($conn, $sql_uservacation_select);
+    $uservacation_list_select = mysqli_fetch_all($result_uservacation_select, MYSQLI_ASSOC);
+} elseif ($_SESSION['auth_type'] == constant('USER')) {
+    $sql_uservacation_select = 'SELECT DISTINCT
+    `tbl_user`.*,
+    `tbl_vacationinfo`.`vacationid`,
+    `tbl_vacationinfo`.`vacationstr`,
+    `tbl_vacationinfo`.`vacationend`,
+    `tbl_vacationinfo`.`oldcnt`,
+    `tbl_vacationinfo`.`newcnt`,
+    `tbl_vacationinfo`.`usecnt`,
+    `tbl_vacationinfo`.`usetime`,
+    `tbl_vacationinfo`.`restcnt`
+    FROM
+    `tbl_user`
+    LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
+    WHERE `tbl_user`.`companyid` IN ("' . $ganasys_company_id . '")
+    AND `tbl_user`.`uid` IN ("' . $_SESSION['auth_uid'] . '")';
+        $result_uservacation_select = mysqli_query($conn, $sql_uservacation_select);
+        $uservacation_list_select = mysqli_fetch_all($result_uservacation_select, MYSQLI_ASSOC);
+}
+
 if ($_POST['uservacationListSearch'] == NULL) {
     $uservacation_list = $uservacation_list_select;
 } elseif (isset($_POST['uservacationListSearch'])) {
