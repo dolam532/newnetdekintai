@@ -65,7 +65,9 @@
                             <li class="menu-level3"><a href="../user/genbaList.php">勤務管理表</a></li>
                             <li class="menu-level3"><a href="../user/genbaUserList.php">現場別勤務社員</a></li>
                             <li class="menu-level3"><a href="../contact/userloginList.php">社員ログイン内訳</a></li>
-                            <li class="menu-level3"><a href="../manage/manageInfo.php">管理情報登録</a></li>
+                            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                                <li class="menu-level3"><a href="../manage/manageInfo.php">管理情報登録</a></li>
+                            <?php endif; ?>
                             <li class="menu-level3"><a href="../contact/noticeList.php">お知らせ登録</a></li>
                         </ul>
                     </li>
