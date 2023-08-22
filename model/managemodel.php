@@ -34,6 +34,7 @@ if (isset($_POST['btnRegMi'])) {
     }
 }
 
+// companyList.php
 // Select database from tbl_company table
 $sql_company_select = 'SELECT * FROM `tbl_company`';
 $result_company_select = mysqli_query($conn, $sql_company_select);
@@ -94,6 +95,57 @@ if (isset($_POST['btnRegCL'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Update Data to tbl_company
+if (isset($_POST['btnUpdateCL'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $companycode = mysqli_real_escape_string($conn, $_POST['udcompanycode']);
+    $companyname = mysqli_real_escape_string($conn, $_POST['udcompanyname']);
+    $staff = mysqli_real_escape_string($conn, $_POST['udstaff']);
+    $telno = mysqli_real_escape_string($conn, $_POST['udtelno']);
+    $strymd = mysqli_real_escape_string($conn, $_POST['udstrymd']);
+    $endymd = mysqli_real_escape_string($conn, $_POST['udendymd']);
+    $address = mysqli_real_escape_string($conn, $_POST['udaddress']);
+    $use_yn = mysqli_real_escape_string($conn, $_POST['uduse_yn']);
+    $joken = mysqli_real_escape_string($conn, $_POST['udjoken']);
+    $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
+
+    $sql = "UPDATE tbl_company SET 
+            companyname='$companyname',
+            staff='$staff',
+            telno='$telno',
+            strymd='$strymd',
+            endymd='$endymd',
+            address='$address',
+            use_yn='$use_yn',
+            joken='$joken',
+            bigo='$bigo'
+        WHERE companyid ='$companyid'
+        AND companycode ='$companycode'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['update_success'] =  $update_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Delete data to tbl_company table of database
+if (isset($_POST['DeleteCL'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $companycode = mysqli_real_escape_string($conn, $_POST['udcompanycode']);
+
+    $sql = "DELETE FROM `tbl_company` 
+            WHERE companyid ='$companyid' AND companycode ='$companycode'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['delete_success'] =  $delete_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);

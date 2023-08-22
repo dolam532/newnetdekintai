@@ -215,7 +215,7 @@ if (isset($_POST['SaveKinmu'])) {
     }
 }
 
-// Save data to tbl_genba table of database
+// Update data to tbl_genba table of database
 if (isset($_POST['UpdateKinmu'])) {
     $genid = mysqli_real_escape_string($conn, $_POST['genid_cmodal']);
     $genbaname = mysqli_real_escape_string($conn, $_POST['genbaname_cmodal']);
