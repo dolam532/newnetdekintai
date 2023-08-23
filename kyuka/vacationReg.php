@@ -209,12 +209,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="col-md-4 col-sm-4 col-sx-4"></div>
 							<div class="col-md-2 col-sm-2 col-sx-2 btn">
 								<p class="text-center">
-									<input type="submit" name="SaveUpdateKyuka" class="btn btn-primary btn-md" id="btnRegSaveUpdate" role="button" value="登録">
+									<input type="submit" name="SaveUpdateKyuka" class="btn btn-primary btn-md" id="btnRegSaveUpdate" role="button" value="編集">
 								</p>
 							</div>
 							<div class="col-md-2 col-sm-2 col-sx-2 btn">
 								<p class="text-center">
-									<a class="btn btn-primary btn-md" data-dismiss="modal" role="button">閉じる </a>
+									<a class="btn btn-default btn-md" data-dismiss="modal" role="button">閉じる </a>
 								</p>
 							</div>
 							<div class="col-md-4 col-sm-4 col-sx-4"></div>

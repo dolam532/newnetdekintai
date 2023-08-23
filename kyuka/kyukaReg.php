@@ -793,12 +793,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<div class="col-md-2 col-sm-2 col-sx-2 btn">
 								<p class="text-center">
-									<a class="btn btn-primary btn-md" id="btnClear" role="button">クリア </a>
+									<a class="btn btn-success btn-md" id="btnClear" role="button">クリア </a>
 								</p>
 							</div>
 							<div class="col-md-2 col-sm-2 col-sx-2 btn">
 								<p class="text-center">
-									<a class="btn btn-primary btn-md" data-dismiss="modal" role="button">閉じる </a>
+									<a class="btn btn-default btn-md" data-dismiss="modal" role="button">閉じる </a>
 								</p>
 							</div>
 							<div class="col-md-3 col-sm-3 col-sx-3"></div>
@@ -868,7 +868,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						</div>
 						<div class="modal-footer" style="padding-bottom: 5px;">
 							<div class="col-md text-center">
-								<a class="btn btn-primary btn-md" data-dismiss="modal" role="button">閉じる </a>
+								<a class="btn btn-default btn-md" data-dismiss="modal" role="button">閉じる </a>
 							</div>
 						</div>
 					</div>
@@ -919,7 +919,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<div class="col-md-2 col-sm-2 col-sx-2 btn">
 								<p class="text-center">
-									<a class="btn btn-primary btn-md" data-dismiss="modal" role="button">閉じる </a>
+									<a class="btn btn-default btn-md" data-dismiss="modal" role="button">閉じる </a>
 								</p>
 							</div>
 							<div class="col-md-4 col-sm-4 col-sx-4"></div>

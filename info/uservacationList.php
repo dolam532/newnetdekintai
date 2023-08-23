@@ -154,7 +154,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             <form method="post">
                 <div class="modal-content">
                     <div class="modal-header">
-                        年次休暇登録
+                        <span id="ustitle"></span>
                         (<span id="usname"></span>)
                         <button class="close" data-dismiss="modal">x</button>
                     </div>
@@ -245,10 +245,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         var Inymd = SeparateArr[2];
         var CheckData = SeparateArr[3];
         if (CheckData === "") {
-			$('#btnUpdateUvl').val("登録");
-		} else {
-			$('#btnUpdateUvl').val("編集");
-		}
+            $('#btnUpdateUvl').val("登録");
+            $("#ustitle").text("年次休暇登録");
+        } else {
+            $('#btnUpdateUvl').val("編集");
+            $("#ustitle").text("年次休暇編集");
+        }
         if (Inymd == "") {
             alert("<?php echo $info_uvl_joincompany_empty; ?>");
             return false;

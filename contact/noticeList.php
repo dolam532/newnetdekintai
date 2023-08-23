@@ -259,7 +259,7 @@ if ($_SESSION['auth'] == false) {
                 <form method="post">
                     <div class="modal-content">
                         <div class="modal-header">
-                            お知らせ登録
+                            お知らせ編集
                             (<span id="udtname"></span>)
                             <button class="close" data-dismiss="modal">x</button>
                         </div>

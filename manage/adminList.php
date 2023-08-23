@@ -13,7 +13,6 @@ if ($_SESSION['auth'] == false) {
 if ($_SESSION['auth_type'] == constant('USER')) { // if not admin 
     header("Location: ../index.php");
 }
-echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css'>";
 ?>
 
 <!-- ****CSS*****  -->
@@ -39,15 +38,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         vertical-align: middle;
     }
 
-    span.companyList_class {
+    span.adminList_class {
         display: none;
     }
 </style>
-<title>使用者登録</title>
+<title>管理者登</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <?php
-    if (isset($_SESSION['save_success']) && isset($_POST['btnRegCL'])) {
+    if (isset($_SESSION['save_success']) && isset($_POST['btnRegAM'])) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -83,33 +82,22 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         <div class="row">
             <div class="col-md-3 text-left">
                 <div class="title_name">
-                    <span class="text-left">使用者登録</span>
-                </div>
-            </div>
-            <div class="col-md-3 text-center">
-                <div class="title_condition">
-                    <label for="searchUseyn">使用区分&nbsp;:</label>
-                    <?php
-                    foreach (ConstArray::$search_company as $key => $value) {
-                    ?>
-                        <input type='radio' name='searchUseyn' value='<?= $key ?>' <?php if ($key == $_POST['searchUseyn']) {
-                                                                                        echo ' checked="checked"';
-                                                                                    } ?>>
-                        <?= $value ?>
-                        </input>
-                    <?php
-                    }
-                    ?>
+                    <span class="text-left">管理者登</span>
                 </div>
             </div>
             <div class="col-md-3 text-left">
                 <div class="title_condition">
-                    <label for="searchCompanyname">会社名 : <input type="text" name="searchCompanyname" value="<?= $_POST['searchCompanyname'] ?>" style="width: 200px;"></label>
+                    <label for="searchAdminGrade">区分 : <input type="text" name="searchAdminGrade" value="<?= $_POST['searchAdminGrade'] ?>" style="width: 100px;"></label>
+                </div>
+            </div>
+            <div class="col-md-3 text-left">
+                <div class="title_condition">
+                    <label for="searchAdminName">会社名 : <input type="text" name="searchAdminName" value="<?= $_POST['searchAdminName'] ?>" style="width: 100px;"></label>
                 </div>
             </div>
             <div class="col-md-3 text-right">
                 <div class="title_btn">
-                    <input type="submit" name="SearchButtonCL" value="検索">&nbsp;&nbsp;&nbsp;
+                    <input type="submit" name="SearchButtonAM" value="検索">&nbsp;
                     <input type="button" id="btnNewCL" value="新規">
                 </div>
             </div>
@@ -119,43 +107,32 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
-                    <th style="text-align: center; width: 3%;">ID</th>
-                    <th style="text-align: center; width: 8%;">会社コード</th>
-                    <th style="text-align: center; width: 18%;">会社名</th>
-                    <th style="text-align: center; width: 8%;">担当者</th>
-                    <th style="text-align: center; width: 12%;">電話番号</th>
-                    <th style="text-align: center; width: 12%;">契約期間</th>
-                    <th style="text-align: center; width: 5%;">使用</th>
-                    <th style="text-align: center; width: 20%;">契約条件</th>
+                    <th style="text-align: center; width: 10%;">ID</th>
+                    <th style="text-align: center; width: 10%;">PASSWORD</th>
+                    <th style="text-align: center; width: 10%;">社員名</th>
+                    <th style="text-align: center; width: 14%;">Email</th>
+                    <th style="text-align: center; width: 10%;">部署</th>
+                    <th style="text-align: center; width: 10%;">区分</th>
+                    <th style="text-align: center; width: 10%;">会社名</th>
                     <th style="text-align: center; width: auto;">備考</th>
                 </tr>
             </thead>
             <tbody>
-                <?php if (empty($company_list)) { ?>
+                <?php if (empty($admin_list)) { ?>
                     <tr>
-                        <td colspan="9" align="center"><?php echo $data_save_no; ?></td>
+                        <td colspan="8" align="center"><?php echo $data_save_no; ?></td>
                     </tr>
-                    <?php } elseif (!empty($company_list)) {
-                    foreach ($company_list as $key) {
+                    <?php } elseif (!empty($admin_list)) {
+                    foreach ($admin_list as $key) {
                     ?>
                         <tr>
-                            <td><span><?= $key['companyid'] ?></span></td>
-                            <td><span><?= $key['companycode'] ?></span></td>
-                            <td><a href="#"><span class="showModal"><?= $key['companyname'] ?><span class="companyList_class"><?= ',' . $key['companyid'] ?></span></span></a></td>
-                            <td><span><?= $key['staff'] ?></span></td>
-                            <td><span><?= $key['telno'] ?></span></td>
-                            <td><span><?= $key['strymd'] . '~' . $key['endymd'] ?></span></td>
-                            <td>
-                                <span>
-                                    <?php if ($key['use_yn'] == "1") {
-                                        echo "<p style='font-weight:bold;color:green;'>使用</p>";
-                                    } else {
-                                        echo "<p style='font-weight:bold;color:red;'>中止</p>";
-                                    }
-                                    ?>
-                                </span>
-                            </td>
-                            <td><span><?= $key['joken'] ?></span></td>
+                            <td><a href="#"><span class="showModal"><?= $key['uid'] ?><span class="adminList_class"><?= ',' . $key['companyid'] ?></span></span></a></td>
+                            <td><span><?= $key['pwd'] ?></span></td>
+                            <td><span><?= $key['name'] ?></span></td>
+                            <td><span><?= $key['email'] ?></span></td>
+                            <td><span><?= $key['dept'] ?></span></td>
+                            <td><span><?= $key['grade'] ?></span></td>
+                            <td><span><?= $key['companyname'] ?></span></td>
                             <td><span><?= $key['bigo'] ?></span></td>
                         </tr>
                 <?php
@@ -172,79 +149,74 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                 <form method="post">
                     <div class="modal-content">
                         <div class="modal-header">
-                            使用者登録(<span>New</span>)
+                            社員登録(<span>New</span>)
                             <button class="close" data-dismiss="modal">x</button>
                         </div>
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-xs-3">
-                                    <label for="companycode">会社コード</label>
-                                    <input type="text" class="form-control" name="companycode" id="companycode" placeholder="companycode" maxlength="10" style="text-align: left">
+                                    <label for="uid">ID</label>
+                                    <input type="text" class="form-control" name="uid" id="uid" placeholder="ID" maxlength="10" style="text-align: left">
                                 </div>
-                                <div class="col-xs-9">
-                                    <label for="companyname">会社名</label>
-                                    <input type="text" class="form-control" name="companyname" id="companyname" placeholder="companyname" maxlength="20" style="text-align: left">
+                                <div class="col-xs-3">
+                                    <label for="pwd">PASSWORD</label>
+                                    <input type="text" class="form-control" name="pwd" id="pwd" placeholder="pwd" maxlength="20" style="text-align: left">
+                                </div>
+                                <div class="col-xs-3">
+                                    <label for="name">社員名</label>
+                                    <input type="text" class="form-control" name="name" id="name" placeholder="name" maxlength="100" style="text-align: left">
+                                </div>
+                                <div class="col-xs-3">
+                                    <label for="grade">区分</label>
+                                    <input type="text" class="form-control" name="grade" id="grade" placeholder="役員/管理/社員" maxlength="30" style="text-align: left">
                                 </div>
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-xs-3">
-                                    <label for="staff">担当者名</label>
-                                    <input type="text" class="form-control" name="staff" id="staff" placeholder="staff" maxlength="100" style="text-align: left">
+                                <div class="col-xs-6">
+                                    <label for="email">email</label>
+                                    <input type="text" class="form-control" name="email" id="email" placeholder="email" maxlength="100" style="text-align: left">
                                 </div>
-                                <div class="col-xs-3">
-                                    <label for="telno">電話番号</label>
-                                    <input type="text" class="form-control" name="telno" id="telno" placeholder="telno" maxlength="100" style="text-align: left">
-                                </div>
-                                <div class="col-xs-3">
-                                    <label for="strymd">契約期間(F)</label>
-                                    <input type="text" class="form-control" name="strymd" id="strymd" maxlength="10" placeholder="2019/01/01" style="text-align: left">
-                                </div>
-                                <div class="col-xs-3">
-                                    <label for="endymd">契約期間(T)</label>
-                                    <input type="text" class="form-control" name="endymd" id="endymd" maxlength="10" placeholder="2019/01/01" style="text-align: left">
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-xs-9">
-                                    <label for="address">住所</label>
-                                    <input type="text" class="form-control" name="address" id="address" maxlength="150" style="text-align: left">
-                                </div>
-                                <div class="col-xs-3">
-                                    <label for="use_yn"><strong>使用</strong></label>
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" name="use_yn" value="1" checked>使用
-                                        <input type="radio" name="use_yn" value="0">中止
-                                    </div>
+                                <div class="col-xs-6">
+                                    <label for="dept">部署</label>
+                                    <input type="text" class="form-control" name="dept" id="dept" placeholder="開発部" maxlength="50" style="text-align: left">
                                 </div>
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <label for="joken">契約条件</label>
-                                    <input type="text" class="form-control" name="joken" id="joken" maxlength="200" style="text-align: left">
+                                    <label for="companyid">会社名</label>
+                                    <select class="form-control" name="companyid" id="companyid">
+                                        <option value="" selected="">会社名を選択してください。</option>
+                                        <?php foreach ($company_list_select as $value) { ?>
+                                            <option value="<?= $value['companyid']  ?>" <?php if ($value['companyid'] == $_POST['companyid']) {
+                                                                                            echo ' selected="selected"';
+                                                                                        } ?>>
+                                                <?= $value['companyname'] ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
                                 </div>
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="bigo">備考</label>
-                                    <input type="text" class="form-control" name="bigo" id="bigo" maxlength="300" style="text-align: left">
+                                    <input type="text" class="form-control" name="bigo" id="bigo" maxlength="1000" style="text-align: left">
                                 </div>
                             </div>
-                        </div>
-                        <div class="modal-footer" style="text-align: center">
-                            <div class="col-xs-4"></div>
-                            <div class="col-xs-2">
-                                <p class="text-center">
-                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="登録">
-                                </p>
+                            <div class="modal-footer" style="text-align: center">
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-2">
+                                    <p class="text-center">
+                                        <input type="submit" name="btnRegAM" class="btn btn-primary" id="btnRegAM" role="button" value="登録">
+                                    </p>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                                </div>
+                                <div class="col-xs-4"></div>
                             </div>
-                            <div class="col-xs-2">
-                                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
-                            </div>
-                            <div class="col-xs-4"></div>
                         </div>
                     </div>
                 </form>
@@ -416,8 +388,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         }
 
         <?php
-        if (!empty($company_list)) {
-            foreach ($company_list as $key) {
+        if (!empty($admin_list)) {
+            foreach ($admin_list as $key) {
         ?>
                 if ('<?php echo $key['companycode'] ?>' == Companycode) {
                     alert("<?php echo $manage_Ccode_have; ?>");
@@ -450,7 +422,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         var CompanyId = SeparateArr[1];
 
         <?php
-        foreach ($company_list as $key) {
+        foreach ($admin_list as $key) {
         ?>
             if ('<?php echo $key['companyid'] ?>' === CompanyId && '<?php echo $key['companyname'] ?>' === CompanyName) {
                 $("#usname").text('<?php echo $key['companyname'] ?>');

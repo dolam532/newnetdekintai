@@ -151,3 +151,74 @@ if (isset($_POST['DeleteCL'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+// AdminList.php
+// Select database from tbl_user table
+$sql_admin_select = 'SELECT DISTINCT
+    `tbl_user`.*,
+    `tbl_company`.`companyname`
+    FROM `tbl_user`
+    LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
+    WHERE `tbl_user`.`type` IN ("' . constant('ADMIN') . '", "' . constant('ADMINISTRATOR') . '")';
+$result_admin_select = mysqli_query($conn, $sql_admin_select);
+$admin_list_select = mysqli_fetch_all($result_admin_select, MYSQLI_ASSOC);
+
+// Search Data tbl_company
+if ($_POST['SearchButtonAM'] == NULL) {
+    $admin_list = $admin_list_select;
+} elseif (isset($_POST['SearchButtonAM'])) {
+    if (!empty($admin_list_select)) {
+        foreach ($admin_list_select as $key) {
+            $AdminName[] = $key['name'];
+            $AdminGrade[] = $key['grade'];
+        }
+    }
+    $AdminName = array_unique($AdminName);
+    $AdminGrade = array_unique($AdminGrade);
+
+    if ($_POST['searchAdminName'] != "") {
+        $searchAdminName = trim($_POST['searchAdminName']);
+    } else {
+        $searchAdminName = implode('","', $AdminName);
+    }
+
+    if ($_POST['searchAdminGrade'] != "") {
+        $searchAdminGrade = trim($_POST['searchAdminGrade']);
+    } else {
+        $searchAdminGrade = implode('","', $AdminGrade);
+    }
+
+    $sql_admin = 'SELECT *
+        FROM `tbl_user`
+        WHERE `tbl_user`.`name` IN ("' . $searchAdminName . '")
+        AND `tbl_user`.`grade` IN ("' . $searchAdminGrade . '")';
+    $result_admin = mysqli_query($conn, $sql_admin);
+    $admin_list = mysqli_fetch_all($result_admin, MYSQLI_ASSOC);
+}
+
+// Save Data to tbl_user
+if (isset($_POST['btnRegAM'])) {
+    $uid = mysqli_real_escape_string($conn, $_POST['uid']);
+    $pwd = mysqli_real_escape_string($conn, $_POST['pwd']);
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $grade = mysqli_real_escape_string($conn, $_POST['grade']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $dept = mysqli_real_escape_string($conn, $_POST['dept']);
+    $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
+    $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
+    $inymd = "";
+    $outymd = "";
+    $type = constant('ADMINISTRATOR');
+
+    $sql = "INSERT INTO `tbl_user` (`uid`, `companyid`, `name`, `pwd`, `dept`, 
+                `email`, `grade`, `type`, `bigo`, `inymd`, `outymd`, `reg_dt`)
+                VALUES ('$uid', '$companyid', '$name', '$pwd', '$dept',
+                '$email', '$grade', '$type', '$bigo', '$inymd', '$outymd', '$reg_dt')";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
