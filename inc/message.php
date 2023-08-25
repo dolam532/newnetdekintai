@@ -126,7 +126,7 @@ $content_noteViewcnt_empty = 'view Cntを入力してください。';
 // companyList
 $manage_Ccode_empty = '会社コードを入力してください。';
 $manage_Ccode_no = '会社コードを番号で入力してください。';
-$manage_Ccode_have='登録済み会社コードです。';
+$manage_Ccode_have = '登録済み会社コードです。';
 $manage_Cname_empty = '会社名を入力してください。';
 $manage_staff_empty = '担当者名を入力してください。';
 $manage_telno_empty = '電話番号を入力してください。';
@@ -134,3 +134,14 @@ $manage_strymd_empty = '契約期間(F)を入力してください。';
 $manage_endymd_empty = '契約期間(T)を入力してください。';
 $manage_address_empty = '住所を入力してください。';
 $manage_joken_empty = '契約条件を入力してください。';
+
+// adminList
+$manage_id_empty = 'IDを入力してください。';
+$manage_id_alphabet = 'IDをアルファベットで入力してください。';
+$manage_Uid_have = '登録済みIDです。';
+$manage_pwd_empty = 'Passwordを入力してください。';
+$manage_name_empty = '社員名を入力してください。';
+$manage_grade_empty = '区分を入力してください。';
+$manage_email_empty = 'Emailを入力してください。';
+$manage_dept_empty = '部署を入力してください。';
+$manage_companyid_empty = '会社名を選択してください。';
