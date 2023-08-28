@@ -222,3 +222,47 @@ if (isset($_POST['btnRegAM'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+// Update Data to tbl_user
+if (isset($_POST['btnUpdateAM'])) {
+    $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+    $pwd = mysqli_real_escape_string($conn, $_POST['udpwd']);
+    $name = mysqli_real_escape_string($conn, $_POST['udname']);
+    $grade = mysqli_real_escape_string($conn, $_POST['udgrade']);
+    $email = mysqli_real_escape_string($conn, $_POST['udemail']);
+    $dept = mysqli_real_escape_string($conn, $_POST['uddept']);
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
+
+    $sql = "UPDATE tbl_user SET 
+            pwd='$pwd',
+            name='$name',
+            grade='$grade',
+            email='$email',
+            dept='$dept',
+            companyid='$companyid',
+            bigo='$bigo'
+        WHERE uid ='$uid'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['update_success'] =  $update_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Delete data to tbl_user table of database
+if (isset($_POST['DeleteAM'])) {
+    $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+
+    $sql = "DELETE FROM `tbl_user` 
+            WHERE uid ='$uid'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['delete_success'] =  $delete_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}

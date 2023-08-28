@@ -53,7 +53,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
     }
     ?>
     <?php
-    if (isset($_SESSION['update_success']) && isset($_POST['btnUpdateCL'])) {
+    if (isset($_SESSION['update_success']) && isset($_POST['btnUpdateAM'])) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -64,7 +64,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
     }
     ?>
     <?php
-    if (isset($_SESSION['delete_success']) && isset($_POST['DeleteCL'])) {
+    if (isset($_SESSION['delete_success']) && isset($_POST['DeleteAM'])) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -219,88 +219,88 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             </div>
         </div>
     </div>
-</div>
 
-<!-- 編集 -->
-<div class="row">
-    <div class="modal" id="modal2" tabindex="-1" style="display: none;">
-        <div class="modal-dialog">
-            <form method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        社員編集
-                        (<span id="usname"></span>)
-                        <button class="close" data-dismiss="modal">x</button>
-                    </div>
+    <!-- 編集 -->
+    <div class="row">
+        <div class="modal" id="modal2" tabindex="-1" style="display: none;">
+            <div class="modal-dialog">
+                <form method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            社員編集
+                            (<span id="usname"></span>)
+                            <button class="close" data-dismiss="modal">x</button>
+                        </div>
 
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <label for="uid">ID</label>
-                                <input type="text" class="form-control" name="uduid" id="uduid" placeholder="ID" maxlength="10" style="text-align: left" readonly>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <label for="uid">ID</label>
+                                    <input type="text" class="form-control" name="uduid" id="uduid" placeholder="ID" maxlength="10" style="text-align: left" readonly>
+                                </div>
+                                <div class="col-xs-3">
+                                    <label for="pwd">PASSWORD</label>
+                                    <input type="text" class="form-control" name="udpwd" id="udpwd" placeholder="pwd" maxlength="20" style="text-align: left">
+                                </div>
+                                <div class="col-xs-3">
+                                    <label for="name">社員名</label>
+                                    <input type="text" class="form-control" name="udname" id="udname" placeholder="name" maxlength="100" style="text-align: left">
+                                </div>
+                                <div class="col-xs-3">
+                                    <label for="grade">区分</label>
+                                    <input type="text" class="form-control" name="udgrade" id="udgrade" placeholder="役員/管理/社員" maxlength="30" style="text-align: left">
+                                </div>
                             </div>
-                            <div class="col-xs-3">
-                                <label for="pwd">PASSWORD</label>
-                                <input type="text" class="form-control" name="udpwd" id="udpwd" placeholder="pwd" maxlength="20" style="text-align: left">
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <label for="email">email</label>
+                                    <input type="text" class="form-control" name="udemail" id="udemail" placeholder="email" maxlength="100" style="text-align: left">
+                                </div>
+                                <div class="col-xs-6">
+                                    <label for="dept">部署</label>
+                                    <input type="text" class="form-control" name="uddept" id="uddept" placeholder="開発部" maxlength="50" style="text-align: left">
+                                </div>
                             </div>
-                            <div class="col-xs-3">
-                                <label for="name">社員名</label>
-                                <input type="text" class="form-control" name="udname" id="udname" placeholder="name" maxlength="100" style="text-align: left">
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <label for="companyid">会社名</label>
+                                    <select class="form-control" name="udcompanyid" id="udcompanyid">
+                                        <?php foreach ($company_list_select as $value) { ?>
+                                            <option value="<?= $value['companyid']  ?>" <?php if ($value['companyid'] == $_POST['companyid']) {
+                                                                                            echo ' selected="selected"';
+                                                                                        } ?>>
+                                                <?= $value['companyname'] ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="col-xs-3">
-                                <label for="grade">区分</label>
-                                <input type="text" class="form-control" name="udgrade" id="udgrade" placeholder="役員/管理/社員" maxlength="30" style="text-align: left">
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <label for="bigo">備考</label>
+                                    <input type="text" class="form-control" name="udbigo" id="udbigo" maxlength="1000" style="text-align: left">
+                                </div>
                             </div>
                         </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-xs-6">
-                                <label for="email">email</label>
-                                <input type="text" class="form-control" name="udemail" id="udemail" placeholder="email" maxlength="100" style="text-align: left">
+                        <div class="modal-footer" style="text-align: center">
+                            <div class="col-md-3"></div>
+                            <div class="col-md-2">
+                                <input type="submit" name="btnUpdateAM" class="btn btn-primary" id="btnUpdateAM" role="button" value="編集">
                             </div>
-                            <div class="col-xs-6">
-                                <label for="dept">部署</label>
-                                <input type="text" class="form-control" name="uddept" id="uddept" placeholder="開発部" maxlength="50" style="text-align: left">
+                            <div class="col-md-2">
+                                <input type="submit" name="DeleteAM" class="btn btn-warning" role="button" value="削除">
                             </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <label for="companyid">会社名</label>
-                                <select class="form-control" name="udcompanyid" id="udcompanyid">
-                                    <?php foreach ($company_list_select as $value) { ?>
-                                        <option value="<?= $value['companyid']  ?>" <?php if ($value['companyid'] == $_POST['companyid']) {
-                                                                                        echo ' selected="selected"';
-                                                                                    } ?>>
-                                            <?= $value['companyname'] ?>
-                                        </option>
-                                    <?php } ?>
-                                </select>
+                            <div class="col-md-2">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
                             </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <label for="bigo">備考</label>
-                                <input type="text" class="form-control" name="udbigo" id="udbigo" maxlength="1000" style="text-align: left">
-                            </div>
+                            <div class="col-md-3"></div>
                         </div>
                     </div>
-                    <div class="modal-footer" style="text-align: center">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-2">
-                            <input type="submit" name="btnUpdateAM" class="btn btn-primary" id="btnUpdateAM" role="button" value="編集">
-                        </div>
-                        <div class="col-md-2">
-                            <input type="submit" name="DeleteAM" class="btn btn-warning" role="button" value="削除">
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
-                        </div>
-                        <div class="col-md-3"></div>
-                    </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </div>
