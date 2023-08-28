@@ -133,3 +133,12 @@ if (isset($_POST['btnDelNL'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+// codemasterList.php
+// Select database from tbl_codetype table
+$sql_codetype = 'SELECT * FROM `tbl_codetype`';
+$result_codetype = mysqli_query($conn, $sql_codetype);
+$codetype_list = mysqli_fetch_all($result_codetype, MYSQLI_ASSOC);
+
+var_dump($_POST['typecode']);
+var_dump($_POST['typename']);

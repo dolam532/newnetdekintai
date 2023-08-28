@@ -34,6 +34,10 @@ if ($_SESSION['auth'] == false) {
         text-align: left;
         vertical-align: middle;
     }
+
+    span.codemasterList_class {
+        display: none;
+    }
 </style>
 <title>基礎コード登録</title>
 <?php include('../inc/menu.php'); ?>
@@ -60,14 +64,41 @@ if ($_SESSION['auth'] == false) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td align="center"><span style="font-weight:bold">01</span></td>
-                        <td><a href="http://old.netdekintai.com/netdekintai/info/codemasterList#" onclick="fn_TypeClick(&#39;01&#39;)"><span style="font-weight:bold">部署</span></a></td>
-                    </tr>
-                    <tr>
-                        <td align="center"><span style="font-weight:normal">02</span></td>
-                        <td><a href="http://old.netdekintai.com/netdekintai/info/codemasterList#" onclick="fn_TypeClick(&#39;02&#39;)"><span style="font-weight:normal">休暇種類</span></a></td>
-                    </tr>
+                    <form id="myForm" method="post">
+                        <input type="hidden" name="typecode" id="typecode">
+                        <input type="hidden" name="typename" id="typename">
+                    </form>
+                    <?php if (empty($codetype_list)) { ?>
+                        <tr class="info">
+                            <td colspan="2" align="center"><?php echo $data_save_no; ?></td>
+                        </tr>
+                        <?php } elseif (!empty($codetype_list)) {
+                        foreach ($codetype_list as $key) {
+                        ?>
+                            <?php if ($key['typecode'] == $_POST['typecode']) : ?>
+                                <tr>
+                                    <td align="center"><span style="font-weight:bold"><?= $key['typecode'] ?></span></td>
+                                    <td>
+                                        <a href="#" class="submitLink">
+                                            <span style="font-weight:bold"><?= $key['typename'] ?></span>
+                                            <span class="codemasterList_class"><?= $key['typecode'] . ',' . $key['typename'] ?></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php else : ?>
+                                <tr>
+                                    <td align="center"><span><?= $key['typecode'] ?></span></td>
+                                    <td>
+                                        <a href="#" class="submitLink">
+                                            <span><?= $key['typename'] ?></span>
+                                            <span class="codemasterList_class"><?= $key['typecode'] . ',' . $key['typename'] ?></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                    <?php
+                        }
+                    } ?>
                 </tbody>
             </table>
         </div>
@@ -207,6 +238,18 @@ if ($_SESSION['auth'] == false) {
     </div>
 </div>
 <script>
+    $(document).ready(function() {
+        $(".submitLink").click(function(event) {
+            event.preventDefault(); // Prevent the default link behavior
+            var ArrayData = $(this).find(".codemasterList_class").text();
+            var SeparateArr = ArrayData.split(',');
+            var Typecode = SeparateArr[0].trim();
+            var Typename = SeparateArr[1].trim();
 
+            $("#typecode").val(Typecode);
+            $("#typename").val(Typename);
+            $("#myForm").submit();
+        });
+    });
 </script>
 <?php include('../inc/footer.php'); ?>
