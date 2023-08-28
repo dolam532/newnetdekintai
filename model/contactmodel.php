@@ -140,5 +140,5 @@ $sql_codetype = 'SELECT * FROM `tbl_codetype`';
 $result_codetype = mysqli_query($conn, $sql_codetype);
 $codetype_list = mysqli_fetch_all($result_codetype, MYSQLI_ASSOC);
 
-var_dump($_POST['typecode']);
-var_dump($_POST['typename']);
+// var_dump($_POST['typecode']);
+// var_dump($_POST['typename']);
