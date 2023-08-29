@@ -5,7 +5,7 @@ include('../inc/message.php');
 include('../inc/const_array.php');
 include('../inc/header.php');
 include('../model/contactmodel.php');
-include('../model/inactive.php');
+// include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
     header("Location: ../loginout/loginout.php");
@@ -143,50 +143,43 @@ if ($_SESSION['auth'] == false) {
     <div class="row">
         <div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false" style="display: none;">
             <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        基礎コード登録(<span id="sname">New</span>)
-                        <button class="close" data-dismiss="modal">x</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-2">
-                                <label for="code">Code</label>
-                                <input type="text" class="form-control" id="code" placeholder="" style="text-align: center" disabled="">
-                                <input type="hidden" id="seq" value="">
-                                <input type="hidden" id="uid" value="admin">
-                                <input type="hidden" id="companyid" value="1">
-                                <input type="hidden" id="typecode" value="01">
+                <form method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            基礎コード登録(<span id="sname">New</span>)
+                            <button class="close" data-dismiss="modal">x</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="code">Code</label>
+                                    <input type="text" class="form-control" name="code" id="code" style="text-align: center">
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="name">名</label>
+                                    <input type="text" class="form-control" name="name" id="name" style="text-align: left">
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="remark">備考</label>
+                                    <input type="text" class="form-control" name="remark" id="remark" style="text-align: left">
+                                </div>
                             </div>
-                            <div class="col-md-5">
-                                <label for="name">名</label>
-                                <input type="text" class="form-control" id="name" placeholder="" style="text-align: left">
+                            <br>
+                        </div>
+                        <div class="modal-footer" style="text-align: center">
+                            <div class="col-xs-4"></div>
+                            <div class="col-xs-2">
+                                <p class="text-center">
+                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="編集">
+                                </p>
                             </div>
-                            <div class="col-md-5">
-                                <label for="remark">備考</label>
-                                <input type="text" class="form-control" id="remark" placeholder="" style="text-align: left">
+                            <div class="col-xs-2">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
                             </div>
+                            <div class="col-xs-4"></div>
                         </div>
-                        <br>
                     </div>
-                    <div class="modal-footer" style="text-align: center">
-                        <div class="col-xs-3"></div>
-                        <div class="col-xs-2">
-                            <p class="text-center">
-                                <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
-                            </p>
-                        </div>
-                        <div class="col-xs-2">
-                            <p class="text-center">
-                                <input type="submit" name="btnDelCL" class="btn btn-warning" id="btnDelCL" role="button" value="削除">
-                            </p>
-                        </div>
-                        <div class="col-xs-2">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
-                        </div>
-                        <div class="col-xs-3"></div>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -210,6 +203,52 @@ if ($_SESSION['auth'] == false) {
     // New button: popup & clear 
     $(document).on('click', '#btnNewCL', function(e) {
         $('#modal').modal('toggle');
+    });
+
+    // Check Error
+    $(document).on('click', '#btnRegNL', function(e) {
+        var Code = $("#code").val();
+        var Name = $("#name").val();
+        var Remark = $("#remark").val();
+
+        if (Code == "") {
+            alert("<?php echo $content_cmlC_empty; ?>");
+            $("#code").focus();
+            return false;
+        }
+
+        if (isNaN(Code)) {
+            alert("<?php echo $content_cmlC_no; ?>");
+            e.preventDefault();
+            $("#code").focus();
+            return false;
+        }
+
+        <?php
+        if (!empty($codebase_list)) {
+            foreach ($codebase_list as $key) {
+        ?>
+                if ('<?php echo $key['companycode'] ?>' == Companycode) {
+                    alert("<?php echo $manage_Ccode_have; ?>");
+                    $("#companycode").focus();
+                    return false;
+                }
+        <?php
+            }
+        }
+        ?>
+
+        if (Content == "") {
+            alert("<?php echo $content_noteC_empty; ?>");
+            $("#content").focus();
+            return false;
+        }
+
+        if (Reader == "") {
+            alert("<?php echo $content_noteR_empty; ?>");
+            $("#reader").focus();
+            return false;
+        }
     });
 </script>
 <?php include('../inc/footer.php'); ?>

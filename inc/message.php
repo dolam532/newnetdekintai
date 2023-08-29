@@ -145,3 +145,7 @@ $manage_grade_empty = '区分を入力してください。';
 $manage_email_empty = 'Emailを入力してください。';
 $manage_dept_empty = '部署を入力してください。';
 $manage_companyid_empty = '会社名を選択してください。';
+
+// codemasterList
+$content_cmlC_empty = 'Codeを入力してください。';
+$content_cmlC_no = 'Codeをを番号で入力してください。';
