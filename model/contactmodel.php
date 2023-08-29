@@ -1,4 +1,6 @@
 <?php
+$reg_dt = date('Y-m-d H:i:s');
+
 // userloginList.php
 $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
 $month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
@@ -155,16 +157,16 @@ if ($_POST['typecode'] == NULL) {
 }
 
 // Save Data to tbl_codebase DB 
-if (isset($_POST['btnRegNL'])) {
-    $uid = mysqli_real_escape_string($conn, $_POST['uid']);
-    $title = mysqli_real_escape_string($conn, $_POST['title']);
-    $content = mysqli_real_escape_string($conn, $_POST['content']);
-    $reader = mysqli_real_escape_string($conn, $_POST['reader']);
-    $viewcnt = mysqli_real_escape_string($conn, $_POST['viewcnt']);
-    $reg_dt = mysqli_real_escape_string($conn, $_POST['reg_dt']);
+if (isset($_POST['btnRegCL'])) {
+    $companyid = constant('GANASYS_COMPANY_ID');
+    $typecode = "01";
+    $uid = $_SESSION['auth_uid'];
+    $code = mysqli_real_escape_string($conn, $_POST['code']);
+    $name = mysqli_real_escape_string($conn, $_POST['name']);
+    $remark = mysqli_real_escape_string($conn, $_POST['remark']);
 
-    $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `reader`, `viewcnt`, `uid`, `reg_dt`)
-                VALUES ('$title', '$content', '$reader', '$viewcnt', '$uid', '$reg_dt')";
+    $sql = "INSERT INTO `tbl_codebase` (`companyid`, `typecode`, `code`, `name`, `remark`, `uid`, `reg_dt`)
+                VALUES ('$companyid', '$typecode', '$code', '$name', '$remark', '$uid', '$reg_dt')";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;

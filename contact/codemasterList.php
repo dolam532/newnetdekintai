@@ -5,7 +5,7 @@ include('../inc/message.php');
 include('../inc/const_array.php');
 include('../inc/header.php');
 include('../model/contactmodel.php');
-// include('../model/inactive.php');
+include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
     header("Location: ../loginout/loginout.php");
@@ -42,6 +42,39 @@ if ($_SESSION['auth'] == false) {
 <title>基礎コード登録</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
+    <?php
+    if (isset($_SESSION['save_success']) && isset($_POST['btnRegCL'])) {
+    ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['save_success']; ?>
+        </div>
+    <?php
+        unset($_SESSION['save_success']);
+    }
+    ?>
+    <?php
+    if (isset($_SESSION['update_success']) && isset($_POST['btnUpdateCL'])) {
+    ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['update_success']; ?>
+        </div>
+    <?php
+        unset($_SESSION['update_success']);
+    }
+    ?>
+    <?php
+    if (isset($_SESSION['delete_success']) && isset($_POST['btnDelCL'])) {
+    ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['delete_success']; ?>
+        </div>
+    <?php
+        unset($_SESSION['delete_success']);
+    }
+    ?>
     <div class="row">
         <div class="col-md-10">
             <div class="title_name">
@@ -124,12 +157,12 @@ if ($_SESSION['auth'] == false) {
                                 <td>
                                     <a href="#">
                                         <span class="showModal">
-                                            <span class="codemasterList_class"><?= $key['companyid']  . ',' ?></span>
+                                            <span class="codemasterList_class"><?= $key['uid']  . ',' . $key['companyid']  . ',' . $key['typecode']  . ',' ?></span>
                                             <?= $key['name'] ?>
                                         </span>
                                     </a>
                                 </td>
-                                <td><span><?= $key['bigo'] ?></span></td>
+                                <td><span><?= $key['remark'] ?></span></td>
                             </tr>
                     <?php
                         }
@@ -170,13 +203,66 @@ if ($_SESSION['auth'] == false) {
                             <div class="col-xs-4"></div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="編集">
+                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="新規">
                                 </p>
                             </div>
                             <div class="col-xs-2">
                                 <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
                             </div>
                             <div class="col-xs-4"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- 編集 -->
+    <div class="row">
+        <div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false" style="display: none;">
+            <div class="modal-dialog">
+                <form method="post">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            基礎コード登録
+                            (<span id="udname"></span>)
+                            <button class="close" data-dismiss="modal">x</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <label for="code">Code</label>
+                                    <input type="text" class="form-control" name="udcode" id="udcode" style="text-align: center">
+                                    <input type="hidden" name="udcompanyid" id="udcompanyid">
+                                    <input type="hidden" name="uduid" id="uduid">
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="name">名</label>
+                                    <input type="text" class="form-control" name="udname" id="udname" style="text-align: left">
+                                </div>
+                                <div class="col-md-5">
+                                    <label for="remark">備考</label>
+                                    <input type="text" class="form-control" name="udremark" id="udremark" style="text-align: left">
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="modal-footer" style="text-align: center">
+                            <div class="col-xs-3"></div>
+                            <div class="col-xs-2">
+                                <p class="text-center">
+                                    <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
+                                </p>
+                            </div>
+                            <div class="col-xs-2">
+                                <p class="text-center">
+                                    <input type="submit" name="btnDelCL" class="btn btn-warning" id="btnDelCL" role="button" value="削除">
+                                </p>
+                            </div>
+                            <div class="col-xs-2">
+                                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                            </div>
+                            <div class="col-xs-3"></div>
                         </div>
                     </div>
                 </form>
@@ -209,7 +295,6 @@ if ($_SESSION['auth'] == false) {
     $(document).on('click', '#btnRegNL', function(e) {
         var Code = $("#code").val();
         var Name = $("#name").val();
-        var Remark = $("#remark").val();
 
         if (Code == "") {
             alert("<?php echo $content_cmlC_empty; ?>");
@@ -224,31 +309,22 @@ if ($_SESSION['auth'] == false) {
             return false;
         }
 
-        <?php
-        if (!empty($codebase_list)) {
-            foreach ($codebase_list as $key) {
-        ?>
-                if ('<?php echo $key['companycode'] ?>' == Companycode) {
-                    alert("<?php echo $manage_Ccode_have; ?>");
-                    $("#companycode").focus();
-                    return false;
-                }
-        <?php
-            }
-        }
-        ?>
-
-        if (Content == "") {
+        if (Name == "") {
             alert("<?php echo $content_noteC_empty; ?>");
-            $("#content").focus();
+            $("#name").focus();
             return false;
         }
+    });
 
-        if (Reader == "") {
-            alert("<?php echo $content_noteR_empty; ?>");
-            $("#reader").focus();
-            return false;
-        }
+    // Year/month click on grid (edit): popup & content display
+    $(document).on('click', '.showModal', function() {
+        $('#modal2').modal('toggle');
+        var ArrayData = $(this).text();
+        alert(ArrayData);
+        var SeparateArr = ArrayData.split(',');
+        var Uid = SeparateArr[0].trim();
+        var CompanyId = SeparateArr[1].trim();
+        var Typecode = SeparateArr[2].trim();
     });
 </script>
 <?php include('../inc/footer.php'); ?>
