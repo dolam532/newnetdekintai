@@ -50,7 +50,7 @@ if ($_SESSION['auth'] == false) {
         </div>
         <div class="col-md-2 text-right">
             <div class="title_btn">
-                <input type="button" id="btnNew" value="新規 ">
+                <input type="button" id="btnNewCL" value="新規 ">
             </div>
         </div>
     </div>
@@ -112,78 +112,28 @@ if ($_SESSION['auth'] == false) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td align="center"><span name="ccode">01</span></td>
-                        <td><a href="http://old.netdekintai.com/netdekintai/info/codemasterList#"><span name="cname" class="showModal">開発部</span></a></td>
-                        <td><span name="cremark"></span>
-                            <input type="hidden" name="tcompanyid" value="1">
-                            <input type="hidden" name="tuid" value="">
-                            <input type="hidden" name="ttypecode" value="01">
-                            <input type="hidden" name="tcode" value="01">
-                            <input type="hidden" name="tname" value="開発部">
-                            <input type="hidden" name="tremark" value="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center"><span name="ccode">02</span></td>
-                        <td><a href="http://old.netdekintai.com/netdekintai/info/codemasterList#"><span name="cname" class="showModal">管理部</span></a></td>
-                        <td><span name="cremark"></span>
-                            <input type="hidden" name="tcompanyid" value="1">
-                            <input type="hidden" name="tuid" value="">
-                            <input type="hidden" name="ttypecode" value="01">
-                            <input type="hidden" name="tcode" value="02">
-                            <input type="hidden" name="tname" value="管理部">
-                            <input type="hidden" name="tremark" value="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center"><span name="ccode">01</span></td>
-                        <td><a href="http://old.netdekintai.com/netdekintai/info/codemasterList#"><span name="cname" class="showModal">開発部</span></a></td>
-                        <td><span name="cremark"></span>
-                            <input type="hidden" name="tcompanyid" value="1">
-                            <input type="hidden" name="tuid" value="">
-                            <input type="hidden" name="ttypecode" value="01">
-                            <input type="hidden" name="tcode" value="01">
-                            <input type="hidden" name="tname" value="開発部">
-                            <input type="hidden" name="tremark" value="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center"><span name="ccode">02</span></td>
-                        <td><a href="http://old.netdekintai.com/netdekintai/info/codemasterList#"><span name="cname" class="showModal">管理部</span></a></td>
-                        <td><span name="cremark"></span>
-                            <input type="hidden" name="tcompanyid" value="1">
-                            <input type="hidden" name="tuid" value="">
-                            <input type="hidden" name="ttypecode" value="01">
-                            <input type="hidden" name="tcode" value="02">
-                            <input type="hidden" name="tname" value="管理部">
-                            <input type="hidden" name="tremark" value="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center"><span name="ccode">01</span></td>
-                        <td><a href="http://old.netdekintai.com/netdekintai/info/codemasterList#"><span name="cname" class="showModal">開発部</span></a></td>
-                        <td><span name="cremark"></span>
-                            <input type="hidden" name="tcompanyid" value="1">
-                            <input type="hidden" name="tuid" value="">
-                            <input type="hidden" name="ttypecode" value="01">
-                            <input type="hidden" name="tcode" value="01">
-                            <input type="hidden" name="tname" value="開発部">
-                            <input type="hidden" name="tremark" value="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td align="center"><span name="ccode">02</span></td>
-                        <td><a href="http://old.netdekintai.com/netdekintai/info/codemasterList#"><span name="cname" class="showModal">管理部</span></a></td>
-                        <td><span name="cremark"></span>
-                            <input type="hidden" name="tcompanyid" value="1">
-                            <input type="hidden" name="tuid" value="">
-                            <input type="hidden" name="ttypecode" value="01">
-                            <input type="hidden" name="tcode" value="02">
-                            <input type="hidden" name="tname" value="管理部">
-                            <input type="hidden" name="tremark" value="">
-                        </td>
-                    </tr>
+                    <?php if (empty($codebase_list)) { ?>
+                        <tr>
+                            <td colspan="3" align="center"><?php echo $data_save_no; ?></td>
+                        </tr>
+                        <?php } elseif (!empty($codebase_list)) {
+                        foreach ($codebase_list as $key) {
+                        ?>
+                            <tr>
+                                <td align="center"><span><?= $key['typecode'] ?></span></td>
+                                <td>
+                                    <a href="#">
+                                        <span class="showModal">
+                                            <span class="codemasterList_class"><?= $key['companyid']  . ',' ?></span>
+                                            <?= $key['name'] ?>
+                                        </span>
+                                    </a>
+                                </td>
+                                <td><span><?= $key['bigo'] ?></span></td>
+                            </tr>
+                    <?php
+                        }
+                    } ?>
                 </tbody>
             </table>
         </div>
@@ -220,17 +170,21 @@ if ($_SESSION['auth'] == false) {
                         <br>
                     </div>
                     <div class="modal-footer" style="text-align: center">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-2">
-                            <p class="text-center"><a class="btn btn-primary btn-md" id="btnReg" href="http://old.netdekintai.com/netdekintai/info/codemasterList#" role="button">登録 </a></p>
+                        <div class="col-xs-3"></div>
+                        <div class="col-xs-2">
+                            <p class="text-center">
+                                <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
+                            </p>
                         </div>
-                        <div class="col-md-2">
-                            <p class="text-center"><a class="btn btn-primary btn-md" id="btnDel" href="http://old.netdekintai.com/netdekintai/info/codemasterList#" role="button">削除 </a></p>
+                        <div class="col-xs-2">
+                            <p class="text-center">
+                                <input type="submit" name="btnDelCL" class="btn btn-warning" id="btnDelCL" role="button" value="削除">
+                            </p>
                         </div>
-                        <div class="col-md-2">
-                            <p class="text-center"><a class="btn btn-primary btn-md" id="btnRet" href="http://old.netdekintai.com/netdekintai/info/codemasterList#" role="button">閉じる </a></p>
+                        <div class="col-xs-2">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
                         </div>
-                        <div class="col-md-3"></div>
+                        <div class="col-xs-3"></div>
                     </div>
                 </div>
             </div>
@@ -238,6 +192,7 @@ if ($_SESSION['auth'] == false) {
     </div>
 </div>
 <script>
+    // Change type code by submit 
     $(document).ready(function() {
         $(".submitLink").click(function(event) {
             event.preventDefault(); // Prevent the default link behavior
@@ -250,6 +205,11 @@ if ($_SESSION['auth'] == false) {
             $("#typename").val(Typename);
             $("#myForm").submit();
         });
+    });
+
+    // New button: popup & clear 
+    $(document).on('click', '#btnNewCL', function(e) {
+        $('#modal').modal('toggle');
     });
 </script>
 <?php include('../inc/footer.php'); ?>
