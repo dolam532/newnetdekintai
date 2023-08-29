@@ -120,7 +120,7 @@ if ($_SESSION['auth'] == false) {
                         foreach ($codebase_list as $key) {
                         ?>
                             <tr>
-                                <td align="center"><span><?= $key['typecode'] ?></span></td>
+                                <td align="center"><span><?= $key['code'] ?></span></td>
                                 <td>
                                     <a href="#">
                                         <span class="showModal">
