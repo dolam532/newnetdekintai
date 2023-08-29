@@ -38,7 +38,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         vertical-align: middle;
     }
 </style>
-<title>管理者登</title>
+<title>管理者登録</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <?php
@@ -78,7 +78,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         <div class="row">
             <div class="col-md-3 text-left">
                 <div class="title_name">
-                    <span class="text-left">管理者登</span>
+                    <span class="text-left">管理者登録</span>
                 </div>
             </div>
             <div class="col-md-3 text-left">
