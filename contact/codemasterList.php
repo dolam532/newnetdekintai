@@ -158,7 +158,7 @@ if ($_SESSION['auth'] == false) {
                                     <a href="#">
                                         <span class="showModal">
                                             <span class="codemasterList_class"><?= $key['uid']  . ',' . $key['companyid']  . ',' . $key['typecode']  . ',' . $key['code']  . ',' ?></span>
-                                            <?= $key['typecode'] ?>
+                                            <?= $key['name'] ?>
                                         </span>
                                     </a>
                                 </td>
