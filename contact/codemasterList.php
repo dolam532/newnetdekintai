@@ -157,7 +157,7 @@ if ($_SESSION['auth'] == false) {
                                 <td>
                                     <a href="#">
                                         <span class="showModal">
-                                            <span class="codemasterList_class"><?= $key['uid']  . ',' . $key['companyid']  . ',' . $key['typecode']  . ',' ?></span>
+                                            <span class="codemasterList_class"><?= $key['uid']  . ',' . $key['companyid']  . ',' . $key['typecode']  . ',' . $key['code']  . ',' ?></span>
                                             <?= $key['name'] ?>
                                         </span>
                                     </a>
@@ -224,17 +224,18 @@ if ($_SESSION['auth'] == false) {
                 <form method="post">
                     <div class="modal-content">
                         <div class="modal-header">
-                            基礎コード登録
-                            (<span id="udname"></span>)
+                            基礎コード編集
+                            (<span id="udtcode"></span>)
                             <button class="close" data-dismiss="modal">x</button>
                         </div>
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-md-2">
                                     <label for="code">Code</label>
-                                    <input type="text" class="form-control" name="udcode" id="udcode" style="text-align: center">
+                                    <input type="text" class="form-control" name="udcode" id="udcode" style="text-align: center" readonly>
                                     <input type="hidden" name="udcompanyid" id="udcompanyid">
                                     <input type="hidden" name="uduid" id="uduid">
+                                    <input type="hidden" name="udtypecode" id="udtypecode">
                                 </div>
                                 <div class="col-md-5">
                                     <label for="name">名</label>
@@ -310,7 +311,7 @@ if ($_SESSION['auth'] == false) {
         }
 
         if (Name == "") {
-            alert("<?php echo $content_noteC_empty; ?>");
+            alert("<?php echo $content_cmlN_empty; ?>");
             $("#name").focus();
             return false;
         }
@@ -320,11 +321,45 @@ if ($_SESSION['auth'] == false) {
     $(document).on('click', '.showModal', function() {
         $('#modal2').modal('toggle');
         var ArrayData = $(this).text();
-        alert(ArrayData);
         var SeparateArr = ArrayData.split(',');
         var Uid = SeparateArr[0].trim();
         var CompanyId = SeparateArr[1].trim();
-        var Typecode = SeparateArr[2].trim();
+        var TypecodeD = SeparateArr[2].trim();
+        var Code = SeparateArr[3].trim();
+
+        <?php
+        if (!empty($codebase_list)) {
+            foreach ($codebase_list as $key) {
+        ?>
+                if ('<?php echo $key['companyid'] ?>' == CompanyId && '<?php echo $key['typecode'] ?>' == TypecodeD && '<?php echo $key['uid'] ?>' == Uid && '<?php echo $key['code'] ?>' == Code) {
+                    $("#udtcode").text('<?php echo $key['code'] ?>');
+                    var udcompanyid = $("input[name=udcompanyid]:hidden");
+                    udcompanyid.val("<?php echo $key['companyid'] ?>");
+                    var udcompanyid = udcompanyid.val();
+                    var uduid = $("input[name=uduid]:hidden");
+                    uduid.val("<?php echo $key['uid'] ?>");
+                    var uduid = uduid.val();
+                    var udtypecode = $("input[name=udtypecode]:hidden");
+                    udtypecode.val("<?php echo $key['typecode'] ?>");
+                    var udtypecode = udtypecode.val();
+                    $("#udcode").text($('[name="udcode"]').val("<?php echo $key['code'] ?>"));
+                    $("#udname").text($('[name="udname"]').val("<?php echo $key['name'] ?>"));
+                    $("#udremark").text($('[name="udremark"]').val("<?php echo $key['remark'] ?>"));
+                }
+        <?php
+            }
+        }
+        ?>
+    });
+
+    // Check Error
+    $(document).on('click', '#btnUpdateCL', function(e) {
+        var Name = $("#udname").val();
+        if (Name == "") {
+            alert("<?php echo $content_cmlN_empty; ?>");
+            $("#udname").focus();
+            return false;
+        }
     });
 </script>
 <?php include('../inc/footer.php'); ?>

@@ -149,4 +149,4 @@ $manage_companyid_empty = '会社名を選択してください。';
 // codemasterList
 $content_cmlC_empty = 'Codeを入力してください。';
 $content_cmlC_no = 'Codeをを番号で入力してください。';
-$content_cmlC_ = '名を入力してください。';
+$content_cmlN_empty = '名を入力してください。';

@@ -175,3 +175,46 @@ if (isset($_POST['btnRegCL'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+// Update Data to tbl_codebase DB 
+if (isset($_POST['btnUpdateCL'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+    $typecode = mysqli_real_escape_string($conn, $_POST['udtypecode']);
+    $code = mysqli_real_escape_string($conn, $_POST['udcode']);
+    $name = mysqli_real_escape_string($conn, $_POST['udname']);
+    $remark = mysqli_real_escape_string($conn, $_POST['udremark']);
+
+    $sql = "UPDATE tbl_codebase SET 
+                name='$name',
+                remark='$remark'
+            WHERE companyid ='$companyid'
+            AND uid ='$uid'
+            AND typecode ='$typecode'
+            AND code ='$code'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['update_success'] =  $update_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Delete Data to tbl_codebase DB 
+if (isset($_POST['btnDelCL'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+    $typecode = mysqli_real_escape_string($conn, $_POST['udtypecode']);
+    $code = mysqli_real_escape_string($conn, $_POST['udcode']);
+
+    $sql = "DELETE FROM `tbl_codebase` 
+    WHERE companyid ='$companyid' AND uid ='$uid' AND typecode ='$typecode' AND code ='$code'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['delete_success'] =  $delete_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}

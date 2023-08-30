@@ -368,7 +368,7 @@ if ($_SESSION['auth'] == false) {
         var ArrayData = $(this).text();
         var SeparateArr = ArrayData.split(',');
         var Bid = SeparateArr[0].trim();
-        var Uid = SeparateArr[1];
+        var Uid = SeparateArr[1].trim();
 
         <?php
         if (!empty($notice_list)) {
