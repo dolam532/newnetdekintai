@@ -1,11 +1,11 @@
 <?php
+// connect to database
 session_start();
 include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../inc/const_array.php');
 include('../model/kintaimodel.php');
 include('../inc/header.php');
-include('../inc/menu.php');
 include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {

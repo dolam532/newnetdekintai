@@ -4,7 +4,6 @@ session_start();
 include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../inc/const_array.php');
-include('../model/commonmodel.php');
 include('../model/kintaimodel.php');
 include('../inc/header.php');
 include('../model/inactive.php');
@@ -49,6 +48,10 @@ if ($_SESSION['auth'] == false) {
 	.print_btn {
 		display: inline-block;
 		padding-top: 30px;
+	}
+
+	span.kintaiReg_class {
+		display: none;
 	}
 </style>
 <title>勤 務 表</title>
@@ -221,15 +224,15 @@ if ($_SESSION['auth'] == false) {
 							<td>
 								<?php if ($key['decide_color'] == "土") : ?>
 									<a href="#" style="color:blue;">
-										<span class="showModal"><?= $key['date']; ?></span>
+										<span class="showModal"><?= $key['date']; ?><span class="kintaiReg_class"><?= ',' . $key['jobstarthh'] ?></span></span>
 									</a>
 								<?php elseif ($key['decide_color'] == "日") : ?>
 									<a href="#" style="color:red;">
-										<span class="showModal"><?= $key['date']; ?></span>
+										<span class="showModal"><?= $key['date']; ?><span class="kintaiReg_class"><?= ',' . $key['jobstarthh'] ?></span></span>
 									</a>
 								<?php else : ?>
 									<a href="#">
-										<span class="showModal"><?= $key['date']; ?></span>
+										<span class="showModal"><?= $key['date']; ?><span class="kintaiReg_class"><?= ',' . $key['jobstarthh'] ?></span></span>
 									</a>
 								<?php endif; ?>
 							</td>
@@ -252,15 +255,15 @@ if ($_SESSION['auth'] == false) {
 							<td>
 								<?php if ($key['decide_color'] == "土") : ?>
 									<a href="#" style="color:blue;">
-										<span class="showModal"><?= $key['date']; ?></span>
+										<span class="showModal"><?= $key['date']; ?><span class="kintaiReg_class"><?= ',' . $key['jobstarthh'] ?></span></span>
 									</a>
 								<?php elseif ($key['decide_color'] == "日") : ?>
 									<a href="#" style="color:red;">
-										<span class="showModal"><?= $key['date']; ?></span>
+										<span class="showModal"><?= $key['date']; ?><span class="kintaiReg_class"><?= ',' . $key['jobstarthh'] ?></span></span>
 									</a>
 								<?php else : ?>
 									<a href="#">
-										<span class="showModal"><?= $key['date']; ?></span>
+										<span class="showModal"><?= $key['date']; ?><span class="kintaiReg_class"><?= ',' . $key['jobstarthh'] ?></span></span>
 									</a>
 								<?php endif; ?>
 							</td>
@@ -439,7 +442,7 @@ if ($_SESSION['auth'] == false) {
 						<?php if ($decide_template_ == "1") : ?>
 							<input type="hidden" value="0" name="janhh_bottom">
 							<input type="hidden" value="0" name="janmm_bottom">
-							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="2" value="<?= isset($totalworkhh_top) ? $totalworkhh_top : '0'; ?>"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= isset($totalworkhh_top) ? $totalworkhh_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= isset($totalworkmm_top) ? $totalworkmm_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= isset($cnprejob_top) ? $cnprejob_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= isset($cnactjob_top) ? $cnactjob_top : '0'; ?>"></td>
@@ -450,7 +453,7 @@ if ($_SESSION['auth'] == false) {
 						<?php elseif ($decide_template_ == "2") : ?>
 							<input type="hidden" value="<?= isset($totalJanHours) ? $totalJanHours : '0'; ?>" name="janhh_bottom">
 							<input type="hidden" value="<?= isset($totalJanMinutes) ? $totalJanMinutes : '0'; ?>" name="janmm_bottom">
-							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="2" value="<?= isset($totaldayhh_top) ? $totaldayhh_top : '0'; ?>"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= isset($totaldayhh_top) ? $totaldayhh_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= isset($totaldaymm_top) ? $totaldaymm_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= isset($cnprejob_top) ? $cnprejob_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom" id="workdays_bottom" maxlength="2" value="<?= isset($cnactjob_top) ? $cnactjob_top : '0'; ?>"></td>
@@ -509,11 +512,11 @@ if ($_SESSION['auth'] == false) {
 						<div class="row">
 							<div class="col-md-6">
 								<label for="workcontent_rmodal">業務内容</label>
-								<input type="text" class="form-control" name="workcontent_rmodal" id="workcontent_rmodal" placeholder="業務内容" style="text-align: left">
+								<input type="text" class="form-control" name="workcontent_rmodal" id="workcontent_rmodal" placeholder="content" style="text-align: left">
 							</div>
 							<div class="col-md-6">
 								<label for="bigo_rmodal">備考</label>
-								<input type="text" class="form-control" name="bigo_rmodal" id="bigo_rmodal" placeholder="備考" style="text-align: left">
+								<input type="text" class="form-control" name="bigo_rmodal" id="bigo_rmodal" placeholder="remark" style="text-align: left">
 							</div>
 						</div>
 					</div>
@@ -741,17 +744,17 @@ if ($_SESSION['auth'] == false) {
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="comment">業務内容</label>
-								<input type="text" class="form-control" name="comment" id="comment" placeholder="" style="text-align: left">
+								<input type="text" class="form-control" name="comment" id="comment" placeholder="content" style="text-align: left">
 							</div>
 							<div class="col-xs-6">
 								<label for="bigo">備考</label>
-								<input type="text" class="form-control" name="bigo" id="bigo" placeholder="" style="text-align: left">
+								<input type="text" class="form-control" name="bigo" id="bigo" placeholder="remark" style="text-align: left">
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
-						<input type="submit" name="SaveUpdateKintai" class="btn btn-primary" id="btnReg" role="button" value="登録">
-						<input type="submit" name="DeleteKintai" class="btn btn-primary" id="btnDel" role="button" value="削除">
+						<input type="submit" name="SaveUpdateKintai" class="btn btn-primary" id="btnReg" role="button">
+						<input type="submit" name="DeleteKintai" class="btn btn-warning" id="btnDel" role="button" value="削除">
 						<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
 					</div>
 				</div>
@@ -773,6 +776,15 @@ if ($_SESSION['auth'] == false) {
 		var ArrayData = $(this).text();
 		var SeparateArr = ArrayData.split('/');
 		var Date_ = SeparateArr[1].substr(0, 2);
+
+		var SeparateArr2 = ArrayData.split(',');
+		var CheckData = SeparateArr2[1];
+		if (CheckData === "") {
+			$('#btnReg').val("登録");
+		} else {
+			$('#btnReg').val("編集");
+		}
+
 		var uid = $("input[name=uid]:hidden");
 		uid.val("<?php echo $_SESSION['auth_uid'] ?>");
 		var uid = uid.val();
@@ -918,30 +930,30 @@ if ($_SESSION['auth'] == false) {
 			var earlydays_bottom = $('#earlydays_bottom').val();
 
 			$("#jobhh_bottom").on("change", function() {
-				var jobhh_bottom = parseInt($(this).val()); 
+				var jobhh_bottom = parseInt($(this).val());
 			});
 			$("#jobmm_bottom").on("change", function() {
-				var jobmm_bottom = parseInt($(this).val()); 
+				var jobmm_bottom = parseInt($(this).val());
 			});
 			$("#jobdays_bottom").on("change", function() {
-				var jobdays_bottom = parseInt($(this).val()); 
+				var jobdays_bottom = parseInt($(this).val());
 			});
 			$("#workdays_bottom").on("change", function() {
-				var workdays_bottom = parseInt($(this).val()); 
+				var workdays_bottom = parseInt($(this).val());
 			});
 			$("#holydays_bottom").on("change", function() {
-				var holydays_bottom = parseInt($(this).val()); 
+				var holydays_bottom = parseInt($(this).val());
 			});
 			$("#offdays_bottom").on("change", function() {
-				var offdays_bottom = parseInt($(this).val()); 
+				var offdays_bottom = parseInt($(this).val());
 			});
 			$("#delaydays_bottom").on("change", function() {
-				var delaydays_bottom = parseInt($(this).val()); 
+				var delaydays_bottom = parseInt($(this).val());
 			});
 			$("#earlydays_bottom").on("change", function() {
-				var earlydays_bottom = parseInt($(this).val()); 
+				var earlydays_bottom = parseInt($(this).val());
 			});
-			
+
 			<?php
 			if (!empty($workmonth_list)) {
 				foreach ($workmonth_list as $key) {
@@ -956,8 +968,12 @@ if ($_SESSION['auth'] == false) {
 					} else {
 						alert("<?php echo $kintai_click_month; ?>");
 					}
-			<?php
+				<?php
 				}
+			} else {
+				?>
+				$("#autopdf").submit();
+			<?php
 			}
 			?>
 		<?php

@@ -57,27 +57,29 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">基本情報
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li class="menu-level3"><a href="">基礎コード登録</a></li>
-                            <li class="menu-level3"><a href="">勤務日登録</a></li>
-                            <li class="menu-level3"><a href="">祝日登録</a></li>
+                            <li class="menu-level3"><a href="../contact/codemasterList.php">基礎コード登録</a></li>
+                            <li class="menu-level3"><a href="../info/workdayList.php">勤務日登録</a></li>
+                            <li class="menu-level3"><a href="../info/holidayReg.php">祝日登録</a></li>
                             <li class="menu-level3"><a href="../user/userList.php">社員登録</a></li>
-                            <li class="menu-level3"><a href="">年次休暇登録</a></li>
+                            <li class="menu-level3"><a href="../info/uservacationList.php">年次休暇登録</a></li>
                             <li class="menu-level3"><a href="../user/genbaList.php">勤務管理表</a></li>
                             <li class="menu-level3"><a href="../user/genbaUserList.php">現場別勤務社員</a></li>
-                            <li class="menu-level3"><a href="">社員ログイン内訳</a></li>
-                            <li class="menu-level3"><a href="">管理情報登録</a>
-                            </li>
-                            <li class="menu-level3"><a href="">お知らせ登録</a>
-                            </li>
+                            <li class="menu-level3"><a href="../contact/userloginList.php">社員ログイン内訳</a></li>
+                            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                                <li class="menu-level3"><a href="../manage/manageInfo.php">管理情報登録</a></li>
+                            <?php endif; ?>
+                            <li class="menu-level3"><a href="../contact/noticeList.php">お知らせ登録</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown" id="gana">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true">GANASYS<span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="">使用者登録</a></li>
-                            <li><a href="">管理者登録</a></li>
-                        </ul>
-                    </li>
+                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                        <li class="dropdown" id="gana">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true">GANASYS<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="../manage/companyList.php">使用者登録</a></li>
+                                <li><a href="../manage/adminList.php">管理者登録</a></li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <?php if (isset($_SESSION['auth'])) : ?>

@@ -16,3 +16,7 @@ DEFINE('URL_NAME', 'http://new.netdekintai.com/index.php');
 // GANASYS COMPANY NOTE
 DEFINE('GANASYS_COMPANY_ID', '1');
 DEFINE('GANASYS_COMPANY_TYPE', '1');
+
+// USE YES OR NO
+DEFINE('USE_NO', '0');
+DEFINE('USE_YES', '1');

@@ -3,16 +3,16 @@
 $data_save_no = '登録されたデータがありません。';
 $save_success = '入力情報保存しました。';
 $autosave_success = '自動入力情報保存しました。';
-$update_success = '入力情報が更新されます。';
+$update_success = '入力情報が更新されました。';
 $connect_error = '接続エラー: ';
 $save_fail = '入力情報保存できませんでした。';
 $delete_success = '削除成功しました。';
 $delete_all_success = 'すべて削除成功しました。';
 
-// Index
+// index
 $login_is_not = '詳細情報はログイン後可能です。';
 
-// Login & Logout
+// loginout
 $login_empty_id = 'ログイン失敗！  idを入力してください。';
 $login_empty_pwd = 'ログイン失敗！  PWDを入力してください。';
 $login_alphabet = 'IDをアルファベットで入力してください。';
@@ -20,7 +20,7 @@ $login_success = 'ログインに成功しました。';
 $logout_success = 'ログアウトに成功しました。';
 $login_fail = 'ログイン失敗！  idとPWDを確認してください。';
 
-// User
+// userList
 $user_id_same = '他の社員が使用しているidです。';
 $user_id_empty = 'IDを入力してください。';
 $user_pwd_empty = 'Passwordを入力してください。';
@@ -30,7 +30,7 @@ $user_dept_empty = '部署を入力してください。';
 $user_grade_empty = '区分を入力してください。';
 $user_genba_list_empty = '勤務時間タイプを選択してください。';
 
-// Kyuka
+// KyukaReg
 $kyuka_no_receive = '休暇はまだもらえません。';
 $kyuka_ymdcnt_01 = '休暇の申込日は(';
 $kyuka_ymdcnt_02 = '日)を超えるわけにはいきません。';
@@ -50,6 +50,8 @@ $kyuka_destplace_empty = '場所を入力してください。';
 $kyuka_desttel_empty = '電話番号を入力してください。';
 $kyuka_vacationstr_empty = '休暇開始日を入力してください。';
 $kyuka_vacationend_empty = '休暇終了日を入力してください。';
+
+// vacationReg
 $kyuka_oldcnt_empty = '休暇使用数を入力してください。';
 $kyuka_newcnt_empty = '休暇新しい数を入力してください。';
 $kyuka_usecnt_empty = '休暇使用数を入力してください。';
@@ -70,17 +72,81 @@ $kintai_bend_empty = '業務終了を入力してください。';
 $kintai_offtime_empty = '休憩時間を入力してください。';
 $kintai_click_month = '月登録まだ保存されてないです。確認してください。';
 
-// KintaiMonthly
-$NO_DATA = 'データが存在しませんでした。';
-$CONNECT_ERROR = '接続エラー。';
+// genbaList
+$user_genbaname_empty = '勤務時間タイプを入力してください。';
+$user_workstr_empty = '業務開始時間を入力してください。';
+$user_workend_empty = '業務終了時間を入力してください。';
+$user_offtime1_empty = '昼休(時:分)を入力してください。';
+$user_offtime2_empty = '夜休(時:分)を入力してください。';
+$user_workstr_incorrect = '業務開始時間を正しく入力してください。';
+$user_workend_incorrect = '業務終了時間を正しく入力してください。';
+$user_offtime1_incorrect = '昼休(時:分)を正しく入力してください。';
+$user_offtime2_incorrect = '夜休(時:分)を正しく入力してください。';
 
-// KinmuManager
-$kinmu_genbaname_empty = '勤務時間タイプを入力してください。';
-$kinmu_workstr_empty = '業務開始時間を入力してください。';
-$kinmu_workend_empty = '業務終了時間を入力してください。';
-$kinmu_offtime1_empty = '昼休(時:分)を入力してください。';
-$kinmu_offtime2_empty = '夜休(時:分)を入力してください。';
-$kinmu_workstr_incorrect = '業務開始時間を正しく入力してください。';
-$kinmu_workend_incorrect = '業務終了時間を正しく入力してください。';
-$kinmu_offtime1_incorrect = '昼休(時:分)を正しく入力してください。';
-$kinmu_offtime2_incorrect = '夜休(時:分)を正しく入力してください。';
+// workdayList
+$info_workyear_empty = '勤務年は必須です。';
+$info_workyear_no = '勤務年を番号で入力してください。';
+$info_workyear_have = '登録済み年月です。';
+$info_workday01_no = '01月に項目を番号で入力してください。';
+$info_workday02_no = '02月に項目を番号で入力してください。';
+$info_workday03_no = '03月に項目を番号で入力してください。';
+$info_workday04_no = '04月に項目を番号で入力してください。';
+$info_workday05_no = '05月に項目を番号で入力してください。';
+$info_workday06_no = '06月に項目を番号で入力してください。';
+$info_workday07_no = '07月に項目を番号で入力してください。';
+$info_workday08_no = '08月に項目を番号で入力してください。';
+$info_workday09_no = '09月に項目を番号で入力してください。';
+$info_workday10_no = '10月に項目を番号で入力してください。';
+$info_workday11_no = '11月に項目を番号で入力してください。';
+$info_workday12_no = '12月に項目を番号で入力してください。';
+
+// holidayReg
+$info_holiday_empty = '祝日を正しく入力してください。';
+$info_holiday_have = '登録済み祝日です。';
+
+// uservacationList
+$info_uvl_joincompany_empty = '入社日が登録されていない社員は休暇登録はできません。';
+$info_uvlvacationstr_empty = '年次開始日を入力してください。';
+$info_uvlvacationend_empty = '年次終了日を入力してください。';
+
+// manageInfo
+$update_mi_success = '変更登録完了。';
+$manage_magamym_empty = '締切（月）を入力してください。';
+$manage_magamymd_empty = '締切（日）を入力してください。';
+$manage_kyukatimelimit_empty = '年間休暇時間を入力してください。';
+$manage_kyukatimelimit_no = '年間休暇時間を番号で入力してください。';
+
+// noticeList
+$content_noteT_empty = 'タイトルを入力してください。';
+$content_noteC_empty = '内容を入力してください。';
+$content_noteR_empty = '確認者を入力してください。';
+$content_noteRegdt_empty = '作成日を入力してください。';
+$content_noteViewcnt_empty = 'view Cntを入力してください。';
+
+// companyList
+$manage_Ccode_empty = '会社コードを入力してください。';
+$manage_Ccode_no = '会社コードを番号で入力してください。';
+$manage_Ccode_have = '登録済み会社コードです。';
+$manage_Cname_empty = '会社名を入力してください。';
+$manage_staff_empty = '担当者名を入力してください。';
+$manage_telno_empty = '電話番号を入力してください。';
+$manage_strymd_empty = '契約期間(F)を入力してください。';
+$manage_endymd_empty = '契約期間(T)を入力してください。';
+$manage_address_empty = '住所を入力してください。';
+$manage_joken_empty = '契約条件を入力してください。';
+
+// adminList
+$manage_id_empty = 'IDを入力してください。';
+$manage_id_alphabet = 'IDをアルファベットで入力してください。';
+$manage_Uid_have = '登録済みIDです。';
+$manage_pwd_empty = 'Passwordを入力してください。';
+$manage_name_empty = '社員名を入力してください。';
+$manage_grade_empty = '区分を入力してください。';
+$manage_email_empty = 'Emailを入力してください。';
+$manage_dept_empty = '部署を入力してください。';
+$manage_companyid_empty = '会社名を選択してください。';
+
+// codemasterList
+$content_cmlC_empty = 'Codeを入力してください。';
+$content_cmlC_no = 'Codeをを番号で入力してください。';
+$content_cmlN_empty = '名を入力してください。';

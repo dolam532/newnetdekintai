@@ -11,10 +11,6 @@ if ($_SESSION['auth'] == false) {
     header("Location: ../loginout/loginout.php");
 }
 
-if ($_SESSION['auth_type'] == 1) { // if not admin 
-    header("Location: ./../../index.php");
-}
-
 ?>
 
 <!-- ****CSS*****  -->
@@ -39,7 +35,7 @@ if ($_SESSION['auth_type'] == 1) { // if not admin
             <thead>
                 <tr class="info">
                     <th style="text-align: center; width: 5%;">No</th>
-                    <th style="text-align: center; width: 20%;">現場名</th>
+                    <th style="text-align: center; width: 20%;">勤務時間タイプ</th>
                     <th style="text-align: center; width: 15%;">社員名</th>
                     <th style="text-align: center; width: 26%;" colspan="2">契約期間</th>
                     <th style="text-align: center; width: auto;">備考</th>

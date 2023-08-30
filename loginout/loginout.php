@@ -105,7 +105,7 @@ include('../model/loginoutmodel.php');
         if (pwd == "") {
             alert("<?php echo $login_empty_pwd; ?>");
             e.preventDefault();
-            $("#uid").focus();
+            $("#pwd").focus();
             return true;
         }
 

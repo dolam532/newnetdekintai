@@ -50,12 +50,12 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
     if ($_POST['searchName'] == "") {
         $searchName = implode('","', $Name);
     } else {
-        $searchName = $_POST['searchName'];
+        $searchName = trim($_POST['searchName']);
     }
     if ($_POST['searchGrade'] == "") {
         $searchGrade = implode('","', $Grade);
     } else {
-        $searchGrade = $_POST['searchGrade'];
+        $searchGrade = trim($_POST['searchGrade']);
     }
     $sql_user = 'SELECT DISTINCT
     `tbl_user`.*,
@@ -68,7 +68,7 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
  `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
 WHERE 
 `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
-    AND `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
+    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
     AND `tbl_user`.`name` IN("' . $searchName . '") 
     AND `tbl_user`.`grade` IN("' . $searchGrade . '")';
 
@@ -179,9 +179,16 @@ if (isset($_POST['UpdateUser'])) {
 }
 
 // Select data from tbl_genba
-$sql_genba = 'SELECT * FROM `tbl_genba`';
-$result_genba = mysqli_query($conn, $sql_genba);
-$genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_genba = 'SELECT * FROM `tbl_genba`';
+    $result_genba = mysqli_query($conn, $sql_genba);
+    $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
+} elseif ($_SESSION['auth_type'] == constant('USER')) {
+    $sql_genba = 'SELECT * FROM `tbl_genba`
+        WHERE `tbl_genba`.`genid` IN ("' . $_SESSION['auth_genid'] . '")';
+    $result_genba = mysqli_query($conn, $sql_genba);
+    $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
+}
 
 // Save data to tbl_genba table of database
 if (isset($_POST['SaveKinmu'])) {
@@ -208,7 +215,7 @@ if (isset($_POST['SaveKinmu'])) {
     }
 }
 
-// Save data to tbl_genba table of database
+// Update data to tbl_genba table of database
 if (isset($_POST['UpdateKinmu'])) {
     $genid = mysqli_real_escape_string($conn, $_POST['genid_cmodal']);
     $genbaname = mysqli_real_escape_string($conn, $_POST['genbaname_cmodal']);
@@ -261,11 +268,23 @@ if (isset($_POST['DeleteKinmu'])) {
 
 // genbaUserList.php
 // Select data from tbl_user
-$sql_user_g = 'SELECT
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_user_g = 'SELECT
         `tbl_user`.*,
         `tbl_genba`.`genbaname`
     FROM
     `tbl_user`
     LEFT JOIN `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`';
-$result_user_g = mysqli_query($conn, $sql_user_g);
-$user_list_g = mysqli_fetch_all($result_user_g, MYSQLI_ASSOC);
+    $result_user_g = mysqli_query($conn, $sql_user_g);
+    $user_list_g = mysqli_fetch_all($result_user_g, MYSQLI_ASSOC);
+} elseif ($_SESSION['auth_type'] == constant('USER')) {
+    $sql_user_g = 'SELECT
+        `tbl_user`.*,
+        `tbl_genba`.`genbaname`
+    FROM
+    `tbl_user`
+    LEFT JOIN `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`
+    WHERE `tbl_user`.`uid` IN ("' . $_SESSION['auth_uid'] . '")';
+    $result_user_g = mysqli_query($conn, $sql_user_g);
+    $user_list_g = mysqli_fetch_all($result_user_g, MYSQLI_ASSOC);
+}
