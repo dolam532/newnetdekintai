@@ -186,15 +186,15 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-md-2">
                                     <label for="code">Code</label>
-                                    <input type="text" class="form-control" name="code" id="code" style="text-align: center">
+                                    <input type="text" class="form-control" name="code" id="code" placeholder="code" style="text-align: center">
                                 </div>
                                 <div class="col-md-5">
                                     <label for="name">名</label>
-                                    <input type="text" class="form-control" name="name" id="name" style="text-align: left">
+                                    <input type="text" class="form-control" name="name" id="name" placeholder="name" style="text-align: left">
                                 </div>
                                 <div class="col-md-5">
                                     <label for="remark">備考</label>
-                                    <input type="text" class="form-control" name="remark" id="remark" style="text-align: left">
+                                    <input type="text" class="form-control" name="remark" id="remark" placeholder="remark" style="text-align: left">
                                 </div>
                             </div>
                             <br>
@@ -239,11 +239,11 @@ if ($_SESSION['auth'] == false) {
                                 </div>
                                 <div class="col-md-5">
                                     <label for="name">名</label>
-                                    <input type="text" class="form-control" name="udname" id="udname" style="text-align: left">
+                                    <input type="text" class="form-control" name="udname" id="udname" placeholder="name" style="text-align: left">
                                 </div>
                                 <div class="col-md-5">
                                     <label for="remark">備考</label>
-                                    <input type="text" class="form-control" name="udremark" id="udremark" style="text-align: left">
+                                    <input type="text" class="form-control" name="udremark" id="udremark" placeholder="remark" style="text-align: left">
                                 </div>
                             </div>
                             <br>

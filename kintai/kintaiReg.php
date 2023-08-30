@@ -512,11 +512,11 @@ if ($_SESSION['auth'] == false) {
 						<div class="row">
 							<div class="col-md-6">
 								<label for="workcontent_rmodal">業務内容</label>
-								<input type="text" class="form-control" name="workcontent_rmodal" id="workcontent_rmodal" placeholder="業務内容" style="text-align: left">
+								<input type="text" class="form-control" name="workcontent_rmodal" id="workcontent_rmodal" placeholder="content" style="text-align: left">
 							</div>
 							<div class="col-md-6">
 								<label for="bigo_rmodal">備考</label>
-								<input type="text" class="form-control" name="bigo_rmodal" id="bigo_rmodal" placeholder="備考" style="text-align: left">
+								<input type="text" class="form-control" name="bigo_rmodal" id="bigo_rmodal" placeholder="remark" style="text-align: left">
 							</div>
 						</div>
 					</div>
@@ -744,11 +744,11 @@ if ($_SESSION['auth'] == false) {
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="comment">業務内容</label>
-								<input type="text" class="form-control" name="comment" id="comment" placeholder="" style="text-align: left">
+								<input type="text" class="form-control" name="comment" id="comment" placeholder="content" style="text-align: left">
 							</div>
 							<div class="col-xs-6">
 								<label for="bigo">備考</label>
-								<input type="text" class="form-control" name="bigo" id="bigo" placeholder="" style="text-align: left">
+								<input type="text" class="form-control" name="bigo" id="bigo" placeholder="remark" style="text-align: left">
 							</div>
 						</div>
 					</div>

@@ -163,7 +163,7 @@ if ($_SESSION['auth'] == false) {
                                 <label for="workyear">勤務年</label>
                             </div>
                             <div class="col-xs-3">
-                                <input type="text" class="form-control text-center" id="workyear" name="workyear" placeholder="" maxlength="4">
+                                <input type="text" class="form-control text-center" id="workyear" name="workyear" placeholder="0000" maxlength="4">
                                 <input type="hidden" name="companyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
                             </div>
                             <div class="col-xs-6">
@@ -176,14 +176,14 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="month01" value="01">
-                                <input type="text" class="form-control text-center" name="workday01" id="workday01" maxlength="2">
+                                <input type="text" class="form-control text-center" name="workday01" id="workday01" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday02">02月</label>
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="month02" value="02">
-                                <input type="text" class="form-control text-center" name="workday02" id="workday02" maxlength="2">
+                                <input type="text" class="form-control text-center" name="workday02" id="workday02" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
                         </div>
@@ -194,14 +194,14 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="month03" value="03">
-                                <input type="text" class="form-control text-center" name="workday03" id="workday03" maxlength="2">
+                                <input type="text" class="form-control text-center" name="workday03" id="workday03" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday04">04月</label>
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="month04" value="04">
-                                <input type="text" class="form-control text-center" name="workday04" id="workday04" maxlength="2">
+                                <input type="text" class="form-control text-center" name="workday04" id="workday04" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
                         </div>
@@ -212,14 +212,14 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="month05" value="05">
-                                <input type="text" class="form-control text-center" name="workday05" id="workday05" maxlength="2">
+                                <input type="text" class="form-control text-center" name="workday05" id="workday05" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday06">06月</label>
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="month06" value="06">
-                                <input type="text" class="form-control text-center" name="workday06" id="workday06" maxlength="2">
+                                <input type="text" class="form-control text-center" name="workday06" id="workday06" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
                         </div>
@@ -230,14 +230,14 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="month07" value="07">
-                                <input type="text" class="form-control text-center" name="workday07" id="workday07" maxlength="2">
+                                <input type="text" class="form-control text-center" name="workday07" id="workday07" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday08">08月</label>
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="month08" value="08">
-                                <input type="text" class="form-control text-center" name="workday08" id="workday08" maxlength="2">
+                                <input type="text" class="form-control text-center" name="workday08" id="workday08" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
                         </div>
@@ -248,14 +248,14 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="month09" value="09">
-                                <input type="text" class="form-control text-center" name="workday09" id="workday09" maxlength="2">
+                                <input type="text" class="form-control text-center" name="workday09" id="workday09" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <input type="hidden" name="month10" value="10">
                                 <label for="workday10">10月</label>
                             </div>
                             <div class="col-xs-3">
-                                <input type="text" class="form-control text-center" name="workday10" id="workday10" maxlength="2">
+                                <input type="text" class="form-control text-center" name="workday10" id="workday10" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
                         </div>
@@ -266,14 +266,14 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="month11" value="11">
-                                <input type="text" class="form-control text-center" name="workday11" id="workday11" maxlength="2">
+                                <input type="text" class="form-control text-center" name="workday11" id="workday11" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday12">12月</label>
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="month12" value="12">
-                                <input type="text" class="form-control text-center" name="workday12" id="workday12" maxlength="2">
+                                <input type="text" class="form-control text-center" name="workday12" id="workday12" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
                         </div>
@@ -317,7 +317,7 @@ if ($_SESSION['auth'] == false) {
                                 <label for="workyear">勤務年</label>
                             </div>
                             <div class="col-xs-3">
-                                <input type="text" class="form-control text-center" id="udworkyear" name="udworkyear" placeholder="" maxlength="4" readonly>
+                                <input type="text" class="form-control text-center" id="udworkyear" name="udworkyear" maxlength="4" readonly>
                                 <input type="hidden" name="udcompanyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
                             </div>
                             <div class="col-xs-6">
@@ -330,14 +330,14 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="udmonth01">
-                                <input type="text" class="form-control text-center" name="udworkday01" id="udworkday01" maxlength="2">
+                                <input type="text" class="form-control text-center" name="udworkday01" id="udworkday01" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday02">02月</label>
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="udmonth02">
-                                <input type="text" class="form-control text-center" name="udworkday02" id="udworkday02" maxlength="2">
+                                <input type="text" class="form-control text-center" name="udworkday02" id="udworkday02" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
                         </div>
@@ -348,14 +348,14 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="udmonth03">
-                                <input type="text" class="form-control text-center" name="udworkday03" id="udworkday03" maxlength="2">
+                                <input type="text" class="form-control text-center" name="udworkday03" id="udworkday03" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday04">04月</label>
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="udmonth04">
-                                <input type="text" class="form-control text-center" name="udworkday04" id="udworkday04" maxlength="2">
+                                <input type="text" class="form-control text-center" name="udworkday04" id="udworkday04" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
                         </div>
@@ -366,14 +366,14 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="udmonth05">
-                                <input type="text" class="form-control text-center" name="udworkday05" id="udworkday05" maxlength="2">
+                                <input type="text" class="form-control text-center" name="udworkday05" id="udworkday05" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday06">06月</label>
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="udmonth06">
-                                <input type="text" class="form-control text-center" name="udworkday06" id="udworkday06" maxlength="2">
+                                <input type="text" class="form-control text-center" name="udworkday06" id="udworkday06" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
                         </div>
@@ -384,14 +384,14 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="udmonth07">
-                                <input type="text" class="form-control text-center" name="udworkday07" id="udworkday07" maxlength="2">
+                                <input type="text" class="form-control text-center" name="udworkday07" id="udworkday07" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday08">08月</label>
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="udmonth08">
-                                <input type="text" class="form-control text-center" name="udworkday08" id="udworkday08" maxlength="2">
+                                <input type="text" class="form-control text-center" name="udworkday08" id="udworkday08" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
                         </div>
@@ -402,14 +402,14 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="udmonth09">
-                                <input type="text" class="form-control text-center" name="udworkday09" id="udworkday09" maxlength="2">
+                                <input type="text" class="form-control text-center" name="udworkday09" id="udworkday09" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <input type="hidden" name="udmonth10">
                                 <label for="workday10">10月</label>
                             </div>
                             <div class="col-xs-3">
-                                <input type="text" class="form-control text-center" name="udworkday10" id="udworkday10" maxlength="2">
+                                <input type="text" class="form-control text-center" name="udworkday10" id="udworkday10" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
                         </div>
@@ -420,14 +420,14 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="udmonth11">
-                                <input type="text" class="form-control text-center" name="udworkday11" id="udworkday11" maxlength="2">
+                                <input type="text" class="form-control text-center" name="udworkday11" id="udworkday11" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workday12">12月</label>
                             </div>
                             <div class="col-xs-3">
                                 <input type="hidden" name="udmonth12">
-                                <input type="text" class="form-control text-center" name="udworkday12" id="udworkday12" maxlength="2">
+                                <input type="text" class="form-control text-center" name="udworkday12" id="udworkday12" placeholder="00" maxlength="2">
                             </div>
                             <div class="col-xs-1"></div>
                         </div>

@@ -159,14 +159,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 <label for="holiday">祝日</label>
                             </div>
                             <div class="col-xs-3">
-                                <input type="text" class="form-control text-center" name="holiday" id="holiday" maxlength="10">
+                                <input type="text" class="form-control text-center" name="holiday" id="holiday" placeholder="holiday" maxlength="10">
                                 <input type="hidden" name="companyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
                             </div>
                             <div class="col-xs-2 text-right">
-                                <label for="holiremark">Remark</label>
+                                <label for="holiremark">備考</label>
                             </div>
                             <div class="col-xs-5">
-                                <input type="text" class="form-control text-left" name="holiremark" id="holiremark" maxlength="20">
+                                <input type="text" class="form-control text-left" name="holiremark" id="holiremark" placeholder="remark" maxlength="20">
                             </div>
                         </div>
                     </div>
@@ -210,10 +210,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 <input type="hidden" name="udholiyear" id="udholiyear">
                             </div>
                             <div class="col-xs-2 text-right">
-                                <label for="holiremark">Remark</label>
+                                <label for="holiremark">備考</label>
                             </div>
                             <div class="col-xs-5">
-                                <input type="text" class="form-control text-left" name="udholiremark" id="udholiremark" maxlength="20">
+                                <input type="text" class="form-control text-left" name="udholiremark" id="udholiremark" placeholder="remark" maxlength="20">
                             </div>
                         </div>
                     </div>
