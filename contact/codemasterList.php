@@ -158,7 +158,7 @@ if ($_SESSION['auth'] == false) {
                                     <a href="#">
                                         <span class="showModal">
                                             <span class="codemasterList_class"><?= $key['uid']  . ',' . $key['companyid']  . ',' . $key['typecode']  . ',' . $key['code']  . ',' ?></span>
-                                            <?= $key['name'] ?>
+                                            <?= $key['typecode'] ?>
                                         </span>
                                     </a>
                                 </td>
@@ -203,7 +203,7 @@ if ($_SESSION['auth'] == false) {
                             <div class="col-xs-4"></div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="新規">
+                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="登録">
                                 </p>
                             </div>
                             <div class="col-xs-2">
@@ -293,7 +293,7 @@ if ($_SESSION['auth'] == false) {
     });
 
     // Check Error
-    $(document).on('click', '#btnRegNL', function(e) {
+    $(document).on('click', '#btnRegCL', function(e) {
         var Code = $("#code").val();
         var Name = $("#name").val();
 
