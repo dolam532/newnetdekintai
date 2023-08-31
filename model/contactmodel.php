@@ -178,6 +178,7 @@ if (isset($_POST['btnRegCL'])) {
 
 // Update Data to tbl_codebase DB 
 if (isset($_POST['btnUpdateCL'])) {
+    $id = mysqli_real_escape_string($conn, $_POST['udid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
     $typecode = mysqli_real_escape_string($conn, $_POST['udtypecode']);
@@ -188,7 +189,8 @@ if (isset($_POST['btnUpdateCL'])) {
     $sql = "UPDATE tbl_codebase SET 
                 name='$name',
                 remark='$remark'
-            WHERE companyid ='$companyid'
+            WHERE id ='$id'
+            AND companyid ='$companyid'
             AND uid ='$uid'
             AND typecode ='$typecode'
             AND code ='$code'";
@@ -203,13 +205,14 @@ if (isset($_POST['btnUpdateCL'])) {
 
 // Delete Data to tbl_codebase DB 
 if (isset($_POST['btnDelCL'])) {
+    $id = mysqli_real_escape_string($conn, $_POST['udid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
     $typecode = mysqli_real_escape_string($conn, $_POST['udtypecode']);
     $code = mysqli_real_escape_string($conn, $_POST['udcode']);
 
     $sql = "DELETE FROM `tbl_codebase` 
-    WHERE companyid ='$companyid' AND uid ='$uid' AND typecode ='$typecode' AND code ='$code'";
+    WHERE id ='$id' AND companyid ='$companyid' AND uid ='$uid' AND typecode ='$typecode' AND code ='$code'";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] =  $delete_success;

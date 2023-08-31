@@ -157,7 +157,7 @@ if ($_SESSION['auth'] == false) {
                                 <td>
                                     <a href="#">
                                         <span class="showModal">
-                                            <span class="codemasterList_class"><?= $key['uid']  . ',' . $key['companyid']  . ',' . $key['typecode']  . ',' . $key['code']  . ',' ?></span>
+                                            <span class="codemasterList_class"><?= $key['id'] . ',' ?></span>
                                             <?= $key['name'] ?>
                                         </span>
                                     </a>
@@ -233,6 +233,7 @@ if ($_SESSION['auth'] == false) {
                                 <div class="col-md-2">
                                     <label for="code">Code</label>
                                     <input type="text" class="form-control" name="udcode" id="udcode" style="text-align: center" readonly>
+                                    <input type="hidden" name="udid" id="udid">
                                     <input type="hidden" name="udcompanyid" id="udcompanyid">
                                     <input type="hidden" name="uduid" id="uduid">
                                     <input type="hidden" name="udtypecode" id="udtypecode">
@@ -322,17 +323,16 @@ if ($_SESSION['auth'] == false) {
         $('#modal2').modal('toggle');
         var ArrayData = $(this).text();
         var SeparateArr = ArrayData.split(',');
-        var Uid = SeparateArr[0].trim();
-        var CompanyId = SeparateArr[1].trim();
-        var TypecodeD = SeparateArr[2].trim();
-        var Code = SeparateArr[3].trim();
-
+        var Id = SeparateArr[0].trim();
         <?php
         if (!empty($codebase_list)) {
             foreach ($codebase_list as $key) {
         ?>
-                if ('<?php echo $key['companyid'] ?>' == CompanyId && '<?php echo $key['typecode'] ?>' == TypecodeD && '<?php echo $key['uid'] ?>' == Uid && '<?php echo $key['code'] ?>' == Code) {
+                if ('<?php echo $key['id'] ?>' == Id) {
                     $("#udtcode").text('<?php echo $key['code'] ?>');
+                    var udid = $("input[name=udid]:hidden");
+                    udid.val("<?php echo $key['id'] ?>");
+                    var udid = udid.val();
                     var udcompanyid = $("input[name=udcompanyid]:hidden");
                     udcompanyid.val("<?php echo $key['companyid'] ?>");
                     var udcompanyid = udcompanyid.val();
