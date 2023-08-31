@@ -402,6 +402,23 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		dateFormat: 'yy/mm/dd'
 	});
 
+	$("#ulgenstrymd").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+	$("#ulgenendymd").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+	$("#ulinymd").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+	$("#uloutymd").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+
 	// 社員登録 POP UP (ADMIN & ADMINISTRATOR)
 	$(document).on('click', '#btnNew', function(e) {
 		$('#modal').modal('toggle');
