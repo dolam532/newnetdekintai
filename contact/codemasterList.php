@@ -83,7 +83,9 @@ if ($_SESSION['auth'] == false) {
         </div>
         <div class="col-md-2 text-right">
             <div class="title_btn">
-                <input type="button" id="btnNewCL" value="新規 ">
+                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                    <input type="button" id="btnNewCL" value="新規 ">
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -155,12 +157,17 @@ if ($_SESSION['auth'] == false) {
                             <tr>
                                 <td align="center"><span><?= $key['code'] ?></span></td>
                                 <td>
-                                    <a href="#">
-                                        <span class="showModal">
-                                            <span class="codemasterList_class"><?= $key['id'] . ',' ?></span>
-                                            <?= $key['name'] ?>
-                                        </span>
-                                    </a>
+                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                                        <a href="#">
+                                            <span class="showModal">
+                                                <span class="codemasterList_class"><?= $key['id'] . ',' ?></span>
+                                                <?= $key['name'] ?>
+                                            </span>
+                                        </a>
+                                    <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+                                        <?= $key['name'] ?>
+                                    <?php endif; ?>
+
                                 </td>
                                 <td><span><?= $key['remark'] ?></span></td>
                             </tr>
