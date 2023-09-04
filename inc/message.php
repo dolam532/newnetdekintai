@@ -65,11 +65,15 @@ $kyuka_restcnt_no = '休暇休憩回数を番号で入力してください。';
 
 // KintaiReg
 $kintai_start_empty = '出社時刻を入力してください。';
+$kintai_start_no = '出社時刻を番号で入力してください。';
 $kintai_end_empty = '退社時刻を入力してください。';
+$kintai_end_no = '退社時刻を番号で入力してください。';
 $kintai_bstart_empty = '業務開始を入力してください。';
+$kintai_bstart_no = '業務開始を番号で入力してください。';
 $kintai_bend_empty = '業務終了を入力してください。';
-$kintai_bend_empty = '業務終了を入力してください。';
+$kintai_bend_no = '業務終了を番号で入力してください。';
 $kintai_offtime_empty = '休憩時間を入力してください。';
+$kintai_offtime_no = '休憩時間を番号で入力してください。';
 $kintai_click_month = '月登録まだ保存されてないです。確認してください。';
 
 // genbaList

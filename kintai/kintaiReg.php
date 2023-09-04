@@ -53,8 +53,26 @@ if ($_SESSION['auth'] == false) {
 	span.kintaiReg_class {
 		display: none;
 	}
+
+	span.select2.select2-container.select2-container--default {
+		width: 100% !important;
+	}
+
+	.message {
+		font-size: smaller;
+		color: red;
+	}
+
+	.label_text {
+		display: flex;
+	}
 </style>
-<title>勤 務 表</title>
+
+<head>
+	<title>勤 務 表</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+</head>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top: -20px;">
 	<?php
@@ -508,7 +526,6 @@ if ($_SESSION['auth'] == false) {
 							</div>
 						</div>
 						<br>
-						<br>
 						<div class="row">
 							<div class="col-md-6">
 								<label for="workcontent_rmodal">業務内容</label>
@@ -548,9 +565,13 @@ if ($_SESSION['auth'] == false) {
 					</div>
 					<div class="modal-body" style="text-align: left">
 						<div class="row">
+							<div class="col-xs-4"></div>
+							<div class="col-xs-8"><span class="message">＊入力したい場合入力した後Enterを押してください。</span></div>
+						</div>
+						<div class="row">
 							<div class="col-xs-4">
 								<label for="workymd">日付</label>
-								<input type="text" class="form-control" id="workymd" name="workymd" placeholder="" style="text-align: center" readonly>
+								<input type="text" class="form-control" id="workymd" name="workymd" style="text-align: center" readonly>
 								<input type="hidden" id="uid" name="uid">
 								<input type="hidden" id="genid" name="genid">
 								<input type="hidden" id="date_show" name="date_show">
@@ -558,69 +579,79 @@ if ($_SESSION['auth'] == false) {
 							</div>
 							<div class="col-xs-2">
 								<label>業務開始</label>
-								<select id="jobstarthh" name="jobstarthh" class="form-control">
-									<option value="" selected></option>
-									<?php
-									foreach (ConstArray::$search_hour as $key => $value) {
-									?>
-										<option value="<?= $key ?>" <?php if ($value == $_POST['jobstarthh']) {
-																		echo ' selected="selected"';
-																	} ?>>
-											<?= $value ?>
-										</option>
-									<?php
-									}
-									?>
-								</select>
+								<div class="label_text">
+									<select id="jobstarthh" name="jobstarthh" class="form-control js-jobstarthh-tags">
+										<option value="" selected></option>
+										<?php
+										foreach (ConstArray::$search_hour as $key => $value) {
+										?>
+											<option value="<?= $key ?>" <?php if ($value == $_POST['jobstarthh']) {
+																			echo ' selected="selected"';
+																		} ?>>
+												<?= $value ?>
+											</option>
+										<?php
+										}
+										?>
+									</select><span class="label_time">&nbsp;時</span>
+								</div>
 							</div>
 							<div class="col-xs-2">
 								<label>&nbsp;</label>
-								<select id="jobstartmm" name="jobstartmm" class="form-control">
-									<?php
-									foreach (ConstArray::$search_minute as $key => $value) {
-									?>
-										<option value="<?= $key ?>" <?php if ($value == $_POST['jobstartmm']) {
-																		echo ' selected="selected"';
-																	} ?>>
-											<?= $value ?>
-										</option>
-									<?php
-									}
-									?>
-								</select>
+								<div class="label_text">
+									<select id="jobstartmm" name="jobstartmm" class="form-control js-jobstartmm-tags">
+										<option value="" selected></option>
+										<?php
+										foreach (ConstArray::$search_minute as $key => $value) {
+										?>
+											<option value="<?= $key ?>" <?php if ($value == $_POST['jobstartmm']) {
+																			echo ' selected="selected"';
+																		} ?>>
+												<?= $value ?>
+											</option>
+										<?php
+										}
+										?>
+									</select><span class="label_time">&nbsp;分</span>
+								</div>
 							</div>
 							<div class="col-xs-2">
 								<label>業務終了</label>
-								<select id="jobendhh" name="jobendhh" class="form-control">
-									<option value="" selected></option>
-									<?php
-									foreach (ConstArray::$search_hour as $key => $value) {
-									?>
-										<option value="<?= $key ?>" <?php if ($value == $_POST['jobendhh']) {
-																		echo ' selected="selected"';
-																	} ?>>
-											<?= $value ?>
-										</option>
-									<?php
-									}
-									?>
-								</select>
+								<div class="label_text">
+									<select id="jobendhh" name="jobendhh" class="form-control js-jobendhh-tags">
+										<option value="" selected></option>
+										<?php
+										foreach (ConstArray::$search_hour as $key => $value) {
+										?>
+											<option value="<?= $key ?>" <?php if ($value == $_POST['jobendhh']) {
+																			echo ' selected="selected"';
+																		} ?>>
+												<?= $value ?>
+											</option>
+										<?php
+										}
+										?>
+									</select><span class="label_time">&nbsp;時</span>
+								</div>
 							</div>
 							<div class="col-xs-2">
 								<label>&nbsp;</label>
-								<select id="jobendmm" name="jobendmm" class="form-control">
-									<?php
-									foreach (ConstArray::$search_minute as $key => $value) {
-									?>
-										<option value="<?= $key ?>" <?php if ($value == $_POST['jobendmm']) {
-																		echo ' selected="selected"';
-																	} ?>>
-											<?= $value ?>
-										</option>
-									<?php
-									}
-									?>
-								</select>
+								<div class="label_text">
+									<select id="jobendmm" name="jobendmm" class="form-control js-jobendmm-tags">
+										<option value="" selected></option>
+										<?php
+										foreach (ConstArray::$search_minute as $key => $value) {
+										?>
+											<option value="<?= $key ?>" <?php if ($value == $_POST['jobendmm']) {
+																			echo ' selected="selected"';
+																		} ?>>
+												<?= $value ?>
+											</option>
+										<?php
+										}
+										?>
+									</select><span class="label_time">&nbsp;分</span>
+								</div>
 							</div>
 						</div>
 						<br>
@@ -629,69 +660,79 @@ if ($_SESSION['auth'] == false) {
 								<div class="col-xs-4 "></div>
 								<div class="col-xs-2">
 									<label>出社時刻</label>
-									<select id="daystarthh" name="daystarthh" class="form-control">
-										<option value="" selected></option>
-										<?php
-										foreach (ConstArray::$search_hour as $key => $value) {
-										?>
-											<option value="<?= $key ?>" <?php if ($value == $_POST['daystarthh']) {
-																			echo ' selected="selected"';
-																		} ?>>
-												<?= $value ?>
-											</option>
-										<?php
-										}
-										?>
-									</select>
+									<div class="label_text">
+										<select id="daystarthh" name="daystarthh" class="form-control js-daystarthh-tags">
+											<option value="" selected></option>
+											<?php
+											foreach (ConstArray::$search_hour as $key => $value) {
+											?>
+												<option value="<?= $key ?>" <?php if ($value == $_POST['daystarthh']) {
+																				echo ' selected="selected"';
+																			} ?>>
+													<?= $value ?>
+												</option>
+											<?php
+											}
+											?>
+										</select><span class="label_time">&nbsp;時</span>
+									</div>
 								</div>
 								<div class="col-xs-2">
 									<label>&nbsp;</label>
-									<select id="daystartmm" name="daystartmm" class="form-control">
-										<?php
-										foreach (ConstArray::$search_minute as $key => $value) {
-										?>
-											<option value="<?= $key ?>" <?php if ($value == $_POST['daystartmm']) {
-																			echo ' selected="selected"';
-																		} ?>>
-												<?= $value ?>
-											</option>
-										<?php
-										}
-										?>
-									</select>
+									<div class="label_text">
+										<select id="daystartmm" name="daystartmm" class="form-control js-daystartmm-tags">
+											<option value="" selected></option>
+											<?php
+											foreach (ConstArray::$search_minute as $key => $value) {
+											?>
+												<option value="<?= $key ?>" <?php if ($value == $_POST['daystartmm']) {
+																				echo ' selected="selected"';
+																			} ?>>
+													<?= $value ?>
+												</option>
+											<?php
+											}
+											?>
+										</select><span class="label_time">&nbsp;分</span>
+									</div>
 								</div>
 								<div class="col-xs-2">
 									<label>退社時刻</label>
-									<select id="dayendhh" name="dayendhh" class="form-control">
-										<option value="" selected></option>
-										<?php
-										foreach (ConstArray::$search_hour as $key => $value) {
-										?>
-											<option value="<?= $key ?>" <?php if ($value == $_POST['dayendhh']) {
-																			echo ' selected="selected"';
-																		} ?>>
-												<?= $value ?>
-											</option>
-										<?php
-										}
-										?>
-									</select>
+									<div class="label_text">
+										<select id="dayendhh" name="dayendhh" class="form-control js-dayendhh-tags">
+											<option value="" selected></option>
+											<?php
+											foreach (ConstArray::$search_hour as $key => $value) {
+											?>
+												<option value="<?= $key ?>" <?php if ($value == $_POST['dayendhh']) {
+																				echo ' selected="selected"';
+																			} ?>>
+													<?= $value ?>
+												</option>
+											<?php
+											}
+											?>
+										</select><span class="label_time">&nbsp;時</span>
+									</div>
 								</div>
 								<div class="col-xs-2">
 									<label>&nbsp;</label>
-									<select id="dayendmm" name="dayendmm" class="form-control">
-										<?php
-										foreach (ConstArray::$search_minute as $key => $value) {
-										?>
-											<option value="<?= $key ?>" <?php if ($value == $_POST['dayendmm']) {
-																			echo ' selected="selected"';
-																		} ?>>
-												<?= $value ?>
-											</option>
-										<?php
-										}
-										?>
-									</select>
+									<div class="label_text">
+										<select id="dayendmm" name="dayendmm" class="form-control js-dayendmm-tags">
+											<option value="" selected></option>
+											<?php
+											foreach (ConstArray::$search_minute as $key => $value) {
+											?>
+												<option value="<?= $key ?>" <?php if ($value == $_POST['dayendmm']) {
+																				echo ' selected="selected"';
+																			} ?>>
+													<?= $value ?>
+												</option>
+											<?php
+											}
+											?>
+										</select><span class="label_time">&nbsp;分</span>
+									</div>
 								</div>
 							</div>
 							<br>
@@ -700,36 +741,41 @@ if ($_SESSION['auth'] == false) {
 							<div class="col-xs-4"></div>
 							<div class="col-xs-2">
 								<label>休憩時間</label>
-								<select id="offtimehh" name="offtimehh" class="form-control">
-									<option value="" selected></option>
-									<?php
-									foreach (ConstArray::$rest_hour as $key => $value) {
-									?>
-										<option value="<?= $key ?>" <?php if ($value == $_POST['offtimehh']) {
-																		echo ' selected="selected"';
-																	} ?>>
-											<?= $value ?>
-										</option>
-									<?php
-									}
-									?>
-								</select>
+								<div class="label_text">
+									<select id="offtimehh" name="offtimehh" class="form-control js-offtimehh-tags">
+										<option value="" selected></option>
+										<?php
+										foreach (ConstArray::$rest_hour as $key => $value) {
+										?>
+											<option value="<?= $key ?>" <?php if ($value == $_POST['offtimehh']) {
+																			echo ' selected="selected"';
+																		} ?>>
+												<?= $value ?>
+											</option>
+										<?php
+										}
+										?>
+									</select><span class="label_time">&nbsp;時</span>
+								</div>
 							</div>
 							<div class="col-xs-2">
 								<label>&nbsp;</label>
-								<select id="offtimemm" name="offtimemm" class="form-control">
-									<?php
-									foreach (ConstArray::$rest_minute as $key => $value) {
-									?>
-										<option value="<?= $key ?>" <?php if ($value == $_POST['offtimemm']) {
-																		echo ' selected="selected"';
-																	} ?>>
-											<?= $value ?>
-										</option>
-									<?php
-									}
-									?>
-								</select>
+								<div class="label_text">
+									<select id="offtimemm" name="offtimemm" class="form-control js-offtimemm-tags">
+										<option value="" selected></option>
+										<?php
+										foreach (ConstArray::$rest_minute as $key => $value) {
+										?>
+											<option value="<?= $key ?>" <?php if ($value == $_POST['offtimemm']) {
+																			echo ' selected="selected"';
+																		} ?>>
+												<?= $value ?>
+											</option>
+										<?php
+										}
+										?>
+									</select><span class="label_time">&nbsp;分</span>
+								</div>
 							</div>
 							<div class="col-xs-2">
 								<label for="workhh">就業時間</label>
@@ -800,24 +846,42 @@ if ($_SESSION['auth'] == false) {
 		foreach ($datas as $key) {
 		?>
 			if ('<?php echo $key['workymd'] ?>' === date_show) {
-				document.getElementById("jobstarthh").value = "<?php echo $key['jobstarthh'] ?>";
-				document.getElementById("jobstartmm").value = "<?php echo empty($key['jobstartmm']) ? "00" : $key['jobstartmm']; ?>";
-				document.getElementById("jobendhh").value = "<?php echo $key['jobendhh'] ?>";
-				document.getElementById("jobendmm").value = "<?php echo empty($key['jobendmm']) ? "00" : $key['jobendmm']; ?>";
-				document.getElementById("offtimehh").value = "<?php echo $key['offtimehh'] ?>";
-				document.getElementById("offtimemm").value = "<?php echo empty($key['offtimemm']) ? "00" : $key['offtimemm']; ?>";
-				document.getElementById("workhh").value = "<?php echo $key['workhh'] ?>";
-				document.getElementById("workmm").value = "<?php echo $key['workmm'] ?>";
+				$("#jobstarthh").val("<?php echo $key['jobstarthh'] ?>");
+				$("#jobstartmm").val("<?php echo $key['jobstartmm'] ?>");
+				$("#jobendhh").val("<?php echo $key['jobendhh'] ?>");
+				$("#jobendmm").val("<?php echo $key['jobendmm'] ?>");
+				$("#offtimehh").val("<?php echo $key['offtimehh'] ?>");
+				$("#offtimemm").val("<?php echo $key['offtimemm'] ?>");
+				$("#workhh").val("<?php echo $key['workhh'] ?>");
+				$("#workmm").val("<?php echo $key['workmm'] ?>");
 				$("#comment").text($('[name="comment"]').val("<?php echo $key['comment'] ?>"));
 				$("#bigo").text($('[name="bigo"]').val("<?php echo $key['bigo'] ?>"));
-				document.getElementById("daystarthh").value = "<?php echo $key['daystarthh'] ?>";
-				document.getElementById("daystartmm").value = "<?php echo empty($key['daystartmm']) ? "00" : $key['daystartmm']; ?>";
-				document.getElementById("dayendhh").value = "<?php echo $key['dayendhh'] ?>";
-				document.getElementById("dayendmm").value = "<?php echo empty($key['daystartmm']) ? "00" : $key['dayendmm']; ?>";
+				$("#daystarthh").val("<?php echo $key['daystarthh'] ?>");
+				$("#daystartmm").val("<?php echo $key['daystartmm'] ?>");
+				$("#dayendhh").val("<?php echo $key['dayendhh'] ?>");
+				$("#dayendmm").val("<?php echo $key['dayendmm'] ?>");
+
 			}
 		<?php
 		}
 		?>
+	});
+
+	// Define an array of class names
+	var classNames = [
+		"js-jobstarthh-tags",
+		"js-jobstartmm-tags",
+		"js-jobendhh-tags",
+		"js-jobendmm-tags",
+		"js-offtimehh-tags",
+		"js-offtimemm-tags"
+	];
+
+	// Loop through the class names and initialize select2 for each
+	classNames.forEach(function(className) {
+		$("." + className).select2({
+			tags: true
+		});
 	});
 
 	// Time calculate
@@ -866,11 +930,33 @@ if ($_SESSION['auth'] == false) {
 	$(document).on('click', '#btnReg', function(e) {
 		<?php if ($decide_template_ == "2") : ?>
 			var daystarthh = $("#daystarthh option:selected").val();
+			var daystartmm = $("#daystartmm option:selected").val();
 			var dayendhh = $("#dayendhh option:selected").val();
+			var dayendmm = $("#dayendmm option:selected").val();
 
 			if (daystarthh == "") {
 				alert("<?php echo $kintai_start_empty; ?>");
 				$("#daystarthh").focus();
+				return false;
+			}
+
+			if (isNaN(daystarthh)) {
+				alert("<?php echo $kintai_start_no; ?>");
+				e.preventDefault();
+				$("#daystarthh").focus();
+				return false;
+			}
+
+			if (daystartmm == "") {
+				alert("<?php echo $kintai_start_empty; ?>");
+				$("#daystartmm").focus();
+				return false;
+			}
+
+			if (isNaN(daystartmm)) {
+				alert("<?php echo $kintai_start_no; ?>");
+				e.preventDefault();
+				$("#daystartmm").focus();
 				return false;
 			}
 
@@ -879,15 +965,58 @@ if ($_SESSION['auth'] == false) {
 				$("#dayendhh").focus();
 				return false;
 			}
+
+			if (isNaN(dayendhh)) {
+				alert("<?php echo $kintai_end_no; ?>");
+				e.preventDefault();
+				$("#dayendhh").focus();
+				return false;
+			}
+
+			if (dayendmm == "") {
+				alert("<?php echo $kintai_end_empty; ?>");
+				$("#dayendmm").focus();
+				return false;
+			}
+
+			if (isNaN(dayendmm)) {
+				alert("<?php echo $kintai_end_no; ?>");
+				e.preventDefault();
+				$("#dayendmm").focus();
+				return false;
+			}
 		<?php endif; ?>
 
 		var jobstarthh = $("#jobstarthh option:selected").val();
+		var jobstartmm = $("#jobstartmm option:selected").val();
 		var jobendhh = $("#jobendhh option:selected").val();
+		var jobendmm = $("#jobendmm option:selected").val();
 		var offtimehh = $("#offtimehh option:selected").val();
+		var offtimemm = $("#offtimemm option:selected").val();
 
 		if (jobstarthh == "") {
 			alert("<?php echo $kintai_bstart_empty; ?>");
 			$("#jobstarthh").focus();
+			return false;
+		}
+
+		if (isNaN(jobstarthh)) {
+			alert("<?php echo $kintai_bstart_no; ?>");
+			e.preventDefault();
+			$("#jobstarthh").focus();
+			return false;
+		}
+
+		if (jobstartmm == "") {
+			alert("<?php echo $kintai_bstart_empty; ?>");
+			$("#jobstartmm").focus();
+			return false;
+		}
+
+		if (isNaN(jobstartmm)) {
+			alert("<?php echo $kintai_bstart_no; ?>");
+			e.preventDefault();
+			$("#jobstartmm").focus();
 			return false;
 		}
 
@@ -897,9 +1026,49 @@ if ($_SESSION['auth'] == false) {
 			return false;
 		}
 
+		if (isNaN(jobendhh)) {
+			alert("<?php echo $kintai_bend_no; ?>");
+			e.preventDefault();
+			$("#jobendhh").focus();
+			return false;
+		}
+
+		if (jobendmm == "") {
+			alert("<?php echo $kintai_bend_empty; ?>");
+			$("#jobendmm").focus();
+			return false;
+		}
+
+		if (isNaN(jobendmm)) {
+			alert("<?php echo $kintai_bend_no; ?>");
+			e.preventDefault();
+			$("#jobendmm").focus();
+			return false;
+		}
+
 		if (offtimehh == "") {
 			alert("<?php echo $kintai_offtime_empty; ?>");
 			$("#offtimehh").focus();
+			return false;
+		}
+
+		if (isNaN(offtimehh)) {
+			alert("<?php echo $kintai_offtime_no; ?>");
+			e.preventDefault();
+			$("#offtimehh").focus();
+			return false;
+		}
+
+		if (offtimemm == "") {
+			alert("<?php echo $kintai_offtime_empty; ?>");
+			$("#offtimemm").focus();
+			return false;
+		}
+
+		if (isNaN(offtimemm)) {
+			alert("<?php echo $kintai_offtime_no; ?>");
+			e.preventDefault();
+			$("#offtimemm").focus();
 			return false;
 		}
 	});
