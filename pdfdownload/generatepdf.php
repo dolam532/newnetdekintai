@@ -12,6 +12,16 @@ $date_show = json_decode($_POST['date_show'], true);
 $template = json_decode($_POST['template'], true);
 $data = json_decode($_POST['data'], true);
 $workmonth_list = json_decode($_POST['workmonth_list'], true);
+$totalworkhh = json_decode($_POST['totalworkhh_bottom'], true);
+$totalworkmm = json_decode($_POST['totalworkmm_bottom'], true);
+$totaldayhh = json_decode($_POST['totaldayhh_bottom'], true);
+$totaldaymm = json_decode($_POST['totaldaymm_bottom'], true);
+$cnprejob = json_decode($_POST['cnprejob_bottom'], true);
+$cnactjob = json_decode($_POST['cnactjob_bottom'], true);
+$holydayswork = json_decode($_POST['holydayswork_bottom'], true);
+$offdayswork = json_decode($_POST['offdayswork_bottom'], true);
+$delaydayswork = json_decode($_POST['delaydayswork_bottom'], true);
+$earlydayswork = json_decode($_POST['earlydayswork_bottom'], true);
 
 // Define your CSS styles
 $style_bold = 'font-weight: 700;';
@@ -108,11 +118,13 @@ $tcpdf->Cell(25, 13.6, '実働時間', 1, 0, 'C', true);
 $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 if (!empty($workmonth_list)) {
-	foreach ($workmonth_list as $key) {
-		$tcpdf->Cell(20, 13.6, $key['jobhour'] . ':' . $key['jobminute'], 1, 0, 'C', true);
+	if ($template == "1") {
+		$tcpdf->Cell(20, 13.6, $totalworkhh . ':' . $totalworkmm, 1, 0, 'C', true);
+	} elseif ($template == "2") {
+		$tcpdf->Cell(20, 13.6, $totaldayhh . ':' . $totaldaymm, 1, 0, 'C', true);
 	}
 } else {
-	$tcpdf->Cell(20, 13.6, ':', 1, 0, 'C', true);
+	$tcpdf->Cell(20, 13.6, '' . ':' . '', 1, 0, 'C', true);
 }
 $tcpdf->SetFillColor(240, 240, 240); // Set the fill color for the header
 $tcpdf->SetTextColor(0, 0, 0); // Set the text color for the header
@@ -129,14 +141,22 @@ $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data
 if (!empty($workmonth_list)) {
-	foreach ($workmonth_list as $key) {
+	if ($template == "1") {
 		$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
-		$tcpdf->Cell(30, 6.8, $key['jobdays'], 1, 0, 'C', true);
-		$tcpdf->Cell(30, 6.8, $key['workdays'], 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $key['holydays'], 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $key['offdays'], 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $key['delaydays'], 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $key['earlydays'], 1, 1, 'C', true);
+		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
+		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, '0', 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, '0', 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, '0', 1, 1, 'C', true);
+	} elseif ($template == "2") {
+		$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
+		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $offdayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
 	}
 } else {
 	$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
@@ -147,5 +167,4 @@ if (!empty($workmonth_list)) {
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 1, 'C', true);
 }
-
 $tcpdf->Output("download.pdf", "I");

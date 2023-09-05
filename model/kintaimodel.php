@@ -447,6 +447,8 @@ if (isset($_POST['MonthSaveKintai'])) {
     $jobmm_top_ = intval($_POST['jobmm_top']);
     $jobhh_bottom_ = intval($_POST['jobhh_bottom']);
     $jobmm_bottom_ = intval($_POST['jobmm_bottom']);
+    $holydays_top_ = intval($_POST['holydays_top']);
+    $holydays_bottom_ = intval($_POST['holydays_bottom']);
 
     $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
     $genid = mysqli_real_escape_string($conn, $gen_id_);
@@ -466,8 +468,8 @@ if (isset($_POST['MonthSaveKintai'])) {
     $jobdays = mysqli_real_escape_string($conn, $_POST['jobdays_bottom']);
     $workdays2 = mysqli_real_escape_string($conn, $_POST['workdays_top']);
     $workdays = mysqli_real_escape_string($conn, $_POST['workdays_bottom']);
-    $holydays2 = mysqli_real_escape_string($conn, $_POST['holydays_top']);
-    $holydays = mysqli_real_escape_string($conn, $_POST['holydays_bottom']);
+    $holydays2 = mysqli_real_escape_string($conn, $holydays_top_);
+    $holydays = mysqli_real_escape_string($conn, $holydays_bottom_);
     $offdays2 = mysqli_real_escape_string($conn, $_POST['offdays_top']);
     $offdays = mysqli_real_escape_string($conn, $_POST['offdays_bottom']);
     $delaydays2 = mysqli_real_escape_string($conn, $_POST['delaydays_top']);
