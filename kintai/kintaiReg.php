@@ -6,7 +6,7 @@ include('../inc/message.php');
 include('../inc/const_array.php');
 include('../model/kintaimodel.php');
 include('../inc/header.php');
-include('../model/inactive.php');
+// include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
@@ -54,25 +54,34 @@ if ($_SESSION['auth'] == false) {
 		display: none;
 	}
 
-	span.select2.select2-container.select2-container--default {
-		width: 100% !important;
+	.holder {
+		position: relative;
+		height: 20px;
 	}
 
-	.message {
-		font-size: smaller;
-		color: red;
+	#jobstarthh,
+	#jobstartmm,
+	#jobendhh,
+	#jobendmm {
+		position: relative;
+		z-index: 30;
 	}
 
-	.label_text {
-		display: flex;
+	#daystarthh,
+	#daystartmm,
+	#dayendhh,
+	#dayendmm {
+		position: relative;
+		z-index: 20;
+	}
+
+	#offtimehh,
+	#offtimemm {
+		position: relative;
+		z-index: 10;
 	}
 </style>
-
-<head>
-	<title>勤 務 表</title>
-	<link rel="stylesheet" href="../assets/css/select2.min.css">
-    <script src="../assets/js/select2.min.js"></script>
-</head>
+<title>勤 務 表</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top: -20px;">
 	<?php
@@ -478,7 +487,7 @@ if ($_SESSION['auth'] == false) {
 				</form>
 			</tr>
 		</tbody>
-		
+
 		<!-- Auto Error Message -->
 		<?php
 		if (!empty($workmonth_list)) {
@@ -600,10 +609,6 @@ if ($_SESSION['auth'] == false) {
 					</div>
 					<div class="modal-body" style="text-align: left">
 						<div class="row">
-							<div class="col-xs-4"></div>
-							<div class="col-xs-8"><span class="message">＊入力したい場合入力した後Enterを押してください。</span></div>
-						</div>
-						<div class="row">
 							<div class="col-xs-4">
 								<label for="workymd">日付</label>
 								<input type="text" class="form-control" id="workymd" name="workymd" style="text-align: center" readonly>
@@ -612,205 +617,187 @@ if ($_SESSION['auth'] == false) {
 								<input type="hidden" id="date_show" name="date_show">
 								<input type="hidden" value="<?= $decide_template_ ?>" name="template_table_">
 							</div>
-							<div class="col-xs-2">
+							<div class="col-xs-2 holder">
 								<label>業務開始</label>
-								<div class="label_text">
-									<select id="jobstarthh" name="jobstarthh" class="form-control js-jobstarthh-tags">
-										<option value="" selected></option>
-										<?php
-										foreach (ConstArray::$search_hour as $key => $value) {
-										?>
-											<option value="<?= $key ?>" <?php if ($value == $_POST['jobstarthh']) {
-																			echo ' selected="selected"';
-																		} ?>>
-												<?= $value ?>
-											</option>
-										<?php
-										}
-										?>
-									</select><span class="label_time">&nbsp;時</span>
-								</div>
+								<select id="jobstarthh" name="jobstarthh" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+									<option value="" selected disabled>時</option>
+									<?php
+									foreach (ConstArray::$search_hour as $key => $value) {
+									?>
+										<option size="10" value="<?= $key ?>" <?php if ($value == $_POST['jobstarthh']) {
+																					echo ' selected="selected"';
+																				} ?>>
+											<?= $value ?>
+										</option>
+									<?php
+									}
+									?>
+								</select>
 							</div>
-							<div class="col-xs-2">
+							<div class="col-xs-2 holder">
 								<label>&nbsp;</label>
-								<div class="label_text">
-									<select id="jobstartmm" name="jobstartmm" class="form-control js-jobstartmm-tags">
-										<option value="" selected></option>
-										<?php
-										foreach (ConstArray::$search_minute as $key => $value) {
-										?>
-											<option value="<?= $key ?>" <?php if ($value == $_POST['jobstartmm']) {
-																			echo ' selected="selected"';
-																		} ?>>
-												<?= $value ?>
-											</option>
-										<?php
-										}
-										?>
-									</select><span class="label_time">&nbsp;分</span>
-								</div>
+								<select id="jobstartmm" name="jobstartmm" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+									<option value="" selected disabled>分</option>
+									<?php
+									foreach (ConstArray::$search_minute as $key => $value) {
+									?>
+										<option value="<?= $key ?>" <?php if ($value == $_POST['jobstartmm']) {
+																		echo ' selected="selected"';
+																	} ?>>
+											<?= $value ?>
+										</option>
+									<?php
+									}
+									?>
+								</select>
 							</div>
-							<div class="col-xs-2">
+							<div class="col-xs-2 holder">
 								<label>業務終了</label>
-								<div class="label_text">
-									<select id="jobendhh" name="jobendhh" class="form-control js-jobendhh-tags">
-										<option value="" selected></option>
-										<?php
-										foreach (ConstArray::$search_hour as $key => $value) {
-										?>
-											<option value="<?= $key ?>" <?php if ($value == $_POST['jobendhh']) {
-																			echo ' selected="selected"';
-																		} ?>>
-												<?= $value ?>
-											</option>
-										<?php
-										}
-										?>
-									</select><span class="label_time">&nbsp;時</span>
-								</div>
+								<select id="jobendhh" name="jobendhh" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+									<option value="" selected disabled>時</option>
+									<?php
+									foreach (ConstArray::$search_hour as $key => $value) {
+									?>
+										<option value="<?= $key ?>" <?php if ($value == $_POST['jobendhh']) {
+																		echo ' selected="selected"';
+																	} ?>>
+											<?= $value ?>
+										</option>
+									<?php
+									}
+									?>
+								</select>
 							</div>
-							<div class="col-xs-2">
+							<div class="col-xs-2 holder">
 								<label>&nbsp;</label>
-								<div class="label_text">
-									<select id="jobendmm" name="jobendmm" class="form-control js-jobendmm-tags">
-										<option value="" selected></option>
-										<?php
-										foreach (ConstArray::$search_minute as $key => $value) {
-										?>
-											<option value="<?= $key ?>" <?php if ($value == $_POST['jobendmm']) {
-																			echo ' selected="selected"';
-																		} ?>>
-												<?= $value ?>
-											</option>
-										<?php
-										}
-										?>
-									</select><span class="label_time">&nbsp;分</span>
-								</div>
+								<select id="jobendmm" name="jobendmm" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+									<option value="" selected disabled>分</option>
+									<?php
+									foreach (ConstArray::$search_minute as $key => $value) {
+									?>
+										<option value="<?= $key ?>" <?php if ($value == $_POST['jobendmm']) {
+																		echo ' selected="selected"';
+																	} ?>>
+											<?= $value ?>
+										</option>
+									<?php
+									}
+									?>
+								</select>
 							</div>
 						</div>
 						<br>
 						<?php if ($decide_template_ == "2") : ?>
 							<div class="row">
-								<div class="col-xs-4 "></div>
-								<div class="col-xs-2">
+								<div class="col-xs-4"></div>
+								<div class="col-xs-2 holder">
 									<label>出社時刻</label>
-									<div class="label_text">
-										<select id="daystarthh" name="daystarthh" class="form-control js-daystarthh-tags">
-											<option value="" selected></option>
-											<?php
-											foreach (ConstArray::$search_hour as $key => $value) {
-											?>
-												<option value="<?= $key ?>" <?php if ($value == $_POST['daystarthh']) {
-																				echo ' selected="selected"';
-																			} ?>>
-													<?= $value ?>
-												</option>
-											<?php
-											}
-											?>
-										</select><span class="label_time">&nbsp;時</span>
-									</div>
+									<select id="daystarthh" name="daystarthh" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+										<option value="" selected disabled>時</option>
+										<?php
+										foreach (ConstArray::$search_hour as $key => $value) {
+										?>
+											<option value="<?= $key ?>" <?php if ($value == $_POST['daystarthh']) {
+																			echo ' selected="selected"';
+																		} ?>>
+												<?= $value ?>
+											</option>
+										<?php
+										}
+										?>
+									</select>
 								</div>
-								<div class="col-xs-2">
+								<div class="col-xs-2 holder">
 									<label>&nbsp;</label>
-									<div class="label_text">
-										<select id="daystartmm" name="daystartmm" class="form-control js-daystartmm-tags">
-											<option value="" selected></option>
-											<?php
-											foreach (ConstArray::$search_minute as $key => $value) {
-											?>
-												<option value="<?= $key ?>" <?php if ($value == $_POST['daystartmm']) {
-																				echo ' selected="selected"';
-																			} ?>>
-													<?= $value ?>
-												</option>
-											<?php
-											}
-											?>
-										</select><span class="label_time">&nbsp;分</span>
-									</div>
+									<select id="daystartmm" name="daystartmm" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+										<option value="" selected disabled>分</option>
+										<?php
+										foreach (ConstArray::$search_minute as $key => $value) {
+										?>
+											<option value="<?= $key ?>" <?php if ($value == $_POST['daystartmm']) {
+																			echo ' selected="selected"';
+																		} ?>>
+												<?= $value ?>
+											</option>
+										<?php
+										}
+										?>
+									</select>
 								</div>
-								<div class="col-xs-2">
+								<div class="col-xs-2 holder">
 									<label>退社時刻</label>
-									<div class="label_text">
-										<select id="dayendhh" name="dayendhh" class="form-control js-dayendhh-tags">
-											<option value="" selected></option>
-											<?php
-											foreach (ConstArray::$search_hour as $key => $value) {
-											?>
-												<option value="<?= $key ?>" <?php if ($value == $_POST['dayendhh']) {
-																				echo ' selected="selected"';
-																			} ?>>
-													<?= $value ?>
-												</option>
-											<?php
-											}
-											?>
-										</select><span class="label_time">&nbsp;時</span>
-									</div>
+									<select id="dayendhh" name="dayendhh" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+										<option value="" selected disabled>時</option>
+										<?php
+										foreach (ConstArray::$search_hour as $key => $value) {
+										?>
+											<option value="<?= $key ?>" <?php if ($value == $_POST['dayendhh']) {
+																			echo ' selected="selected"';
+																		} ?>>
+												<?= $value ?>
+											</option>
+										<?php
+										}
+										?>
+									</select>
 								</div>
-								<div class="col-xs-2">
+								<div class="col-xs-2 holder">
 									<label>&nbsp;</label>
-									<div class="label_text">
-										<select id="dayendmm" name="dayendmm" class="form-control js-dayendmm-tags">
-											<option value="" selected></option>
-											<?php
-											foreach (ConstArray::$search_minute as $key => $value) {
-											?>
-												<option value="<?= $key ?>" <?php if ($value == $_POST['dayendmm']) {
-																				echo ' selected="selected"';
-																			} ?>>
-													<?= $value ?>
-												</option>
-											<?php
-											}
-											?>
-										</select><span class="label_time">&nbsp;分</span>
-									</div>
+									<select id="dayendmm" name="dayendmm" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+										<option value="" selected disabled>分</option>
+										<?php
+										foreach (ConstArray::$search_minute as $key => $value) {
+										?>
+											<option value="<?= $key ?>" <?php if ($value == $_POST['dayendmm']) {
+																			echo ' selected="selected"';
+																		} ?>>
+												<?= $value ?>
+											</option>
+										<?php
+										}
+										?>
+									</select>
 								</div>
 							</div>
+							<br>
+							<br>
 							<br>
 						<?php endif; ?>
 						<div class="row">
 							<div class="col-xs-4"></div>
-							<div class="col-xs-2">
+							<div class="col-xs-2 holder">
 								<label>休憩時間</label>
-								<div class="label_text">
-									<select id="offtimehh" name="offtimehh" class="form-control js-offtimehh-tags">
-										<option value="" selected></option>
-										<?php
-										foreach (ConstArray::$rest_hour as $key => $value) {
-										?>
-											<option value="<?= $key ?>" <?php if ($value == $_POST['offtimehh']) {
-																			echo ' selected="selected"';
-																		} ?>>
-												<?= $value ?>
-											</option>
-										<?php
-										}
-										?>
-									</select><span class="label_time">&nbsp;時</span>
-								</div>
+								<select id="offtimehh" name="offtimehh" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+									<option value="" selected disabled>時</option>
+									<?php
+									foreach (ConstArray::$search_hour as $key => $value) {
+									?>
+										<option value="<?= $key ?>" <?php if ($value == $_POST['offtimehh']) {
+																		echo ' selected="selected"';
+																	} ?>>
+											<?= $value ?>
+										</option>
+									<?php
+									}
+									?>
+								</select>
 							</div>
-							<div class="col-xs-2">
+							<div class="col-xs-2 holder">
 								<label>&nbsp;</label>
-								<div class="label_text">
-									<select id="offtimemm" name="offtimemm" class="form-control js-offtimemm-tags">
-										<option value="" selected></option>
-										<?php
-										foreach (ConstArray::$rest_minute as $key => $value) {
-										?>
-											<option value="<?= $key ?>" <?php if ($value == $_POST['offtimemm']) {
-																			echo ' selected="selected"';
-																		} ?>>
-												<?= $value ?>
-											</option>
-										<?php
-										}
-										?>
-									</select><span class="label_time">&nbsp;分</span>
-								</div>
+								<select id="offtimemm" name="offtimemm" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+									<option value="" selected disabled>分</option>
+									<?php
+									foreach (ConstArray::$search_minute as $key => $value) {
+									?>
+										<option value="<?= $key ?>" <?php if ($value == $_POST['offtimemm']) {
+																		echo ' selected="selected"';
+																	} ?>>
+											<?= $value ?>
+										</option>
+									<?php
+									}
+									?>
+								</select>
 							</div>
 							<div class="col-xs-2">
 								<label for="workhh">就業時間</label>
@@ -900,23 +887,6 @@ if ($_SESSION['auth'] == false) {
 		<?php
 		}
 		?>
-	});
-
-	// Define an array of class names
-	var classNames = [
-		"js-jobstarthh-tags",
-		"js-jobstartmm-tags",
-		"js-jobendhh-tags",
-		"js-jobendmm-tags",
-		"js-offtimehh-tags",
-		"js-offtimemm-tags"
-	];
-
-	// Loop through the class names and initialize select2 for each
-	classNames.forEach(function(className) {
-		$("." + className).select2({
-			tags: true
-		});
 	});
 
 	// Time calculate
