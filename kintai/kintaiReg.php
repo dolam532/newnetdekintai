@@ -70,8 +70,8 @@ if ($_SESSION['auth'] == false) {
 
 <head>
 	<title>勤 務 表</title>
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
+	<link rel="stylesheet" href="../assets/css/select2.min.css">
+    <script src="../assets/js/select2.min.js"></script>
 </head>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top: -20px;">
@@ -320,7 +320,7 @@ if ($_SESSION['auth'] == false) {
 							<td><strong><?= $totalworkmm_top = isset($totalWorkMinutes) ? $totalWorkMinutes : (isset($key['jobminute2']) ? $key['jobminute2'] : '0'); ?></strong></td>
 							<td><strong><?= $cnprejob_top = isset($countJobStartHH) ? $countJobStartHH : (isset($key['jobdays2']) ? $key['jobdays2'] : '0'); ?></strong></td>
 							<td><strong><?= $cnactjob_top = isset($countJobStartHH) ? $countJobStartHH : (isset($key['workdays2']) ? $key['workdays2'] : '0'); ?></strong></td>
-							<td><strong><?= $holydays_top = isset($key['holydays2']) ? $key['holydays2'] : '0'; ?></strong></td>
+							<td><strong><?= $holydayswork_top = isset($key['holydays2']) ? $key['holydays2'] : '0'; ?></strong></td>
 							<td><strong>0</strong></td>
 							<td><strong>0</strong></td>
 							<td><strong>0</strong></td>
@@ -478,6 +478,8 @@ if ($_SESSION['auth'] == false) {
 				</form>
 			</tr>
 		</tbody>
+		
+		<!-- Auto Error Message -->
 		<?php
 		if (!empty($workmonth_list)) {
 			foreach ($workmonth_list as $key) {
@@ -492,7 +494,7 @@ if ($_SESSION['auth'] == false) {
 					if (
 						$key['jobhour'] !== $totaldayhh_bottom_pdf && $key['jobminute'] !== $totaldaymm_bottom_pdf
 						&& $key['jobdays'] !== $cnprejob_bottom_pdf && $key['workdays'] !== $cnactjob_bottom_pdf
-						&& $key['offdays'] !== $offdayswork_bottom_pdf
+						&& $key['holydays'] !== $holydayswork_bottom_pdf && $key['offdays'] !== $offdayswork_bottom_pdf
 						&& $key['delaydays'] !== $delaydayswork_bottom_pdf && $key['earlydays'] !== $earlydayswork_bottom_pdf
 					) {
 						echo '<p style="color: red;">' . $kintai_click_month . '</p>';
