@@ -6,7 +6,7 @@ include('../inc/message.php');
 include('../inc/const_array.php');
 include('../model/kintaimodel.php');
 include('../inc/header.php');
-// include('../model/inactive.php');
+include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
@@ -79,6 +79,10 @@ if ($_SESSION['auth'] == false) {
 	#offtimemm {
 		position: relative;
 		z-index: 10;
+	}
+
+	.text_size {
+		font-size: smaller;
 	}
 </style>
 <title>勤 務 表</title>
@@ -633,6 +637,7 @@ if ($_SESSION['auth'] == false) {
 									}
 									?>
 								</select>
+								<input type="text" id="IVjobstarthh" class="form-control text_size" placeholder="入力(xx)">
 							</div>
 							<div class="col-xs-2 holder">
 								<label>&nbsp;</label>
@@ -650,6 +655,7 @@ if ($_SESSION['auth'] == false) {
 									}
 									?>
 								</select>
+								<input type="text" id="IVjobstartmm" class="form-control text_size" placeholder="入力(xx)">
 							</div>
 							<div class="col-xs-2 holder">
 								<label>業務終了</label>
@@ -667,6 +673,7 @@ if ($_SESSION['auth'] == false) {
 									}
 									?>
 								</select>
+								<input type="text" id="IVjobendhh" class="form-control text_size" placeholder="入力(xx)">
 							</div>
 							<div class="col-xs-2 holder">
 								<label>&nbsp;</label>
@@ -684,8 +691,10 @@ if ($_SESSION['auth'] == false) {
 									}
 									?>
 								</select>
+								<input type="text" id="IVjobendmm" class="form-control text_size" placeholder="入力(xx)">
 							</div>
 						</div>
+						<br>
 						<br>
 						<?php if ($decide_template_ == "2") : ?>
 							<div class="row">
@@ -706,6 +715,7 @@ if ($_SESSION['auth'] == false) {
 										}
 										?>
 									</select>
+									<input type="text" id="IVdaystarthh" class="form-control text_size" placeholder="入力(xx)">
 								</div>
 								<div class="col-xs-2 holder">
 									<label>&nbsp;</label>
@@ -723,6 +733,7 @@ if ($_SESSION['auth'] == false) {
 										}
 										?>
 									</select>
+									<input type="text" id="IVdaystartmm" class="form-control text_size" placeholder="入力(xx)">
 								</div>
 								<div class="col-xs-2 holder">
 									<label>退社時刻</label>
@@ -740,6 +751,7 @@ if ($_SESSION['auth'] == false) {
 										}
 										?>
 									</select>
+									<input type="text" id="IVdayendhh" class="form-control text_size" placeholder="入力(xx)">
 								</div>
 								<div class="col-xs-2 holder">
 									<label>&nbsp;</label>
@@ -757,8 +769,10 @@ if ($_SESSION['auth'] == false) {
 										}
 										?>
 									</select>
+									<input type="text" id="IVdayendmm" class="form-control text_size" placeholder="入力(xx)">
 								</div>
 							</div>
+							<br>
 							<br>
 							<br>
 							<br>
@@ -781,6 +795,7 @@ if ($_SESSION['auth'] == false) {
 									}
 									?>
 								</select>
+								<input type="text" id="IVofftimehh" class="form-control text_size" placeholder="入力(xx)">
 							</div>
 							<div class="col-xs-2 holder">
 								<label>&nbsp;</label>
@@ -798,6 +813,7 @@ if ($_SESSION['auth'] == false) {
 									}
 									?>
 								</select>
+								<input type="text" id="IVofftimemm" class="form-control text_size" placeholder="入力(xx)">
 							</div>
 							<div class="col-xs-2">
 								<label for="workhh">就業時間</label>
@@ -808,6 +824,7 @@ if ($_SESSION['auth'] == false) {
 								<input type="text" class="form-control" name="workmm" id="workmm" placeholder="0" required="required" style="text-align: center" readonly>
 							</div>
 						</div>
+						<br>
 						<br>
 						<div class="row">
 							<div class="col-xs-6">
@@ -1088,6 +1105,29 @@ if ($_SESSION['auth'] == false) {
 	$("#submit-button").click(function(event) {
 		event.preventDefault(); // Prevent the default form submission
 		$("#autopdf").submit();
+	});
+
+	// Select input tag
+	$(document).ready(function() {
+		// Function to handle input fields
+		function handleInput(inputId, selectId) {
+			$(inputId).on('input', function() {
+				var inputValue = $(this).val();
+				$(selectId + ' option[value="' + inputValue + '"]').prop('selected', true);
+			});
+		}
+
+		// Usage of the function for each input-select pair
+		handleInput('#IVjobstarthh', '#jobstarthh');
+		handleInput('#IVjobstartmm', '#jobstartmm');
+		handleInput('#IVjobendhh', '#jobendhh');
+		handleInput('#IVjobendmm', '#jobendmm');
+		handleInput('#IVdaystarthh', '#daystarthh');
+		handleInput('#IVdaystartmm', '#daystartmm');
+		handleInput('#IVdayendhh', '#dayendhh');
+		handleInput('#IVdayendmm', '#dayendmm');
+		handleInput('#IVofftimehh', '#offtimehh');
+		handleInput('#IVofftimemm', '#offtimemm');
 	});
 </script>
 
