@@ -199,7 +199,7 @@ if ($_SESSION['auth'] == false) {
 		<div class="col-md-5 text-right">
 			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
 				<div class="print_btn">
-					<a href="../kintaidetail/kintaidetail.php" class="btn btn-default" style="width: auto;">社員勤務表</a>
+					<a href="../kintaidetail/kintaiUser.php" class="btn btn-default" style="width: auto;">社員勤務表</a>
 				</div>
 			<?php endif; ?>
 			<div class="print_btn">
