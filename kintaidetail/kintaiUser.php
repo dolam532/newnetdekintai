@@ -13,9 +13,6 @@ if ($_SESSION['auth'] == false) {
 }
 ?>
 
-<style>
-
-</style>
 <title>社員勤務表</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container">
