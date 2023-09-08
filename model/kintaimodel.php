@@ -476,15 +476,16 @@ if (isset($_POST['MonthSaveKintai'])) {
     $delaydays = mysqli_real_escape_string($conn, $_POST['delaydays_bottom']);
     $earlydays2 = mysqli_real_escape_string($conn, $_POST['earlydays_top']);
     $earlydays = mysqli_real_escape_string($conn, $_POST['earlydays_bottom']);
+    $template = mysqli_real_escape_string($conn, $_POST['template_table_']);
 
     $sql = "INSERT INTO `tbl_workmonth` (`uid`, `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
-                `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `reg_dt`)
+                `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `reg_dt`)
                 VALUES ('$uid', '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
-                '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$reg_dt')
+                '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$template', '$reg_dt')
                 ON DUPLICATE KEY UPDATE
                 genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2',
                 janhour='$janhour', janminute='$janminute', janhour2='$janhour2', janminute2='$janminute2', jobdays='$jobdays', jobdays2='$jobdays2', workdays='$workdays', workdays2='$workdays2', holydays='$holydays',
-                holydays2='$holydays2', offdays='$offdays', offdays2='$offdays2', delaydays='$delaydays', delaydays2='$delaydays2', reg_dt='$reg_dt'";
+                holydays2='$holydays2', offdays='$offdays', offdays2='$offdays2', delaydays='$delaydays', delaydays2='$delaydays2', template='$template', reg_dt='$reg_dt'";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;

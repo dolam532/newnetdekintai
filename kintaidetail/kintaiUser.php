@@ -11,6 +11,9 @@ include('../model/inactive.php');
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
 }
+if ($_SESSION['auth_type'] == constant('USER')) { // if not admin 
+	header("Location: ../index.php");
+}
 ?>
 
 <title>社員勤務表</title>
@@ -33,7 +36,11 @@ if ($_SESSION['auth'] == false) {
 				<span class="text-left">社員勤務表</span>
 			</div>
 		</div>
-		<div class="col-md-9"></div>
+		<div class="col-md-9 text-right">
+			<div class="title_btn">
+				<input type="button" onclick="window.location.href='../kintai/kintaiReg.php'" value="戻る ">
+			</div>
+		</div>
 	</div>
 
 	<div class="form-group">
@@ -68,7 +75,8 @@ if ($_SESSION['auth'] == false) {
 							<td><span name="genbaname"><?= $user['genbaname'] ?></span></td>
 							<td class="text-center">
 								<form method="post" action="../kintaidetail/kintaiUserDetail.php">
-									<input type="hidden" value="<?= $user['uid'] ?>" name="year">
+									<input type="hidden" value="<?= $user['uid'] ?>" name="uid">
+									<input type="hidden" value="<?= $user['name'] ?>" name="name">
 									<input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="詳細">
 								</form>
 							</td>
