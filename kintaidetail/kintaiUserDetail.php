@@ -33,6 +33,26 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	span.kintaiReg_class {
 		display: none;
 	}
+
+	.col-md-12.text-center.title {
+		margin-top: 10px;
+		margin-bottom: 10px;
+		font-size: 22px;
+		font-weight: bold;
+	}
+
+	.subtitle,
+	.underline,
+	.one {
+		font-size: 16px;
+		font-weight: bold;
+		margin-top: 15px;
+		margin-bottom:15px;
+	}
+
+	.underline {
+		text-decoration: underline;
+	}
 </style>
 <title><?= $_SESSION['employee_name']; ?>の勤務表</title>
 <?php include('../inc/menu.php'); ?>
@@ -46,6 +66,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		<form method="post">
 			<input type="hidden" value="<?= $_SESSION['employee_uid'] ?>" name="uid">
 			<input type="hidden" value="<?= $_SESSION['employee_name'] ?>" name="name">
+			<input type="hidden" value="<?= $_SESSION['employee_dept'] ?>" name="dept">
 			<div class="col-md-4 text-center" name="workYm_page_condition">
 				<div class="title_condition">
 					<label>基準日:
@@ -96,6 +117,34 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			<div class="title_btn">
 				<input type="button" onclick="window.location.href='./kintaiUser.php'" value="戻る ">
 			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 text-center title">
+			<?= substr($date_show, 0, 4) ?>年<?= substr($date_show, 5, 2) ?>月 勤務表
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-9 text-left sub_name">
+			<div class="subtitle">ガナシス株式会社 御中</div>
+			<div class="underline one">所属：<?= $_SESSION['employee_dept'] ?></div>
+			<div class="underline two">氏名：<?= $_SESSION['employee_name'] ?> (印)</div>
+		</div>
+		<div class="col-md-3 text-right">
+			<table class="table table-bordered">
+				<thead>
+					<tr class="info">
+						<th>社長</th>
+						<th>担当</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td style="padding-top: 60px;" rowspan="3"></td>
+						<td style="padding-top: 60px;" rowspan="3"></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 

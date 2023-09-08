@@ -77,6 +77,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 								<form method="post" action="../kintaidetail/kintaiUserDetail.php">
 									<input type="hidden" value="<?= $user['uid'] ?>" name="uid">
 									<input type="hidden" value="<?= $user['name'] ?>" name="name">
+									<input type="hidden" value="<?= $user['dept'] ?>" name="dept">
 									<input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="詳細">
 								</form>
 							</td>
