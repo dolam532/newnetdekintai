@@ -599,14 +599,14 @@ if ($_SESSION['auth'] == false) {
 	</div>
 </div>
 
-<!-- Modal 勤務時間変更  -->
+<!-- Modal 勤務時間登録編集  -->
 <div class="row">
 	<div class="modal" id="modal2" tabindex="-2" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
 			<form method="post">
 				<div class="modal-content">
 					<div class="modal-header">
-						勤務時間変更(<span id="selkindate"></span>)
+						勤務時間<span id="selkindatetext"></span>(<span id="selkindate"></span>)
 						<button class="close" data-dismiss="modal">&times;</button>
 					</div>
 					<div class="modal-body" style="text-align: left">
@@ -864,8 +864,10 @@ if ($_SESSION['auth'] == false) {
 		var CheckData = SeparateArr2[1];
 		if (CheckData === "") {
 			$('#btnReg').val("登録");
+			$('#selkindatetext').text("登録");
 		} else {
 			$('#btnReg').val("編集");
+			$('#selkindatetext').text("編集")
 		}
 
 		var uid = $("input[name=uid]:hidden");
