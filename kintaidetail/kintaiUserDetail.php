@@ -72,6 +72,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			<input type="hidden" value="<?= $_SESSION['employee_uid'] ?>" name="uid">
 			<input type="hidden" value="<?= $_SESSION['employee_name'] ?>" name="name">
 			<input type="hidden" value="<?= $_SESSION['employee_dept'] ?>" name="dept">
+			<input type="hidden" value="<?= $_SESSION['employee_genid'] ?>" name="genid">
 			<div class="col-md-4 text-center" name="workYm_page_condition">
 				<div class="title_condition">
 					<label>基準日:
@@ -252,9 +253,9 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 							<td><strong><?= $cnprejob_top = isset($countJobStartHH) ? $countJobStartHH : (isset($key['jobdays2']) ? $key['jobdays2'] : '0'); ?></strong></td>
 							<td><strong><?= $cnactjob_top = isset($countJobStartHH) ? $countJobStartHH : (isset($key['workdays2']) ? $key['workdays2'] : '0'); ?></strong></td>
 							<td><strong><?= $holydayswork_top = isset($key['holydays2']) ? $key['holydays2'] : '0'; ?></strong></td>
-							<td><strong>0</strong></td>
-							<td><strong>0</strong></td>
-							<td><strong>0</strong></td>
+							<td><strong><?= $offdayswork_top = isset($countJobAct) ? $countJobAct : (isset($key['offdays2']) ? $key['offdays2'] : '0'); ?></strong></td>
+							<td><strong><?= $delaydayswork_top = isset($countLate) ? $countLate : (isset($key['delaydays2']) ? $key['delaydays2'] : '0'); ?></strong></td>
+							<td><strong><?= $earlydayswork_top = isset($countEarly) ? $countEarly : (isset($key['earlydays2']) ? $key['earlydays2'] : '0'); ?></strong></td>
 						<?php elseif ($decide_template_ == "2") : ?>
 							<td><strong><?= $totaldayhh_top = isset($totalDayHours) ? $totalDayHours : (isset($key['jobhour2']) ? $key['jobhour2'] : '0'); ?></strong></td>
 							<td><strong><?= $totaldaymm_top = isset($totalDayMinutes) ? $totalDayMinutes : (isset($key['jobminute2']) ? $key['jobminute2'] : '0'); ?></strong></td>
@@ -275,9 +276,9 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 						<td><strong><?= $cnprejob_top = isset($countJobStartHH) ? $countJobStartHH : '0'; ?></strong></td>
 						<td><strong><?= $cnactjob_top = isset($countJobStartHH) ? $countJobStartHH : '0'; ?></strong></td>
 						<td><strong><?= $holydayswork_top = '0' ?></strong></td>
-						<td><strong>0</strong></td>
-						<td><strong>0</strong></td>
-						<td><strong>0</strong></td>
+						<td><strong><?= $offdayswork_top = '0'; ?></strong></td>
+						<td><strong><?= $delaydayswork_top = '0'; ?></strong></td>
+						<td><strong><?= $earlydayswork_top = '0'; ?></strong></td>
 					<?php elseif ($decide_template_ == "2") : ?>
 						<td><strong><?= $totaldayhh_top = isset($totalDayHours) ? $totalDayHours : '0'; ?></strong></td>
 						<td><strong><?= $totaldaymm_top = isset($totalDayMinutes) ? $totalDayMinutes : '0'; ?></strong></td>
@@ -327,7 +328,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 
 <!-- Modal 勤務時間登録編集  -->
 <div class="row">
-	<div class="modal" id="modal2" tabindex="-2" data-backdrop="static" data-keyboard="false">
+	<div class="modal" id="modal" tabindex="-2" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
 			<form method="post">
 				<div class="modal-content">
@@ -581,7 +582,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 
 	// Funtion for click day of week
 	$(document).on('click', '.showModal', function() {
-		$('#modal2').modal('toggle');
+		$('#modal').modal('toggle');
 		var ArrayData = $(this).text();
 		var SeparateArr = ArrayData.split('/');
 		var Date_ = SeparateArr[1].substr(0, 2);
@@ -597,10 +598,10 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		}
 
 		var uid = $("input[name=uid]:hidden");
-		uid.val("<?php echo $_SESSION['auth_uid'] ?>");
+		uid.val("<?php echo $_SESSION['employee_uid'] ?>");
 		var uid = uid.val();
 		var genid = $("input[name=genid]:hidden");
-		genid.val("<?php echo $_SESSION['auth_genid'] ?>");
+		genid.val("<?php echo $_SESSION['employee_genid'] ?>");
 		var genid = genid.val();
 		var date_show = $("input[name=date_show]:hidden");
 		date_show.val("<?php echo $date_show ?>" + Date_);

@@ -8,6 +8,7 @@ if ($_POST['selmm'] == NULL && $_POST['selyy'] == NULL && $_POST['template_table
         $_SESSION['employee_uid'] = $_POST['uid'];
         $_SESSION['employee_name'] = $_POST['name'];
         $_SESSION['employee_dept'] = $_POST['dept'];
+        $_SESSION['employee_genid'] = $_POST['genid'];
         $_POST['selmm'] = $_SESSION['selmm'];
         $_POST['selyy'] = $_SESSION['selyy'];
         $_POST['template_table'] = $_SESSION['template_table'];
