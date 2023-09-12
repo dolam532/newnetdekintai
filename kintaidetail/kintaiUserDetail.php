@@ -58,21 +58,103 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		display: inline-block;
 		padding-top: 30px;
 	}
+
+	.holder {
+		position: relative;
+		height: 20px;
+	}
+
+	#jobstarthh,
+	#jobstartmm,
+	#jobendhh,
+	#jobendmm {
+		position: relative;
+		z-index: 30;
+	}
+
+	#daystarthh,
+	#daystartmm,
+	#dayendhh,
+	#dayendmm {
+		position: relative;
+		z-index: 20;
+	}
+
+	#offtimehh,
+	#offtimemm {
+		position: relative;
+		z-index: 10;
+	}
+
+	.text_size {
+		font-size: smaller;
+	}
 </style>
-<title><?= $_SESSION['employee_name']; ?>の勤務表</title>
+<title><?= $employee_name; ?>の勤務表</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top: -20px;">
+	<?php
+	if (isset($_SESSION['save_success']) && isset($_POST['SaveUpdateKintaiDetail'])) {
+	?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['save_success']; ?>
+		</div>
+	<?php
+		unset($_SESSION['save_success']);
+	}
+	?>
+	<?php
+	if (isset($_SESSION['autosave_success']) && isset($_POST['AutoUpdateKintai'])) {
+	?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['autosave_success']; ?>
+		</div>
+	<?php
+		unset($_SESSION['autosave_success']);
+	}
+	?>
+	<?php
+	if (isset($_SESSION['delete_success']) && isset($_POST['DeleteKintai'])) {
+	?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['delete_success']; ?>
+		</div>
+	<?php
+		unset($_SESSION['delete_success']);
+	}
+	?>
+	<?php
+	if (isset($_SESSION['save_success']) && isset($_POST['MonthSaveKintai'])) {
+	?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['save_success']; ?>
+		</div>
+	<?php
+		unset($_SESSION['save_success']);
+	}
+	?>
+	<?php
+	if (isset($_SESSION['delete_all_success']) && isset($_POST['DeleteAll'])) {
+	?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['delete_all_success']; ?>
+		</div>
+	<?php
+		unset($_SESSION['delete_all_success']);
+	}
+	?>
 	<div class="row">
 		<div class="col-md-3 text-left" name="workYm_page_title">
 			<div class="title_name text-center">
-				<span id="workYm_page_title" class="text-left"><?= $_SESSION['employee_name']; ?>の勤務表</span>
+				<span id="workYm_page_title" class="text-left"><?= $employee_name; ?>の勤務表</span>
 			</div>
 		</div>
 		<form method="post">
-			<input type="hidden" value="<?= $_SESSION['employee_uid'] ?>" name="uid">
-			<input type="hidden" value="<?= $_SESSION['employee_name'] ?>" name="name">
-			<input type="hidden" value="<?= $_SESSION['employee_dept'] ?>" name="dept">
-			<input type="hidden" value="<?= $_SESSION['employee_genid'] ?>" name="genid">
 			<div class="col-md-4 text-center" name="workYm_page_condition">
 				<div class="title_condition">
 					<label>基準日:
@@ -342,6 +424,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 								<label for="workymd">日付</label>
 								<input type="text" class="form-control" id="workymd" name="workymd" style="text-align: center" readonly>
 								<input type="hidden" id="uid" name="uid">
+								<input type="hidden" id="name" name="name">
 								<input type="hidden" id="genid" name="genid">
 								<input type="hidden" id="date_show" name="date_show">
 								<input type="hidden" value="<?= $decide_template_ ?>" name="template_table_">
@@ -563,8 +646,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
-						<input type="submit" name="SaveUpdateKintai" class="btn btn-primary" id="btnReg" role="button">
-						<input type="submit" name="DeleteKintai" class="btn btn-warning" id="btnDel" role="button" value="削除">
+						<input type="submit" name="SaveUpdateKintaiDetail" class="btn btn-primary" id="btnReg" role="button">
+						<input type="submit" name="DeleteKintaiDetail" class="btn btn-warning" id="btnDel" role="button" value="削除">
 						<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
 					</div>
 				</div>
@@ -598,10 +681,13 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		}
 
 		var uid = $("input[name=uid]:hidden");
-		uid.val("<?php echo $_SESSION['employee_uid'] ?>");
+		uid.val("<?php echo $employee_uid ?>");
 		var uid = uid.val();
+		var name = $("input[name=name]:hidden");
+		name.val("<?php echo $employee_name ?>");
+		var name = name.val();
 		var genid = $("input[name=genid]:hidden");
-		genid.val("<?php echo $_SESSION['employee_genid'] ?>");
+		genid.val("<?php echo $employee_genid ?>");
 		var genid = genid.val();
 		var date_show = $("input[name=date_show]:hidden");
 		date_show.val("<?php echo $date_show ?>" + Date_);
@@ -631,6 +717,195 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		<?php
 		}
 		?>
+	});
+
+	// Time calculate
+	$('#jobstarthh, #jobstartmm, #jobendhh, #jobendmm, #daystarthh, #daystartmm, #dayendhh, #dayendmm, #offtimehh, #offtimemm').on('change', function(e) {
+		var offtimehh = $('#offtimehh').val();
+		var offtimemm = $('#offtimemm').val();
+		var offtime_ = offtimehh + ':' + offtimemm;
+		o = offtime_.split(':');
+		var jobstarthh = $('#jobstarthh').val();
+		var jobstartmm = $('#jobstartmm').val();
+		var jobendhh = $('#jobendhh').val();
+		var jobendmm = $('#jobendmm').val();
+		<?php if ($decide_template_ == "1") : ?>
+			var jobstartime_ = jobstarthh + ':' + jobstartmm;
+			var jobendtime_ = jobendhh + ':' + jobendmm;
+			s = jobstartime_.split(':');
+			e = jobendtime_.split(':');
+		<?php elseif ($decide_template_ == "2") : ?>
+			var daystarthh = $('#daystarthh').val();
+			var daystartmm = $('#daystartmm').val();
+			var dayendhh = $('#dayendhh').val();
+			var dayendmm = $('#dayendmm').val();
+			var daystartime_ = daystarthh + ':' + daystartmm;
+			var dayendtime_ = dayendhh + ':' + dayendmm;
+			s = daystartime_.split(':');
+			e = dayendtime_.split(':');
+		<?php endif; ?>
+
+		min = e[1] - s[1] - o[1];
+		hour_carry = 0;
+		if (min < 0) {
+			min += 60;
+			hour_carry += 1;
+		}
+		hour = e[0] - s[0] - o[0] - hour_carry;
+		var workhh = hour;
+		if (workhh <= 0) {
+			workhh = workhh + 24;
+		}
+		var workmm = min;
+		$('#workhh').val(workhh);
+		$('#workmm').val(workmm);
+	});
+
+	// Check Error
+	$(document).on('click', '#btnReg', function(e) {
+		<?php if ($decide_template_ == "2") : ?>
+			var daystarthh = $("#daystarthh option:selected").val();
+			var daystartmm = $("#daystartmm option:selected").val();
+			var dayendhh = $("#dayendhh option:selected").val();
+			var dayendmm = $("#dayendmm option:selected").val();
+
+			if (daystarthh == "") {
+				alert("<?php echo $kintai_start_empty; ?>");
+				$("#daystarthh").focus();
+				return false;
+			}
+
+			if (isNaN(daystarthh)) {
+				alert("<?php echo $kintai_start_no; ?>");
+				e.preventDefault();
+				$("#daystarthh").focus();
+				return false;
+			}
+
+			if (daystartmm == "") {
+				alert("<?php echo $kintai_start_empty; ?>");
+				$("#daystartmm").focus();
+				return false;
+			}
+
+			if (isNaN(daystartmm)) {
+				alert("<?php echo $kintai_start_no; ?>");
+				e.preventDefault();
+				$("#daystartmm").focus();
+				return false;
+			}
+
+			if (dayendhh == "") {
+				alert("<?php echo $kintai_end_empty; ?>");
+				$("#dayendhh").focus();
+				return false;
+			}
+
+			if (isNaN(dayendhh)) {
+				alert("<?php echo $kintai_end_no; ?>");
+				e.preventDefault();
+				$("#dayendhh").focus();
+				return false;
+			}
+
+			if (dayendmm == "") {
+				alert("<?php echo $kintai_end_empty; ?>");
+				$("#dayendmm").focus();
+				return false;
+			}
+
+			if (isNaN(dayendmm)) {
+				alert("<?php echo $kintai_end_no; ?>");
+				e.preventDefault();
+				$("#dayendmm").focus();
+				return false;
+			}
+		<?php endif; ?>
+
+		var jobstarthh = $("#jobstarthh option:selected").val();
+		var jobstartmm = $("#jobstartmm option:selected").val();
+		var jobendhh = $("#jobendhh option:selected").val();
+		var jobendmm = $("#jobendmm option:selected").val();
+		var offtimehh = $("#offtimehh option:selected").val();
+		var offtimemm = $("#offtimemm option:selected").val();
+
+		if (jobstarthh == "") {
+			alert("<?php echo $kintai_bstart_empty; ?>");
+			$("#jobstarthh").focus();
+			return false;
+		}
+
+		if (isNaN(jobstarthh)) {
+			alert("<?php echo $kintai_bstart_no; ?>");
+			e.preventDefault();
+			$("#jobstarthh").focus();
+			return false;
+		}
+
+		if (jobstartmm == "") {
+			alert("<?php echo $kintai_bstart_empty; ?>");
+			$("#jobstartmm").focus();
+			return false;
+		}
+
+		if (isNaN(jobstartmm)) {
+			alert("<?php echo $kintai_bstart_no; ?>");
+			e.preventDefault();
+			$("#jobstartmm").focus();
+			return false;
+		}
+
+		if (jobendhh == "") {
+			alert("<?php echo $kintai_bend_empty; ?>");
+			$("#jobendhh").focus();
+			return false;
+		}
+
+		if (isNaN(jobendhh)) {
+			alert("<?php echo $kintai_bend_no; ?>");
+			e.preventDefault();
+			$("#jobendhh").focus();
+			return false;
+		}
+
+		if (jobendmm == "") {
+			alert("<?php echo $kintai_bend_empty; ?>");
+			$("#jobendmm").focus();
+			return false;
+		}
+
+		if (isNaN(jobendmm)) {
+			alert("<?php echo $kintai_bend_no; ?>");
+			e.preventDefault();
+			$("#jobendmm").focus();
+			return false;
+		}
+
+		if (offtimehh == "") {
+			alert("<?php echo $kintai_offtime_empty; ?>");
+			$("#offtimehh").focus();
+			return false;
+		}
+
+		if (isNaN(offtimehh)) {
+			alert("<?php echo $kintai_offtime_no; ?>");
+			e.preventDefault();
+			$("#offtimehh").focus();
+			return false;
+		}
+
+		if (offtimemm == "") {
+			alert("<?php echo $kintai_offtime_empty; ?>");
+			$("#offtimemm").focus();
+			return false;
+		}
+
+		if (isNaN(offtimemm)) {
+			alert("<?php echo $kintai_offtime_no; ?>");
+			e.preventDefault();
+			$("#offtimemm").focus();
+			return false;
+		}
 	});
 </script>
 
