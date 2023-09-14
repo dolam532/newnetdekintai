@@ -516,6 +516,8 @@ if ($_SESSION['auth'] == false) {
 		?>
 	</table>
 </div>
+
+<!-- PDF product -->
 <form id="autopdf" action="../pdfdownload/generatepdf.php" method="post" target="_blank">
 	<input type="hidden" name="data" value="<?php echo htmlspecialchars(json_encode($datas)); ?>">
 	<input type="hidden" name="name" value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_name'])); ?>">

@@ -78,6 +78,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 									<input type="hidden" value="<?= $user['uid'] ?>" name="uid_g">
 									<input type="hidden" value="<?= $user['name'] ?>" name="name_g">
 									<input type="hidden" value="<?= $user['genid'] ?>" name="genid_g">
+									<input type="hidden" value="<?= $user['dept'] ?>" name="dept_g">
 									<input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="詳細">
 								</form>
 							</td>

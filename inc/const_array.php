@@ -70,6 +70,7 @@ class ConstArray
     ];
 
     public static $search_hour = [
+        '00' => '00',
         '01' => '01',
         '02' => '02',
         '03' => '03',
@@ -92,8 +93,7 @@ class ConstArray
         '20' => '20',
         '21' => '21',
         '22' => '22',
-        '23' => '23',
-        '24' => '24'
+        '23' => '23'
     ];
 
     public static $search_minute = [

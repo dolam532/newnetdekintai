@@ -17,6 +17,8 @@ if (isset($_POST['uid_g']) && isset($_POST['name_g']) && isset($_POST['genid_g']
         $file_content .= ';';
         $file_content .= '$genid_e = "' . $_POST['genid_g'] . '"';
         $file_content .= ';';
+        $file_content .= '$dept_e = "' . $_POST['dept_g'] . '"';
+        $file_content .= ';';
         $file_content .= '?>';
         if (file_put_contents($file_path, $file_content) !== false) {
         }
@@ -35,6 +37,7 @@ include('temporary.php');
 $employee_uid = $uid_e;
 $employee_name = $name_e;
 $employee_genid = $genid_e;
+$employee_dept = $dept_e;
 
 $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
 $month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
@@ -235,6 +238,78 @@ if (isset($_POST['SaveUpdateKintaiDetail'])) {
                     genid='$genid', daystarthh='$daystarthh', daystartmm='$daystartmm', dayendhh='$dayendhh', dayendmm='$dayendmm', jobstarthh='$jobstarthh', jobstartmm='$jobstartmm',
                     jobendhh='$jobendhh', jobendmm='$jobendmm', offtimehh='$offtimehh', offtimemm='$offtimemm', workhh='$workhh', workmm='$workmm', janhh='$janhh',
                     janmm='$janmm', comment='$comment', bigo='$bigo', upt_dt='$upt_dt'";
+
+        if ($conn->query($sql) === TRUE) {
+                $_SESSION['save_success'] =  $save_success;
+                header("Refresh:3");
+        } else {
+                echo 'query error: ' . mysqli_error($conn);
+        }
+}
+
+// Save data to tbl_workmonth table of database
+if (isset($_POST['MonthSaveKintaiUserDetail'])) {
+        $_SESSION['selmm'] = $month;
+        $_SESSION['selyy'] = $year;
+        $yearmonth = $year . $month;
+        $_SESSION['template_table'] = $_POST["template_table_"];
+
+        $gen_id_ = intval($_SESSION['auth_genid']);
+        $template_table_s = intval($_POST["template_table_"]);
+
+        $jobhh_top_ = intval($_POST['jobhh_top']);
+        $jobmm_top_ = intval($_POST['jobmm_top']);
+        $holydays_top_ = intval($_POST['holydays_top']);
+        $janhh_top_ = intval($_POST['janhh_top']);
+        $janmm_top_ = intval($_POST['janmm_top']);
+        $jobdays_top_ = intval($_POST['jobdays_top']);
+        $workdays_top_ = intval($_POST['workdays_top']);
+        $offdays_top_ = intval($_POST['offdays_top']);
+        $delaydays_top_ = intval($_POST['delaydays_top']);
+        $earlydays_top_ = intval($_POST['earlydays_top']);
+
+        $jobhh_bottom_ = intval($_POST['jobhh_bottom']);
+        $jobmm_bottom_ = intval($_POST['jobmm_bottom']);
+        $holydays_bottom_ = intval($_POST['holydays_bottom']);
+        $janhh_bottom_ = intval($_POST['janhh_bottom']);
+        $janmm_bottom_ = intval($_POST['janmm_bottom']);
+
+        $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
+        $genid = mysqli_real_escape_string($conn, $gen_id_);
+        $workym = mysqli_real_escape_string($conn, $yearmonth);
+
+        $jobhour2 = mysqli_real_escape_string($conn, $jobhh_top_);
+        $jobminute2 = mysqli_real_escape_string($conn, $jobmm_top_);
+        $jobhour = mysqli_real_escape_string($conn, $jobhh_bottom_);
+        $jobminute = mysqli_real_escape_string($conn, $jobmm_bottom_);
+
+        $janhour2 = mysqli_real_escape_string($conn, $janhh_top_);
+        $janminute2 = mysqli_real_escape_string($conn, $janmm_top_);
+        $janhour = mysqli_real_escape_string($conn, $janhh_bottom_);
+        $janminute = mysqli_real_escape_string($conn, $janmm_bottom_);
+
+        $jobdays2 = mysqli_real_escape_string($conn, $jobdays_top_);
+        $jobdays = mysqli_real_escape_string($conn, $_POST['jobdays_bottom']);
+        $workdays2 = mysqli_real_escape_string($conn, $workdays_top_);
+        $workdays = mysqli_real_escape_string($conn, $_POST['workdays_bottom']);
+        $holydays2 = mysqli_real_escape_string($conn, $holydays_top_);
+        $holydays = mysqli_real_escape_string($conn, $holydays_bottom_);
+        $offdays2 = mysqli_real_escape_string($conn, $offdays_top_);
+        $offdays = mysqli_real_escape_string($conn, $_POST['offdays_bottom']);
+        $delaydays2 = mysqli_real_escape_string($conn, $delaydays_top_);
+        $delaydays = mysqli_real_escape_string($conn, $_POST['delaydays_bottom']);
+        $earlydays2 = mysqli_real_escape_string($conn, $earlydays_top_);
+        $earlydays = mysqli_real_escape_string($conn, $_POST['earlydays_bottom']);
+        $template = mysqli_real_escape_string($conn, $template_table_s);
+
+        $sql = "INSERT INTO `tbl_workmonth` (`uid`, `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
+                    `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `reg_dt`)
+                    VALUES ('$uid', '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
+                    '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$template', '$reg_dt')
+                    ON DUPLICATE KEY UPDATE
+                    genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2',
+                    janhour='$janhour', janminute='$janminute', janhour2='$janhour2', janminute2='$janminute2', jobdays='$jobdays', jobdays2='$jobdays2', workdays='$workdays', workdays2='$workdays2', holydays='$holydays',
+                    holydays2='$holydays2', offdays='$offdays', offdays2='$offdays2', delaydays='$delaydays', delaydays2='$delaydays2', template='$template', reg_dt='$reg_dt'";
 
         if ($conn->query($sql) === TRUE) {
                 $_SESSION['save_success'] =  $save_success;
