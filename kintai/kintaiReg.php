@@ -206,7 +206,7 @@ if ($_SESSION['auth'] == false) {
 				<form method="post">
 					<input type="hidden" value="<?= $year ?>" name="year">
 					<input type="hidden" value="<?= $month ?>" name="month">
-					<button id="delete_all" name="DeleteAll" class="btn btn-default" style="width: auto;" type="submit">すべて削除</button>
+					<button name="DeleteAll" class="btn btn-default" style="width: auto;" type="submit">すべて削除</button>
 				</form>
 			</div>
 			<div class="print_btn">
@@ -544,7 +544,7 @@ if ($_SESSION['auth'] == false) {
 			<form method="post">
 				<div class="modal-content">
 					<div class="modal-header">
-						自動入力設定<span id=""></span>
+						自動入力設定
 						<button class="close" data-dismiss="modal" onclick="handlerCloseModal(1)">&times;</button>
 					</div>
 					<div class="modal-body">

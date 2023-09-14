@@ -94,7 +94,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top: -20px;">
 	<?php
-	if (isset($_SESSION['save_success']) && isset($_POST['SaveUpdateKintaiDetail'])) {
+	if (isset($_SESSION['save_success']) && isset($_POST['SaveUpdateKintaiUserDetail'])) {
 	?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -105,7 +105,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	}
 	?>
 	<?php
-	if (isset($_SESSION['autosave_success']) && isset($_POST['AutoUpdateKintai'])) {
+	if (isset($_SESSION['autosave_success']) && isset($_POST['AutoUpdateKintaiUserDetail'])) {
 	?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -116,7 +116,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	}
 	?>
 	<?php
-	if (isset($_SESSION['delete_success']) && isset($_POST['DeleteKintai'])) {
+	if (isset($_SESSION['delete_success']) && isset($_POST['DeleteKintaiUserDetail'])) {
 	?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -138,7 +138,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	}
 	?>
 	<?php
-	if (isset($_SESSION['delete_all_success']) && isset($_POST['DeleteAll'])) {
+	if (isset($_SESSION['delete_all_success']) && isset($_POST['DeleteAllKintaiUserDetail'])) {
 	?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -206,7 +206,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 				<form method="post">
 					<input type="hidden" value="<?= $year ?>" name="year">
 					<input type="hidden" value="<?= $month ?>" name="month">
-					<button id="delete_all" name="DeleteAll" class="btn btn-default" style="width: auto;" type="submit">すべて削除</button>
+					<input type="hidden" value="<?= $decide_template_ ?>" name="template_table_">
+					<button name="DeleteAllKintaiUserDetail" class="btn btn-default" style="width: auto;" type="submit">すべて削除</button>
 				</form>
 			</div>
 			<div class="print_btn">
@@ -725,8 +726,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
-						<input type="submit" name="SaveUpdateKintaiDetail" class="btn btn-primary" id="btnReg" role="button">
-						<input type="submit" name="DeleteKintaiDetail" class="btn btn-warning" id="btnDel" role="button" value="削除">
+						<input type="submit" name="SaveUpdateKintaiUserDetail" class="btn btn-primary" id="btnReg" role="button">
+						<input type="submit" name="DeleteKintaiUserDetail" class="btn btn-warning" id="btnDel" role="button" value="削除">
 						<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
 					</div>
 				</div>
@@ -734,6 +735,75 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		</div>
 	</div>
 </div>
+
+<!-- Modal 自動入力 -->
+<div class="row">
+	<div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<form method="post">
+				<div class="modal-content">
+					<div class="modal-header">
+						自動入力設定
+						<button class="close" data-dismiss="modal" onclick="handlerCloseModal(1)">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-9">
+								<label for="genbaname_rmodal">勤務時間</label>
+								<select class="form-control" id="genba_selection_rmodal" name="genba_selection_rmodal">
+									<?php
+									$selected = 'selected';
+									echo '<option value="" selected="' . $selected . '">現場を選択してください。</option>';
+									foreach ($genba_list as $value) {
+										if ($value['genid'] == $employee_genid) {
+											$selected = ''; 
+										} 
+									?>
+										<option value="<?= $value['genid'] . ',' . $value['workstrtime'] . ',' . $value['workendtime'] . ',' . $value['offtime1'] . ',' . $value['offtime2']  ?>" <?= $selected ?>>
+											<?= $value['genbaname'] . ':' . $value['workstrtime'] . '-' . $value['workendtime'] . '  || (昼休)' . $value['offtime1'] . '  || (夜休)' . $value['offtime2'] ?>
+										</option>
+									<?php } ?>
+								</select>
+							</div>
+							<div class="col-md-3">
+								<label for="use_weekofday"><strong>曜日</strong></label>
+								<div class="custom-control custom-checkbox">
+									<input type="hidden" value="<?= $year ?>" name="year">
+									<input type="hidden" value="<?= $month ?>" name="month">
+									<input type="hidden" value="<?= $decide_template_ ?>" name="template_table_">
+									<input type="checkbox" name="weekdayCheckbox" id="weekdayCheckbox" value="1">平日
+									<input type="checkbox" name="weekendCheckbox" id="weekendCheckbox" value="2">土日
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<label for="workcontent_rmodal">業務内容</label>
+								<input type="text" class="form-control" name="workcontent_rmodal" id="workcontent_rmodal" placeholder="content" style="text-align: left">
+							</div>
+							<div class="col-md-6">
+								<label for="bigo_rmodal">備考</label>
+								<input type="text" class="form-control" name="bigo_rmodal" id="bigo_rmodal" placeholder="remark" style="text-align: left">
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer" style="text-align: center">
+						<div class="col-md-4"></div>
+						<div class="col-md-2">
+							<input type="submit" name="AutoUpdateKintai" class="btn btn-primary" id="btnAuto" role="button" value="入力確定">
+						</div>
+						<div class="col-md-2">
+							<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
 <script>
 	// Submit for select
 	jQuery(function() {
@@ -1046,6 +1116,12 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		event.preventDefault(); // Prevent the default form submission
 		$("#autopdf").submit();
 	});
+
+	// 自動入力
+	function autoInputHandle() {
+		$('#modal2').modal('toggle');
+		$("#weekdayCheckbox").prop('checked', true);
+	}
 </script>
 
 <?php include('../inc/footer.php'); ?>

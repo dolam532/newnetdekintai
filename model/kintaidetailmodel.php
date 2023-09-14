@@ -188,7 +188,7 @@ foreach ($datas as &$row) {       // write directly to $array1 while iterating
 }
 
 // Save data to tbl_worktime table of database
-if (isset($_POST['SaveUpdateKintaiDetail'])) {
+if (isset($_POST['SaveUpdateKintaiUserDetail'])) {
         $_SESSION['selmm'] = substr($_POST['date_show'], 5, 2);
         $_SESSION['selyy'] = substr($_POST['date_show'], 0, 4);
         $_SESSION['template_table'] = $_POST["template_table_"];
@@ -318,3 +318,63 @@ if (isset($_POST['MonthSaveKintaiUserDetail'])) {
                 echo 'query error: ' . mysqli_error($conn);
         }
 }
+
+// Delete data to tbl_worktime table and tbl_workmonth of database
+if (isset($_POST['DeleteAllKintaiUserDetail'])) {
+        $deleteAllData = false;
+        $_SESSION['selmm'] = $_POST['month'];
+        $_SESSION['selyy'] = $_POST['year'];
+        $_SESSION['template_table'] = $_POST["template_table_"];
+        $yearmonthSlet = $_POST["year"] . '/' . $_POST["month"];
+        $yearmonth = $_POST["year"] . $_POST["month"];
+
+        $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
+        $workymS = mysqli_real_escape_string($conn, $yearmonthSlet);
+        $workym = mysqli_real_escape_string($conn, $yearmonth);
+        $sql = "DELETE FROM `tbl_worktime` 
+                WHERE uid ='$uid' 
+                AND LEFT(`tbl_worktime`.`workymd`, 7) IN('$workymS')";
+
+        if ($conn->query($sql) === TRUE) {
+                $deleteAllData = true;
+        } else {
+                echo 'query error: ' . mysqli_error($conn);
+        }
+        if ($deleteAllData = true) {
+                $sql2 = "DELETE FROM `tbl_workmonth` 
+                WHERE uid ='$uid' 
+                AND LEFT(`tbl_workmonth`.`workym`, 6) IN('$workym')";
+
+                if ($conn->query($sql2) === TRUE) {
+                        $_SESSION['delete_all_success'] =  $delete_all_success;
+                        header("Refresh:3");
+                } else {
+                        echo 'query error: ' . mysqli_error($conn);
+                }
+        }
+}
+
+// Delete data to tbl_worktime table of database
+if (isset($_POST['DeleteKintaiUserDetail'])) {
+        $_SESSION['selmm'] = substr($_POST['date_show'], 5, 2);
+        $_SESSION['selyy'] = substr($_POST['date_show'], 0, 4);
+        $_SESSION['template_table'] = $_POST["template_table_"];
+
+        $uid = mysqli_real_escape_string($conn, $_POST['uid']);
+        $genid = mysqli_real_escape_string($conn, $_POST['genid']);
+        $workymd = mysqli_real_escape_string($conn, $_POST['date_show']);
+        $sql = "DELETE FROM `tbl_worktime` 
+                WHERE uid ='$uid' AND genid ='$genid' AND workymd ='$workymd'";
+
+        if ($conn->query($sql) === TRUE) {
+                $_SESSION['delete_success'] =  $delete_success;
+                header("Refresh:3");
+        } else {
+                echo 'query error: ' . mysqli_error($conn);
+        }
+}
+
+// Select data from tbl_genba
+$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `tbl_genba`.`use_yn`="' . constant('USE_YES') . '"';
+$result_genba = mysqli_query($conn, $sql_genba);
+$genba_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
