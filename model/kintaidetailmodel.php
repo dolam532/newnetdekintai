@@ -9,7 +9,7 @@ $result_user = mysqli_query($conn, $sql_user);
 $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 
 if (isset($_POST['uid_g']) && isset($_POST['name_g']) && isset($_POST['genid_g'])) {
-        $file_path = '../kintaidetail/temporary.php';
+        $file_path = '../kintaidetail/temporary' . $_SESSION['auth_uid'] . '.php';
         $file_content = '<?php ';
         $file_content .= '$uid_e = "' . $_POST['uid_g'] . '"';
         $file_content .= ';';
@@ -31,7 +31,7 @@ if ($_POST['selmm'] == NULL && $_POST['selyy'] == NULL && $_POST['template_table
 }
 
 // Include the file
-include('temporary.php');
+include('temporary' . $_SESSION['auth_uid'] . '.php');
 
 // Now you can access the variables from temporary.php
 $employee_uid = $uid_e;
