@@ -8,6 +8,7 @@ $connect_error = '接続エラー: ';
 $save_fail = '入力情報保存できませんでした。';
 $delete_success = '削除成功しました。';
 $delete_all_success = 'すべて削除成功しました。';
+$select_message = '現場を選択してください。';
 
 // index
 $login_is_not = '詳細情報はログイン後可能です。';

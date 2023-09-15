@@ -260,7 +260,6 @@ if (isset($_POST['AutoUpdateKintai'])) {
     $offtimehh_ = $dayoffArray[0];
     $offtimemm_ = $dayoffArray[1];
     $nightoff = $dataArray[4];
-    $weekdayCheckbox = $_POST['weekdayCheckbox'];
     $workcontent_rmodal = $_POST['workcontent_rmodal'];
     $bigo_rmodal = $_POST['bigo_rmodal'];
     $weekdayCheckbox = $_POST['weekdayCheckbox'];

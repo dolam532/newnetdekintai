@@ -753,11 +753,11 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 								<select class="form-control" id="genba_selection_rmodal" name="genba_selection_rmodal">
 									<?php
 									$selected = 'selected';
-									echo '<option value="" selected="' . $selected . '">現場を選択してください。</option>';
+									echo '<option value="" selected="' . $selected . '">' . $select_message . '</option>';
 									foreach ($genba_list as $value) {
 										if ($value['genid'] == $employee_genid) {
-											$selected = ''; 
-										} 
+											$selected = '';
+										}
 									?>
 										<option value="<?= $value['genid'] . ',' . $value['workstrtime'] . ',' . $value['workendtime'] . ',' . $value['offtime1'] . ',' . $value['offtime2']  ?>" <?= $selected ?>>
 											<?= $value['genbaname'] . ':' . $value['workstrtime'] . '-' . $value['workendtime'] . '  || (昼休)' . $value['offtime1'] . '  || (夜休)' . $value['offtime2'] ?>
@@ -791,7 +791,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 					<div class="modal-footer" style="text-align: center">
 						<div class="col-md-4"></div>
 						<div class="col-md-2">
-							<input type="submit" name="AutoUpdateKintai" class="btn btn-primary" id="btnAuto" role="button" value="入力確定">
+							<input type="submit" name="AutoUpdateKintaiUserDetail" class="btn btn-primary" id="btnAuto" role="button" value="入力確定">
 						</div>
 						<div class="col-md-2">
 							<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
@@ -1122,6 +1122,16 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		$('#modal2').modal('toggle');
 		$("#weekdayCheckbox").prop('checked', true);
 	}
+
+	// Check Error
+	$(document).on('click', '#btnAuto', function(e) {
+		var genba_select_ = $("#genba_selection_rmodal").val();
+		if (genba_select_ === "") {
+			alert("<?php echo $select_message; ?>");
+			$("#genba_selection_rmodal").focus();
+			return false;
+		}
+	});
 </script>
 
 <?php include('../inc/footer.php'); ?>
