@@ -379,12 +379,37 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			<tr id="footer_table_edit_input">
 				<form method="post">
 					<input type="hidden" value="<?= $decide_template_ ?>" name="template_table_">
+					<?php if ($decide_template_ == "1") : ?>
+						<input type="hidden" value="<?= $totalworkhh_top ?>" name="jobhh_top">
+						<input type="hidden" value="<?= $totalworkmm_top ?>" name="jobmm_top">
+						<input type="hidden" value="<?= $cnprejob_top ?>" name="jobdays_top">
+						<input type="hidden" value="<?= $janworkhh_top = '0' ?>" name="janhh_top">
+						<input type="hidden" value="<?= $janworkmm_top = '0' ?>" name="janmm_top">
+						<input type="hidden" value="<?= $cnactjob_top ?>" name="workdays_top">
+						<input type="hidden" value="<?= $holydayswork_top ?>" name="holydays_top">
+						<input type="hidden" value="<?= $offdayswork_top = '0' ?>" name="offdays_top">
+						<input type="hidden" value="<?= $delaydayswork_top = '0' ?>" name="delaydays_top">
+						<input type="hidden" value="<?= $earlydayswork_top = '0' ?>" name="earlydays_top">
+					<?php elseif ($decide_template_ == "2") : ?>
+						<input type="hidden" value="<?= $totaldayhh_top ?>" name="jobhh_top">
+						<input type="hidden" value="<?= $totaldaymm_top ?>" name="jobmm_top">
+						<input type="hidden" value="<?= $cnprejob_top ?>" name="jobdays_top">
+						<input type="hidden" value="<?= $janworkhh_top = isset($totalJanHours) ? $totalJanHours : '0'; ?>" name="janhh_top">
+						<input type="hidden" value="<?= $janworkmm_top = isset($totalJanMinutes) ? $totalJanMinutes : '0'; ?>" name="janmm_top">
+						<input type="hidden" value="<?= $cnactjob_top ?>" name="workdays_top">
+						<input type="hidden" value="<?= $holydayswork_top ?>" name="holydays_top">
+						<input type="hidden" value="<?= $offdayswork_top ?>" name="offdays_top">
+						<input type="hidden" value="<?= $delaydayswork_top ?>" name="delaydays_top">
+						<input type="hidden" value="<?= $earlydayswork_top ?>" name="earlydays_top">
+					<?php endif; ?>
 					<td><input type="submit" name="MonthSaveKintaiUserDetail" class="btn btn-primary" id="btnSaveMonth" role="button" value="月登録"></td>
 					<?php
 					if (!empty($workmonth_list)) {
 						foreach ($workmonth_list as $key) {
 					?>
 							<?php if ($decide_template_ == "1") : ?>
+								<input type="hidden" value="<?= $janworkhh_bottom_pdf = isset($janworkhh_top) ? $janworkhh_top : (isset($key['janhour']) ? $key['janhour'] : '0'); ?>" name="janhh_bottom">
+								<input type="hidden" value="<?= $janworkmm_bottom_pdf = isset($janworkmm_top) ? $janworkmm_top : (isset($key['janminute']) ? $key['janminute'] : '0'); ?>" name="janmm_bottom">
 								<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= $totalworkhh_bottom_pdf = isset($totalworkhh_top) ? $totalworkhh_top : (isset($key['jobhour']) ? $key['jobhour'] : '0'); ?>"></td>
 								<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= $totalworkmm_bottom_pdf = isset($totalworkmm_top) ? $totalworkmm_top : (isset($key['jobminute']) ? $key['jobminute'] : '0'); ?>"></td>
 								<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= $cnprejob_bottom_pdf = isset($cnprejob_top) ? $cnprejob_top : (isset($key['jobdays']) ? $key['jobdays'] : '0'); ?>"></td>
@@ -394,6 +419,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 								<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom" id="delaydays_bottom" maxlength="2" value="<?= $delaydayswork_bottom_pdf = isset($delaydayswork_top) ? $delaydayswork_top : (isset($key['delaydays']) ? $key['delaydays'] : '0'); ?>"></td>
 								<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom" id="earlydays_bottom" maxlength="2" value="<?= $earlydayswork_bottom_pdf = isset($earlydayswork_top) ? $earlydayswork_top : (isset($key['earlydays']) ? $key['earlydays'] : '0'); ?>"></td>
 							<?php elseif ($decide_template_ == "2") : ?>
+								<input type="hidden" value="<?= $janworkhh_bottom_pdf = isset($janworkhh_top) ? $janworkhh_top : (isset($key['janhour']) ? $key['janhour'] : '0'); ?>" name="janhh_bottom">
+								<input type="hidden" value="<?= $janworkmm_bottom_pdf = isset($janworkmm_top) ? $janworkmm_top : (isset($key['janminute']) ? $key['janminute'] : '0'); ?>" name="janmm_bottom">
 								<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= $totaldayhh_bottom_pdf = isset($totaldayhh_top) ? $totaldayhh_top : (isset($key['jobhour']) ? $key['jobhour'] : '0'); ?>"></td>
 								<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= $totaldaymm_bottom_pdf = isset($totaldaymm_top) ? $totaldaymm_top : (isset($key['jobminute']) ? $key['jobminute'] : '0'); ?>"></td>
 								<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= $cnprejob_bottom_pdf = isset($cnprejob_top) ? $cnprejob_top : (isset($key['jobdays']) ? $key['jobdays'] : '0'); ?>"></td>
@@ -408,6 +435,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 					} else {
 						?>
 						<?php if ($decide_template_ == "1") : ?>
+							<input type="hidden" value="<?= $janworkhh_bottom_pdf = isset($janworkhh_top) ? $janworkhh_top : '0'; ?>" name="janhh_bottom">
+							<input type="hidden" value="<?= $janworkmm_bottom_pdf = isset($janworkmm_top) ? $janworkmm_top : '0'; ?>" name="janmm_bottom">
 							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= $totalworkhh_bottom_pdf = isset($totalworkhh_top) ? $totalworkhh_top : '0'; ?>"></td>
 							<td rowspan="3"><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= $totalworkmm_bottom_pdf = isset($totalworkmm_top) ? $totalworkmm_top : '0'; ?>"></td>
 							<td rowspan="3"><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= $cnprejob_bottom_pdf = isset($cnprejob_top) ? $cnprejob_top : '0'; ?>"></td>
@@ -417,6 +446,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 							<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom" id="delaydays_bottom" maxlength="2" value="<?= $delaydayswork_bottom_pdf = isset($delaydayswork_top) ? $delaydayswork_top : '0'; ?>"></td>
 							<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom" id="earlydays_bottom" maxlength="2" value="<?= $earlydayswork_bottom_pdf = isset($earlydayswork_top) ? $earlydayswork_top : '0'; ?>"></td>
 						<?php elseif ($decide_template_ == "2") : ?>
+							<input type="hidden" value="<?= $janworkhh_bottom_pdf = isset($janworkhh_top) ? $janworkhh_top : '0'; ?>" name="janhh_bottom">
+							<input type="hidden" value="<?= $janworkmm_bottom_pdf = isset($janworkmm_top) ? $janworkmm_top : '0'; ?>" name="janmm_bottom">
 							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= isset($totaldayhh_top) ? $totaldayhh_top : '0'; ?>"></td>
 							<td rowspan="3"><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom" id="jobmm_bottom" maxlength="2" value="<?= isset($totaldaymm_top) ? $totaldaymm_top : '0'; ?>"></td>
 							<td rowspan="3"><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom" id="jobdays_bottom" maxlength="2" value="<?= $cnprejob_bottom_pdf = isset($cnprejob_top) ? $cnprejob_top : '0'; ?>"></td>
@@ -861,7 +892,6 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 				$("#daystartmm").val("<?php echo $key['daystartmm'] ?>");
 				$("#dayendhh").val("<?php echo $key['dayendhh'] ?>");
 				$("#dayendmm").val("<?php echo $key['dayendmm'] ?>");
-
 			}
 		<?php
 		}

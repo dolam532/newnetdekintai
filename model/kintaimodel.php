@@ -4,9 +4,6 @@ $sql_genba = 'SELECT * FROM `tbl_genba` WHERE `tbl_genba`.`use_yn`="' . constant
 $result_genba = mysqli_query($conn, $sql_genba);
 $genba_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
-// Include the PDO connection file
-require_once '../inc/dbconnect.php';
-
 // kintaiReg.php
 if ($_POST['selmm'] == NULL && $_POST['selyy'] == NULL && $_POST['template_table'] == NULL) {
     $_POST['selmm'] = $_SESSION['selmm'];
@@ -209,7 +206,6 @@ if (isset($_POST['SaveUpdateKintai'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
-        $_SESSION['decide_show'] = "1";
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -230,7 +226,6 @@ if (isset($_POST['DeleteKintai'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] =  $delete_success;
-        $_SESSION['decide_show'] = "1";
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -426,7 +421,6 @@ if (isset($_POST['AutoUpdateKintai'])) {
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['autosave_success'] =  $autosave_success;
-            $_SESSION['decide_show'] = "1";
             header("Refresh:3");
         } else {
             echo 'query error: ' . mysqli_error($conn);
@@ -488,7 +482,6 @@ if (isset($_POST['MonthSaveKintai'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
-        $_SESSION['decide_show'] = "2";
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -535,7 +528,6 @@ if (isset($_POST['DeleteAll'])) {
 
         if ($conn->query($sql2) === TRUE) {
             $_SESSION['delete_all_success'] =  $delete_all_success;
-            $_SESSION['decide_show'] = "1";
             header("Refresh:3");
         } else {
             echo 'query error: ' . mysqli_error($conn);
