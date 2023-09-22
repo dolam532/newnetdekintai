@@ -39,7 +39,7 @@ if ($_SESSION['auth'] == false) {
         display: none;
     }
 </style>
-<title>お知らせ</title>
+<title>お知らせ登録</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <?php
@@ -78,7 +78,7 @@ if ($_SESSION['auth'] == false) {
     <div class="row">
         <div class="col-md-3 text-left">
             <div class="title_name">
-                <span class="text-left">お知らせ</span>
+                <span class="text-left">お知らせ登録</span>
             </div>
         </div>
         <div class="col-md-2 text-left">
