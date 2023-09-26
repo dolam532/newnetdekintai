@@ -159,7 +159,7 @@ if ($_POST['typecode'] == NULL) {
 // Save Data to tbl_codebase DB 
 if (isset($_POST['btnRegCL'])) {
     $companyid = constant('GANASYS_COMPANY_ID');
-    $typecode = "01";
+    $typecode = $_POST['typecode'];
     $uid = $_SESSION['auth_uid'];
     $code = mysqli_real_escape_string($conn, $_POST['code']);
     $name = mysqli_real_escape_string($conn, $_POST['name']);

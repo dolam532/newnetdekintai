@@ -184,6 +184,7 @@ if ($_SESSION['auth'] == false) {
         <div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false" style="display: none;">
             <div class="modal-dialog">
                 <form method="post">
+                    <input type="hidden" name="typecode" value="<?= $_POST['typecode'] ?>">
                     <div class="modal-content">
                         <div class="modal-header">
                             基礎コード登録(<span id="sname">New</span>)
