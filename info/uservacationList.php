@@ -65,6 +65,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         unset($_SESSION['delete_success']);
     }
     ?>
+    <?php
+    if (isset($_SESSION['update_success']) && isset($_POST['btnUpdateUser'])) {
+    ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['update_success']; ?>
+        </div>
+    <?php
+        unset($_SESSION['update_success']);
+    }
+    ?>
     <form method="post">
         <div class="row">
             <div class="col-md-3 text-left">
@@ -131,7 +142,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 echo $years;
                                 ?>
                             </td>
-                            <td><a href="#"><span class="showModal"><?= isset($key['vacationstr']) ? $key['vacationstr']  : '未登錄'; ?><span class="uservacationList_class"><?= ',' . $key['uid'] . ',' . $key['inymd'] . ',' . $key['vacationstr'] ?></span></span></a></td>
+                            <td><a href="#"><span class="showModal"><?= isset($key['vacationstr']) ? $key['vacationstr']  : '未登錄'; ?><span class="uservacationList_class"><?= ',' . $key['uid'] . ',' . $key['inymd'] . ',' . $key['vacationstr'] . ',' . $key['name'] ?></span></span></a></td>
                             <td align="center"><span><?= $key['vacationend'] ?></span></td>
                             <td align="center"><span><?= $key['oldcnt'] ?></span></td>
                             <td align="center"><span><?= $key['newcnt'] ?></span></td>
@@ -235,6 +246,59 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         </div>
     </div>
 </div>
+
+<div class="row">
+    <div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <form method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        入社日登録(<span id="usernametitle"></span>)
+                        <button class="close" data-dismiss="modal">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <label for="uid">ID</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="useruid" id="useruid" style="text-align: left" readonly>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="col-md-2">
+                                <label for="name">名</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="username" id="username" style="text-align: left" readonly>
+                            </div>
+                            <br>
+                            <br>
+                            <div class="col-md-2">
+                                <label for="inymd">入社日</label>
+                            </div>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="userinymd" id="userinymd" style="text-align: left">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: center">
+                        <div class="col-md-4"></div>
+                        <div class="col-md-2">
+                            <p class="text-center">
+                                <input type="submit" name="btnUpdateUser" class="btn btn-primary" id="btnUpdateUser" role="button" value="登録">
+                            </p>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
     // Year/month click on grid (edit): popup & content display
     $(document).on('click', '.showModal', function() {
@@ -244,6 +308,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         var Uid = SeparateArr[1];
         var Inymd = SeparateArr[2];
         var CheckData = SeparateArr[3];
+        var Name = SeparateArr[4];
         if (CheckData === "") {
             $('#btnUpdateUvl').val("登録");
             $("#ustitle").text("年次休暇登録");
@@ -251,9 +316,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             $('#btnUpdateUvl').val("編集");
             $("#ustitle").text("年次休暇編集");
         }
+
         if (Inymd == "") {
             alert("<?php echo $info_uvl_joincompany_empty; ?>");
-            return false;
+            $('#modal2').modal('toggle');
+            $("#usernametitle").text(Uid);
+            $("#useruid").text($('[name="useruid"]').val(Uid));
+            $("#username").text($('[name="username"]').val(Name));
         } else {
             $('#modal').modal('toggle');
             $("#usname").text(Uid);
@@ -299,6 +368,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     });
 
     $("#udvacationend").datepicker({
+        changeYear: true,
+        dateFormat: 'yy/mm/dd'
+    });
+
+    $("#userinymd").datepicker({
         changeYear: true,
         dateFormat: 'yy/mm/dd'
     });

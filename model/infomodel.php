@@ -301,8 +301,8 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
     LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
     WHERE `tbl_user`.`companyid` IN ("' . $ganasys_company_id . '")
     AND `tbl_user`.`uid` IN ("' . $_SESSION['auth_uid'] . '")';
-        $result_uservacation_select = mysqli_query($conn, $sql_uservacation_select);
-        $uservacation_list_select = mysqli_fetch_all($result_uservacation_select, MYSQLI_ASSOC);
+    $result_uservacation_select = mysqli_query($conn, $sql_uservacation_select);
+    $uservacation_list_select = mysqli_fetch_all($result_uservacation_select, MYSQLI_ASSOC);
 }
 
 if ($_POST['uservacationListSearch'] == NULL) {
@@ -381,6 +381,25 @@ if (isset($_POST['btnDelUvl'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] =  $delete_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Update Database of tbl_user inymd column
+if (isset($_POST['btnUpdateUser'])) {
+    $uid = mysqli_real_escape_string($conn, $_POST['useruid']);
+    $name = mysqli_real_escape_string($conn, $_POST['username']);
+    $inymd = mysqli_real_escape_string($conn, $_POST['userinymd']);
+
+    $sql = "UPDATE tbl_user SET 
+    inymd='$inymd'
+    WHERE uid ='$uid'
+    AND name ='$name'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['update_success'] =  $update_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
