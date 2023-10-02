@@ -18,7 +18,7 @@ include('./model/inactive.php');
 	<link rel="stylesheet" href="./assets/fonts/glyphicons-halflings-regular.eot">
 	<link rel="stylesheet" href="./assets/fonts/glyphicons-halflings-regular.ttf">
 	<link rel="stylesheet" href="./assets/fonts/glyphicons-halflings-regular.woff">
-	<!-- common Javascript -->
+	<!-- common Javascript   -->
 	<script type="text/javascript" src="./assets/js/common.js"> </script>
 
 	<!-- Datepeeker 위한 link -->

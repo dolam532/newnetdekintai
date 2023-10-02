@@ -23,7 +23,6 @@ if ($_SESSION['auth'] == false) {
 		text-align: center;
 	}
 
-	 
 	.datatable tr td {
 		text-align: center;
 	}
