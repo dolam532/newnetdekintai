@@ -150,6 +150,9 @@ $manage_grade_empty = '区分を入力してください。';
 $manage_email_empty = 'Emailを入力してください。';
 $manage_dept_empty = '部署を入力してください。';
 $manage_companyid_empty = '会社名を選択してください。';
+$manage_image_upload = 'ファイルのアップロード中にエラーが発生しました。';
+$manage_image_type = '無効なファイルタイプです。 画像(JPEG、PNG、JPG)をアップロードしてください。';
+$manage_image_size = 'アップロードされた画像は最大許容サイズ (2 MB) を超えています。';
 
 // codemasterList
 $content_cmlC_empty = 'Codeを入力してください。';

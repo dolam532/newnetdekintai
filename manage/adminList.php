@@ -103,13 +103,14 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
-                    <th style="text-align: center; width: 10%;">ID</th>
-                    <th style="text-align: center; width: 10%;">PASSWORD</th>
+                    <th style="text-align: center; width: 8%;">ID</th>
+                    <th style="text-align: center; width: 8%;">PASSWORD</th>
                     <th style="text-align: center; width: 10%;">社員名</th>
-                    <th style="text-align: center; width: 14%;">Email</th>
+                    <th style="text-align: center; width: 12%;">Email</th>
                     <th style="text-align: center; width: 10%;">部署</th>
                     <th style="text-align: center; width: 10%;">区分</th>
-                    <th style="text-align: center; width: 10%;">会社名</th>
+                    <th style="text-align: center; width: 12%;">会社名</th>
+                    <th style="text-align: center; width: 8%;">印鑑</th>
                     <th style="text-align: center; width: auto;">備考</th>
                 </tr>
             </thead>
@@ -129,6 +130,16 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                             <td><span><?= $key['dept'] ?></span></td>
                             <td><span><?= $key['grade'] ?></span></td>
                             <td><span><?= $key['companyname'] ?></span></td>
+                            <td>
+                                <span>
+                                    <?php if ($key['signstamp'] == NULL) : ?>
+                                        印鑑無し
+                                    <?php else : ?>
+                                        <img width="50" src="<?= "../assets/uploads/" . $key['signstamp'] ?>"><br>
+                                        <?= $key['signstamp'] ?>
+                                    <?php endif; ?>
+                                </span>
+                            </td>
                             <td><span><?= $key['bigo'] ?></span></td>
                         </tr>
                 <?php
@@ -142,7 +153,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
     <div class="row">
         <div class="modal" id="modal" tabindex="-1" style="display: none;">
             <div class="modal-dialog">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     <div class="modal-content">
                         <div class="modal-header">
                             社員登録(<span>New</span>)
@@ -180,7 +191,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-6">
                                     <label for="companyid">会社名</label>
                                     <select class="form-control" name="companyid" id="companyid">
                                         <option value="" selected="">会社名を選択してください。</option>
@@ -192,6 +203,10 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                             </option>
                                         <?php } ?>
                                     </select>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label for="signstamp">印鑑</label>
+                                    <input type="file" name="signstamp" accept="image/*" id="fileInput">
                                 </div>
                             </div>
                             <br>
@@ -224,7 +239,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
     <div class="row">
         <div class="modal" id="modal2" tabindex="-1" style="display: none;">
             <div class="modal-dialog">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     <div class="modal-content">
                         <div class="modal-header">
                             社員編集
@@ -279,9 +294,16 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                             </div>
                             <br>
                             <div class="row">
-                                <div class="col-xs-12">
+                                <div class="col-xs-6">
                                     <label for="bigo">備考</label>
                                     <input type="text" class="form-control" name="udbigo" id="udbigo" maxlength="1000" style="text-align: left">
+                                </div>
+                                <div class="col-xs-6">
+                                    <label for="signstamp">印鑑</label><br>
+                                    <img width="50" id="udsignstamp" alt="印鑑無し">
+                                    <span id="udsignstamp_name"></span>
+                                    <input type="hidden" name="udsignstamp_old" id="udsignstamp_old">
+                                    <input type="file" name="udsignstamp_new" id="udfileInput" accept="image/*">
                                 </div>
                             </div>
                         </div>
@@ -409,6 +431,12 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                 $("#udemail").text($('[name="udemail"]').val("<?php echo $key['email'] ?>"));
                 $("#uddept").text($('[name="uddept"]').val("<?php echo $key['dept'] ?>"));
                 $("#udcompanyid").val("<?php echo $key['companyid']; ?>");
+                var udsignstamp_old = $("input[name=udsignstamp_old]:hidden");
+                udsignstamp_old.val("<?php echo $key['signstamp'] ?>");
+                var udsignstamp_old = udsignstamp_old.val();
+                $("#udsignstamp_name").text('<?php echo $key['signstamp'] ?>');
+                var imagePath = "../assets/uploads/<?php echo $key['signstamp']; ?>";
+                $("#udsignstamp").attr("src", imagePath);
                 $("#udbigo").text($('[name="udbigo"]').val("<?php echo $key['bigo'] ?>"));
             }
         <?php
@@ -464,6 +492,32 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             alert("<?php echo $manage_companyid_empty; ?>");
             e.preventDefault();
             $("#udcompanyid").focus();
+            return true;
+        }
+    });
+
+    $('#udfileInput').on('change', function() {
+        var maxFileSize = 2 * 1024 * 1024;
+        var fileInput = this;
+        var fileSize = fileInput.files[0].size;
+        if (fileSize > maxFileSize) {
+            alert("<?php echo $manage_image_size; ?>");
+            fileInput.value = '';
+            e.preventDefault();
+            $("#udfileInput").focus();
+            return true;
+        }
+    });
+
+    $('#fileInput').on('change', function() {
+        var maxFileSize = 2 * 1024 * 1024;
+        var fileInput = this;
+        var fileSize = fileInput.files[0].size;
+        if (fileSize > maxFileSize) {
+            alert("<?php echo $manage_image_size; ?>");
+            fileInput.value = '';
+            e.preventDefault();
+            $("#fileInput").focus();
             return true;
         }
     });
