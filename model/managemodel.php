@@ -210,10 +210,32 @@ if (isset($_POST['btnRegAM'])) {
     $outymd = "";
     $type = constant('ADMINISTRATOR');
 
-    $sql = "INSERT INTO `tbl_user` (`uid`, `companyid`, `name`, `pwd`, `dept`, 
+    if ($_FILES['signstamp']["name"] == "") {
+        $sql = "INSERT INTO `tbl_user` (`uid`, `companyid`, `name`, `pwd`, `dept`, 
                 `email`, `grade`, `type`, `bigo`, `inymd`, `outymd`, `reg_dt`)
                 VALUES ('$uid', '$companyid', '$name', '$pwd', '$dept',
                 '$email', '$grade', '$type', '$bigo', '$inymd', '$outymd', '$reg_dt')";
+    } else {
+        $uploadDirectory = "../assets/uploads/";
+        $fileName = $_FILES["signstamp"]["name"];
+        $fileTmpName = $_FILES["signstamp"]["tmp_name"];
+        $fileType = $_FILES["signstamp"]["type"];
+        $allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+
+        if (in_array($fileType, $allowedTypes)) {
+            $targetPath = $uploadDirectory . $fileName;
+            if (move_uploaded_file($fileTmpName, $targetPath)) {
+                $sql = "INSERT INTO `tbl_user` (`uid`, `companyid`, `name`, `pwd`, `dept`, 
+                    `email`, `grade`, `type`, `signstamp`, `bigo`, `inymd`, `outymd`, `reg_dt`)
+                    VALUES ('$uid', '$companyid', '$name', '$pwd', '$dept', '$email', 
+                    '$grade', '$type', '$fileName', '$bigo', '$inymd', '$outymd', '$reg_dt')";
+            } else {
+                echo $manage_image_upload;
+            }
+        } else {
+            echo $manage_image_type;
+        }
+    }
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
@@ -234,7 +256,8 @@ if (isset($_POST['btnUpdateAM'])) {
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
 
-    $sql = "UPDATE tbl_user SET 
+    if ($_FILES['udsignstamp_new']["name"] == "") {
+        $sql = "UPDATE tbl_user SET 
             pwd='$pwd',
             name='$name',
             grade='$grade',
@@ -243,6 +266,38 @@ if (isset($_POST['btnUpdateAM'])) {
             companyid='$companyid',
             bigo='$bigo'
         WHERE uid ='$uid'";
+    } else {
+        $filePath = "../assets/uploads/" . $_POST['udsignstamp_old'];
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+        
+        $uploadDirectory = "../assets/uploads/";
+        $fileName = $_FILES["udsignstamp_new"]["name"];
+        $fileTmpName = $_FILES["udsignstamp_new"]["tmp_name"];
+        $fileType = $_FILES["udsignstamp_new"]["type"];
+        $allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+
+        if (in_array($fileType, $allowedTypes)) {
+            $targetPath = $uploadDirectory . $fileName;
+            if (move_uploaded_file($fileTmpName, $targetPath)) {
+                $sql = "UPDATE tbl_user SET 
+                    pwd='$pwd',
+                    name='$name',
+                    grade='$grade',
+                    email='$email',
+                    dept='$dept',
+                    companyid='$companyid',
+                    signstamp='$fileName',
+                    bigo='$bigo'
+            WHERE uid ='$uid'";
+            } else {
+                echo $manage_image_upload;
+            }
+        } else {
+            echo $manage_image_type;
+        }
+    }
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['update_success'] =  $update_success;
@@ -255,7 +310,11 @@ if (isset($_POST['btnUpdateAM'])) {
 // Delete data to tbl_user table of database
 if (isset($_POST['DeleteAM'])) {
     $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
-
+    $filePath = "../assets/uploads/" . $_POST['udsignstamp_old'];
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
+    
     $sql = "DELETE FROM `tbl_user` 
             WHERE uid ='$uid'";
 
