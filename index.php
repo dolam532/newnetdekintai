@@ -17,7 +17,7 @@ include('./model/inactive.php');
 	<link rel="stylesheet" href="./assets/fonts/glyphicons-halflings-regular.eot">
 	<link rel="stylesheet" href="./assets/fonts/glyphicons-halflings-regular.ttf">
 	<link rel="stylesheet" href="./assets/fonts/glyphicons-halflings-regular.woff">
-	<!-- common Javascript     --> 
+	<!-- common Javascript     -->
 	<script type="text/javascript" src="./assets/js/common.js"> </script>
 
 	<!-- Datepeeker 위한 link -->
@@ -104,7 +104,7 @@ include('./model/inactive.php');
 					?>
 							<div class="media">
 								<div class="media-left">
-									<a href="javascript:;" onclick="fn_showNotice(`<?= $notice['bid']; ?>`, `<?= $notice['imagenum']; ?>`, `<?= $notice['title']; ?>`, `<?= $notice['reader']; ?>`, `<?= $notice['name']; ?>`, `<?= $notice['viewcnt']; ?>`, `<?= $notice['reg_dt']; ?>`, `<?= $notice['content']; ?>`);"><img class="media-object" src="./assets/images/<?= $notice['bid']; ?>.jpg" alt="お知らせ"></a>
+									<a href="javascript:;" onclick="fn_showNotice(`<?= $notice['bid']; ?>`, `<?= $notice['imagenum']; ?>`, `<?= $notice['title']; ?>`, `<?= $notice['reader']; ?>`, `<?= $notice['name']; ?>`, `<?= $notice['viewcnt']; ?>`, `<?= $notice['reg_dt']; ?>`, `<?= $notice['content']; ?>`);"><img class="media-object" width="150" src="./assets/uploads/<?= $notice['imagefile']; ?>" alt="お知らせ"></a>
 								</div>
 								<div class="media-body">
 									<h4 class="media-heading">

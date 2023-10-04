@@ -431,12 +431,14 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                 $("#udemail").text($('[name="udemail"]').val("<?php echo $key['email'] ?>"));
                 $("#uddept").text($('[name="uddept"]').val("<?php echo $key['dept'] ?>"));
                 $("#udcompanyid").val("<?php echo $key['companyid']; ?>");
+                
                 var udsignstamp_old = $("input[name=udsignstamp_old]:hidden");
                 udsignstamp_old.val("<?php echo $key['signstamp'] ?>");
                 var udsignstamp_old = udsignstamp_old.val();
                 $("#udsignstamp_name").text('<?php echo $key['signstamp'] ?>');
                 var imagePath = "../assets/uploads/<?php echo $key['signstamp']; ?>";
                 $("#udsignstamp").attr("src", imagePath);
+                
                 $("#udbigo").text($('[name="udbigo"]').val("<?php echo $key['bigo'] ?>"));
             }
         <?php
@@ -501,7 +503,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         var fileInput = this;
         var fileSize = fileInput.files[0].size;
         if (fileSize > maxFileSize) {
-            alert("<?php echo $manage_image_size; ?>");
+            alert("<?php echo $image_size_error; ?>");
             fileInput.value = '';
             e.preventDefault();
             $("#udfileInput").focus();
@@ -514,7 +516,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         var fileInput = this;
         var fileSize = fileInput.files[0].size;
         if (fileSize > maxFileSize) {
-            alert("<?php echo $manage_image_size; ?>");
+            alert("<?php echo $image_size_error; ?>");
             fileInput.value = '';
             e.preventDefault();
             $("#fileInput").focus();

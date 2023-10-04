@@ -9,6 +9,9 @@ $save_fail = '入力情報保存できませんでした。';
 $delete_success = '削除成功しました。';
 $delete_all_success = 'すべて削除成功しました。';
 $select_message = '現場を選択してください。';
+$image_upload_error = 'ファイルのアップロード中にエラーが発生しました。';
+$image_type_error = '無効なファイルタイプです。 画像(JPEG、PNG、JPG)をアップロードしてください。';
+$image_size_error = 'アップロードされた画像は最大許容サイズ (2 MB) を超えています。';
 
 // index
 $login_is_not = '詳細情報はログイン後可能です。';
@@ -150,9 +153,6 @@ $manage_grade_empty = '区分を入力してください。';
 $manage_email_empty = 'Emailを入力してください。';
 $manage_dept_empty = '部署を入力してください。';
 $manage_companyid_empty = '会社名を選択してください。';
-$manage_image_upload = 'ファイルのアップロード中にエラーが発生しました。';
-$manage_image_type = '無効なファイルタイプです。 画像(JPEG、PNG、JPG)をアップロードしてください。';
-$manage_image_size = 'アップロードされた画像は最大許容サイズ (2 MB) を超えています。';
 
 // codemasterList
 $content_cmlC_empty = 'Codeを入力してください。';

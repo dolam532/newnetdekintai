@@ -140,6 +140,7 @@ if ($_SESSION['auth'] == false) {
                         <th style="text-align: center; width: 10%;">作成者</th>
                         <th style="text-align: center; width: 15%;">作成日</th>
                         <th style="text-align: center; width: 25%;">確認者</th>
+                        <th style="text-align: center; width: 10%;">写真</th>
                         <th style="text-align: center; width: 5%;">view</th>
                     </tr>
                 </thead>
@@ -176,6 +177,16 @@ if ($_SESSION['auth'] == false) {
                                 <td><span><?= $key['name'] ?></span></td>
                                 <td><span><?= $key['reg_dt'] ?></span></td>
                                 <td><span><?= $key['reader'] ?></span></td>
+                                <td>
+                                    <span>
+                                        <?php if ($key['imagefile'] == NULL) : ?>
+                                            写真無し
+                                        <?php else : ?>
+                                            <img width="50" src="<?= "../assets/uploads/" . $key['imagefile'] ?>"><br>
+                                            <?= $key['imagefile'] ?>
+                                        <?php endif; ?>
+                                    </span>
+                                </td>
                                 <td><span><?= $key['viewcnt'] ?></span></td>
                             </tr>
                     <?php
@@ -190,7 +201,7 @@ if ($_SESSION['auth'] == false) {
     <div class="row">
         <div class="modal" id="modal" tabindex="-1" style="display: none;">
             <div class="modal-dialog">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     <div class="modal-content">
                         <div class="modal-header">
                             お知らせ登録(<span id="sname"><?= $_SESSION['auth_name'] ?></span>)
@@ -208,7 +219,7 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="content">内容</label>
-                                    <textarea type="text" class="form-control" rows="5" name="content" id="content" placeholder="お知らせ内容"></textarea>
+                                    <textarea type="text" class="form-control" rows="3" name="content" id="content" placeholder="お知らせ内容"></textarea>
                                 </div>
                             </div>
                             <br>
@@ -231,6 +242,13 @@ if ($_SESSION['auth'] == false) {
                                 <div class="col-xs-4">
                                     <label for="viewcnt">view Cnt</label>
                                     <input type="text" class="form-control" name="viewcnt" value="0" style="text-align: center" readonly>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <label for="imagefile">写真</label>
+                                    <input type="file" name="imagefile" accept="image/*" id="fileInput">
                                 </div>
                             </div>
                         </div>
@@ -256,7 +274,7 @@ if ($_SESSION['auth'] == false) {
     <div class="row">
         <div class="modal" id="modal2" tabindex="-1" style="display: none;">
             <div class="modal-dialog">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     <div class="modal-content">
                         <div class="modal-header">
                             お知らせ編集
@@ -276,7 +294,7 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="content">内容</label>
-                                    <textarea type="text" class="form-control" rows="5" name="udcontent" id="udcontent"></textarea>
+                                    <textarea type="text" class="form-control" rows="3" name="udcontent" id="udcontent"></textarea>
                                 </div>
                             </div>
                             <br>
@@ -299,6 +317,16 @@ if ($_SESSION['auth'] == false) {
                                 <div class="col-xs-4">
                                     <label for="viewcnt">view Cnt</label>
                                     <input type="text" class="form-control" name="udviewcnt" id="udviewcnt" style="text-align: center">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <label for="udimagefile">写真</label><br>
+                                    <img width="50" id="udimagefile" alt="写真無し">
+                                    <span id="udimagefile_name"></span>
+                                    <input type="hidden" name="udimagefile_old" id="udimagefile_old">
+                                    <input type="file" name="udimagefile_new" id="udfileInput" accept="image/*">
                                 </div>
                             </div>
                         </div>
@@ -383,6 +411,13 @@ if ($_SESSION['auth'] == false) {
                     $("#udviewcnt").text($('[name="udviewcnt"]').val("<?php echo $key['viewcnt'] ?>"));
                     $("#udreg_dt").text($('[name="udreg_dt"]').val("<?php echo $key['reg_dt'] ?>"));
 
+                    var udimagefile_old = $("input[name=udimagefile_old]:hidden");
+                    udimagefile_old.val("<?php echo $key['imagefile'] ?>");
+                    var udimagefile_old = udimagefile_old.val();
+                    $("#udimagefile_name").text('<?php echo $key['imagefile'] ?>');
+                    var imagePath = "../assets/uploads/<?php echo $key['imagefile']; ?>";
+                    $("#udimagefile").attr("src", imagePath);
+
                     var udbid = $("input[name=udbid]:hidden");
                     udbid.val("<?php echo $key['bid'] ?>");
                     var udbid = udbid.val();
@@ -438,6 +473,32 @@ if ($_SESSION['auth'] == false) {
             alert("<?php echo $content_noteViewcnt_empty; ?>");
             $("#udviewcnt").focus();
             return false;
+        }
+    });
+
+    $('#udfileInput').on('change', function() {
+        var maxFileSize = 2 * 1024 * 1024;
+        var fileInput = this;
+        var fileSize = fileInput.files[0].size;
+        if (fileSize > maxFileSize) {
+            alert("<?php echo $image_size_error; ?>");
+            fileInput.value = '';
+            e.preventDefault();
+            $("#udfileInput").focus();
+            return true;
+        }
+    });
+
+    $('#fileInput').on('change', function() {
+        var maxFileSize = 2 * 1024 * 1024;
+        var fileInput = this;
+        var fileSize = fileInput.files[0].size;
+        if (fileSize > maxFileSize) {
+            alert("<?php echo $image_size_error; ?>");
+            fileInput.value = '';
+            e.preventDefault();
+            $("#fileInput").focus();
+            return true;
         }
     });
 </script>

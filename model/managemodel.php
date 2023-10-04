@@ -230,10 +230,10 @@ if (isset($_POST['btnRegAM'])) {
                     VALUES ('$uid', '$companyid', '$name', '$pwd', '$dept', '$email', 
                     '$grade', '$type', '$fileName', '$bigo', '$inymd', '$outymd', '$reg_dt')";
             } else {
-                echo $manage_image_upload;
+                echo $image_upload_error;
             }
         } else {
-            echo $manage_image_type;
+            echo $image_type_error;
         }
     }
 
@@ -292,10 +292,10 @@ if (isset($_POST['btnUpdateAM'])) {
                     bigo='$bigo'
             WHERE uid ='$uid'";
             } else {
-                echo $manage_image_upload;
+                echo $image_upload_error;
             }
         } else {
-            echo $manage_image_type;
+            echo $image_type_error;
         }
     }
 
