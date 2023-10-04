@@ -151,11 +151,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<div class="col-xs-3">
 								<label for="pwd">PASSWORD</label>
-								<input type="text" class="form-control" id="pwd" name="pwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left" value="1111" readonly>
+								<input type="text" class="form-control" id="pwd" name="pwd" placeholder="パスワード" required="required" maxlength="20" style="text-align: left" value="1111" readonly>
 							</div>
 							<div class="col-xs-3">
 								<label for="name">社員名</label>
-								<input type="text" class="form-control" id="name" name="name" placeholder="name" required="required" maxlength="100" style="text-align: left">
+								<input type="text" class="form-control" id="name" name="name" placeholder="日本 太郎" required="required" maxlength="100" style="text-align: left">
 							</div>
 							<div class="col-xs-3">
 								<label for="grade">区分</label>
@@ -166,7 +166,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="email">email</label>
-								<input type="email" class="form-control" id="email" name="email" placeholder="email" required="required" maxlength="100" style="text-align: left">
+								<input type="email" class="form-control" id="email" name="email" placeholder="email@" required="required" maxlength="100" style="text-align: left">
 							</div>
 							<div class="col-xs-6">
 								<label for="dept">部署</label>
@@ -177,23 +177,23 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="bigo">備考</label>
-								<input type="text" class="form-control" name="bigo" maxlength="1000" style="text-align: left">
+								<input type="text" class="form-control" name="bigo" maxlength="1000" style="text-align: left" placeholder="備考">
 							</div>
 							<div class="col-xs-3">
 								<label for="inymd">入社日</label>
-								<input type="text" class="form-control" id="inymd" name="inymd" maxlength="10" placeholder="" style="text-align: left">
+								<input type="text" class="form-control" id="inymd" name="inymd" maxlength="10" placeholder="日付" style="text-align: left">
 							</div>
 							<div class="col-xs-3">
 								<label for="outymd">退社日</label>
-								<input type="text" class="form-control" id="outymd" name="outymd" maxlength="10" placeholder="" style="text-align: left">
+								<input type="text" class="form-control" id="outymd" name="outymd" maxlength="10" placeholder="日付" style="text-align: left">
 							</div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="genid">勤務時間タイプ</label>
-								<select class="form-control" id="genba_list" name="genba_list">
-									<option value="" selected=""></option>
+								<select class="form-control" id="genba_list" name="genba_list" >
+									<option value="" selected="" ></option>
 									<?php
 									foreach ($genba_list_db as $key) {
 									?>
@@ -205,11 +205,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<div class="col-xs-3">
 								<label for="genstrymd">契約期間(F)</label>
-								<input type="text" class="form-control" id="genstrymd" name="genstrymd" maxlength="10" placeholder="" style="text-align: left">
+								<input type="text" class="form-control" id="genstrymd" name="genstrymd" maxlength="10" placeholder="日付" style="text-align: left">
 							</div>
 							<div class="col-xs-3">
 								<label for="genendymd">契約期間(T)</label>
-								<input type="text" class="form-control" id="genendymd" name="genendymd" maxlength="10" placeholder="" style="text-align: left">
+								<input type="text" class="form-control" id="genendymd" name="genendymd" maxlength="10" placeholder="日付" style="text-align: left">
 							</div>
 						</div>
 					</div>
@@ -250,11 +250,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<div class="col-xs-3">
 								<label for="pwd">PASSWORD</label>
-								<input type="text" class="form-control" id="ulpwd" name="ulpwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
+								<input type="text" class="form-control" id="ulpwd" name="ulpwd" placeholder="パスワード" required="required" maxlength="20" style="text-align: left">
 							</div>
 							<div class="col-xs-3">
 								<label for="name">社員名</label>
-								<input type="text" class="form-control" id="ulname" name="ulname" placeholder="name" required="required" maxlength="100" style="text-align: left">
+								<input type="text" class="form-control" id="ulname" name="ulname" placeholder="日本 太郎" required="required" maxlength="100" style="text-align: left">
 							</div>
 							<div class="col-xs-3">
 								<label for="grade">区分</label>
@@ -265,7 +265,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="email">email</label>
-								<input type="email" class="form-control" id="ulemail" name="ulemail" placeholder="email" required="required" maxlength="100" style="text-align: left">
+								<input type="email" class="form-control" id="ulemail" name="ulemail" placeholder="email@" required="required" maxlength="100" style="text-align: left">
 							</div>
 							<div class="col-xs-6">
 								<label for="dept">部署</label>
@@ -276,7 +276,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="bigo">備考</label>
-								<input type="text" class="form-control" id="ulbigo" name="ulbigo" maxlength="1000" style="text-align: left">
+								<input type="text" class="form-control" id="ulbigo" name="ulbigo" maxlength="1000" style="text-align: left" placeholder="備考">
 							</div>
 							<div class="col-xs-3">
 								<label for="inymd">入社日</label>
@@ -347,7 +347,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<div class="col-xs-3">
 								<label for="pwd">PASSWORD</label>
-								<input type="text" class="form-control" id="userpwd" name="userpwd" placeholder="pwd" required="required" maxlength="20" style="text-align: left">
+								<input type="text" class="form-control" id="userpwd" name="userpwd" placeholder="パスワード" required="required" maxlength="20" style="text-align: left">
 							</div>
 							<div class="col-xs-6">
 								<label for="genid">勤務時間タイプ</label>

@@ -1140,7 +1140,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 
 		var SeparateArr2 = ArrayData.split(',');
 		var CheckData = SeparateArr2[1];
-		if (CheckData === "") {
+		if (CheckData.trim().length === 0) {
 			$('#btnReg').val("登録");
 			$('#KUDdatetext').text("登録");
 		} else {

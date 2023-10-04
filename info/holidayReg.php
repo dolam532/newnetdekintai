@@ -113,7 +113,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                 <tr class="info">
                     <th style="text-align: center; width: 20%;">年</th>
                     <th style="text-align: center; width: 20%;">祝日</th>
-                    <th style="text-align: center; width: 60%;">Remark</th>
+                    <th style="text-align: center; width: 60%;">備考</th>
                 </tr>
             </thead>
             <tbody>
