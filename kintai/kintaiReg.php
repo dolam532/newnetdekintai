@@ -3,6 +3,7 @@
 session_start();
 include('../inc/dbconnect.php');
 include('../inc/message.php');
+include('../inc/const.php');
 include('../inc/const_array.php');
 include('../model/kintaimodel.php');
 include('../inc/header.php');
@@ -84,7 +85,6 @@ if ($_SESSION['auth'] == false) {
 	.text_size {
 		font-size: smaller;
 	}
-
 </style>
 <title>勤 務 表</title>
 <?php include('../inc/menu.php'); ?>
@@ -238,7 +238,7 @@ if ($_SESSION['auth'] == false) {
 					<th style="text-align: center; width: 9%;">休憩時間</th>
 					<th style="text-align: center; width: 9%;">就業時間</th>
 					<th style="text-align: center; width: auto;">業務内容</th>
-					<th style="text-align: center; width: 20%;">備考</th>
+					<th style="text-align: center; width: 18%;">備考</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -276,19 +276,19 @@ if ($_SESSION['auth'] == false) {
 							</td>
 							<td>
 								<?= $key['jobstarthh'] ?>:
-								<?= $key['jobstartmm'] ?>
+								<?= $key['jobstartmm'] ?><!-- fix 18: 00  -> 18:00 to show  -->
 							</td>
 							<td>
 								<?= $key['jobendhh'] ?>:
-								<?= $key['jobendmm'] ?>
+								<?= $key['jobendmm'] ?> <!-- fix 18: 00  -> 18:00 to show  -->
 							</td>
 							<td>
 								<?= $key['offtimehh'] ?>:
-								<?= $key['offtimemm'] ?>
+								<?= $key['offtimemm'] ?> <!-- fix 18: 00  -> 18:00 to show  -->
 							</td>
 							<td>
-								<?= $key['workhh'] ?>:
-								<?= $key['workmm'] ?>
+								<!-- fix 8:0  -> 08:00 to show   -->
+								<?= (empty($key['workhh']) && empty($key['workmm'])) || ($key['workhh'] === '00' && $key['workmm'] === '00') ? '' : sprintf('%02d:%02d', $key['workhh'], $key['workmm']) ?>
 							</td>
 							<td>
 								<?= $key['comment'] ?>
@@ -334,28 +334,23 @@ if ($_SESSION['auth'] == false) {
 								<?php endif; ?>
 							</td>
 							<td>
-								<?= $key['daystarthh'] ?>:
-								<?= $key['daystartmm'] ?>
+								<?= $key['daystarthh'] ?>:<?= $key['daystartmm'] ?>
 							</td>
 							<td>
-								<?= $key['dayendhh'] ?>:
-								<?= $key['dayendmm'] ?>
+								<?= $key['dayendhh'] ?>:<?= $key['dayendmm'] ?>
 							</td>
 							<td>
-								<?= $key['jobstarthh'] ?>:
-								<?= $key['jobstartmm'] ?>
+								<?= $key['jobstarthh'] ?>:<?= $key['jobstartmm'] ?>
 							</td>
 							<td>
-								<?= $key['jobendhh'] ?>:
-								<?= $key['jobendmm'] ?>
+								<?= $key['jobendhh'] ?>:<?= $key['jobendmm'] ?>
 							</td>
 							<td>
-								<?= $key['offtimehh'] ?>:
-								<?= $key['offtimemm'] ?>
+								<?= $key['offtimehh'] ?>:<?= $key['offtimemm'] ?>
 							</td>
 							<td>
-								<?= $key['workhh'] ?>:
-								<?= $key['workmm'] ?>
+								<!-- fix 8:0  -> 08:00 to show   -->
+								<?= (empty($key['workhh']) && empty($key['workmm'])) || ($key['workhh'] === '00' && $key['workmm'] === '00') ? '' : sprintf('%02d:%02d', $key['workhh'], $key['workmm']) ?>
 							</td>
 							<td>
 								<?= $key['comment'] ?>
@@ -810,18 +805,24 @@ if ($_SESSION['auth'] == false) {
 							</div>
 						</div>
 						<br>
+						<!--2023/1340-003 change start -->
 						<div class="row">
 							<div class="col-md-6">
-								<label for="workcontent_rmodal">業務内容</label>
+								<label for="workcontent_rmodal">業務内容 <p id="workcontent_rmodal-error"
+										style="color: red;"></p></label>
 								<input type="text" class="form-control" name="workcontent_rmodal"
-									id="workcontent_rmodal" placeholder="content" style="text-align: left">
+									id="workcontent_rmodal"
+									placeholder="業務内容(<?php echo $MAX_INPUT_LENGTH_COMMENT ?>桁まで)"
+									style="text-align: left" maxlength=<?php echo $MAX_INPUT_LENGTH_COMMENT ?>>
 							</div>
 							<div class="col-md-6">
-								<label for="bigo_rmodal">備考</label>
+								<label for="bigo_rmodal">備考 <p id="bigo_rmodal-error" style="color: red;"></p></label>
 								<input type="text" class="form-control" name="bigo_rmodal" id="bigo_rmodal"
-									placeholder="remark" style="text-align: left">
+									placeholder="備考(<?php echo $MAX_INPUT_LENGTH_BIGO ?>桁まで)" style="text-align: left"
+									maxlength=<?php echo $MAX_INPUT_LENGTH_BIGO ?>>
 							</div>
 						</div>
+						<!--2023/1340-003 change end -->
 					</div>
 					<div class="modal-footer" style="text-align: center">
 						<div class="col-md-4"></div>
@@ -1091,14 +1092,23 @@ if ($_SESSION['auth'] == false) {
 						<br>
 						<div class="row">
 							<div class="col-xs-6">
-								<label for="comment">業務内容</label>
+								<label for="comment">業務内容 <!--2023/1340-003 add start -->
+									<p id="comment-error" style="color: red;"></p>
+									<!--2023/1340-003 add end -->
+								</label>
+
 								<input type="text" class="form-control" name="comment" id="comment"
-									placeholder="content" style="text-align: left" maxlength=22>
+									placeholder="業務内容(<?php echo $MAX_INPUT_LENGTH_COMMENT ?>桁まで)"
+									style="text-align: left" maxlength=<?php echo $MAX_INPUT_LENGTH_COMMENT ?>>
 							</div>
 							<div class="col-xs-6">
-								<label for="bigo">備考</label>
-								<input type="text" class="form-control" name="bigo" id="bigo" placeholder="remark"
-									style="text-align: left">
+								<label for="bigo">備考 <!--2023/1340-003 add start -->
+									<p id="bigo-error" style="color: red;"></p>
+									<!--2023/1340-003 add end -->
+								</label>
+								<input type="text" class="form-control" name="bigo" id="bigo"
+									placeholder="備考(<?php echo $MAX_INPUT_LENGTH_BIGO ?>桁まで)" style="text-align: left"
+									maxlength=<?php echo $MAX_INPUT_LENGTH_BIGO ?>>
 							</div>
 						</div>
 					</div>
@@ -1522,6 +1532,36 @@ if ($_SESSION['auth'] == false) {
 			return false;
 		}
 	});
+
+
+	// ----------2023-10-04/1340-003 --------- add start//
+	// check input length call ↓
+	validateLength("comment");
+	validateLength("bigo");
+	validateLength("workcontent_rmodal");
+	validateLength("bigo_rmodal");
+
+	// Check Maxlength on input function
+	// Create a function to check input length based on the provided input element's ID, 
+	// Automatically extracting the character limit from the maxlength attribute of that element."
+	function validateLength(inputId) {
+		var $input = $("#" + inputId);
+		var $errorMsg = $("#" + inputId + "-error");
+		var maxLength = parseInt($input.attr("maxlength"));
+		$input.on("input", function () {
+			var text = $input.val();
+			var charCount = Array.from(text).length;
+			if (charCount > maxLength) {
+				$errorMsg.text(maxLength + "<?php echo $kintai_check_input_err; ?>");
+				$input.css("borderColor", "red");
+			} else {
+				$errorMsg.text("");
+				$input.css("borderColor", "");
+				$input.prop("disabled", false);
+			}
+		});
+	}
+	// ----------2023-10-04/1340-003 --------- add start//
 </script>
 
 <?php include('../inc/footer.php'); ?>
