@@ -104,7 +104,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             </div>
             <div class="col-md-3 text-left">
                 <div class="title_condition">
-                    <label for="searchCompanyname">会社名 : <input type="text" name="searchCompanyname" value="<?= $_POST['searchCompanyname'] ?>" style="width: 200px;"></label>
+                    <label for="searchCompanyname">会社名 : <input type="text" name="searchCompanyname" value="<?= $_POST['searchCompanyname'] ?>" style="width: 200px;" placeholder="〇〇会社"></label>
                 </div>
             </div>
             <div class="col-md-3 text-right">
@@ -209,7 +209,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             <div class="row">
                                 <div class="col-xs-9">
                                     <label for="address">住所</label>
-                                    <input type="text" class="form-control" name="address" id="address" maxlength="150" style="text-align: left">
+                                    <input type="text" class="form-control" name="address" id="address" maxlength="150" style="text-align: left" placeholder="東京都東京区1丁目2番地二ホンビル3階">
                                 </div>
                                 <div class="col-xs-3">
                                     <label for="use_yn"><strong>使用</strong></label>
@@ -223,14 +223,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="joken">契約条件</label>
-                                    <input type="text" class="form-control" name="joken" id="joken" maxlength="200" style="text-align: left">
+                                    <input type="text" class="form-control" name="joken" id="joken" maxlength="200" style="text-align: left" placeholder="契約条件">
                                 </div>
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="bigo">備考</label>
-                                    <input type="text" class="form-control" name="bigo" id="bigo" maxlength="300" style="text-align: left">
+                                    <input type="text" class="form-control" name="bigo" id="bigo" maxlength="300" style="text-align: left" placeholder="備考">
                                 </div>
                             </div>
                         </div>
@@ -299,7 +299,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             <div class="row">
                                 <div class="col-xs-9">
                                     <label for="address">住所</label>
-                                    <input type="text" class="form-control" name="udaddress" id="udaddress" maxlength="150" style="text-align: left">
+                                    <input type="text" class="form-control" name="udaddress" id="udaddress" maxlength="150" style="text-align: left" placeholder="東京都東京区1丁目2番地二ホンビル3階">
                                 </div>
                                 <div class="col-xs-3">
                                     <label for="use_yn"><strong>使用</strong></label>
@@ -313,14 +313,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="joken">契約条件</label>
-                                    <input type="text" class="form-control" name="udjoken" id="udjoken" maxlength="200" style="text-align: left">
+                                    <input type="text" class="form-control" name="udjoken" id="udjoken" maxlength="200" style="text-align: left" placeholder="契約条件">
                                 </div>
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="bigo">備考</label>
-                                    <input type="text" class="form-control" name="udbigo" id="udbigo" maxlength="300" style="text-align: left">
+                                    <input type="text" class="form-control" name="udbigo" id="udbigo" maxlength="300" style="text-align: left" placeholder="備考">
                                 </div>
                             </div>
                         </div>
