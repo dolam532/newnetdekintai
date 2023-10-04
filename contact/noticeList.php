@@ -200,7 +200,7 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="title">タイトル</label>
-                                    <input type="text" class="form-control" name="title" id="title">
+                                    <input type="text" class="form-control" name="title" id="title" placeholder="タイトル">
                                     <input type="hidden" name="uid" value="<?= $_SESSION['auth_uid'] ?>">
                                 </div>
                             </div>
@@ -208,14 +208,14 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="content">内容</label>
-                                    <textarea type="text" class="form-control" rows="5" name="content" id="content"></textarea>
+                                    <textarea type="text" class="form-control" rows="5" name="content" id="content" placeholder="お知らせ内容"></textarea>
                                 </div>
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="reader">確認者</label>
-                                    <input type="text" class="form-control" name="reader" id="reader" style="text-align: left">
+                                    <input type="text" class="form-control" name="reader" id="reader" style="text-align: left" placeholder="日本 太郎">
                                 </div>
                             </div>
                             <br>

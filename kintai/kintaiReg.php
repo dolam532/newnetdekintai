@@ -1093,7 +1093,7 @@ if ($_SESSION['auth'] == false) {
 							<div class="col-xs-6">
 								<label for="comment">業務内容</label>
 								<input type="text" class="form-control" name="comment" id="comment"
-									placeholder="content" style="text-align: left">
+									placeholder="content" style="text-align: left" maxlength=22>
 							</div>
 							<div class="col-xs-6">
 								<label for="bigo">備考</label>
@@ -1130,7 +1130,7 @@ if ($_SESSION['auth'] == false) {
 
 		var SeparateArr2 = ArrayData.split(',');
 		var CheckData = SeparateArr2[1];
-		if (CheckData === "") {
+		if (CheckData.trim().length === 0) {
 			$('#btnReg').val("登録");
 			$('#selkindatetext').text("登録");
 		} else {
