@@ -50,6 +50,28 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		unset($_SESSION['save_success']);
 	}
 	?>
+	<?php
+	if (isset($_SESSION['update_success']) && isset($_POST['UpdateUserList'])) {
+	?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['update_success']; ?>
+		</div>
+	<?php
+		unset($_SESSION['update_success']);
+	}
+	?>
+	<?php
+	if (isset($_SESSION['delete_success']) && isset($_POST['btnDelUserList'])) {
+	?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['delete_success']; ?>
+		</div>
+	<?php
+		unset($_SESSION['delete_success']);
+	}
+	?>
 	<div class="row">
 		<div class="col-md-3 text-left">
 			<div class="title_name">
@@ -73,30 +95,25 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<input type="submit" name="SearchButton" value="検索">&nbsp;&nbsp;&nbsp;
 					<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
 						<input type="button" id="btnNew" value="新規">
-					<?php else : ?>
-						<?php if (!empty($userlist_list)) {
-							foreach (@$userlist_list as $user) {
-						?>
-								<input type="button" id="edituser" class="showModal2" value="編集  ,<?= $user['uid'] ?>">
-						<?php }
-						} ?>
-					<?php endif; ?>
+					<?php endif;?>
 				</div>
 			</div>
 		</form>
 	</div>
 
+	<!-- ビュー -->
 	<div class="form-group">
 		<table class="table table-bordered datatable">
 			<thead>
 				<tr class="info">
-					<th style="text-align: center; width: 10%;">ID</th>
-					<th style="text-align: center; width: 10%;">PASSWORD</th>
-					<th style="text-align: center; width: 10%;">社員名</th>
-					<th style="text-align: center; width: 14%;">Email</th>
+					<th style="text-align: center; width: 8%;">ID</th>
+					<th style="text-align: center; width: 8%;">PASSWORD</th>
+					<th style="text-align: center; width: 8%;">社員名</th>
+					<th style="text-align: center; width: 15%;">Email</th>
 					<th style="text-align: center; width: 10%;">部署</th>
 					<th style="text-align: center; width: 8%;">区分</th>
-					<th style="text-align: center; width: 16%;">勤務時間タイプ</th>
+					<th style="text-align: center; width: 15%;">勤務時間タイプ</th>
+					<th style="text-align: center; width: 10%;">印鑑</th>
 					<th style="text-align: center; width: auto;">備考</th>
 				</tr>
 			</thead>
@@ -111,11 +128,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<tr>
 							<td>
 								<a href="#">
-									<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-										<span class="showModal"><?= $user['uid'] ?></span>
-									<?php else : ?>
-										<span class="showModal2"><?= $user['uid'] ?></span>
-									<?php endif; ?>
+									<span class="showModal"><?= $user['uid'] ?></span>
 								</a>
 							</td>
 							<td><span name="pwd"><?= $user['pwd'] ?></span></td>
@@ -124,8 +137,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<td><span name="dept"><?= $user['dept'] ?></span></td>
 							<td><span name="grade"><?= $user['grade'] ?></span></td>
 							<td><span name="genbaname"><?= $user['genbaname'] ?></span></td>
-							<td><span name="bigo"><?= $user['bigo'] ?></span>
+							<td>
+								<span name="signstamp">
+									<?php if ($user['signstamp'] == NULL) : ?>
+										印鑑無し
+									<?php else : ?>
+										<img width="50" src="<?= "../assets/uploads/" . $user['signstamp'] ?>"><br>
+										<?= $user['signstamp'] ?>
+									<?php endif; ?>
+								</span>
 							</td>
+							<td><span name="bigo"><?= $user['bigo'] ?></span></td>
 						</tr>
 				<?php }
 				} ?>
@@ -133,10 +155,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		</table>
 	</div>
 </div>
+
+<!-- 新規 -->
 <div class="row">
 	<div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
-			<form method="post">
+			<form method="post" enctype="multipart/form-data">
 				<div class="modal-content">
 					<div class="modal-header">社員登録(<span id="sname">New</span>)
 						<button class="close" data-dismiss="modal">&times;</button>
@@ -192,8 +216,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="genid">勤務時間タイプ</label>
-								<select class="form-control" id="genba_list" name="genba_list" >
-									<option value="" selected="" ></option>
+								<select class="form-control" id="genba_list" name="genba_list">
+									<option value="" selected=""></option>
 									<?php
 									foreach ($genba_list_db as $key) {
 									?>
@@ -210,6 +234,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="col-xs-3">
 								<label for="genendymd">契約期間(T)</label>
 								<input type="text" class="form-control" id="genendymd" name="genendymd" maxlength="10" placeholder="日付" style="text-align: left">
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-xs-12">
+								<label for="signstamp">印鑑</label>
+								<input type="file" name="signstamp" accept="image/*" id="fileInput">
 							</div>
 						</div>
 					</div>
@@ -231,10 +262,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	</div>
 </div>
 
+<!-- 編集 -->
 <div class="row">
 	<div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog">
-			<form method="post">
+			<form method="post" enctype="multipart/form-data">
 				<div class="modal-content">
 					<div class="modal-header">社員編集(<span id="ulnametitle"></span>)
 						<button class="close" data-dismiss="modal">&times;</button>
@@ -311,72 +343,46 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<input type="text" class="form-control" id="ulgenendymd" name="ulgenendymd" maxlength="10" placeholder="日付け" style="text-align: left">
 							</div>
 						</div>
-					</div>
-					<div class="modal-footer" style="text-align: center">
-						<div class="col-xs-4"></div>
-						<div class="col-xs-2">
-							<p class="text-center">
-								<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md" id="UpdatebtnReg" role="button" value="編集">
-							</p>
-						</div>
-						<div class="col-xs-2">
-							<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
-						</div>
-						<div class="col-xs-4"></div>
-					</div>
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
-
-<div class="row">
-	<div class="modal" id="modal3" tabindex="-1" data-backdrop="static" data-keyboard="false">
-		<div class="modal-dialog">
-			<form method="post">
-				<div class="modal-content">
-					<div class="modal-header">社員編集(<span id="usernametitle"></span>)
-						<button class="close" data-dismiss="modal">&times;</button>
-					</div>
-
-					<div class="modal-body">
+						<br>
 						<div class="row">
-							<div class="col-xs-3">
-								<label for="uid">ID</label>
-								<input type="text" class="form-control" id="useruid" name="useruid" style="text-align: left" readonly>
-							</div>
-							<div class="col-xs-3">
-								<label for="pwd">PASSWORD</label>
-								<input type="text" class="form-control" id="userpwd" name="userpwd" placeholder="パスワード" required="required" maxlength="20" style="text-align: left">
-							</div>
-							<div class="col-xs-6">
-								<label for="genid">勤務時間タイプ</label>
-								<select class="form-control" id="usergenba_list" name="usergenba_list">
-									<option value="" selected=""></option>
-									<?php
-									foreach ($genba_list_db as $key) {
-									?>
-										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["workstrtime"] . ',' . $key["workendtime"] ?>"><?= $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?></option>
-									<?php
-									}
-									?>
-								</select>
+							<div class="col-xs-12">
+								<label for="signstamp">印鑑</label><br>
+								<img width="50" id="udsignstamp" alt="印鑑無し">
+								<span id="udsignstamp_name"></span>
+								<input type="hidden" name="udsignstamp_old" id="udsignstamp_old">
+								<input type="file" name="udsignstamp_new" id="udfileInput" accept="image/*">
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
-						<div class="col-xs-4"></div>
-						<div class="col-xs-2">
-							<p class="text-center">
-								<input type="submit" name="UpdateUser" class="btn btn-primary btn-md" id="UserbtnReg" role="button" value="登録">
-							</p>
-						</div>
-						<div class="col-xs-2">
-							<p class="text-center">
-								<a class="btn btn-primary btn-md" id="btnRet" data-dismiss="modal">閉じる </a>
-							</p>
-						</div>
-						<div class="col-xs-4"></div>
+						<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+							<div class="col-xs-3"></div>
+							<div class="col-xs-2">
+								<p class="text-center">
+									<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md" id="UpdatebtnReg" role="button" value="編集">
+								</p>
+							</div>
+							<div class="col-xs-2">
+								<p class="text-center">
+									<input type="submit" name="btnDelUserList" class="btn btn-warning" id="btnDel" role="button" value="削除">
+								</p>
+							</div>
+							<div class="col-xs-2">
+								<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+							</div>
+							<div class="col-xs-3"></div>
+						<?php else : ?>
+							<div class="col-xs-4"></div>
+							<div class="col-xs-2">
+								<p class="text-center">
+									<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md" id="UpdatebtnReg" role="button" value="編集">
+								</p>
+							</div>
+							<div class="col-xs-2">
+								<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+							</div>
+							<div class="col-xs-4"></div>
+						<?php endif; ?>
 					</div>
 				</div>
 			</form>
@@ -419,12 +425,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		dateFormat: 'yy/mm/dd'
 	});
 
-	// 社員登録 POP UP (ADMIN & ADMINISTRATOR)
+	// 社員登録 POP UP
 	$(document).on('click', '#btnNew', function(e) {
 		$('#modal').modal('toggle');
 	});
 
-	//社員編集 POP UP (ADMIN & ADMINISTRATOR)
+	//社員編集 POP UP
 	$(document).on('click', '.showModal', function() {
 		$('#modal2').modal('toggle');
 		var Uid = $(this).text();
@@ -453,6 +459,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#ulgenba_list option:selected").text("<?php echo $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?>").val("<?php echo $key['genid'] ?>");
 					$("#ulgenstrymd").text($('[name="ulgenstrymd"]').val("<?php echo $key['genstrymd'] ?>"));
 					$("#ulgenendymd").text($('[name="ulgenendymd"]').val("<?php echo $key['genendymd'] ?>"));
+
+					var udsignstamp_old = $("input[name=udsignstamp_old]:hidden");
+					udsignstamp_old.val("<?php echo $key['signstamp'] ?>");
+					var udsignstamp_old = udsignstamp_old.val();
+					$("#udsignstamp_name").text('<?php echo $key['signstamp'] ?>');
+					var imagePath = "../assets/uploads/<?php echo $key['signstamp']; ?>";
+					$("#udsignstamp").attr("src", imagePath);
 				}
 		<?php
 			}
@@ -466,7 +479,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$("#searchGrade").val("");
 	});
 
-	// Check Error 社員登録(ADMIN & ADMINISTRATOR)
+	// Check Error 社員登録
 	$(document).on('click', '#btnReg', function(e) {
 		var uid = $("#uid").val();
 		var pwd = $("#pwd").val();
@@ -529,7 +542,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		}
 	});
 
-	// Check Error 社員編集(ADMIN & ADMINISTRATOR)
+	// Check Error 社員編集
 	$(document).on('click', '#UpdatebtnReg', function(e) {
 		var pwd = $("#ulpwd").val();
 		var name = $("#ulname").val();
@@ -575,51 +588,29 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		}
 	});
 
-	// 社員登録 POP UP (USER)
-	$(document).on('click', '.showModal2', function() {
-		$('#modal3').modal('toggle');
-		var Uid = $(this).text();
-		var ArrayData = $('#edituser').val();
-		var SeparateArr = ArrayData.split(',');
-		var edituser = SeparateArr[1];
-		if (typeof(edituser) != "undefined" && edituser !== null) {
-			var UserUid = edituser;
-		} else if (typeof(Uid) != "undefined" && Uid !== null) {
-			var UserUid = Uid;
+	$('#udfileInput').on('change', function() {
+		var maxFileSize = 2 * 1024 * 1024;
+		var fileInput = this;
+		var fileSize = fileInput.files[0].size;
+		if (fileSize > maxFileSize) {
+			alert("<?php echo $image_size_error; ?>");
+			fileInput.value = '';
+			e.preventDefault();
+			$("#udfileInput").focus();
+			return true;
 		}
-
-		<?php
-		if (!empty($userlist_list)) {
-			foreach ($userlist_list as $key) {
-		?>
-				if ('<?php echo $key['uid'] ?>' == UserUid) {
-					$("#usernametitle").text('<?php echo $key['name'] ?>');
-					$("#useruid").text($('[name="useruid"]').val("<?php echo $key['uid'] ?>"));
-					$("#userpwd").text($('[name="userpwd"]').val("<?php echo $key['pwd'] ?>"));
-					$("#usergenba_list option:selected").text("<?php echo $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?>").val("<?php echo $key['genid'] ?>");
-				}
-		<?php
-			}
-		}
-		?>
 	});
 
-	// Check Error 社員編集(USER)
-	$(document).on('click', '#UserbtnReg', function(e) {
-		var pwd = $("#userpwd").val();
-		var genba_list = $("#usergenba_list").val();
-
-		if (pwd == "") {
-			alert("<?php echo $user_pwd_empty; ?>");
-			$("#userpwd").focus();
+	$('#fileInput').on('change', function() {
+		var maxFileSize = 2 * 1024 * 1024;
+		var fileInput = this;
+		var fileSize = fileInput.files[0].size;
+		if (fileSize > maxFileSize) {
+			alert("<?php echo $image_size_error; ?>");
+			fileInput.value = '';
 			e.preventDefault();
-			return;
-		}
-		if (genba_list == "") {
-			alert("<?php echo $user_genba_list_empty; ?>");
-			$("#usergenba_list").focus();
-			e.preventDefault();
-			return;
+			$("#fileInput").focus();
+			return true;
 		}
 	});
 </script>

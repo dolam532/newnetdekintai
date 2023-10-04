@@ -101,8 +101,29 @@ if (isset($_POST['SaveUserList'])) {
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
 
-    $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) 
-	VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
+    if ($_FILES['signstamp']["name"] == "") {
+        $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) 
+	                        VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
+    } else {
+        $uploadDirectory = "../assets/uploads/";
+        $fileName = $_FILES["signstamp"]["name"];
+        $fileTmpName = $_FILES["signstamp"]["tmp_name"];
+        $fileType = $_FILES["signstamp"]["type"];
+        $allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+
+        if (in_array($fileType, $allowedTypes)) {
+            $targetPath = $uploadDirectory . $fileName;
+            if (move_uploaded_file($fileTmpName, $targetPath)) {
+                $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`, `signstamp`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) 
+                                    VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type', '$fileName', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
+            } else {
+                echo $image_upload_error;
+            }
+        } else {
+            echo $image_type_error;
+        }
+    }
+
     if (mysqli_query($conn, $sql_user_insert)) {
         $_SESSION['save_success'] =  $save_success;
         header("Refresh:3");
@@ -111,7 +132,7 @@ if (isset($_POST['SaveUserList'])) {
     }
 }
 
-// Update data to tbl_user table of database(ADMIN & ADMINISTRATOR)
+// Update data to tbl_user table of database
 if (isset($_POST['UpdateUserList'])) {
     $_POST['ulcompanyid'] = intval($_POST['ulcompanyid']);
     $uid = mysqli_real_escape_string($conn, $_POST['uluid']);
@@ -131,7 +152,8 @@ if (isset($_POST['UpdateUserList'])) {
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
 
-    $sql = "UPDATE tbl_user SET 
+    if ($_FILES['udsignstamp_new']["name"] == "") {
+            $sql = "UPDATE tbl_user SET 
             companyid='$companyid',
             pwd='$pwd',
             name='$name',
@@ -147,6 +169,45 @@ if (isset($_POST['UpdateUserList'])) {
             genendymd='$genendymd',
             upt_dt='$upt_dt'
         WHERE uid ='$uid'";
+    } else {
+        $filePath = "../assets/uploads/" . $_POST['udsignstamp_old'];
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        $uploadDirectory = "../assets/uploads/";
+        $fileName = $_FILES["udsignstamp_new"]["name"];
+        $fileTmpName = $_FILES["udsignstamp_new"]["tmp_name"];
+        $fileType = $_FILES["udsignstamp_new"]["type"];
+        $allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+
+        if (in_array($fileType, $allowedTypes)) {
+            $targetPath = $uploadDirectory . $fileName;
+            if (move_uploaded_file($fileTmpName, $targetPath)) {
+                $sql = "UPDATE tbl_user SET 
+                    companyid='$companyid',
+                    pwd='$pwd',
+                    name='$name',
+                    grade='$grade',
+                    signstamp='$fileName',
+                    type='$type',
+                    email='$email',
+                    dept='$dept',
+                    bigo='$bigo',
+                    genid='$genid',
+                    inymd='$inymd',
+                    outymd='$outymd',
+                    genstrymd='$genstrymd',
+                    genendymd='$genendymd',
+                    upt_dt='$upt_dt'
+                WHERE uid ='$uid'";
+            } else {
+                echo $image_upload_error;
+            }
+        } else {
+            echo $image_type_error;
+        }
+    }
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
@@ -156,28 +217,27 @@ if (isset($_POST['UpdateUserList'])) {
     }
 }
 
-// Update data to tbl_user table of database(USER)
-if (isset($_POST['UpdateUser'])) {
-    $uid = mysqli_real_escape_string($conn, $_POST['useruid']);
-    $pwd = mysqli_real_escape_string($conn, $_POST['userpwd']);
-    $genba_list = mysqli_real_escape_string($conn, $_POST['usergenba_list']);
-    $gen_id_dev = explode(",", $genba_list);
-    $genid = $gen_id_dev[0];
+// Delete data to tbl_user table of database
+if (isset($_POST['btnDelUserList'])) {
+    $uid = mysqli_real_escape_string($conn, $_POST['uluid']);
+    $filePath = "../assets/uploads/" . $_POST['udsignstamp_old'];
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
 
-    $sql = "UPDATE tbl_user SET 
-            pwd='$pwd',
-            genid='$genid',
-            upt_dt='$upt_dt'
-        WHERE uid ='$uid'";
+    $sql = "DELETE FROM `tbl_user` 
+            WHERE uid ='$uid'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['save_success'] =  $save_success;
+        $_SESSION['delete_success'] =  $delete_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
 
+
+// (genbaList.php)
 // Select data from tbl_genba
 if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $sql_genba = 'SELECT * FROM `tbl_genba`';
@@ -265,6 +325,7 @@ if (isset($_POST['DeleteKinmu'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
 
 // genbaUserList.php
 // Select data from tbl_user

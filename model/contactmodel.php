@@ -36,6 +36,7 @@ FROM `tbl_notice`
 LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`';
 $result_notice_select = mysqli_query($conn, $sql_notice_select);
 $notice_list_select = mysqli_fetch_all($result_notice_select, MYSQLI_ASSOC);
+
 // Default value for search
 $searchTitle = '';
 $searchContent = '';
