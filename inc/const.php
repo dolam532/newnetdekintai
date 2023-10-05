@@ -4,7 +4,7 @@
 DEFINE('DB_HOST', '153.127.255.167');
 DEFINE('DB_USER', 'ndk');
 DEFINE('DB_PASSWORD', 'ganandkadm2019');
-DEFINE('DB_NAME', 'servicendk');
+DEFINE('DB_NAME', 'newndk');
 
 // Loginout Admin, User, ADMINISTRATOR
 DEFINE('ADMIN', '9');
