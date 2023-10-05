@@ -87,15 +87,11 @@ if (isset($_POST['btnRegNL'])) {
 
         if (in_array($fileType, $allowedTypes)) {
             $targetPath = $uploadDirectory . $fileName;
-            if (file_exists($targetPath)) {
-                echo "A file with the same name already exists. Please rename the file.";
+            if (move_uploaded_file($fileTmpName, $targetPath)) {
+                $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `imagefile`, `reader`, `viewcnt`, `uid`, `reg_dt`)
+                VALUES ('$title', '$content', '$fileName', '$reader', '$viewcnt', '$uid', '$reg_dt')";
             } else {
-                if (move_uploaded_file($fileTmpName, $targetPath)) {
-                    $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `imagefile`, `reader`, `viewcnt`, `uid`, `reg_dt`)
-                    VALUES ('$title', '$content', '$fileName', '$reader', '$viewcnt', '$uid', '$reg_dt')";
-                } else {
-                    echo $image_upload_error;
-                }
+                echo $image_upload_error;
             }
         } else {
             echo $image_type_error;
