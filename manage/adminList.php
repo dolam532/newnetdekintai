@@ -83,12 +83,12 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             </div>
             <div class="col-md-3 text-left">
                 <div class="title_condition">
-                    <label for="searchAdminGrade">区分 : <input type="text" name="searchAdminGrade" value="<?= $_POST['searchAdminGrade'] ?>" style="width: 100px;"></label>
+                    <label for="searchAdminGrade">区分 : <input type="text" name="searchAdminGrade" value="<?= $_POST['searchAdminGrade'] ?>" style="width: 100px;" placeholder="社員"></label>
                 </div>
             </div>
             <div class="col-md-3 text-left">
                 <div class="title_condition">
-                    <label for="searchAdminName">会社名 : <input type="text" name="searchAdminName" value="<?= $_POST['searchAdminName'] ?>" style="width: 100px;"></label>
+                    <label for="searchAdminName">会社名 : <input type="text" name="searchAdminName" value="<?= $_POST['searchAdminName'] ?>" style="width: 100px;" placeholder="〇〇会社"></label>
                 </div>
             </div>
             <div class="col-md-3 text-right">
@@ -213,7 +213,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="bigo">備考</label>
-                                    <input type="text" class="form-control" name="bigo" id="bigo" maxlength="1000" style="text-align: left">
+                                    <input type="text" class="form-control" name="bigo" id="bigo" maxlength="1000" style="text-align: left" placeholder="備考">
                                 </div>
                             </div>
                         </div>
@@ -296,7 +296,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                             <div class="row">
                                 <div class="col-xs-6">
                                     <label for="bigo">備考</label>
-                                    <input type="text" class="form-control" name="udbigo" id="udbigo" maxlength="1000" style="text-align: left">
+                                    <input type="text" class="form-control" name="udbigo" id="udbigo" maxlength="1000" style="text-align: left" placeholder="備考">
                                 </div>
                                 <div class="col-xs-6">
                                     <label for="signstamp">印鑑</label><br>

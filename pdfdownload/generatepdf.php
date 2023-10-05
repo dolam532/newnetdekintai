@@ -76,10 +76,10 @@ if ($template == "1") {
 	$tcpdf->Cell(16, 7, '日付', 1, 0, 'C', true); // Add 'LTRB' to draw an outer border for the cell
 	$tcpdf->Cell(25, 7, '出退社時刻', 1, 0, 'C', true);
 	$tcpdf->Cell(25, 7, '業務時間', 1, 0, 'C', true);
-	$tcpdf->Cell(19, 7, '休憩時間', 1, 0, 'C', true);
-	$tcpdf->Cell(19, 7, '間就業時間', 1, 0, 'C', true);
-	$tcpdf->Cell(56, 7, '業務内容', 1, 0, 'C', true);
-	$tcpdf->Cell(30, 7, '備考', 1, 1, 'C', true); // Add 1 to move to the next line
+	$tcpdf->Cell(18, 7, '休憩時間', 1, 0, 'C', true);
+	$tcpdf->Cell(18, 7, '間就業時間', 1, 0, 'C', true);
+	$tcpdf->Cell(60, 7, '業務内容', 1, 0, 'C', true);
+	$tcpdf->Cell(28, 7, '備考', 1, 1, 'C', true); // Add 1 to move to the next line
 }
 
 // Table data
@@ -111,7 +111,7 @@ foreach ($data as $row) {
 		$tcpdf->Cell(12.5, 6.8, $row["dayendhh"] . ':' . $row["dayendmm"], 1, 0, 'C', true);
 		$tcpdf->Cell(12.5, 6.8, $row["jobstarthh"] . ':' . $row["jobstartmm"], 1, 0, 'C', true);
 		$tcpdf->Cell(12.5, 6.8, $row["jobendhh"] . ':' . $row["jobendmm"], 1, 0, 'C', true);
-		$tcpdf->Cell(19, 6.8, $row["offtimehh"] . ':' . $row["offtimemm"], 1, 0, 'C', true);
+		$tcpdf->Cell(18, 6.8, $row["offtimehh"] . ':' . $row["offtimemm"], 1, 0, 'C', true);
 		// <!-- fix 8:0  -> 08:00 to show start -->
 		$workhh = $row["workhh"];
 		$workmm = $row["workmm"];
@@ -120,10 +120,10 @@ foreach ($data as $row) {
 		} else {
 			$workTime = sprintf('%02d:%02d', $workhh, $workmm);
 		}
-		$tcpdf->Cell(19, 6.8, $workTime, 1, 0, 'C', true);
+		$tcpdf->Cell(18, 6.8, $workTime, 1, 0, 'C', true);
 		// <!-- fix 8:0  -> 08:00 to show end -->
-		$tcpdf->Cell(56, 6.8, $row["comment"], 1, 0, 'C', true);
-		$tcpdf->Cell(30, 6.8, $row["bigo"], 1, 1, 'C', true); // Add 1 to move to the next line
+		$tcpdf->Cell(60, 6.8, $row["comment"], 1, 0, 'C', true);
+		$tcpdf->Cell(28, 6.8, $row["bigo"], 1, 1, 'C', true); // Add 1 to move to the next line
 	}
 }
 $tcpdf->Ln(1.2);
