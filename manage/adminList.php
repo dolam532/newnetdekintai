@@ -88,7 +88,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             </div>
             <div class="col-md-3 text-left">
                 <div class="title_condition">
-                    <label for="searchAdminName">会社名 : <input type="text" name="searchAdminName" value="<?= $_POST['searchAdminName'] ?>" style="width: 100px;" placeholder="〇〇会社"></label>
+                    <label for="searchAdminName">社員名 : <input type="text" name="searchAdminName" value="<?= $_POST['searchAdminName'] ?>" style="width: 100px;" placeholder="名前"></label>
                 </div>
             </div>
             <div class="col-md-3 text-right">
