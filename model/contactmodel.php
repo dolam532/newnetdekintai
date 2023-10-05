@@ -131,19 +131,22 @@ if (isset($_POST['btnDelNL'])) {
 $sql_codetype = 'SELECT * FROM `tbl_codetype`';
 $result_codetype = mysqli_query($conn, $sql_codetype);
 $codetype_list = mysqli_fetch_all($result_codetype, MYSQLI_ASSOC);
-
+$codes;
 // Select database from tbl_codebase table
 if ($_POST['typecode'] == NULL) {
     $sql_codebase = 'SELECT * FROM `tbl_codebase`
         WHERE `tbl_codebase`.`companyid` IN ("' . constant('GANASYS_COMPANY_ID') . '")';
     $result_codebase = mysqli_query($conn, $sql_codebase);
     $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
+    $codes = array_column($codebase_list, 'code');
+   
 } elseif (isset($_POST['typecode'])) {
     $sql_codebase = 'SELECT * FROM `tbl_codebase`
         WHERE `tbl_codebase`.`companyid` IN ("' . constant('GANASYS_COMPANY_ID') . '")
         AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';
     $result_codebase = mysqli_query($conn, $sql_codebase);
     $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
+    $codes = array_column($codebase_list, 'code');
 }
 
 // Save Data to tbl_codebase DB 

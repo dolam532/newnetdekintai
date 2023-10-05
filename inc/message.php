@@ -156,3 +156,4 @@ $manage_companyid_empty = '会社名を選択してください。';
 $content_cmlC_empty = 'Codeを入力してください。';
 $content_cmlC_no = 'Codeをを番号で入力してください。';
 $content_cmlN_empty = '名を入力してください。';
+$content_cmlC_duplicate = 'コードが既存しましたので登録出来ませんでした。';
