@@ -26,3 +26,7 @@ DEFINE('USE_YES', '1');
 ///===== KINTAI CONFIG ===== //// 
 $MAX_INPUT_LENGTH_COMMENT = 17;
 $MAX_INPUT_LENGTH_BIGO = 8;
+
+
+///===== CODEMASTER CONFIG ===== //// 
+$MAX_LENGTH_CODE = 2;
