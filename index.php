@@ -104,7 +104,7 @@ include('./model/inactive.php');
 					?>
 							<div class="media">
 								<div class="media-left">
-									<a href="javascript:;" onclick="fn_showNotice(`<?= $notice['bid']; ?>`, `<?= $notice['imagenum']; ?>`, `<?= $notice['title']; ?>`, `<?= $notice['reader']; ?>`, `<?= $notice['name']; ?>`, `<?= $notice['viewcnt']; ?>`, `<?= $notice['reg_dt']; ?>`, `<?= $notice['content']; ?>`);"><img class="media-object" width="150" src="./assets/uploads/<?= $notice['imagefile']; ?>" alt="お知らせ"></a>
+									<a href="javascript:;" onclick="fn_showNotice(`<?= $notice['bid']; ?>`, `<?= $notice['imagenum']; ?>`, `<?= $notice['title']; ?>`, `<?= $notice['reader']; ?>`, `<?= $notice['name']; ?>`, `<?= $notice['viewcnt']; ?>`, `<?= $notice['reg_dt']; ?>`, `<?= $notice['content']; ?>`);"><img class="media-object" width="150" src="./assets/uploads/notice/<?= $notice['imagefile']; ?>" alt="お知らせ"></a>
 								</div>
 								<div class="media-body">
 									<h4 class="media-heading">

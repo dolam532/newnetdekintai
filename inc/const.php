@@ -30,3 +30,9 @@ $MAX_INPUT_LENGTH_BIGO = 8;
 
 ///===== CODEMASTER CONFIG ===== //// 
 $MAX_LENGTH_CODE = 2;
+
+
+///===== お知らせ登録===== //// 
+$PATH_IMAGE_NOTICE = "../assets/uploads/notice/";
+$LENGTH_RANDOM_UNIQUE_NAME = 15;
+$NOTICE_IMAGE_MAXSIZE = 2000000;  // 2MB = 2000000

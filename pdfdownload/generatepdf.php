@@ -69,7 +69,7 @@ if ($template == "1") {
 	$tcpdf->Cell(20, 7, '日付', 1, 0, 'C', true); // Add 'LTRB' to draw an outer border for the cell
 	$tcpdf->Cell(40, 7, '業務時間', 1, 0, 'C', true);
 	$tcpdf->Cell(20, 7, '休憩時間', 1, 0, 'C', true);
-	$tcpdf->Cell(20, 7, '間就業時間', 1, 0, 'C', true);
+	$tcpdf->Cell(20, 7, '就業時間', 1, 0, 'C', true);
 	$tcpdf->Cell(60, 7, '業務内容', 1, 0, 'C', true);
 	$tcpdf->Cell(30, 7, '備考', 1, 1, 'C', true); // Add 1 to move to the next line
 } elseif ($template == "2") {
@@ -77,7 +77,7 @@ if ($template == "1") {
 	$tcpdf->Cell(25, 7, '出退社時刻', 1, 0, 'C', true);
 	$tcpdf->Cell(25, 7, '業務時間', 1, 0, 'C', true);
 	$tcpdf->Cell(18, 7, '休憩時間', 1, 0, 'C', true);
-	$tcpdf->Cell(18, 7, '間就業時間', 1, 0, 'C', true);
+	$tcpdf->Cell(18, 7, '就業時間', 1, 0, 'C', true);
 	$tcpdf->Cell(60, 7, '業務内容', 1, 0, 'C', true);
 	$tcpdf->Cell(28, 7, '備考', 1, 1, 'C', true); // Add 1 to move to the next line
 }

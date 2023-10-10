@@ -75,31 +75,81 @@ if (isset($_POST['btnRegNL'])) {
     $viewcnt = mysqli_real_escape_string($conn, $_POST['viewcnt']);
     $reg_dt = mysqli_real_escape_string($conn, $_POST['reg_dt']);
 
-    if ($_FILES['imagefile']["name"] == "") {
-        $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `reader`, `viewcnt`, `uid`, `reg_dt`)
-        VALUES ('$title', '$content', '$reader', '$viewcnt', '$uid', '$reg_dt')";
-    } else {
-        $uploadDirectory = "../assets/uploads/";
-        $fileName = $_FILES["imagefile"]["name"];
-        $fileTmpName = $_FILES["imagefile"]["tmp_name"];
-        $fileType = $_FILES["imagefile"]["type"];
-        $allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+    // if ($_FILES['imagefile']["name"] == "") {
+    //     $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `reader`, `viewcnt`, `uid`, `reg_dt`)
+    //     VALUES ('$title', '$content', '$reader', '$viewcnt', '$uid', '$reg_dt')";
+    // } else {
+    //     $uploadDirectory = $PATH_IMAGE_NOTICE;
+    //     $fileName = $_FILES["imagefile"]["name"];
+    //     $fileTmpName = $_FILES["imagefile"]["tmp_name"];
+    //     $fileType = $_FILES["imagefile"]["type"];
+    //     $allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
 
-        if (in_array($fileType, $allowedTypes)) {
-            $targetPath = $uploadDirectory . $fileName;
-            if (move_uploaded_file($fileTmpName, $targetPath)) {
-                $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `imagefile`, `reader`, `viewcnt`, `uid`, `reg_dt`)
-                VALUES ('$title', '$content', '$fileName', '$reader', '$viewcnt', '$uid', '$reg_dt')";
-            } else {
-                echo $image_upload_error;
-            }
-        } else {
-            echo $image_type_error;
-        }
+    //     if (in_array($fileType, $allowedTypes)) {
+    //         $targetPath = $uploadDirectory . $fileName;
+    //         if (move_uploaded_file($fileTmpName, $targetPath)) {
+    //             $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `imagefile`, `reader`, `viewcnt`, `uid`, `reg_dt`)
+    //             VALUES ('$title', '$content', '$fileName', '$reader', '$viewcnt', '$uid', '$reg_dt')";
+    //         } else {
+    //             echo $image_upload_error;
+    //         }
+    //     } else {
+    //         echo $image_type_error;
+    //     }
+    // }
+
+    //...........2023-10-06/1340-004...................//
+// ...........upload image  add start..........  -->
+//...............................................//
+    $uploadDir = '/var/www/html/newnetdekintai/assets/uploads/notice/';
+    $noticeId = $bid;
+    $fileExtension = pathinfo($_FILES["udimagefile_new"]["name"], PATHINFO_EXTENSION);
+    $newFileName = generateUniqueFileName($uploadDir, $fileExtension, $noticeId);
+    $originalFileName = $_FILES["udimagefile_new"]["name"];
+    $uploadFile = $uploadDir . $newFileName;
+    $uploadOk = true;
+    global $NOTICE_IMAGE_MAXSIZE;
+
+    // Check file name is exists
+    if (file_exists($uploadFile)) {
+        echo "File name is exists -> Delete old file name";
+        unlink($uploadFile);
+    }
+    // check size 
+    if (!isFileSizeValid($_FILES["file"], $NOTICE_IMAGE_MAXSIZE)) {
+        echo "File is BIG!";
+        $uploadOk = false;
     }
 
+    // check file validate extention (image only)
+    $allowedTypes = array("jpg", "jpeg", "png", "gif");
+    $fileType = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
+    if (!in_array($fileType, $allowedTypes)) {
+        echo "Image only(jpg, jpeg, png, gif).";
+        $uploadOk = false;
+    }
+
+    // if not error save
+    if ($uploadOk) {
+        if (move_uploaded_file($_FILES["udimagefile_new"]["tmp_name"], $uploadFile)) {
+            // Remove old files based on noticeId and newFileName
+            deleteNoticeImages($uploadDir, $noticeId, $newFileName);
+            $fileName = $newFileName;
+            echo $newFileName;
+        } else {
+            echo "Upload Error";
+        }
+    }
+    echo $newFileName;
+
+    $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `imagefile`, `reader`, `viewcnt`, `uid`, `reg_dt`)
+             VALUES ('$title', '$content', '$fileName', '$reader', '$viewcnt', '$uid', '$reg_dt')";
+
+
+
+
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['save_success'] =  $save_success;
+        $_SESSION['save_success'] = $save_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -118,54 +168,163 @@ if (isset($_POST['btnUpdateNL'])) {
     $viewcnt = mysqli_real_escape_string($conn, $_POST['udviewcnt']);
     $reg_dt = mysqli_real_escape_string($conn, $_POST['udreg_dt']);
 
-    if ($_FILES['udimagefile_new']["name"] == "") {
-        $sql = "UPDATE tbl_notice SET 
-                title='$title',
-                content='$content',
-                reader='$reader',
-                viewcnt='$viewcnt',
-                reg_dt='$reg_dt'
-            WHERE bid ='$bid'
-            AND uid ='$uid'";
-    } else {
-        $filePath = "../assets/uploads/" . $_POST['udimagefile_old'];
-        if (file_exists($filePath)) {
-            unlink($filePath);
-        }
 
-        $uploadDirectory = "../assets/uploads/";
-        $fileName = $_FILES["udimagefile_new"]["name"];
-        $fileTmpName = $_FILES["udimagefile_new"]["tmp_name"];
-        $fileType = $_FILES["udimagefile_new"]["type"];
-        $allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
 
-        if (in_array($fileType, $allowedTypes)) {
-            $targetPath = $uploadDirectory . $fileName;
-            if (move_uploaded_file($fileTmpName, $targetPath)) {
-                $sql = "UPDATE tbl_notice SET 
-                title='$title',
-                content='$content',
-                reader='$reader',
-                imagefile='$fileName',
-                viewcnt='$viewcnt',
-                reg_dt='$reg_dt'
-                WHERE bid ='$bid'
-                AND uid ='$uid'";
-            } else {
-                echo $image_upload_error;
-            }
-        } else {
-            echo $image_type_error;
-        }
+    // if ($_FILES['udimagefile_new']["name"] == "") {
+    //     $sql = "UPDATE tbl_notice SET 
+    //             title='$title',
+    //             content='$content',
+    //             reader='$reader',
+    //             viewcnt='$viewcnt',
+    //             reg_dt='$reg_dt'
+    //         WHERE bid ='$bid'
+    //         AND uid ='$uid'";
+    // } else {
+    //     $filePath = $PATH_IMAGE_NOTICE . $_POST['udimagefile_old'];
+    //     if (file_exists($filePath)) {
+    //         unlink($filePath);
+    //     }
+
+    //     $uploadDirectory = $PATH_IMAGE_NOTICE;
+    //     $fileName = $_FILES["udimagefile_new"]["name"];
+    //     $fileTmpName = $_FILES["udimagefile_new"]["tmp_name"];
+    //     $fileType = $_FILES["udimagefile_new"]["type"];
+    //     $allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+
+    //     if (in_array($fileType, $allowedTypes)) {
+    //         $targetPath = $uploadDirectory . $fileName;
+    //         if (move_uploaded_file($fileTmpName, $targetPath)) {
+    // $sql = "UPDATE tbl_notice SET 
+    // title='$title',
+    // content='$content',
+    // reader='$reader',
+    // imagefile='$fileName',
+    // viewcnt='$viewcnt',
+    // reg_dt='$reg_dt'
+    // WHERE bid ='$bid'
+    // AND uid ='$uid'";
+    //         } else {
+    //             echo $image_upload_error;
+    //         }
+    //     } else {
+    //         echo $image_type_error;
+    //     }
+    // }
+
+    //...........2023-10-06/1340-004...................//
+// ...........upload image  add start..........  -->
+//...............................................//
+    $uploadDir = '/var/www/html/newnetdekintai/assets/uploads/notice/';
+    $noticeId = $bid;
+    $fileExtension = pathinfo($_FILES["udimagefile_new"]["name"], PATHINFO_EXTENSION);
+    $newFileName = generateUniqueFileName($uploadDir, $fileExtension, $noticeId);
+    $originalFileName = $_FILES["udimagefile_new"]["name"];
+    $uploadFile = $uploadDir . $newFileName;
+    $uploadOk = true;
+    global $NOTICE_IMAGE_MAXSIZE;
+
+    // Check file name is exists
+    if (file_exists($uploadFile)) {
+        echo "File name is exists -> Delete old file name";
+        unlink($uploadFile);
+    }
+    // check size 
+    if (!isFileSizeValid($_FILES["file"], $NOTICE_IMAGE_MAXSIZE)) {
+        echo "File is BIG!";
+        $uploadOk = false;
     }
 
+    // check file validate extention (image only)
+    $allowedTypes = array("jpg", "jpeg", "png", "gif");
+    $fileType = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
+    if (!in_array($fileType, $allowedTypes)) {
+        echo "Image only(jpg, jpeg, png, gif).";
+        $uploadOk = false;
+    }
+
+    // if not error save
+    if ($uploadOk) {
+        if (move_uploaded_file($_FILES["udimagefile_new"]["tmp_name"], $uploadFile)) {
+            // Remove old files based on noticeId and newFileName
+            deleteNoticeImages($uploadDir, $noticeId, $newFileName);
+            $fileName = $newFileName;
+            echo $newFileName;
+        } else {
+            echo "Upload Error";
+        }
+    }
+    echo $newFileName;
+
+
+    $sql = "UPDATE tbl_notice SET 
+title='$title',
+content='$content',
+reader='$reader',
+imagefile='$fileName',
+viewcnt='$viewcnt',
+reg_dt='$reg_dt'
+WHERE bid ='$bid'
+AND uid ='$uid'";
+
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['update_success'] =  $update_success;
+        $_SESSION['update_success'] = $update_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+// check valid size
+function isFileSizeValid($file, $maxSize)
+{
+    return $file["size"] <= $maxSize;
+}
+
+// delete old image 
+function deleteNoticeImages($uploadDir, $noticeId, $newFileName)
+{
+    global $LENGTH_RANDOM_UNIQUE_NAME;
+    $files = scandir($uploadDir);
+    foreach ($files as $file) {
+        if ($file !== $newFileName && strpos($file, $noticeId) === 0) {
+            $filePath = $uploadDir . $file;
+            if (unlink($filePath)) {
+                echo "Deleted file: " . $file . "<br>";
+            } else {
+                echo "Failed to delete file: " . $file . "<br>";
+            }
+        }
+        if (!preg_match('/_notice_\w{' . $LENGTH_RANDOM_UNIQUE_NAME . '}\.\w+/', $file)) {
+            $filePath = $uploadDir . $file;
+            unlink($filePath);
+        }
+    }
+}
+// generate file name 
+function generateUniqueFileName($uploadDir, $fileExtension, $noticeId)
+{
+    global $LENGTH_RANDOM_UNIQUE_NAME;
+    $uniqueFileName = generateRandomString($LENGTH_RANDOM_UNIQUE_NAME);
+    $newFileName = $noticeId . '_notice_' . $uniqueFileName . '.' . $fileExtension;
+    while (file_exists($uploadDir . $newFileName)) {
+        $uniqueFileName = generateRandomString($LENGTH_RANDOM_UNIQUE_NAME);
+        $newFileName = $noticeId . '_notice_' . $uniqueFileName . '.' . $fileExtension;
+    }
+    return $newFileName;
+}
+function generateRandomString($length)
+{
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, strlen($characters) - 1)];
+    }
+    return $randomString;
+}
+
+//...........2023-10-06/1340-004...................//
+// ...........upload image  add end...........  -->
+//...............................................//
 
 // Delete Data to tbl_notice DB 
 if (isset($_POST['btnDelNL'])) {
@@ -176,7 +335,7 @@ if (isset($_POST['btnDelNL'])) {
     WHERE bid ='$bid' AND uid ='$uid'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['delete_success'] =  $delete_success;
+        $_SESSION['delete_success'] = $delete_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -196,7 +355,7 @@ if ($_POST['typecode'] == NULL) {
     $result_codebase = mysqli_query($conn, $sql_codebase);
     $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
     $codes = array_column($codebase_list, 'code');
-   
+
 } elseif (isset($_POST['typecode'])) {
     $sql_codebase = 'SELECT * FROM `tbl_codebase`
         WHERE `tbl_codebase`.`companyid` IN ("' . constant('GANASYS_COMPANY_ID') . '")
@@ -219,7 +378,7 @@ if (isset($_POST['btnRegCL'])) {
                 VALUES ('$companyid', '$typecode', '$code', '$name', '$remark', '$uid', '$reg_dt')";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['save_success'] =  $save_success;
+        $_SESSION['save_success'] = $save_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -246,7 +405,7 @@ if (isset($_POST['btnUpdateCL'])) {
             AND code ='$code'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['update_success'] =  $update_success;
+        $_SESSION['update_success'] = $update_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -265,7 +424,7 @@ if (isset($_POST['btnDelCL'])) {
     WHERE id ='$id' AND companyid ='$companyid' AND uid ='$uid' AND typecode ='$typecode' AND code ='$code'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['delete_success'] =  $delete_success;
+        $_SESSION['delete_success'] = $delete_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
