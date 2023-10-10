@@ -153,11 +153,12 @@ if ($_SESSION['auth'] == false) {
                             </td>
                         </tr>
                     <?php } elseif (!empty($notice_list)) {
+                         $counter = 1; 
                         foreach ($notice_list as $key) {
                             ?>
                             <tr>
                                 <td><span>
-                                        <?= $key['bid'] ?>
+                                        <?=  $counter++; // $key['bid'] change show number  ?> 
                                     </span></td>
                                 <td style="text-align:left">
                                     <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
