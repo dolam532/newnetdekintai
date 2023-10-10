@@ -556,3 +556,11 @@ WHERE
 
 $result_workmonth_select = mysqli_query($conn, $sql_workmonth_select);
 $workmonth_select_list = mysqli_fetch_all($result_workmonth_select, MYSQLI_ASSOC);
+
+$sql_user_admin = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMIN') . '"';
+$result_user_admin = mysqli_query($conn, $sql_user_admin);
+$signstamp_admin = mysqli_fetch_all($result_user_admin, MYSQLI_ASSOC);
+
+$sql_user_kanri = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMINISTRATOR') . '"';
+$result_user_kanri = mysqli_query($conn, $sql_user_kanri);
+$signstamp_kanri = mysqli_fetch_all($result_user_kanri, MYSQLI_ASSOC);

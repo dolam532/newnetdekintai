@@ -6,6 +6,36 @@ $tcpdf->SetPrintHeader(false);
 $tcpdf->SetLeftMargin(10); // Set the left margin to 0
 $tcpdf->AddPage();
 
+// Image file path
+$signstamp_admin = json_decode($_POST['signstamp_admin'], true);
+$signstamp_kanri = json_decode($_POST['signstamp_kanri'], true);
+$signstamp_user = json_decode($_POST['signstamp_user'], true);
+// var_dump($signstamp_kanri);
+
+// Assuming $signstamp_data contains HTML code, including an image tag.
+$signstamp_admin_ = '<img src="../assets/uploads/signstamp/' . $signstamp_admin . '" width="40" height="40" />';
+$signstamp_kanri_ = '<img src="../assets/uploads/signstamp/' . $signstamp_kanri . '" width="40" height="40" />';
+$signstamp_user_ = '<img src="../assets/uploads/signstamp/' . $signstamp_user . '" width="40" height="40" />';
+
+// Set the X and Y coordinates for the cell
+$x_admin = 145;
+$y_admin = 27;
+$x_kanri = 70;
+$y_kanri = 30;
+$x_user = 50;
+$y_user = 30;
+
+// Width and height for the cell
+$w = 100;
+$h = 50;
+
+// Border and newline settings
+$border = 0;
+$ln = 1;
+
+// Align the content to the left
+$align = 'L';
+
 $name = json_decode($_POST['name'], true);
 $dept = json_decode($_POST['dept'], true);
 $date_show = json_decode($_POST['date_show'], true);
@@ -36,7 +66,8 @@ $tcpdf->SetXY(10, 18); // Set the X and Y position for the text
 $tcpdf->Cell(0, 7, 'ガナシス株式会社 御中', 0, 1, 'L'); // Output the text aligned to the left
 $tcpdf->SetFont("kozgopromedium", "U", 10);
 $tcpdf->Cell(0, 7, '所属：' . $dept . '                                ', 0, 1, 'L'); // Output the text aligned to the left
-$tcpdf->Cell(0, 7, '氏名：' . $name . '                   (印)', 0, 1, 'L'); // Output the text aligned to the left
+$tcpdf->Cell(0, 7, '氏名：' . $name . '                   ' . '(印)', 0, 1, 'L');
+$tcpdf->writeHTMLCell($w, $h, $x_user, $y_user, $signstamp_user_, $border, $ln, 0, true, $align);
 
 // Table
 $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the table cells
@@ -93,6 +124,7 @@ foreach ($data as $row) {
 		$tcpdf->Cell(20, 6.8, $row["jobstarthh"] . ':' . $row["jobstartmm"], 1, 0, 'C', true);
 		$tcpdf->Cell(20, 6.8, $row["jobendhh"] . ':' . $row["jobendmm"], 1, 0, 'C', true);
 		$tcpdf->Cell(20, 6.8, $row["offtimehh"] . ':' . $row["offtimemm"], 1, 0, 'C', true);
+
 		// <!-- fix 8:0  -> 08:00 to show start -->
 		$workhh = $row["workhh"];
 		$workmm = $row["workmm"];
@@ -102,6 +134,7 @@ foreach ($data as $row) {
 			$workTime = sprintf('%02d:%02d', $workhh, $workmm);
 		}
 		$tcpdf->Cell(20, 6.8, $workTime, 1, 0, 'C', true);
+
 		// <!-- fix 8:0  -> 08:00 to show end -->
 		$tcpdf->Cell(60, 6.8, $row["comment"], 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $row["bigo"], 1, 1, 'C', true); // Add 1 to move to the next line
@@ -112,6 +145,7 @@ foreach ($data as $row) {
 		$tcpdf->Cell(12.5, 6.8, $row["jobstarthh"] . ':' . $row["jobstartmm"], 1, 0, 'C', true);
 		$tcpdf->Cell(12.5, 6.8, $row["jobendhh"] . ':' . $row["jobendmm"], 1, 0, 'C', true);
 		$tcpdf->Cell(18, 6.8, $row["offtimehh"] . ':' . $row["offtimemm"], 1, 0, 'C', true);
+
 		// <!-- fix 8:0  -> 08:00 to show start -->
 		$workhh = $row["workhh"];
 		$workmm = $row["workmm"];
@@ -121,6 +155,7 @@ foreach ($data as $row) {
 			$workTime = sprintf('%02d:%02d', $workhh, $workmm);
 		}
 		$tcpdf->Cell(18, 6.8, $workTime, 1, 0, 'C', true);
+
 		// <!-- fix 8:0  -> 08:00 to show end -->
 		$tcpdf->Cell(60, 6.8, $row["comment"], 1, 0, 'C', true);
 		$tcpdf->Cell(28, 6.8, $row["bigo"], 1, 1, 'C', true); // Add 1 to move to the next line
