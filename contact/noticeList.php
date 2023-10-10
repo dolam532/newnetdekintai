@@ -153,11 +153,12 @@ if ($_SESSION['auth'] == false) {
                             </td>
                         </tr>
                     <?php } elseif (!empty($notice_list)) {
+                         $counter = 1; 
                         foreach ($notice_list as $key) {
                             ?>
                             <tr>
                                 <td><span>
-                                        <?= $key['bid'] ?>
+                                        <?=  $counter++; // $key['bid'] change show number  ?> 
                                     </span></td>
                                 <td style="text-align:left">
                                     <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
@@ -316,6 +317,7 @@ if ($_SESSION['auth'] == false) {
                                     <input type="text" class="form-control" name="udtitle" id="udtitle">
                                     <input type="hidden" name="udbid" id="udbid">
                                     <input type="hidden" name="uduid" id="uduid">
+                                    <input type="hidden" name="udimagefile_name" id="udimagefile_name">
                                 </div>
                             </div>
                             <br>
@@ -357,7 +359,7 @@ if ($_SESSION['auth'] == false) {
                                 <div class="col-xs-12">
                                     <label for="udimagefile">写真</label><br>
                                     <img width="50" id="udimagefile" alt="写真無し">
-                                    <span id="udimagefile_name" hidden></span> 
+                                    <span id="imagename" name="imagename" hidden></span> 
                                     <input type="hidden" name="udimagefile_old" id="udimagefile_old">
                                     <input type="file" name="udimagefile_new" id="udfileInput" accept="image/*">
                                 </div>
@@ -455,16 +457,22 @@ if ($_SESSION['auth'] == false) {
                     var udimagefile_old = $("input[name=udimagefile_old]:hidden");
                     udimagefile_old.val("<?php echo $key['imagefile'] ?>");
                     var udimagefile_old = udimagefile_old.val();
-                    $("#udimagefile_name").text('<?php echo $key['imagefile'] ?>');
+                    // $("#udimagefile_name").text('<?php // echo $key['imagefile'] ?>');
                     var imagePath = "<?php echo $PATH_IMAGE_NOTICE . $key['imagefile']; ?>";
                     $("#udimagefile").attr("src", imagePath);
 
                     var udbid = $("input[name=udbid]:hidden");
                     udbid.val("<?php echo $key['bid'] ?>");
                     var udbid = udbid.val();
+
                     var uduid = $("input[name=uduid]:hidden");
                     uduid.val("<?php echo $key['uid'] ?>");
                     var uduid = uduid.val();
+
+                    var udimagefile_name = $("input[name=udimagefile_name]:hidden");
+                    udimagefile_name.val("<?php echo $key['imagefile'] ?>");
+                    var udimagefile_name = udimagefile_name.val();
+
                 }
                 <?php
             }
@@ -542,37 +550,6 @@ if ($_SESSION['auth'] == false) {
             return true;
         }
     });
-
-
-    // $("#btnUpdate").click(function () {
-    //     var formData = new FormData();
-    //     formData.append("udimagefile_new", $("#udfileInput")[0].files[0]);
-    //     formData.append("noticeId", $("#udbid").val());
-    //     alert($("#udbid").val());
-    //     $.ajax({
-    //         url: "../model/uploadmodel.php", // Đường dẫn đến tệp PHP xử lý
-    //         type: "POST",
-    //         data: formData,
-    //         contentType: false,
-    //         processData: false,
-    //         // success: function(response) {
-    //         //     console.log(response);
-    //         //     console.log("Uploaded");
-    //         //     alert(response); // Hiển thị kết quả từ tệp PHP xử lý
-    //         // },
-    //         success: function (response) {
-    //             console.log("Uploaded");
-    //             $("#udimagefile_name").text(response); // Cập nhật đường dẫn hiển thị
-    //             $("#udimagefile_old").val(response); // Cập nhật đường dẫn vào trường ẩn
-    //             $("#udimagefile").attr("src", response);
-    //             alert("Hình ảnh đã được tải lên thành công.");
-    //         },
-    //         error: function () {
-    //             alert("Lỗi khi tải lên.");
-    //         }
-    //     });
-    // });
-
 
 
 </script>
