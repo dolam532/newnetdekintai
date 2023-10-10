@@ -18,12 +18,12 @@ $signstamp_kanri_ = '<img src="../assets/uploads/signstamp/' . $signstamp_kanri 
 $signstamp_user_ = '<img src="../assets/uploads/signstamp/' . $signstamp_user . '" width="40" height="40" />';
 
 // Set the X and Y coordinates for the cell
-$x_admin = 145;
-$y_admin = 27;
-$x_kanri = 70;
-$y_kanri = 30;
 $x_user = 50;
-$y_user = 30;
+$y_user = 29;
+$x_admin = 105;
+$y_admin = 27;
+$x_kanri = 177;
+$y_kanri = 27;
 
 // Width and height for the cell
 $w = 100;
@@ -85,9 +85,11 @@ $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
 $tcpdf->SetLineWidth(0.2); // Set the line width for the table border
-$tcpdf->Cell(30, 18, '', 1, 0, 'C', true); // Output the third cell with background color
-$tcpdf->Cell(30, 18, '', 1, 1, 'C', true); // Output the fourth cell with background color
-$tcpdf->Ln(1.2);
+$tcpdf->Cell(30, 17, '', 1, 0, 'C'); 
+$tcpdf->Cell(30, 17, '', 1, 1, 'C'); 
+$tcpdf->writeHTMLCell($w, $h, $x_admin, $y_admin, $signstamp_admin_, $border, $ln, 0, true, 'C');
+$tcpdf->writeHTMLCell($w, $h, $x_kanri, $y_kanri, $signstamp_kanri_, $border, 0, 0, true, $align);
+$tcpdf->Ln(17);
 
 // Table header
 $tcpdf->SetFillColor(240, 240, 240); // Set the fill color for the header
