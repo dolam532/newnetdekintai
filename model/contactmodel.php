@@ -97,7 +97,6 @@ if (isset($_POST['btnRegNL'])) {
     $viewcnt = mysqli_real_escape_string($conn, $_POST['viewcnt']);
     $reg_dt = mysqli_real_escape_string($conn, $_POST['reg_dt']);
 
-
     //...........2023-10-09/1340-004...................//
 // ...........upload image  chg start..........  -->
 //...............................................//
@@ -122,10 +121,6 @@ if (isset($_POST['btnRegNL'])) {
     }
     // check valid extention 
     $fileExtension_add = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
-    echo "selected file :" . $originalFileName . "<br/>";
-    echo "NEW file :" . $newFileName . "<br/>";
-    ;
-
     if (!checkValidExtension($fileExtension_add)) {
         error_log("Image only(jpg, jpeg, png, gif):");
         $uploadOk = false;
@@ -146,21 +141,20 @@ if (isset($_POST['btnRegNL'])) {
             $_SESSION['save_success'] = $save_success;
             header("Refresh:3");
         } else {
-            echo 'query error: ' . mysqli_error($conn);
+            error_log('query error: ' . mysqli_error($conn));
         }
         // upload file 
         if ($uploadOk) {
-            error_log("************ IS UPLOAD OK CHECK UPLOAD OK" . $originalFileName);
             $uploadFile = $uploadDir . $fileName;
             if (move_uploaded_file($_FILES["imagefile"]["tmp_name"], $uploadFile)) {
                 deleteNoticeImages($uploadDir, $noticeId, $fileName);
-                echo "FileName :" . $fileName . "<br/>";
+        
             } else {
                 error_log("Upload Error");
             }
         }
     } else {
-        echo 'query error: ' . mysqli_error($conn);
+        error_log('query error: ' . mysqli_error($conn));
     }
 
 }
@@ -240,7 +234,6 @@ function isFileSizeValid($file, $maxSize)
 // check valid extention
 function checkValidExtension($fEx)
 {
-    echo "<br/>file EXTENTION check :" . $fEx;
     global $ALLOWED_TYPES;
     $validExtensions = array_map('strtolower', $ALLOWED_TYPES);
     $fEx = trim(strtolower($fEx));
@@ -329,7 +322,7 @@ if (isset($_POST['btnDelNL'])) {
         }
         header("Refresh:3");
     } else {
-        echo 'query error: ' . mysqli_error($conn);
+        error_log('query error: ' . mysqli_error($conn));
     }
 }
 
@@ -377,7 +370,7 @@ if (isset($_POST['btnRegCL'])) {
         $_SESSION['save_success'] = $save_success;
         header("Refresh:3");
     } else {
-        echo 'query error: ' . mysqli_error($conn);
+        error_log('query error: ' . mysqli_error($conn));
     }
 }
 
@@ -404,7 +397,7 @@ if (isset($_POST['btnUpdateCL'])) {
         $_SESSION['update_success'] = $update_success;
         header("Refresh:3");
     } else {
-        echo 'query error: ' . mysqli_error($conn);
+        error_log('query error: ' . mysqli_error($conn));
     }
 }
 
@@ -424,6 +417,6 @@ if (isset($_POST['btnDelCL'])) {
 
         header("Refresh:3");
     } else {
-        echo 'query error: ' . mysqli_error($conn);
+        error_log('query error: ' . mysqli_error($conn));
     }
 }
