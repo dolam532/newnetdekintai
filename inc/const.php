@@ -36,3 +36,5 @@ $MAX_LENGTH_CODE = 2;
 $PATH_IMAGE_NOTICE = "../assets/uploads/notice/";
 $LENGTH_RANDOM_UNIQUE_NAME = 15;
 $NOTICE_IMAGE_MAXSIZE = 2000000;  // 2MB = 2000000
+$ALLOWED_TYPES = array("jpg", "jpeg", "png", "gif");
+    
