@@ -25,6 +25,7 @@ if ($_SESSION['auth'] == false) {
 	}
 </style>
 <title>月勤務表</title>
+<?php include('../inc/menu.php'); ?>
 <div class="container">
 	<div class="row">
 		<div class="col-md-5 text-left">
