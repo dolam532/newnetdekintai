@@ -523,7 +523,7 @@ if ($_SESSION['auth'] == false) {
 							<input type="hidden" value="<?= $delaydayswork_top ?>" name="delaydays_top">
 							<input type="hidden" value="<?= $earlydayswork_top ?>" name="earlydays_top">
 						<?php endif; ?>
-						<input type="submit" name="MonthSaveKintai" class="btn btn-primary" id="btnSaveMonth" role="button" value="月登録">
+						<input type="submit" name="MonthSaveKintai" class="btn btn-primary" id="btnSaveMonth" role="button" value="月合計登録">
 					</td>
 					<?php
 					if (!empty($workmonth_list)) {
