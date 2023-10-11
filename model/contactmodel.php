@@ -51,6 +51,12 @@ if ($companyId == "" || $companyId == null) {
 
 /// noticeList.php
 // Select database from tbl_notice table
+
+global $IMAGE_UPLOAD_DIR;
+
+
+
+
 $sql_notice_select = 'SELECT DISTINCT
 `tbl_notice`.*,
 `tbl_user`.`name`
@@ -100,10 +106,9 @@ if (isset($_POST['btnRegNL'])) {
     //...........2023-10-09/1340-004...................//
 // ...........upload image  chg start..........  -->
 //...............................................//
-    $uploadDir = '/var/www/html/newnetdekintai/assets/uploads/notice/';
     $noticeId = $bid;
     $fileExtension_add = pathinfo($_FILES["imagefile"]["name"], PATHINFO_EXTENSION);
-    $newFileName = generateUniqueFileName($uploadDir, $fileExtension_add, $noticeId, $companyId);
+    $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR, $fileExtension_add, $noticeId, $companyId);
     $originalFileName = $_FILES["imagefile"]["name"];
 
     $uploadOk = true;
@@ -128,41 +133,38 @@ if (isset($_POST['btnRegNL'])) {
     // if not error change name 
     if ($uploadOk) {
         $fileName = $newFileName;
-    }
-    $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `imagefile`, `reader`, `viewcnt`, `uid`, `reg_dt`)
+        $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `imagefile`, `reader`, `viewcnt`, `uid`, `reg_dt`)
              VALUES ('$title', '$content', '$fileName', '$reader', '$viewcnt', '$uid', '$reg_dt')";
-    if ($conn->query($sql) === TRUE) {
-        $_SESSION['save_success'] = $save_success;
-        // set id to image 
-        $insertedId = mysqli_insert_id($conn);
-        $fileName = $insertedId . $fileName;
-        $updateSql = "UPDATE tbl_notice SET `imagefile` = '$fileName' WHERE `bid` = $insertedId";
-        if ($conn->query($updateSql) === TRUE) {
+        if ($conn->query($sql) === TRUE) {
             $_SESSION['save_success'] = $save_success;
-            header("Refresh:3");
+            // set id to image 
+            $insertedId = mysqli_insert_id($conn);
+            $fileName = str_replace('__', '_' . $insertedId . '_', $fileName);
+            $updateSql = "UPDATE tbl_notice SET `imagefile` = '$fileName' WHERE `bid` = $insertedId";
+            if ($conn->query($updateSql) === TRUE) {
+                $_SESSION['save_success'] = $save_success;
+                header("Refresh:3");
+            } else {
+                error_log('query error: ' . mysqli_error($conn));
+            }
+            // upload file 
+            if ($uploadOk) {
+                $uploadFile = $IMAGE_UPLOAD_DIR . $fileName;
+                if (move_uploaded_file($_FILES["imagefile"]["tmp_name"], $uploadFile)) {
+                    deleteNoticeImages($IMAGE_UPLOAD_DIR, $noticeId, $fileName);
+                } else {
+                    error_log("Upload Error");
+                }
+            }
         } else {
             error_log('query error: ' . mysqli_error($conn));
         }
-        // upload file 
-        if ($uploadOk) {
-            $uploadFile = $uploadDir . $fileName;
-            if (move_uploaded_file($_FILES["imagefile"]["tmp_name"], $uploadFile)) {
-                deleteNoticeImages($uploadDir, $noticeId, $fileName);
-        
-            } else {
-                error_log("Upload Error");
-            }
-        }
-    } else {
-        error_log('query error: ' . mysqli_error($conn));
     }
 
 }
 //...........2023-10-09/1340-004...................//
 // ...........insert image  chg end..........  -->
 //...............................................//
-
-
 
 // Update Data to tbl_notice DB 
 if (isset($_POST['btnUpdateNL'])) {
@@ -178,12 +180,11 @@ if (isset($_POST['btnUpdateNL'])) {
     //...........2023-10-09/1340-004...................//
 // ...........upload image  add start..........  -->
 //...............................................//
-    $uploadDir = '/var/www/html/newnetdekintai/assets/uploads/notice/';
     $noticeId = $bid;
     $fileExtension = pathinfo($_FILES["udimagefile_new"]["name"], PATHINFO_EXTENSION);
-    $newFileName = generateUniqueFileName($uploadDir, $fileExtension, $noticeId, $companyId);
+    $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR, $fileExtension, $noticeId, $companyId);
     $originalFileName = $_FILES["udimagefile_new"]["name"];
-    $uploadFile = $uploadDir . $newFileName;
+    $uploadFile = $IMAGE_UPLOAD_DIR . $newFileName;
     $uploadOk = true;
     global $NOTICE_IMAGE_MAXSIZE;
 
@@ -198,7 +199,6 @@ if (isset($_POST['btnUpdateNL'])) {
         $uploadOk = false;
     }
     // check valid extention 
-
     $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
     if (!checkValidExtension($fileExtension)) {
         error_log("Image only(jpg, jpeg, png, gif).");
@@ -208,29 +208,29 @@ if (isset($_POST['btnUpdateNL'])) {
     if ($uploadOk) {
         error_log("************ IS UPLOAD OK CHECK UPLOAD OK" . $originalFileName);
         if (move_uploaded_file($_FILES["udimagefile_new"]["tmp_name"], $uploadFile)) {
-            deleteNoticeImages($uploadDir, $noticeId, $newFileName);
+            deleteNoticeImages($IMAGE_UPLOAD_DIR, $noticeId, $newFileName);
             $fileName = $newFileName;
         } else {
             error_log("Upload Error");
         }
-    }
-    $sql = "UPDATE tbl_notice SET  title='$title', content='$content', reader='$reader', imagefile='$fileName'
-    , viewcnt='$viewcnt', reg_dt='$reg_dt' WHERE bid ='$bid' AND uid ='$uid'";
 
-    if ($conn->query($sql) === TRUE) {
-        $_SESSION['update_success'] = $update_success;
-        header("Refresh:3");
-    } else {
-        error_log('query error: ' . mysqli_error($conn));
+        $sql = "UPDATE tbl_notice SET  title='$title', content='$content', reader='$reader', imagefile='$fileName'
+        , viewcnt='$viewcnt', reg_dt='$reg_dt' WHERE bid ='$bid' AND uid ='$uid'";
+    
+        if ($conn->query($sql) === TRUE) {
+            $_SESSION['update_success'] = $update_success;
+            header("Refresh:3");
+        } else {
+            error_log('query error: ' . mysqli_error($conn));
+        }
     }
+
 }
-
 // check valid size
 function isFileSizeValid($file, $maxSize)
 {
     return $file["size"] <= $maxSize;
 }
-
 // check valid extention
 function checkValidExtension($fEx)
 {
@@ -255,10 +255,23 @@ function deleteNoticeImages($uploadDir, $noticeId, $newFileName)
                 error_log("****Failed to delete file:" . $file);
             }
         }
-        if (!preg_match('/_\w+_\w{' . $LENGTH_RANDOM_UNIQUE_NAME . '}\.\w+/', $file)) {
+        // if (!preg_match('/_\w+_\w{' . $LENGTH_RANDOM_UNIQUE_NAME . '}\.\w+/', $file)) {
+        //     $filePath = $uploadDir . $file;
+        //     unlink($filePath);
+        //           // check __ when __ delete this file 
+        // if (!preg_match('/_([^a-zA-Z0-9]+)_/', $file)) {
+        //     $filePath = $uploadDir . $file;
+        //     unlink($filePath);
+        // }
+        // }
+
+        if (!preg_match('/_([a-zA-Z0-9]+)_\w{' . $LENGTH_RANDOM_UNIQUE_NAME . '}\.\w+/', $file)) {
             $filePath = $uploadDir . $file;
             unlink($filePath);
         }
+
+  
+
         if (!ctype_alnum($file[0])) { // when start not number or word
             $filePath = $uploadDir . $file;
             if (unlink($filePath)) {
@@ -275,10 +288,10 @@ function generateUniqueFileName($uploadDir, $fileEx, $noticeId, $companyId)
 {
     global $LENGTH_RANDOM_UNIQUE_NAME;
     $uniqueFileName = generateRandomString($LENGTH_RANDOM_UNIQUE_NAME);
-    $newFileName = $noticeId . "_" . $companyId . "_" . $uniqueFileName . '.' . $fileEx;
+    $newFileName = $companyId . "_" . $noticeId . "_" . $uniqueFileName . '.' . $fileEx;
     while (file_exists($uploadDir . $newFileName)) {
         $uniqueFileName = generateRandomString($LENGTH_RANDOM_UNIQUE_NAME);
-        $newFileName = $noticeId . "_" . $companyId . "_" . $uniqueFileName . '.' . $fileEx;
+        $newFileName = $companyId . "_" . $noticeId . "_" . $uniqueFileName . '.' . $fileEx;
     }
     return $newFileName;
 }
@@ -295,6 +308,9 @@ function generateRandomString($length)
 //...........2023-10-09/1340-004...................//
 // ...........upload image  add end...........  -->
 //...............................................//
+
+
+
 
 
 

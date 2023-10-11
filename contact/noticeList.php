@@ -3,6 +3,7 @@ session_start();
 include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../inc/const_array.php');
+include('../inc/const.php');
 include('../inc/header.php');
 include('../model/contactmodel.php');
 include('../model/inactive.php');
@@ -63,8 +64,10 @@ if ($_SESSION['auth'] == false) {
         <?php
         unset($_SESSION['update_success']);
     }
+
     ?>
     <?php
+
     if (isset($_SESSION['delete_success']) && isset($_POST['btnDelNL'])) {
         ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
@@ -75,6 +78,7 @@ if ($_SESSION['auth'] == false) {
         unset($_SESSION['delete_success']);
     }
     ?>
+
     <div class="row">
         <div class="col-md-3 text-left">
             <div class="title_name">
@@ -153,12 +157,12 @@ if ($_SESSION['auth'] == false) {
                             </td>
                         </tr>
                     <?php } elseif (!empty($notice_list)) {
-                         $counter = 1; 
+                        $counter = 1;
                         foreach ($notice_list as $key) {
                             ?>
                             <tr>
                                 <td><span>
-                                        <?=  $counter++; // $key['bid'] change show number  ?> 
+                                        <?= $counter++; // $key['bid'] change show number  ?>
                                     </span></td>
                                 <td style="text-align:left">
                                     <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
@@ -275,7 +279,8 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="imagefile">写真</label>
-                                    <input type="file" name="imagefile" accept="image/*" id="fileInput">
+                                    <input type="file" name="imagefile" accept="image/*" id="fileInput"
+                                        onchange=checkFileSize(this)>
                                 </div>
                             </div>
                         </div>
@@ -287,6 +292,9 @@ if ($_SESSION['auth'] == false) {
                                         role="button" value="登録">
                                 </p>
                             </div>
+
+
+
                             <div class="col-xs-2">
                                 <button type="button" class="btn btn-default" data-dismiss="modal"
                                     id="modalClose">閉じる</button>
@@ -359,9 +367,10 @@ if ($_SESSION['auth'] == false) {
                                 <div class="col-xs-12">
                                     <label for="udimagefile">写真</label><br>
                                     <img width="50" id="udimagefile" alt="写真無し">
-                                    <span id="imagename" name="imagename" hidden></span> 
+                                    <span id="imagename" name="imagename" hidden></span>
                                     <input type="hidden" name="udimagefile_old" id="udimagefile_old">
-                                    <input type="file" name="udimagefile_new" id="udfileInput" accept="image/*">
+                                    <input type="file" name="udimagefile_new" id="udfileInput"
+                                        onchange=checkFileSize(this)>
                                 </div>
                             </div>
                         </div>
@@ -401,6 +410,18 @@ if ($_SESSION['auth'] == false) {
         $("input[name='rdoSearch']").click(function () {
             $("#searchForm").submit(); // Trigger form submission
         });
+
+        //...........2023-10-11/1340-005...................//
+        // ...........upload image  add start..........  -->
+
+        // load valid extention to element check 
+        <?php $allowedTypesString = "." . implode(", .", $ALLOWED_TYPES); ?>
+        $('#udfileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
+        $('#fileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
+
+        //...........2023-10-11/1340-005...................//
+        // ...........upload image  add end..........  -->
+
     });
 
     // New button: popup & clear 
@@ -525,31 +546,44 @@ if ($_SESSION['auth'] == false) {
         }
     });
 
-    $('#udfileInput').on('change', function () {
-        var maxFileSize = 2 * 1024 * 1024;
-        var fileInput = this;
-        var fileSize = fileInput.files[0].size;
-        if (fileSize > maxFileSize) {
-            alert("<?php echo $image_size_error; ?>");
-            fileInput.value = '';
-            e.preventDefault();
-            $("#udfileInput").focus();
-            return true;
-        }
-    });
 
-    $('#fileInput').on('change', function () {
-        var maxFileSize = 2 * 1024 * 1024;
-        var fileInput = this;
-        var fileSize = fileInput.files[0].size;
-        if (fileSize > maxFileSize) {
-            alert("<?php echo $image_size_error; ?>");
-            fileInput.value = '';
-            e.preventDefault();
-            $("#fileInput").focus();
-            return true;
+    //...........2023-10-11/1340-005...................//
+    // ...........upload image  add start..........  -->
+    //...............................................//
+
+    // check size file upload 
+    function checkFileSize(input) {
+        if (input.files.length > 0) {
+            var fileSize = input.files[0].size;
+            var maxSize = <?php echo $NOTICE_IMAGE_MAXSIZE; ?>;
+            if (fileSize > maxSize) {
+                alert("<?php echo $file_size_isvalid; ?>");
+                input.value = ""; // delete selected file
+            }
         }
-    });
+        // check extention 
+        validateImage(input);
+    }
+
+    // check valid size extention 
+    function validateImage(inputElement) {
+        <?php $allowedTypesJSON = json_encode($ALLOWED_TYPES); ?>
+        var allowedExtensions = <?php echo $allowedTypesJSON; ?>;
+        if (inputElement.files.length > 0) {
+            const fileName = inputElement.files[0].name;
+            const fileExtension = fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
+            if (!allowedExtensions.includes(fileExtension.toLowerCase())) {
+                alert("<?php echo $file_extension_invalid; ?>");
+                inputElement.value = ''; // delete selected file
+            }
+
+        }
+    }
+
+    //...........2023-10-11/1340-005...................//
+    // ...........upload image  add end..........  -->
+    //...............................................//
+
 
 
 </script>
