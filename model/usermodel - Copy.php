@@ -230,7 +230,7 @@ if (isset($_POST['UpdateUserList'])) {
 // ----------2023-10-11/1340-006--------- change start// 
 
     $fileExtension = pathinfo($_FILES["udsignstamp_new"]["name"], PATHINFO_EXTENSION);
-
+    error_log("*******UID [" .$uid."]");
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
     $originalFileName = $_FILES["udsignstamp_new"]["name"];
     $uploadFile = $IMAGE_UPLOAD_DIR_STAMP . $newFileName;
@@ -330,7 +330,6 @@ function checkValidExtension($fEx)
 function deleteNoticeImages($uploadDir, $uId, $newFileName)
 {
     global $LENGTH_RANDOM_UNIQUE_NAME_STAMP;
- 
     $files = scandir($uploadDir);
     foreach ($files as $file) {
         if ($file !== $newFileName && strpos($file, $uId) === 0) {
@@ -339,18 +338,6 @@ function deleteNoticeImages($uploadDir, $uId, $newFileName)
                 error_log("******Deleted file: " . $file);
             } else {
                 error_log("****Failed to delete file:" . $file);
-            }
-        }
-
-        if ($file !== $newFileName ) {
-            if (preg_match('/_' . preg_quote($uId, '/') . '_/', $file)) {
-                error_log("***------------***FILE: " . $file);
-                $filePath = $uploadDir . $file;
-                if (unlink($filePath)) {
-                    error_log("******Deleted file: " . $file);
-                } else {
-                    error_log("****Failed to delete file:" . $file);
-                }
             }
         }
 

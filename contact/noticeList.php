@@ -278,7 +278,8 @@ if ($_SESSION['auth'] == false) {
                             <br>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <label for="imagefile">写真</label>
+                                    <label for="udimagefile_addNew">写真</label>
+                                    <img width="50" id="udimagefile_addNew" alt="写真無し">
                                     <input type="file" name="imagefile" accept="image/*" id="fileInput"
                                         onchange=checkFileSize(this)>
                                 </div>
@@ -427,6 +428,10 @@ if ($_SESSION['auth'] == false) {
     // New button: popup & clear 
     $(document).on('click', '#btnNewNL', function (e) {
         $('#modal').modal('toggle');
+        $('label[for="udimagefile_addNew"]').show();
+        $('#fileInput').val('');
+        $('#udimagefile_addNew').attr('src', '').attr('alt', '写真無し');
+
     });
 
     // Check Error
@@ -457,6 +462,10 @@ if ($_SESSION['auth'] == false) {
     // Year/month click on grid (edit): popup & content display
     $(document).on('click', '.showModal', function () {
         $('#modal2').modal('toggle');
+        $('label[for="udimagefile"]').show();
+        $('#udfileInput').val('');
+        $('#udimagefile').attr('src', '').attr('alt', '写真無し');
+
         var ArrayData = $(this).text();
         var SeparateArr = ArrayData.split(',');
         var Bid = SeparateArr[0].trim();
@@ -561,12 +570,24 @@ if ($_SESSION['auth'] == false) {
                 input.value = ""; // delete selected file
             }
         }
-        // check extention 
-        validateImage(input);
+
+        var parentElement = input.parentNode;
+        var siblings = parentElement.childNodes;
+        for (var i = 0; i < siblings.length; i++) {
+            var sibling = siblings[i];
+            if (sibling.id && sibling.id.endsWith("_addNew")) {
+                validateImage(input, true);
+                return;
+            }
+        }
+        validateImage(input, false);
     }
 
+
+
+
     // check valid size extention 
-    function validateImage(inputElement) {
+    function validateImage(inputElement, isaddNew) {
         <?php $allowedTypesJSON = json_encode($ALLOWED_TYPES); ?>
         var allowedExtensions = <?php echo $allowedTypesJSON; ?>;
         if (inputElement.files.length > 0) {
@@ -575,10 +596,62 @@ if ($_SESSION['auth'] == false) {
             if (!allowedExtensions.includes(fileExtension.toLowerCase())) {
                 alert("<?php echo $file_extension_invalid; ?>");
                 inputElement.value = ''; // delete selected file
+            } else {
+                // show new image 
+                if (isaddNew)
+                    displaySelectedImageAddNew(inputElement)
+                else
+                    displaySelectedImageChange(inputElement)
             }
-
         }
     }
+
+    // ad new show selected img 
+    function displaySelectedImageAddNew(input) {
+        if (input.files.length > 0) {
+            const selectedFile = input.files[0];
+            const imageElement = document.getElementById('udimagefile_addNew');
+            const labelElement = document.querySelector('label[for="udimagefile_addNew"]');
+
+            if (selectedFile.type.match('image.*')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    imageElement.src = e.target.result;
+                    imageElement.alt = selectedFile.name;
+                    labelElement.style.display = 'none';
+                };
+
+                reader.readAsDataURL(selectedFile);
+            } else {
+                alert("<?php echo $file_extension_invalid; ?>");
+                input.value = '';
+            }
+        }
+    }
+
+    // change selected img
+    function displaySelectedImageChange(input) {
+        if (input.files.length > 0) {
+            const selectedFile = input.files[0];
+            const imageElement = document.getElementById('udimagefile');
+            if (selectedFile.type.match('image.*')) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    imageElement.src = e.target.result;
+                    imageElement.alt = selectedFile.name;
+                    document.getElementById('imagename').innerText = selectedFile.name;
+                    document.getElementById('imagename').hidden = false;
+                };
+                reader.readAsDataURL(selectedFile);
+            } else {
+                alert("<?php echo $file_extension_invalid; ?>");
+                input.value = '';
+            }
+        }
+    }
+
+
 
     //...........2023-10-11/1340-005...................//
     // ...........upload image  add end..........  -->

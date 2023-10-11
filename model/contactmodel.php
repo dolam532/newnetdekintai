@@ -46,17 +46,12 @@ if ($companyId == "" || $companyId == null) {
 
 
 
-
 // ----------2023-10-09/1340-003--------- change start// 
 
 /// noticeList.php
 // Select database from tbl_notice table
 
 global $IMAGE_UPLOAD_DIR;
-
-
-
-
 $sql_notice_select = 'SELECT DISTINCT
 `tbl_notice`.*,
 `tbl_user`.`name`
@@ -103,7 +98,7 @@ if (isset($_POST['btnRegNL'])) {
     $viewcnt = mysqli_real_escape_string($conn, $_POST['viewcnt']);
     $reg_dt = mysqli_real_escape_string($conn, $_POST['reg_dt']);
 
-    //...........2023-10-09/1340-004...................//
+//...........2023-10-09/1340-004...................//
 // ...........upload image  chg start..........  -->
 //...............................................//
     $noticeId = $bid;
@@ -160,7 +155,6 @@ if (isset($_POST['btnRegNL'])) {
             error_log('query error: ' . mysqli_error($conn));
         }
     }
-
 }
 //...........2023-10-09/1340-004...................//
 // ...........insert image  chg end..........  -->
@@ -206,7 +200,6 @@ if (isset($_POST['btnUpdateNL'])) {
     }
     // if not error save
     if ($uploadOk) {
-        error_log("************ IS UPLOAD OK CHECK UPLOAD OK" . $originalFileName);
         if (move_uploaded_file($_FILES["udimagefile_new"]["tmp_name"], $uploadFile)) {
             deleteNoticeImages($IMAGE_UPLOAD_DIR, $noticeId, $newFileName);
             $fileName = $newFileName;
@@ -224,7 +217,6 @@ if (isset($_POST['btnUpdateNL'])) {
             error_log('query error: ' . mysqli_error($conn));
         }
     }
-
 }
 // check valid size
 function isFileSizeValid($file, $maxSize)
@@ -255,22 +247,21 @@ function deleteNoticeImages($uploadDir, $noticeId, $newFileName)
                 error_log("****Failed to delete file:" . $file);
             }
         }
-        // if (!preg_match('/_\w+_\w{' . $LENGTH_RANDOM_UNIQUE_NAME . '}\.\w+/', $file)) {
-        //     $filePath = $uploadDir . $file;
-        //     unlink($filePath);
-        //           // check __ when __ delete this file 
-        // if (!preg_match('/_([^a-zA-Z0-9]+)_/', $file)) {
-        //     $filePath = $uploadDir . $file;
-        //     unlink($filePath);
-        // }
-        // }
+        if ($file !== $newFileName ) {
+            if (preg_match('/_' . preg_quote($noticeId, '/') . '_/', $file)) {
+                $filePath = $uploadDir . $file;
+                if (unlink($filePath)) {
+                    error_log("******Deleted file: " . $file);
+                } else {
+                    error_log("****Failed to delete file:" . $file);
+                }
+            }
+        }
 
         if (!preg_match('/_([a-zA-Z0-9]+)_\w{' . $LENGTH_RANDOM_UNIQUE_NAME . '}\.\w+/', $file)) {
             $filePath = $uploadDir . $file;
             unlink($filePath);
         }
-
-  
 
         if (!ctype_alnum($file[0])) { // when start not number or word
             $filePath = $uploadDir . $file;
@@ -312,10 +303,6 @@ function generateRandomString($length)
 
 
 
-
-
-
-
 //...........2023-10-09/1340-004...................//
 // ...........delete notice  change start..........-->
 //...............................................//
@@ -325,7 +312,7 @@ if (isset($_POST['btnDelNL'])) {
     $bid = mysqli_real_escape_string($conn, $_POST['udbid']);
     $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
     $fileImgName = mysqli_real_escape_string($conn, $_POST['udimagefile_name']);
-    $removeDir = '/var/www/html/newnetdekintai/assets/uploads/notice/';
+    $removeDir = $IMAGE_UPLOAD_DIR;
     $sql = "DELETE FROM `tbl_notice` 
     WHERE bid ='$bid' AND uid ='$uid'";
     if ($conn->query($sql) === TRUE) {
