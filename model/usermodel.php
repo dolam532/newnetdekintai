@@ -12,7 +12,7 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
     `tbl_genba`.`workendtime`
 FROM
     `tbl_user`
-CROSS JOIN 
+LEFT JOIN 
     `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
 WHERE
     `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
@@ -25,7 +25,7 @@ WHERE
     `tbl_genba`.`workendtime`
 FROM
     `tbl_user`
-CROSS JOIN 
+LEFT JOIN 
     `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
 WHERE
     `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"
@@ -64,10 +64,10 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
     `tbl_genba`.`workendtime`
  FROM
     `tbl_user`
- CROSS JOIN 
+ LEFT JOIN 
  `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
-WHERE 
-`tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+ WHERE 
+ `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
     AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
     AND `tbl_user`.`name` IN("' . $searchName . '") 
     AND `tbl_user`.`grade` IN("' . $searchGrade . '")';
