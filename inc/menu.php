@@ -73,7 +73,7 @@
                     </li>
                     <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                         <li class="dropdown" id="gana">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true">GANASYS<span class="caret"></span></a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true"><?= $_SESSION['auth_name'] ?><span class="caret"></span></a>
                             <ul class="dropdown-menu">
                                 <li><a href="../manage/companyList.php">使用者登録</a></li>
                                 <li><a href="../manage/adminList.php">管理者登録</a></li>
