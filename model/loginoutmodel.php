@@ -16,6 +16,7 @@ if (isset($_POST['btnLogin'])) {
     if (mysqli_num_rows($login_query_run) > 0) {
         foreach ($login_query_run as $data) {
             $user_uid = $data['uid'];
+            $user_companyid = $data['companyid'];
             $user_pwd = $data['pwd'];
             $user_name = $data['name'];
             $user_type = $data['type'];
@@ -26,6 +27,7 @@ if (isset($_POST['btnLogin'])) {
         $_SESSION['auth'] = true;
         $_SESSION['auth_type'] = "$user_type"; //9=admin, 3=管理者, 1=user
         $_SESSION['auth_uid'] = "$user_uid";
+        $_SESSION['auth_companyid'] = "$user_companyid";
         $_SESSION['auth_pwd'] = "$user_pwd";
         $_SESSION['auth_name'] = "$user_name";
         $_SESSION['auth_genid'] = "$user_genid";
@@ -74,6 +76,7 @@ if (isset($_POST['btnLogout'])) {
     unset($_SESSION['auth']);
     unset($_SESSION['auth_type']);
     unset($_SESSION['auth_uid']);
+    unset($_SESSION['auth_companyid']);
     unset($_SESSION['auth_pwd']);
     unset($_SESSION['auth_name']);
     unset($_SESSION['auth_genid']);
