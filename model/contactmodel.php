@@ -54,7 +54,8 @@ if ($companyId == "" || $companyId == null) {
 global $IMAGE_UPLOAD_DIR;
 $sql_notice_select = 'SELECT DISTINCT
 `tbl_notice`.*,
-`tbl_user`.`name`
+`tbl_user`.`name`,
+`tbl_user`.`companyid`
 FROM `tbl_notice`
 LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`';
 $result_notice_select = mysqli_query($conn, $sql_notice_select);
@@ -75,16 +76,24 @@ if (isset($_POST['SearchButtonNL'])) {
     }
     $sql_notice = 'SELECT DISTINCT
     `tbl_notice`.*,
-    `tbl_user`.`name`
+    `tbl_user`.`name`,
+    `tbl_user`.`companyid`
     FROM `tbl_notice`
     LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
     WHERE (`tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '")';
 
     $result_notice = mysqli_query($conn, $sql_notice);
-    $notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
+    $notice_list_ = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
 } else {
-    $notice_list = $notice_list_select;
+    $notice_list_ = $notice_list_select;
 }
+$notice_list = array(); // Create an empty array to store filtered notices
+foreach ($notice_list_ as $k => $v) {
+    if ($v['companyid'] == $_SESSION['auth_companyid']) {
+        $notice_list[] = $v; // Add the notice to the filtered array
+    }
+}
+
 // ----------2023-10-09/1340-003--------- change end// 
 
 // Save Data to tbl_notice DB 
@@ -98,9 +107,9 @@ if (isset($_POST['btnRegNL'])) {
     $viewcnt = mysqli_real_escape_string($conn, $_POST['viewcnt']);
     $reg_dt = mysqli_real_escape_string($conn, $_POST['reg_dt']);
 
-//...........2023-10-09/1340-004...................//
-// ...........upload image  chg start..........  -->
-//...............................................//
+    //...........2023-10-09/1340-004...................//
+    // ...........upload image  chg start..........  -->
+    //...............................................//
     $noticeId = $bid;
     $fileExtension_add = pathinfo($_FILES["imagefile"]["name"], PATHINFO_EXTENSION);
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR, $fileExtension_add, $noticeId, $companyId);
@@ -172,8 +181,8 @@ if (isset($_POST['btnUpdateNL'])) {
     $viewcnt = mysqli_real_escape_string($conn, $_POST['udviewcnt']);
 
     //...........2023-10-09/1340-004...................//
-// ...........upload image  add start..........  -->
-//...............................................//
+    // ...........upload image  add start..........  -->
+    //...............................................//
     $noticeId = $bid;
     $fileExtension = pathinfo($_FILES["udimagefile_new"]["name"], PATHINFO_EXTENSION);
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR, $fileExtension, $noticeId, $companyId);
@@ -209,7 +218,7 @@ if (isset($_POST['btnUpdateNL'])) {
 
         $sql = "UPDATE tbl_notice SET  title='$title', content='$content', reader='$reader', imagefile='$fileName'
         , viewcnt='$viewcnt', reg_dt='$reg_dt' WHERE bid ='$bid' AND uid ='$uid'";
-    
+
         if ($conn->query($sql) === TRUE) {
             $_SESSION['update_success'] = $update_success;
             header("Refresh:3");
@@ -247,7 +256,7 @@ function deleteNoticeImages($uploadDir, $noticeId, $newFileName)
                 error_log("****Failed to delete file:" . $file);
             }
         }
-        if ($file !== $newFileName ) {
+        if ($file !== $newFileName) {
             if (preg_match('/_' . preg_quote($noticeId, '/') . '_/', $file)) {
                 $filePath = $uploadDir . $file;
                 if (unlink($filePath)) {
@@ -347,7 +356,6 @@ if ($_POST['typecode'] == NULL) {
     $result_codebase = mysqli_query($conn, $sql_codebase);
     $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
     $codes = array_column($codebase_list, 'code');
-
 } elseif (isset($_POST['typecode'])) {
     $sql_codebase = 'SELECT * FROM `tbl_codebase`
         WHERE `tbl_codebase`.`companyid` IN ("' . constant('GANASYS_COMPANY_ID') . '")
