@@ -8,7 +8,7 @@ $sql_manageinfo = 'SELECT DISTINCT
     `tbl_company`.`companyname`
     FROM `tbl_manageinfo` 
     LEFT JOIN `tbl_company` ON `tbl_manageinfo`.`companyid` = `tbl_company`.`companyid`
-    WHERE `tbl_manageinfo`.`companyid` IN("' . constant('GANASYS_COMPANY_ID') . '")';
+    WHERE `tbl_manageinfo`.`companyid` IN("' . $_SESSION['auth_companyid'] . '")';
 $result_manageinfo = mysqli_query($conn, $sql_manageinfo);
 $manageinfo_list = mysqli_fetch_all($result_manageinfo, MYSQLI_ASSOC);
 
