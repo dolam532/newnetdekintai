@@ -348,17 +348,18 @@ if (isset($_POST['btnDelNL'])) {
 $sql_codetype = 'SELECT * FROM `tbl_codetype`';
 $result_codetype = mysqli_query($conn, $sql_codetype);
 $codetype_list = mysqli_fetch_all($result_codetype, MYSQLI_ASSOC);
+
 $codes;
 // Select database from tbl_codebase table
 if ($_POST['typecode'] == NULL) {
     $sql_codebase = 'SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`companyid` IN ("' . constant('GANASYS_COMPANY_ID') . '")';
+        WHERE `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
     $result_codebase = mysqli_query($conn, $sql_codebase);
     $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
     $codes = array_column($codebase_list, 'code');
 } elseif (isset($_POST['typecode'])) {
     $sql_codebase = 'SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`companyid` IN ("' . constant('GANASYS_COMPANY_ID') . '")
+        WHERE `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")
         AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';
     $result_codebase = mysqli_query($conn, $sql_codebase);
     $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
@@ -367,7 +368,7 @@ if ($_POST['typecode'] == NULL) {
 
 // Save Data to tbl_codebase DB 
 if (isset($_POST['btnRegCL'])) {
-    $companyid = constant('GANASYS_COMPANY_ID');
+    $companyid = $_SESSION['auth_companyid'];
     $typecode = $_POST['typecode'];
     $uid = $_SESSION['auth_uid'];
     $code = mysqli_real_escape_string($conn, $_POST['code']);

@@ -4,7 +4,7 @@ $reg_dt = date('Y-m-d H:i:s');
 $upt_dt = date('Y-m-d H:i:s');
 
 // Select data from tbl_user
-$sql_user = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`companyid`="' . constant('GANASYS_COMPANY_ID') . '"';
+$sql_user = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`companyid`="' . $_SESSION['auth_companyid'] . '"';
 $result_user = mysqli_query($conn, $sql_user);
 $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 

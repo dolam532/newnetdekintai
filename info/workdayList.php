@@ -164,7 +164,7 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control text-center" id="workyear" name="workyear" placeholder="0000" maxlength="4">
-                                <input type="hidden" name="companyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
+                                <input type="hidden" name="companyid" value="<?= $_SESSION['auth_companyid'] ?>">
                             </div>
                             <div class="col-xs-6">
                             </div>
@@ -318,7 +318,7 @@ if ($_SESSION['auth'] == false) {
                             </div>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control text-center" id="udworkyear" name="udworkyear" maxlength="4" readonly>
-                                <input type="hidden" name="udcompanyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
+                                <input type="hidden" name="udcompanyid" value="<?= $_SESSION['auth_companyid'] ?>">
                             </div>
                             <div class="col-xs-6">
                             </div>

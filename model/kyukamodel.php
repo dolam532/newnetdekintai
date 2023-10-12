@@ -36,7 +36,7 @@ CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinf
 WHERE
 `tbl_codebase`.`typecode` = 02
 AND
-`tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+`tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
 AND 
     `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
@@ -103,7 +103,7 @@ FROM
 LEFT JOIN 
 `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
 WHERE
-    `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+    `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
 AND 
     `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '", "' . constant('ADMIN') . '")';
     $result_vacationinfo = mysqli_query($conn, $sql_vacationinfo);
@@ -125,7 +125,7 @@ FROM
 LEFT JOIN 
 `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
 WHERE
-    `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+    `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
 AND 
     `tbl_user`.`type` IN("' . constant('USER') . '")';
     $result_vacationinfo = mysqli_query($conn, $sql_vacationinfo);

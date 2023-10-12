@@ -160,7 +160,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             </div>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control text-center" name="holiday" id="holiday" placeholder="holiday" maxlength="10">
-                                <input type="hidden" name="companyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
+                                <input type="hidden" name="companyid" value="<?= $_SESSION['auth_companyid'] ?>">
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="holiremark">備考</label>
@@ -206,7 +206,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             </div>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control text-center" name="udholiday" id="udholiday" maxlength="10" readonly>
-                                <input type="hidden" name="udcompanyid" value="<?= constant('GANASYS_COMPANY_ID') ?>">
+                                <input type="hidden" name="udcompanyid" value="<?= $_SESSION['auth_companyid'] ?>">
                                 <input type="hidden" name="udholiyear" id="udholiyear">
                             </div>
                             <div class="col-xs-2 text-right">

@@ -2,7 +2,7 @@
 // (workdayList.php)
 // Select database from tbl_workday table
 $reg_dt = date('Y-m-d H:i:s');
-$ganasys_company_id = constant('GANASYS_COMPANY_ID');
+$ganasys_company_id = $_SESSION['auth_companyid'];
 $sql_workday = "SELECT workyear,
     MAX(CASE WHEN workmonth = '01' THEN workmonth END) AS one_month,
     MAX(CASE WHEN workmonth = '01' THEN workdays END) AS one_monthwd,

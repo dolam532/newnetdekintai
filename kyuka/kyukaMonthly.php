@@ -235,7 +235,7 @@ if ($_SESSION['auth'] == false) {
 				<tbody>
 					<?php if (empty($userkyuka_list)) { ?>
 						<tr>
-							<td colspan="8" align="center"><?php echo $data_save_no; ?></td>
+							<td colspan="10" align="center"><?php echo $data_save_no; ?></td>
 						</tr>
 						<?php } elseif (!empty($userkyuka_list)) {
 						foreach ($userkyuka_list as $userkyuka) {

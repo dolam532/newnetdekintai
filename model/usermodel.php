@@ -15,7 +15,7 @@ FROM
 LEFT JOIN 
     `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
 WHERE
-    `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+    `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
     AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_user_select_db = 'SELECT DISTINCT
@@ -29,7 +29,7 @@ LEFT JOIN
     `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
 WHERE
     `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"
-    AND `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+    AND `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
     AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
 }
 
@@ -67,7 +67,7 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
  LEFT JOIN 
  `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
  WHERE 
- `tbl_user`.`companyid` = "' . constant('GANASYS_COMPANY_ID') . '"
+ `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
     AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
     AND `tbl_user`.`name` IN("' . $searchName . '") 
     AND `tbl_user`.`grade` IN("' . $searchGrade . '")';
@@ -77,7 +77,7 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
 }
 
 // Select data from tbl_genba
-$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . constant('GANASYS_COMPANY_ID') . '")';
+$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
 $result_genba = mysqli_query($conn, $sql_genba);
 $genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
