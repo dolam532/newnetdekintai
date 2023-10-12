@@ -133,6 +133,7 @@ if (isset($_POST['btnRegNL'])) {
         if ($conn->query($sql) === TRUE) {
             $_SESSION['save_success'] = $save_success;
             // set id to image 
+  
             $insertedId = mysqli_insert_id($conn);
             $fileName = str_replace('__', '_' . $insertedId . '_', $fileName);
             $updateSql = "UPDATE tbl_notice SET `imagefile` = '$fileName' WHERE `bid` = $insertedId";
@@ -171,7 +172,7 @@ if (isset($_POST['btnUpdateNL'])) {
     $reader = mysqli_real_escape_string($conn, $_POST['udreader']);
     $viewcnt = mysqli_real_escape_string($conn, $_POST['udviewcnt']);
 
-    //...........2023-10-09/1340-004...................//
+//...........2023-10-09/1340-004...................//
 // ...........upload image  add start..........  -->
 //...............................................//
     $noticeId = $bid;

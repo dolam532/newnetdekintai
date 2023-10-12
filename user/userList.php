@@ -379,7 +379,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</p>
 							</div>
 							<div class="col-xs-2">
-								<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
 							</div>
 							<div class="col-xs-4"></div>
 						<?php endif; ?>
@@ -389,11 +388,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		</div>
 	</div>
 </div>
-<script>
 
+
+
+<script>
 	//...........2023-10-11/1340-005...................//
 	// ...........upload image  add start..........  -->
-	$(document).ready(function () {
+	$(document).ready(function () { 
 		// load valid extention to element check 
 		<?php $allowedTypesString = "." . implode(", .", $ALLOWED_TYPES_STAMP); ?>
 		$('#udfileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
@@ -401,9 +402,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 	});
     // check size file upload 
-
-
-
     function checkFileSize(input) {
         if (input.files.length > 0) {
             var fileSize = input.files[0].size;
@@ -451,8 +449,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	function displaySelectedImageAddNew(input) {
         if (input.files.length > 0) {
             const selectedFile = input.files[0];
-            const imageElement = document.getElementById('udsignstamp_addNew');
-            const labelElement = document.querySelector('label[for="udsignstamp_addNew"]');
+            const imageElement = document.getElementById('udsignstamp_addNew');   // 
+            const labelElement = document.querySelector('label[for="udsignstamp_addNew"]');  
 
             if (selectedFile.type.match('image.*')) {
                 const reader = new FileReader();
@@ -549,7 +547,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$('#udsignstamp').attr('src', '').attr('alt', '印鑑無し');
 		$('label[for="signstamp"]').show();
         $('#udfileInput').val('');
-
+        $('#udsignstamp_name').text('');
 		<?php
 		if (!empty($userlist_list)) {
 			foreach ($userlist_list as $key) {
@@ -726,7 +724,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	// 		fileInput.value = '';
 	// 		e.preventDefault();
 	// 		$("#fileInput").focus();
-	// 		return true;
+	// 		return true;   jquery 
 	// 	}
 	// });
 </script>
