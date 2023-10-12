@@ -87,10 +87,10 @@ if (isset($_POST['SearchButtonNL'])) {
 } else {
     $notice_list_ = $notice_list_select;
 }
-$notice_list = array(); // Create an empty array to store filtered notices
+$notice_list = array(); 
 foreach ($notice_list_ as $k => $v) {
     if ($v['companyid'] == $_SESSION['auth_companyid']) {
-        $notice_list[] = $v; // Add the notice to the filtered array
+        $notice_list[] = $v; 
     }
 }
 
@@ -349,11 +349,19 @@ $sql_codetype = 'SELECT * FROM `tbl_codetype`';
 $result_codetype = mysqli_query($conn, $sql_codetype);
 $codetype_list = mysqli_fetch_all($result_codetype, MYSQLI_ASSOC);
 
-$codes;
+$codetype_list_a = array(); 
+foreach ($codetype_list as $k => $v) {
+        $codetype_list_a[] = $v['typecode'];
+}
+$codetype_list_a = array_unique($codetype_list_a);
+$codetype_list_a_string = "'" . implode("','", $codetype_list_a) . "'";
+
 // Select database from tbl_codebase table
+$codes;
 if ($_POST['typecode'] == NULL) {
-    $sql_codebase = 'SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
+    $sql_codebase = "SELECT * FROM `tbl_codebase`
+    WHERE `tbl_codebase`.`companyid` = '{$_SESSION['auth_companyid']}'
+    AND `tbl_codebase`.`typecode` IN ({$codetype_list_a_string})";
     $result_codebase = mysqli_query($conn, $sql_codebase);
     $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
     $codes = array_column($codebase_list, 'code');
