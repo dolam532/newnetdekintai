@@ -330,12 +330,14 @@ function generateRandomString($length)
 // (genbaList.php)
 // Select data from tbl_genba
 if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
-    $sql_genba = 'SELECT * FROM `tbl_genba`';
+    $companyid = $_SESSION['auth_companyid'] ;
+    $sql_genba = 'SELECT * FROM `tbl_genba` where `companyid` ='. $companyid .';';
     $result_genba = mysqli_query($conn, $sql_genba);
     $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
+    $companyid = $_SESSION['auth_companyid'] ;
     $sql_genba = 'SELECT * FROM `tbl_genba`
-        WHERE `tbl_genba`.`genid` IN ("' . $_SESSION['auth_genid'] . '")';
+        WHERE `tbl_genba`.`genid` IN ("' . $_SESSION['auth_genid'] . '") AND `companyid` ='. $companyid .';';
     $result_genba = mysqli_query($conn, $sql_genba);
     $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 }
@@ -343,8 +345,6 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
 // Save data to tbl_genba table of database
 if (isset($_POST['SaveKinmu'])) {
     $companyid = $_SESSION['auth_companyid'] ;
-    error_log("company*****:".$companyid );
-
     $strymd = "";
     $endymd = "";
     $genbacompany = "";
