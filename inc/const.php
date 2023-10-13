@@ -17,21 +17,21 @@ DEFINE('URL_NAME', 'http://new.netdekintai.com/index.php');
 DEFINE('USE_NO', '0');
 DEFINE('USE_YES', '1');
 
-///===== KINTAI CONFIG ===== //// 
+// KINTAI CONFIG 
 $MAX_INPUT_LENGTH_COMMENT = 17;
 $MAX_INPUT_LENGTH_BIGO = 8;
 
-///===== CODEMASTER CONFIG ===== //// 
+// CODEMASTER CONFIG 
 $MAX_LENGTH_CODE = 2;
 
-///===== お知らせ登録===== //// 
+// お知らせ登録
 $PATH_IMAGE_NOTICE = "../assets/uploads/notice/";
 $LENGTH_RANDOM_UNIQUE_NAME = 15;
 $NOTICE_IMAGE_MAXSIZE = 2000000;  // 2MB = 2000000
 $ALLOWED_TYPES = array("jpg", "jpeg", "png", "gif");
 $IMAGE_UPLOAD_DIR = '/var/www/html/newnetdekintai/assets/uploads/notice/';
 
-///===== 社員登録===== //// 
+// 社員登録 + 管理者登録
 $PATH_IMAGE_STAMP = "../assets/uploads/signstamp/";
 $ALLOWED_TYPES_STAMP = array("png");
 $STAMP_MAXSIZE = 2000000;  // 2MB = 2000000

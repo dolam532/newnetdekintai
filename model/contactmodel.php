@@ -1,5 +1,4 @@
 <?php
-
 $reg_dt = date('Y-m-d H:i:s');
 
 // userloginList.php
@@ -28,7 +27,7 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
 }
 
 
-// ----------2023-10-09/1340-004--------- add start// 
+// 2023-10-09/1340-004
 // get company id from loginned user id 
 $uid = $_SESSION['auth_uid'];
 $stmt = $conn->prepare("SELECT companyid FROM tbl_user WHERE uid = ?");
@@ -41,16 +40,11 @@ $stmt->close();
 if ($companyId == "" || $companyId == null) {
     $companyId = "x_xCompanyErrorx_xUid:" . $uid . "x_x";
 }
+// 2023-10-09/1340-004-add end
 
-// ----------2023-10-09/1340-004--------- add end// 
-
-
-
-// ----------2023-10-09/1340-003--------- change start// 
-
-/// noticeList.php
+// 2023-10-09/1340-003 change start
+// noticeList.php
 // Select database from tbl_notice table
-
 global $IMAGE_UPLOAD_DIR;
 $sql_notice_select = 'SELECT DISTINCT
 `tbl_notice`.*,
@@ -94,8 +88,7 @@ foreach ($notice_list_ as $k => $v) {
     }
 }
 
-// ----------2023-10-09/1340-003--------- change end// 
-
+// 2023-10-09/1340-003 change end
 // Save Data to tbl_notice DB 
 if (isset($_POST['btnRegNL'])) {
     $content_d = $_POST['content'];
@@ -107,9 +100,8 @@ if (isset($_POST['btnRegNL'])) {
     $viewcnt = mysqli_real_escape_string($conn, $_POST['viewcnt']);
     $reg_dt = mysqli_real_escape_string($conn, $_POST['reg_dt']);
 
-    //...........2023-10-09/1340-004...................//
-    // ...........upload image  chg start..........  -->
-    //...............................................//
+    // 2023-10-09/1340-004
+    // upload image chg start
     $noticeId = $bid;
     $fileExtension_add = pathinfo($_FILES["imagefile"]["name"], PATHINFO_EXTENSION);
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR, $fileExtension_add, $noticeId, $companyId);
@@ -134,6 +126,7 @@ if (isset($_POST['btnRegNL'])) {
         error_log("Image only(jpg, jpeg, png, gif):");
         $uploadOk = false;
     }
+
     // if not error change name 
     if ($uploadOk) {
         $fileName = $newFileName;
@@ -141,6 +134,7 @@ if (isset($_POST['btnRegNL'])) {
              VALUES ('$title', '$content', '$fileName', '$reader', '$viewcnt', '$uid', '$reg_dt')";
         if ($conn->query($sql) === TRUE) {
             $_SESSION['save_success'] = $save_success;
+
             // set id to image 
             $insertedId = mysqli_insert_id($conn);
             $fileName = str_replace('__', '_' . $insertedId . '_', $fileName);
@@ -151,6 +145,7 @@ if (isset($_POST['btnRegNL'])) {
             } else {
                 error_log('query error: ' . mysqli_error($conn));
             }
+
             // upload file 
             if ($uploadOk) {
                 $uploadFile = $IMAGE_UPLOAD_DIR . $fileName;
@@ -165,9 +160,8 @@ if (isset($_POST['btnRegNL'])) {
         }
     }
 }
-//...........2023-10-09/1340-004...................//
-// ...........insert image  chg end..........  -->
-//...............................................//
+// 2023-10-09/1340-004
+// insert image chg end
 
 // Update Data to tbl_notice DB 
 if (isset($_POST['btnUpdateNL'])) {
@@ -180,9 +174,8 @@ if (isset($_POST['btnUpdateNL'])) {
     $reader = mysqli_real_escape_string($conn, $_POST['udreader']);
     $viewcnt = mysqli_real_escape_string($conn, $_POST['udviewcnt']);
 
-    //...........2023-10-09/1340-004...................//
-    // ...........upload image  add start..........  -->
-    //...............................................//
+    // 2023-10-09/1340-004
+    // upload image add start
     $noticeId = $bid;
     $fileExtension = pathinfo($_FILES["udimagefile_new"]["name"], PATHINFO_EXTENSION);
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR, $fileExtension, $noticeId, $companyId);
@@ -227,6 +220,7 @@ if (isset($_POST['btnUpdateNL'])) {
         }
     }
 }
+
 // check valid size
 function isFileSizeValid($file, $maxSize)
 {
@@ -305,17 +299,14 @@ function generateRandomString($length)
     return $randomString;
 }
 
-//...........2023-10-09/1340-004...................//
-// ...........upload image  add end...........  -->
-//...............................................//
+// 2023-10-09/1340-004
+// upload image add end
 
 
 
 
-//...........2023-10-09/1340-004...................//
-// ...........delete notice  change start..........-->
-//...............................................//
-
+// 023-10-09/1340-004
+// delete notice change start
 // Delete Data to tbl_notice DB 
 if (isset($_POST['btnDelNL'])) {
     $bid = mysqli_real_escape_string($conn, $_POST['udbid']);
@@ -326,6 +317,7 @@ if (isset($_POST['btnDelNL'])) {
     WHERE bid ='$bid' AND uid ='$uid'";
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
+
         // when success   -> delete img 
         if (unlink($removeDir . $fileImgName)) {
             error_log("******Deleted file: " . $fileImgName);
@@ -337,10 +329,6 @@ if (isset($_POST['btnDelNL'])) {
         error_log('query error: ' . mysqli_error($conn));
     }
 }
-
-//...........2023-10-09/1340-004...................//
-// ...........delete notice  change start..........-->
-//...............................................//
 
 
 // codemasterList.php

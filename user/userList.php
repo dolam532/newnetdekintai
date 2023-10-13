@@ -95,7 +95,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<input type="submit" name="SearchButton" value="検索">&nbsp;&nbsp;&nbsp;
 					<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
 						<input type="button" id="btnNew" value="新規">
-					<?php endif;?>
+					<?php endif; ?>
 				</div>
 			</div>
 		</form>
@@ -142,7 +142,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<?php if ($user['signstamp'] == NULL) : ?>
 										印鑑無し
 									<?php else : ?>
-										<img width="50" src="<?= $PATH_IMAGE_STAMP. $user['signstamp'] ?>"><br>
+										<img width="50" src="<?= $PATH_IMAGE_STAMP . $user['signstamp'] ?>"><br>
 									<?php endif; ?>
 								</span>
 							</td>
@@ -240,7 +240,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="col-xs-12">
 								<label for="udsignstamp_addNew">印鑑</label>
 								<img width="50" id="udsignstamp_addNew" alt="印鑑無し">
-								<input type="file" name="signstamp"  id="fileInput"  onchange=checkFileSize(this)>
+								<input type="file" name="signstamp" id="fileInput" onchange=checkFileSize(this)>
 							</div>
 						</div>
 					</div>
@@ -347,10 +347,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-xs-12">
 								<label for="signstamp">印鑑</label><br>
-								<img width="50" id="udsignstamp"  alt="印鑑無し">
+								<img width="50" id="udsignstamp" alt="印鑑無し">
 								<span id="udsignstamp_name"></span>
 								<input type="hidden" name="udsignstamp_old" id="udsignstamp_old">
-								<input type="file" name="udsignstamp_new" id="udfileInput"  onchange=checkFileSize(this)>
+								<input type="file" name="udsignstamp_new" id="udfileInput" onchange=checkFileSize(this)>
 							</div>
 						</div>
 					</div>
@@ -390,115 +390,105 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	</div>
 </div>
 <script>
-
-	//...........2023-10-11/1340-005...................//
-	// ...........upload image  add start..........  -->
-	$(document).ready(function () {
+	// 2023-10-11/1340-005
+	// upload image  add start
+	$(document).ready(function() {
 		// load valid extention to element check 
 		<?php $allowedTypesString = "." . implode(", .", $ALLOWED_TYPES_STAMP); ?>
 		$('#udfileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
 		$('#fileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
 
 	});
-    // check size file upload 
 
+	// check size file upload
+	function checkFileSize(input) {
+		if (input.files.length > 0) {
+			var fileSize = input.files[0].size;
+			var maxSize = <?php echo $STAMP_MAXSIZE; ?>;
+			if (fileSize > maxSize) {
+				alert("<?php echo $file_size_isvalid_STAMP; ?>");
+				input.value = ""; // delete selected file
+			}
+		}
 
+		var parentElement = input.parentNode;
+		var siblings = parentElement.childNodes;
+		for (var i = 0; i < siblings.length; i++) {
+			var sibling = siblings[i];
+			if (sibling.id && sibling.id.endsWith("_addNew")) {
+				validateImage(input, true);
+				return;
+			}
+		}
+		validateImage(input, false);
+	}
 
-    function checkFileSize(input) {
-        if (input.files.length > 0) {
-            var fileSize = input.files[0].size;
-            var maxSize = <?php echo $STAMP_MAXSIZE; ?>;
-            if (fileSize > maxSize) {
-                alert("<?php echo $file_size_isvalid_STAMP; ?>");
-                input.value = ""; // delete selected file
-            }
-        }
-
-        var parentElement = input.parentNode;
-        var siblings = parentElement.childNodes;
-        for (var i = 0; i < siblings.length; i++) {
-            var sibling = siblings[i];
-            if (sibling.id && sibling.id.endsWith("_addNew")) {
-                validateImage(input, true);
-                return;
-            }
-        }
-        validateImage(input, false);
-    }
-
-
-    // check valid size extention 
-    function validateImage(inputElement, isaddNew) {
-        <?php $allowedTypesJSON = json_encode($ALLOWED_TYPES_STAMP); ?>
-        var allowedExtensions = <?php echo $allowedTypesJSON; ?>;
-        if (inputElement.files.length > 0) {
-            const fileName = inputElement.files[0].name;
-            const fileExtension = fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
-            if (!allowedExtensions.includes(fileExtension.toLowerCase())) {
-                alert("<?php echo $file_extension_invalid_STAMP; ?>");
-                inputElement.value = ''; // delete selected file
-            } else {
-                // show new image 
-                if (isaddNew)
-                    displaySelectedImageAddNew(inputElement)
-                else
-                	displaySelectedImageChange(inputElement)
-            }
-        }
-    }
-
+	// check valid size extention 
+	function validateImage(inputElement, isaddNew) {
+		<?php $allowedTypesJSON = json_encode($ALLOWED_TYPES_STAMP); ?>
+		var allowedExtensions = <?php echo $allowedTypesJSON; ?>;
+		if (inputElement.files.length > 0) {
+			const fileName = inputElement.files[0].name;
+			const fileExtension = fileName.slice(((fileName.lastIndexOf(".") - 1) >>> 0) + 2);
+			if (!allowedExtensions.includes(fileExtension.toLowerCase())) {
+				alert("<?php echo $file_extension_invalid_STAMP; ?>");
+				inputElement.value = ''; // delete selected file
+			} else {
+				// show new image 
+				if (isaddNew)
+					displaySelectedImageAddNew(inputElement)
+				else
+					displaySelectedImageChange(inputElement)
+			}
+		}
+	}
 
 	function displaySelectedImageAddNew(input) {
-        if (input.files.length > 0) {
-            const selectedFile = input.files[0];
-            const imageElement = document.getElementById('udsignstamp_addNew');
-            const labelElement = document.querySelector('label[for="udsignstamp_addNew"]');
+		if (input.files.length > 0) {
+			const selectedFile = input.files[0];
+			const imageElement = document.getElementById('udsignstamp_addNew');
+			const labelElement = document.querySelector('label[for="udsignstamp_addNew"]');
 
-            if (selectedFile.type.match('image.*')) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    imageElement.src = e.target.result;
-                    imageElement.alt = selectedFile.name;
-                    labelElement.style.display = 'none';
-                };
+			if (selectedFile.type.match('image.*')) {
+				const reader = new FileReader();
+				reader.onload = function(e) {
+					imageElement.src = e.target.result;
+					imageElement.alt = selectedFile.name;
+					labelElement.style.display = 'none';
+				};
 
-                reader.readAsDataURL(selectedFile);
-            } else {
-                alert("<?php echo $file_extension_invalid_STAMP; ?>");
-                input.value = '';
-            }
-        }
-    }
+				reader.readAsDataURL(selectedFile);
+			} else {
+				alert("<?php echo $file_extension_invalid_STAMP; ?>");
+				input.value = '';
+			}
+		}
+	}
 
-    // change selected img
-    function displaySelectedImageChange(input) {
-        if (input.files.length > 0) {
-            const selectedFile = input.files[0];
-            const imageElement = document.getElementById('udsignstamp');
-            if (selectedFile.type.match('image.*')) {
-                const reader = new FileReader();
+	// change selected img
+	function displaySelectedImageChange(input) {
+		if (input.files.length > 0) {
+			const selectedFile = input.files[0];
+			const imageElement = document.getElementById('udsignstamp');
+			if (selectedFile.type.match('image.*')) {
+				const reader = new FileReader();
 
-                reader.onload = function (e) {
-                    imageElement.src = e.target.result;
-                    imageElement.alt = selectedFile.name;
-                    document.getElementById('udsignstamp_name').innerText = selectedFile.name;
-                    document.getElementById('udsignstamp_name').hidden = false;
-                };
-                reader.readAsDataURL(selectedFile);
-            } else {
-                alert("<?php echo $file_extension_invalid_STAMP; ?>");
-                input.value = '';
-            }
-        }
-    }
+				reader.onload = function(e) {
+					imageElement.src = e.target.result;
+					imageElement.alt = selectedFile.name;
+					document.getElementById('udsignstamp_name').innerText = selectedFile.name;
+					document.getElementById('udsignstamp_name').hidden = false;
+				};
+				reader.readAsDataURL(selectedFile);
+			} else {
+				alert("<?php echo $file_extension_invalid_STAMP; ?>");
+				input.value = '';
+			}
+		}
+	}
 
-
-
-
-    //...........2023-10-11/1340-005...................//
-    // ...........upload image  add end..........  -->
-    //...............................................//
-
+	// 2023-10-11/1340-005
+	// upload image  add end
 	// Datepicker Calender
 	$("#genstrymd").datepicker({
 		changeYear: true,
@@ -548,7 +538,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var Uid = $(this).text();
 		$('#udsignstamp').attr('src', '').attr('alt', '印鑑無し');
 		$('label[for="signstamp"]').show();
-        $('#udfileInput').val('');
+		$('#udfileInput').val('');
+		$('#udsignstamp_name').text('');
 
 		<?php
 		if (!empty($userlist_list)) {
@@ -703,31 +694,5 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			return;
 		}
 	});
-
-	// $('#udfileInput').on('change', function() {
-	// 	var maxFileSize = 2 * 1024 * 1024;
-	// 	var fileInput = this;
-	// 	var fileSize = fileInput.files[0].size;
-	// 	if (fileSize > maxFileSize) {
-	// 		alert("<?php echo $image_size_error; ?>");
-	// 		fileInput.value = '';
-	// 		e.preventDefault();
-	// 		$("#udfileInput").focus();
-	// 		return true;
-	// 	}
-	// });
-
-	// $('#fileInput').on('change', function() {
-	// 	var maxFileSize = 2 * 1024 * 1024;
-	// 	var fileInput = this;
-	// 	var fileSize = fileInput.files[0].size;
-	// 	if (fileSize > maxFileSize) {
-	// 		alert("<?php echo $image_size_error; ?>");
-	// 		fileInput.value = '';
-	// 		e.preventDefault();
-	// 		$("#fileInput").focus();
-	// 		return true;
-	// 	}
-	// });
 </script>
 <?php include('../inc/footer.php'); ?>

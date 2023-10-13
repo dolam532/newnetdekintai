@@ -81,6 +81,8 @@ $sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['au
 $result_genba = mysqli_query($conn, $sql_genba);
 $genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
+// 2023-10-11/1340-006
+// upload image add start
 // Save data to tbl_user table of database
 if (isset($_POST['SaveUserList'])) {
     $_POST['companyid'] = intval($_POST['companyid']);
@@ -101,54 +103,60 @@ if (isset($_POST['SaveUserList'])) {
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
 
+    // 2023-10-11/1340-006 change start
+    $fileExtension = pathinfo($_FILES["signstamp"]["name"], PATHINFO_EXTENSION);
+    $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
+    $originalFileName = $_FILES["signstamp"]["name"];
+    $uploadFile = $IMAGE_UPLOAD_DIR_STAMP . $newFileName;
+    $uploadOk = true;
+    global $STAMP_MAXSIZE;
 
-    $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`
-    , `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) 
-    VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type'
-    , '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
+    // Check file name is exists
+    if (file_exists($uploadFile)) {
+        error_log("File name is exists -> Delete old file name");
+        unlink($uploadFile);
+    }
+    // check size 
+    if (!isFileSizeValid($_FILES["signstamp"], $STAMP_MAXSIZE)) {
+        error_log("File is BIG!");
+        $uploadOk = false;
+    }
+    // check valid extention 
+    $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
+    if (!checkValidExtension($fileExtension)) {
 
+        error_log("Image only(png).".$fileExtension);
+        error_log("FileName".$originalFileName);
+        $uploadOk = false;
+    }
 
-
-
-    if ($_FILES['signstamp']["name"] == "") {
-        $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) 
-                            VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
-    } else {
-        $uploadDirectory = "../assets/uploads/";
-        $fileName = $_FILES["signstamp"]["name"];
-        $fileTmpName = $_FILES["signstamp"]["tmp_name"];
-        $fileType = $_FILES["signstamp"]["type"];
-        $allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-
-        if (in_array($fileType, $allowedTypes)) {
-            $targetPath = $uploadDirectory . $fileName;
-            if (move_uploaded_file($fileTmpName, $targetPath)) {
-                $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`, `signstamp`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) 
-                                    VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type', '$fileName', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
-            } else {
-                echo $image_upload_error;
-            }
+    // if not error save
+    if ($uploadOk) {
+        $fileName = $newFileName;
+        // upload to server
+        if (move_uploaded_file($_FILES["signstamp"]["tmp_name"], $uploadFile)) {
+            deleteNoticeImages($IMAGE_UPLOAD_DIR_STAMP, $uid, $newFileName);
         } else {
-            echo $image_type_error;
+            error_log("Upload Error");
+        }
+        if ($fileName == null) {
+            $fileName == '';
+        }
+
+        // insert to DB 
+        $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`
+        , `signstamp`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt`) 
+         VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type'
+        , '$fileName', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt')";
+
+        if ($conn->query($sql_user_insert) === TRUE) {
+            $_SESSION['save_success'] = $save_success;
+            header("Refresh:3");
+        } else {
+            echo 'query error: ' . mysqli_error($conn);
         }
     }
-
-
-
-    // ----------2023-10-11/1340-006--------- change start// 
-
-
-
-
-
-    // ----------2023-10-11/1340-006--------- change end// 
-
-    if (mysqli_query($conn, $sql_user_insert)) {
-        $_SESSION['save_success'] = $save_success;
-        header("Refresh:3");
-    } else {
-        echo 'query error: ' . mysqli_error($conn);
-    }
+    // 023-10-11/1340-006 change end
 }
 
 // Update data to tbl_user table of database
@@ -171,66 +179,7 @@ if (isset($_POST['UpdateUserList'])) {
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
 
-    // if ($_FILES['udsignstamp_new']["name"] == "") {
-    //         $sql = "UPDATE tbl_user SET 
-    //         companyid='$companyid',
-    //         pwd='$pwd',
-    //         name='$name',
-    //         grade='$grade',
-    //         type='$type',
-    //         email='$email',
-    //         dept='$dept',
-    //         bigo='$bigo',
-    //         genid='$genid',
-    //         inymd='$inymd',
-    //         outymd='$outymd',
-    //         genstrymd='$genstrymd',
-    //         genendymd='$genendymd',
-    //         upt_dt='$upt_dt'
-    //     WHERE uid ='$uid'";
-    // } else {
-    //     $filePath = "../assets/uploads/" . $_POST['udsignstamp_old'];
-    //     if (file_exists($filePath)) {
-    //         unlink($filePath);
-    //     }
-
-    //     $uploadDirectory = "../assets/uploads/";
-    //     $fileName = $_FILES["udsignstamp_new"]["name"];
-    //     $fileTmpName = $_FILES["udsignstamp_new"]["tmp_name"];
-    //     $fileType = $_FILES["udsignstamp_new"]["type"];
-    //     $allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
-
-    //     if (in_array($fileType, $allowedTypes)) {
-    //         $targetPath = $uploadDirectory . $fileName;
-    //         if (move_uploaded_file($fileTmpName, $targetPath)) {
-    //             $sql = "UPDATE tbl_user SET 
-    //                 companyid='$companyid',
-    //                 pwd='$pwd',
-    //                 name='$name',
-    //                 grade='$grade',
-    //                 signstamp='$fileName',
-    //                 type='$type',
-    //                 email='$email',
-    //                 dept='$dept',
-    //                 bigo='$bigo',
-    //                 genid='$genid',
-    //                 inymd='$inymd',
-    //                 outymd='$outymd',
-    //                 genstrymd='$genstrymd',
-    //                 genendymd='$genendymd',
-    //                 upt_dt='$upt_dt'
-    //             WHERE uid ='$uid'";
-    //         } else {
-    //             echo $image_upload_error;
-    //         }
-    //     } else {
-    //         echo $image_type_error;
-    //     }
-    // }
-// ----------2023-10-11/1340-006--------- change start// 
-
     $fileExtension = pathinfo($_FILES["udsignstamp_new"]["name"], PATHINFO_EXTENSION);
-
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
     $originalFileName = $_FILES["udsignstamp_new"]["name"];
     $uploadFile = $IMAGE_UPLOAD_DIR_STAMP . $newFileName;
@@ -262,7 +211,7 @@ if (isset($_POST['UpdateUserList'])) {
         } else {
             error_log("Upload Error");
         }
-        
+
         $sql = "UPDATE tbl_user SET  
         companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName'
         , type='$type', email='$email',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd'
@@ -277,39 +226,26 @@ if (isset($_POST['UpdateUserList'])) {
     }
 
 }
-
-        // ----------2023-10-11/1340-006--------- change end// 
-
-
-
-
+// 2023-10-11/1340-006 change end
 
 // Delete data to tbl_user table of database
 if (isset($_POST['btnDelUserList'])) {
     $uid = mysqli_real_escape_string($conn, $_POST['uluid']);
-    $filePath = "../assets/uploads/" . $_POST['udsignstamp_old'];
-    if (file_exists($filePath)) {
-        unlink($filePath);
-    }
+    $filePath = $IMAGE_UPLOAD_DIR_STAMP . $_POST['udsignstamp_old'];
 
     $sql = "DELETE FROM `tbl_user` 
             WHERE uid ='$uid'";
-
+    // error_log("xxxxx****xxxxx DELETE FILE PATH".$filePath);
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
-
-
-
-
-//...........2023-10-11/1340-006...................//
-// ...........upload image  add start..........  -->
-//...............................................//
-
 
 // check valid size
 function isFileSizeValid($file, $maxSize)
@@ -327,10 +263,10 @@ function checkValidExtension($fEx)
 }
 
 // delete old image and image not in format 
+// when 1_97_8372891372819.jpgは $newFileNameなら 1_97_xxxxxxxxxxxxx.jpg を削除する 
 function deleteNoticeImages($uploadDir, $uId, $newFileName)
 {
     global $LENGTH_RANDOM_UNIQUE_NAME_STAMP;
- 
     $files = scandir($uploadDir);
     foreach ($files as $file) {
         if ($file !== $newFileName && strpos($file, $uId) === 0) {
@@ -341,8 +277,7 @@ function deleteNoticeImages($uploadDir, $uId, $newFileName)
                 error_log("****Failed to delete file:" . $file);
             }
         }
-
-        if ($file !== $newFileName ) {
+        if ($file !== $newFileName) {
             if (preg_match('/_' . preg_quote($uId, '/') . '_/', $file)) {
                 error_log("***------------***FILE: " . $file);
                 $filePath = $uploadDir . $file;
@@ -353,7 +288,6 @@ function deleteNoticeImages($uploadDir, $uId, $newFileName)
                 }
             }
         }
-
         if (!preg_match('/_([a-zA-Z0-9]+)_\w{' . $LENGTH_RANDOM_UNIQUE_NAME_STAMP . '}\.\w+/', $file)) {
             $filePath = $uploadDir . $file;
             unlink($filePath);
@@ -391,10 +325,8 @@ function generateRandomString($length)
     }
     return $randomString;
 }
-
-//...........2023-10-11/1340-006...................//
-// ...........upload image  add end..........  -->
-//...............................................//
+// 2023-10-11/1340-006
+// upload image add end
 
 
 // (genbaList.php)
