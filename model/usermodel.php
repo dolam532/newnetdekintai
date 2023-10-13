@@ -328,7 +328,6 @@ function generateRandomString($length)
 // 2023-10-11/1340-006
 // upload image add end
 
-
 // (genbaList.php)
 // Select data from tbl_genba
 if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {

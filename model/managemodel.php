@@ -240,7 +240,6 @@ if (isset($_POST['btnRegAM'])) {
         $uploadOk = false;
     }
 
-
     // if not error save
     if ($uploadOk) {
         $fileName = $newFileName;
@@ -422,6 +421,7 @@ function generateUniqueFileName($uploadDir, $fileEx, $uId, $companyId)
     }
     return $newFileName;
 }
+
 function generateRandomString($length)
 {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

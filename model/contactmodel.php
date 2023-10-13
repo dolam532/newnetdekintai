@@ -27,7 +27,7 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
 }
 
 
-// 2023-10-09/1340-004
+// 2023-10-09/1340-004 add start
 // get company id from loginned user id 
 $uid = $_SESSION['auth_uid'];
 $stmt = $conn->prepare("SELECT companyid FROM tbl_user WHERE uid = ?");
