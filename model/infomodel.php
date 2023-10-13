@@ -257,7 +257,7 @@ if (isset($_POST['btnDelHdr'])) {
 
     $sql = "DELETE FROM `tbl_holiday` 
     WHERE companyid ='$companyid' AND holiyear ='$holiyear' AND holiday ='$holiday'";
-
+    
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
         header("Refresh:3");
