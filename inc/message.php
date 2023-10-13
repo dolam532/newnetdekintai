@@ -2,7 +2,6 @@
 // All
 include('../inc/const.php');
 
-
 $data_save_no = '登録されたデータがありません。';
 $save_success = '入力情報保存しました。';
 $autosave_success = '自動入力情報保存しました。';
@@ -15,7 +14,6 @@ $select_message = '現場を選択してください。';
 $image_upload_error = 'ファイルのアップロード中にエラーが発生しました。';
 $image_type_error = '無効なファイルタイプです。 画像(JPEG、PNG、JPG)をアップロードしてください。';
 $image_size_error = 'アップロードされた画像は最大許容サイズ (2 MB) を超えています。';
-
 
 // index
 $login_is_not = '詳細情報はログイン後可能です。';
@@ -37,9 +35,8 @@ $user_email_empty = 'mailを入力してください。';
 $user_dept_empty = '部署を入力してください。';
 $user_grade_empty = '区分を入力してください。';
 $user_genba_list_empty = '勤務時間タイプを選択してください。';
-$file_size_isvalid_STAMP = 'ファイルサイズが無効です。ファイルサイズが' . round($STAMP_MAXSIZE / 1000000, 0).'MB未満のファイルを選択してください。';
+$file_size_isvalid_STAMP = 'ファイルサイズが無効です。ファイルサイズが' . round($STAMP_MAXSIZE / 1000000, 0) . 'MB未満のファイルを選択してください。';
 $file_extension_invalid_STAMP = 'ファイルの拡張子無効です。ファイルの拡張子が [ ' . implode(', ', $ALLOWED_TYPES_STAMP) . ' ] です';
-
 
 // KyukaReg
 $kyuka_no_receive = '休暇はまだもらえません。';
@@ -138,9 +135,8 @@ $content_noteC_empty = '内容を入力してください。';
 $content_noteR_empty = '確認者を入力してください。';
 $content_noteRegdt_empty = '作成日を入力してください。';
 $content_noteViewcnt_empty = 'view Cntを入力してください。';
-$file_size_isvalid = 'ファイルサイズが無効です。ファイルサイズが' . round($NOTICE_IMAGE_MAXSIZE / 1000000, 0).'MB未満のファイルを選択してください。';
+$file_size_isvalid = 'ファイルサイズが無効です。ファイルサイズが' . round($NOTICE_IMAGE_MAXSIZE / 1000000, 0) . 'MB未満のファイルを選択してください。';
 $file_extension_invalid = 'ファイルの拡張子無効です。ファイルの拡張子が [ ' . implode(', ', $ALLOWED_TYPES) . ' ] です';
-
 
 // companyList
 $manage_Ccode_empty = '会社コードを入力してください。';

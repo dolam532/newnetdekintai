@@ -61,7 +61,6 @@ function deleteNoticeImages($uploadDir, $noticeId, $newFileName)
     }
 }
 
-
 function generateUniqueFileName($uploadDir, $fileExtension, $noticeId)
 {
     global $LENGTH_RANDOM_UNIQUE_NAME;
@@ -82,12 +81,3 @@ function generateRandomString($length)
     }
     return $randomString;
 }
-
-
-
-
-
-
-
-
-?>

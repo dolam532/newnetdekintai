@@ -13,10 +13,6 @@ if ($_SESSION['auth'] == false) {
 
 ?>
 
-<!-- ****CSS*****  -->
-<style>
-
-</style>
 <title>現場別勤務社員</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">

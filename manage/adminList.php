@@ -136,7 +136,6 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                         印鑑無し
                                     <?php else : ?>
                                         <img width="50" src="<?= $PATH_IMAGE_STAMP . $key['signstamp'] ?>"><br>
-                                        <?= $key['signstamp'] ?>
                                     <?php endif; ?>
                                 </span>
                             </td>

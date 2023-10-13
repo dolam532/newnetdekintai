@@ -506,7 +506,7 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 $workmm = $row['workmm'];
                 $comment = $row['comment'];
                 $bigo = $row['bigo'];
-                
+
                 $sql = "INSERT INTO `tbl_worktime` (`uid`, `genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`,
                 `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`, `bigo`, `reg_dt`, `upt_dt`)
                 VALUES (:uid, :genid, :workymd, :jobstarthh, :jobstartmm, :jobendhh, :jobendmm,

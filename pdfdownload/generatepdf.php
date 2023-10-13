@@ -85,8 +85,8 @@ $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
 $tcpdf->SetLineWidth(0.2); // Set the line width for the table border
-$tcpdf->Cell(30, 17, '', 1, 0, 'C'); 
-$tcpdf->Cell(30, 17, '', 1, 1, 'C'); 
+$tcpdf->Cell(30, 17, '', 1, 0, 'C');
+$tcpdf->Cell(30, 17, '', 1, 1, 'C');
 $tcpdf->writeHTMLCell($w, $h, $x_admin, $y_admin, $signstamp_admin_, $border, $ln, 0, true, 'C');
 $tcpdf->writeHTMLCell($w, $h, $x_kanri, $y_kanri, $signstamp_kanri_, $border, 0, 0, true, $align);
 $tcpdf->Ln(17);
@@ -96,7 +96,6 @@ $tcpdf->SetFillColor(240, 240, 240); // Set the fill color for the header
 $tcpdf->SetTextColor(0, 0, 0); // Set the text color for the header
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the header
 $tcpdf->SetLineWidth(0.2); // Set the line width for the table border
-
 
 if ($template == "1") {
 	$tcpdf->Cell(20, 7, '日付', 1, 0, 'C', true); // Add 'LTRB' to draw an outer border for the cell

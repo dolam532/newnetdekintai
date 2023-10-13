@@ -1325,14 +1325,15 @@ if ($_SESSION['auth'] == false) {
 
 	// Select input tag
 	$(document).ready(function() {
+
 		// Function to handle input fields
 		function handleInput(inputId, selectId) {
 			var inputValue = $(inputId);
 			var selectOption = $(selectId);
-			// ----------2023-10-02/1340-001--------- add start// // Modal text box fix 
+
+			// 2023-10-02/1340-001 add start(Modal text box fix)
 			// 入力した値を正しく選択ボックスへ反映
 			inputValue.on('input', function() {
-				// var formattedValue = formatValue();
 				var c;
 				if ($(this)[0].attributes.id.value.includes('hh')) {
 					formattedValue = formatValue(formatValue($(this).val(), true));
@@ -1354,12 +1355,14 @@ if ($_SESSION['auth'] == false) {
 				}
 			});
 		}
+
 		// Function format value to "01", "02", ..., "09"
 		function formatValue(value, hoursOrMinuteFlg) {
 			var result = value;
 			if (value.length === 1) {
 				result = "0" + value;
 			} else {
+
 				// if length > 2  -> get last 
 				if (value.length > 2) {
 					result = value.slice(-2);
@@ -1376,8 +1379,7 @@ if ($_SESSION['auth'] == false) {
 			}
 			return value;
 		}
-		// ----------2023-10-02 --------- add end//
-
+		// 2023-10-02 add end//
 
 		// Usage of the function for each input-select pair
 		handleInput('#IVjobstarthh', '#jobstarthh');
@@ -1403,7 +1405,7 @@ if ($_SESSION['auth'] == false) {
 	});
 
 
-	// ----------2023-10-04/1340-003 --------- add start//
+	// 2023-10-04/1340-003 add start
 	// check input length call ↓
 	validateLength("comment");
 	validateLength("bigo");
@@ -1430,7 +1432,6 @@ if ($_SESSION['auth'] == false) {
 			}
 		});
 	}
-	// ----------2023-10-04/1340-003 --------- add start//
+	// 2023-10-04/1340-003 add start
 </script>
-
 <?php include('../inc/footer.php'); ?>

@@ -26,7 +26,6 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
     $userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
 }
 
-
 // 2023-10-09/1340-004 add start
 // get company id from loginned user id 
 $uid = $_SESSION['auth_uid'];
@@ -81,10 +80,10 @@ if (isset($_POST['SearchButtonNL'])) {
 } else {
     $notice_list_ = $notice_list_select;
 }
-$notice_list = array(); 
+$notice_list = array();
 foreach ($notice_list_ as $k => $v) {
     if ($v['companyid'] == $_SESSION['auth_companyid']) {
-        $notice_list[] = $v; 
+        $notice_list[] = $v;
     }
 }
 
@@ -298,12 +297,8 @@ function generateRandomString($length)
     }
     return $randomString;
 }
-
 // 2023-10-09/1340-004
 // upload image add end
-
-
-
 
 // 023-10-09/1340-004
 // delete notice change start
@@ -337,9 +332,9 @@ $sql_codetype = 'SELECT * FROM `tbl_codetype`';
 $result_codetype = mysqli_query($conn, $sql_codetype);
 $codetype_list = mysqli_fetch_all($result_codetype, MYSQLI_ASSOC);
 
-$codetype_list_a = array(); 
+$codetype_list_a = array();
 foreach ($codetype_list as $k => $v) {
-        $codetype_list_a[] = $v['typecode'];
+    $codetype_list_a[] = $v['typecode'];
 }
 $codetype_list_a = array_unique($codetype_list_a);
 $codetype_list_a_string = "'" . implode("','", $codetype_list_a) . "'";

@@ -1,4 +1,4 @@
-<?php 
+<?php
 // Auto logout inactive page
 if (isset($_SESSION['last_login_timestamp']) && (time() - $_SESSION['last_login_timestamp']) > 600) {
     session_destroy();

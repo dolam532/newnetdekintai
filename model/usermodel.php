@@ -125,8 +125,8 @@ if (isset($_POST['SaveUserList'])) {
     $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
     if (!checkValidExtension($fileExtension)) {
 
-        error_log("Image only(png).".$fileExtension);
-        error_log("FileName".$originalFileName);
+        error_log("Image only(png)." . $fileExtension);
+        error_log("FileName" . $originalFileName);
         $uploadOk = false;
     }
 
@@ -224,7 +224,6 @@ if (isset($_POST['UpdateUserList'])) {
             echo 'query error: ' . mysqli_error($conn);
         }
     }
-
 }
 // 2023-10-11/1340-006 change end
 
@@ -416,7 +415,6 @@ if (isset($_POST['DeleteKinmu'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
-
 
 // genbaUserList.php
 // Select data from tbl_user

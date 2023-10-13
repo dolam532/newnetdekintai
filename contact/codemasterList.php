@@ -44,34 +44,34 @@ if ($_SESSION['auth'] == false) {
 <div class="container" style="margin-top:-20px;">
     <?php
     if (isset($_SESSION['save_success']) && isset($_POST['btnRegCL'])) {
-        ?>
+    ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <?php echo $_SESSION['save_success']; ?>
         </div>
-        <?php
+    <?php
         unset($_SESSION['save_success']);
     }
     ?>
     <?php
     if (isset($_SESSION['update_success']) && isset($_POST['btnUpdateCL'])) {
-        ?>
+    ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <?php echo $_SESSION['update_success']; ?>
         </div>
-        <?php
+    <?php
         unset($_SESSION['update_success']);
     }
     ?>
     <?php
     if (isset($_SESSION['delete_success']) && isset($_POST['btnDelCL'])) {
-        ?>
+    ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
             <?php echo $_SESSION['delete_success']; ?>
         </div>
-        <?php
+    <?php
         unset($_SESSION['delete_success']);
     }
     ?>
@@ -83,7 +83,7 @@ if ($_SESSION['auth'] == false) {
         </div>
         <div class="col-md-2 text-right">
             <div class="title_btn">
-                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
+                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                     <input type="button" id="btnNewCL" value="新規 ">
                 <?php endif; ?>
             </div>
@@ -109,10 +109,10 @@ if ($_SESSION['auth'] == false) {
                                 <?php echo $data_save_no; ?>
                             </td>
                         </tr>
-                    <?php } elseif (!empty($codetype_list)) {
+                        <?php } elseif (!empty($codetype_list)) {
                         foreach ($codetype_list as $key) {
-                            ?>
-                            <?php if ($key['typecode'] == $_POST['typecode']): ?>
+                        ?>
+                            <?php if ($key['typecode'] == $_POST['typecode']) : ?>
                                 <tr>
                                     <td align="center"><span style="font-weight:bold">
                                             <?= $key['typecode'] ?>
@@ -128,7 +128,7 @@ if ($_SESSION['auth'] == false) {
                                         </a>
                                     </td>
                                 </tr>
-                            <?php else: ?>
+                            <?php else : ?>
                                 <tr>
                                     <td align="center"><span>
                                             <?= $key['typecode'] ?>
@@ -145,7 +145,7 @@ if ($_SESSION['auth'] == false) {
                                     </td>
                                 </tr>
                             <?php endif; ?>
-                            <?php
+                    <?php
                         }
                     } ?>
                 </tbody>
@@ -167,15 +167,15 @@ if ($_SESSION['auth'] == false) {
                                 <?php echo $data_save_no; ?>
                             </td>
                         </tr>
-                    <?php } elseif (!empty($codebase_list)) {
+                        <?php } elseif (!empty($codebase_list)) {
                         foreach ($codebase_list as $key) {
-                            ?>
+                        ?>
                             <tr>
                                 <td align="center"><span>
                                         <?= $key['code'] ?>
                                     </span></td>
                                 <td>
-                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
+                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                                         <a href="#">
                                             <span class="showModal">
                                                 <span class="codemasterList_class">
@@ -184,7 +184,7 @@ if ($_SESSION['auth'] == false) {
                                                 <?= $key['name'] ?>
                                             </span>
                                         </a>
-                                    <?php elseif ($_SESSION['auth_type'] == constant('USER')): ?>
+                                    <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
                                         <?= $key['name'] ?>
                                     <?php endif; ?>
 
@@ -193,7 +193,7 @@ if ($_SESSION['auth'] == false) {
                                         <?= $key['remark'] ?>
                                     </span></td>
                             </tr>
-                            <?php
+                    <?php
                         }
                     } ?>
                 </tbody>
@@ -216,18 +216,15 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-md-2">
                                     <label for="code">Code</label>
-                                    <input type="text" class="form-control" name="code" id="code" placeholder="コード"
-                                        style="text-align: center" maxlength=<?php echo $MAX_LENGTH_CODE ?>>
+                                    <input type="text" class="form-control" name="code" id="code" placeholder="コード" style="text-align: center" maxlength=<?php echo $MAX_LENGTH_CODE ?>>
                                 </div>
                                 <div class="col-md-5">
                                     <label for="name">名</label>
-                                    <input type="text" class="form-control" name="name" id="name" placeholder="name"
-                                        style="text-align: left">
+                                    <input type="text" class="form-control" name="name" id="name" placeholder="name" style="text-align: left">
                                 </div>
                                 <div class="col-md-5">
                                     <label for="remark">備考</label>
-                                    <input type="text" class="form-control" name="remark" id="remark"
-                                        placeholder="remark" style="text-align: left">
+                                    <input type="text" class="form-control" name="remark" id="remark" placeholder="remark" style="text-align: left">
                                 </div>
                             </div>
                             <br>
@@ -236,13 +233,11 @@ if ($_SESSION['auth'] == false) {
                             <div class="col-xs-4"></div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL"
-                                        role="button" value="登録">
+                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="登録">
                                 </p>
                             </div>
                             <div class="col-xs-2">
-                                <button type="button" class="btn btn-default" data-dismiss="modal"
-                                    id="modalClose">閉じる</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
                             </div>
                             <div class="col-xs-4"></div>
                         </div>
@@ -254,8 +249,7 @@ if ($_SESSION['auth'] == false) {
 
     <!-- 編集 -->
     <div class="row">
-        <div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false"
-            style="display: none;">
+        <div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false" style="display: none;">
             <div class="modal-dialog">
                 <form method="post">
                     <div class="modal-content">
@@ -268,8 +262,7 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-md-2">
                                     <label for="code">Code</label>
-                                    <input type="text" class="form-control" name="udcode" id="udcode"
-                                        style="text-align: center" readonly>
+                                    <input type="text" class="form-control" name="udcode" id="udcode" style="text-align: center" readonly>
                                     <input type="hidden" name="udid" id="udid">
                                     <input type="hidden" name="udcompanyid" id="udcompanyid">
                                     <input type="hidden" name="uduid" id="uduid">
@@ -277,13 +270,11 @@ if ($_SESSION['auth'] == false) {
                                 </div>
                                 <div class="col-md-5">
                                     <label for="name">名</label>
-                                    <input type="text" class="form-control" name="udname" id="udname" placeholder="name"
-                                        style="text-align: left">
+                                    <input type="text" class="form-control" name="udname" id="udname" placeholder="name" style="text-align: left">
                                 </div>
                                 <div class="col-md-5">
                                     <label for="remark">備考</label>
-                                    <input type="text" class="form-control" name="udremark" id="udremark"
-                                        placeholder="remark" style="text-align: left">
+                                    <input type="text" class="form-control" name="udremark" id="udremark" placeholder="remark" style="text-align: left">
                                 </div>
                             </div>
                             <br>
@@ -292,19 +283,16 @@ if ($_SESSION['auth'] == false) {
                             <div class="col-xs-3"></div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL"
-                                        role="button" value="編集">
+                                    <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
                                 </p>
                             </div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input type="submit" name="btnDelCL" class="btn btn-warning" id="btnDelCL"
-                                        role="button" value="削除">
+                                    <input type="submit" name="btnDelCL" class="btn btn-warning" id="btnDelCL" role="button" value="削除">
                                 </p>
                             </div>
                             <div class="col-xs-2">
-                                <button type="button" class="btn btn-default" data-dismiss="modal"
-                                    id="modalClose">閉じる</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
                             </div>
                             <div class="col-xs-3"></div>
                         </div>
@@ -316,8 +304,8 @@ if ($_SESSION['auth'] == false) {
 </div>
 <script>
     // Change type code by submit 
-    $(document).ready(function () {
-        $(".submitLink").click(function (event) {
+    $(document).ready(function() {
+        $(".submitLink").click(function(event) {
             event.preventDefault(); // Prevent the default link behavior
             var ArrayData = $(this).find(".codemasterList_class").text();
             var SeparateArr = ArrayData.split(',');
@@ -331,12 +319,12 @@ if ($_SESSION['auth'] == false) {
     });
 
     // New button: popup & clear 
-    $(document).on('click', '#btnNewCL', function (e) {
+    $(document).on('click', '#btnNewCL', function(e) {
         $('#modal').modal('toggle');
     });
 
     // Check Error
-    $(document).on('click', '#btnRegCL', function (e) {
+    $(document).on('click', '#btnRegCL', function(e) {
         var Code = $("#code").val();
         var Name = $("#name").val();
 
@@ -372,7 +360,7 @@ if ($_SESSION['auth'] == false) {
     });
 
     // Year/month click on grid (edit): popup & content display
-    $(document).on('click', '.showModal', function () {
+    $(document).on('click', '.showModal', function() {
         $('#modal2').modal('toggle');
         var ArrayData = $(this).text();
         var SeparateArr = ArrayData.split(',');
@@ -380,7 +368,7 @@ if ($_SESSION['auth'] == false) {
         <?php
         if (!empty($codebase_list)) {
             foreach ($codebase_list as $key) {
-                ?>
+        ?>
                 if ('<?php echo $key['id'] ?>' == Id) {
                     $("#udtcode").text('<?php echo $key['code'] ?>');
                     var udid = $("input[name=udid]:hidden");
@@ -399,14 +387,14 @@ if ($_SESSION['auth'] == false) {
                     $("#udname").text($('[name="udname"]').val("<?php echo $key['name'] ?>"));
                     $("#udremark").text($('[name="udremark"]').val("<?php echo $key['remark'] ?>"));
                 }
-                <?php
+        <?php
             }
         }
         ?>
     });
 
     // Check Error
-    $(document).on('click', '#btnUpdateCL', function (e) {
+    $(document).on('click', '#btnUpdateCL', function(e) {
         var Name = $("#udname").val();
         if (Name == "") {
             alert("<?php echo $content_cmlN_empty; ?>");

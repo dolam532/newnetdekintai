@@ -174,7 +174,6 @@ CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinf
         AND `tbl_codebase`.`typecode` = 02';
 }
 
-
 // Select data from tbl_user, tbl_vacationinfo and tbl_manageinfo of table
 $sql_select_table3_db = 'SELECT DISTINCT
 `tbl_user`.*,
@@ -197,7 +196,6 @@ AND
 `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"';
 $sql_table3_select = mysqli_query($conn, $sql_select_table3_db);
 $result_uservacationmanage_select = mysqli_fetch_all($sql_table3_select, MYSQLI_ASSOC);
-
 
 // Save data to tbl_userkyuka table of database
 if (isset($_POST['SaveKyuka'])) {
@@ -234,7 +232,6 @@ if (isset($_POST['SaveKyuka'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
-
 
 // Search Button Click kyukaMonthly.php
 if ($_POST['btnSearchMon'] != NULL) {
@@ -337,8 +334,8 @@ if (isset($_POST['DecideUpdateKyuka'])) {
         restcnt='$restcnt'
     WHERE uid ='$uid'";
 
-        $sql=implode( ';', $queries );
-        if ($conn->multi_query( $sql ) === TRUE) {
+        $sql = implode(';', $queries);
+        if ($conn->multi_query($sql) === TRUE) {
             $_SESSION['save_success'] =  $save_success;
             header("Refresh:3");
         } else {
