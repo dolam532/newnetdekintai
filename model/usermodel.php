@@ -342,7 +342,9 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
 
 // Save data to tbl_genba table of database
 if (isset($_POST['SaveKinmu'])) {
-    $companyid = 0;
+    $companyid = $_SESSION['auth_companyid'] ;
+    error_log("company*****:".$companyid );
+
     $strymd = "";
     $endymd = "";
     $genbacompany = "";
