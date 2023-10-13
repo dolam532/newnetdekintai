@@ -642,6 +642,7 @@ if ($_SESSION['auth'] == false) {
                     imageElement.alt = selectedFile.name;
                     document.getElementById('imagename').innerText = selectedFile.name;
                     document.getElementById('imagename').hidden = false;
+
                 };
                 reader.readAsDataURL(selectedFile);
             } else {

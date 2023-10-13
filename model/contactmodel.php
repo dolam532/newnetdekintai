@@ -48,9 +48,7 @@ if ($companyId == "" || $companyId == null) {
 
 // ----------2023-10-09/1340-003--------- change start// 
 
-/// noticeList.php
-// Select database from tbl_notice table
-
+// noticeList.php
 global $IMAGE_UPLOAD_DIR;
 $sql_notice_select = 'SELECT DISTINCT
 `tbl_notice`.*,
@@ -98,7 +96,7 @@ if (isset($_POST['btnRegNL'])) {
     $viewcnt = mysqli_real_escape_string($conn, $_POST['viewcnt']);
     $reg_dt = mysqli_real_escape_string($conn, $_POST['reg_dt']);
 
-//...........2023-10-09/1340-004...................//
+    //...........2023-10-09/1340-004...................//
 // ...........upload image  chg start..........  -->
 //...............................................//
     $noticeId = $bid;
@@ -133,7 +131,7 @@ if (isset($_POST['btnRegNL'])) {
         if ($conn->query($sql) === TRUE) {
             $_SESSION['save_success'] = $save_success;
             // set id to image 
-  
+
             $insertedId = mysqli_insert_id($conn);
             $fileName = str_replace('__', '_' . $insertedId . '_', $fileName);
             $updateSql = "UPDATE tbl_notice SET `imagefile` = '$fileName' WHERE `bid` = $insertedId";
@@ -172,7 +170,7 @@ if (isset($_POST['btnUpdateNL'])) {
     $reader = mysqli_real_escape_string($conn, $_POST['udreader']);
     $viewcnt = mysqli_real_escape_string($conn, $_POST['udviewcnt']);
 
-//...........2023-10-09/1340-004...................//
+    //...........2023-10-09/1340-004...................//
 // ...........upload image  add start..........  -->
 //...............................................//
     $noticeId = $bid;
@@ -210,7 +208,7 @@ if (isset($_POST['btnUpdateNL'])) {
 
         $sql = "UPDATE tbl_notice SET  title='$title', content='$content', reader='$reader', imagefile='$fileName'
         , viewcnt='$viewcnt', reg_dt='$reg_dt' WHERE bid ='$bid' AND uid ='$uid'";
-    
+
         if ($conn->query($sql) === TRUE) {
             $_SESSION['update_success'] = $update_success;
             header("Refresh:3");
@@ -248,7 +246,7 @@ function deleteNoticeImages($uploadDir, $noticeId, $newFileName)
                 error_log("****Failed to delete file:" . $file);
             }
         }
-        if ($file !== $newFileName ) {
+        if ($file !== $newFileName) {
             if (preg_match('/_' . preg_quote($noticeId, '/') . '_/', $file)) {
                 $filePath = $uploadDir . $file;
                 if (unlink($filePath)) {
