@@ -187,7 +187,7 @@ if (isset($_POST['btnDelWdl'])) {
     WHERE companyid ='$companyid' AND workyear ='$workyear'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['delete_success'] =  $delete_success;
+        $_SESSION['delete_success'] = $delete_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -219,7 +219,7 @@ if (isset($_POST['btnRegHdr'])) {
     $sql_holiday_insert = "INSERT INTO `tbl_holiday` (`companyid`, `holiyear`, `holiday`, `holiremark`) 
 	VALUES('$companyid', '$holiyear', '$holiday', '$holiremark')";
     if (mysqli_query($conn, $sql_holiday_insert)) {
-        $_SESSION['save_success'] =  $save_success;
+        $_SESSION['save_success'] = $save_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -241,7 +241,7 @@ if (isset($_POST['btnUpdateHdr'])) {
             AND holiday ='$holiday'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['update_success'] =  $update_success;
+        $_SESSION['update_success'] = $update_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -259,7 +259,7 @@ if (isset($_POST['btnDelHdr'])) {
     WHERE companyid ='$companyid' AND holiyear ='$holiyear' AND holiday ='$holiday'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['delete_success'] =  $delete_success;
+        $_SESSION['delete_success'] = $delete_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -365,7 +365,7 @@ if (isset($_POST['btnUpdateUvl'])) {
                 vacationstr='$vacationstr', vacationend='$vacationend', oldcnt='$oldcnt', newcnt='$newcnt', usecnt='$usecnt', usetime='$usetime', restcnt='$restcnt'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['save_success'] =  $save_success;
+        $_SESSION['save_success'] = $save_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -380,7 +380,7 @@ if (isset($_POST['btnDelUvl'])) {
     WHERE vacationid ='$vacationid' AND uid ='$uid'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['delete_success'] =  $delete_success;
+        $_SESSION['delete_success'] = $delete_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -399,7 +399,7 @@ if (isset($_POST['btnUpdateUser'])) {
     AND name ='$name'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['update_success'] =  $update_success;
+        $_SESSION['update_success'] = $update_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
