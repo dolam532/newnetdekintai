@@ -486,7 +486,7 @@ if ($_SESSION['auth'] == false) {
 							<div class="col-md-9">
 								<label for="genbaname_rmodal">勤務時間</label>
 								<select class="form-control" id="genba_selection_rmodal" name="genba_selection_rmodal">
-									<option value="" selected="">現場を選択してください。</option>
+									<option value="" selected="">勤務時間タイプ選択してください。</option>
 									<?php foreach ($genba_list as $value) { ?>
 										<option value="<?= $value['genid'] . ',' . $value['workstrtime'] . ',' . $value['workendtime'] . ',' . $value['offtime1'] . ',' . $value['offtime2']  ?>" <?php if ($value['genid'] == $_SESSION['auth_genid']) {
 																																																		echo ' selected="selected"';
@@ -981,5 +981,6 @@ if ($_SESSION['auth'] == false) {
 		?>
 	});
 </script>
+
 
 <?php include('../inc/footer.php'); ?>

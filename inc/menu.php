@@ -62,8 +62,8 @@
                             <li class="menu-level3"><a href="../info/holidayReg.php">祝日登録</a></li>
                             <li class="menu-level3"><a href="../user/userList.php">社員登録</a></li>
                             <li class="menu-level3"><a href="../info/uservacationList.php">年次休暇登録</a></li>
-                            <li class="menu-level3"><a href="../user/genbaList.php">勤務管理表</a></li>
-                            <li class="menu-level3"><a href="../user/genbaUserList.php">現場別勤務社員</a></li>
+                            <li class="menu-level3"><a href="../user/genbaList.php">勤務時間タイプ設定</a></li>
+                            <li class="menu-level3"><a href="../user/genbaUserList.php">勤務時間タイプ表</a></li>
                             <li class="menu-level3"><a href="../contact/userloginList.php">社員ログイン内訳</a></li>
                             <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                                 <li class="menu-level3"><a href="../manage/manageInfo.php">管理情報登録</a></li>

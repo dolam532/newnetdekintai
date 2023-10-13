@@ -17,13 +17,13 @@ if ($_SESSION['auth'] == false) {
 <style>
 
 </style>
-<title>現場別勤務社員</title>
+<title>勤務時間タイプ表</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <div class="row">
         <div class="col-md-4">
             <div class="title_name">
-                <span class="text-left">現場別勤務社員</span>
+                <span class="text-left">勤務時間タイプ表</span>
             </div>
         </div>
         <div class="col-md-6"></div>

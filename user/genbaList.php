@@ -54,7 +54,7 @@ if ($_SESSION['auth'] == false) {
 		color: red
 	}
 </style>
-<title>勤務管理表</title>
+<title>勤務時間タイプ設定</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
 	<?php
@@ -93,7 +93,7 @@ if ($_SESSION['auth'] == false) {
 	<div class="row">
 		<div class="col-md-4">
 			<div class="title_name">
-				<span class="text-left">勤務管理表</span>
+				<span class="text-left">勤務時間タイプ設定</span>
 			</div>
 		</div>
 		<div class="col-md-6"></div>
