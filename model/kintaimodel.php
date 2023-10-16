@@ -1,6 +1,10 @@
 <?php
 // Select data from tbl_genba
-$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `tbl_genba`.`use_yn`="' . constant('USE_YES') . '"';
+$sql_genba = 'SELECT * FROM `tbl_genba` 
+    WHERE 
+        `tbl_genba`.`use_yn`="' . constant('USE_YES') . '"
+    AND
+        `tbl_genba`.`companyid`="' . $_SESSION['auth_companyid'] . '"';
 $result_genba = mysqli_query($conn, $sql_genba);
 $genba_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 

@@ -1047,7 +1047,7 @@ if ($_SESSION['auth'] == false) {
 				$("#daystartmm").val("<?php echo $key['daystartmm'] ?>");
 				$("#dayendhh").val("<?php echo $key['dayendhh'] ?>");
 				$("#dayendmm").val("<?php echo $key['dayendmm'] ?>");
-				// ----------2023-10-03/1340-001--------- add start//
+				// 023-10-03/1340-001 add start
 				// textbox
 				$("#IVjobstarthh").val("<?php echo $key['jobstarthh'] ?>");
 				$("#IVjobstartmm").val("<?php echo $key['jobstartmm'] ?>");
@@ -1063,7 +1063,7 @@ if ($_SESSION['auth'] == false) {
 				$("#IVdaystartmm").val("<?php echo $key['daystartmm'] ?>");
 				$("#IVdayendhh").val("<?php echo $key['dayendhh'] ?>");
 				$("#IVdayendmm").val("<?php echo $key['dayendmm'] ?>");
-				// ----------2023-10-03/1340-001--------- add end start//
+				// 2023-10-03/1340-001 add end start
 			}
 		<?php
 		}
@@ -1118,7 +1118,7 @@ if ($_SESSION['auth'] == false) {
 		calculateWorkTime();
 	});
 
-	// ----------2023-10-03/1340-001--------- add start//
+	// 2023-10-03/1340-001 add start
 	//  input Time calculate 
 	$('#IVjobstarthh, #IVjobstartmm , #IVjobendhh, #IVjobendmm, #IVdaystarthh, #IVdaystartmm, #IVdayendhh, #IVdayendmm, #IVofftimehh, #IVofftimemm').on('change', function(e) {
 		calculateWorkTime();
@@ -1162,7 +1162,7 @@ if ($_SESSION['auth'] == false) {
 		}
 		return value.toString();
 	}
-	// ----------2023-10-03/1340-001--------- add end//
+	// 2023-10-03/1340-001 add end
 
 	// Check Error
 	$(document).on('click', '#btnReg', function(e) {
