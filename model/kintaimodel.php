@@ -32,6 +32,8 @@ $weekdays = array(
     7 => '日'
 );
 
+
+
 // Display the dates, months, weekdays, and weekends in Japanese
 for ($day = 1; $day <= $daysInMonth; $day++) {
     $date = date("Y-m-d", strtotime($dateString . "-" . $day));
@@ -194,15 +196,21 @@ if (isset($_POST['SaveUpdateKintai'])) {
     $workmm = mysqli_real_escape_string($conn, $_POST['workmm']);
     $comment = mysqli_real_escape_string($conn, $_POST['comment']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
+    $holy_decide = mysqli_real_escape_string($conn, $_POST['holy_decide']);
+    if($holy_decide == null || $holy_decide == '') 
+    {
+        $holy_decide = array_key_first($HOLY_DECIDE);
+    }
+
 
     $sql = "INSERT INTO `tbl_worktime` (`uid`, `genid`, `workymd`, `daystarthh`, `daystartmm`, `dayendhh`, `dayendmm`, `jobstarthh`, `jobstartmm`,
-                `jobendhh`, `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `janhh`, `janmm`, `comment`, `bigo`, `reg_dt`, `upt_dt`)
+                `jobendhh`, `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `janhh`, `janmm`, `comment`, `holy_decide`, `bigo`, `reg_dt`,  `upt_dt`)
                 VALUES ('$uid', '$genid', '$workymd', '$daystarthh', '$daystartmm', '$dayendhh', '$dayendmm', '$jobstarthh', '$jobstartmm',
-                '$jobendhh', '$jobendmm', '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$janhh', '$janmm', '$comment', '$bigo', '$reg_dt', '$upt_dt')
+                '$jobendhh', '$jobendmm', '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$janhh', '$janmm', '$comment', '$holy_decide','$bigo', '$reg_dt',  '$upt_dt')
                 ON DUPLICATE KEY UPDATE
                 genid='$genid', daystarthh='$daystarthh', daystartmm='$daystartmm', dayendhh='$dayendhh', dayendmm='$dayendmm', jobstarthh='$jobstarthh', jobstartmm='$jobstartmm',
                 jobendhh='$jobendhh', jobendmm='$jobendmm', offtimehh='$offtimehh', offtimemm='$offtimemm', workhh='$workhh', workmm='$workmm', janhh='$janhh',
-                janmm='$janmm', comment='$comment', bigo='$bigo', upt_dt='$upt_dt'";
+                janmm='$janmm', comment='$comment', holy_decide = '$holy_decide' , bigo='$bigo',  upt_dt='$upt_dt'";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
@@ -384,6 +392,7 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $stmt->bindParam(':workhh', $workhh);
         $stmt->bindParam(':workmm', $workmm);
         $stmt->bindParam(':comment', $comment);
+      
         $stmt->bindParam(':bigo', $bigo);
         $stmt->bindParam(':reg_dt', $reg_dt);
         $stmt->bindParam(':upt_dt', $upt_dt);

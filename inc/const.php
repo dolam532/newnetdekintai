@@ -20,6 +20,17 @@ DEFINE('USE_YES', '1');
 // KINTAI CONFIG 
 $MAX_INPUT_LENGTH_COMMENT = 17;
 $MAX_INPUT_LENGTH_BIGO = 8;
+//------2023/10/16-----add start-//
+// holy_decide 
+$HOLY_DECIDE= array(
+    0 => '通常',
+    1 => '休暇',
+    2 => '祝日',
+    3 => '代休',
+    9 => '欠勤'
+);
+//------2023/10/16-----add end-//
+
 
 // CODEMASTER CONFIG 
 $MAX_LENGTH_CODE = 2;
@@ -37,3 +48,5 @@ $ALLOWED_TYPES_STAMP = array("png");
 $STAMP_MAXSIZE = 2000000;  // 2MB = 2000000
 $LENGTH_RANDOM_UNIQUE_NAME_STAMP = 16;
 $IMAGE_UPLOAD_DIR_STAMP = '/var/www/html/newnetdekintai/assets/uploads/signstamp/';
+
+
