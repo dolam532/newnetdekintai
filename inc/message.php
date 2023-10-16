@@ -87,6 +87,9 @@ $kintai_check_input_err = ' 桁まで入力してください';
 
 // genbaList
 $user_genbaname_empty = '勤務時間タイプを入力してください。';
+$user_genbacompany_empty = '勤務会社名を入力してください。';
+$user_strymd_empty = '勤務作業期間を入力してください。';
+$user_endymd_empty = '勤務作業期間を入力してください。';
 $user_workstr_empty = '業務開始時間を入力してください。';
 $user_workend_empty = '業務終了時間を入力してください。';
 $user_offtime1_empty = '昼休(時:分)を入力してください。';

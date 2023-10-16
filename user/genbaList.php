@@ -10,7 +10,7 @@ include('../model/inactive.php');
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
 }
-
+echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css'>";
 ?>
 
 <!-- ****CSS*****  -->
@@ -110,12 +110,14 @@ if ($_SESSION['auth'] == false) {
 		<table class="table table-bordered datatable">
 			<thead>
 				<tr class="info">
-					<th style="text-align: center; width: 5%;">ID</th>
-					<th style="text-align: center; width: 20%;">勤務時間タイプ</th>
+					<th style="text-align: center; width: 3%;">ID</th>
+					<th style="text-align: center; width: 13%;">勤務時間タイプ</th>
+					<th style="text-align: center; width: 13%;">勤務会社名</th>
+					<th style="text-align: center; width: 13%;">勤務作業期間</th>
 					<th style="text-align: center; width: 10%;">勤務開始時間</th>
 					<th style="text-align: center; width: 10%;">勤務終了時間</th>
-					<th style="text-align: center; width: 10%;">昼休</th>
-					<th style="text-align: center; width: 10%;">夜休</th>
+					<th style="text-align: center; width: 5%;">昼休</th>
+					<th style="text-align: center; width: 5%;">夜休</th>
 					<th style="text-align: center; width: 7%;">使用</th>
 					<th style="text-align: center; width: auto;">備考</th>
 				</tr>
@@ -124,7 +126,7 @@ if ($_SESSION['auth'] == false) {
 			<tbody>
 				<?php if (empty($genbadatas_list)) { ?>
 					<tr>
-						<td colspan="12" align="center"><?php echo $data_save_no; ?></td>
+						<td colspan="10" align="center"><?php echo $data_save_no; ?></td>
 					</tr>
 					<?php } elseif (!empty($genbadatas_list)) {
 					foreach ($genbadatas_list as $genba) {
@@ -132,11 +134,13 @@ if ($_SESSION['auth'] == false) {
 						<tr>
 							<td class="td1"><span><?= $genba['genid'] ?></span></td>
 							<td class="td2"><a href="#"><span class="showModal" style="text-decoration-line: underline;"><?= $genba['genbaname'] ?></span></td>
-							<td class="td3"><span><?= $genba['workstrtime'] ?></span></td>
-							<td class="td4"><span><?= $genba['workendtime'] ?></span></td>
-							<td class="td5"><span><?= $genba['offtime1'] ?></span></td>
-							<td class="td6"><span><?= $genba['offtime2'] ?></span></td>
-							<td class="td7">
+							<td class="td3"><span><?= $genba['genbacompany'] ?></span></td>
+							<td class="td4"><span><?= $genba['strymd'] ?>~<?= $genba['endymd'] ?></span></td>
+							<td class="td5"><span><?= $genba['workstrtime'] ?></span></td>
+							<td class="td6"><span><?= $genba['workendtime'] ?></span></td>
+							<td class="td7"><span><?= $genba['offtime1'] ?></span></td>
+							<td class="td8"><span><?= $genba['offtime2'] ?></span></td>
+							<td class="td9">
 								<span>
 									<?php if ($genba['use_yn'] == "1") {
 										echo "<p style='font-weight:bold;color:green;'>使用</p>";
@@ -146,7 +150,7 @@ if ($_SESSION['auth'] == false) {
 									?>
 								</span>
 							</td>
-							<td class="td8"><span><?= $genba['bigo'] ?></span></td>
+							<td class="td10"><span><?= $genba['bigo'] ?></span></td>
 						</tr>
 				<?php }
 				} ?>
@@ -168,48 +172,62 @@ if ($_SESSION['auth'] == false) {
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-md-9">
-								<label for="genbacompany_rmodal">勤務時間タイプ</label>
-								<input type="text" class="form-control" id="genbaname_rmodal" name="genbaname_rmodal" placeholder="勤務時間タイプ">
+								<label for="genbacompany">勤務時間タイプ</label>
+								<input type="text" class="form-control" id="genbaname" name="genbaname" placeholder="勤務時間タイプ">
 							</div>
 							<div class="col-md-3">
-								<label for="use_rmodal"><strong>使用</strong></label>
+								<label for="use_yn"><strong>使用</strong></label>
 								<div class="custom-control custom-radio">
-									<input type="radio" id="use_rmodal" name="use_rmodal" value="1">使用
-									<input type="radio" id="use_rmodal" name="use_rmodal" value="0">中止
+									<input type="radio" id="use_yn" name="use_yn" value="1">使用
+									<input type="radio" id="use_yn" name="use_yn" value="0">中止
 								</div>
 							</div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-md-6">
-								<label for="workstr_rmodal">業務開始時間</label>
-								<input type="text" class="form-control" id="workstr_rmodal" name="workstr_rmodal" placeholder="09:00" required="required" style="text-align: center">
+								<label for="genbacompany">勤務会社名</label>
+								<input type="text" class="form-control" id="genbacompany" name="genbacompany" placeholder="勤務会社名" style="text-align: left">
 							</div>
 							<div class="col-md-6">
-								<label for="workend_rmodal">業務終了時間</label>
-								<input type="text" class="form-control" id="workend_rmodal" name="workend_rmodal" placeholder="18:00" required="required" style="text-align: center">
+								<label for="work_period">業務作業期間</label>
+								<div style="display: flex;">
+									<input type="text" class="form-control" id="strymd" name="strymd" placeholder="日付">~
+									<input type="text" class="form-control" id="endymd" name="endymd" placeholder="日付">
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<label for="workstrtime">業務開始時間</label>
+								<input type="text" class="form-control" id="workstrtime" name="workstrtime" placeholder="09:00" style="text-align: center">
+							</div>
+							<div class="col-md-6">
+								<label for="workendtime">業務終了時間</label>
+								<input type="text" class="form-control" id="workendtime" name="workendtime" placeholder="18:00" style="text-align: center">
 							</div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-md-3">
-								<label for="offtime1_rmodal">昼休(時:分)</label>
-								<input type="text" class="form-control" id="offtime1_rmodal" name="offtime1_rmodal" placeholder="01:00" required="required" style="text-align: center">
+								<label for="offtime1">昼休(時:分)</label>
+								<input type="text" class="form-control" id="offtime1" name="offtime1" placeholder="01:00" style="text-align: center">
 							</div>
 							<div class="col-md-3">
-								<label for="offtime2_rmodal">夜休(時:分)</label>
-								<input type="text" class="form-control" id="offtime2_rmodal" name="offtime2_rmodal" placeholder="00:00" required="required" style="text-align: center">
+								<label for="offtime2">夜休(時:分)</label>
+								<input type="text" class="form-control" id="offtime2" name="offtime2" placeholder="00:00" style="text-align: center">
 							</div>
 							<div class="col-md-6">
-								<label for="bigo_rmodal">備考</label>
-								<input type="text" class="form-control" id="bigo_rmodal" name="bigo_rmodal" placeholder="備考" required="required" style="text-align: left">
+								<label for="bigo">備考</label>
+								<input type="text" class="form-control" id="bigo" name="bigo" placeholder="備考" style="text-align: left">
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
 						<div class="col-md-4"></div>
 						<div class="col-md-2">
-							<input type="submit" name="SaveKinmu" class="btn btn-primary" id="btnReg_rmodal" role="button" value="登録">
+							<input type="submit" name="SaveKinmu" class="btn btn-primary" id="btnReg_GL" role="button" value="登録">
 						</div>
 						<div class="col-md-2">
 							<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
@@ -234,41 +252,53 @@ if ($_SESSION['auth'] == false) {
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-md-9">
-								<label for="genbaname_cmodal">勤務時間タイプ</label>
-								<input type="text" class="form-control" name="genbaname_cmodal" id="genbaname_cmodal" placeholder="勤務時間タイプ">
-								<input type="hidden" id="genid_cmodal" name="genid_cmodal">
-								<input type="hidden" id="companyid_cmodal" name="companyid_cmodal">
-								<input type="hidden" id="strymd_cmodal" name="strymd_cmodal">
-								<input type="hidden" id="endymd_cmodal" name="endymd_cmodal">
+								<label for="udgenbaname">勤務時間タイプ</label>
+								<input type="text" class="form-control" name="udgenbaname" id="udgenbaname" placeholder="勤務時間タイプ">
+								<input type="hidden" id="udgenid" name="udgenid">
+								<input type="hidden" id="udcompanyid" name="udcompanyid">
 							</div>
 							<div class="col-md-3">
-								<label for="use_cmodal"><strong>使用</strong></label>
+								<label for="uduse_yn"><strong>使用</strong></label>
 								<div class="custom-control custom-radio">
-									<input type="radio" name="use_cmodal" id="use_cmodal1" value="1">使用
-									<input type="radio" name="use_cmodal" id="use_cmodal2" value="0">中止
+									<input type="radio" name="uduse_yn" id="uduse_yn1" value="1">使用
+									<input type="radio" name="uduse_yn" id="uduse_yn2" value="0">中止
 								</div>
 							</div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-md-6">
-								<label for="workstr_cmodal">業務開始時間</label>
-								<input type="text" class="form-control" name="workstr_cmodal" id="workstr_cmodal" placeholder="09:00" required="required" style="text-align: center">
+								<label for="udgenbacompany">勤務会社名</label>
+								<input type="text" class="form-control" id="udgenbacompany" name="udgenbacompany" placeholder="勤務会社名" style="text-align: left">
 							</div>
 							<div class="col-md-6">
-								<label for="workend_cmodal">業務終了時間</label>
-								<input type="text" class="form-control" name="workend_cmodal" id="workend_cmodal" placeholder="18:00" required="required" style="text-align: center">
+								<label for="udwork_period">業務作業期間</label>
+								<div style="display: flex;">
+									<input type="text" class="form-control" id="udstrymd" name="udstrymd" placeholder="日付">~
+									<input type="text" class="form-control" id="udendymd" name="udendymd" placeholder="日付">
+								</div>
+							</div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-md-6">
+								<label for="udworkstrtime">業務開始時間</label>
+								<input type="text" class="form-control" name="udworkstrtime" id="udworkstrtime" placeholder="09:00" style="text-align: center">
+							</div>
+							<div class="col-md-6">
+								<label for="udworkendtime">業務終了時間</label>
+								<input type="text" class="form-control" name="udworkendtime" id="udworkendtime" placeholder="18:00" style="text-align: center">
 							</div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-md-3">
-								<label for="offtime1_cmodal">昼休(時:分)</label>
-								<input type="text" class="form-control" name="offtime1_cmodal" id="offtime1_cmodal" placeholder="01:00" required="required" style="text-align: center">
+								<label for="udofftime1">昼休(時:分)</label>
+								<input type="text" class="form-control" name="udofftime1" id="udofftime1" placeholder="01:00" style="text-align: center">
 							</div>
 							<div class="col-md-3">
-								<label for="offtime2_cmodal">夜休(時:分)</label>
-								<input type="text" class="form-control" name="offtime2_cmodal" id="offtime2_cmodal" placeholder="00:00" required="required" style="text-align: center">
+								<label for="udofftime2">夜休(時:分)</label>
+								<input type="text" class="form-control" name="udofftime2" id="udofftime2" placeholder="00:00" style="text-align: center">
 							</div>
 							<div class="col-md-6">
 								<label for="bigo_cmodal">備考</label>
@@ -279,7 +309,7 @@ if ($_SESSION['auth'] == false) {
 					<div class="modal-footer" style="text-align: center">
 						<div class="col-md-3"></div>
 						<div class="col-md-2">
-							<input type="submit" name="UpdateKinmu" class="btn btn-primary" id="btnUpd_cmodel" role="button" value="編集">
+							<input type="submit" name="UpdateKinmu" class="btn btn-primary" id="btnUpd_GL" role="button" value="編集">
 						</div>
 						<div class="col-md-2">
 							<input type="submit" name="DeleteKinmu" class="btn btn-warning" role="button" value="削除">
@@ -298,8 +328,29 @@ if ($_SESSION['auth'] == false) {
 <script>
 	// New button
 	$(document).on('click', '#btnNew', function(e) {
-		$("#use_rmodal").prop('checked', true);
+		$("use_yn").prop('checked', true);
 		$('#modal').modal('toggle');
+	});
+
+	// Datepeeker Calender
+	$("#strymd").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+
+	$("#endymd").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+
+	$("#udstrymd").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+
+	$("#udendymd").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
 	});
 
 	// Click (modify) employee ID in the grid: popup & display contents
@@ -311,24 +362,21 @@ if ($_SESSION['auth'] == false) {
 			foreach ($genbadatas_list as $key) {
 		?>
 				if ('<?php echo $key['genbaname'] ?>' == Genbaname) {
-					var genid_cmodal = $("input[name=genid_cmodal]:hidden");
-					genid_cmodal.val("<?php echo $key['genid'] ?>");
-					var genid_cmodal = genid_cmodal.val();
-					var companyid_cmodal = $("input[name=companyid_cmodal]:hidden");
-					companyid_cmodal.val("<?php echo $key['companyid'] ?>");
-					var companyid_cmodal = companyid_cmodal.val();
-					var strymd_cmodal = $("input[name=strymd_cmodal]:hidden");
-					strymd_cmodal.val("<?php echo $key['strymd'] ?>");
-					var strymd_cmodal = strymd_cmodal.val();
-					var endymd_cmodal = $("input[name=endymd_cmodal]:hidden");
-					endymd_cmodal.val("<?php echo $key['endymd'] ?>");
-					var endymd_cmodal = endymd_cmodal.val();
-					$("#genbaname_cmodal").text($('[name="genbaname_cmodal"]').val("<?php echo $key['genbaname'] ?>"));
-					$("input[name='use_cmodal'][value='<?php echo $key['use_yn']; ?>']").prop('checked', true);
-					$("#workstr_cmodal").text($('[name="workstr_cmodal"]').val("<?php echo $key['workstrtime'] ?>"));
-					$("#workend_cmodal").text($('[name="workend_cmodal"]').val("<?php echo $key['workendtime'] ?>"));
-					$("#offtime1_cmodal").text($('[name="offtime1_cmodal"]').val("<?php echo $key['offtime1'] ?>"));
-					$("#offtime2_cmodal").text($('[name="offtime2_cmodal"]').val("<?php echo $key['offtime2'] ?>"));
+					var udgenid = $("input[name=udgenid]:hidden");
+					udgenid.val("<?php echo $key['genid'] ?>");
+					var udgenid = udgenid.val();
+					var udcompanyid = $("input[name=udcompanyid]:hidden");
+					udcompanyid.val("<?php echo $key['companyid'] ?>");
+					var udcompanyid = udcompanyid.val();
+					$("#udgenbaname").text($('[name="udgenbaname"]').val("<?php echo $key['genbaname'] ?>"));
+					$("#udgenbacompany").text($('[name="udgenbacompany"]').val("<?php echo $key['genbacompany'] ?>"));
+					$("input[name='uduse_yn'][value='<?php echo $key['use_yn']; ?>']").prop('checked', true);
+					$("#udstrymd").text($('[name="udstrymd"]').val("<?php echo $key['strymd'] ?>"));
+					$("#udendymd").text($('[name="udendymd"]').val("<?php echo $key['endymd'] ?>"));
+					$("#udworkstrtime").text($('[name="udworkstrtime"]').val("<?php echo $key['workstrtime'] ?>"));
+					$("#udworkendtime").text($('[name="udworkendtime"]').val("<?php echo $key['workendtime'] ?>"));
+					$("#udofftime1").text($('[name="udofftime1"]').val("<?php echo $key['offtime1'] ?>"));
+					$("#udofftime2").text($('[name="udofftime2"]').val("<?php echo $key['offtime2'] ?>"));
 					$("#bigo_cmodal").text($('[name="bigo_cmodal"]').val("<?php echo $key['bigo'] ?>"));
 				}
 		<?php
@@ -338,40 +386,61 @@ if ($_SESSION['auth'] == false) {
 	});
 
 	// Check Error 新規
-	$(document).on('click', '#btnReg_rmodal', function(e) {
-		var genbaname_rmodal = $("#genbaname_rmodal").val();
-		var workstr_rmodal = $("#workstr_rmodal").val();
-		var workend_rmodal = $("#workend_rmodal").val();
-		var offtime1_rmodal = $("#offtime1_rmodal").val();
-		var offtime2_rmodal = $("#offtime2_rmodal").val();
+	$(document).on('click', '#btnReg_GL', function(e) {
+		var genbaname = $("#genbaname").val();
+		var genbacompany = $("#genbacompany").val();
+		var strymd = $("#strymd").val();
+		var endymd = $("#endymd").val();
+		var workstrtime = $("#workstrtime").val();
+		var workendtime = $("#workendtime").val();
+		var offtime1 = $("#offtime1").val();
+		var offtime2 = $("#offtime2").val();
 
-		if (genbaname_rmodal == "") {
+		if (genbaname == "") {
 			alert("<?php echo $user_genbaname_empty; ?>");
-			$("#genbaname_rmodal").focus();
+			$("#genbaname").focus();
 			return false;
 		}
 
-		if (workstr_rmodal == "") {
+		if (genbacompany == "") {
+			alert("<?php echo $user_genbacompany_empty; ?>");
+			$("#genbaname").focus();
+			return false;
+		}
+
+		if (strymd == "") {
+			alert("<?php echo $user_strymd_empty; ?>");
+			$("#strymd").focus();
+			return false;
+		}
+
+		if (endymd == "") {
+			alert("<?php echo $user_endymd_empty; ?>");
+			$("#endymd").focus();
+			return false;
+		}
+
+		if (workstrtime == "") {
 			alert("<?php echo $user_workstr_empty; ?>");
-			$("#workstr_rmodal").focus();
+			$("#workstrtime").focus();
 			return false;
 		}
 
-		if (workend_rmodal == "") {
+		if (workendtime == "") {
 			alert("<?php echo $user_workend_empty; ?>");
-			$("#workend_rmodal").focus();
+			$("#workendtime").focus();
 			return false;
 		}
 
-		if (offtime1_rmodal == "") {
+		if (offtime1 == "") {
 			alert("<?php echo $user_offtime1_empty; ?>");
-			$("#offtime1_rmodal").focus();
+			$("#offtime1").focus();
 			return false;
 		}
 
-		if (offtime2_rmodal == "") {
+		if (offtime2 == "") {
 			alert("<?php echo $user_offtime2_empty; ?>");
-			$("#offtime2_rmodal").focus();
+			$("#offtime2").focus();
 			return false;
 		}
 
@@ -380,70 +449,91 @@ if ($_SESSION['auth'] == false) {
 			return regex.test(time);
 		}
 
-		var isValid_workstr = validateTimeFormat(workstr_rmodal);
+		var isValid_workstr = validateTimeFormat(workstrtime);
 		if (!isValid_workstr) {
 			alert("<?php echo $user_workstr_incorrect; ?>");
-			$("#workstr_rmodal").focus();
+			$("#workstrtime").focus();
 			return false;
 		}
 
-		var isValid_workend = validateTimeFormat(workend_rmodal);
+		var isValid_workend = validateTimeFormat(workendtime);
 		if (!isValid_workend) {
 			alert("<?php echo $user_workend_incorrect; ?>");
-			$("#workend_rmodal").focus();
+			$("#workendtime").focus();
 			return false;
 		}
 
-		var isValid_offtime1 = validateTimeFormat(offtime1_rmodal);
+		var isValid_offtime1 = validateTimeFormat(offtime1);
 		if (!isValid_offtime1) {
 			alert("<?php echo $user_offtime1_incorrect; ?>");
-			$("#offtime1_rmodal").focus();
+			$("#offtime1").focus();
 			return false;
 		}
 
-		var isValid_offtime2 = validateTimeFormat(offtime2_rmodal);
+		var isValid_offtime2 = validateTimeFormat(offtime2);
 		if (!isValid_offtime2) {
 			alert("<?php echo $user_offtime2_incorrect; ?>");
-			$("#offtime2_rmodal").focus();
+			$("#offtime2").focus();
 			return false;
 		}
 	});
 
 	// Check Error 編集
-	$(document).on('click', '#btnUpd_cmodel', function(e) {
-		var genbaname_cmodal = $("#genbaname_cmodal").val();
-		var workstr_cmodal = $("#workstr_cmodal").val();
-		var workend_cmodal = $("#workend_cmodal").val();
-		var offtime1_cmodal = $("#offtime1_cmodal").val();
-		var offtime2_cmodal = $("#offtime2_cmodal").val();
+	$(document).on('click', '#btnUpd_GL', function(e) {
+		var udgenbaname = $("#udgenbaname").val();
+		var udgenbacompany = $("#udgenbacompany").val();
+		var udstrymd = $("#udstrymd").val();
+		var udendymd = $("#udendymd").val();
+		var udworkstrtime = $("#udworkstrtime").val();
+		var udworkendtime = $("#udworkendtime").val();
+		var udofftime1 = $("#udofftime1").val();
+		var udofftime2 = $("#udofftime2").val();
 
-		if (genbaname_cmodal == "") {
+		if (udgenbaname == "") {
 			alert("<?php echo $user_genbaname_empty; ?>");
-			$("#genbaname_cmodal").focus();
+			$("#udgenbaname").focus();
 			return false;
 		}
 
-		if (workstr_cmodal == "") {
+		if (udgenbacompany == "") {
+			alert("<?php echo $user_genbacompany_empty; ?>");
+			$("#udgenbacompany").focus();
+			return false;
+		}
+
+		if (udstrymd == "") {
+			alert("<?php echo $user_strymd_empty; ?>");
+			$("#udstrymd").focus();
+			return false;
+		}
+
+		if (udendymd == "") {
+			alert("<?php echo $user_endymd_empty; ?>");
+			$("#udendymd").focus();
+			return false;
+		}
+
+		if (udworkstrtime == "") {
 			alert("<?php echo $user_workstr_empty; ?>");
-			$("#workstr_cmodal").focus();
+			$("#udworkstrtime").focus();
 			return false;
 		}
 
-		if (workend_cmodal == "") {
+		if (udworkendtime == "") {
 			alert("<?php echo $user_workend_empty; ?>");
-			$("#workend_cmodal").focus();
+			$("#udworkendtime").focus();
 			return false;
 		}
 
-		if (offtime1_cmodal == "") {
+		if (udofftime1 == "") {
 			alert("<?php echo $user_offtime1_empty; ?>");
-			$("#offtime1_cmodal").focus();
+			$("#udofftime1").focus();
 			return false;
 		}
 
-		if (offtime2_cmodal == "") {
+		if (udofftime2 == "") {
 			alert("<?php echo $user_offtime2_empty; ?>");
-			$("#offtime2_cmodal").focus();
+			$("#udofftime2").focus();
 			return false;
 		}
 
@@ -452,31 +542,31 @@ if ($_SESSION['auth'] == false) {
 			return regex.test(time);
 		}
 
-		var isValid_workstr = validateTimeFormat(workstr_cmodal);
+		var isValid_workstr = validateTimeFormat(udworkstrtime);
 		if (!isValid_workstr) {
 			alert("<?php echo $user_workstr_incorrect; ?>");
-			$("#workstr_cmodal").focus();
+			$("#udworkstrtime").focus();
 			return false;
 		}
 
-		var isValid_workend = validateTimeFormat(workend_cmodal);
+		var isValid_workend = validateTimeFormat(udworkendtime);
 		if (!isValid_workend) {
 			alert("<?php echo $user_workend_incorrect; ?>");
-			$("#workend_cmodal").focus();
+			$("#udworkendtime").focus();
 			return false;
 		}
 
-		var isValid_offtime1 = validateTimeFormat(offtime1_cmodal);
+		var isValid_offtime1 = validateTimeFormat(udofftime1);
 		if (!isValid_offtime1) {
 			alert("<?php echo $user_offtime1_incorrect; ?>");
-			$("#offtime1_cmodal").focus();
+			$("#udofftime1").focus();
 			return false;
 		}
 
-		var isValid_offtime2 = validateTimeFormat(offtime2_cmodal);
+		var isValid_offtime2 = validateTimeFormat(udofftime2);
 		if (!isValid_offtime2) {
 			alert("<?php echo $user_offtime2_incorrect; ?>");
-			$("#offtime2_cmodal").focus();
+			$("#udofftime2").focus();
 			return false;
 		}
 	});

@@ -345,16 +345,16 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
 // Save data to tbl_genba table of database
 if (isset($_POST['SaveKinmu'])) {
     $companyid = $_SESSION['auth_companyid'] ;
-    $strymd = "";
-    $endymd = "";
-    $genbacompany = "";
-    $genbaname = mysqli_real_escape_string($conn, $_POST['genbaname_rmodal']);
-    $use_yn = mysqli_real_escape_string($conn, $_POST['use_rmodal']);
-    $workstrtime = mysqli_real_escape_string($conn, $_POST['workstr_rmodal']);
-    $workendtime = mysqli_real_escape_string($conn, $_POST['workend_rmodal']);
-    $offtime1 = mysqli_real_escape_string($conn, $_POST['offtime1_rmodal']);
-    $offtime2 = mysqli_real_escape_string($conn, $_POST['offtime2_rmodal']);
-    $bigo = mysqli_real_escape_string($conn, $_POST['bigo_rmodal']);
+    $genbaname = mysqli_real_escape_string($conn, $_POST['genbaname']);
+    $genbacompany = mysqli_real_escape_string($conn, $_POST['genbacompany']);
+    $strymd = mysqli_real_escape_string($conn, $_POST['strymd']);
+    $endymd = mysqli_real_escape_string($conn, $_POST['endymd']);
+    $use_yn = mysqli_real_escape_string($conn, $_POST['use_yn']);
+    $workstrtime = mysqli_real_escape_string($conn, $_POST['workstrtime']);
+    $workendtime = mysqli_real_escape_string($conn, $_POST['workendtime']);
+    $offtime1 = mysqli_real_escape_string($conn, $_POST['offtime1']);
+    $offtime2 = mysqli_real_escape_string($conn, $_POST['offtime2']);
+    $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
 
     $sql_genba_insert = mysqli_query($conn, "INSERT INTO `tbl_genba` (`genbaname`, `genbacompany`, `companyid`, `strymd`, `endymd`, `use_yn`, `workstrtime`, `workendtime`, `offtime1`, `offtime2`, `bigo`, `reg_dt`, `upt_dt`)
                 VALUES ('$genbaname', '$genbacompany', '$companyid', '$strymd', '$endymd', '$use_yn', '$workstrtime', '$workendtime', '$offtime1', '$offtime2', '$bigo', '$reg_dt', '$upt_dt')");
@@ -369,19 +369,21 @@ if (isset($_POST['SaveKinmu'])) {
 
 // Update data to tbl_genba table of database
 if (isset($_POST['UpdateKinmu'])) {
-    $genid = mysqli_real_escape_string($conn, $_POST['genid_cmodal']);
-    $genbaname = mysqli_real_escape_string($conn, $_POST['genbaname_cmodal']);
-    $companyid = mysqli_real_escape_string($conn, $_POST['companyid_cmodal']);
-    $strymd = mysqli_real_escape_string($conn, $_POST['strymd_cmodal']);
-    $endymd = mysqli_real_escape_string($conn, $_POST['endymd_cmodal']);
-    $use_yn = mysqli_real_escape_string($conn, $_POST['use_cmodal']);
-    $workstrtime = mysqli_real_escape_string($conn, $_POST['workstr_cmodal']);
-    $workendtime = mysqli_real_escape_string($conn, $_POST['workend_cmodal']);
-    $offtime1 = mysqli_real_escape_string($conn, $_POST['offtime1_cmodal']);
-    $offtime2 = mysqli_real_escape_string($conn, $_POST['offtime2_cmodal']);
+    $genid = mysqli_real_escape_string($conn, $_POST['udgenid']);
+    $genbaname = mysqli_real_escape_string($conn, $_POST['udgenbaname']);
+    $genbacompany = mysqli_real_escape_string($conn, $_POST['udgenbacompany']);
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $strymd = mysqli_real_escape_string($conn, $_POST['udstrymd']);
+    $endymd = mysqli_real_escape_string($conn, $_POST['udendymd']);
+    $use_yn = mysqli_real_escape_string($conn, $_POST['uduse_yn']);
+    $workstrtime = mysqli_real_escape_string($conn, $_POST['udworkstrtime']);
+    $workendtime = mysqli_real_escape_string($conn, $_POST['udworkendtime']);
+    $offtime1 = mysqli_real_escape_string($conn, $_POST['udofftime1']);
+    $offtime2 = mysqli_real_escape_string($conn, $_POST['udofftime2']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo_cmodal']);
     $sql = "UPDATE tbl_genba SET 
             genbaname='$genbaname',
+            genbacompany='$genbacompany',
             companyid='$companyid',
             strymd='$strymd',
             endymd='$endymd',
@@ -404,8 +406,8 @@ if (isset($_POST['UpdateKinmu'])) {
 
 // Delete data to tbl_genba table of database
 if (isset($_POST['DeleteKinmu'])) {
-    $genid = mysqli_real_escape_string($conn, $_POST['genid_cmodal']);
-    $genbaname = mysqli_real_escape_string($conn, $_POST['genbaname_cmodal']);
+    $genid = mysqli_real_escape_string($conn, $_POST['udgenid']);
+    $genbaname = mysqli_real_escape_string($conn, $_POST['udgenbaname']);
 
     $sql = "DELETE FROM `tbl_genba` 
             WHERE genid ='$genid' AND genbaname ='$genbaname'";
