@@ -82,7 +82,7 @@ $kintai_bend_empty = '業務終了を入力してください。';
 $kintai_bend_no = '業務終了を番号で入力してください。';
 $kintai_offtime_empty = '休憩時間を入力してください。';
 $kintai_offtime_no = '休憩時間を番号で入力してください。';
-$kintai_click_month = '月登録まだ保存されてないです。確認してください。';
+$kintai_click_month = '月合計登録まだ保存されてないです。確認してください。';
 $kintai_check_input_err = ' 桁まで入力してください';
 
 // genbaList
