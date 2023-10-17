@@ -61,6 +61,7 @@ if ($_SESSION['auth'] == false) {
 	}
 
 	#jobstarthh,
+	#holy_decide,
 	#jobstartmm,
 	#jobendhh,
 	#jobendmm {
@@ -289,6 +290,7 @@ if ($_SESSION['auth'] == false) {
 							<td>
 								<?= $key['comment'] ?>
 							</td>
+							<input type="hidden" value="<?= $holy_decide ?>" name="holy_decide">
 							<td>
 								<?= $key['bigo'] ?>
 							</td>
@@ -345,12 +347,13 @@ if ($_SESSION['auth'] == false) {
 								<?= $key['offtimehh'] ?>:<?= $key['offtimemm'] ?>
 							</td>
 							<td>
-								<!-- fix 8:0  -> 08:00 to show   -->
+								<!-- fix 8:0  08:00 to show   -->
 								<?= (empty($key['workhh']) && empty($key['workmm'])) || ($key['workhh'] === '00' && $key['workmm'] === '00') ? '' : sprintf('%02d:%02d', $key['workhh'], $key['workmm']) ?>
 							</td>
 							<td>
 								<?= $key['comment'] ?>
 							</td>
+							<input type="hidden" value="<?= $holy_decide ?>" name="holy_decide">
 							<td>
 								<?= $key['bigo'] ?>
 							</td>
@@ -916,7 +919,25 @@ if ($_SESSION['auth'] == false) {
 							<br>
 						<?php endif; ?>
 						<div class="row">
-							<div class="col-xs-4"></div>
+							<!-- 2023/10-16/ add start -->
+							<div class="col-xs-4 holder">
+								<label>勤務日状態</label>
+								<select id="holy_decide" name="holy_decide" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
+									<?php
+									foreach ($HOLY_DECIDE as $key => $value) {
+									?>
+										<option size="10" value="<?= $key ?>" <?php if ($value == $_POST['holy_decide']) {
+																					echo ' selected="selected"';
+																				} ?>>
+											<?= $value ?>
+										</option>
+									<?php
+									}
+									?>
+								</select>
+							</div>
+							<!-- <div class="col-xs-4"></div> -->
+							<!-- 2023/10-16/ add end -->
 							<div class="col-xs-2 holder">
 								<label>休憩時間</label>
 								<select id="offtimehh" name="offtimehh" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
@@ -1047,8 +1068,17 @@ if ($_SESSION['auth'] == false) {
 				$("#daystartmm").val("<?php echo $key['daystartmm'] ?>");
 				$("#dayendhh").val("<?php echo $key['dayendhh'] ?>");
 				$("#dayendmm").val("<?php echo $key['dayendmm'] ?>");
+
 				// 023-10-03/1340-001 add start
-				// textbox
+				$("#holy_decide").val("<?php echo $key['holy_decide'] ?>");
+				var holyDecideValue = "<?php echo $key['holy_decide'] ?>";
+				if (holyDecideValue === '' || holyDecideValue === null) {
+					$("#holy_decide").val(0);
+				} else {
+					$("#holy_decide").val(holyDecideValue);
+				}
+				// 023-10-03/1340-001 add end
+				
 				$("#IVjobstarthh").val("<?php echo $key['jobstarthh'] ?>");
 				$("#IVjobstartmm").val("<?php echo $key['jobstartmm'] ?>");
 				$("#IVjobendhh").val("<?php echo $key['jobendhh'] ?>");
@@ -1069,6 +1099,7 @@ if ($_SESSION['auth'] == false) {
 		}
 		?>
 	});
+
 	// Time calculate Func
 	function calculateWorkTime() {
 		var offtimehh = $('#offtimehh').val() || "00";
