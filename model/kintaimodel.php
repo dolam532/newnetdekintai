@@ -36,8 +36,6 @@ $weekdays = array(
     7 => '日'
 );
 
-
-
 // Display the dates, months, weekdays, and weekends in Japanese
 for ($day = 1; $day <= $daysInMonth; $day++) {
     $date = date("Y-m-d", strtotime($dateString . "-" . $day));
@@ -213,7 +211,7 @@ if (isset($_POST['SaveUpdateKintai'])) {
                 genid='$genid', daystarthh='$daystarthh', daystartmm='$daystartmm', dayendhh='$dayendhh', dayendmm='$dayendmm', jobstarthh='$jobstarthh', jobstartmm='$jobstartmm',
                 jobendhh='$jobendhh', jobendmm='$jobendmm', offtimehh='$offtimehh', offtimemm='$offtimemm', workhh='$workhh', workmm='$workmm', janhh='$janhh',
                 janmm='$janmm', comment='$comment', holy_decide = '$holy_decide' , bigo='$bigo',  upt_dt='$upt_dt'";
-                
+
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
         header("Refresh:3");
