@@ -168,8 +168,8 @@ if ($_SESSION['auth'] == false) {
 			<div class="col-md-3 col-ms-3" id="divUid">
 				<div class="title_condition">
 					<label>社員名 :
-						<select id="searchUid" name="searchUid" style="padding:5px;">
-							<?php if ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
+						<select id="searchUid" name="searchUid" style="padding:5px; width:70%;">
+							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
 								<option value="" selected="">選択なし</option>
 								<?php
 								foreach ($user_list as $value) {
