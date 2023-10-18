@@ -410,10 +410,10 @@ if ($_SESSION['auth'] == false) {
 									<?= $cnactjob_top = isset($countJobStartHH) ? $countJobStartHH : (isset($key['workdays2']) ? $key['workdays2'] : '0'); ?>
 								</strong></td>
 							<td><strong>
-									<?= $holydayswork_top = isset($key['holydays2']) ? $key['holydays2'] : '0'; ?>
+									<?= $holydayswork_top = isset($countKuyka) ? $countKuyka : (isset($key['holydays2']) ? $key['holydays2'] : '0'); ?>
 								</strong></td>
 							<td><strong>
-									<?= $offdayswork_top = isset($countJobAct) ? $countJobAct : (isset($key['offdays2']) ? $key['offdays2'] : '0'); ?>
+									<?= $offdayswork_top = isset($countKekkin) ? $countKekkin : (isset($key['offdays2']) ? $key['offdays2'] : '0'); ?>
 								</strong></td>
 							<td><strong>
 									<?= $delaydayswork_top = isset($countLate) ? $countLate : (isset($key['delaydays2']) ? $key['delaydays2'] : '0'); ?>
@@ -435,10 +435,10 @@ if ($_SESSION['auth'] == false) {
 									<?= $cnactjob_top = isset($countDayStartHH) ? $countDayStartHH : (isset($key['workdays2']) ? $key['workdays2'] : '0'); ?>
 								</strong></td>
 							<td><strong>
-									<?= $holydayswork_top = isset($key['holydays2']) ? $key['holydays2'] : '0'; ?>
+									<?= $holydayswork_top = isset($countKuyka) ? $countKuyka : (isset($key['holydays2']) ? $key['holydays2'] : '0'); ?>
 								</strong></td>
 							<td><strong>
-									<?= $offdayswork_top = isset($countJobAct) ? $countJobAct : (isset($key['offdays2']) ? $key['offdays2'] : '0'); ?>
+									<?= $offdayswork_top = isset($countKekkin) ? $countKekkin : (isset($key['offdays2']) ? $key['offdays2'] : '0'); ?>
 								</strong></td>
 							<td><strong>
 									<?= $delaydayswork_top = isset($countLate) ? $countLate : (isset($key['delaydays2']) ? $key['delaydays2'] : '0'); ?>
@@ -465,10 +465,10 @@ if ($_SESSION['auth'] == false) {
 								<?= $cnactjob_top = isset($countJobStartHH) ? $countJobStartHH : '0'; ?>
 							</strong></td>
 						<td><strong>
-								<?= $holydayswork_top = '0' ?>
+								<?= $holydayswork_top = isset($countKuyka) ? $countKuyka : '0'; ?>
 							</strong></td>
 						<td><strong>
-								<?= $offdayswork_top = '0'; ?>
+								<?= $offdayswork_top = isset($countKekkin) ? $countKekkin : '0'; ?>
 							</strong></td>
 						<td><strong>
 								<?= $delaydayswork_top = '0'; ?>
@@ -490,10 +490,10 @@ if ($_SESSION['auth'] == false) {
 								<?= $cnactjob_top = isset($countDayStartHH) ? $countDayStartHH : '0'; ?>
 							</strong></td>
 						<td><strong>
-								<?= $holydayswork_top = '0' ?>
+								<?= $holydayswork_top = isset($countKuyka) ? $countKuyka : '0'; ?>
 							</strong></td>
 						<td><strong>
-								<?= $offdayswork_top = isset($countJobAct) ? $countJobAct : '0'; ?>
+								<?= $offdayswork_top = isset($countKekkin) ? $countKekkin : '0'; ?>
 							</strong></td>
 						<td><strong>
 								<?= $delaydayswork_top = isset($countLate) ? $countLate : '0'; ?>
@@ -520,7 +520,7 @@ if ($_SESSION['auth'] == false) {
 							<input type="hidden" value="<?= $janworkmm_top = '0' ?>" name="janmm_top">
 							<input type="hidden" value="<?= $cnactjob_top ?>" name="workdays_top">
 							<input type="hidden" value="<?= $holydayswork_top ?>" name="holydays_top">
-							<input type="hidden" value="<?= $offdayswork_top = '0' ?>" name="offdays_top">
+							<input type="hidden" value="<?= $offdayswork_top ?>" name="offdays_top">
 							<input type="hidden" value="<?= $delaydayswork_top = '0' ?>" name="delaydays_top">
 							<input type="hidden" value="<?= $earlydayswork_top = '0' ?>" name="earlydays_top">
 						<?php elseif ($decide_template_ == "2"): ?>
@@ -654,22 +654,13 @@ if ($_SESSION['auth'] == false) {
 									id="holydays_bottom" maxlength="2"
 									value="<?= $holydayswork_bottom_pdf = isset($holydayswork_top) ? $holydayswork_top : '0'; ?>">
 							</td>
-							<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom"
-									id="offdays_bottom" maxlength="2" value="0"></td>
-							<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom"
-									id="delaydays_bottom" maxlength="2" value="0"></td>
-							<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom"
-									id="earlydays_bottom" maxlength="2" value="0"></td>
-						<?php elseif ($decide_template_ == "2"): ?>
-							<input type="hidden"
-								value="<?= $janworkhh_bottom_pdf = isset($janworkhh_top) ? $janworkhh_top : '0'; ?>"
-								name="janhh_bottom">
-							<input type="hidden"
-								value="<?= $janworkmm_bottom_pdf = isset($janworkmm_top) ? $janworkmm_top : '0'; ?>"
-								name="janmm_bottom">
-							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom"
-									id="jobhh_bottom" maxlength="3"
-									value="<?= $totaldayhh_bottom_pdf = isset($totaldayhh_top) ? $totaldayhh_top : '0'; ?>">
+							<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom" id="offdays_bottom" maxlength="2" value="0"></td>
+							<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom" id="delaydays_bottom" maxlength="2" value="0"></td>
+							<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom" id="earlydays_bottom" maxlength="2" value="0"></td>
+						<?php elseif ($decide_template_ == "2") : ?>
+							<input type="hidden" value="<?= $janworkhh_bottom_pdf = isset($janworkhh_top) ? $janworkhh_top : '0'; ?>" name="janhh_bottom">
+							<input type="hidden" value="<?= $janworkmm_bottom_pdf = isset($janworkmm_top) ? $janworkmm_top : '0'; ?>" name="janmm_bottom">
+							<td><input type="text" class="form-control" style="text-align: center" name="jobhh_bottom" id="jobhh_bottom" maxlength="3" value="<?= $totaldayhh_bottom_pdf = isset($totaldayhh_top) ? $totaldayhh_top : '0'; ?>">
 							</td>
 							<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom"
 									id="jobmm_bottom" maxlength="2"
@@ -1053,9 +1044,7 @@ if ($_SESSION['auth'] == false) {
 							<!-- 2023/10-16/ add start -->
 							<div class="col-xs-4 holder">
 								<label>勤務日状態</label>
-								<select id="holy_decide" name="holy_decide" class="form-control" size="1"
-									onfocus='this.size=6;' onblur='this.size=1;'
-									onchange='this.size=1; this.blur();handleSelectDayStatusChange(this)'>
+								<select id="holy_decide" name="holy_decide" class="form-control" size="1" onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
 									<?php
 									foreach ($HOLY_DECIDE as $key => $value) {
 										?>
@@ -1207,13 +1196,13 @@ if ($_SESSION['auth'] == false) {
 				$("#workhh").val("<?php echo $key['workhh'] ?>");
 				$("#workmm").val("<?php echo $key['workmm'] ?>");
 				$("#comment").text($('[name="comment"]').val("<?php echo $key['comment'] ?>"));
+
+
 				$("#bigo").text($('[name="bigo"]').val("<?php echo $key['bigo'] ?>"));
 				$("#daystarthh").val("<?php echo $key['daystarthh'] ?>");
 				$("#daystartmm").val("<?php echo $key['daystartmm'] ?>");
 				$("#dayendhh").val("<?php echo $key['dayendhh'] ?>");
 				$("#dayendmm").val("<?php echo $key['dayendmm'] ?>");
-
-				// 023-10-03/1340-001 add start
 				$("#holy_decide").val("<?php echo $key['holy_decide'] ?>");
 				var holyDecideValue = "<?php echo $key['holy_decide'] ?>";
 				if (holyDecideValue === '' || holyDecideValue === null) {
@@ -1221,10 +1210,8 @@ if ($_SESSION['auth'] == false) {
 				} else {
 					$("#holy_decide").val(holyDecideValue);
 				}
-				$("#holy_decide").val() === '<?= json_encode(array_keys($HOLY_DECIDE)[0]) ?>' ? changeDateTimeInputable(false) : changeDateTimeInputable(true);
-
 				// 023-10-03/1340-001 add end
-			
+				
 				$("#IVjobstarthh").val("<?php echo $key['jobstarthh'] ?>");
 				$("#IVjobstartmm").val("<?php echo $key['jobstartmm'] ?>");
 				$("#IVjobendhh").val("<?php echo $key['jobendhh'] ?>");
@@ -1342,12 +1329,13 @@ if ($_SESSION['auth'] == false) {
 	// 2023-10-03/1340-001 add end
 
 	// Check Error
-	$(document).on('click', '#btnReg', function (e) {
-		<?php if ($decide_template_ == "2"): ?>
+	$(document).on('click', '#btnReg', function(e) {
+		<?php if ($decide_template_ == "2") : ?>
 			var daystarthh = $("#daystarthh option:selected").val();
 			var daystartmm = $("#daystartmm option:selected").val();
 			var dayendhh = $("#dayendhh option:selected").val();
 			var dayendmm = $("#dayendmm option:selected").val();
+
 
 			if (daystarthh == "") {
 				alert("<?php echo $kintai_start_empty; ?>");
@@ -1610,56 +1598,6 @@ if ($_SESSION['auth'] == false) {
 			}
 		});
 	}
-	// ------2023-10-04/1340-003 add end---//
-
-
-
-	// ------2023-10-17/1340-003 add start
-	// date status change , not nomal is off day and input time is readonly
-	function handleSelectDayStatusChange(elem) {
-		var selectedOption = elem.options[elem.selectedIndex];
-		var selectedValue = selectedOption.value;
-		var selectedText = selectedOption.textContent;
-		if (selectedValue === '<?= json_encode(array_keys($HOLY_DECIDE)[0]) ?>') {
-			changeDateTimeInputable(false);
-		} else {
-			// when off day -> no input time -> 備考と内容のみ
-			changeDateTimeInputable(true);
-		}
-	}
-	function changeDateTimeInputable(isReadonly) {
-		var elementIds = [
-			'jobstarthh', 'jobstartmm', 'jobendhh', 'jobendmm',
-			'offtimehh', 'offtimemm', 'daystarthh', 'daystartmm',
-			'dayendhh', 'dayendmm', 'IVjobstarthh', 'IVjobstartmm',
-			'IVjobendhh', 'IVjobendmm', 'IVofftimehh', 'IVofftimemm',
-			'IVdaystarthh', 'IVdaystartmm', 'IVdayendhh', 'IVdayendmm'
-		];
-		elementIds.forEach(function (elementId) {
-			var element = $('#' + elementId);
-			element.removeAttr('readonly');
-			if (isReadonly) {
-				elementIds.forEach(function (elementId) {
-					var element = $('#' + elementId);
-					element.attr('readonly', 'readonly');
-					if (elementId.includes('IV')) {
-						element.attr('readonly', 'readonly').val('');
-					} else {
-						element.prop('selectedIndex', 0);
-					}
-				});
-				$('#workhh').val('');
-				$('#workmm').val('');
-			} else {
-
-				elementIds.forEach(function (elementId) {
-					var element = $('#' + elementId);
-					element.removeAttr('readonly');
-				});
-			}
-		});
-	}
-
-	// ------2023-10-17/1340-003 add end---//
+	// 2023-10-04/1340-003 add start
 </script>
 <?php include('../inc/footer.php'); ?>

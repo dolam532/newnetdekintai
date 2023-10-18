@@ -25,8 +25,8 @@ $MAX_INPUT_LENGTH_BIGO = 8;
 // holy_decide 
 $HOLY_DECIDE = array(
     0 => '通常',
-    1 => '休暇',
-    2 => '祝日',
+    1 => '祝日',
+    2 => '休暇',
     3 => '代休',
     9 => '欠勤'
 );
