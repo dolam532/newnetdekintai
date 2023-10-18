@@ -329,7 +329,7 @@ if ($_SESSION['auth'] == false) {
 				} else {
 					?>
 					<?php if ($decide_template_ == "1") : ?>
-						<td><strong><?= $totalworkhh_top = isset($tottotalWorkHoursalWorkHours) ? $totalWorkHours : '0'; ?></strong></td>
+						<td><strong><?= $totalworkhh_top = isset($totalWorkHours) ? $totalWorkHours : '0'; ?></strong></td>
 						<td><strong><?= $totalworkmm_top = isset($totalWorkMinutes) ? $totalWorkMinutes : '0'; ?></strong></td>
 						<td><strong><?= $cnprejob_top = isset($countJobStartHH) ? $countJobStartHH : '0'; ?></strong></td>
 						<td><strong><?= $cnactjob_top = isset($countJobStartHH) ? $countJobStartHH : '0'; ?></strong></td>
