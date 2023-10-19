@@ -134,7 +134,7 @@ foreach ($worktime_list as $work) {
     // set holyday count 
     //---2023-10-18 add start ------//
     if ($work['holy_decide'] != array_keys($HOLY_DECIDE)[0]) {
-        if ($work['holy_decide'] == array_keys($HOLY_DECIDE)[1]) {  // select by array index 
+        if ($work['holy_decide'] == array_keys($HOLY_DECIDE)[1]) { // select by array index 
             $countHoliday++;
         }
         if ($work['holy_decide'] == array_keys($HOLY_DECIDE)[2]) {
@@ -150,10 +150,10 @@ foreach ($worktime_list as $work) {
 
     //---2023-10-18 add end ------//
 }
-error_log("HOLYDAY*****".  $countHoliday);
-error_log("KYUKA*****".  $countKuyka);
-error_log("DAIKYU*****".  $countDaikyu);
-error_log("KEKKINNN*****".  $countKekkin);
+error_log("HOLYDAY*****" . $countHoliday);
+error_log("KYUKA*****" . $countKuyka);
+error_log("DAIKYU*****" . $countDaikyu);
+error_log("KEKKINNN*****" . $countKekkin);
 
 $countJobAct = $countJobStartHH - $countDayStartHH;
 
@@ -526,7 +526,23 @@ if (isset($_POST['MonthSaveKintai'])) {
     $janhour = mysqli_real_escape_string($conn, $_POST['janhh_bottom']);
     $janminute = mysqli_real_escape_string($conn, $_POST['janmm_bottom']);
 
-    $jobdays2 = mysqli_real_escape_string($conn, $_POST['jobdays_top']);
+    //----- 2023/10/18---- add start//
+    $companyid = $_SESSION['auth_companyid'];
+    $year = substr($workym, 0, 4);
+    $month = substr($workym, 4, 2);
+    $jobdays2;
+    $sql_getjd_currentMonth = "SELECT `workdays` FROM tbl_workday WHERE `companyid` = '$companyid' AND `workyear` = '$year' AND `workmonth` = '$month' LIMIT 1;";
+    $result = mysqli_query($conn, $sql_getjd_currentMonth);
+    if ($result) {
+        if ($row = mysqli_fetch_assoc($result)) {
+            $jobdays2 = $row['workdays'];
+        } else {
+            $jobdays2 = 0;
+        }
+    } else {
+        echo 'Query error: ' . mysqli_error($conn);
+    }
+    //----- 2023/10/18---- add end//
     $jobdays = mysqli_real_escape_string($conn, $_POST['jobdays_bottom']);
     $workdays2 = mysqli_real_escape_string($conn, $_POST['workdays_top']);
     $workdays = mysqli_real_escape_string($conn, $_POST['workdays_bottom']);
@@ -540,9 +556,9 @@ if (isset($_POST['MonthSaveKintai'])) {
     $earlydays = mysqli_real_escape_string($conn, $_POST['earlydays_bottom']);
     $template = mysqli_real_escape_string($conn, $_POST['template_table_']);
 
-    $sql = "INSERT INTO `tbl_workmonth` (`uid`, `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
+    $sql = "INSERT INTO `tbl_workmonth` (`uid`,  `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
                 `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `reg_dt`)
-                VALUES ('$uid', '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
+                VALUES ('$uid',  '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
                 '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$template', '$reg_dt')
                 ON DUPLICATE KEY UPDATE
                 genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2',
