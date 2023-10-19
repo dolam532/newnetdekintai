@@ -85,6 +85,7 @@ $kintai_offtime_no = '休憩時間を番号で入力してください。';
 $kintai_click_month = '月合計登録まだ保存されてないです。確認してください。';
 $kintai_bigo_or_comment = 'コメントか備考を入力してください。';
 $kintai_check_input_err = ' 桁まで入力してください';
+$kintai_reg_workmonth = '勤務日登録されてないです。確認してください。';
 
 
 // genbaList
