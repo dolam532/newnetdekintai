@@ -200,9 +200,9 @@ if (!empty($workmonth_list)) {
 		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, '0', 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, '0', 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, '0', 1, 1, 'C', true);
+		$tcpdf->Cell(15, 6.8, $offdayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
 	} elseif ($template == "2") {
 		$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
