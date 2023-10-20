@@ -90,6 +90,21 @@ if ($_SESSION['auth'] == false) {
 <title>勤 務 表</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top: -20px;">
+	<!-- // 2023-10-20----- add start //  -->
+	<?php
+
+	if (isset($_SESSION['save_success']) && isset($_POST['changeGenid'])) {
+		?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['save_success']; ?>
+		</div>
+		<?php
+		unset($_SESSION['save_success']);
+	}
+	?>
+	<!-- // 2023-10-20----- add end // 	 -->
+
 	<?php
 	if (isset($_SESSION['save_success']) && isset($_POST['SaveUpdateKintai'])) {
 		?>
@@ -183,7 +198,7 @@ if ($_SESSION['auth'] == false) {
 							}
 							?>
 						</select>
-						<select id="template_table" name="template_table" class="seldate" style="padding:5px;"
+						<!-- <select id="template_table" name="template_table" class="seldate" style="padding:5px;"
 							onchange="this.form.submit()">
 							<?php
 							foreach (ConstArray::$search_template as $key => $value) {
@@ -196,12 +211,18 @@ if ($_SESSION['auth'] == false) {
 								<?php
 							}
 							?>
-						</select>
+						</select> -->
 					</label>
 				</div>
 			</div>
 		</form>
 		<div class="col-md-5 text-right">
+			<!-- 2023/10/20 ---- add start  -->
+			<div class="print_btn">
+				<a href="#" onclick="kinmutypeHandle()" ; class="btn btn-default" style="width: auto;">勤務タイプ選択</a>
+			</div>
+			<!-- 2023/10/20 ---- add end  -->
+
 			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
 				<div class="print_btn">
 					<a href="../kintaidetail/kintaiUser.php" class="btn btn-default" style="width: auto;">社員勤務表</a>
@@ -565,18 +586,18 @@ if ($_SESSION['auth'] == false) {
 
 								<td><input type="text" class="form-control" style="text-align: center" name="jobmm_bottom"
 										id="jobmm_bottom" maxlength="3"
-										value="<?= $totalworkmm_bottom_pdf = (isset($key['jobminute']) && $key['jobminute'] !== '') ? $key['jobminute'] : $totaldaymm_top; ?>" >
+										value="<?= $totalworkmm_bottom_pdf = (isset($key['jobminute']) && $key['jobminute'] !== '') ? $key['jobminute'] : $totaldaymm_top; ?>">
 								</td>
-								
+
 								<td><input type="text" class="form-control" style="text-align: center" name="jobdays_bottom"
 										id="jobdays_bottom" maxlength="2"
 										value="<?= $cnprejob_bottom_pdf = (isset($key['jobdays']) && $key['jobdays'] !== '') ? $key['jobdays'] : $cnprejob_top; ?>">
 								</td>
 								<td><input type="text" class="form-control" style="text-align: center" name="workdays_bottom"
-										id="workdays_bottom" maxlength="2" 
+										id="workdays_bottom" maxlength="2"
 										value="<?= $cnactjob_bottom_pdf = (isset($key['workdays']) && $key['workdays'] !== '') ? $key['workdays'] : $cnactjob_top; ?>">
 								</td>
-								
+
 								<td><input type="text" class="form-control" style="text-align: center" name="holydays_bottom"
 										id="holydays_bottom" maxlength="2"
 										value="<?= $holydayswork_bottom_pdf = (isset($key['holydays']) && $key['holydays'] !== '') ? $key['holydays'] : $holydayswork_top; ?>">
@@ -732,8 +753,6 @@ if ($_SESSION['auth'] == false) {
 				$delaydayswork_bottom_pdf = strval($delaydayswork_bottom_pdf);
 				$earlydayswork_bottom_pdf = strval($earlydayswork_bottom_pdf);
 
-				echo $totalworkmm_bottom_pdf . "--".$key['jobminute'];
-
 				if ($decide_template_ == "1") {
 					if (
 						$key['jobhour'] !== $totalworkhh_bottom_pdf || $key['jobminute'] !== $totalworkmm_bottom_pdf
@@ -757,7 +776,6 @@ if ($_SESSION['auth'] == false) {
 						|| $key['delaydays'] !== $delaydayswork_bottom_pdf || $key['earlydays'] !== $earlydayswork_bottom_pdf
 					) {
 						echo '<p style="color: red;">' . $kintai_click_month . '</p>';
-						echo "ABCD";
 					}
 					//---- 2023-10-18------ add start //	
 					// if ($cnprejob_bottom_pdf === '0') {
@@ -808,6 +826,65 @@ if ($_SESSION['auth'] == false) {
 		value="<?php echo htmlspecialchars(json_encode($earlydayswork_bottom_pdf)); ?>">
 	<input type="hidden" name="workmonth_list" value="<?php echo htmlspecialchars(json_encode($workmonth_list)); ?>">
 </form>
+
+<!-- Modal 勤務タイプ選択 -->
+<div class="row">
+	<div class="modal" id="modal3" tabindex="-3" data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog">
+			<form method="post">
+				<div class="modal-content">
+					<div class="modal-header">
+						勤務タイプ選択
+						<button class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div class="row">
+							<div class="col-md-12">
+								<label for="genbaname_rmodal">勤務時間</label>
+								<select class="form-control" id="genba_selection_rmodal" name="genba_selection_rmodal">
+									<option value="" selected="">
+										<?php echo $select_message ?>
+									</option>
+									<?php foreach ($genba_list as $value) { ?>
+										<option
+											value="<?= $value['genid'] . ',' . $value['workstrtime'] . ',' . $value['workendtime'] . ',' . $value['offtime1'] . ',' . $value['offtime2'] ?>"
+											<?php if ($value['genid'] == $_SESSION['auth_genid']) {
+												echo ' selected="selected"';
+											} ?>>
+											<?= $value['genbaname'] . ':' . $value['workstrtime'] . '-' . $value['workendtime'] . '  || (昼休)' . $value['offtime1'] . '  || (夜休)' . $value['offtime2'] ?>
+										</option>
+									<?php } ?>
+								</select>
+							</div>
+						</div>
+						<br>
+						<input type="hidden" id="selectedGenid" name="selectedGenid" value="">
+					</div>
+					<div class="modal-footer" style="text-align: center">
+						<div class="col-md-4"></div>
+						<div class="col-md-2">
+							<input type="submit" name="changeGenid" class="btn btn-primary" id="btnchgGenid"
+								role="button" value="選択">
+						</div>
+						<div class="col-md-2">
+							<input type="submit" name="RegGenid" class="btn btn-primary" id="RegGenId" role="button"
+								value="登録ヘ">
+						</div>
+						<div class="col-md-2">
+							<button type="button" class="btn btn-default" data-dismiss="modal"
+								id="modalClose">閉じる</button>
+						</div>
+						<div class="col-md-4"></div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+
 
 <!-- Modal 自動入力 -->
 <div class="row">
@@ -1540,6 +1617,13 @@ if ($_SESSION['auth'] == false) {
 	});
 
 
+	// 勤務タイプ選択
+	function kinmutypeHandle() {
+		$('#modal3').modal('toggle');
+
+	}
+
+
 	// 自動入力
 	function autoInputHandle() {
 		$('#modal').modal('toggle');
@@ -1554,6 +1638,8 @@ if ($_SESSION['auth'] == false) {
 
 	// Select input tag
 	$(document).ready(function () {
+
+
 
 		// Function to handle input fields
 		function handleInput(inputId, selectId) {
@@ -1622,6 +1708,13 @@ if ($_SESSION['auth'] == false) {
 		handleInput('#IVdayendmm', '#dayendmm');
 		handleInput('#IVofftimehh', '#offtimehh');
 		handleInput('#IVofftimemm', '#offtimemm');
+
+		$('#genba_selection_rmodal').change(function () {
+			var selectedOption = $(this).val();
+			var genid = selectedOption.split(',')[0]; 
+			$('#selectedGenid').val(genid); 
+		});
+
 	});
 
 	// Check Error

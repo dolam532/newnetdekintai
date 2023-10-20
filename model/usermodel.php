@@ -77,7 +77,7 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
 }
 
 // Select data from tbl_genba
-$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
+$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", 0 ) ';
 $result_genba = mysqli_query($conn, $sql_genba);
 $genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
@@ -329,22 +329,30 @@ function generateRandomString($length)
 
 // (genbaList.php)
 // Select data from tbl_genba
+
+$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", 0 ) ';
 if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
-    $companyid = $_SESSION['auth_companyid'] ;
-    $sql_genba = 'SELECT * FROM `tbl_genba` where `companyid` ='. $companyid .';';
+    $companyid = $_SESSION['auth_companyid'];
     $result_genba = mysqli_query($conn, $sql_genba);
     $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
-    $companyid = $_SESSION['auth_companyid'] ;
-    $sql_genba = 'SELECT * FROM `tbl_genba`
-        WHERE `tbl_genba`.`genid` IN ("' . $_SESSION['auth_genid'] . '") AND `companyid` ='. $companyid .';';
+    $companyid = $_SESSION['auth_companyid'];
+    // $sql_genba = 'SELECT * FROM `tbl_genba`
+    //    WHERE `tbl_genba`.`genid` IN ("' . $_SESSION['auth_genid'] . '") AND `companyid` ='. $companyid .';';
     $result_genba = mysqli_query($conn, $sql_genba);
     $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 }
 
 // Save data to tbl_genba table of database
 if (isset($_POST['SaveKinmu'])) {
-    $companyid = $_SESSION['auth_companyid'] ;
+    //2023-10-20 ---- add start ----// 
+    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')) {
+        echo 'not admin ';
+        return;
+    }
+    //2023-10-20 ---- add end ----// 
+
+    $companyid = $_SESSION['auth_companyid'];
     $genbaname = mysqli_real_escape_string($conn, $_POST['genbaname']);
     $genbacompany = mysqli_real_escape_string($conn, $_POST['genbacompany']);
     $strymd = mysqli_real_escape_string($conn, $_POST['strymd']);
@@ -369,7 +377,16 @@ if (isset($_POST['SaveKinmu'])) {
 
 // Update data to tbl_genba table of database
 if (isset($_POST['UpdateKinmu'])) {
+    //2023-10-20 ---- add start ----// 
+    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')) {
+        echo 'not admin ';
+    }
     $genid = mysqli_real_escape_string($conn, $_POST['udgenid']);
+    if ($genid == '0' && $_SESSION['auth_type'] !== constant('ADMIN')) {
+        echo 'not admin of defaut  ';
+        return;
+    }
+    //2023-10-20 ---- add end ----// 
     $genbaname = mysqli_real_escape_string($conn, $_POST['udgenbaname']);
     $genbacompany = mysqli_real_escape_string($conn, $_POST['udgenbacompany']);
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
@@ -406,9 +423,20 @@ if (isset($_POST['UpdateKinmu'])) {
 
 // Delete data to tbl_genba table of database
 if (isset($_POST['DeleteKinmu'])) {
-    $genid = mysqli_real_escape_string($conn, $_POST['udgenid']);
-    $genbaname = mysqli_real_escape_string($conn, $_POST['udgenbaname']);
 
+    //2023-10-20 ---- add start ----// 
+    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')) {
+        echo 'not admin ';
+    }
+    $genid = mysqli_real_escape_string($conn, $_POST['udgenid']);
+    if ($genid == '0' && $_SESSION['auth_type'] !== constant('ADMIN')) {
+        echo 'not admin of defaut  ';
+        return;
+    }
+    //2023-10-20 ---- add end ----// 
+
+
+    $genbaname = mysqli_real_escape_string($conn, $_POST['udgenbaname']);
     $sql = "DELETE FROM `tbl_genba` 
             WHERE genid ='$genid' AND genbaname ='$genbaname'";
 

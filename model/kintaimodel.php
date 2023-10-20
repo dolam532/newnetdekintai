@@ -2,9 +2,12 @@
 // Select data from tbl_genba
 $sql_genba = 'SELECT * FROM `tbl_genba` 
     WHERE 
-        `tbl_genba`.`use_yn`="' . constant('USE_YES') . '"
+        (`tbl_genba`.`use_yn`="' . constant('USE_YES') . '"
     AND
-        `tbl_genba`.`companyid`="' . $_SESSION['auth_companyid'] . '"';
+        `tbl_genba`.`companyid`="' . $_SESSION['auth_companyid'] . '")
+    OR
+        `tbl_genba`.`companyid` = 0';
+
 $result_genba = mysqli_query($conn, $sql_genba);
 $genba_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
@@ -24,6 +27,7 @@ $decide_template_ = isset($_POST["template_table"]) ? $_POST["template_table"] :
 
 //----- 2023/10/18---- add start//
 $companyid = $_SESSION['auth_companyid'];
+$uid_ = $_SESSION['auth_uid'];
 
 $jobdays2;
 $sql_getjd_currentMonth = "SELECT `workdays` FROM tbl_workday WHERE `companyid` = '$companyid' AND `workyear` = '$year' AND `workmonth` = '$month' LIMIT 1;";
@@ -196,6 +200,23 @@ foreach ($datas as &$row) { // write directly to $array1 while iterating
         $row += $keyed[$row['workymd']]; // append associative elements
     }
 }
+// 2023-10-20----- add start // 
+if (isset($_POST['changeGenid'])) {
+    $selectedGenid = mysqli_real_escape_string($conn, $_POST['selectedGenid']);
+    $sql  = "UPDATE tbl_user SET `genid` = '$selectedGenid' where `uid` = '$uid_' AND `companyid` = ' $companyid' ;";
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['save_success'] = $save_success;
+        $_SESSION['auth_genid'] =  $selectedGenid;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+    
+}
+
+
+// 2023-10-20----- add end // 	 -->
+
 
 // Save data to tbl_worktime table of database
 if (isset($_POST['SaveUpdateKintai'])) {
