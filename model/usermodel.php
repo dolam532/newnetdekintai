@@ -4,6 +4,14 @@
 $reg_dt = date('Y-m-d H:i:s');
 $upt_dt = date('Y-m-d H:i:s');
 
+// Select data from tbl_codebase
+$sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
+WHERE `tbl_codebase`.`typecode` = "' . constant('DEPARTMENT') . '"
+AND `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+GROUP BY `code`, `name`';
+$result_codebase = mysqli_query($conn, $sql_codebase);
+$codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
+
 if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
@@ -329,7 +337,6 @@ function generateRandomString($length)
 
 // (genbaList.php)
 // Select data from tbl_genba
-
 $sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", 0 ) ';
 if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $companyid = $_SESSION['auth_companyid'];

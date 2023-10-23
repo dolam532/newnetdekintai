@@ -11,18 +11,35 @@ $sql_genba = 'SELECT * FROM `tbl_genba`
 $result_genba = mysqli_query($conn, $sql_genba);
 $genba_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
+// get template from genid 
+$currentGenid = $_SESSION['auth_genid'];
+$currentTemplate  = 1;
+$sqlTemplate = "SELECT `template` from tbl_genba WHERE `genid` = '$currentGenid';";
+$result = $conn->query($sqlTemplate);
+if ($result) {
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $currentTemplate = $row['template'];
+    } else {
+    }
+} else {
+    echo 'error' . mysqli_error($conn);
+}
+
+
+
 // kintaiReg.php
 if ($_POST['selmm'] == NULL && $_POST['selyy'] == NULL && $_POST['template_table'] == NULL) {
     $_POST['selmm'] = $_SESSION['selmm'];
     $_POST['selyy'] = $_SESSION['selyy'];
-    $_POST['template_table'] = $_SESSION['template_table'];
+    $_POST['template_table'] = $currentTemplate;
 }
 
 $reg_dt = date('Y-m-d H:i:s');
 $upt_dt = date('Y-m-d H:i:s');
 $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
 $month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
-$decide_template_ = isset($_POST["template_table"]) ? $_POST["template_table"] : '1';
+$decide_template_ = $currentTemplate;
 
 
 //----- 2023/10/18---- add start//
@@ -203,10 +220,10 @@ foreach ($datas as &$row) { // write directly to $array1 while iterating
 // 2023-10-20----- add start // 
 if (isset($_POST['changeGenid'])) {
     $selectedGenid = mysqli_real_escape_string($conn, $_POST['selectedGenid']);
-    $sql  = "UPDATE tbl_user SET `genid` = '$selectedGenid' where `uid` = '$uid_' AND `companyid` = ' $companyid' ;";
+    $sql = "UPDATE tbl_user SET `genid` = '$selectedGenid' where `uid` = '$uid_' AND `companyid` = ' $companyid' ;";
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] = $save_success;
-        $_SESSION['auth_genid'] =  $selectedGenid;
+        $_SESSION['auth_genid'] = $selectedGenid;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -214,14 +231,16 @@ if (isset($_POST['changeGenid'])) {
 }
 
 
-// 2023-10-20----- add end // 	 -->
 
+
+// 2023-10-20----- add end // 	 -->
 
 // Save data to tbl_worktime table of database
 if (isset($_POST['SaveUpdateKintai'])) {
+
     $_SESSION['selmm'] = substr($_POST['date_show'], 5, 2);
     $_SESSION['selyy'] = substr($_POST['date_show'], 0, 4);
-    $_SESSION['template_table'] = $_POST["template_table_"];
+    $_SESSION['template_table'] = $currentTemplate;
     //---2023-10-18 add start ------//
     $holy_decide = mysqli_real_escape_string($conn, $_POST['holy_decide']);
     $comment = mysqli_real_escape_string($conn, $_POST['comment']);
@@ -230,70 +249,64 @@ if (isset($_POST['SaveUpdateKintai'])) {
     $uid = mysqli_real_escape_string($conn, $_POST['uid']);
     $genid = mysqli_real_escape_string($conn, $_POST['genid']);
 
-    // when off day -> check riyu 
-    if ($holy_decide != array_keys($HOLY_DECIDE)[0]) {
+    $offtime = 0;
+    $jobstarttime = 0;
+    $jobendtime = 0;
 
-        $sql = "INSERT INTO `tbl_worktime` (`uid`, `companyid`,`genid`, `workymd`, `daystarthh`, `daystartmm`, `dayendhh`, `dayendmm`, `jobstarthh`, `jobstartmm`,
-            `jobendhh`, `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `janhh`, `janmm`, `comment`, `holy_decide`, `bigo`, `reg_dt`,  `upt_dt`)
-        VALUES ('$uid', '$companyid','$genid', '$workymd', null, null, null, null, null, null,
-            null, null, null, null, null, null, null, null , '$comment', '$holy_decide','$bigo', '$reg_dt',  '$upt_dt')
-            ON DUPLICATE KEY UPDATE
-            companyid='$companyid', genid='$genid', daystarthh=null, daystartmm=null, dayendhh=null, dayendmm=null, jobstarthh=null, jobstartmm=null,
-            jobendhh=null ,  jobendmm=null, offtimehh=null, offtimemm=null, workhh=null, workmm=null, janhh=null,
-            janmm=null, comment='$comment', holy_decide = '$holy_decide' , bigo='$bigo',  upt_dt='$upt_dt' ";
-
-
-        if ($conn->query($sql) === TRUE) {
-            $_SESSION['save_success'] = $save_success;
-            header("Refresh:3");
-        } else {
-            echo 'query error: ' . mysqli_error($conn);
-        }
-    } else {
-
-        //---2023-10-18 add end ------//
-        $offtime = DateTime::createFromFormat('H:i', $_POST['offtimehh'] . ':' . $_POST['offtimemm']);
+    if (isset($_POST['jobstarthh']) && isset($_POST['jobstartmm']) && isset($_POST['jobendhh']) && isset($_POST['jobendmm'])) {
         $jobstarttime = DateTime::createFromFormat('H:i', $_POST['jobstarthh'] . ':' . $_POST['jobstartmm']);
         $jobendtime = DateTime::createFromFormat('H:i', $_POST['jobendhh'] . ':' . $_POST['jobendmm']);
+        if (isset($_POST['offtimehh']) && isset($_POST['offtimemm'])) {
+            $offtime = DateTime::createFromFormat('H:i', $_POST['offtimehh'] . ':' . $_POST['offtimemm']);
+        }
+    }
+    $calculatedHours = 0;
+    $calculatedMinutes = 0;
+
+    if ($_POST['jobstarthh'] !== null || $_POST['jobstartmm'] !== null) {
+        if ($_POST['offtimehh'] == null || $_POST['offtimehh'] == null) {
+            $offtime = 0;
+        }
 
         $interval = $jobendtime->diff($jobstarttime);
         $totalMinutes = ($interval->h * 60) + $interval->i;
         $totalMinutes -= ($offtime->format('H') * 60) + $offtime->format('i');
+        error_log("OF TIME : " . $totalMinutes);
         $calculatedHours = floor($totalMinutes / 60);
         $calculatedMinutes = $totalMinutes % 60;
+    }
 
-        if ($_POST["template_table_"] == "1") {
-            $janhh = '0';
-            $janmm = '0';
-            $_POST['daystarthh'] = '';
-            $_POST['daystartmm'] = '';
-            $_POST['dayendhh'] = '';
-            $_POST['dayendmm'] = '';
-        } elseif ($_POST["template_table_"] == "2") {
-            $janhh = $_POST['workhh'] - $calculatedHours;
-            $janmm = $_POST['workmm'] - $calculatedMinutes;
-        }
+    if ($_POST["template_table_"] == "1") {
+        $janhh = '0';
+        $janmm = '0';
+        $_POST['daystarthh'] = '';
+        $_POST['daystartmm'] = '';
+        $_POST['dayendhh'] = '';
+        $_POST['dayendmm'] = '';
+    } elseif ($_POST["template_table_"] == "2") {
+        $janhh = $_POST['workhh'] - $calculatedHours;
+        $janmm = $_POST['workmm'] - $calculatedMinutes;
+    }
 
-        $jobstarthh = mysqli_real_escape_string($conn, $_POST['jobstarthh']);
-        $jobstartmm = mysqli_real_escape_string($conn, $_POST['jobstartmm']);
-        $jobendhh = mysqli_real_escape_string($conn, $_POST['jobendhh']);
-        $jobendmm = mysqli_real_escape_string($conn, $_POST['jobendmm']);
-        $daystarthh = mysqli_real_escape_string($conn, $_POST['daystarthh']);
-        $daystartmm = mysqli_real_escape_string($conn, $_POST['daystartmm']);
-        $dayendhh = mysqli_real_escape_string($conn, $_POST['dayendhh']);
-        $dayendmm = mysqli_real_escape_string($conn, $_POST['dayendmm']);
-        $offtimehh = mysqli_real_escape_string($conn, $_POST['offtimehh']);
-        $offtimemm = mysqli_real_escape_string($conn, $_POST['offtimemm']);
-        $workhh = mysqli_real_escape_string($conn, $_POST['workhh']);
-        $workmm = mysqli_real_escape_string($conn, $_POST['workmm']);
+    $jobstarthh = mysqli_real_escape_string($conn, $_POST['jobstarthh']);
+    $jobstartmm = mysqli_real_escape_string($conn, $_POST['jobstartmm']);
+    $jobendhh = mysqli_real_escape_string($conn, $_POST['jobendhh']);
+    $jobendmm = mysqli_real_escape_string($conn, $_POST['jobendmm']);
+    $daystarthh = mysqli_real_escape_string($conn, $_POST['daystarthh']);
+    $daystartmm = mysqli_real_escape_string($conn, $_POST['daystartmm']);
+    $dayendhh = mysqli_real_escape_string($conn, $_POST['dayendhh']);
+    $dayendmm = mysqli_real_escape_string($conn, $_POST['dayendmm']);
+    $offtimehh = mysqli_real_escape_string($conn, $_POST['offtimehh']);
+    $offtimemm = mysqli_real_escape_string($conn, $_POST['offtimemm']);
+    $workhh = mysqli_real_escape_string($conn, $_POST['workhh']);
+    $workmm = mysqli_real_escape_string($conn, $_POST['workmm']);
 
-        // $holy_decide = mysqli_real_escape_string($conn, $_POST['holy_decide']);
-        if ($holy_decide == null || $holy_decide == '') {
-            $holy_decide = array_keys($HOLY_DECIDE)[0];
-        }
+    // $holy_decide = mysqli_real_escape_string($conn, $_POST['holy_decide']);
+    if (!isset($holy_decide) || $holy_decide == null || $holy_decide == '') {
+        $holy_decide = array_keys($HOLY_DECIDE)[0];
+    }
 
-
-        $sql = "INSERT INTO `tbl_worktime` (`uid`, `genid`, `workymd`, `daystarthh`, `daystartmm`, `dayendhh`, `dayendmm`, `jobstarthh`, `jobstartmm`,
+    $sql = "INSERT INTO `tbl_worktime` (`uid`, `genid`, `workymd`, `daystarthh`, `daystartmm`, `dayendhh`, `dayendmm`, `jobstarthh`, `jobstartmm`,
                 `jobendhh`, `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `janhh`, `janmm`, `comment`, `holy_decide`, `bigo`, `reg_dt`,  `upt_dt`)
                 VALUES ('$uid', '$genid', '$workymd', '$daystarthh', '$daystartmm', '$dayendhh', '$dayendmm', '$jobstarthh', '$jobstartmm',
                 '$jobendhh', '$jobendmm', '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$janhh', '$janmm', '$comment', '$holy_decide','$bigo', '$reg_dt',  '$upt_dt')
@@ -302,12 +315,11 @@ if (isset($_POST['SaveUpdateKintai'])) {
                 jobendhh='$jobendhh', jobendmm='$jobendmm', offtimehh='$offtimehh', offtimemm='$offtimemm', workhh='$workhh', workmm='$workmm', janhh='$janhh',
                 janmm='$janmm', comment='$comment', holy_decide = '$holy_decide' , bigo='$bigo',  upt_dt='$upt_dt'";
 
-        if ($conn->query($sql) === TRUE) {
-            $_SESSION['save_success'] = $save_success;
-            header("Refresh:3");
-        } else {
-            echo 'query error: ' . mysqli_error($conn);
-        }
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['save_success'] = $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
     }
 }
 
@@ -315,7 +327,6 @@ if (isset($_POST['SaveUpdateKintai'])) {
 if (isset($_POST['DeleteKintai'])) {
     $_SESSION['selmm'] = substr($_POST['date_show'], 5, 2);
     $_SESSION['selyy'] = substr($_POST['date_show'], 0, 4);
-    $_SESSION['template_table'] = $_POST["template_table_"];
 
     $uid = mysqli_real_escape_string($conn, $_POST['uid']);
 
@@ -338,7 +349,7 @@ if (isset($_POST['DeleteKintai'])) {
 if (isset($_POST['AutoUpdateKintai'])) {
     $_SESSION['selmm'] = $_POST['month'];
     $_SESSION['selyy'] = $_POST["year"];
-    $_SESSION['template_table'] = $_POST["template_table_"];
+    $_SESSION['template_table'] = $currentTemplate;
 
     $genba_selection_rmodal = $_POST['genba_selection_rmodal'];
     $uid_ = $_SESSION['auth_uid'];
@@ -463,12 +474,12 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $bigo = $row['bigo'];
 
         $sql = "INSERT INTO `tbl_worktime` (`uid`, `companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`,
-            `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`, `bigo`, `reg_dt`, `upt_dt`)
+            `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`, `holy_decide`, `bigo`, `reg_dt`, `upt_dt`)
             VALUES (:uid, '$companyid' , :genid, :workymd, :jobstarthh, :jobstartmm, :jobendhh, :jobendmm,
-            :offtimehh, :offtimemm, :workhh, :workmm, :comment, :bigo, :reg_dt, :upt_dt)
+            :offtimehh, :offtimemm, :workhh, :workmm, :comment, 0 , :bigo, :reg_dt, :upt_dt)
             ON DUPLICATE KEY UPDATE
             companyid = '$companyid',  genid = :genid, jobstarthh = :jobstarthh, jobstartmm = :jobstartmm, jobendhh = :jobendhh, jobendmm = :jobendmm,
-            offtimehh = :offtimehh, offtimemm = :offtimemm, workhh = :workhh, workmm = :workmm, comment = :comment, bigo = :bigo, upt_dt = :upt_dt";
+            offtimehh = :offtimehh, offtimemm = :offtimemm, workhh = :workhh, workmm = :workmm, comment = :comment, holy_decide = 0  , bigo = :bigo, upt_dt = :upt_dt";
 
         // Prepare the statement
         $stmt = $pdo->prepare($sql);
@@ -535,7 +546,7 @@ if (isset($_POST['MonthSaveKintai'])) {
     $_SESSION['selmm'] = $_POST['month'];
     $_SESSION['selyy'] = $_POST["year"];
     $yearmonth = $_POST["year"] . $_POST["month"];
-    $_SESSION['template_table'] = $_POST["template_table_"];
+    // $_SESSION['template_table'] = $_POST["template_table_"];
 
     $gen_id_ = intval($_SESSION['auth_genid']);
     $jobhh_top_ = intval($_POST['jobhh_top']);
@@ -571,7 +582,7 @@ if (isset($_POST['MonthSaveKintai'])) {
     $delaydays = mysqli_real_escape_string($conn, $_POST['delaydays_bottom']);
     $earlydays2 = mysqli_real_escape_string($conn, $_POST['earlydays_top']);
     $earlydays = mysqli_real_escape_string($conn, $_POST['earlydays_bottom']);
-    $template = mysqli_real_escape_string($conn, $_POST['template_table_']);
+    $template = $currentTemplate;
 
     $sql = "INSERT INTO `tbl_workmonth` (`uid`,  `companyid` , `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
                 `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `reg_dt`)
@@ -607,7 +618,7 @@ if (isset($_POST['DeleteAll'])) {
     $deleteAllData = false;
     $_SESSION['selmm'] = $_POST['month'];
     $_SESSION['selyy'] = $_POST['year'];
-    $_SESSION['template_table'] = $_POST["template_table_"];
+    $_SESSION['template_table'] = $currentTemplate;
     $yearmonthSlet = $_POST["year"] . '/' . $_POST["month"];
     $yearmonth = $_POST["year"] . $_POST["month"];
 

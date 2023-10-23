@@ -193,7 +193,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<div class="col-xs-6">
 								<label for="dept">部署</label>
-								<input type="text" class="form-control" id="dept" name="dept" placeholder="開発部" maxlength="50" style="text-align: left">
+								<select class="form-control" id="dept" name="dept">
+									<option value="" disabled selected>選択してください。</option>
+									<?php foreach ($codebase_list as $key) : ?>
+										<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
+									<?php endforeach; ?>
+								</select>
 							</div>
 						</div>
 						<br>
@@ -216,7 +221,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="col-xs-6">
 								<label for="genid">勤務時間タイプ</label>
 								<select class="form-control" id="genba_list" name="genba_list">
-									<option value="" selected=""></option>
+									<option value="" disabled selected>選択してください。</option>
 									<?php
 									foreach ($genba_list_db as $key) {
 									?>

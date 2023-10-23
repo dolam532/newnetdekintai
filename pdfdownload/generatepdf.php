@@ -36,6 +36,9 @@ $ln = 1;
 // Align the content to the left
 $align = 'L';
 
+// set turn of next page and set margin 
+$tcpdf->SetAutoPageBreak(false, 10);
+
 $name = json_decode($_POST['name'], true);
 $dept = json_decode($_POST['dept'], true);
 $date_show = json_decode($_POST['date_show'], true);
@@ -164,25 +167,94 @@ foreach ($data as $row) {
 }
 $tcpdf->Ln(1.2);
 
+// // Set up the table header
+// $tcpdf->SetFillColor(240, 240, 240); // Set the fill color for the header
+// $tcpdf->SetTextColor(0, 0, 0); // Set the text color for the header
+// $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the header
+// $tcpdf->Cell(25, 13.6, '実働時間', 1, 0, 'C', true);
+// $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
+// $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
+// if (!empty($workmonth_list)) {
+// 	if ($template == "1") {
+// 		$tcpdf->Cell(20, 13.6, $totalworkhh . ':' . $totalworkmm, 1, 0, 'C', true);
+// 	} elseif ($template == "2") {
+// 		$tcpdf->Cell(20, 13.6, $totaldayhh . ':' . $totaldaymm, 1, 0, 'C', true);
+// 	}
+// } else {
+// 	$tcpdf->Cell(20, 13.6, '' . ':' . '', 1, 0, 'C', true);
+// }
+// $tcpdf->SetFillColor(240, 240, 240); // Set the fill color for the header
+// $tcpdf->SetTextColor(0, 0, 0); // Set the text color for the header
+// $tcpdf->Cell(25, 13.6, '勤務状況', 1, 0, 'C', true);
+// $tcpdf->Cell(30, 6.8, '所定勤務日数', 1, 0, 'C', true);
+// $tcpdf->Cell(30, 6.8, '日実勤務日数', 1, 0, 'C', true);
+// $tcpdf->Cell(15, 6.8, '休暇', 1, 0, 'C', true);
+// $tcpdf->Cell(15, 6.8, '欠勤', 1, 0, 'C', true);
+// $tcpdf->Cell(15, 6.8, '遲刻', 1, 0, 'C', true);
+// $tcpdf->Cell(15, 6.8, '早退', 1, 1, 'C', true); // Add 1 to move to the next line
+
+// // Set up the table data
+// $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
+// $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
+// $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data
+// if (!empty($workmonth_list)) {
+// 	if ($template == "1") {
+// 		$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+// 		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
+// 		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
+// 		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
+// 		$tcpdf->Cell(15, 6.8, $offdayswork, 1, 0, 'C', true);
+// 		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
+// 		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
+
+
+// 	} elseif ($template == "2") {
+// 		$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+// 		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
+// 		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
+// 		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
+// 		$tcpdf->Cell(15, 6.8, $offdayswork, 1, 0, 'C', true);
+// 		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
+// 		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
+
+
+
+// 	}
+// } else {
+// 	$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+// 	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
+// 	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
+// 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
+// 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
+// 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
+// 	$tcpdf->Cell(15, 6.8, '', 1, 1, 'C', true);
+// }
+
+
+
 // Set up the table header
 $tcpdf->SetFillColor(240, 240, 240); // Set the fill color for the header
 $tcpdf->SetTextColor(0, 0, 0); // Set the text color for the header
-$tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the header
-$tcpdf->Cell(25, 13.6, '実働時間', 1, 0, 'C', true);
+$tcpdf->Cell(45, 6.8, '実働時間', 1, 0, 'C', true);
+
+
 $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
-if (!empty($workmonth_list)) {
-	if ($template == "1") {
-		$tcpdf->Cell(20, 13.6, $totalworkhh . ':' . $totalworkmm, 1, 0, 'C', true);
-	} elseif ($template == "2") {
-		$tcpdf->Cell(20, 13.6, $totaldayhh . ':' . $totaldaymm, 1, 0, 'C', true);
-	}
-} else {
-	$tcpdf->Cell(20, 13.6, '' . ':' . '', 1, 0, 'C', true);
-}
+$tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the header
+
+
+// if (!empty($workmonth_list)) {
+// 	if ($template == "1") {
+// 	} elseif ($template == "2") {
+// 		$tcpdf->Cell(20, 10.2, $totaldayhh . ':' . $totaldaymm, 1, 0, 'C', true);
+// 	}
+// } else {
+// 	$tcpdf->Cell(20, 10.2, '' . ':' . '', 1, 0, 'C', true);
+// }
+
 $tcpdf->SetFillColor(240, 240, 240); // Set the fill color for the header
 $tcpdf->SetTextColor(0, 0, 0); // Set the text color for the header
-$tcpdf->Cell(25, 13.6, '勤務状況', 1, 0, 'C', true);
+$tcpdf->Cell(25, 20.4, '勤務状況', 1, 0, 'C', true);
 $tcpdf->Cell(30, 6.8, '所定勤務日数', 1, 0, 'C', true);
 $tcpdf->Cell(30, 6.8, '日実勤務日数', 1, 0, 'C', true);
 $tcpdf->Cell(15, 6.8, '休暇', 1, 0, 'C', true);
@@ -196,7 +268,19 @@ $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data
 if (!empty($workmonth_list)) {
 	if ($template == "1") {
-		$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+		$tcpdf->Cell(45, 6.8, $totalworkhh . ':' . $totalworkmm, 1, 0, 'C', true);
+		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
+
+		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
+		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $offdayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
+
+
+		$tcpdf->Cell(45, 6.8, $totalworkhh . ':' . $totalworkmm, 1, 0, 'C', true);
+		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
@@ -204,6 +288,14 @@ if (!empty($workmonth_list)) {
 		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
 	} elseif ($template == "2") {
+		$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
+		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $offdayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
+
 		$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
@@ -220,5 +312,16 @@ if (!empty($workmonth_list)) {
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 1, 'C', true);
+
+	$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(15, 6.8, '', 1, 1, 'C', true);
 }
+
+
+
 $tcpdf->Output("download.pdf", "I");
