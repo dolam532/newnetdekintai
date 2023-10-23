@@ -40,11 +40,11 @@ $PATH_IMAGE_NOTICE = "../assets/uploads/notice/";
 $LENGTH_RANDOM_UNIQUE_NAME = 15;
 $NOTICE_IMAGE_MAXSIZE = 2000000;  // 2MB = 2000000
 $ALLOWED_TYPES = array("jpg", "jpeg", "png", "gif");
-$IMAGE_UPLOAD_DIR = '/var/www/html/newnetdekintai/assets/uploads/notice/';
+$IMAGE_UPLOAD_DIR = '../assets/uploads/notice/';
 
 // 社員登録 + 管理者登録
 $PATH_IMAGE_STAMP = "../assets/uploads/signstamp/";
 $ALLOWED_TYPES_STAMP = array("png");
 $STAMP_MAXSIZE = 2000000;  // 2MB = 2000000
 $LENGTH_RANDOM_UNIQUE_NAME_STAMP = 16;
-$IMAGE_UPLOAD_DIR_STAMP = '/var/www/html/newnetdekintai/assets/uploads/signstamp/';
+$IMAGE_UPLOAD_DIR_STAMP = '../assets/uploads/signstamp/';
