@@ -687,7 +687,7 @@ if ($_SESSION['auth'] == false) {
 							</td>
 							<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom"
 									id="offdays_bottom" maxlength="2"
-									value="<?= $offdayswork_bottom_pdf = isset($offdayswork_top) ? $offdayswork_top : '0'; ?>">
+									value="<?= $offdayswork_bottom_pdf = (isset($key['offdays']) && $key['offdays'] !== '') ? $key['offdays'] : $offdayswork_top; ?>">
 							</td>
 							<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom"
 									id="delaydays_bottom" maxlength="2" value="0"></td>
@@ -720,7 +720,7 @@ if ($_SESSION['auth'] == false) {
 							</td>
 							<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom"
 									id="offdays_bottom" maxlength="2"
-									value="<?= $offdayswork_bottom_pdf = isset($offdayswork_top) ? $offdayswork_top : '0'; ?>">
+									value="<?= $offdayswork_bottom_pdf = (isset($key['offdays']) && $key['offdays'] !== '') ? $key['offdays'] : $offdayswork_top; ?>">
 							</td>
 							<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom"
 									id="delaydays_bottom" maxlength="2"
@@ -738,54 +738,58 @@ if ($_SESSION['auth'] == false) {
 			</tr>
 		</tbody>
 
+
 		<!-- Auto Error Message -->
 		<?php
 		if (!empty($workmonth_list)) {
 			foreach ($workmonth_list as $key) {
-				$totalworkhh_bottom_pdf = strval($totalworkhh_bottom_pdf);
-				$totaldaymm_bottom_pdf = strval($totaldaymm_bottom_pdf);
-				$totaldayhh_bottom_pdf = strval($totaldayhh_bottom_pdf);
-				$totalworkmm_bottom_pdf = strval($totalworkmm_bottom_pdf);
-				$cnprejob_bottom_pdf = strval($cnprejob_bottom_pdf);
-				$cnactjob_bottom_pdf = strval($cnactjob_bottom_pdf);
-				$holydayswork_bottom_pdf = strval($holydayswork_bottom_pdf);
-				$offdayswork_bottom_pdf = strval($offdayswork_bottom_pdf);
-				$delaydayswork_bottom_pdf = strval($delaydayswork_bottom_pdf);
-				$earlydayswork_bottom_pdf = strval($earlydayswork_bottom_pdf);
+				$totalworkhh_top = strval($totalworkhh_top);
+				$totalworkmm_top = strval($totalworkmm_top);
+				$totaldayhh_top = strval($totaldayhh_top);
+				$totaldaymm_top = strval($totaldaymm_top);
+				$cnprejob_top = strval($cnprejob_top);
+				$cnactjob_top = strval($cnactjob_top);
+				$holydayswork_top = strval($holydayswork_top);
+				$offdayswork_top = strval($offdayswork_top);
+				$delaydayswork_top = strval($delaydayswork_top);
+				$earlydayswork_top = strval($earlydayswork_top);
 
 				if ($decide_template_ == "1") {
 					if (
-						$key['jobhour'] !== $totalworkhh_bottom_pdf || $key['jobminute'] !== $totalworkmm_bottom_pdf
-						|| $key['jobdays'] !== $cnprejob_bottom_pdf || $key['workdays'] !== $cnactjob_bottom_pdf
-						|| $key['holydays'] !== $holydayswork_bottom_pdf || $key['offdays'] !== $offdayswork_bottom_pdf
-						|| $key['delaydays'] !== $delaydayswork_bottom_pdf || $key['earlydays'] !== $earlydayswork_bottom_pdf
+						$key['jobhour2'] !== $totalworkhh_top || $key['jobminute2'] !== $totalworkmm_top
+						|| $key['jobdays2'] !== $cnprejob_top || $key['workdays2'] !== $cnactjob_top
+						|| $key['holydays2'] !== $holydayswork_top || $key['offdays2'] !== $offdayswork_top
+						|| $key['delaydays2'] !== $delaydayswork_top || $key['earlydays2'] !== $earlydayswork_top
 					) {
 						echo '<p style="color: red;">' . $kintai_click_month . '</p>';
 
 					}
-					//---- 2023-10-18------ add start //	
-					// if ($cnprejob_bottom_pdf === '0') {
-					// 	echo '<p style="color: red;">' . $kintai_reg_workmonth . '</p>';
-					// }
-					//---- 2023-10-18------ add end //	
+					// ---- 2023-10-18------ add start //	
+					if ($cnprejob_top === '0') {
+						echo '<p style="color: red;">' . $kintai_reg_workmonth . '</p>';
+					}
+					// ---- 2023-10-18------ add end //	
 				} elseif ($decide_template_ == "2") {
 					if (
-						$key['jobhour'] !== $totaldayhh_bottom_pdf || $key['jobminute'] !== $totaldaymm_bottom_pdf
-						|| $key['jobdays'] !== $cnprejob_bottom_pdf || $key['workdays'] !== $cnactjob_bottom_pdf
-						|| $key['holydays'] !== $holydayswork_bottom_pdf || $key['offdays'] !== $offdayswork_bottom_pdf
-						|| $key['delaydays'] !== $delaydayswork_bottom_pdf || $key['earlydays'] !== $earlydayswork_bottom_pdf
+						$key['jobhour2'] !== $totaldayhh_top || $key['jobminute2'] !== $totaldaymm_top
+						|| $key['jobdays2'] !== $cnprejob_top || $key['workdays2'] !== $cnactjob_top
+						|| $key['holydays2'] !== $holydayswork_top || $key['offdays2'] !== $offdayswork_top
+						|| $key['delaydays2'] !== $delaydayswork_top || $key['earlydays2'] !== $earlydayswork_top
 					) {
 						echo '<p style="color: red;">' . $kintai_click_month . '</p>';
 					}
 					//---- 2023-10-18------ add start //	
-					// if ($cnprejob_bottom_pdf === '0') {
-					// 	echo '<p style="color: red;">' . $kintai_reg_workmonth . '</p>';
-					// }
+					if ($cnprejob_top === '0') {
+						echo '<p style="color: red;">' . $kintai_reg_workmonth . '</p>';
+					}
 					//---- 2023-10-18------ add end //	
-		
 				}
 			}
+		} else {
+			echo '<p style="color: red;">' . $kintai_click_month . '</p>';
 		}
+
+
 		?>
 
 
@@ -1332,15 +1336,6 @@ if ($_SESSION['auth'] == false) {
 					$("#holy_decide").val(holyDecideValue);
 				}
 
-				$("#holy_decide").val() === '<?= json_encode(array_keys($HOLY_DECIDE)[0]) ?>' ? changeDateTimeInputable(
-					false) : changeDateTimeInputable(true);
-
-				// 023-10-03/1340-001 add end
-
-				// ------2023-10-17/1340-003 add start
-				$("#holy_decide").val() === '<?= json_encode(array_keys($HOLY_DECIDE)[0]) ?>' ? changeDateTimeInputable(false) : changeDateTimeInputable(true);
-				// ------2023-10-17/1340-003 add end
-
 				$("#IVjobstarthh").val("<?php echo $key['jobstarthh'] ?>");
 				$("#IVjobstartmm").val("<?php echo $key['jobstartmm'] ?>");
 				$("#IVjobendhh").val("<?php echo $key['jobendhh'] ?>");
@@ -1459,17 +1454,19 @@ if ($_SESSION['auth'] == false) {
 	}
 	// 2023-10-03/1340-001 add end
 
+
+
 	// Check Error
 	$(document).on('click', '#btnReg', function (e) {
-		// 2023-10-17 add start -------//
-		if (!($("#holy_decide").val() === '<?= json_encode(array_keys($HOLY_DECIDE)[0]) ?>')) {
-			if ($('[name="comment"]').val() === "" && $('[name="bigo"]').val() === "") {
-				alert("<?php echo $kintai_bigo_or_comment; ?>");
-				return false;
-			}
-			return true;
-		}
-		// 2023-10-17 add end -------//
+
+
+		var jobstarthh = $("#jobstarthh option:selected").val();
+		var jobstartmm = $("#jobstartmm option:selected").val();
+		var jobendhh = $("#jobendhh option:selected").val();
+		var jobendmm = $("#jobendmm option:selected").val();
+		var offtimehh = $("#offtimehh option:selected").val();
+		var offtimemm = $("#offtimemm option:selected").val();
+
 
 		<?php if ($decide_template_ == "2"): ?>
 			var daystarthh = $("#daystarthh option:selected").val();
@@ -1477,10 +1474,63 @@ if ($_SESSION['auth'] == false) {
 			var dayendhh = $("#dayendhh option:selected").val();
 			var dayendmm = $("#dayendmm option:selected").val();
 
-			if (daystarthh == "") {
-				alert("<?php echo $kintai_start_empty; ?>");
-				$("#daystarthh").focus();
-				return false;
+			// check when input one -> all need input 
+			if (daystarthh !== "" || daystartmm !== "" || dayendhh !== "" || dayendmm !== ""
+				|| jobstarthh !== "" || jobstartmm !== "" || jobendhh !== "" || jobendmm !== ""
+				|| offtimehh !== "" || offtimemm !== "") {
+				if (daystarthh == "") {
+					alert("<?php echo $kintai_start_empty; ?>");
+					$("#daystarthh").focus();
+					return false;
+				}
+				if (daystartmm == "") {
+					alert("<?php echo $kintai_start_empty; ?>");
+					$("#daystartmm").focus();
+					return false;
+				}
+				if (dayendhh == "") {
+					alert("<?php echo $kintai_end_empty; ?>");
+					$("#dayendhh").focus();
+					return false;
+				}
+
+				if (dayendmm == "") {
+					alert("<?php echo $kintai_end_empty; ?>");
+					$("#dayendmm").focus();
+					return false;
+				}
+				if (jobstarthh == "") {
+					alert("<?php echo $kintai_bstart_empty; ?>");
+					$("#jobstarthh").focus();
+					return false;
+				}
+
+				if (jobstartmm == "") {
+					alert("<?php echo $kintai_bstart_empty; ?>");
+					$("#jobstartmm").focus();
+					return false;
+				}
+
+				if (jobendhh == "") {
+					alert("<?php echo $kintai_bend_empty; ?>");
+					$("#jobendhh").focus();
+					return false;
+				}
+				if (jobendmm == "") {
+					alert("<?php echo $kintai_bend_empty; ?>");
+					$("#jobendmm").focus();
+					return false;
+				}
+				if (offtimehh == "") {
+					alert("<?php echo $$kintai_offtime_empty; ?>");
+					$("#offtimehh").focus();
+					return false;
+				}
+				if (offtimemm == "") {
+					alert("<?php echo $$kintai_offtime_empty; ?>");
+					$("#offtimemm").focus();
+					return false;
+				}
 			}
 
 			if (isNaN(daystarthh)) {
@@ -1489,23 +1539,10 @@ if ($_SESSION['auth'] == false) {
 				$("#daystarthh").focus();
 				return false;
 			}
-
-			if (daystartmm == "") {
-				alert("<?php echo $kintai_start_empty; ?>");
-				$("#daystartmm").focus();
-				return false;
-			}
-
 			if (isNaN(daystartmm)) {
 				alert("<?php echo $kintai_start_no; ?>");
 				e.preventDefault();
 				$("#daystartmm").focus();
-				return false;
-			}
-
-			if (dayendhh == "") {
-				alert("<?php echo $kintai_end_empty; ?>");
-				$("#dayendhh").focus();
 				return false;
 			}
 
@@ -1516,12 +1553,6 @@ if ($_SESSION['auth'] == false) {
 				return false;
 			}
 
-			if (dayendmm == "") {
-				alert("<?php echo $kintai_end_empty; ?>");
-				$("#dayendmm").focus();
-				return false;
-			}
-
 			if (isNaN(dayendmm)) {
 				alert("<?php echo $kintai_end_no; ?>");
 				e.preventDefault();
@@ -1529,18 +1560,40 @@ if ($_SESSION['auth'] == false) {
 				return false;
 			}
 		<?php endif; ?>
+		// check when input one -> all need input 
+		if (jobstarthh !== "" || jobstartmm !== "" || jobendhh !== "" || jobendmm !== ""
+			|| offtimehh !== "" || offtimemm !== "") {
+			if (jobstarthh == "") {
+				alert("<?php echo $kintai_bstart_empty; ?>");
+				$("#jobstarthh").focus();
+				return false;
+			}
+			if (jobstartmm == "") {
+				alert("<?php echo $kintai_bstart_empty; ?>");
+				$("#jobstartmm").focus();
+				return false;
+			}
 
-		var jobstarthh = $("#jobstarthh option:selected").val();
-		var jobstartmm = $("#jobstartmm option:selected").val();
-		var jobendhh = $("#jobendhh option:selected").val();
-		var jobendmm = $("#jobendmm option:selected").val();
-		var offtimehh = $("#offtimehh option:selected").val();
-		var offtimemm = $("#offtimemm option:selected").val();
-
-		if (jobstarthh == "") {
-			alert("<?php echo $kintai_bstart_empty; ?>");
-			$("#jobstarthh").focus();
-			return false;
+			if (jobendhh == "") {
+				alert("<?php echo $kintai_bend_empty; ?>");
+				$("#jobendhh").focus();
+				return false;
+			}
+			if (jobendmm == "") {
+				alert("<?php echo $kintai_bend_empty; ?>");
+				$("#jobendmm").focus();
+				return false;
+			}
+			if (offtimehh == "") {
+				alert("<?php echo $$kintai_offtime_empty; ?>");
+				$("#offtimehh").focus();
+				return false;
+			}
+			if (offtimemm == "") {
+				alert("<?php echo $$kintai_offtime_empty; ?>");
+				$("#offtimemm").focus();
+				return false;
+			}
 		}
 
 		if (isNaN(jobstarthh)) {
@@ -1549,23 +1602,10 @@ if ($_SESSION['auth'] == false) {
 			$("#jobstarthh").focus();
 			return false;
 		}
-
-		if (jobstartmm == "") {
-			alert("<?php echo $kintai_bstart_empty; ?>");
-			$("#jobstartmm").focus();
-			return false;
-		}
-
 		if (isNaN(jobstartmm)) {
 			alert("<?php echo $kintai_bstart_no; ?>");
 			e.preventDefault();
 			$("#jobstartmm").focus();
-			return false;
-		}
-
-		if (jobendhh == "") {
-			alert("<?php echo $kintai_bend_empty; ?>");
-			$("#jobendhh").focus();
 			return false;
 		}
 
@@ -1576,12 +1616,6 @@ if ($_SESSION['auth'] == false) {
 			return false;
 		}
 
-		if (jobendmm == "") {
-			alert("<?php echo $kintai_bend_empty; ?>");
-			$("#jobendmm").focus();
-			return false;
-		}
-
 		if (isNaN(jobendmm)) {
 			alert("<?php echo $kintai_bend_no; ?>");
 			e.preventDefault();
@@ -1589,22 +1623,10 @@ if ($_SESSION['auth'] == false) {
 			return false;
 		}
 
-		if (offtimehh == "") {
-			alert("<?php echo $kintai_offtime_empty; ?>");
-			$("#offtimehh").focus();
-			return false;
-		}
-
 		if (isNaN(offtimehh)) {
 			alert("<?php echo $kintai_offtime_no; ?>");
 			e.preventDefault();
 			$("#offtimehh").focus();
-			return false;
-		}
-
-		if (offtimemm == "") {
-			alert("<?php echo $kintai_offtime_empty; ?>");
-			$("#offtimemm").focus();
 			return false;
 		}
 
@@ -1623,7 +1645,6 @@ if ($_SESSION['auth'] == false) {
 
 	}
 
-
 	// 自動入力
 	function autoInputHandle() {
 		$('#modal').modal('toggle');
@@ -1638,14 +1659,10 @@ if ($_SESSION['auth'] == false) {
 
 	// Select input tag
 	$(document).ready(function () {
-
-
-
 		// Function to handle input fields
 		function handleInput(inputId, selectId) {
 			var inputValue = $(inputId);
 			var selectOption = $(selectId);
-
 			// 2023-10-02/1340-001 add start(Modal text box fix)
 			// 入力した値を正しく選択ボックスへ反映
 			inputValue.on('input', function () {
@@ -1669,6 +1686,11 @@ if ($_SESSION['auth'] == false) {
 				} else {
 					selectOption.val('');
 				}
+			});
+			// inputへ反映
+			selectOption.on('change', function () {
+				var selectedValue = $(this).val();
+				inputValue.val(selectedValue);
 			});
 		}
 
@@ -1711,8 +1733,8 @@ if ($_SESSION['auth'] == false) {
 
 		$('#genba_selection_rmodal').change(function () {
 			var selectedOption = $(this).val();
-			var genid = selectedOption.split(',')[0]; 
-			$('#selectedGenid').val(genid); 
+			var genid = selectedOption.split(',')[0];
+			$('#selectedGenid').val(genid);
 		});
 
 	});
@@ -1759,53 +1781,22 @@ if ($_SESSION['auth'] == false) {
 
 
 
-	// ------2023-10-17/1340-003 add start
+	// ------2023-10-23/1340-003 chg start
 	// date status change , not nomal is off day and input time is readonly
 	function handleSelectDayStatusChange(elem) {
 		var selectedOption = elem.options[elem.selectedIndex];
 		var selectedValue = selectedOption.value;
 		var selectedText = selectedOption.textContent;
-		if (selectedValue === '<?= json_encode(array_keys($HOLY_DECIDE)[0]) ?>') {
-			changeDateTimeInputable(false);
-		} else {
-			// when off day -> no input time -> 備考と内容のみ
-			changeDateTimeInputable(true);
+
+		var oldValue = $("#bigo").text($('[name="bigo"]')).val();
+		$("#bigo").text($('[name="bigo"]').val(''));
+		if (selectedValue !== '<?= json_encode(array_keys($HOLY_DECIDE)[0]) ?>') {
+			var holyDecideValue = <?= json_encode($HOLY_DECIDE) ?>;
+			var selectedDecideValue = holyDecideValue[selectedValue];
+			$("#bigo").text($('[name="bigo"]').val('【' + selectedDecideValue + '】'));
 		}
 	}
 
-	function changeDateTimeInputable(isReadonly) {
-		var elementIds = [
-			'jobstarthh', 'jobstartmm', 'jobendhh', 'jobendmm',
-			'offtimehh', 'offtimemm', 'daystarthh', 'daystartmm',
-			'dayendhh', 'dayendmm', 'IVjobstarthh', 'IVjobstartmm',
-			'IVjobendhh', 'IVjobendmm', 'IVofftimehh', 'IVofftimemm',
-			'IVdaystarthh', 'IVdaystartmm', 'IVdayendhh', 'IVdayendmm'
-		];
-		elementIds.forEach(function (elementId) {
-			var element = $('#' + elementId);
-			element.removeAttr('readonly');
-			if (isReadonly) {
-				elementIds.forEach(function (elementId) {
-					var element = $('#' + elementId);
-					element.attr('readonly', 'readonly');
-					if (elementId.includes('IV')) {
-						element.attr('readonly', 'readonly').val('');
-					} else {
-						element.prop('selectedIndex', 0);
-					}
-				});
-				$('#workhh').val('');
-				$('#workmm').val('');
-			} else {
-
-				elementIds.forEach(function (elementId) {
-					var element = $('#' + elementId);
-					element.removeAttr('readonly');
-				});
-			}
-		});
-	}
-
-	// ------2023-10-17/1340-003 add end---//
+	// ------2023-10-23/1340-003 chg end---//
 </script>
 <?php include('../inc/footer.php'); ?>
