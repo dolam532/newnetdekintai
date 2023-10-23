@@ -6,7 +6,9 @@ $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
-WHERE `tbl_codebase`.`typecode` = 02 GROUP BY `code`, `name`';
+WHERE `tbl_codebase`.`typecode` = "' . constant('VACATION_TYPE') . '"
+AND `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+GROUP BY `code`, `name`';
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
@@ -191,6 +193,8 @@ FROM
 CROSS JOIN `tbl_user` ON `tbl_vacationinfo`.`uid` = `tbl_user`.`uid`
 CROSS JOIN `tbl_manageinfo` ON `tbl_user`.`companyid` = `tbl_manageinfo`.`companyid`
 WHERE
+`tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '
+AND
 `tbl_user`.`type` = "' . $_SESSION['auth_type'] . '"
 AND
 `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"';

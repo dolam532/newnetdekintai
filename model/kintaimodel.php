@@ -211,7 +211,6 @@ if (isset($_POST['changeGenid'])) {
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
-    
 }
 
 
@@ -319,13 +318,13 @@ if (isset($_POST['DeleteKintai'])) {
     $_SESSION['template_table'] = $_POST["template_table_"];
 
     $uid = mysqli_real_escape_string($conn, $_POST['uid']);
-    
+
     $workymd = mysqli_real_escape_string($conn, $_POST['date_show']);
-   
+
     $sql = "DELETE FROM `tbl_worktime` 
             WHERE uid ='$uid' AND companyid ='$companyid' AND workymd ='$workymd'";
 
-    error_log("uid: ". $uid ."genId: " .$genid . "workYMD: ".$workymd );
+    error_log("uid: " . $uid . "genId: " . $genid . "workYMD: " . $workymd);
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
