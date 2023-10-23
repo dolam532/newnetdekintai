@@ -109,7 +109,16 @@ include('./model/inactive.php');
 								<div class="media-body">
 									<h4 class="media-heading">
 										<a href="javascript:;" onclick="fn_showNotice(`<?= $notice['bid']; ?>`, `<?= $notice['imagenum']; ?>`, `<?= $notice['title']; ?>`, `<?= $notice['reader']; ?>`, `<?= $notice['name']; ?>`, `<?= $notice['viewcnt']; ?>`, `<?= $notice['reg_dt']; ?>`, `<?= $notice['content']; ?>`);">
-											<?= $notice['title']; ?>&nbsp;<span class="badge">New</span>
+											<?= $notice['title']; ?>&nbsp;
+											<?php
+											$timestamp = strtotime($notice['reg_dt']);
+											$currentTimestamp = time();
+											$timeDifference = $currentTimestamp - $timestamp;
+											$oneMonthInSeconds = 30 * 24 * 60 * 60;
+											if ($timeDifference <= $oneMonthInSeconds) {
+												echo '<span class="badge">New</span>';
+											}
+											?>
 										</a>
 									</h4>
 									<?= $notice['content']; ?>
@@ -130,7 +139,16 @@ include('./model/inactive.php');
 									<div class="media-body">
 										<h4 class="media-heading">
 											<a href="javascript:;" onclick="fn_showNotice(`<?= $notice['bid']; ?>`, `<?= $notice['imagenum']; ?>`, `<?= $notice['title']; ?>`, `<?= $notice['reader']; ?>`, `<?= $notice['name']; ?>`, `<?= $notice['viewcnt']; ?>`, `<?= $notice['reg_dt']; ?>`, `<?= $notice['content']; ?>`);">
-												<?= $notice['title']; ?>&nbsp;<span class="badge">New</span>
+												<?= $notice['title']; ?>&nbsp;
+												<?php
+												$timestamp = strtotime($notice['reg_dt']);
+												$currentTimestamp = time();
+												$timeDifference = $currentTimestamp - $timestamp;
+												$oneMonthInSeconds = 30 * 24 * 60 * 60;
+												if ($timeDifference <= $oneMonthInSeconds) {
+													echo '<span class="badge">New</span>';
+												}
+												?>
 											</a>
 										</h4>
 										<?= $notice['content']; ?>
