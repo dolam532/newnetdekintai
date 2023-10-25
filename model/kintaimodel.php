@@ -480,10 +480,8 @@ if (isset($_POST['AutoUpdateKintai'])) {
             ON DUPLICATE KEY UPDATE
             companyid = '$companyid',  genid = :genid, jobstarthh = :jobstarthh, jobstartmm = :jobstartmm, jobendhh = :jobendhh, jobendmm = :jobendmm,
             offtimehh = :offtimehh, offtimemm = :offtimemm, workhh = :workhh, workmm = :workmm, comment = :comment, holy_decide = 0  , bigo = :bigo, upt_dt = :upt_dt";
-
         // Prepare the statement
         $stmt = $pdo->prepare($sql);
-
         // Bind the parameters
         $stmt->bindParam(':uid', $uid);
         $stmt->bindParam(':genid', $genid);
@@ -500,7 +498,6 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $stmt->bindParam(':bigo', $bigo);
         $stmt->bindParam(':reg_dt', $reg_dt);
         $stmt->bindParam(':upt_dt', $upt_dt);
-
         // Execute the statement
         if ($stmt->execute()) {
             $ArraySave = true;
@@ -525,12 +522,12 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $bigo = mysqli_real_escape_string($conn, $bigo_rmodal);
 
         $sql = "INSERT INTO `tbl_worktime` (`uid`, `companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`, `jobendmm`, 
-                `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`, `bigo`, `reg_dt`, `upt_dt`)
+                `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`,  `holy_decide`, `bigo`, `reg_dt`, `upt_dt`)
                 VALUES ('$uid', '$companyid' ,'$genid', '$workymd', '$jobstarthh', '$jobstartmm', '$jobendhh', '$jobendmm',
-                '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$comment', '$bigo', '$reg_dt', '$upt_dt')
+                '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$comment', 0 ,'$bigo', '$reg_dt', '$upt_dt')
                 ON DUPLICATE KEY UPDATE
                 companyid = '$companyid' ,genid='$genid', jobstarthh='$jobstarthh', jobstartmm='$jobstartmm', jobendhh='$jobendhh', jobendmm='$jobendmm',
-                offtimehh='$offtimehh', offtimemm='$offtimemm', workhh='$workhh', workmm='$workmm', comment='$comment', bigo='$bigo', upt_dt='$upt_dt'";
+                offtimehh='$offtimehh', offtimemm='$offtimemm', workhh='$workhh', workmm='$workmm', comment='$comment',  holy_decide = 0 , bigo='$bigo', upt_dt='$upt_dt'";
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['autosave_success'] = $autosave_success;

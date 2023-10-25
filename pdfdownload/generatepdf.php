@@ -45,10 +45,24 @@ $date_show = json_decode($_POST['date_show'], true);
 $template = json_decode($_POST['template'], true);
 $data = json_decode($_POST['data'], true);
 $workmonth_list = json_decode($_POST['workmonth_list'], true);
-$totalworkhh = json_decode($_POST['totalworkhh_bottom'], true);
-$totalworkmm = json_decode($_POST['totalworkmm_bottom'], true);
-$totaldayhh = json_decode($_POST['totaldayhh_bottom'], true);
-$totaldaymm = json_decode($_POST['totaldaymm_bottom'], true);
+// top
+$totalworkhh_top = str_pad((string) json_decode($_POST['totalworkhh_top'], true), 2, '0', STR_PAD_LEFT);
+$totalworkmm_top = str_pad((string) json_decode($_POST['totalworkmm_top'], true), 2, '0', STR_PAD_LEFT);
+$totaldayhh_top = str_pad((string) json_decode($_POST['totaldayhh_top'], true), 2, '0', STR_PAD_LEFT);
+$totaldaymm_top = str_pad((string) json_decode($_POST['totaldaymm_top'], true), 2, '0', STR_PAD_LEFT);
+$cnprejob_top = json_decode($_POST['cnprejob_top'], true);
+$cnactjob_top = json_decode($_POST['cnactjob_top'], true);
+$holydayswork_top = json_decode($_POST['holydayswork_top'], true);
+$offdayswork_top = json_decode($_POST['offdayswork_top'], true);
+$delaydayswork_top = json_decode($_POST['delaydayswork_top'], true);
+$earlydayswork_top = json_decode($_POST['earlydayswork_top'], true);
+
+
+// bottom
+$totalworkhh = str_pad((string) json_decode($_POST['totalworkhh_bottom'], true), 2, '0', STR_PAD_LEFT);
+$totalworkmm = str_pad((string) json_decode($_POST['totalworkmm_bottom'], true), 2, '0', STR_PAD_LEFT);
+$totaldayhh = str_pad((string) json_decode($_POST['totaldayhh'], true), 2, '0', STR_PAD_LEFT);
+$totaldaymm = str_pad((string) json_decode($_POST['totaldaymm'], true), 2, '0', STR_PAD_LEFT);
 $cnprejob = json_decode($_POST['cnprejob_bottom'], true);
 $cnactjob = json_decode($_POST['cnactjob_bottom'], true);
 $holydayswork = json_decode($_POST['holydayswork_bottom'], true);
@@ -268,17 +282,17 @@ $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data
 if (!empty($workmonth_list)) {
 	if ($template == "1") {
-		$tcpdf->Cell(45, 6.8, $totalworkhh . ':' . $totalworkmm, 1, 0, 'C', true);
+		// top
+		$tcpdf->Cell(45, 6.8, $totalworkhh_top . ':' . $totalworkmm_top, 1, 0, 'C', true);
 		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
+		$tcpdf->Cell(30, 6.8, $cnprejob_top, 1, 0, 'C', true);
+		$tcpdf->Cell(30, 6.8, $cnactjob_top, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $holydayswork_top, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $offdayswork_top, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $delaydayswork_top, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $earlydayswork_top, 1, 1, 'C', true);
 
-		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
-		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $offdayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
-
-
+		// bottom
 		$tcpdf->Cell(45, 6.8, $totalworkhh . ':' . $totalworkmm, 1, 0, 'C', true);
 		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
@@ -288,15 +302,18 @@ if (!empty($workmonth_list)) {
 		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
 	} elseif ($template == "2") {
-		$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
-		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
-		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $offdayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
-
-		$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+		// top 
+		$tcpdf->Cell(45, 6.8, $totaldayhh_top . ':' . $totaldaymm_top, 1, 0, 'C', true);
+		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
+		$tcpdf->Cell(30, 6.8, $cnprejob_top, 1, 0, 'C', true);
+		$tcpdf->Cell(30, 6.8, $cnactjob_top, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $holydayswork_top, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $offdayswork_top, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $delaydayswork_top, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $earlydayswork_top, 1, 1, 'C', true);
+		// bottom
+		$tcpdf->Cell(45, 6.8, $totalworkhh . ':' . $totalworkmm, 1, 0, 'C', true);
+		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
@@ -305,7 +322,8 @@ if (!empty($workmonth_list)) {
 		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
 	}
 } else {
-	$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+	$tcpdf->Cell(45, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
@@ -313,7 +331,8 @@ if (!empty($workmonth_list)) {
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 1, 'C', true);
 
-	$tcpdf->Cell(70, 6.8, '', 0, 0, 'C', false);
+	$tcpdf->Cell(45, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
@@ -321,7 +340,5 @@ if (!empty($workmonth_list)) {
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 1, 'C', true);
 }
-
-
 
 $tcpdf->Output("download.pdf", "I");
