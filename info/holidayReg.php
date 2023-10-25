@@ -73,7 +73,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     }
     ?>
     <div class="row">
-        <div class="col-md-5 text-left">
+        <div class="col-md-4 text-left">
             <div class="title_name">
                 <span class="text-left">祝日登録</span>
             </div>
@@ -99,12 +99,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                 </div>
             </div>
         </form>
-        <div class="col-md-3 text-right">
+        <div class="col-md-4 text-right">
             <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                 <div class="title_btn">
                     <input type="button" id="btnNew" value="新規 ">
                 </div>
             <?php endif; ?>
+            <div class="title_btn">
+                <input type="button" onclick="history.back()" value="戻る ">
+            </div>
         </div>
     </div>
     <div class="form-group">

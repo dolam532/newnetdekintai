@@ -78,13 +78,16 @@ if ($_SESSION['auth'] == false) {
                 <span class="text-left">勤務日登録</span>
             </div>
         </div>
-        <div class="col-md-6"></div>
-        <div class="col-md-2 text-right">
+        <div class="col-md-4"></div>
+        <div class="col-md-4 text-right">
             <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                 <div class="title_btn">
                     <input type="button" id="btnNew" value="新規 ">
                 </div>
             <?php endif; ?>
+            <div class="title_btn">
+                <input type="button" onclick="history.back()" value="戻る ">
+            </div>
         </div>
     </div>
 

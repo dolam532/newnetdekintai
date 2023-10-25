@@ -73,7 +73,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	}
 	?>
 	<div class="row">
-		<div class="col-md-3 text-left">
+		<div class="col-md-2 text-left">
 			<div class="title_name">
 				<span class="text-left">社員登録</span>
 			</div>
@@ -89,13 +89,20 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<label>社員名 : <input type="text" id="searchName" name="searchName" value="<?= $_POST['searchName'] ?>" style="width: 100px;"></label>
 				</div>
 			</div>
-			<div class="col-md-3 text-right">
+			<div class="col-md-4 text-right">
 				<div class="title_btn">
-					<input type="submit" id="ClearButton" name="ClearButton" value="クリア">&nbsp;&nbsp;&nbsp;
-					<input type="submit" name="SearchButton" value="検索">&nbsp;&nbsp;&nbsp;
+					<input type="submit" id="ClearButton" name="ClearButton" value="クリア">
+				</div>
+				<div class="title_btn">
+					<input type="submit" name="SearchButton" value="検索">
+				</div>
+				<div class="title_btn">
 					<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
 						<input type="button" id="btnNew" value="新規">
 					<?php endif; ?>
+				</div>
+				<div class="title_btn">
+					<input type="button" onclick="history.back()" value="戻る ">
 				</div>
 			</div>
 		</form>
