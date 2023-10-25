@@ -76,16 +76,19 @@ if ($_SESSION['auth'] == false) {
     }
     ?>
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-8">
             <div class="title_name">
                 <span class="text-left">基礎コード登録</span>
             </div>
         </div>
-        <div class="col-md-2 text-right">
+        <div class="col-md-4 text-right">
             <div class="title_btn">
                 <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                     <input type="button" id="btnNewCL" value="新規 ">
                 <?php endif; ?>
+            </div>
+            <div class="title_btn">
+                <input type="button" onclick="history.back()" value="戻る ">
             </div>
         </div>
     </div>
@@ -320,6 +323,8 @@ if ($_SESSION['auth'] == false) {
 
     // New button: popup & clear 
     $(document).on('click', '#btnNewCL', function(e) {
+        alert("<?php echo $content_cmlC_empty; ?>");
+        return false;
         $('#modal').modal('toggle');
     });
 

@@ -141,7 +141,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<td><span name="pwd"><?= $user['pwd'] ?></span></td>
 							<td><span name="name"><?= $user['name'] ?></span></td>
 							<td><span name="email"><?= $user['email'] ?></span></td>
-							<td><span name="dept"><?= $user['dept'] ?></span></td>
+							<td>
+								<span name="dept">
+									<?php foreach ($codebase_list as $key) : ?>
+										<?php 
+											if($key['code']==$user['dept']){
+												echo $key['name'];
+											}
+										?>
+									<?php endforeach; ?>
+								</span>
+							</td>
 							<td><span name="grade"><?= $user['grade'] ?></span></td>
 							<td><span name="genbaname"><?= $user['genbaname'] ?></span></td>
 							<td>
@@ -313,7 +323,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<div class="col-xs-6">
 								<label for="dept">部署</label>
-								<input type="text" class="form-control" id="uldept" name="uldept" placeholder="開発部" maxlength="50" style="text-align: left">
+								<select class="form-control" id="uldept" name="uldept">
+									<option value="" disabled selected>選択してください。</option>
+									<?php foreach ($codebase_list as $key) : ?>
+										<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
+									<?php endforeach; ?>
+								</select>
 							</div>
 						</div>
 						<br>
@@ -568,7 +583,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#ulname").text($('[name="ulname"]').val("<?php echo $key['name'] ?>"));
 					$("#ulgrade").text($('[name="ulgrade"]').val("<?php echo $key['grade'] ?>"));
 					$("#ulemail").text($('[name="ulemail"]').val("<?php echo $key['email'] ?>"));
-					$("#uldept").text($('[name="uldept"]').val("<?php echo $key['dept'] ?>"));
+					$("#uldept").val("<?php echo $key['dept'] ?>");
 					$("#ulbigo").text($('[name="ulbigo"]').val("<?php echo $key['bigo'] ?>"));
 					$("#ulinymd").text($('[name="ulinymd"]').val("<?php echo $key['inymd'] ?>"));
 					$("#uloutymd").text($('[name="uloutymd"]').val("<?php echo $key['outymd'] ?>"));
@@ -674,7 +689,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var dept = $("#uldept").val();
 		var grade = $("#ulgrade").val();
 		var genba_list = $("#ulgenba_list").val();
-		var fileInput = $("#udfileInput").val();
 
 		if (pwd == "") {
 			alert("<?php echo $user_pwd_empty; ?>");
@@ -708,12 +722,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (genba_list == "") {
 			alert("<?php echo $user_genba_list_empty; ?>");
 			$("#ulgenba_list").focus();
-			e.preventDefault();
-			return;
-		}
-		if (fileInput == "") {
-			alert("<?php echo $user_signstamp_empty; ?>");
-			$("#udfileInput").focus();
 			e.preventDefault();
 			return;
 		}
