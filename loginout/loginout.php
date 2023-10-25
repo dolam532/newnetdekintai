@@ -93,7 +93,7 @@ include('../model/loginoutmodel.php');
     $(document).on('click', '#btnLogin', function(e) {
         var uid = $("#uid").val();
         var pwd = $("#pwd").val();
-        var letters = /^[A-Za-z]+$/;
+        var letters = /^[A-Za-z@.]+$/;
 
         if (uid == "") {
             alert("<?php echo $login_empty_id; ?>");
