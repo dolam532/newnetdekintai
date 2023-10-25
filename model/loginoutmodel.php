@@ -11,7 +11,7 @@ if (isset($_POST['btnLogin'])) {
     $password = mysqli_real_escape_string($conn, $_POST['pwd']);
 
     $login_query = 'SELECT * FROM `tbl_user` 
-        WHERE `uid` ="' . $userid . '" AND `pwd` = "' . $password . '" LIMIT 1';
+        WHERE `email` ="' . $userid . '" AND `pwd` = "' . $password . '" LIMIT 1';
     $login_query_run = mysqli_query($conn, $login_query);
     if (mysqli_num_rows($login_query_run) > 0) {
         foreach ($login_query_run as $data) {
