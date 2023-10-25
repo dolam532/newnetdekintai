@@ -34,6 +34,7 @@ $user_name_empty = '社員名を入力してください。';
 $user_email_empty = 'mailを入力してください。';
 $user_dept_empty = '部署を入力してください。';
 $user_grade_empty = '区分を入力してください。';
+$user_signstamp_empty = '印鑑を入力してください。';
 $user_genba_list_empty = '勤務時間タイプを選択してください。';
 $file_size_isvalid_STAMP = 'ファイルサイズが無効です。ファイルサイズが' . round($STAMP_MAXSIZE / 1000000, 0) . 'MB未満のファイルを選択してください。';
 $file_extension_invalid_STAMP = 'ファイルの拡張子無効です。ファイルの拡張子が [ ' . implode(', ', $ALLOWED_TYPES_STAMP) . ' ] です';

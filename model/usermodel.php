@@ -124,15 +124,16 @@ if (isset($_POST['SaveUserList'])) {
         error_log("File name is exists -> Delete old file name");
         unlink($uploadFile);
     }
+
     // check size 
     if (!isFileSizeValid($_FILES["signstamp"], $STAMP_MAXSIZE)) {
         error_log("File is BIG!");
         $uploadOk = false;
     }
+
     // check valid extention 
     $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
     if (!checkValidExtension($fileExtension)) {
-
         error_log("Image only(png)." . $fileExtension);
         error_log("FileName" . $originalFileName);
         $uploadOk = false;
@@ -169,9 +170,9 @@ if (isset($_POST['SaveUserList'])) {
 
 // Update data to tbl_user table of database
 if (isset($_POST['UpdateUserList'])) {
-    $_POST['ulcompanyid'] = intval($_POST['ulcompanyid']);
+    $ulcompanyid = intval($_POST['ulcompanyid']);
     $uid = mysqli_real_escape_string($conn, $_POST['uluid']);
-    $companyid = mysqli_real_escape_string($conn, $_POST['ulcompanyid']);
+    $companyid = mysqli_real_escape_string($conn, $ulcompanyid);
     $pwd = mysqli_real_escape_string($conn, $_POST['ulpwd']);
     $name = mysqli_real_escape_string($conn, $_POST['ulname']);
     $grade = mysqli_real_escape_string($conn, $_POST['ulgrade']);
@@ -184,6 +185,7 @@ if (isset($_POST['UpdateUserList'])) {
     $genba_list = mysqli_real_escape_string($conn, $_POST['ulgenba_list']);
     $genstrymd = mysqli_real_escape_string($conn, $_POST['ulgenstrymd']);
     $genendymd = mysqli_real_escape_string($conn, $_POST['ulgenendymd']);
+    $udsignstamp_old = mysqli_real_escape_string($conn, $_POST['udsignstamp_old']);
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
 
@@ -199,16 +201,22 @@ if (isset($_POST['UpdateUserList'])) {
         error_log("File name is exists -> Delete old file name");
         unlink($uploadFile);
     }
+
     // check size 
     if (!isFileSizeValid($_FILES["udsignstamp_new"], $STAMP_MAXSIZE)) {
         error_log("File is BIG!");
         $uploadOk = false;
     }
-    // check valid extention 
-    $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
-    if (!checkValidExtension($fileExtension)) {
-        error_log("Image only(png).");
-        $uploadOk = false;
+
+    // check valid extention
+    if (!empty($originalFileName)) {
+        $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
+        if (!checkValidExtension($fileExtension)) {
+            error_log("Image only(png).");
+            $uploadOk = false;
+        }
+    } else {
+        $fileName = $udsignstamp_old;
     }
 
     // if not error save
@@ -226,7 +234,7 @@ if (isset($_POST['UpdateUserList'])) {
         , outymd='$outymd', genstrymd='$genstrymd', genendymd='$genendymd', upt_dt='$upt_dt' WHERE uid ='$uid'";
 
         if ($conn->query($sql) === TRUE) {
-            $_SESSION['save_success'] = $save_success;
+            $_SESSION['update_success'] = $update_success;
             header("Refresh:3");
         } else {
             echo 'query error: ' . mysqli_error($conn);
@@ -344,8 +352,6 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
     $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $companyid = $_SESSION['auth_companyid'];
-    // $sql_genba = 'SELECT * FROM `tbl_genba`
-    //    WHERE `tbl_genba`.`genid` IN ("' . $_SESSION['auth_genid'] . '") AND `companyid` ='. $companyid .';';
     $result_genba = mysqli_query($conn, $sql_genba);
     $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 }
@@ -441,7 +447,6 @@ if (isset($_POST['DeleteKinmu'])) {
         return;
     }
     //2023-10-20 ---- add end ----// 
-
 
     $genbaname = mysqli_real_escape_string($conn, $_POST['udgenbaname']);
     $sql = "DELETE FROM `tbl_genba` 

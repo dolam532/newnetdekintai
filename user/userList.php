@@ -5,7 +5,7 @@ include('../inc/dbconnect.php');
 include('../inc/message.php');
 include('../model/usermodel.php');
 include('../inc/header.php');
-include('../model/inactive.php');
+// include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
@@ -243,8 +243,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<br>
 						<div class="row">
 							<div class="col-xs-12">
-								<label for="udsignstamp_addNew">印鑑</label>
-								<img width="50" id="udsignstamp_addNew" alt="印鑑無し">
+								<label for="signstamp_addNew">印鑑</label>
+								<img width="50" id="signstamp_addNew">
 								<input type="file" name="signstamp" id="fileInput" onchange=checkFileSize(this)>
 							</div>
 						</div>
@@ -352,7 +352,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-xs-12">
 								<label for="signstamp">印鑑</label><br>
-								<img width="50" id="udsignstamp" alt="印鑑無し">
+								<img width="50" id="udsignstamp">
 								<span id="udsignstamp_name"></span>
 								<input type="hidden" name="udsignstamp_old" id="udsignstamp_old">
 								<input type="file" name="udsignstamp_new" id="udfileInput" onchange=checkFileSize(this)>
@@ -451,8 +451,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	function displaySelectedImageAddNew(input) {
 		if (input.files.length > 0) {
 			const selectedFile = input.files[0];
-			const imageElement = document.getElementById('udsignstamp_addNew');
-			const labelElement = document.querySelector('label[for="udsignstamp_addNew"]');
+			const imageElement = document.getElementById('signstamp_addNew');
+			const labelElement = document.querySelector('label[for="signstamp_addNew"]');
 
 			if (selectedFile.type.match('image.*')) {
 				const reader = new FileReader();
@@ -532,7 +532,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	// 社員登録 POP UP
 	$(document).on('click', '#btnNew', function(e) {
 		$('#modal').modal('toggle');
-		$('#udsignstamp_addNew').attr('src', '').attr('alt', '印鑑無し');
 		$('label[for="signstamp"]').show();
 		$('#fileInput').val('');
 	});
@@ -541,7 +540,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	$(document).on('click', '.showModal', function() {
 		$('#modal2').modal('toggle');
 		var Uid = $(this).text();
-		$('#udsignstamp').attr('src', '').attr('alt', '印鑑無し');
 		$('label[for="signstamp"]').show();
 		$('#udfileInput').val('');
 		$('#udsignstamp_name').text('');
@@ -600,6 +598,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var dept = $("#dept").val();
 		var grade = $("#grade").val();
 		var genba_list = $("#genba_list").val();
+		var fileInput = $("#fileInput").val();
 
 		<?php foreach ($userlist_list as $user) : ?>
 			var user_uid = '<?php echo $user["uid"] ?>';
@@ -652,6 +651,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			e.preventDefault();
 			return;
 		}
+		if (fileInput == "") {
+			alert("<?php echo $user_signstamp_empty; ?>");
+			$("#fileInput").focus();
+			e.preventDefault();
+			return;
+		}
 	});
 
 	// Check Error 社員編集
@@ -662,6 +667,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var dept = $("#uldept").val();
 		var grade = $("#ulgrade").val();
 		var genba_list = $("#ulgenba_list").val();
+		var fileInput = $("#udfileInput").val();
 
 		if (pwd == "") {
 			alert("<?php echo $user_pwd_empty; ?>");
@@ -695,6 +701,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (genba_list == "") {
 			alert("<?php echo $user_genba_list_empty; ?>");
 			$("#ulgenba_list").focus();
+			e.preventDefault();
+			return;
+		}
+		if (fileInput == "") {
+			alert("<?php echo $user_signstamp_empty; ?>");
+			$("#udfileInput").focus();
 			e.preventDefault();
 			return;
 		}
