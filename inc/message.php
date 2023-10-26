@@ -13,12 +13,12 @@ $delete_all_success = 'すべて削除成功しました。';
 $login_is_not = '詳細情報はログイン後可能です。';
 
 // loginout
-$login_empty_id = 'ログイン失敗！  idを入力してください。';
-$login_empty_pwd = 'ログイン失敗！  PWDを入力してください。';
+$login_empty_id = 'ログイン失敗！  IDを入力してください。';
+$login_empty_pwd = 'ログイン失敗！  パスワードを入力してください。';
 $login_alphabet = 'IDをアルファベットで入力してください。';
 $login_success = 'ログインに成功しました。';
 $logout_success = 'ログアウトに成功しました。';
-$login_fail = 'ログイン失敗！  idとPWDを確認してください。';
+$login_fail = 'IDまたはパスワードが正しくありません。もう一度お試しください。';
 
 // userList
 $user_id_same = '他の社員が使用しているidです。';
