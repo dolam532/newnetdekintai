@@ -2,7 +2,7 @@
 // (workdayList.php)
 // Select database from tbl_workday table
 $reg_dt = date('Y-m-d H:i:s');
-$ganasys_company_id = $_SESSION['auth_companyid'];
+$companyId_ = $_SESSION['auth_companyid'];
 $sql_workday = "SELECT workyear,
     MAX(CASE WHEN workmonth = '01' THEN workmonth END) AS one_month,
     MAX(CASE WHEN workmonth = '01' THEN workdays END) AS one_monthwd,
@@ -29,7 +29,7 @@ $sql_workday = "SELECT workyear,
     MAX(CASE WHEN workmonth = '12' THEN workmonth END) AS twelve_month,
     MAX(CASE WHEN workmonth = '12' THEN workdays END) AS twelve_monthwd
     FROM `tbl_workday`
-    WHERE `companyid` = $ganasys_company_id
+    WHERE `companyid` = $companyId_
     GROUP BY workyear
     ORDER BY workyear DESC, one_month ASC";
 $result_workday = mysqli_query($conn, $sql_workday);
@@ -203,7 +203,7 @@ $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
 
 // Select database from tbl_holiday table
 $sql_holiday = 'SELECT * FROM `tbl_holiday` 
-    WHERE `tbl_holiday`.`companyid` IN("' . $ganasys_company_id . '")
+    WHERE `tbl_holiday`.`companyid` IN("' . $companyId_ . '")
     AND `tbl_holiday`.`holiyear` IN("' . $year . '")';
 $result_holiday = mysqli_query($conn, $sql_holiday);
 $holiday_list = mysqli_fetch_all($result_holiday, MYSQLI_ASSOC);
@@ -282,7 +282,7 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
     FROM
     `tbl_user`
     LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
-    WHERE `tbl_user`.`companyid` IN ("' . $ganasys_company_id . '")';
+    WHERE `tbl_user`.`companyid` IN ("' . $companyId_ . '")';
     $result_uservacation_select = mysqli_query($conn, $sql_uservacation_select);
     $uservacation_list_select = mysqli_fetch_all($result_uservacation_select, MYSQLI_ASSOC);
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
@@ -295,11 +295,11 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
     `tbl_vacationinfo`.`newcnt`,
     `tbl_vacationinfo`.`usecnt`,
     `tbl_vacationinfo`.`usetime`,
-    `tbl_vacationinfo`.`restcnt`
+    `tbl_vacationinfo`.`restcnt` 
     FROM
     `tbl_user`
     LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
-    WHERE `tbl_user`.`companyid` IN ("' . $ganasys_company_id . '")
+    WHERE `tbl_user`.`companyid` IN ("' . $companyId_ . '")
     AND `tbl_user`.`uid` IN ("' . $_SESSION['auth_uid'] . '")';
     $result_uservacation_select = mysqli_query($conn, $sql_uservacation_select);
     $uservacation_list_select = mysqli_fetch_all($result_uservacation_select, MYSQLI_ASSOC);
@@ -317,16 +317,8 @@ if ($_POST['uservacationListSearch'] == NULL) {
     $Name = array_unique($Name);
     $Inymd = array_unique($Inymd);
 
-    if ($_POST['searchName'] == "") {
-        $searchName = implode('","', $Name);
-    } else {
-        $searchName = trim($_POST['searchName']);
-    }
-    if ($_POST['searchYmd'] == "") {
-        $searchYmd = implode('","', $Inymd);
-    } else {
-        $searchYmd = trim($_POST['searchYmd']);
-    }
+    $searchName = isset($_POST['searchName']) ? "%" . trim($_POST['searchName']) . "%" : "";
+    $searchYmd = isset($_POST['searchYmd']) ? "%" . trim($_POST['searchYmd']) . "%" : "";
     $sql_uservacation = 'SELECT DISTINCT
 `tbl_user`.*,
 `tbl_vacationinfo`.`vacationid`,
@@ -340,9 +332,16 @@ if ($_POST['uservacationListSearch'] == NULL) {
 FROM
 `tbl_user`
 LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
-WHERE `tbl_user`.`companyid` IN ("' . $ganasys_company_id . '")
-AND `tbl_user`.`name` IN ("' . $searchName . '") 
-AND `tbl_user`.`inymd` IN ("' . $searchYmd . '")';
+WHERE `tbl_user`.`companyid` IN ("' . $companyId_ . '") ' ;
+
+
+if ($searchName !== "" && $searchName !=='%%') {
+    $sql_uservacation .= ' AND `tbl_user`.`name` LIKE "' . $searchName . '"';
+}
+
+if ($searchYmd !== "" && $searchYmd !=='%%') {
+    $sql_uservacation .= ' AND `tbl_user`.`inymd` LIKE "' . $searchYmd . '"';
+}
     $result_uservacation = mysqli_query($conn, $sql_uservacation);
     $uservacation_list = mysqli_fetch_all($result_uservacation, MYSQLI_ASSOC);
 }

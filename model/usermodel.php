@@ -55,16 +55,8 @@ $Name = array_unique($Name);
 if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
     $userlist_list = $result_user_select;
 } elseif ($_POST['SearchButton'] != NULL) {
-    if ($_POST['searchName'] == "") {
-        $searchName = implode('","', $Name);
-    } else {
-        $searchName = trim($_POST['searchName']);
-    }
-    if ($_POST['searchGrade'] == "") {
-        $searchGrade = implode('","', $Grade);
-    } else {
-        $searchGrade = trim($_POST['searchGrade']);
-    }
+    $searchName = isset($_POST['searchName']) ? "%" . trim($_POST['searchName']) . "%" : "";
+    $searchGrade = isset($_POST['searchGrade']) ? "%" . trim($_POST['searchGrade']) . "%" : "";
     $sql_user = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
@@ -76,9 +68,15 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
  `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
  WHERE 
  `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
-    AND `tbl_user`.`name` IN("' . $searchName . '") 
-    AND `tbl_user`.`grade` IN("' . $searchGrade . '")';
+    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
+
+if ($searchName !== "" && $searchName !=='%%') {
+    $sql_user .= ' AND `tbl_user`.`name` LIKE "' . $searchName . '"';
+}
+
+if ($searchGrade !== "" && $searchGrade !=='%%') {
+    $sql_user .= ' AND `tbl_user`.`grade` LIKE "' . $searchGrade . '"';
+}
 
     $sql_user_re = mysqli_query($conn, $sql_user);
     $userlist_list = mysqli_fetch_all($sql_user_re, MYSQLI_ASSOC);
