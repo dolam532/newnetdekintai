@@ -286,6 +286,15 @@ if ($_SESSION['auth'] == false) {
 											</span>
 										</span>
 									</a>
+								<?php elseif ($key['isHoliday']): ?>
+									<a href="#" style="color:red;">
+										<span class="showModal">
+											<?= $key['date']; ?><span class="kintaiReg_class">
+												<?= ',' . $key['jobstarthh'] ?>
+											</span>
+										</span>
+									</a>
+
 								<?php else: ?>
 									<a href="#">
 										<span class="showModal">
@@ -349,6 +358,16 @@ if ($_SESSION['auth'] == false) {
 											</span>
 										</span>
 									</a>
+
+								<?php elseif ($key['isHoliday']): ?>
+									<a href="#" style="color:red;">
+										<span class="showModal">
+											<?= $key['date']; ?><span class="kintaiReg_class">
+												<?= ',' . $key['jobstarthh'] ?>
+											</span>
+										</span>
+									</a>
+
 								<?php else: ?>
 									<a href="#">
 										<span class="showModal">
@@ -806,8 +825,8 @@ if ($_SESSION['auth'] == false) {
 	<input type="hidden" name="name" value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_name'])); ?>">
 	<input type="hidden" name="dept" value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_dept'])); ?>">
 	<input type="hidden" name="date_show" value="<?php echo htmlspecialchars(json_encode($date_show)); ?>">
+	<input type="hidden" name="companyName" value="<?php echo htmlspecialchars(json_encode($companyName_)); ?>">
 	<input type="hidden" name="template" value="<?php echo htmlspecialchars(json_encode($decide_template_)); ?>">
-
 	<!-- top   earlydayswork_top -->
 	<input type="hidden" name="totalworkhh_top" value="<?php echo htmlspecialchars(json_encode($totalworkhh_top)); ?>">
 	<input type="hidden" name="totalworkmm_top" value="<?php echo htmlspecialchars(json_encode($totalworkmm_top)); ?>">
