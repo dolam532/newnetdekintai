@@ -272,8 +272,8 @@ if ($_SESSION['auth'] == false) {
                             <br>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <label for="udimagefile_addNew">写真</label>
-                                    <img width="50" id="udimagefile_addNew" alt="写真無し">
+                                    <label for="imagefile_addNew">写真</label>
+                                    <img width="50" id="imagefile_addNew">
                                     <input type="file" name="imagefile" accept="image/*" id="fileInput" onchange=checkFileSize(this)>
                                 </div>
                             </div>
@@ -350,7 +350,7 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="udimagefile">写真</label><br>
-                                    <img width="50" id="udimagefile" alt="写真無し">
+                                    <img width="50" id="udimagefile">
                                     <span id="imagename" name="imagename" hidden></span>
                                     <input type="hidden" name="udimagefile_old" id="udimagefile_old">
                                     <input type="file" name="udimagefile_new" id="udfileInput" onchange=checkFileSize(this)>
@@ -400,10 +400,8 @@ if ($_SESSION['auth'] == false) {
     // New button: popup & clear 
     $(document).on('click', '#btnNewNL', function(e) {
         $('#modal').modal('toggle');
-        $('label[for="udimagefile_addNew"]').show();
+        $('label[for="imagefile_addNew"]').show();
         $('#fileInput').val('');
-        $('#udimagefile_addNew').attr('src', '').attr('alt', '写真無し');
-
     });
 
     // Check Error
@@ -411,6 +409,7 @@ if ($_SESSION['auth'] == false) {
         var Title = $("#title").val();
         var Content = $("#content").val();
         var Reader = $("#reader").val();
+        var FileInput = $("#fileInput").val();
 
         if (Title == "") {
             alert("<?php echo $content_noteT_empty; ?>");
@@ -429,6 +428,12 @@ if ($_SESSION['auth'] == false) {
             $("#reader").focus();
             return false;
         }
+
+        if (FileInput == "") {
+            alert("<?php echo $image_empty_error; ?>");
+            $("#fileInput").focus();
+            return false;
+        }
     });
 
     // Year/month click on grid (edit): popup & content display
@@ -436,7 +441,6 @@ if ($_SESSION['auth'] == false) {
         $('#modal2').modal('toggle');
         $('label[for="udimagefile"]').show();
         $('#udfileInput').val('');
-        $('#udimagefile').attr('src', '').attr('alt', '写真無し');
 
         var ArrayData = $(this).text();
         var SeparateArr = ArrayData.split(',');
@@ -578,8 +582,8 @@ if ($_SESSION['auth'] == false) {
     function displaySelectedImageAddNew(input) {
         if (input.files.length > 0) {
             const selectedFile = input.files[0];
-            const imageElement = document.getElementById('udimagefile_addNew');
-            const labelElement = document.querySelector('label[for="udimagefile_addNew"]');
+            const imageElement = document.getElementById('imagefile_addNew');
+            const labelElement = document.querySelector('label[for="imagefile_addNew"]');
 
             if (selectedFile.type.match('image.*')) {
                 const reader = new FileReader();

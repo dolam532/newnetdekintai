@@ -14,6 +14,7 @@ $select_message = '勤務時間タイプを選択してください。';
 $image_upload_error = 'ファイルのアップロード中にエラーが発生しました。';
 $image_type_error = '無効なファイルタイプです。 画像(JPEG、PNG、JPG)をアップロードしてください。';
 $image_size_error = 'アップロードされた画像は最大許容サイズ (2 MB) を超えています。';
+$image_empty_error = '写真を入力してください。';
 
 // index
 $login_is_not = '詳細情報はログイン後可能です。';

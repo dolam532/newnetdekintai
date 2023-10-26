@@ -172,6 +172,7 @@ if (isset($_POST['btnUpdateNL'])) {
     $content = mysqli_real_escape_string($conn, $udcontent_f);
     $reader = mysqli_real_escape_string($conn, $_POST['udreader']);
     $viewcnt = mysqli_real_escape_string($conn, $_POST['udviewcnt']);
+    $udimagefile_old = mysqli_real_escape_string($conn, $_POST['udimagefile_old']);
 
     // 2023-10-09/1340-004
     // upload image add start
@@ -188,17 +189,24 @@ if (isset($_POST['btnUpdateNL'])) {
         error_log("File name is exists -> Delete old file name");
         unlink($uploadFile);
     }
+
     // check size 
     if (!isFileSizeValid($_FILES["udimagefile_new"], $NOTICE_IMAGE_MAXSIZE)) {
         error_log("File is BIG!");
         $uploadOk = false;
     }
-    // check valid extention 
-    $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
-    if (!checkValidExtension($fileExtension)) {
-        error_log("Image only(jpg, jpeg, png, gif).");
-        $uploadOk = false;
+
+    // check valid extention
+    if (!empty($originalFileName)) {
+        $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
+        if (!checkValidExtension($fileExtension)) {
+            error_log("Image only(jpg, jpeg, png, gif).");
+            $uploadOk = false;
+        }
+    } else {
+        $fileName = $udimagefile_old;
     }
+
     // if not error save
     if ($uploadOk) {
         if (move_uploaded_file($_FILES["udimagefile_new"]["tmp_name"], $uploadFile)) {
