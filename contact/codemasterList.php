@@ -117,9 +117,11 @@ if ($_SESSION['auth'] == false) {
                         ?>
                             <?php if ($key['typecode'] == $_POST['typecode']) : ?>
                                 <tr>
-                                    <td align="center"><span style="font-weight:bold">
+                                    <td align="center">
+                                        <span style="font-weight:bold">
                                             <?= $key['typecode'] ?>
-                                        </span></td>
+                                        </span>
+                                    </td>
                                     <td>
                                         <a href="#" class="submitLink">
                                             <span style="font-weight:bold">
@@ -133,11 +135,13 @@ if ($_SESSION['auth'] == false) {
                                 </tr>
                             <?php else : ?>
                                 <tr>
-                                    <td align="center"><span>
+                                    <td align="center">
+                                        <span>
                                             <?= $key['typecode'] ?>
-                                        </span></td>
+                                        </span>
+                                    </td>
                                     <td>
-                                        <a href="#" class="submitLink">
+                                        <a href="#" class="submitLink" id="target_error">
                                             <span>
                                                 <?= $key['typename'] ?>
                                             </span>
@@ -174,9 +178,11 @@ if ($_SESSION['auth'] == false) {
                         foreach ($codebase_list as $key) {
                         ?>
                             <tr>
-                                <td align="center"><span>
+                                <td align="center">
+                                    <span>
                                         <?= $key['code'] ?>
-                                    </span></td>
+                                    </span>
+                                </td>
                                 <td>
                                     <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                                         <a href="#">
@@ -192,9 +198,11 @@ if ($_SESSION['auth'] == false) {
                                     <?php endif; ?>
 
                                 </td>
-                                <td><span>
+                                <td>
+                                    <span>
                                         <?= $key['remark'] ?>
-                                    </span></td>
+                                    </span>
+                                </td>
                             </tr>
                     <?php
                         }
@@ -323,8 +331,12 @@ if ($_SESSION['auth'] == false) {
 
     // New button: popup & clear 
     $(document).on('click', '#btnNewCL', function(e) {
-        alert("<?php echo $content_cmlC_empty; ?>");
-        return false;
+        var typecode = <?php echo json_encode($_POST['typecode']); ?>;
+        if (typecode === null) {
+            alert("<?php echo $content_choice_empty; ?>");
+            $("#target_error").focus();
+            return false;
+        }
         $('#modal').modal('toggle');
     });
 
@@ -360,8 +372,6 @@ if ($_SESSION['auth'] == false) {
                 return false;
             }
         }
-
-
     });
 
     // Year/month click on grid (edit): popup & content display
