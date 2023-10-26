@@ -63,6 +63,36 @@ if ($result) {
 // Create a date string in "YYYY-MM" format
 $dateString = $year . "-" . $month;
 
+//----- 2023/10/26---- add start//
+
+$sqlGetCurrentMonthHolydays = "SELECT `holiday` FROM tbl_holiday 
+WHERE `companyid` = '$companyid' 
+AND `holiyear` = '$year' 
+AND `holiday` LIKE '$year/$month/%' ";
+
+$holidayDates_ = array();
+$result = $conn->query($sqlGetCurrentMonthHolydays);
+
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $holidayDates_[] = $row['holiday'];
+    }
+} 
+
+
+// get company Name 
+$auth_companyid = $_SESSION['auth_companyid'];
+$getCompanysql = "SELECT `companyname` FROM tbl_company WHERE `companyid` = '$auth_companyid' LIMIT 1";
+$companyName_ = "";
+$result = $conn->query($getCompanysql);
+if ($result) {
+    $row = $result->fetch_assoc();
+    if ($row) {
+        $companyName_ = $row['companyname'];
+    }
+}
+
+//----- 2023/10/26---- add end//
 // Get the number of days in the selected month and year
 $daysInMonth = date("t", strtotime($dateString));
 $weekdays = array(
@@ -83,11 +113,14 @@ for ($day = 1; $day <= $daysInMonth; $day++) {
     $month_ = date("m", strtotime($dateString . "-" . $day));
     $date_show = $Year_ . "/" . $month_ . "/";
     $weekday = $weekdays[date("N", strtotime($date))];
+    $isHoliday = in_array( $Year_ . "/" . $month_ . "/" . $date_, $holidayDates_); // Kiểm tra xem ngày hiện tại có phải là ngày nghỉ lễ không
+
     $datas[] = [
         'date' => $month_ . "/" . $date_ . "(" . $weekday . ")",
         'decide_color' => $weekday,
         'workymd' => $Year_ . "/" . $month_ . "/" . $date_,
-        'template' => $decide_template_
+        'template' => $decide_template_,
+        'isHoliday' => $isHoliday 
     ];
 }
 
