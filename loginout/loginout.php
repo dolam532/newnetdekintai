@@ -91,30 +91,39 @@ include('../model/loginoutmodel.php');
 <script>
     // Login button handling
     $(document).on('click', '#btnLogin', function(e) {
-        var uid = $("#uid").val();
-        var pwd = $("#pwd").val();
-        var letters = /^[A-Za-z0-9@.]+$/;
+    var uid = $("#uid").val();
+    var pwd = $("#pwd").val();
+    var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    var passwordRegex = /^[A-Za-z0-9]+$/; // 半角英数字のみを許可
 
-        if (uid == "") {
-            alert("<?php echo $login_empty_id; ?>");
-            e.preventDefault();
-            $("#uid").focus();
-            return true;
-        }
+    if (uid == "") {
+        alert("メールアドレスを入力してください。");
+        e.preventDefault();
+        $("#uid").focus();
+        return false;
+    }
 
-        if (pwd == "") {
-            alert("<?php echo $login_empty_pwd; ?>");
-            e.preventDefault();
-            $("#pwd").focus();
-            return true;
-        }
+    if (pwd == "") {
+        alert("パスワードを入力してください。");
+        e.preventDefault();
+        $("#pwd").focus();
+        return false;
+    }
 
-        if (!uid.match(letters)) {
-            alert("<?php echo $login_alphabet; ?>");
-            e.preventDefault();
-            $("#uid").focus();
-            return true;
-        }
-    });
+    if (!emailRegex.test(uid)) {
+        alert("正しいメールアドレスを入力してください。");
+        e.preventDefault();
+        $("#uid").focus();
+        return false;
+    }
+
+    if (!passwordRegex.test(pwd)) {
+        alert("パスワードは半角英数字のみを許可します。");
+        e.preventDefault();
+        $("#pwd").focus();
+        return false;
+    }
+});
+
 </script>
 <?php include('../inc/footer.php'); ?>
