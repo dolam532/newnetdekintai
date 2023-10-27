@@ -227,7 +227,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			</div>
 			<div class="print_btn">
 				<input type="button" class="btn btn-default" style="width: auto;"
-					onclick="window.location.href='./kintaiUser.php'" value="戻る ">
+					onclick="window.location.href='./kintaiUser.php'" value="戻る">
 			</div>
 		</div>
 	</div>

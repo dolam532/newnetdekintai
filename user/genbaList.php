@@ -63,34 +63,34 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 <div class="container" style="margin-top:-20px;">
 	<?php
 	if (isset($_SESSION['save_success']) && isset($_POST['SaveKinmu'])) {
-		?>
+	?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<?php echo $_SESSION['save_success']; ?>
 		</div>
-		<?php
+	<?php
 		unset($_SESSION['save_success']);
 	}
 	?>
 	<?php
 	if (isset($_SESSION['update_success']) && isset($_POST['UpdateKinmu'])) {
-		?>
+	?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<?php echo $_SESSION['update_success']; ?>
 		</div>
-		<?php
+	<?php
 		unset($_SESSION['update_success']);
 	}
 	?>
 	<?php
 	if (isset($_SESSION['delete_success']) && isset($_POST['DeleteKinmu'])) {
-		?>
+	?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<?php echo $_SESSION['delete_success']; ?>
 		</div>
-		<?php
+	<?php
 		unset($_SESSION['delete_success']);
 	}
 	?>
@@ -100,13 +100,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<span class="text-left">勤務時間タイプ設定</span>
 			</div>
 		</div>
-		<div class="col-md-6"></div>
-		<div class="col-md-2 text-right">
-			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
+		<div class="col-md-4"></div>
+		<div class="col-md-4 text-right">
+			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
 				<div class="title_btn">
-					<input type="button" id="btnNew" value=" 新規 ">
+					<input type="button" id="btnNew" value="新規">
 				</div>
 			<?php endif; ?>
+			<div class="title_btn">
+				<input type="button" onclick="window.location.href='../'" value="トップへ戻る">
+			</div>
 		</div>
 	</div>
 
@@ -134,21 +137,18 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<?php echo $data_save_no; ?>
 						</td>
 					</tr>
-				<?php } elseif (!empty($genbadatas_list)) {
+					<?php } elseif (!empty($genbadatas_list)) {
 					foreach ($genbadatas_list as $genba) {
-						?>
+					?>
 						<tr>
 							<td class="td1"><span>
 									<?= $genba['genid'] ?>
 								</span></td>
 							<td class="td2">
 
-								<a href="#"><span class="showModal" id="showModalChange"
-										style="text-decoration-line: underline;" data-genid="<?= $genba['genid'] ?>">
+								<a href="#"><span class="showModal" id="showModalChange" style="text-decoration-line: underline;" data-genid="<?= $genba['genid'] ?>">
 										<?= $genba['genbaname'] ?>
 									</span>
-
-
 							</td>
 							<td class="td3"><span>
 									<?= $genba['genbacompany'] ?>
@@ -183,7 +183,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<?= $genba['bigo'] ?>
 								</span></td>
 						</tr>
-					<?php }
+				<?php }
 				} ?>
 			</tbody>
 		</table>
@@ -204,8 +204,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-md-9">
 								<label for="genbacompany">勤務時間タイプ</label>
-								<input type="text" class="form-control" id="genbaname" name="genbaname"
-									placeholder="勤務時間タイプ">
+								<input type="text" class="form-control" id="genbaname" name="genbaname" placeholder="勤務時間タイプ">
 							</div>
 							<div class="col-md-3">
 								<label for="use_yn"><strong>使用</strong></label>
@@ -217,12 +216,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<!-- 2023/10/20---- add start  -->
 								<label for="use_type"><strong>タイプ</strong></label>
 								<div class="custom-control custom-radio">
-									<input type="radio" id="use_type" name="use_type"
-										value="<?php echo array_keys(ConstArray::$search_template)[0]; ?>">
+									<input type="radio" id="use_type" name="use_type" value="<?php echo array_keys(ConstArray::$search_template)[0]; ?>">
 									<?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[0]]; ?>
 									<br />
-									<input type="radio" id="use_type" name="use_type"
-										value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
+									<input type="radio" id="use_type" name="use_type" value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
 									<?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[1]]; ?>
 								</div>
 								<!-- 2023/10/20---- add end  -->
@@ -232,8 +229,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-md-6">
 								<label for="genbacompany">勤務会社名</label>
-								<input type="text" class="form-control" id="genbacompany" name="genbacompany"
-									placeholder="勤務会社名" style="text-align: left">
+								<input type="text" class="form-control" id="genbacompany" name="genbacompany" placeholder="勤務会社名" style="text-align: left">
 							</div>
 							<div class="col-md-6">
 								<label for="work_period">業務作業期間</label>
@@ -247,43 +243,36 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-md-6">
 								<label for="workstrtime">業務開始時間</label>
-								<input type="text" class="form-control" id="workstrtime" name="workstrtime"
-									placeholder="09:00" style="text-align: center">
+								<input type="text" class="form-control" id="workstrtime" name="workstrtime" placeholder="09:00" style="text-align: center">
 							</div>
 							<div class="col-md-6">
 								<label for="workendtime">業務終了時間</label>
-								<input type="text" class="form-control" id="workendtime" name="workendtime"
-									placeholder="18:00" style="text-align: center">
+								<input type="text" class="form-control" id="workendtime" name="workendtime" placeholder="18:00" style="text-align: center">
 							</div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-md-3">
 								<label for="offtime1">昼休(時:分)</label>
-								<input type="text" class="form-control" id="offtime1" name="offtime1"
-									placeholder="01:00" style="text-align: center">
+								<input type="text" class="form-control" id="offtime1" name="offtime1" placeholder="01:00" style="text-align: center">
 							</div>
 							<div class="col-md-3">
 								<label for="offtime2">夜休(時:分)</label>
-								<input type="text" class="form-control" id="offtime2" name="offtime2"
-									placeholder="00:00" style="text-align: center">
+								<input type="text" class="form-control" id="offtime2" name="offtime2" placeholder="00:00" style="text-align: center">
 							</div>
 							<div class="col-md-6">
 								<label for="bigo">備考</label>
-								<input type="text" class="form-control" id="bigo" name="bigo" placeholder="備考"
-									style="text-align: left">
+								<input type="text" class="form-control" id="bigo" name="bigo" placeholder="備考" style="text-align: left">
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
 						<div class="col-md-4"></div>
 						<div class="col-md-2">
-							<input type="submit" name="SaveKinmu" class="btn btn-primary" id="btnReg_GL" role="button"
-								value="登録">
+							<input type="submit" name="SaveKinmu" class="btn btn-primary" id="btnReg_GL" role="button" value="登録">
 						</div>
 						<div class="col-md-2">
-							<button type="button" class="btn btn-default" data-dismiss="modal"
-								id="modalClose">閉じる</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
 						</div>
 						<div class="col-md-4"></div>
 					</div>
@@ -306,8 +295,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-md-9">
 								<label for="udgenbaname">勤務時間タイプ</label>
-								<input type="text" class="form-control" name="udgenbaname" id="udgenbaname"
-									placeholder="勤務時間タイプ">
+								<input type="text" class="form-control" name="udgenbaname" id="udgenbaname" placeholder="勤務時間タイプ">
 								<input type="hidden" id="udgenid" name="udgenid">
 								<input type="hidden" id="udcompanyid" name="udcompanyid">
 							</div>
@@ -320,12 +308,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<!-- 2023/10/20---- add start  -->
 								<label for="uduse_type"><strong>タイプ</strong></label>
 								<div class="custom-control custom-radio">
-									<input type="radio" id="uduse_type1" name="uduse_type"
-										value="<?php echo array_keys(ConstArray::$search_template)[0]; ?>">
+									<input type="radio" id="uduse_type1" name="uduse_type" value="<?php echo array_keys(ConstArray::$search_template)[0]; ?>">
 									<?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[0]]; ?>
 									<br />
-									<input type="radio" id="uduse_type2" name="uduse_type"
-										value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
+									<input type="radio" id="uduse_type2" name="uduse_type" value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
 									<?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[1]]; ?>
 								</div>
 								<!-- 2023/10/20---- add end  -->
@@ -335,16 +321,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-md-6">
 								<label for="udgenbacompany">勤務会社名</label>
-								<input type="text" class="form-control" id="udgenbacompany" name="udgenbacompany"
-									placeholder="勤務会社名" style="text-align: left">
+								<input type="text" class="form-control" id="udgenbacompany" name="udgenbacompany" placeholder="勤務会社名" style="text-align: left">
 							</div>
 							<div class="col-md-6">
 								<label for="udwork_period">業務作業期間</label>
 								<div style="display: flex;">
-									<input type="text" class="form-control" id="udstrymd" name="udstrymd"
-										placeholder="日付">~
-									<input type="text" class="form-control" id="udendymd" name="udendymd"
-										placeholder="日付">
+									<input type="text" class="form-control" id="udstrymd" name="udstrymd" placeholder="日付">~
+									<input type="text" class="form-control" id="udendymd" name="udendymd" placeholder="日付">
 								</div>
 							</div>
 						</div>
@@ -352,47 +335,39 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-md-6">
 								<label for="udworkstrtime">業務開始時間</label>
-								<input type="text" class="form-control" name="udworkstrtime" id="udworkstrtime"
-									placeholder="09:00" style="text-align: center">
+								<input type="text" class="form-control" name="udworkstrtime" id="udworkstrtime" placeholder="09:00" style="text-align: center">
 							</div>
 							<div class="col-md-6">
 								<label for="udworkendtime">業務終了時間</label>
-								<input type="text" class="form-control" name="udworkendtime" id="udworkendtime"
-									placeholder="18:00" style="text-align: center">
+								<input type="text" class="form-control" name="udworkendtime" id="udworkendtime" placeholder="18:00" style="text-align: center">
 							</div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-md-3">
 								<label for="udofftime1">昼休(時:分)</label>
-								<input type="text" class="form-control" name="udofftime1" id="udofftime1"
-									placeholder="01:00" style="text-align: center">
+								<input type="text" class="form-control" name="udofftime1" id="udofftime1" placeholder="01:00" style="text-align: center">
 							</div>
 							<div class="col-md-3">
 								<label for="udofftime2">夜休(時:分)</label>
-								<input type="text" class="form-control" name="udofftime2" id="udofftime2"
-									placeholder="00:00" style="text-align: center">
+								<input type="text" class="form-control" name="udofftime2" id="udofftime2" placeholder="00:00" style="text-align: center">
 							</div>
 							<div class="col-md-6">
 								<label for="bigo_cmodal">備考</label>
-								<input type="text" class="form-control" name="bigo_cmodal" id="bigo_cmodal"
-									placeholder="備考" style="text-align: left">
+								<input type="text" class="form-control" name="bigo_cmodal" id="bigo_cmodal" placeholder="備考" style="text-align: left">
 							</div>
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
 						<div class="col-md-3"></div>
 						<div class="col-md-2">
-							<input type="submit" name="UpdateKinmu" class="btn btn-primary admin-action" id="btnUpd_GL"
-								role="button" value="編集">
+							<input type="submit" name="UpdateKinmu" class="btn btn-primary admin-action" id="btnUpd_GL" role="button" value="編集">
 						</div>
 						<div class="col-md-2">
-							<input type="submit" name="DeleteKinmu" class="btn btn-warning admin-action" id="btnDel_GL"
-								role="button" value="削除">
+							<input type="submit" name="DeleteKinmu" class="btn btn-warning admin-action" id="btnDel_GL" role="button" value="削除">
 						</div>
 						<div class="col-md-2">
-							<button type="button" class="btn btn-default admin-action" data-dismiss="modal"
-								id="btnCls_GL" id="modalClose">閉じる</button>
+							<button type="button" class="btn btn-default admin-action" data-dismiss="modal" id="btnCls_GL" id="modalClose">閉じる</button>
 						</div>
 						<div class="col-md-3"></div>
 					</div>
@@ -404,7 +379,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 <script>
 	// New button
-	$(document).on('click', '#btnNew', function (e) {
+	$(document).on('click', '#btnNew', function(e) {
 		$("use_yn").prop('checked', true);
 		$('#modal').modal('toggle');
 	});
@@ -431,14 +406,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	// Click (modify) employee ID in the grid: popup & display contents
-	$(document).on('click', '.showModal', function () {
+	$(document).on('click', '.showModal', function() {
 		// check when user admin 
 		$('#modal2').modal('toggle');
 		$(".admin-action").removeClass("admin-action-hidden");
 		var genid = $(this).attr('data-genid');
-		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')): ?>
+		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')) : ?>
 			$(".admin-action").addClass("admin-action-hidden");
-		<?php else: ?>
+		<?php else : ?>
 			if (genid === '0' && "<?php echo $_SESSION['auth_type']; ?>" !== "<?php echo constant('ADMIN'); ?>") {
 				$(".admin-action").addClass("admin-action-hidden");
 			}
@@ -448,7 +423,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (!empty($genbadatas_list)) {
 
 			foreach ($genbadatas_list as $key) {
-				?>
+		?>
 				if ('<?php echo $key['genid'] ?>' == genid) {
 					var udgenid = $("input[name=udgenid]:hidden");
 					udgenid.val("<?php echo $key['genid'] ?>");
@@ -468,16 +443,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#udofftime2").text($('[name="udofftime2"]').val("<?php echo $key['offtime2'] ?>"));
 					$("#bigo_cmodal").text($('[name="bigo_cmodal"]').val("<?php echo $key['bigo'] ?>"));
 				}
-				<?php
+		<?php
 			}
 		}
 		?>
 	});
 
 	// Check Error 新規
-	$(document).on('click', '#btnReg_GL', function (e) {
+	$(document).on('click', '#btnReg_GL', function(e) {
 		// check not admin 
-		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')): ?>
+		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')) : ?>
 			return;
 		<?php endif; ?>
 
@@ -573,9 +548,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	// Check Error 編集
-	$(document).on('click', '#btnUpd_GL', function (e) {
+	$(document).on('click', '#btnUpd_GL', function(e) {
 		// check not admin 
-		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')): ?>
+		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')) : ?>
 			return;
 		<?php endif; ?>
 		// check 0 id  

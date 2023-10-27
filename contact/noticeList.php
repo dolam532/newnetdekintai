@@ -121,11 +121,12 @@ if ($_SESSION['auth'] == false) {
             <div class="col-md-3 text-right">
                 <div class="title_btn">
                     <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-                        <input type="submit" name="SearchButtonNL" value="検索">&nbsp;&nbsp;&nbsp;
+                        <input type="submit" name="SearchButtonNL" value="検索">
                         <input type="button" id="btnNewNL" value="新規">
                     <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
                         <input type="submit" name="SearchButtonNL" value="検索">
                     <?php endif; ?>
+                    <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
                 </div>
             </div>
         </form>

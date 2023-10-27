@@ -88,7 +88,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			</div>
 			<div class="col-md-6 col-sm-6 col-sx-6 text-right all-div last">
 				<div class="title_btn">
-					<input type="button" onclick="window.location.href='./kyukaReg.php'" value="戻る ">
+					<input type="button" onclick="window.location.href='./kyukaReg.php'" value="戻る">
 				</div>
 			</div>
 		</div>

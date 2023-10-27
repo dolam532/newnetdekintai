@@ -90,7 +90,11 @@ if ($_SESSION['auth'] == false) {
                     </label>
                 </div>
             </div>
-            <div class="col-md-3 text-right"></div>
+            <div class="col-md-3 text-right">
+                <div class="title_btn">
+                    <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
+                </div>
+            </div>
         </div>
     </form>
     <div class="form-group">

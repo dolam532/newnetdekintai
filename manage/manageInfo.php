@@ -55,9 +55,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     ?>
     <form method="post">
         <div class="row">
-            <div class="col-md-12 text-left">
+            <div class="col-md-10 text-left">
                 <div class="title_name">
                     <span class="text-left">管理情報登録</span>
+                </div>
+            </div>
+            <div class="col-md-2 text-right">
+                <div class="title_btn">
+                    <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
                 </div>
             </div>
         </div>

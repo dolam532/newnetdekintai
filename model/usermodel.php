@@ -343,7 +343,7 @@ function generateRandomString($length)
 
 // (genbaList.php)
 // Select data from tbl_genba
-$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", 0 ) ';
+$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", 0 ) ORDER BY `tbl_genba`.`genid`';
 if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $companyid = $_SESSION['auth_companyid'];
     $result_genba = mysqli_query($conn, $sql_genba);

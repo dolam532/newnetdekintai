@@ -38,7 +38,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		</div>
 		<div class="col-md-9 text-right">
 			<div class="title_btn">
-				<input type="button" onclick="window.location.href='../kintai/kintaiReg.php'" value="戻る ">
+				<input type="button" onclick="window.location.href='../kintai/kintaiReg.php'" value="戻る">
 			</div>
 		</div>
 	</div>
