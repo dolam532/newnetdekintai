@@ -86,7 +86,7 @@ if ($_SESSION['auth'] == false) {
                 </div>
             <?php endif; ?>
             <div class="title_btn">
-                <input type="button" onclick="history.back()" value="戻る ">
+                <input type="button" onclick="window.location.href='../'" value="戻る ">
             </div>
         </div>
     </div>

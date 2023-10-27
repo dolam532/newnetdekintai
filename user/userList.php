@@ -102,7 +102,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<?php endif; ?>
 				</div>
 				<div class="title_btn">
-					<input type="button" onclick="history.back()" value="戻る ">
+					<input type="button" onclick="window.location.href='../'" value="戻る ">
 				</div>
 			</div>
 		</form>

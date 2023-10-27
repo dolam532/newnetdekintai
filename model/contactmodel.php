@@ -50,7 +50,8 @@ $sql_notice_select = 'SELECT DISTINCT
 `tbl_user`.`name`,
 `tbl_user`.`companyid`
 FROM `tbl_notice`
-LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`';
+LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+ORDER BY `tbl_notice`.`bid`';
 $result_notice_select = mysqli_query($conn, $sql_notice_select);
 $notice_list_select = mysqli_fetch_all($result_notice_select, MYSQLI_ASSOC);
 
