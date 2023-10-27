@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="../assets/fonts/glyphicons-halflings-regular.woff2">
     <!-- common Javascript -->
     <script type="text/javascript" src="../assets/js/common.js"> </script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <!-- Datepeeker 위한 link -->
     <link rel="stylesheet" href="../assets/css/jquery-ui.min.css">
     <script src="../assets/js/jquery-ui.min.js"></script>

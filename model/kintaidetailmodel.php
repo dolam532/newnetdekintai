@@ -39,6 +39,9 @@ $employee_name = $name_e;
 $employee_genid = $genid_e;
 $employee_dept = $dept_e;
 
+$employee_signstamp = $signstamp_e; ///**** NOT VALUE NEED work*/
+
+
 $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
 $month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
 
