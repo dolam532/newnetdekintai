@@ -70,13 +70,13 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
  `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
     AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
 
-if ($searchName !== "" && $searchName !=='%%') {
-    $sql_user .= ' AND `tbl_user`.`name` LIKE "' . $searchName . '"';
-}
+    if ($searchName !== "" && $searchName !== '%%') {
+        $sql_user .= ' AND `tbl_user`.`name` LIKE "' . $searchName . '"';
+    }
 
-if ($searchGrade !== "" && $searchGrade !=='%%') {
-    $sql_user .= ' AND `tbl_user`.`grade` LIKE "' . $searchGrade . '"';
-}
+    if ($searchGrade !== "" && $searchGrade !== '%%') {
+        $sql_user .= ' AND `tbl_user`.`grade` LIKE "' . $searchGrade . '"';
+    }
 
     $sql_user_re = mysqli_query($conn, $sql_user);
     $userlist_list = mysqli_fetch_all($sql_user_re, MYSQLI_ASSOC);
@@ -97,7 +97,8 @@ if (isset($_POST['SaveUserList'])) {
     $pwd = mysqli_real_escape_string($conn, $_POST['pwd']);
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $grade = mysqli_real_escape_string($conn, $_POST['grade']);
-    $type = mysqli_real_escape_string($conn, $_POST['type']);
+    // $type = mysqli_real_escape_string($conn, $_POST['type']);
+    $type = constant('USER');
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $dept = mysqli_real_escape_string($conn, $_POST['dept']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
@@ -108,6 +109,11 @@ if (isset($_POST['SaveUserList'])) {
     $genendymd = mysqli_real_escape_string($conn, $_POST['genendymd']);
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
+
+    $genid = $genid ?? 0;
+    if (!isset($genid)) {
+        $genid = 0;
+    }
 
     // 2023-10-11/1340-006 change start
     $fileExtension = pathinfo($_FILES["signstamp"]["name"], PATHINFO_EXTENSION);

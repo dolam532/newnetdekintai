@@ -86,13 +86,84 @@ if ($_SESSION['auth'] == false) {
 	.text_size {
 		font-size: smaller;
 	}
+
+	.title_name {
+		text-align: right;
+	}
+
+	.title_condition {
+		display: flex;
+		justify-content: flex-end;
+		align-items: flex-end;
+	}
+
+
+	.top-action-btn {
+		display: flex;
+		justify-content: flex-end;
+		align-items: flex-end;
+
+	}
+
+	.col-md-6.right {
+		text-align: right;
+		margin: 5px 0;
+	}
+
+
+	/* lanscape notice */
+	#landscape-warning {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(0, 0, 0, 0.5);
+		z-index: 1000;
+		text-align: center;
+		padding: 20px;
+	}
+
+	#warning-message {
+		background: #fff;
+		padding: 10px;
+		border: 1px solid #000;
+		border-radius: 5px;
+		display: inline-block;
+	}
 </style>
+
+<script>
+	// everytime load page -> check is innerWidth < 600 -> show messsage 
+	// when start time width > 600 -> no show 
+	var isWarningDisplayed = false;
+	function showLandscapeWarning() {
+		if (!isWarningDisplayed && window.innerWidth < 600 && window.orientation !== 90) {
+			var landscapeWarning = document.getElementById("landscape-warning");
+			landscapeWarning.style.display = "block";
+
+			landscapeWarning.addEventListener("click", function () {
+				landscapeWarning.style.display = "none";
+			});
+
+			setTimeout(function () {
+				landscapeWarning.style.display = "none";
+			}, 5000); // 5s
+		}
+		isWarningDisplayed = true;
+	}
+	window.addEventListener('load', showLandscapeWarning);
+	window.addEventListener('resize', showLandscapeWarning);
+	window.addEventListener('orientationchange', showLandscapeWarning);
+</script>
+
+
 <title>勤 務 表</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top: -20px;">
 	<!-- // 2023-10-20----- add start //  -->
 	<?php
-
 	if (isset($_SESSION['save_success']) && isset($_POST['changeGenid'])) {
 		?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
@@ -161,13 +232,22 @@ if ($_SESSION['auth'] == false) {
 	}
 	?>
 	<div class="row">
-		<div class="col-md-3 text-left" name="workYm_page_title">
+		<div class="col-md-3 text-left page-top" name="workYm_page_title">
 			<div class="title_name text-center">
 				<span id="workYm_page_title" class="text-left">勤 務 表</span>
 			</div>
 		</div>
+		<!-- lanscape notice  -->
+		<div id="landscape-warning">
+			<p id="warning-message">
+				
+				画面を横向きにすると、コンテンツが正しく表示されます。
+				<br>
+				(どこかをクリックして閉じる)
+			</p>
+		</div>
 		<form method="post">
-			<div class="col-md-4 text-center" name="workYm_page_condition">
+			<div class="col-md-4 text-center page-top-selection" name="workYm_page_condition">
 				<div class="title_condition">
 					<label>基準日:
 						<select id="selyy" name="selyy" class="seldate" style="padding:5px;"
@@ -216,18 +296,24 @@ if ($_SESSION['auth'] == false) {
 				</div>
 			</div>
 		</form>
-		<div class="col-md-5 text-right">
-			<!-- 2023/10/20 ---- add start  -->
-			<div class="print_btn">
-				<a href="#" onclick="kinmutypeHandle()" ; class="btn btn-default" style="width: auto;">勤務タイプ選択</a>
-			</div>
-			<!-- 2023/10/20 ---- add end  -->
+	</div>
+
+	<div class="row top-action-btn">
+		<div class="col-md-6 right">
 
 			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
 				<div class="print_btn">
 					<a href="../kintaidetail/kintaiUser.php" class="btn btn-default" style="width: auto;">社員勤務表</a>
 				</div>
 			<?php endif; ?>
+
+			<!-- 2023/10/20 ---- add start  -->
+			<div class="print_btn">
+				<a href="#" onclick="kinmutypeHandle()" ; class="btn btn-default" style="width: auto;">勤務タイプ選択</a>
+			</div>
+			<!-- 2023/10/20 ---- add end  -->
+
+
 			<div class="print_btn">
 				<form method="post">
 					<input type="hidden" value="<?= $year ?>" name="year">
@@ -806,11 +892,9 @@ if ($_SESSION['auth'] == false) {
 		} else {
 			echo '<p style="color: red;">' . $kintai_click_month . '</p>';
 		}
-
-
 		?>
 
-
+</table>
 </div>
 
 <!-- PDF product -->
@@ -1331,7 +1415,7 @@ if ($_SESSION['auth'] == false) {
 			$('#btnReg').val("編集");
 			$('#selkindatetext').text("編集")
 		}
-
+		
 		var uid = $("input[name=uid]:hidden");
 		uid.val("<?php echo $_SESSION['auth_uid'] ?>");
 		var uid = uid.val();

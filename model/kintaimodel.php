@@ -262,10 +262,6 @@ if (isset($_POST['changeGenid'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
-
-
-
-
 // 2023-10-20----- add end // 	 -->
 
 // Save data to tbl_worktime table of database
