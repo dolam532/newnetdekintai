@@ -109,8 +109,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             </div>
             <div class="col-md-3 text-right">
                 <div class="title_btn">
-                    <input type="submit" name="SearchButtonCL" value="検索">&nbsp;&nbsp;&nbsp;
-                    <input type="button" id="btnNewCL" value="新規">
+                    <input type="submit" name="SearchButtonCL" value="検索">
+                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                        <input type="button" id="btnNewCL" value="新規">
+                    <?php endif; ?>
+                    <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
                 </div>
             </div>
         </div>
@@ -141,7 +144,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                         <tr>
                             <td><span><?= $key['companyid'] ?></span></td>
                             <td><span><?= $key['companycode'] ?></span></td>
-                            <td><a href="#"><span class="showModal"><?= $key['companyname'] ?><span class="companyList_class"><?= ',' . $key['companyid'] ?></span></span></a></td>
+                            <td>
+                                <?php if ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
+                                    <a href="#">
+                                        <span class="showModal"><?= $key['companyname'] ?><span class="companyList_class"><?= ',' . $key['companyid'] ?></span></span>
+                                    </a>
+                                <?php else : ?>
+                                    <span><?= $key['companyname'] ?></span>
+                                <?php endif; ?>
+                            </td>
                             <td><span><?= $key['staff'] ?></span></td>
                             <td><span><?= $key['telno'] ?></span></td>
                             <td><span><?= $key['strymd'] . '~' . $key['endymd'] ?></span></td>

@@ -7,7 +7,8 @@ DEFINE('DB_PASSWORD', 'ganandkadm2019');
 DEFINE('DB_NAME', 'newndk');
 
 // Loginout Admin, User, ADMINISTRATOR
-DEFINE('ADMIN', '9');
+DEFINE('MAIN_ADMIN', '9');
+DEFINE('ADMIN', '6');
 DEFINE('USER', '1');
 DEFINE('ADMINISTRATOR', '3');
 DEFINE('DOMAIN_NAME', 'new.netdekintai.com');

@@ -674,7 +674,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			return;
 		}
 		if (fileInput == "") {
-			alert("<?php echo $user_signstamp_empty; ?>");
+			alert("<?php echo $signstamp_empty_error; ?>");
 			$("#fileInput").focus();
 			e.preventDefault();
 			return;

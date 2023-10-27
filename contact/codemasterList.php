@@ -84,11 +84,11 @@ if ($_SESSION['auth'] == false) {
         <div class="col-md-4 text-right">
             <div class="title_btn">
                 <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-                    <input type="button" id="btnNewCL" value="新規 ">
+                    <input type="button" id="btnNewCL" value="新規">
                 <?php endif; ?>
             </div>
             <div class="title_btn">
-                <input type="button" onclick="window.location.href='../'" value="トップへ戻る ">
+                <input type="button" onclick="window.location.href='../'" value="戻る">
             </div>
         </div>
     </div>

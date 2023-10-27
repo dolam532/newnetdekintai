@@ -93,8 +93,11 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             </div>
             <div class="col-md-3 text-right">
                 <div class="title_btn">
-                    <input type="submit" name="SearchButtonAM" value="検索">&nbsp;
-                    <input type="button" id="btnNewCL" value="新規">
+                    <input type="submit" name="SearchButtonAM" value="検索">
+                    <?php if ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
+                        <input type="button" id="btnNewAL" value="新規">
+                    <?php endif; ?>
+                    <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
                 </div>
             </div>
         </div>
@@ -204,8 +207,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                     </select>
                                 </div>
                                 <div class="col-xs-6">
-                                    <label for="udsignstamp_addNew">印鑑</label>
-                                    <img width="50" id="udsignstamp_addNew" alt="印鑑無し">
+                                    <label for="signstamp_addNew">印鑑</label>
+                                    <img width="50" id="signstamp_addNew">
                                     <input type="file" name="signstamp" onchange=checkFileSize(this) id="fileInput">
                                 </div>
                             </div>
@@ -300,7 +303,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                 </div>
                                 <div class="col-xs-6">
                                     <label for="signstamp">印鑑</label><br>
-                                    <img width="50" id="udsignstamp" alt="印鑑無し">
+                                    <img width="50" id="udsignstamp">
                                     <span id="udsignstamp_name"></span>
                                     <input type="hidden" name="udsignstamp_old" id="udsignstamp_old">
                                     <input type="file" name="udsignstamp_new" id="udfileInput" onchange=checkFileSize(this)>
@@ -384,8 +387,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
     function displaySelectedImageAddNew(input) {
         if (input.files.length > 0) {
             const selectedFile = input.files[0];
-            const imageElement = document.getElementById('udsignstamp_addNew');
-            const labelElement = document.querySelector('label[for="udsignstamp_addNew"]');
+            const imageElement = document.getElementById('signstamp_addNew');
+            const labelElement = document.querySelector('label[for="signstamp_addNew"]');
 
             if (selectedFile.type.match('image.*')) {
                 const reader = new FileReader();
@@ -428,9 +431,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
     // 2023-10-12/1340-006
     // upload image  add end
     // New button: popup & clear 
-    $(document).on('click', '#btnNewCL', function(e) {
+    $(document).on('click', '#btnNewAL', function(e) {
         $('#modal').modal('toggle');
-        $('#udsignstamp_addNew').attr('src', '').attr('alt', '印鑑無し');
         $('label[for="signstamp"]').show();
         $('#fileInput').val('');
 
@@ -446,6 +448,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         var Dept = $("#dept").val();
         var Companyid = $("#companyid").val();
         var letters = /^[A-Za-z]+$/;
+        var FileInput = $("#fileInput").val();
 
         if (Uid == "") {
             alert("<?php echo $manage_id_empty; ?>");
@@ -516,13 +519,19 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             $("#companyid").focus();
             return true;
         }
+
+        if (FileInput == "") {
+            alert("<?php echo $signstamp_empty_error; ?>");
+            e.preventDefault();
+            $("#fileInput").focus();
+            return true;
+        }
     });
 
     // Funtion for click day of week
     $(document).on('click', '.showModal', function() {
         $('#modal2').modal('toggle');
         var Uid = $(this).text();
-        $('#udsignstamp').attr('src', '').attr('alt', '印鑑無し');
         $('label[for="signstamp"]').show();
         $('#udfileInput').val('');
         $('#udsignstamp_name').text('');

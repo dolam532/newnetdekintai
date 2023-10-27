@@ -37,7 +37,11 @@ if (isset($_POST['btnRegMi'])) {
 
 // companyList.php
 // Select database from tbl_company table
-$sql_company_select = 'SELECT * FROM `tbl_company`';
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_company_select = 'SELECT * FROM `tbl_company`';
+} elseif ($_SESSION['auth_type'] == constant('ADMIN')) {
+    $sql_company_select = 'SELECT * FROM `tbl_company` WHERE `tbl_company`.`companyid` IN("' . $_SESSION['auth_companyid'] . '")';
+}
 $result_company_select = mysqli_query($conn, $sql_company_select);
 $company_list_select = mysqli_fetch_all($result_company_select, MYSQLI_ASSOC);
 
@@ -162,7 +166,8 @@ $sql_admin_select = 'SELECT DISTINCT
     `tbl_company`.`companyname`
     FROM `tbl_user`
     LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
-    WHERE `tbl_user`.`type` IN ("' . constant('ADMIN') . '", "' . constant('ADMINISTRATOR') . '")';
+    WHERE `tbl_user`.`type` IN ("' . constant('ADMINISTRATOR') . '")
+    AND `tbl_user`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
 $result_admin_select = mysqli_query($conn, $sql_admin_select);
 $admin_list_select = mysqli_fetch_all($result_admin_select, MYSQLI_ASSOC);
 
@@ -280,6 +285,7 @@ if (isset($_POST['btnUpdateAM'])) {
     $dept = mysqli_real_escape_string($conn, $_POST['uddept']);
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
+    $udsignstamp_old = mysqli_real_escape_string($conn, $_POST['udsignstamp_old']);
 
     $fileExtension = pathinfo($_FILES["udsignstamp_new"]["name"], PATHINFO_EXTENSION);
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
@@ -301,10 +307,14 @@ if (isset($_POST['btnUpdateAM'])) {
     }
 
     // check valid extention 
-    $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
-    if (!checkValidExtension($fileExtension)) {
-        error_log("Image only(png).");
-        $uploadOk = false;
+    if (!empty($originalFileName)) {
+        $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
+        if (!checkValidExtension($fileExtension)) {
+            error_log("Image only(png).");
+            $uploadOk = false;
+        }
+    } else {
+        $fileName = $udsignstamp_old;
     }
 
     // if not error save
@@ -321,7 +331,7 @@ if (isset($_POST['btnUpdateAM'])) {
 
 
         if ($conn->query($sql) === TRUE) {
-            $_SESSION['save_success'] = $save_success;
+            $_SESSION['update_success'] = $update_success;
             header("Refresh:3");
         } else {
             echo 'query error: ' . mysqli_error($conn);

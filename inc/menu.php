@@ -65,16 +65,14 @@
                             <li class="menu-level3"><a href="../user/genbaList.php">勤務時間タイプ設定</a></li>
                             <li class="menu-level3"><a href="../user/genbaUserList.php">勤務時間タイプ表</a></li>
                             <li class="menu-level3"><a href="../contact/userloginList.php">社員ログイン内訳</a></li>
-                            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-                                <li class="menu-level3"><a href="../manage/manageInfo.php">管理情報登録</a></li>
-                            <?php endif; ?>
                             <li class="menu-level3"><a href="../contact/noticeList.php">お知らせ登録</a></li>
                         </ul>
                     </li>
-                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                         <li class="dropdown" id="gana">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true"><?= $_SESSION['auth_name'] ?><span class="caret"></span></a>
                             <ul class="dropdown-menu">
+                                <li><a href="../manage/manageInfo.php">管理情報登録</a></li>
                                 <li><a href="../manage/companyList.php">使用者登録</a></li>
                                 <li><a href="../manage/adminList.php">管理者登録</a></li>
                             </ul>
