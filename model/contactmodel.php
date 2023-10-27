@@ -350,9 +350,20 @@ $codetype_list_a_string = "'" . implode("','", $codetype_list_a) . "'";
 // Select database from tbl_codebase table
 $codes;
 if ($_POST['typecode'] == NULL) {
-    $sql_codebase = "SELECT * FROM `tbl_codebase`
-    WHERE `tbl_codebase`.`companyid` = '{$_SESSION['auth_companyid']}'
-    AND `tbl_codebase`.`typecode` IN ({$codetype_list_a_string})";
+    $_POST['typecode'] = $_SESSION['typecode'];
+    if ($_SESSION['typecode'] == '01') {
+        $sql_codebase = "SELECT * FROM `tbl_codebase`
+        WHERE `tbl_codebase`.`companyid` = '{$_SESSION['auth_companyid']}'
+        AND `tbl_codebase`.`typecode` IN ('01')";
+    } elseif ($_SESSION['typecode'] == '02') {
+        $sql_codebase = "SELECT * FROM `tbl_codebase`
+        WHERE `tbl_codebase`.`companyid` = '{$_SESSION['auth_companyid']}'
+        AND `tbl_codebase`.`typecode` IN ('02')";
+    } else {
+        $sql_codebase = "SELECT * FROM `tbl_codebase`
+        WHERE `tbl_codebase`.`companyid` = '{$_SESSION['auth_companyid']}'
+        AND `tbl_codebase`.`typecode` IN ({$codetype_list_a_string})";
+    }
     $result_codebase = mysqli_query($conn, $sql_codebase);
     $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
     $codes = array_column($codebase_list, 'code');
@@ -368,7 +379,7 @@ if ($_POST['typecode'] == NULL) {
 // Save Data to tbl_codebase DB 
 if (isset($_POST['btnRegCL'])) {
     $companyid = $_SESSION['auth_companyid'];
-    $typecode = $_POST['typecode'];
+    $typecode = $_SESSION['typecode'] = $_POST['typecode'];
     $uid = $_SESSION['auth_uid'];
     $code = mysqli_real_escape_string($conn, $_POST['code']);
     $name = mysqli_real_escape_string($conn, $_POST['name']);
@@ -387,6 +398,7 @@ if (isset($_POST['btnRegCL'])) {
 
 // Update Data to tbl_codebase DB 
 if (isset($_POST['btnUpdateCL'])) {
+    $_SESSION['typecode'] = $_POST['udtypecode'];
     $id = mysqli_real_escape_string($conn, $_POST['udid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
@@ -414,6 +426,7 @@ if (isset($_POST['btnUpdateCL'])) {
 
 // Delete Data to tbl_codebase DB 
 if (isset($_POST['btnDelCL'])) {
+    $_SESSION['typecode'] = $_POST['udtypecode'];
     $id = mysqli_real_escape_string($conn, $_POST['udid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $uid = mysqli_real_escape_string($conn, $_POST['uduid']);

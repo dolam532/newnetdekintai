@@ -2,8 +2,7 @@
 // Select data from tbl_notice
 // (index.php)
 $sql_notice = 'SELECT
-`tbl_notice`.*,
-`tbl_user`.`reg_dt` AS user_reg
+`tbl_notice`.*
 FROM
 `tbl_notice`
 JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
