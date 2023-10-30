@@ -174,7 +174,7 @@ $sql_admin_select = 'SELECT DISTINCT
     `tbl_company`.`companyname`
     FROM `tbl_user`
     LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
-    WHERE `tbl_user`.`type` IN ("' . constant('ADMINISTRATOR') . '")
+    WHERE `tbl_user`.`type` IN ("' . constant('ADMIN') . '", "' . constant('ADMINISTRATOR') . '")
     AND `tbl_user`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
 $result_admin_select = mysqli_query($conn, $sql_admin_select);
 $admin_list_select = mysqli_fetch_all($result_admin_select, MYSQLI_ASSOC);
