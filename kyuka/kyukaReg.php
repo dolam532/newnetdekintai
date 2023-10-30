@@ -95,7 +95,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<div class="title_sub">
 					<label>社員名 :
 						<select id="searchUid" name="searchUid" style="padding:5px; width:70%;">
-							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
 								<option value="" selected="">選択なし</option>
 								<?php
 								foreach ($user_list as $value) {
@@ -185,7 +185,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<td class="td8"><span name="allowok">
 										<?php
 										if ($userkyuka['allowok'] == "0") { ?>
-											<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+											<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
 												<a href="#"><span style="color:red;text-decoration-line: underline;" class="showModal">未決裁<span class="vacationid_class"><?= ',' . $userkyuka['uid'] . ',' . $userkyuka['ymdcnt']  . ',' . $userkyuka['timecnt'] ?></span></span>
 												<?php else : ?>
 													<span style="color:red;">未決裁</span>

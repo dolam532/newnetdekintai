@@ -115,7 +115,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<?php } elseif (!empty($vacationinfo_list)) {
 						foreach ($vacationinfo_list as $vacationinfo) {
 						?>
-							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
 								<tr>
 									<td class="td0"><a href="#"><span class="showModal" style="text-decoration-line: underline;"><?= $vacationinfo['uid'] ?><span class="vacationid_class"><?= ',' . $vacationinfo['vacationid'] ?></span></span></td>
 									<td class="td1"><span><?= $vacationinfo['vacationid'] ?></span></td>

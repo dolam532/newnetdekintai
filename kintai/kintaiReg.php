@@ -301,7 +301,7 @@ if ($_SESSION['auth'] == false) {
 	<div class="row top-action-btn">
 		<div class="col-md-6 right">
 
-			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
+			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
 				<div class="print_btn">
 					<a href="../kintaidetail/kintaiUser.php" class="btn btn-default" style="width: auto;">社員勤務表</a>
 				</div>

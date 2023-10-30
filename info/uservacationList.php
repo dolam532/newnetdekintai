@@ -83,7 +83,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                     <span class="text-left">年次休暇登録</span>
                 </div>
             </div>
-            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                 <div class="col-md-3 text-left">
                     <div class="title_condition">
                         <label>入社日 : <input type="text" id="searchYmd" name="searchYmd" value="<?= $_POST['searchYmd'] ?>" style="width: 100px; text-align:center"></label>

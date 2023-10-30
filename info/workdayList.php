@@ -80,7 +80,7 @@ if ($_SESSION['auth'] == false) {
         </div>
         <div class="col-md-4"></div>
         <div class="col-md-4 text-right">
-            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                 <div class="title_btn">
                     <input type="button" id="btnNew" value="新規">
                 </div>
@@ -121,7 +121,7 @@ if ($_SESSION['auth'] == false) {
                     ?>
                         <tr>
                             <td>
-                                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                                     <a href="#"><span class="showModal"><?= $key['workyear'] ?></span></a>
                                 <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
                                     <span class="showModal"><?= $key['workyear'] ?></span>

@@ -411,10 +411,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$('#modal2').modal('toggle');
 		$(".admin-action").removeClass("admin-action-hidden");
 		var genid = $(this).attr('data-genid');
-		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')) : ?>
+		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN') ) : ?>
 			$(".admin-action").addClass("admin-action-hidden");
 		<?php else : ?>
-			if (genid === '0' && "<?php echo $_SESSION['auth_type']; ?>" !== "<?php echo constant('ADMIN'); ?>") {
+			if (genid === '0' && "<?php echo $_SESSION['auth_type']; ?>" !== "<?php echo constant('MAIN_ADMIN'); ?>") {
 				$(".admin-action").addClass("admin-action-hidden");
 			}
 		<?php endif; ?>

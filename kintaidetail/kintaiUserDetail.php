@@ -162,7 +162,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 </script>
 
 <title>
-	<?= $employee_name; ?>の勤務表
+	勤務表
 </title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top: -20px;">
@@ -239,8 +239,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	<div class="row">
 		<div class="col-md-3 text-left" name="workYm_page_title">
 			<div class="title_name text-center">
-				<span id="workYm_page_title" class="text-left">
-					<?= $employee_name; ?>の勤務表
+				<span style="display: block;">勤務表</span>
+
 				</span>
 			</div>
 		</div>
@@ -292,15 +292,15 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			</div>
 		</form>
 	</div>
+
 	<div class="row top-action-btn">
+		<div class="col-md-6 left">
+			<span id="workYm_page_title" class="text-left" style="display: flex; text-align: center;">
+				<strong>参照社員名：</strong>
+				<?= $employee_name; ?>
+			</span>
+		</div>
 		<div class="col-md-6 right">
-
-			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
-				<div class="print_btn">
-					<a href="../kintaidetail/kintaiUser.php" class="btn btn-default" style="width: auto;">社員勤務表</a>
-				</div>
-			<?php endif; ?>
-
 			<!-- 2023/10/20 ---- add start  -->
 			<div class="print_btn">
 				<a href="#" onclick="kinmutypeHandle()" ; class="btn btn-default" style="width: auto;">勤務タイプ選択</a>
@@ -312,7 +312,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 				<form method="post">
 					<input type="hidden" value="<?= $year ?>" name="year">
 					<input type="hidden" value="<?= $month ?>" name="month">
-					<button name="DeleteAll" class="btn btn-default" style="width: auto;" type="submit"
+					<button name="DeleteAllKintaiUserDetail" class="btn btn-default" style="width: auto;" type="submit"
 						onclick="return confirm('以下のデータを全て削除しますか？')">すべて削除</button>
 				</form>
 			</div>
@@ -667,7 +667,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 							<input type="hidden" value="<?= $delaydayswork_top ?>" name="delaydays_top">
 							<input type="hidden" value="<?= $earlydayswork_top ?>" name="earlydays_top">
 						<?php endif; ?>
-						<input type="submit" name="MonthSaveKintai" class="btn btn-primary" id="btnSaveMonth"
+						<input type="submit" name="MonthSaveKintaiUserDetail" class="btn btn-primary" id="btnSaveMonth"
 							role="button" value="月合計登録">
 					</td>
 					<?php
@@ -1066,7 +1066,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 					<div class="modal-footer" style="text-align: center">
 						<div class="col-md-4"></div>
 						<div class="col-md-2">
-							<input type="submit" name="AutoUpdateKintai" class="btn btn-primary" id="btnAuto"
+							<input type="submit" name="AutoUpdateKintaiUserDetail" class="btn btn-primary" id="btnAuto"
 								role="button" value="入力確定">
 						</div>
 						<div class="col-md-2">
@@ -1375,8 +1375,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
-						<input type="submit" name="SaveUpdateKintai" class="btn btn-primary" id="btnReg" role="button">
-						<input type="submit" name="DeleteKintai" class="btn btn-warning" id="btnDel" role="button"
+						<input type="submit" name="SaveUpdateKintaiUserDetail" class="btn btn-primary" id="btnReg" role="button">
+						<input type="submit" name="DeleteKintaiUserDetail" class="btn btn-warning" id="btnDel" role="button"
 							value="削除">
 						<button type="button" class="btn btn-default " data-dismiss="modal" id="modalClose">閉じる</button>
 					</div>
@@ -1396,7 +1396,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 
 	// Funtion for click day of week
 	$(document).on('click', '.showModal', function () {
-		$('#modal').modal('toggle');
+		$('#modal2').modal('toggle');
 		var ArrayData = $(this).text();
 		var SeparateArr = ArrayData.split('/');
 		var Date_ = SeparateArr[1].substr(0, 2);
@@ -1635,12 +1635,12 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 					return false;
 				}
 				if (offtimehh == "") {
-					alert("<?php echo $$kintai_offtime_empty; ?>");
+					alert("<?php echo $kintai_offtime_empty; ?>");
 					$("#offtimehh").focus();
 					return false;
 				}
 				if (offtimemm == "") {
-					alert("<?php echo $$kintai_offtime_empty; ?>");
+					alert("<?php echo $kintai_offtime_empty; ?>");
 					$("#offtimemm").focus();
 					return false;
 				}
@@ -1698,12 +1698,12 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 				return false;
 			}
 			if (offtimehh == "") {
-				alert("<?php echo $$kintai_offtime_empty; ?>");
+				alert("<?php echo $kintai_offtime_empty; ?>");
 				$("#offtimehh").focus();
 				return false;
 			}
 			if (offtimemm == "") {
-				alert("<?php echo $$kintai_offtime_empty; ?>");
+				alert("<?php echo $kintai_offtime_empty; ?>");
 				$("#offtimemm").focus();
 				return false;
 			}
@@ -1889,7 +1889,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			}
 		});
 	}
-	
+
 	// ------2023-10-23/1340-003 chg start
 	// date status change , not nomal is off day and input time is readonly
 	function handleSelectDayStatusChange(elem) {

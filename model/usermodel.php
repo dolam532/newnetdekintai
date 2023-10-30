@@ -12,7 +12,7 @@ GROUP BY `code`, `name`';
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
@@ -24,7 +24,7 @@ LEFT JOIN
     `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
 WHERE
     `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
+    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';  // don't select Main ADMIN
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
@@ -38,7 +38,7 @@ LEFT JOIN
 WHERE
     `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"
     AND `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
+    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';// don't select Main ADMIN
 }
 
 $sql_user_select = mysqli_query($conn, $sql_user_select_db);
@@ -68,7 +68,7 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
  `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
  WHERE 
  `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
+    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")'; // don't select Main ADMIN
 
     if ($searchName !== "" && $searchName !== '%%') {
         $sql_user .= ' AND `tbl_user`.`name` LIKE "' . $searchName . '"';
@@ -350,7 +350,7 @@ function generateRandomString($length)
 // (genbaList.php)
 // Select data from tbl_genba
 $sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", 0 ) ORDER BY `tbl_genba`.`genid`';
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $companyid = $_SESSION['auth_companyid'];
     $result_genba = mysqli_query($conn, $sql_genba);
     $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
@@ -363,7 +363,7 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
 // Save data to tbl_genba table of database
 if (isset($_POST['SaveKinmu'])) {
     //2023-10-20 ---- add start ----// 
-    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')) {
+    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
         echo 'not admin ';
         return;
     }
@@ -395,11 +395,11 @@ if (isset($_POST['SaveKinmu'])) {
 // Update data to tbl_genba table of database
 if (isset($_POST['UpdateKinmu'])) {
     //2023-10-20 ---- add start ----// 
-    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')) {
+    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
         echo 'not admin ';
     }
     $genid = mysqli_real_escape_string($conn, $_POST['udgenid']);
-    if ($genid == '0' && $_SESSION['auth_type'] !== constant('ADMIN')) {
+    if ($genid == '0' && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
         echo 'not admin of defaut  ';
         return;
     }
@@ -442,11 +442,11 @@ if (isset($_POST['UpdateKinmu'])) {
 if (isset($_POST['DeleteKinmu'])) {
 
     //2023-10-20 ---- add start ----// 
-    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')) {
+    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN') ) {
         echo 'not admin ';
     }
     $genid = mysqli_real_escape_string($conn, $_POST['udgenid']);
-    if ($genid == '0' && $_SESSION['auth_type'] !== constant('ADMIN')) {
+    if ($genid == '0' && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
         echo 'not admin of defaut  ';
         return;
     }
@@ -466,7 +466,7 @@ if (isset($_POST['DeleteKinmu'])) {
 
 // genbaUserList.php
 // Select data from tbl_user
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_user_g = 'SELECT
         `tbl_user`.*,
         `tbl_genba`.`genbaname`

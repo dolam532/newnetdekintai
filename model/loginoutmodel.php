@@ -25,7 +25,7 @@ if (isset($_POST['btnLogin'])) {
             $user_signstamp = $data['signstamp'];
         }
         $_SESSION['auth'] = true;
-        $_SESSION['auth_type'] = "$user_type"; //9=admin, 3=管理者, 1=user
+        $_SESSION['auth_type'] = "$user_type"; //9=admin, 3=管理者, 1=user , 6=社長
         $_SESSION['auth_uid'] = "$user_uid";
         $_SESSION['auth_companyid'] = "$user_companyid";
         $_SESSION['auth_pwd'] = "$user_pwd";
@@ -34,7 +34,7 @@ if (isset($_POST['btnLogin'])) {
         $_SESSION['auth_dept'] = "$user_dept";
         $_SESSION['auth_signstamp_user'] = "$user_signstamp";
 
-        if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('USER') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+        if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('USER') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
             header("Location: ../index.php");
             $_SESSION['login_success'] =  $login_success;
             $_SESSION['last_login_timestamp'] =  time();
