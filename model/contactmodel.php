@@ -24,6 +24,8 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
     AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '")';
     $result_userlogin = mysqli_query($conn, $sql_userlogin);
     $userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
+
+    
 }
 
 // 2023-10-09/1340-004 add start
