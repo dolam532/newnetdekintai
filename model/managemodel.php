@@ -73,12 +73,12 @@ if ($_POST['SearchButtonCL'] == NULL) {
     }
 
     $sql_company = 'SELECT *
-FROM `tbl_company`
-WHERE `tbl_company`.`companyname` LIKE "%' . $searchCompanyname . '%"
-AND `tbl_company`.`use_yn` = "' . $searchUse_yn . '"';
-$result_company = mysqli_query($conn, $sql_company);
-$company_list = mysqli_fetch_all($result_company, MYSQLI_ASSOC);
-
+    FROM `tbl_company`
+    WHERE `tbl_company`.`companyname` LIKE "%' . $searchCompanyname . '%"
+    AND `tbl_company`.`use_yn` = "' . $searchUse_yn . '"';
+    $result_company = mysqli_query($conn, $sql_company);
+    $company_list = mysqli_fetch_all($result_company, MYSQLI_ASSOC);
+    
 }
 
 // Save Data to tbl_company
@@ -158,17 +158,7 @@ if (isset($_POST['DeleteCL'])) {
     }
 }
 
-// 2023-10-11/1340-006
-// upload image  add start
-// adminList.php
-// Select data from tbl_codebase
-$sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
-WHERE `tbl_codebase`.`typecode` = "' . constant('DEPARTMENT') . '"
-AND `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-GROUP BY `code`, `name`';
-$result_codebase = mysqli_query($conn, $sql_codebase);
-$codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
-
+// AdminList.php
 // Select database from tbl_user table
 $sql_admin_select = 'SELECT DISTINCT
     `tbl_user`.*,
@@ -206,12 +196,11 @@ if ($_POST['SearchButtonAM'] == NULL) {
     }
 
     $sql_admin = 'SELECT *
-        FROM `tbl_user`
-        WHERE `tbl_user`.`name` LIKE "%' . $searchAdminName . '%"
-        AND `tbl_user`.`grade` IN ("' . $searchAdminGrade . '")';
-    $result_admin = mysqli_query($conn, $sql_admin);
-    $admin_list = mysqli_fetch_all($result_admin, MYSQLI_ASSOC);
-
+    FROM `tbl_user`
+    WHERE `tbl_user`.`name` LIKE "%' . $searchAdminName . '%"
+    AND `tbl_user`.`grade` IN ("' . $searchAdminGrade . '")';
+$result_admin = mysqli_query($conn, $sql_admin);
+$admin_list = mysqli_fetch_all($result_admin, MYSQLI_ASSOC);
 }
 
 // Save Data to tbl_user
@@ -295,57 +284,22 @@ if (isset($_POST['btnUpdateAM'])) {
     $dept = mysqli_real_escape_string($conn, $_POST['uddept']);
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
-    $udsignstamp_old = mysqli_real_escape_string($conn, $_POST['udsignstamp_old']);
 
-    $fileExtension = pathinfo($_FILES["udsignstamp_new"]["name"], PATHINFO_EXTENSION);
-    $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
-    $originalFileName = $_FILES["udsignstamp_new"]["name"];
-    $uploadFile = $IMAGE_UPLOAD_DIR_STAMP . $newFileName;
-    $uploadOk = true;
-    global $STAMP_MAXSIZE;
+    $sql = "UPDATE tbl_user SET 
+            pwd='$pwd',
+            name='$name',
+            grade='$grade',
+            email='$email',
+            dept='$dept',
+            companyid='$companyid',
+            bigo='$bigo'
+        WHERE uid ='$uid'";
 
-    // Check file name is exists
-    if (file_exists($uploadFile)) {
-        error_log("File name is exists -> Delete old file name");
-        unlink($uploadFile);
-    }
-
-    // check size 
-    if (!isFileSizeValid($_FILES["udsignstamp_new"], $STAMP_MAXSIZE)) {
-        error_log("File is BIG!");
-        $uploadOk = false;
-    }
-
-    // check valid extention 
-    if (!empty($originalFileName)) {
-        $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
-        if (!checkValidExtension($fileExtension)) {
-            error_log("Image only(png).");
-            $uploadOk = false;
-        }
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['update_success'] =  $update_success;
+        header("Refresh:3");
     } else {
-        $fileName = $udsignstamp_old;
-    }
-
-    // if not error save
-    if ($uploadOk) {
-        if (move_uploaded_file($_FILES["udsignstamp_new"]["tmp_name"], $uploadFile)) {
-            deleteNoticeImages($IMAGE_UPLOAD_DIR_STAMP, $uid, $newFileName);
-            $fileName = $newFileName;
-        } else {
-            error_log("Upload Error");
-        }
-        $sql = "UPDATE tbl_user SET  
-        companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName'
-       , email='$email',dept='$dept', bigo='$bigo' , upt_dt='$upt_dt' WHERE uid ='$uid'";
-
-
-        if ($conn->query($sql) === TRUE) {
-            $_SESSION['update_success'] = $update_success;
-            header("Refresh:3");
-        } else {
-            echo 'query error: ' . mysqli_error($conn);
-        }
+        echo 'query error: ' . mysqli_error($conn);
     }
 }
 
