@@ -142,7 +142,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<td><span name="name"><?= $user['name'] ?></span></td>
 							<td><span name="email"><?= $user['email'] ?></span></td>
 							<td>
-								<span name="dept">
+								<span>
 									<?php foreach ($codebase_list as $key) : ?>
 										<?php 
 											if($key['code']==$user['dept']){

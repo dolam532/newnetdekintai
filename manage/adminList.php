@@ -130,7 +130,17 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                             <td><span><?= $key['pwd'] ?></span></td>
                             <td><span><?= $key['name'] ?></span></td>
                             <td><span><?= $key['email'] ?></span></td>
-                            <td><span><?= $key['dept'] ?></span></td>
+                            <td>
+                                <span>
+                                    <?php foreach ($codebase_list as $k) : ?>
+                                        <?php
+                                        if ($k['code'] == $key['dept']) {
+                                            echo $k['name'];
+                                        }
+                                        ?>
+                                    <?php endforeach; ?>
+                                </span>
+                            </td>
                             <td><span><?= $key['grade'] ?></span></td>
                             <td><span><?= $key['companyname'] ?></span></td>
                             <td>

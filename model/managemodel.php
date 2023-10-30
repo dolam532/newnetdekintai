@@ -39,7 +39,7 @@ if (isset($_POST['btnRegMi'])) {
 // Select database from tbl_company table
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_company_select = 'SELECT * FROM `tbl_company`';
-} elseif ($_SESSION['auth_type'] == constant('ADMIN')) {
+} elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $sql_company_select = 'SELECT * FROM `tbl_company` WHERE `tbl_company`.`companyid` IN("' . $_SESSION['auth_companyid'] . '")';
 }
 $result_company_select = mysqli_query($conn, $sql_company_select);
@@ -325,7 +325,6 @@ if (isset($_POST['btnUpdateAM'])) {
         $fileName = $udsignstamp_old;
     }
 
-
     // if not error save
     if ($uploadOk) {
         if (move_uploaded_file($_FILES["udsignstamp_new"]["tmp_name"], $uploadFile)) {
@@ -335,9 +334,8 @@ if (isset($_POST['btnUpdateAM'])) {
             error_log("Upload Error");
         }
         $sql = "UPDATE tbl_user SET  
-        companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName'
-       , email='$email',dept='$dept', bigo='$bigo' , upt_dt='$upt_dt' WHERE uid ='$uid'";
-
+        companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName', 
+        email='$email', dept='$dept', bigo='$bigo', upt_dt='$upt_dt' WHERE uid ='$uid'";
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['update_success'] = $update_success;
