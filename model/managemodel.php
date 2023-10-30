@@ -159,7 +159,15 @@ if (isset($_POST['DeleteCL'])) {
 
 // 2023-10-11/1340-006
 // upload image  add start
-// AdminList.php
+// adminList.php
+// Select data from tbl_codebase
+$sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
+WHERE `tbl_codebase`.`typecode` = "' . constant('DEPARTMENT') . '"
+AND `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+GROUP BY `code`, `name`';
+$result_codebase = mysqli_query($conn, $sql_codebase);
+$codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
+
 // Select database from tbl_user table
 $sql_admin_select = 'SELECT DISTINCT
     `tbl_user`.*,

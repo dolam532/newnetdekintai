@@ -188,7 +188,12 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                 </div>
                                 <div class="col-xs-6">
                                     <label for="dept">部署</label>
-                                    <input type="text" class="form-control" name="dept" id="dept" placeholder="開発部" maxlength="50" style="text-align: left">
+                                    <select class="form-control" id="dept" name="dept">
+                                        <option value="" disabled selected>選択してください。</option>
+                                        <?php foreach ($codebase_list as $key) : ?>
+                                            <option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                             </div>
                             <br>
@@ -277,7 +282,12 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                 </div>
                                 <div class="col-xs-6">
                                     <label for="dept">部署</label>
-                                    <input type="text" class="form-control" name="uddept" id="uddept" placeholder="開発部" maxlength="50" style="text-align: left">
+                                    <select class="form-control" id="uddept" name="uddept">
+                                        <option value="" disabled selected>選択してください。</option>
+                                        <?php foreach ($codebase_list as $key) : ?>
+                                            <option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                             </div>
                             <br>
@@ -546,7 +556,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                 $("#udname").text($('[name="udname"]').val("<?php echo $key['name'] ?>"));
                 $("#udgrade").text($('[name="udgrade"]').val("<?php echo $key['grade'] ?>"));
                 $("#udemail").text($('[name="udemail"]').val("<?php echo $key['email'] ?>"));
-                $("#uddept").text($('[name="uddept"]').val("<?php echo $key['dept'] ?>"));
+                $("#uddept").val("<?php echo $key['dept'] ?>");
                 $("#udcompanyid").val("<?php echo $key['companyid']; ?>");
 
                 var udsignstamp_old = $("input[name=udsignstamp_old]:hidden");
