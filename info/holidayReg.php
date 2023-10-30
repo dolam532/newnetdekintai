@@ -100,7 +100,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             </div>
         </form>
         <div class="col-md-4 text-right">
-            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')  || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                 <div class="title_btn">
                     <input type="button" id="btnNew" value="新規">
                 </div>
@@ -130,7 +130,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                         <tr>
                             <td><span><?= $key['holiyear'] ?></span></td>
                             <td>
-                                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                                     <a href="#"><span class="showModal"><?= $key['holiday'] ?></span></a>
                                 <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
                                     <?= $key['holiday'] ?></span>

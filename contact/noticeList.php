@@ -120,7 +120,7 @@ if ($_SESSION['auth'] == false) {
             </div>
             <div class="col-md-3 text-right">
                 <div class="title_btn">
-                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                         <input type="submit" name="SearchButtonNL" value="検索">
                         <input type="button" id="btnNewNL" value="新規">
                     <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
@@ -166,7 +166,7 @@ if ($_SESSION['auth'] == false) {
                                         ?>
                                     </span></td>
                                 <td style="text-align:left">
-                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                                         <a href="#">
                                             <span class="showModal">
                                                 <span class="noticeList_class">

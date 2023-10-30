@@ -83,7 +83,7 @@ if ($_SESSION['auth'] == false) {
         </div>
         <div class="col-md-4 text-right">
             <div class="title_btn">
-                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                     <input type="button" id="btnNewCL" value="新規">
                 <?php endif; ?>
             </div>
@@ -184,7 +184,7 @@ if ($_SESSION['auth'] == false) {
                                     </span>
                                 </td>
                                 <td>
-                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                                         <a href="#">
                                             <span class="showModal">
                                                 <span class="codemasterList_class">
