@@ -1,5 +1,6 @@
 <?php
 $reg_dt = date('Y-m-d H:i:s');
+$upt_dt = date('Y-m-d H:i:s');
 
 // manageInfo.php
 // Select database from tbl_manageinfo table
@@ -8,7 +9,7 @@ $sql_manageinfo = 'SELECT DISTINCT
     `tbl_company`.`companyname`
     FROM `tbl_manageinfo` 
     LEFT JOIN `tbl_company` ON `tbl_manageinfo`.`companyid` = `tbl_company`.`companyid`
-    WHERE `tbl_manageinfo`.`companyid` IN("' . constant('GANASYS_COMPANY_ID') . '")';
+    WHERE `tbl_manageinfo`.`companyid` IN("' . $_SESSION['auth_companyid'] . '")';
 $result_manageinfo = mysqli_query($conn, $sql_manageinfo);
 $manageinfo_list = mysqli_fetch_all($result_manageinfo, MYSQLI_ASSOC);
 
@@ -68,12 +69,12 @@ if ($_POST['SearchButtonCL'] == NULL) {
     }
 
     $sql_company = 'SELECT *
-FROM `tbl_company`
-WHERE `tbl_company`.`companyname` LIKE "%' . $searchCompanyname . '%"
-AND `tbl_company`.`use_yn` = "' . $searchUse_yn . '"';
-$result_company = mysqli_query($conn, $sql_company);
-$company_list = mysqli_fetch_all($result_company, MYSQLI_ASSOC);
-
+    FROM `tbl_company`
+    WHERE `tbl_company`.`companyname` LIKE "%' . $searchCompanyname . '%"
+    AND `tbl_company`.`use_yn` = "' . $searchUse_yn . '"';
+    $result_company = mysqli_query($conn, $sql_company);
+    $company_list = mysqli_fetch_all($result_company, MYSQLI_ASSOC);
+    
 }
 
 // Save Data to tbl_company
@@ -153,6 +154,8 @@ if (isset($_POST['DeleteCL'])) {
     }
 }
 
+// 2023-10-11/1340-006
+// upload image  add start
 // AdminList.php
 // Select database from tbl_user table
 $sql_admin_select = 'SELECT DISTINCT
@@ -190,12 +193,11 @@ if ($_POST['SearchButtonAM'] == NULL) {
     }
 
     $sql_admin = 'SELECT *
-        FROM `tbl_user`
-        WHERE `tbl_user`.`name` LIKE "%' . $searchAdminName . '%"
-        AND `tbl_user`.`grade` IN ("' . $searchAdminGrade . '")';
-    $result_admin = mysqli_query($conn, $sql_admin);
-    $admin_list = mysqli_fetch_all($result_admin, MYSQLI_ASSOC);
-
+    FROM `tbl_user`
+    WHERE `tbl_user`.`name` LIKE "%' . $searchAdminName . '%"
+    AND `tbl_user`.`grade` IN ("' . $searchAdminGrade . '")';
+$result_admin = mysqli_query($conn, $sql_admin);
+$admin_list = mysqli_fetch_all($result_admin, MYSQLI_ASSOC);
 }
 
 // Save Data to tbl_user
@@ -212,16 +214,60 @@ if (isset($_POST['btnRegAM'])) {
     $outymd = "";
     $type = constant('ADMINISTRATOR');
 
-    $sql = "INSERT INTO `tbl_user` (`uid`, `companyid`, `name`, `pwd`, `dept`, 
-                `email`, `grade`, `type`, `bigo`, `inymd`, `outymd`, `reg_dt`)
-                VALUES ('$uid', '$companyid', '$name', '$pwd', '$dept',
-                '$email', '$grade', '$type', '$bigo', '$inymd', '$outymd', '$reg_dt')";
+    $fileExtension = pathinfo($_FILES["signstamp"]["name"], PATHINFO_EXTENSION);
+    $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
+    $originalFileName = $_FILES["signstamp"]["name"];
+    $uploadFile = $IMAGE_UPLOAD_DIR_STAMP . $newFileName;
+    $uploadOk = true;
+    global $STAMP_MAXSIZE;
 
-    if ($conn->query($sql) === TRUE) {
-        $_SESSION['save_success'] =  $save_success;
-        header("Refresh:3");
-    } else {
-        echo 'query error: ' . mysqli_error($conn);
+
+    // Check file name is exists
+    if (file_exists($uploadFile)) {
+        error_log("File name is exists -> Delete old file name");
+        unlink($uploadFile);
+    }
+    // check size 
+    if (!isFileSizeValid($_FILES["signstamp"], $STAMP_MAXSIZE)) {
+        error_log("File is BIG!");
+        $uploadOk = false;
+    }
+    // check valid extention 
+    $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
+    if (!checkValidExtension($fileExtension)) {
+
+        error_log("Image only(png)." . $fileExtension);
+        error_log("FileName" . $originalFileName);
+        $uploadOk = false;
+    }
+
+    // if not error save
+    if ($uploadOk) {
+        $fileName = $newFileName;
+        // upload to server
+        if (move_uploaded_file($_FILES["signstamp"]["tmp_name"], $uploadFile)) {
+            deleteNoticeImages($IMAGE_UPLOAD_DIR_STAMP, $uid, $newFileName);
+        } else {
+            error_log("Upload Error");
+        }
+        if ($fileName == null) {
+            $fileName == '';
+        }
+
+
+        // insert to DB 
+        $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`
+        , `signstamp`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `reg_dt`) 
+         VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type'
+        , '$fileName', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$reg_dt')";
+
+        if ($conn->query($sql_user_insert) === TRUE) {
+            $_SESSION['save_success'] = $save_success;
+            error_log("*********Inserted success ID: " . $uid);
+            header("Refresh:3");
+        } else {
+            echo 'query error: ' . mysqli_error($conn);
+        }
     }
 }
 
@@ -236,35 +282,155 @@ if (isset($_POST['btnUpdateAM'])) {
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
 
-    $sql = "UPDATE tbl_user SET 
-            pwd='$pwd',
-            name='$name',
-            grade='$grade',
-            email='$email',
-            dept='$dept',
-            companyid='$companyid',
-            bigo='$bigo'
-        WHERE uid ='$uid'";
+    $fileExtension = pathinfo($_FILES["udsignstamp_new"]["name"], PATHINFO_EXTENSION);
+    $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
+    $originalFileName = $_FILES["udsignstamp_new"]["name"];
+    $uploadFile = $IMAGE_UPLOAD_DIR_STAMP . $newFileName;
+    $uploadOk = true;
+    global $STAMP_MAXSIZE;
 
-    if ($conn->query($sql) === TRUE) {
-        $_SESSION['update_success'] =  $update_success;
-        header("Refresh:3");
-    } else {
-        echo 'query error: ' . mysqli_error($conn);
+    // Check file name is exists
+    if (file_exists($uploadFile)) {
+        error_log("File name is exists -> Delete old file name");
+        unlink($uploadFile);
+    }
+
+    // check size 
+    if (!isFileSizeValid($_FILES["udsignstamp_new"], $STAMP_MAXSIZE)) {
+        error_log("File is BIG!");
+        $uploadOk = false;
+    }
+
+    // check valid extention 
+    $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
+    if (!checkValidExtension($fileExtension)) {
+        error_log("Image only(png).");
+        $uploadOk = false;
+    }
+
+    // if not error save
+    if ($uploadOk) {
+        if (move_uploaded_file($_FILES["udsignstamp_new"]["tmp_name"], $uploadFile)) {
+            deleteNoticeImages($IMAGE_UPLOAD_DIR_STAMP, $uid, $newFileName);
+            $fileName = $newFileName;
+        } else {
+            error_log("Upload Error");
+        }
+        $sql = "UPDATE tbl_user SET  
+        companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName'
+       , email='$email',dept='$dept', bigo='$bigo' , upt_dt='$upt_dt' WHERE uid ='$uid'";
+
+
+        if ($conn->query($sql) === TRUE) {
+            $_SESSION['save_success'] = $save_success;
+            header("Refresh:3");
+        } else {
+            echo 'query error: ' . mysqli_error($conn);
+        }
     }
 }
 
 // Delete data to tbl_user table of database
 if (isset($_POST['DeleteAM'])) {
     $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+    $filePath = $IMAGE_UPLOAD_DIR_STAMP . $_POST['udsignstamp_old'];
+
+    if (file_exists($filePath)) {
+        unlink($filePath);
+    }
 
     $sql = "DELETE FROM `tbl_user` 
             WHERE uid ='$uid'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['delete_success'] =  $delete_success;
+        $_SESSION['delete_success'] = $delete_success;
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+// check valid size
+function isFileSizeValid($file, $maxSize)
+{
+    return $file["size"] <= $maxSize;
+}
+
+// check valid extention
+function checkValidExtension($fEx)
+{
+    global $ALLOWED_TYPES_STAMP;
+    $validExtensions = array_map('strtolower', $ALLOWED_TYPES_STAMP);
+    $fEx = trim(strtolower($fEx));
+    return in_array($fEx, $ALLOWED_TYPES_STAMP);
+}
+
+// delete old image and image not in format 
+// when 1_97_8372891372819.jpgは $newFileNameなら 1_97_xxxxxxxxxxxxx.jpg を削除する 
+function deleteNoticeImages($uploadDir, $uId, $newFileName)
+{
+    global $LENGTH_RANDOM_UNIQUE_NAME_STAMP;
+    $files = scandir($uploadDir);
+    foreach ($files as $file) {
+        if ($file !== $newFileName && strpos($file, $uId) === 0) {
+            $filePath = $uploadDir . $file;
+            if (unlink($filePath)) {
+                error_log("******Deleted file: " . $file);
+            } else {
+                error_log("****Failed to delete file:" . $file);
+            }
+        }
+        if ($file !== $newFileName) {
+            if (preg_match('/_' . preg_quote($uId, '/') . '_/', $file)) {
+                error_log("***------------***FILE: " . $file);
+                $filePath = $uploadDir . $file;
+                if (unlink($filePath)) {
+                    error_log("******Deleted file: " . $file);
+                } else {
+                    error_log("****Failed to delete file:" . $file);
+                }
+            }
+        }
+        if (!preg_match('/_([a-zA-Z0-9]+)_\w{' . $LENGTH_RANDOM_UNIQUE_NAME_STAMP . '}\.\w+/', $file)) {
+            $filePath = $uploadDir . $file;
+            unlink($filePath);
+        }
+
+        if (!ctype_alnum($file[0])) { // when start not number or word
+            $filePath = $uploadDir . $file;
+            if (unlink($filePath)) {
+                error_log("******Deleted file: " . $file);
+            } else {
+                error_log("****Failed to delete file:" . $file);
+            }
+        }
+    }
+}
+
+// generate file name 
+function generateUniqueFileName($uploadDir, $fileEx, $uId, $companyId)
+{
+    global $LENGTH_RANDOM_UNIQUE_NAME_STAMP;
+    $uniqueFileName = generateRandomString($LENGTH_RANDOM_UNIQUE_NAME_STAMP);
+    $newFileName = $companyId . "_" . $uId . "_" . $uniqueFileName . '.' . $fileEx;
+    while (file_exists($uploadDir . $newFileName)) {
+        $uniqueFileName = generateRandomString($LENGTH_RANDOM_UNIQUE_NAME_STAMP);
+        $newFileName = $companyId . "_" . $uId . "_" . $uniqueFileName . '.' . $fileEx;
+    }
+    return $newFileName;
+}
+
+function generateRandomString($length)
+{
+    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $randomString = '';
+    for ($i = 0; $i < $length; $i++) {
+        $randomString .= $characters[rand(0, strlen($characters) - 1)];
+    }
+    return $randomString;
+}
+// 2023-10-11/1340-006
+// upload image add end
