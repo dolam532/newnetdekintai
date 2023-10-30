@@ -68,11 +68,12 @@ if ($_POST['SearchButtonCL'] == NULL) {
     }
 
     $sql_company = 'SELECT *
-        FROM `tbl_company`
-        WHERE `tbl_company`.`companyname` IN ("' . $searchCompanyname . '")
-        AND `tbl_company`.`use_yn` IN ("' . $searchUse_yn . '")';
-    $result_company = mysqli_query($conn, $sql_company);
-    $company_list = mysqli_fetch_all($result_company, MYSQLI_ASSOC);
+FROM `tbl_company`
+WHERE `tbl_company`.`companyname` LIKE "%' . $searchCompanyname . '%"
+AND `tbl_company`.`use_yn` = "' . $searchUse_yn . '"';
+$result_company = mysqli_query($conn, $sql_company);
+$company_list = mysqli_fetch_all($result_company, MYSQLI_ASSOC);
+
 }
 
 // Save Data to tbl_company
@@ -190,10 +191,11 @@ if ($_POST['SearchButtonAM'] == NULL) {
 
     $sql_admin = 'SELECT *
         FROM `tbl_user`
-        WHERE `tbl_user`.`name` IN ("' . $searchAdminName . '")
+        WHERE `tbl_user`.`name` LIKE "%' . $searchAdminName . '%"
         AND `tbl_user`.`grade` IN ("' . $searchAdminGrade . '")';
     $result_admin = mysqli_query($conn, $sql_admin);
     $admin_list = mysqli_fetch_all($result_admin, MYSQLI_ASSOC);
+
 }
 
 // Save Data to tbl_user
