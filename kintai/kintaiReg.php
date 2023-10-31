@@ -990,10 +990,10 @@ if ($_SESSION['auth'] == false) {
 							<input type="submit" name="changeGenid" class="btn btn-primary" id="btnchgGenid"
 								role="button" value="選択">
 						</div>
-						<div class="col-md-2">
+						<!-- <div class="col-md-2">
 							<input type="submit" name="RegGenid" class="btn btn-primary" id="RegGenId" role="button"
 								value="登録ヘ">
-						</div>
+						</div> -->
 						<div class="col-md-2">
 							<button type="button" class="btn btn-default" data-dismiss="modal"
 								id="modalClose">閉じる</button>
