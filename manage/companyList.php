@@ -43,7 +43,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         display: none;
     }
 </style>
-<title>使用者登録</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <?php
@@ -79,11 +78,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         unset($_SESSION['delete_success']);
     }
     ?>
+    <title>使用者編集</title>
     <form method="post">
         <div class="row">
             <div class="col-md-3 text-left">
                 <div class="title_name">
-                    <span class="text-left">使用者登録</span>
+                    <span class="text-left">使用者編集</span>
                 </div>
             </div>
             <div class="col-md-3 text-center">
@@ -145,7 +145,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             <td><span><?= $key['companyid'] ?></span></td>
                             <td><span><?= $key['companycode'] ?></span></td>
                             <td>
-                                <?php if ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
+                                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN') || $_SESSION['auth_type'] == constant('ADMIN')) : ?>
                                     <a href="#">
                                         <span class="showModal"><?= $key['companyname'] ?><span class="companyList_class"><?= ',' . $key['companyid'] ?></span></span>
                                     </a>

@@ -39,7 +39,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         vertical-align: middle;
     }
 </style>
-<title>管理情報登録</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <?php
@@ -53,11 +52,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         unset($_SESSION['update_mi_success']);
     }
     ?>
+    <title>会社情報編集</title>
     <form method="post">
         <div class="row">
             <div class="col-md-10 text-left">
                 <div class="title_name">
-                    <span class="text-left">管理情報登録</span>
+                    <span class="text-left">会社情報編集</span>
                 </div>
             </div>
             <div class="col-md-2 text-right">
