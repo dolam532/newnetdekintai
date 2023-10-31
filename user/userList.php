@@ -144,10 +144,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<td>
 								<span>
 									<?php foreach ($codebase_list as $key) : ?>
-										<?php 
-											if($key['code']==$user['dept']){
-												echo $key['name'];
-											}
+										<?php
+										if ($key['code'] == $user['dept']) {
+											echo $key['name'];
+										}
 										?>
 									<?php endforeach; ?>
 								</span>
@@ -260,7 +260,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<br>
 						<div class="row">
 							<div class="col-xs-12">
-								<label for="signstamp_addNew">印鑑</label>
+								<label for="signstamp_addNew">印鑑</label><span style="font-size:smaller; color:red;"> (印鑑はpngタイプを選択してください。)</span>
 								<img width="50" id="signstamp_addNew">
 								<input type="file" name="signstamp" id="fileInput" onchange=checkFileSize(this)>
 							</div>
@@ -373,7 +373,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<br>
 						<div class="row">
 							<div class="col-xs-12">
-								<label for="signstamp">印鑑</label><br>
+								<label for="signstamp">印鑑</label><span style="font-size:smaller; color:red;"> (印鑑はpngタイプを選択してください。)</span><br>
 								<img width="50" id="udsignstamp">
 								<span id="udsignstamp_name"></span>
 								<input type="hidden" name="udsignstamp_old" id="udsignstamp_old">

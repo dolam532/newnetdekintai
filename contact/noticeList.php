@@ -273,7 +273,7 @@ if ($_SESSION['auth'] == false) {
                             <br>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <label for="imagefile_addNew">写真</label>
+                                    <label for="imagefile_addNew">写真</label><span style="font-size:smaller; color:red;"> (写真はpng、jpg、jpeg、gifタイプを選択してください。)</span>
                                     <img width="50" id="imagefile_addNew">
                                     <input type="file" name="imagefile" accept="image/*" id="fileInput" onchange=checkFileSize(this)>
                                 </div>
@@ -350,7 +350,7 @@ if ($_SESSION['auth'] == false) {
                             <br>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <label for="udimagefile">写真</label><br>
+                                    <label for="udimagefile">写真</label><span style="font-size:smaller; color:red;"> (写真はpng、jpg、jpeg、gifタイプを選択してください。)</span><br>
                                     <img width="50" id="udimagefile">
                                     <span id="imagename" name="imagename" hidden></span>
                                     <input type="hidden" name="udimagefile_old" id="udimagefile_old">
