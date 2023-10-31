@@ -110,7 +110,7 @@ if (isset($_POST['SaveUserList'])) {
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
 
-    $genid = $genid ?? 0;
+    $genid = isset($genid) ? $genid : '0';
     if (!isset($genid)) {
         $genid = 0;
     }
