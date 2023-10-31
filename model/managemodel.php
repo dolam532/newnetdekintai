@@ -192,25 +192,33 @@ if ($_POST['SearchButtonAM'] == NULL) {
     $AdminName = array_unique($AdminName);
     $AdminGrade = array_unique($AdminGrade);
 
-    if ($_POST['searchAdminName'] != "") {
-        $searchAdminName = trim($_POST['searchAdminName']);
-    } else {
-        $searchAdminName = implode('","', $AdminName);
-    }
+    $searchAdminName = isset($_POST['searchAdminName']) ? trim($_POST['searchAdminName']) : '';
+    $searchAdminGrade = isset($_POST['searchAdminGrade']) ? trim($_POST['searchAdminGrade']) : '';
 
-    if ($_POST['searchAdminGrade'] != "") {
-        $searchAdminGrade = trim($_POST['searchAdminGrade']);
+    if (empty($searchAdminName) && empty($searchAdminGrade)) {
+        $admin_list = $admin_list_select; // No filtering needed, display all data
     } else {
-        $searchAdminGrade = implode('","', $AdminGrade);
-    }
+        $whereClause = array();
 
-    $sql_admin = 'SELECT *
-    FROM `tbl_user`
-    WHERE `tbl_user`.`name` LIKE "%' . $searchAdminName . '%"
-    AND `tbl_user`.`grade` IN ("' . $searchAdminGrade . '")';
-    $result_admin = mysqli_query($conn, $sql_admin);
-    $admin_list = mysqli_fetch_all($result_admin, MYSQLI_ASSOC);
+        if (!empty($searchAdminName)) {
+            $whereClause[] = '`tbl_user`.`name` LIKE "%' . $searchAdminName . '%"';
+        }
+
+        if (!empty($searchAdminGrade)) {
+            $searchAdminGradeArray = explode(',', $searchAdminGrade);
+            $gradeConditions = array();
+            foreach ($searchAdminGradeArray as $grade) {
+                $gradeConditions[] = '"'.$grade.'"';
+            }
+            $whereClause[] = '`tbl_user`.`grade` IN (' . implode(',', $gradeConditions) . ')';
+        }
+
+        $sql_admin = 'SELECT * FROM `tbl_user` WHERE ' . implode(' AND ', $whereClause);
+        $result_admin = mysqli_query($conn, $sql_admin);
+        $admin_list = mysqli_fetch_all($result_admin, MYSQLI_ASSOC);
+    }
 }
+
 
 // Save Data to tbl_user
 if (isset($_POST['btnRegAM'])) {
