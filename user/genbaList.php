@@ -482,10 +482,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	// Check Error 新規
 	$(document).on('click', '#btnReg_GL', function (e) {
 		// check not admin 
-		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')): ?>
+		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')): ?>
 			return;
 		<?php endif; ?>
-
+		
 		var genbaname = $("#genbaname").val();
 		var genbacompany = $("#genbacompany").val();
 		var strymd = $("#strymd").val();
@@ -580,12 +580,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	// Check Error 編集
 	$(document).on('click', '#btnUpd_GL', function (e) {
 		// check not admin 
-		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR')): ?>
+		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')): ?>
 			return;
 		<?php endif; ?>
 		// check 0 id  
 		var genid = $('#showModalChange').attr('data-genid');
-		if (genid === '0' && "<?php echo $_SESSION['auth_type']; ?>" !== "<?php echo constant('ADMIN'); ?>") {
+		if (genid === '0' && "<?php echo $_SESSION['auth_type']; ?>" !== "<?php echo constant('MAIN_ADMIN'); ?>") {
 			return;
 		}
 

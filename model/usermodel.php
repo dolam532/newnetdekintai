@@ -380,9 +380,11 @@ if (isset($_POST['SaveKinmu'])) {
     $offtime1 = mysqli_real_escape_string($conn, $_POST['offtime1']);
     $offtime2 = mysqli_real_escape_string($conn, $_POST['offtime2']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
+    $template = mysqli_real_escape_string($conn, $_POST['use_type']);
+    $uid = $_SESSION['auth_uid'];
 
-    $sql_genba_insert = mysqli_query($conn, "INSERT INTO `tbl_genba` (`genbaname`, `genbacompany`, `companyid`, `strymd`, `endymd`, `use_yn`, `workstrtime`, `workendtime`, `offtime1`, `offtime2`, `bigo`, `reg_dt`, `upt_dt`)
-                VALUES ('$genbaname', '$genbacompany', '$companyid', '$strymd', '$endymd', '$use_yn', '$workstrtime', '$workendtime', '$offtime1', '$offtime2', '$bigo', '$reg_dt', '$upt_dt')");
+    $sql_genba_insert = mysqli_query($conn, "INSERT INTO `tbl_genba` (`genbaname`, `genbacompany`, `companyid`, `strymd`, `endymd`, `use_yn`, `workstrtime`, `workendtime`,  `offtime1`, `offtime2`, `bigo`,  `template` , `uid` ,   `reg_dt`, `upt_dt`)
+                VALUES ('$genbaname', '$genbacompany', '$companyid', '$strymd', '$endymd', '$use_yn', '$workstrtime', '$workendtime', '$offtime1', '$offtime2', '$bigo',  '$template' , '$uid'  ,'$reg_dt', '$upt_dt')");
 
     if ($sql_genba_insert) {
         $_SESSION['save_success'] = $save_success;
@@ -415,6 +417,9 @@ if (isset($_POST['UpdateKinmu'])) {
     $offtime1 = mysqli_real_escape_string($conn, $_POST['udofftime1']);
     $offtime2 = mysqli_real_escape_string($conn, $_POST['udofftime2']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo_cmodal']);
+    $template = mysqli_real_escape_string($conn, $_POST['uduse_type']);
+    $uid = $_SESSION['auth_uid'];
+   
     $sql = "UPDATE tbl_genba SET 
             genbaname='$genbaname',
             genbacompany='$genbacompany',
@@ -427,7 +432,9 @@ if (isset($_POST['UpdateKinmu'])) {
             offtime2='$offtime2',
             bigo='$bigo',
             use_yn='$use_yn',
-            upt_dt='$upt_dt'
+            upt_dt='$upt_dt',
+            template='$template',
+            uid = '$uid'
         WHERE genid ='$genid'";
 
     if ($conn->query($sql) === TRUE) {
