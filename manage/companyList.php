@@ -87,47 +87,52 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     </title>
     <form method="post">
         <div class="row">
-            <div class="col-md-3 text-left">
-                <div class="title_name">
-                    <span class="text-left">
-                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                            使用者登録
-                        <?php else : ?>
-                            使用者編集
-                        <?php endif; ?>
-                    </span>
+            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                <div class="col-md-3 text-left">
+                    <div class="title_name">
+                        <span class="text-left">使用者登録</span>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 text-center">
-                <div class="title_condition">
-                    <label for="searchUseyn">使用区分&nbsp;:</label>
-                    <?php
-                    foreach (ConstArray::$search_company as $key => $value) {
-                    ?>
-                        <input type='radio' name='searchUseyn' value='<?= $key ?>' <?php if ($key == $_POST['searchUseyn']) {
-                                                                                        echo ' checked="checked"';
-                                                                                    } ?>>
-                        <?= $value ?>
-                        </input>
-                    <?php
-                    }
-                    ?>
+                <div class="col-md-3 text-center">
+                    <div class="title_condition">
+                        <label for="searchUseyn">使用区分&nbsp;:</label>
+                        <?php
+                        foreach (ConstArray::$search_company as $key => $value) {
+                        ?>
+                            <input type='radio' name='searchUseyn' value='<?= $key ?>' <?php if ($key == $_POST['searchUseyn']) {
+                                                                                            echo ' checked="checked"';
+                                                                                        } ?>>
+                            <?= $value ?>
+                            </input>
+                        <?php
+                        }
+                        ?>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 text-left">
-                <div class="title_condition">
-                    <label for="searchCompanyname">会社名 : <input type="text" name="searchCompanyname" value="<?= $_POST['searchCompanyname'] ?>" style="width: 200px;" placeholder="〇〇会社"></label>
+                <div class="col-md-3 text-left">
+                    <div class="title_condition">
+                        <label for="searchCompanyname">会社名 : <input type="text" name="searchCompanyname" value="<?= $_POST['searchCompanyname'] ?>" style="width: 200px;" placeholder="〇〇会社"></label>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-3 text-right">
-                <div class="title_btn">
-                    <input type="submit" name="SearchButtonCL" value="検索">
-                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                <div class="col-md-3 text-right">
+                    <div class="title_btn">
+                        <input type="submit" name="SearchButtonCL" value="検索">
                         <input type="button" id="btnNewCL" value="新規">
-                    <?php endif; ?>
-                    <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
+                        <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
+                    </div>
                 </div>
-            </div>
+            <?php else : ?>
+                <div class="col-md-10 text-left">
+                    <div class="title_name">
+                        <span class="text-left">使用者編集</span>
+                    </div>
+                </div>
+                <div class="col-md-2 text-right">
+                    <div class="title_btn">
+                        <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
     </form>
     <div class="form-group">
@@ -157,20 +162,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             <td><span><?= $key['companyid'] ?></span></td>
                             <td><span><?= $key['companycode'] ?></span></td>
                             <td>
-                                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN') || $_SESSION['auth_type'] == constant('ADMIN')) : ?>
                                     <a href="#">
                                         <span class="showModal"><?= $key['companyname'] ?><span class="companyList_class"><?= ',' . $key['companyid'] ?></span></span>
                                     </a>
-                                <?php elseif ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
-                                    <?php if ($key['companyid'] == $_SESSION['auth_companyid']) : ?>
-                                        <a href="#">
-                                            <span class="showModal"><?= $key['companyname'] ?><span class="companyList_class"><?= ',' . $key['companyid'] ?></span></span>
-                                        </a>
-                                    <?php else : ?>
-                                        <span><?= $key['companyname'] ?></span>
-                                    <?php endif; ?>
-                                <?php else : ?>
-                                    <span><?= $key['companyname'] ?></span>
                                 <?php endif; ?>
                             </td>
                             <td><span><?= $key['staff'] ?></span></td>

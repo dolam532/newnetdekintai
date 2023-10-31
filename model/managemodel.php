@@ -45,8 +45,10 @@ if (isset($_POST['btnRegMi'])) {
 
 // companyList.php
 // Select database from tbl_company table
-if ($_SESSION['auth_type'] == constant('MAIN_ADMIN') || $_SESSION['auth_type'] == constant('ADMIN')) {
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_company_select = 'SELECT * FROM `tbl_company`';
+} elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_company_select = 'SELECT * FROM `tbl_company` WHERE `tbl_company`.`companyid` IN("' . $_SESSION['auth_companyid'] . '")';
 }
 $result_company_select = mysqli_query($conn, $sql_company_select);
 $company_list_select = mysqli_fetch_all($result_company_select, MYSQLI_ASSOC);
