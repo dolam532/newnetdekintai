@@ -38,6 +38,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         text-align: left;
         vertical-align: middle;
     }
+
+    span.manageinfo_class {
+        display: none;
+    }
 </style>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
@@ -52,73 +56,212 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         unset($_SESSION['update_mi_success']);
     }
     ?>
-    <title>会社情報編集</title>
-    <form method="post">
-        <div class="row">
-            <div class="col-md-10 text-left">
-                <div class="title_name">
-                    <span class="text-left">会社情報編集</span>
-                </div>
+    <title>
+        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+            会社情報登録
+        <?php else : ?>
+            会社情報編集
+        <?php endif; ?>
+    </title>
+    <div class="row">
+        <div class="col-md-8 text-left">
+            <div class="title_name">
+                <span class="text-left">
+                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                        会社情報登録
+                    <?php else : ?>
+                        会社情報編集
+                    <?php endif; ?>
+                </span>
             </div>
-            <div class="col-md-2 text-right">
-                <div class="title_btn">
-                    <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
+        </div>
+        <div class="col-md-4 text-right">
+            <div class="title_btn">
+                <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
+                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                    <input type="button" id="btnNewMI" value="新規">
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+        <div class="form-group" style="margin-top:10px;">
+            <table class="table table-bordered datatable">
+                <thead>
+                    <tr class="info">
+                        <th style="text-align: center; width: 10%;">Company ID</th>
+                        <th style="text-align: center; width: 25%;">Company Name</th>
+                        <th style="text-align: center; width: 15%;">締切（月）</th>
+                        <th style="text-align: center; width: 15%;">締切（日）</th>
+                        <th style="text-align: center; width: auto;">年間休暇時間</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php if (empty($manageinfo_list)) { ?>
+                        <tr>
+                            <td colspan="9" align="center"><?php echo $data_save_no; ?></td>
+                        </tr>
+                        <?php } elseif (!empty($manageinfo_list)) {
+                        foreach ($manageinfo_list as $key) {
+                        ?>
+                            <tr>
+                                <td><span><?= $key['companyid'] ?></span></td>
+                                <td>
+                                    <span>
+                                        <a href="#">
+                                            <span class="showModal"><?= $key['companyname'] ?><span class="manageinfo_class"><?= ',' . $key['companyid'] ?></span></span>
+                                        </a>
+                                    </span>
+                                </td>
+                                <td><span><?= $key['magamym'] ?></span></td>
+                                <td><span><?= $key['magamymd'] ?></span></td>
+                                <td><span><?= $key['kyukatimelimit'] ?></span></td>
+                            </tr>
+                    <?php
+                        }
+                    } ?>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 新規 -->
+        <div class="row">
+            <div class="modal" id="modal" tabindex="-1" style="display: none;">
+                <div class="modal-dialog">
+                    <form method="post">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                会社情報登録(<span>New</span>)
+                                <button class="close" data-dismiss="modal">x</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <label for="companycode">Company ID</label>
+                                        <input type="text" class="form-control" name="companyid" id="companyid" placeholder="companyid" maxlength="10" style="text-align: left">
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <label for="companyname">Company Name</label>
+                                        <input type="text" class="form-control" name="companyname" id="companyname" placeholder="xxx株式会社" maxlength="20" style="text-align: left">
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <label for="staff">締切（月）</label>
+                                        <input type="text" class="form-control" name="magamym" id="magamym" placeholder="2019/01" maxlength="100" style="text-align: left">
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <label for="telno">締切（日）</label>
+                                        <input type="text" class="form-control" name="magamymd" id="magamymd" placeholder="2019/01/01" maxlength="100" style="text-align: left">
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <label for="strymd">年間休暇時間</label>
+                                        <input type="text" class="form-control" name="kyukatimelimit" id="kyukatimelimit" maxlength="10" placeholder="40" style="text-align: left">
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-xs-9">
+                                        <label for="address">住所</label>
+                                        <input type="text" class="form-control" name="address" id="address" maxlength="150" style="text-align: left" placeholder="東京都東京区1丁目2番地二ホンビル3階">
+                                    </div>
+                                    <div class="col-xs-3">
+                                        <label for="use_yn"><strong>使用</strong></label>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" name="use_yn" value="1" checked>使用
+                                            <input type="radio" name="use_yn" value="0">中止
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label for="joken">契約条件</label>
+                                        <input type="text" class="form-control" name="joken" id="joken" maxlength="200" style="text-align: left" placeholder="契約条件">
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <label for="bigo">備考</label>
+                                        <input type="text" class="form-control" name="bigo" id="bigo" maxlength="300" style="text-align: left" placeholder="備考">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="text-align: center">
+                                <div class="col-xs-4"></div>
+                                <div class="col-xs-2">
+                                    <p class="text-center">
+                                        <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="登録">
+                                    </p>
+                                </div>
+                                <div class="col-xs-2">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                                </div>
+                                <div class="col-xs-4"></div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
+    <?php else : ?>
         <hr>
-        <div class="row">
-            <?php if (empty($manageinfo_list)) { ?>
-                <div class="form-group row">
-                    <div class="col-md-12"><?php echo $data_save_no; ?></div>
+        <form method="post">
+            <div class="row">
+                <?php if (empty($manageinfo_list)) { ?>
+                    <div class="form-group row">
+                        <div class="col-md-12"><?php echo $data_save_no; ?></div>
+                    </div>
+                    <?php } elseif (!empty($manageinfo_list)) {
+                    foreach ($manageinfo_list as $key) {
+                    ?>
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label for="companyid">Company ID</label>
+                                <input id="companyid" name="companyid" placeholder="Company ID" class="form-control" type="text" value="<?= $key['companyid'] ?>" readonly>
+                            </div>
+                            <div class="col-md-10">
+                                <label for="companyname">Company Name</label>
+                                <input id="companyname" name="companyname" placeholder="Company Name" class="form-control" type="text" value="<?= $key['companyname'] ?>" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-2">
+                                <label for="magamYm">締切（月）</label>
+                                <input id="magamYm" name="magamYm" placeholder="yyyy/mm" class="form-control" type="text" value="<?= $key['magamym'] ?>">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="magamYmd">締切（日）</label>
+                                <input id="magamYmd" name="magamYmd" placeholder="yyyy/mm/dd" class="form-control" type="text" value="<?= $key['magamymd'] ?>">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="kyukatimelimit">年間休暇時間</label>
+                                <input id="kyukatimelimit" name="kyukatimelimit" class="form-control" type="text" value="<?= $key['kyukatimelimit'] ?>" maxlength="2">
+                            </div>
+                            <div class="col-md-6"></div>
+                        </div>
+                <?php
+                    }
+                } ?>
+            </div>
+            <br>
+            <hr>
+            <div class="row">
+                <div class="col-xs-4"></div>
+                <div class="col-xs-2">
+                    <p class="text-center">
+                        <input type="submit" name="btnRegMi" class="btn btn-primary" id="btnReg" role="button" value="登録">
+                    </p>
                 </div>
-                <?php } elseif (!empty($manageinfo_list)) {
-                foreach ($manageinfo_list as $key) {
-                ?>
-                    <div class="form-group row">
-                        <div class="col-md-2">
-                            <label for="companyid">Company ID</label>
-                            <input id="companyid" name="companyid" placeholder="Company ID" class="form-control" type="text" value="<?= $key['companyid'] ?>" readonly>
-                        </div>
-                        <div class="col-md-10">
-                            <label for="companyname">Company Name</label>
-                            <input id="companyname" name="companyname" placeholder="Company Name" class="form-control" type="text" value="<?= $key['companyname'] ?>" readonly>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col-md-2">
-                            <label for="magamYm">締切（月）</label>
-                            <input id="magamYm" name="magamYm" placeholder="yyyy/mm" class="form-control" type="text" value="<?= $key['magamym'] ?>">
-                        </div>
-                        <div class="col-md-2">
-                            <label for="magamYmd">締切（日）</label>
-                            <input id="magamYmd" name="magamYmd" placeholder="yyyy/mm/dd" class="form-control" type="text" value="<?= $key['magamymd'] ?>">
-                        </div>
-                        <div class="col-md-2">
-                            <label for="kyukatimelimit">年間休暇時間</label>
-                            <input id="kyukatimelimit" name="kyukatimelimit" class="form-control" type="text" value="<?= $key['kyukatimelimit'] ?>" maxlength="2">
-                        </div>
-                        <div class="col-md-6"></div>
-                    </div>
-            <?php
-                }
-            } ?>
-        </div>
-        <br>
-        <hr>
-        <div class="row">
-            <div class="col-xs-4"></div>
-            <div class="col-xs-2">
-                <p class="text-center">
-                    <input type="submit" name="btnRegMi" class="btn btn-primary" id="btnReg" role="button" value="登録">
-                </p>
+                <div class="col-xs-2">
+                    <p class="text-center"><a class="btn btn-default btn-md" id="btnClose" href="../contact/noticeList.php" role="button">閉じる </a></p>
+                </div>
+                <div class="col-xs-4"></div>
             </div>
-            <div class="col-xs-2">
-                <p class="text-center"><a class="btn btn-default btn-md" id="btnClose" href="../contact/noticeList.php" role="button">閉じる </a></p>
-            </div>
-            <div class="col-xs-4"></div>
-        </div>
-    </form>
+        </form>
+    <?php endif; ?>
 </div>
 <script>
     // Datepicker Calender
@@ -162,6 +305,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             $("#kyukatimelimit").focus();
             return false;
         }
+    });
+
+    // New button: popup & clear 
+    $(document).on('click', '#btnNewMI', function(e) {
+        $('#modal').modal('toggle');
     });
 </script>
 <?php include('../inc/footer.php'); ?>

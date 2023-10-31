@@ -4,12 +4,20 @@ $upt_dt = date('Y-m-d H:i:s');
 
 // manageInfo.php
 // Select database from tbl_manageinfo table
-$sql_manageinfo = 'SELECT DISTINCT
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_manageinfo = 'SELECT DISTINCT
+    `tbl_manageinfo`.*,
+    `tbl_company`.`companyname`
+    FROM `tbl_manageinfo` 
+    LEFT JOIN `tbl_company` ON `tbl_manageinfo`.`companyid` = `tbl_company`.`companyid`';
+} else {
+    $sql_manageinfo = 'SELECT DISTINCT
     `tbl_manageinfo`.*,
     `tbl_company`.`companyname`
     FROM `tbl_manageinfo` 
     LEFT JOIN `tbl_company` ON `tbl_manageinfo`.`companyid` = `tbl_company`.`companyid`
     WHERE `tbl_manageinfo`.`companyid` IN("' . $_SESSION['auth_companyid'] . '")';
+}
 $result_manageinfo = mysqli_query($conn, $sql_manageinfo);
 $manageinfo_list = mysqli_fetch_all($result_manageinfo, MYSQLI_ASSOC);
 
@@ -37,10 +45,8 @@ if (isset($_POST['btnRegMi'])) {
 
 // companyList.php
 // Select database from tbl_company table
-if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN') || $_SESSION['auth_type'] == constant('ADMIN')) {
     $sql_company_select = 'SELECT * FROM `tbl_company`';
-} elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
-    $sql_company_select = 'SELECT * FROM `tbl_company` WHERE `tbl_company`.`companyid` IN("' . $_SESSION['auth_companyid'] . '")';
 }
 $result_company_select = mysqli_query($conn, $sql_company_select);
 $company_list_select = mysqli_fetch_all($result_company_select, MYSQLI_ASSOC);
@@ -208,7 +214,7 @@ if ($_POST['SearchButtonAM'] == NULL) {
             $searchAdminGradeArray = explode(',', $searchAdminGrade);
             $gradeConditions = array();
             foreach ($searchAdminGradeArray as $grade) {
-                $gradeConditions[] = '"'.$grade.'"';
+                $gradeConditions[] = '"' . $grade . '"';
             }
             $whereClause[] = '`tbl_user`.`grade` IN (' . implode(',', $gradeConditions) . ')';
         }

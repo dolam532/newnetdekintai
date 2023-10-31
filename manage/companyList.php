@@ -78,12 +78,24 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         unset($_SESSION['delete_success']);
     }
     ?>
-    <title>使用者編集</title>
+    <title>
+        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+            使用者登録
+        <?php else : ?>
+            使用者編集
+        <?php endif; ?>
+    </title>
     <form method="post">
         <div class="row">
             <div class="col-md-3 text-left">
                 <div class="title_name">
-                    <span class="text-left">使用者編集</span>
+                    <span class="text-left">
+                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                            使用者登録
+                        <?php else : ?>
+                            使用者編集
+                        <?php endif; ?>
+                    </span>
                 </div>
             </div>
             <div class="col-md-3 text-center">
@@ -145,10 +157,18 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             <td><span><?= $key['companyid'] ?></span></td>
                             <td><span><?= $key['companycode'] ?></span></td>
                             <td>
-                                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN') || $_SESSION['auth_type'] == constant('ADMIN')) : ?>
+                                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                                     <a href="#">
                                         <span class="showModal"><?= $key['companyname'] ?><span class="companyList_class"><?= ',' . $key['companyid'] ?></span></span>
                                     </a>
+                                <?php elseif ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
+                                    <?php if ($key['companyid'] == $_SESSION['auth_companyid']) : ?>
+                                        <a href="#">
+                                            <span class="showModal"><?= $key['companyname'] ?><span class="companyList_class"><?= ',' . $key['companyid'] ?></span></span>
+                                        </a>
+                                    <?php else : ?>
+                                        <span><?= $key['companyname'] ?></span>
+                                    <?php endif; ?>
                                 <?php else : ?>
                                     <span><?= $key['companyname'] ?></span>
                                 <?php endif; ?>
