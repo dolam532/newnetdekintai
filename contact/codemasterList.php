@@ -118,13 +118,13 @@ if ($_SESSION['auth'] == false) {
                             <?php if ($key['typecode'] == $_POST['typecode']) : ?>
                                 <tr>
                                     <td align="center">
-                                        <span style="font-weight:bold">
+                                        <span style="font-weight:bold; color:red; text-decoration: underline;">
                                             <?= $key['typecode'] ?>
                                         </span>
                                     </td>
                                     <td>
                                         <a href="#" class="submitLink">
-                                            <span style="font-weight:bold">
+                                            <span style="font-weight:bold; color:red; text-decoration: underline;">
                                                 <?= $key['typename'] ?>
                                             </span>
                                             <span class="codemasterList_class">
