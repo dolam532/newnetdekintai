@@ -57,7 +57,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     }
     ?>
     <?php
-    if (isset($_SESSION['update_success']) && isset($_POST['btnRegMi'])) {
+    if ((isset($_SESSION['update_success']) && isset($_POST['btnRegMi'])) || (isset($_SESSION['update_success']) && isset($_POST['btnUpdateMMI']))) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -191,6 +191,64 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                 </div>
             </div>
         </div>
+
+        <!-- 編集 -->
+        <div class="row">
+            <div class="modal" id="modal2" tabindex="-1" style="display: none;">
+                <div class="modal-dialog">
+                    <form method="post">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                会社情報編集(<span id="usname"></span>)
+                                <button class="close" data-dismiss="modal">x</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-xs-3">
+                                        <label for="companycode">Company ID</label>
+                                        <input type="text" class="form-control" name="udcompanyid" id="udcompanyid" value="<?= $new_companyID_mi ?>" maxlength="10" style="text-align: left" readonly>
+                                    </div>
+                                    <div class="col-xs-9">
+                                        <label for="companyname">Company Name</label>
+                                        <input type="text" class="form-control" name="udcompanyname" id="udcompanyname" placeholder="xxx株式会社" maxlength="20" style="text-align: left">
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <label for="staff">締切（月）</label>
+                                        <input type="text" class="form-control" name="udmagamym" id="udmagamYm" placeholder="2019/01" maxlength="100" style="text-align: left">
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <label for="telno">締切（日）</label>
+                                        <input type="text" class="form-control" name="udmagamymd" id="udmagamYmd" placeholder="2019/01/01" maxlength="100" style="text-align: left">
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <label for="strymd">年間休暇時間</label>
+                                        <input type="text" class="form-control" name="udkyukatimelimit" id="udkyukatimelimit" maxlength="10" placeholder="40" style="text-align: left">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="text-align: center">
+                                <div class="col-xs-3"></div>
+                                <div class="col-xs-2">
+                                    <p class="text-center">
+                                        <input type="submit" name="btnUpdateMMI" class="btn btn-primary" id="btnUpdateMMI" role="button" value="編集">
+                                    </p>
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="submit" name="DeleteMMI" class="btn btn-warning" role="button" value="削除">
+                                </div>
+                                <div class="col-xs-2">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                                </div>
+                                <div class="col-xs-3"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     <?php else : ?>
         <!-- Show data ADMIN -->
         <hr>
@@ -261,6 +319,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         dateFormat: 'yy/mm/dd'
     });
 
+    $("#udmagamYm").datepicker({
+        changeYear: true,
+        dateFormat: 'yy/mm'
+    });
+
+    $("#udmagamYmd").datepicker({
+        changeYear: true,
+        dateFormat: 'yy/mm/dd'
+    });
+
     // Check Error ADMIN
     $(document).on('click', '#btnReg', function(e) {
         var magamYm = $("#magamYm").val();
@@ -298,7 +366,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         $('#modal').modal('toggle');
     });
 
-    // Check Error MAIN_ADMIN
+    // Check Error MAIN_ADMIN Save Data
     $(document).on('click', '#btnRegMMI', function(e) {
         var companyname = $("#companyname").val();
         var magamYm = $("#magamYm").val();
@@ -333,6 +401,69 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             alert("<?php echo $manage_kyukatimelimit_no; ?>");
             e.preventDefault();
             $("#kyukatimelimit").focus();
+            return false;
+        }
+    });
+
+    // Funtion for click day of week
+    $(document).on('click', '.showModal', function() {
+        $('#modal2').modal('toggle');
+        var ArrayData = $(this).text();
+        var SeparateArr = ArrayData.split(',');
+        var CompanyName = SeparateArr[0];
+        var CompanyId = SeparateArr[1];
+
+        <?php
+        foreach ($manageinfo_list as $key) {
+        ?>
+            if ('<?php echo $key['companyid'] ?>' === CompanyId && '<?php echo $key['companyname'] ?>' === CompanyName) {
+                $("#usname").text('<?php echo $key['companyname'] ?>');
+                $("#udcompanyid").text($('[name="udcompanyid"]').val("<?php echo $key['companyid'] ?>"));
+                $("#udcompanyname").text($('[name="udcompanyname"]').val("<?php echo $key['companyname'] ?>"));
+                $("#udmagamym").text($('[name="udmagamym"]').val("<?php echo $key['magamym'] ?>"));
+                $("#udmagamymd").text($('[name="udmagamymd"]').val("<?php echo $key['magamymd'] ?>"));
+                $("#udkyukatimelimit").text($('[name="udkyukatimelimit"]').val("<?php echo $key['kyukatimelimit'] ?>"));
+            }
+        <?php
+        }
+        ?>
+    });
+
+    // Check Error MAIN_ADMIN Update Data
+    $(document).on('click', '#btnUpdateMMI', function(e) {
+        var companyname = $("#udcompanyname").val();
+        var magamYm = $("#udmagamYm").val();
+        var magamYmd = $("#udmagamYmd").val();
+        var kyukatimeLimit = $("#udkyukatimelimit").val();
+
+        if (companyname == "") {
+            alert("<?php echo $manage_Cname_empty; ?>");
+            $("#udcompanyname").focus();
+            return false;
+        }
+
+        if (magamYm == "") {
+            alert("<?php echo $manage_magamym_empty; ?>");
+            $("#udmagamYm").focus();
+            return false;
+        }
+
+        if (magamYmd == "") {
+            alert("<?php echo $manage_magamymd_empty; ?>");
+            $("#udmagamYmd").focus();
+            return false;
+        }
+
+        if (kyukatimeLimit == "") {
+            alert("<?php echo $manage_kyukatimelimit_empty; ?>");
+            $("#udkyukatimelimit").focus();
+            return false;
+        }
+
+        if (isNaN(kyukatimeLimit)) {
+            alert("<?php echo $manage_kyukatimelimit_no; ?>");
+            e.preventDefault();
+            $("#udkyukatimelimit").focus();
             return false;
         }
     });

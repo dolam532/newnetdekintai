@@ -34,7 +34,7 @@ $new_companyID_mi = $last_companyID_mi + 1;
 $result_manageinfo = mysqli_query($conn, $sql_manageinfo);
 $manageinfo_list = mysqli_fetch_all($result_manageinfo, MYSQLI_ASSOC);
 
-// Update data to tbl_manageinfo table of database(ADMIN)
+// Save data to tbl_manageinfo table of database(MAIN_ADMIN)
 if (isset($_POST['btnRegMMI'])) {
     $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
     $companyname = mysqli_real_escape_string($conn, $_POST['companyname']);
@@ -46,12 +46,12 @@ if (isset($_POST['btnRegMMI'])) {
     $sql = "INSERT INTO `tbl_manageinfo` (`companyid`, `magamym`, `magamymd`, `kyukatimelimit`, `reg_dt`)
                 VALUES ('$companyid', '$magamym', '$magamymd', '$kyukatimelimit', '$reg_dt')
             ON DUPLICATE KEY UPDATE
-                `magamym` = '$magamym', `magamymd` = '$magamymd', `kyukatimelimit` = '$kyukatimelimit', `reg_dt` = '$reg_dt'";
+            `magamym` = '$magamym', `magamymd` = '$magamymd', `kyukatimelimit` = '$kyukatimelimit', `upt_dt` = '$upt_dt'";
 
     $sql2 = "INSERT INTO `tbl_company` (`companyid`, `companyname`, `reg_dt`)
                 VALUES ('$companyid', '$companyname', '$reg_dt')
             ON DUPLICATE KEY UPDATE
-            `companyname` = '$companyname', `reg_dt` = '$reg_dt'";
+            `companyname` = '$companyname', `upt_dt` = '$upt_dt'";
 
     if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
@@ -61,7 +61,7 @@ if (isset($_POST['btnRegMMI'])) {
     }
 }
 
-// Update data to tbl_manageinfo table of database(MAIN_ADMIN)
+// Update data to tbl_manageinfo table of database(ADMIN)
 if (isset($_POST['btnRegMi'])) {
     $magamYm = substr($_POST['magamYm'], 0, 7);
     $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
@@ -78,6 +78,36 @@ if (isset($_POST['btnRegMi'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['update_success'] =  $update_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Update data to tbl_manageinfo table of database(MAIN_ADMIN)
+if (isset($_POST['btnUpdateMMI'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $companyname = mysqli_real_escape_string($conn, $_POST['udcompanyname']);
+    $magamYm = substr($_POST['udmagamym'], 0, 7);
+    $magamym = mysqli_real_escape_string($conn, $magamYm);
+    $magamymd = mysqli_real_escape_string($conn, $_POST['udmagamymd']);
+    $kyukatimelimit = mysqli_real_escape_string($conn, $_POST['udkyukatimelimit']);
+
+    $sql = "UPDATE tbl_manageinfo SET 
+        magamym='$magamym',
+        magamymd='$magamymd',
+        kyukatimelimit='$kyukatimelimit',
+        upt_dt='$upt_dt'
+    WHERE companyid ='$companyid'";
+
+    $sql2 = "UPDATE tbl_company SET 
+        companyname='$companyname',
+        upt_dt='$upt_dt'
+    WHERE companyid ='$companyid'";
+
+
+    if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE) {
+        $_SESSION['update_success'] = $update_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -171,13 +201,13 @@ if (isset($_POST['btnRegCL'])) {
             ON DUPLICATE KEY UPDATE
                 `companycode` = '$companycode', `companyname` = '$companyname', `staff` = '$staff',
                 `telno` = '$telno', `strymd` = '$strymd', `endymd` = '$endymd', `address` = '$address',
-                `use_yn` = '$use_yn', `joken` = '$joken', `bigo` = '$bigo', `reg_dt` = '$reg_dt'";
+                `use_yn` = '$use_yn', `joken` = '$joken', `bigo` = '$bigo', `upt_dt` = '$upt_dt'";
+
 
     $sql2 = "INSERT INTO `tbl_manageinfo` (`companyid`, `reg_dt`)
                 VALUES ('$companyid', '$reg_dt')
             ON DUPLICATE KEY UPDATE
-                `reg_dt` = '$reg_dt'";
-
+                `upt_dt` = '$upt_dt'";
     if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
         header("Refresh:3");
