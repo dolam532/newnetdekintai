@@ -77,7 +77,7 @@ if (isset($_POST['btnRegMi'])) {
             WHERE companyid ='$companyid'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['update_mi_success'] =  $update_mi_success;
+        $_SESSION['update_success'] =  $update_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -128,7 +128,6 @@ if ($_POST['SearchButtonCL'] == NULL) {
     if ($_POST['searchCompanyname'] !== "") {
         $searchCompanyname = trim($_POST['searchCompanyname']);
         $sql_company .= ' WHERE `tbl_company`.`companyname` LIKE "%' . $searchCompanyname . '%" ';
-
     }
     if ($_POST['searchUseyn'] == "0") {
         $searchUse_yn = implode('","', $Use_yn);
@@ -153,6 +152,7 @@ if ($_POST['SearchButtonCL'] == NULL) {
 
 // Save Data to tbl_company
 if (isset($_POST['btnRegCL'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
     $companycode = mysqli_real_escape_string($conn, $_POST['companycode']);
     $companyname = mysqli_real_escape_string($conn, $_POST['companyname']);
     $staff = mysqli_real_escape_string($conn, $_POST['staff']);
@@ -164,12 +164,21 @@ if (isset($_POST['btnRegCL'])) {
     $joken = mysqli_real_escape_string($conn, $_POST['joken']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
 
-    $sql = "INSERT INTO `tbl_company` (`companycode`, `companyname`, `staff`, `telno`,
+    $sql = "INSERT INTO `tbl_company` (`companyid`, `companycode`, `companyname`, `staff`, `telno`,
                 `strymd`, `endymd`, `address`, `use_yn`, `joken`, `bigo`, `reg_dt`)
-                VALUES ('$companycode', '$companyname', '$staff', '$telno',
-                '$strymd', '$endymd', '$address', '$use_yn', '$joken', '$bigo', '$reg_dt')";
+                VALUES ('$companyid', '$companycode', '$companyname', '$staff', '$telno',
+                '$strymd', '$endymd', '$address', '$use_yn', '$joken', '$bigo', '$reg_dt')
+            ON DUPLICATE KEY UPDATE
+                `companycode` = '$companycode', `companyname` = '$companyname', `staff` = '$staff',
+                `telno` = '$telno', `strymd` = '$strymd', `endymd` = '$endymd', `address` = '$address',
+                `use_yn` = '$use_yn', `joken` = '$joken', `bigo` = '$bigo', `reg_dt` = '$reg_dt'";
 
-    if ($conn->query($sql) === TRUE) {
+    $sql2 = "INSERT INTO `tbl_manageinfo` (`companyid`, `reg_dt`)
+                VALUES ('$companyid', '$reg_dt')
+            ON DUPLICATE KEY UPDATE
+                `reg_dt` = '$reg_dt'";
+
+    if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
         header("Refresh:3");
     } else {
@@ -258,8 +267,6 @@ if (isset($_POST['DeleteCL'])) {
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
-
-
 }
 
 // 2023-10-11/1340-006

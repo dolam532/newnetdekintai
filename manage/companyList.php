@@ -42,11 +42,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     span.companyList_class {
         display: none;
     }
-    .admin-action-hidden {
-		display: none;
-	}
 
-    .admin-action-change{
+    .admin-action-hidden {
+        display: none;
+    }
+
+    .admin-action-change {
         pointer-events: none;
         background-color: #ccc;
     }
@@ -147,7 +148,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
-                    <th style="text-align: center; width: 11%;">会社コード</th>
+                    <th style="text-align: center; width: 3%;">ID</th>
+                    <th style="text-align: center; width: 8%;">会社コード</th>
                     <th style="text-align: center; width: 18%;">会社名</th>
                     <th style="text-align: center; width: 8%;">担当者</th>
                     <th style="text-align: center; width: 12%;">電話番号</th>
@@ -166,6 +168,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                     foreach ($company_list as $key) {
                     ?>
                         <tr>
+                            <td><span><?= $key['companyid'] ?></span></td>
                             <td><span><?= $key['companycode'] ?></span></td>
                             <td>
                                 <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
@@ -271,16 +274,28 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             </div>
                         </div>
                         <div class="modal-footer" style="text-align: center">
-                            <div class="col-xs-4"></div>
-                            <div class="col-xs-2">
-                                <p class="text-center">
-                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="登録">
-                                </p>
-                            </div>
-                            <div class="col-xs-2">
-                                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
-                            </div>
-                            <div class="col-xs-4"></div>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-2">
+                                    <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="submit" name="DeleteCL" class="btn btn-warning" role="button" value="削除">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                                </div>
+                                <div class="col-md-3"></div>
+                            <?php else : ?>
+                                <div class="col-md-4"></div>
+                                <div class="col-md-2">
+                                    <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                                </div>
+                                <div class="col-md-4"></div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </form>
@@ -331,7 +346,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 </div>
                                 <div class="col-xs-3">
                                     <label for="endymd">契約期間(T)</label>
-                                    <input  type="text" class="form-control admchg" name="udendymd" id="udendymd" maxlength="10" placeholder="2019/01/01" style="text-align: left">
+                                    <input type="text" class="form-control admchg" name="udendymd" id="udendymd" maxlength="10" placeholder="2019/01/01" style="text-align: left">
                                 </div>
                             </div>
                             <br>
@@ -352,7 +367,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="joken">契約条件</label>
-                                    <input  type="text" class="form-control admchg" name="udjoken" id="udjoken" maxlength="200" style="text-align: left" placeholder="契約条件">
+                                    <input type="text" class="form-control admchg" name="udjoken" id="udjoken" maxlength="200" style="text-align: left" placeholder="契約条件">
                                 </div>
                             </div>
                             <br>
@@ -490,12 +505,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         // check adm del 
         $(".admdel").removeClass("admin-action-hidden");
         $(".admchg").removeClass("admin-action-change");
-        <?php if ($_SESSION['auth_type'] !== constant('MAIN_ADMIN') ): ?>
-			$(".admdel").addClass("admin-action-hidden");
+        <?php if ($_SESSION['auth_type'] !== constant('MAIN_ADMIN')) : ?>
+            $(".admdel").addClass("admin-action-hidden");
             $(".admchg").addClass("admin-action-change");
-            <?php endif;?>
+        <?php endif; ?>
 
-        <?php 
+        <?php
         foreach ($company_list as $key) {
         ?>
             if ('<?php echo $key['companyid'] ?>' === CompanyId && '<?php echo $key['companyname'] ?>' === CompanyName) {
