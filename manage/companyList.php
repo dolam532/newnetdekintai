@@ -42,6 +42,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     span.companyList_class {
         display: none;
     }
+    .admin-action-hidden {
+		display: none;
+	}
+
+    .admin-action-change{
+        pointer-events: none;
+        background-color: #ccc;
+    }
 </style>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
@@ -139,8 +147,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
-                    <th style="text-align: center; width: 3%;">ID</th>
-                    <th style="text-align: center; width: 8%;">会社コード</th>
+                    <th style="text-align: center; width: 11%;">会社コード</th>
                     <th style="text-align: center; width: 18%;">会社名</th>
                     <th style="text-align: center; width: 8%;">担当者</th>
                     <th style="text-align: center; width: 12%;">電話番号</th>
@@ -159,10 +166,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                     foreach ($company_list as $key) {
                     ?>
                         <tr>
-                            <td><span><?= $key['companyid'] ?></span></td>
                             <td><span><?= $key['companycode'] ?></span></td>
                             <td>
-                                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN') || $_SESSION['auth_type'] == constant('ADMIN')) : ?>
+                                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                                     <a href="#">
                                         <span class="showModal"><?= $key['companyname'] ?><span class="companyList_class"><?= ',' . $key['companyid'] ?></span></span>
                                     </a>
@@ -314,11 +320,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 </div>
                                 <div class="col-xs-3">
                                     <label for="strymd">契約期間(F)</label>
-                                    <input type="text" class="form-control" name="udstrymd" id="udstrymd" maxlength="10" placeholder="2019/01/01" style="text-align: left">
+                                    <input type="text" class="form-control admchg" name="udstrymd" id="udstrymd" maxlength="10" placeholder="2019/01/01" style="text-align: left">
                                 </div>
                                 <div class="col-xs-3">
                                     <label for="endymd">契約期間(T)</label>
-                                    <input type="text" class="form-control" name="udendymd" id="udendymd" maxlength="10" placeholder="2019/01/01" style="text-align: left">
+                                    <input  type="text" class="form-control admchg" name="udendymd" id="udendymd" maxlength="10" placeholder="2019/01/01" style="text-align: left">
                                 </div>
                             </div>
                             <br>
@@ -329,7 +335,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 </div>
                                 <div class="col-xs-3">
                                     <label for="use_yn"><strong>使用</strong></label>
-                                    <div class="custom-control custom-radio">
+                                    <div class="custom-control custom-radio admchg">
                                         <input type="radio" name="uduse_yn" id="uduse_yn1" value="1" checked>使用
                                         <input type="radio" name="uduse_yn" id="uduse_yn2" value="0">中止
                                     </div>
@@ -339,7 +345,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             <div class="row">
                                 <div class="col-xs-12">
                                     <label for="joken">契約条件</label>
-                                    <input type="text" class="form-control" name="udjoken" id="udjoken" maxlength="200" style="text-align: left" placeholder="契約条件">
+                                    <input  type="text" class="form-control admchg" name="udjoken" id="udjoken" maxlength="200" style="text-align: left" placeholder="契約条件">
                                 </div>
                             </div>
                             <br>
@@ -355,9 +361,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             <div class="col-md-2">
                                 <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
                             </div>
+                            
                             <div class="col-md-2">
-                                <input type="submit" name="DeleteCL" class="btn btn-warning" role="button" value="削除">
+                                <input type="submit" name="DeleteCL" class="btn btn-warning admdel" role="button" value="削除" onclick="return confirm('選択した会社を削除しますか？');">
                             </div>
+
                             <div class="col-md-2">
                                 <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
                             </div>
@@ -474,8 +482,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         var SeparateArr = ArrayData.split(',');
         var CompanyName = SeparateArr[0];
         var CompanyId = SeparateArr[1];
+        // check adm del 
+        $(".admdel").removeClass("admin-action-hidden");
+        $(".admchg").removeClass("admin-action-change");
+        <?php if ($_SESSION['auth_type'] !== constant('MAIN_ADMIN') ): ?>
+			$(".admdel").addClass("admin-action-hidden");
+            $(".admchg").addClass("admin-action-change");
+            <?php endif;?>
 
-        <?php
+        <?php 
         foreach ($company_list as $key) {
         ?>
             if ('<?php echo $key['companyid'] ?>' === CompanyId && '<?php echo $key['companyname'] ?>' === CompanyName) {

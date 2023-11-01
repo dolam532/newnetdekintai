@@ -36,7 +36,7 @@ if (isset($_POST['btnRegMi'])) {
             WHERE companyid ='$companyid'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['update_mi_success'] =  $update_mi_success;
+        $_SESSION['update_mi_success'] = $update_mi_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -57,39 +57,56 @@ $company_list_select = mysqli_fetch_all($result_company_select, MYSQLI_ASSOC);
 if ($_POST['SearchButtonCL'] == NULL) {
     $company_list = $company_list_select;
 } elseif (isset($_POST['SearchButtonCL'])) {
+    if ($_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
+        echo 'not admin: ' . mysqli_error($conn);
+        return;
+    }
+
     if (!empty($company_list_select)) {
         foreach ($company_list_select as $key) {
             $Companyname[] = $key['companyname'];
-            $Use_yn[] = $key['use_yn'];
+            $Use_yn[] = $_POST['searchUseyn'];
         }
     }
     $Companyname = array_unique($Companyname);
     $Use_yn = array_unique($Use_yn);
-
-    if ($_POST['searchCompanyname'] != "") {
+    $sql_company = 'SELECT *
+    FROM `tbl_company`  ';
+    if ($_POST['searchCompanyname'] !== "") {
         $searchCompanyname = trim($_POST['searchCompanyname']);
-    } else {
-        $searchCompanyname = implode('","', $Companyname);
-    }
+        $sql_company .= ' WHERE `tbl_company`.`companyname` LIKE "%' . $searchCompanyname . '%" ';
 
+    }
     if ($_POST['searchUseyn'] == "0") {
         $searchUse_yn = implode('","', $Use_yn);
-    } elseif ($_POST['searchUseyn'] == "1") {
-        $searchUse_yn = $_POST['searchUseyn'];
-    } elseif ($_POST['searchUseyn'] == "2") {
-        $searchUse_yn = "0";
+    } elseif ($_POST['searchUseyn'] == "1" || $_POST['searchUseyn'] == "2") {
+        if ($_POST['searchCompanyname'] == "") {
+            $sql_company .= ' WHERE ';
+        } else {
+            $sql_company .= ' AND ';
+        }
+        $searchResult = '0';
+        if ($_POST['searchUseyn'] == "1") {
+            $searchResult = '1';
+        }
+        if ($_POST['searchUseyn'] == "2") {
+            $searchResult = '0';
+        }
+        $sql_company .= '`tbl_company`.`use_yn` = "' . $searchResult . '"';
     }
-
-    $sql_company = 'SELECT *
-    FROM `tbl_company`
-    WHERE `tbl_company`.`companyname` LIKE "%' . $searchCompanyname . '%"
-    AND `tbl_company`.`use_yn` = "' . $searchUse_yn . '"';
     $result_company = mysqli_query($conn, $sql_company);
     $company_list = mysqli_fetch_all($result_company, MYSQLI_ASSOC);
 }
 
 // Save Data to tbl_company
 if (isset($_POST['btnRegCL'])) {
+
+    // check  main admin
+    if ($_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
+        echo 'not admin: ' . mysqli_error($conn);
+        return;
+    }
+
     $companycode = mysqli_real_escape_string($conn, $_POST['companycode']);
     $companyname = mysqli_real_escape_string($conn, $_POST['companyname']);
     $staff = mysqli_real_escape_string($conn, $_POST['staff']);
@@ -102,12 +119,13 @@ if (isset($_POST['btnRegCL'])) {
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
 
     $sql = "INSERT INTO `tbl_company` (`companycode`, `companyname`, `staff`, `telno`,
-                `strymd`, `endymd`, `address`, `use_yn`, `joken`, `bigo`, `reg_dt`)
-                VALUES ('$companycode', '$companyname', '$staff', '$telno',
-                '$strymd', '$endymd', '$address', '$use_yn', '$joken', '$bigo', '$reg_dt')";
+    `strymd`, `endymd`, `address`, `use_yn`, `joken`, `bigo`, `reg_dt`)
+    VALUES ('$companycode', '$companyname', '$staff', '$telno',
+    '$strymd', '$endymd', '$address', '$use_yn', '$joken', '$bigo', '$reg_dt')";
+
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['save_success'] =  $save_success;
+        $_SESSION['save_success'] = $save_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -129,6 +147,31 @@ if (isset($_POST['btnUpdateCL'])) {
     $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
 
     $sql = "UPDATE tbl_company SET 
+    companyname='$companyname',
+    staff='$staff',
+    telno='$telno',
+    address='$address',
+    bigo='$bigo'
+WHERE companyid ='$companyid'
+AND companycode ='$companycode'";
+
+    // check  main admin
+    if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+        $sql = "UPDATE tbl_company SET 
+    companyname='$companyname',
+    staff='$staff',
+    telno='$telno',
+    strymd='$strymd',
+    endymd='$endymd',
+    address='$address',
+    use_yn='$use_yn',
+    joken='$joken',
+    bigo='$bigo'
+WHERE companyid ='$companyid'
+AND companycode ='$companycode'";
+    }
+
+    $sql = "UPDATE tbl_company SET 
             companyname='$companyname',
             staff='$staff',
             telno='$telno',
@@ -142,7 +185,7 @@ if (isset($_POST['btnUpdateCL'])) {
         AND companycode ='$companycode'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['update_success'] =  $update_success;
+        $_SESSION['update_success'] = $update_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -151,6 +194,13 @@ if (isset($_POST['btnUpdateCL'])) {
 
 // Delete data to tbl_company table of database
 if (isset($_POST['DeleteCL'])) {
+    // check  main admin
+    if ($_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
+        error_log("NOT ADMIN");
+        echo 'not admin: ' . mysqli_error($conn);
+        return;
+    }
+
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $companycode = mysqli_real_escape_string($conn, $_POST['udcompanycode']);
 
@@ -158,11 +208,13 @@ if (isset($_POST['DeleteCL'])) {
             WHERE companyid ='$companyid' AND companycode ='$companycode'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['delete_success'] =  $delete_success;
+        $_SESSION['delete_success'] = $delete_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
+
+
 }
 
 // 2023-10-11/1340-006
