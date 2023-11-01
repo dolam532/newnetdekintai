@@ -205,9 +205,9 @@ if (isset($_POST['btnUpdateCL'])) {
     staff='$staff',
     telno='$telno',
     address='$address',
-    bigo='$bigo'
-WHERE companyid ='$companyid'
-AND companycode ='$companycode'";
+    bigo='$bigo',
+    companycode ='$companycode'
+WHERE companyid ='$companyid'";
 
     // check  main admin
     if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
@@ -220,23 +220,10 @@ AND companycode ='$companycode'";
     address='$address',
     use_yn='$use_yn',
     joken='$joken',
-    bigo='$bigo'
-WHERE companyid ='$companyid'
-AND companycode ='$companycode'";
+    bigo='$bigo',
+    companycode ='$companycode'
+WHERE companyid ='$companyid'";
     }
-
-    $sql = "UPDATE tbl_company SET 
-            companyname='$companyname',
-            staff='$staff',
-            telno='$telno',
-            strymd='$strymd',
-            endymd='$endymd',
-            address='$address',
-            use_yn='$use_yn',
-            joken='$joken',
-            bigo='$bigo'
-        WHERE companyid ='$companyid'
-        AND companycode ='$companycode'";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['update_success'] = $update_success;
@@ -250,7 +237,6 @@ AND companycode ='$companycode'";
 if (isset($_POST['DeleteCL'])) {
     // check  main admin
     if ($_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
-        error_log("NOT ADMIN");
         echo 'not admin: ' . mysqli_error($conn);
         return;
     }

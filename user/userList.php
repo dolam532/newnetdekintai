@@ -97,7 +97,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<input type="submit" name="SearchButton" value="検索">
 				</div>
 				<div class="title_btn">
-					<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+					<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
 						<input type="button" id="btnNew" value="新規">
 					<?php endif; ?>
 				</div>
@@ -382,7 +382,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
-						<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+						<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
 							<div class="col-xs-3"></div>
 							<div class="col-xs-2">
 								<p class="text-center">

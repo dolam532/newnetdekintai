@@ -268,7 +268,7 @@ if (isset($_POST['btnDelHdr'])) {
 
 // (uservacationList.php)
 // Select data from tbl_user & tbl_vacationinfo
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')  || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_uservacation_select = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_vacationinfo`.`vacationid`,

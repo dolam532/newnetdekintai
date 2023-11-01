@@ -384,7 +384,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
                             </div>
                             <div class="col-md-2">
-                                <input type="submit" name="DeleteCL" class="btn btn-warning" role="button" value="削除">
+                                <input type="submit" name="DeleteCL" class="btn btn-warning admdel" role="button" value="削除" onclick="return confirm('選択した会社を削除しますか？');">
                             </div>
                             <div class="col-md-2">
                                 <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>

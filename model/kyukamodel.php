@@ -14,7 +14,7 @@ $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
 // kyukaReg.php
 // Select data from tbl_userkyuka
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')  || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_userkyuka_select_db = 'SELECT DISTINCT
     `tbl_userkyuka`.*,
     `tbl_user`.`companyid`,
@@ -88,7 +88,7 @@ $KyukaY = array_unique($KyukaY);
 $Name = array_unique($Name);
 $VacationY = array_unique($VacationY);
 
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')  || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_vacationinfo = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_vacationinfo`.`vacationid`,
@@ -249,7 +249,7 @@ if ($_POST['btnSearchMon'] != NULL) {
     } else {
         $searchYY = $_POST['searchYY'];
     }
-    if ($_SESSION['auth_type'] == constant('ADMIN')) {
+    if ($_SESSION['auth_type'] == constant('ADMIN') ||  $_SESSION['auth_type'] == constant('ADMINISTRATOR')  || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         $sql_userkyuka = 'SELECT DISTINCT
     `tbl_userkyuka`.*,
     `tbl_user`.`name`,

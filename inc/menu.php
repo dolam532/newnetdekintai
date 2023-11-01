@@ -76,7 +76,7 @@
                                 <li><a href="../manage/companyList.php">使用者登録</a></li>
                             </ul>
                         </li>
-                    <?php elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                    <?php elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') ) : ?>
                         <li class="dropdown" id="gana">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="true"><?= $_SESSION['auth_name'] ?><span class="caret"></span></a>
                             <ul class="dropdown-menu">

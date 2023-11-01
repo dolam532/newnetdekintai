@@ -94,7 +94,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             <div class="col-md-3 text-right">
                 <div class="title_btn">
                     <input type="submit" name="SearchButtonAM" value="検索">
-                    <?php if ($_SESSION['auth_type'] == constant('ADMIN')) : ?>
+                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                         <input type="button" id="btnNewAL" value="新規">
                     <?php endif; ?>
                     <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
