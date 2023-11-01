@@ -9,19 +9,59 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     `tbl_manageinfo`.*,
     `tbl_company`.`companyname`
     FROM `tbl_manageinfo` 
-    LEFT JOIN `tbl_company` ON `tbl_manageinfo`.`companyid` = `tbl_company`.`companyid`';
+    LEFT JOIN `tbl_company` ON `tbl_manageinfo`.`companyid` = `tbl_company`.`companyid`
+    ORDER BY `tbl_manageinfo`.`companyid`';
 } else {
     $sql_manageinfo = 'SELECT DISTINCT
     `tbl_manageinfo`.*,
     `tbl_company`.`companyname`
     FROM `tbl_manageinfo` 
     LEFT JOIN `tbl_company` ON `tbl_manageinfo`.`companyid` = `tbl_company`.`companyid`
-    WHERE `tbl_manageinfo`.`companyid` IN("' . $_SESSION['auth_companyid'] . '")';
+    WHERE `tbl_manageinfo`.`companyid` IN("' . $_SESSION['auth_companyid'] . '")
+    ORDER BY `tbl_manageinfo`.`companyid`';
 }
+
+$result_mi = $conn->query($sql_manageinfo);
+$last_companyID_mi = null;
+
+if ($result_mi->num_rows > 0) {
+    while ($row = $result_mi->fetch_assoc()) {
+        $last_companyID_mi = $row["companyid"];
+    }
+}
+$new_companyID_mi = $last_companyID_mi + 1;
+
 $result_manageinfo = mysqli_query($conn, $sql_manageinfo);
 $manageinfo_list = mysqli_fetch_all($result_manageinfo, MYSQLI_ASSOC);
 
-// Update data to tbl_manageinfo table of database
+// Update data to tbl_manageinfo table of database(ADMIN)
+if (isset($_POST['btnRegMMI'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
+    $companyname = mysqli_real_escape_string($conn, $_POST['companyname']);
+    $magamYm = substr($_POST['magamym'], 0, 7);
+    $magamym = mysqli_real_escape_string($conn, $magamYm);
+    $magamymd = mysqli_real_escape_string($conn, $_POST['magamymd']);
+    $kyukatimelimit = mysqli_real_escape_string($conn, $_POST['kyukatimelimit']);
+
+    $sql = "INSERT INTO `tbl_manageinfo` (`companyid`, `magamym`, `magamymd`, `kyukatimelimit`, `reg_dt`)
+                VALUES ('$companyid', '$magamym', '$magamymd', '$kyukatimelimit', '$reg_dt')
+            ON DUPLICATE KEY UPDATE
+                `magamym` = '$magamym', `magamymd` = '$magamymd', `kyukatimelimit` = '$kyukatimelimit', `reg_dt` = '$reg_dt'";
+
+    $sql2 = "INSERT INTO `tbl_company` (`companyid`, `companyname`, `reg_dt`)
+                VALUES ('$companyid', '$companyname', '$reg_dt')
+            ON DUPLICATE KEY UPDATE
+            `companyname` = '$companyname', `reg_dt` = '$reg_dt'";
+
+    if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE) {
+        $_SESSION['save_success'] =  $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Update data to tbl_manageinfo table of database(MAIN_ADMIN)
 if (isset($_POST['btnRegMi'])) {
     $magamYm = substr($_POST['magamYm'], 0, 7);
     $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
@@ -32,11 +72,12 @@ if (isset($_POST['btnRegMi'])) {
     $sql = "UPDATE tbl_manageinfo SET 
                 magamym='$magamym',
                 magamymd='$magamymd',
-                kyukatimelimit='$kyukatimelimit'
+                kyukatimelimit='$kyukatimelimit',
+                upt_dt='$upt_dt'
             WHERE companyid ='$companyid'";
 
     if ($conn->query($sql) === TRUE) {
-        $_SESSION['update_mi_success'] =  $update_mi_success;
+        $_SESSION['update_success'] =  $update_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -46,10 +87,22 @@ if (isset($_POST['btnRegMi'])) {
 // companyList.php
 // Select database from tbl_company table
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-    $sql_company_select = 'SELECT * FROM `tbl_company`';
+    $sql_company_select = 'SELECT * FROM `tbl_company` ORDER BY `tbl_company`.`companyid`';
 } elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
-    $sql_company_select = 'SELECT * FROM `tbl_company` WHERE `tbl_company`.`companyid` IN("' . $_SESSION['auth_companyid'] . '")';
+    $sql_company_select = 'SELECT * FROM `tbl_company` WHERE `tbl_company`.`companyid` 
+                            IN("' . $_SESSION['auth_companyid'] . '") ORDER BY `tbl_company`.`companyid`';
 }
+
+$result_cl = $conn->query($sql_company_select);
+$last_companyID_cl = null;
+
+if ($result_cl->num_rows > 0) {
+    while ($row = $result_cl->fetch_assoc()) {
+        $last_companyID_cl = $row["companyid"];
+    }
+}
+$new_companyID_cl = $last_companyID_cl + 1;
+
 $result_company_select = mysqli_query($conn, $sql_company_select);
 $company_list_select = mysqli_fetch_all($result_company_select, MYSQLI_ASSOC);
 
@@ -90,6 +143,7 @@ if ($_POST['SearchButtonCL'] == NULL) {
 
 // Save Data to tbl_company
 if (isset($_POST['btnRegCL'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
     $companycode = mysqli_real_escape_string($conn, $_POST['companycode']);
     $companyname = mysqli_real_escape_string($conn, $_POST['companyname']);
     $staff = mysqli_real_escape_string($conn, $_POST['staff']);
@@ -101,12 +155,21 @@ if (isset($_POST['btnRegCL'])) {
     $joken = mysqli_real_escape_string($conn, $_POST['joken']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
 
-    $sql = "INSERT INTO `tbl_company` (`companycode`, `companyname`, `staff`, `telno`,
+    $sql = "INSERT INTO `tbl_company` (`companyid`, `companycode`, `companyname`, `staff`, `telno`,
                 `strymd`, `endymd`, `address`, `use_yn`, `joken`, `bigo`, `reg_dt`)
-                VALUES ('$companycode', '$companyname', '$staff', '$telno',
-                '$strymd', '$endymd', '$address', '$use_yn', '$joken', '$bigo', '$reg_dt')";
+                VALUES ('$companyid', '$companycode', '$companyname', '$staff', '$telno',
+                '$strymd', '$endymd', '$address', '$use_yn', '$joken', '$bigo', '$reg_dt')
+            ON DUPLICATE KEY UPDATE
+                `companycode` = '$companycode', `companyname` = '$companyname', `staff` = '$staff',
+                `telno` = '$telno', `strymd` = '$strymd', `endymd` = '$endymd', `address` = '$address',
+                `use_yn` = '$use_yn', `joken` = '$joken', `bigo` = '$bigo', `reg_dt` = '$reg_dt'";
 
-    if ($conn->query($sql) === TRUE) {
+    $sql2 = "INSERT INTO `tbl_manageinfo` (`companyid`, `reg_dt`)
+                VALUES ('$companyid', '$reg_dt')
+            ON DUPLICATE KEY UPDATE
+                `reg_dt` = '$reg_dt'";
+
+    if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE) {
         $_SESSION['save_success'] =  $save_success;
         header("Refresh:3");
     } else {

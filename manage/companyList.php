@@ -203,11 +203,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                         </div>
                         <div class="modal-body">
                             <div class="row">
+                                <div class="col-xs-2">
+                                    <label for="companycode">会社ID</label>
+                                    <input type="text" class="form-control" name="companyid" id="companyid" value="<?= $new_companyID_cl ?>" style="text-align: left" readonly>
+                                </div>
                                 <div class="col-xs-3">
                                     <label for="companycode">会社コード</label>
                                     <input type="text" class="form-control" name="companycode" id="companycode" placeholder="companycode" maxlength="10" style="text-align: left">
                                 </div>
-                                <div class="col-xs-9">
+                                <div class="col-xs-7">
                                     <label for="companyname">会社名</label>
                                     <input type="text" class="form-control" name="companyname" id="companyname" placeholder="companyname" maxlength="20" style="text-align: left">
                                 </div>
@@ -292,12 +296,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
                         <div class="modal-body">
                             <div class="row">
+                                <div class="col-xs-2">
+                                    <label for="companycode">会社ID</label>
+                                    <input type="text" class="form-control" name="udcompanyid" id="udcompanyid" maxlength="10" style="text-align: left" readonly>
+                                </div>
                                 <div class="col-xs-3">
                                     <label for="companycode">会社コード</label>
-                                    <input type="text" class="form-control" name="udcompanycode" id="udcompanycode" placeholder="companycode" maxlength="10" style="text-align: left" readonly>
-                                    <input type="hidden" name="udcompanyid" id="udcompanyid">
+                                    <input type="text" class="form-control" name="udcompanycode" id="udcompanycode" placeholder="companycode" maxlength="10" style="text-align: left">
                                 </div>
-                                <div class="col-xs-9">
+                                <div class="col-xs-7">
                                     <label for="companyname">会社名</label>
                                     <input type="text" class="form-control" name="udcompanyname" id="udcompanyname" placeholder="companyname" maxlength="20" style="text-align: left">
                                 </div>
@@ -351,17 +358,28 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             </div>
                         </div>
                         <div class="modal-footer" style="text-align: center">
-                            <div class="col-md-3"></div>
-                            <div class="col-md-2">
-                                <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
-                            </div>
-                            <div class="col-md-2">
-                                <input type="submit" name="DeleteCL" class="btn btn-warning" role="button" value="削除">
-                            </div>
-                            <div class="col-md-2">
-                                <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
-                            </div>
-                            <div class="col-md-3"></div>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <div class="col-md-3"></div>
+                                <div class="col-md-2">
+                                    <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
+                                </div>
+                                <div class="col-md-2">
+                                    <input type="submit" name="DeleteCL" class="btn btn-warning" role="button" value="削除">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                                </div>
+                                <div class="col-md-3"></div>
+                            <?php else : ?>
+                                <div class="col-md-4"></div>
+                                <div class="col-md-2">
+                                    <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                                </div>
+                                <div class="col-md-4"></div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </form>
@@ -480,10 +498,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         ?>
             if ('<?php echo $key['companyid'] ?>' === CompanyId && '<?php echo $key['companyname'] ?>' === CompanyName) {
                 $("#usname").text('<?php echo $key['companyname'] ?>');
+                $("#udcompanyid").text($('[name="udcompanyid"]').val("<?php echo $key['companyid'] ?>"));
                 $("#udcompanycode").text($('[name="udcompanycode"]').val("<?php echo $key['companycode'] ?>"));
-                var udcompanyid = $("input[name=udcompanyid]:hidden");
-                udcompanyid.val("<?php echo $key['companyid'] ?>");
-                var udcompanyid = udcompanyid.val();
                 $("#udcompanyname").text($('[name="udcompanyname"]').val("<?php echo $key['companyname'] ?>"));
                 $("#udstaff").text($('[name="udstaff"]').val("<?php echo $key['staff'] ?>"));
                 $("#udtelno").text($('[name="udtelno"]').val("<?php echo $key['telno'] ?>"));
@@ -512,6 +528,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
     // Check Error
     $(document).on('click', '#btnUpdateCL', function(e) {
+        var Companycode = $("#udcompanycode").val();
         var Companyname = $("#udcompanyname").val();
         var Staff = $("#udstaff").val();
         var Telno = $("#udtelno").val();
@@ -519,6 +536,19 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         var Endymd = $("#udendymd").val();
         var Address = $("#udaddress").val();
         var Joken = $("#udjoken").val();
+
+        if (Companycode == "") {
+            alert("<?php echo $manage_Ccode_empty; ?>");
+            $("#udcompanycode").focus();
+            return false;
+        }
+
+        if (isNaN(Companycode)) {
+            alert("<?php echo $manage_Ccode_no; ?>");
+            e.preventDefault();
+            $("#udcompanycode").focus();
+            return false;
+        }
 
         if (Companyname == "") {
             alert("<?php echo $manage_Cname_empty; ?>");

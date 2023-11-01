@@ -5,7 +5,7 @@ include('../inc/message.php');
 include('../inc/const_array.php');
 include('../inc/header.php');
 include('../model/managemodel.php');
-include('../model/inactive.php');
+// include('../model/inactive.php');
 
 if ($_SESSION['auth'] == false) {
     header("Location: ../loginout/loginout.php");
@@ -46,14 +46,25 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <?php
-    if (isset($_SESSION['update_mi_success']) && isset($_POST['btnRegMi'])) {
+    if (isset($_SESSION['save_success']) && isset($_POST['btnRegMMI'])) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-            <?php echo $_SESSION['update_mi_success']; ?>
+            <?php echo $_SESSION['save_success']; ?>
         </div>
     <?php
-        unset($_SESSION['update_mi_success']);
+        unset($_SESSION['save_success']);
+    }
+    ?>
+    <?php
+    if (isset($_SESSION['update_success']) && isset($_POST['btnRegMi'])) {
+    ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['update_success']; ?>
+        </div>
+    <?php
+        unset($_SESSION['update_success']);
     }
     ?>
     <title>
@@ -77,13 +88,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         </div>
         <div class="col-md-4 text-right">
             <div class="title_btn">
-                <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
                 <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                     <input type="button" id="btnNewMI" value="新規">
                 <?php endif; ?>
+                <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
             </div>
         </div>
     </div>
+
+    <!-- Show data MAIN_ADMIN -->
     <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
         <div class="form-group" style="margin-top:10px;">
             <table class="table table-bordered datatable">
@@ -138,7 +151,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 <div class="row">
                                     <div class="col-xs-3">
                                         <label for="companycode">Company ID</label>
-                                        <input type="text" class="form-control" name="companyid" id="companyid" placeholder="companyid" maxlength="10" style="text-align: left">
+                                        <input type="text" class="form-control" name="companyid" id="companyid" value="<?= $new_companyID_mi ?>" maxlength="10" style="text-align: left" readonly>
                                     </div>
                                     <div class="col-xs-9">
                                         <label for="companyname">Company Name</label>
@@ -149,43 +162,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 <div class="row">
                                     <div class="col-xs-4">
                                         <label for="staff">締切（月）</label>
-                                        <input type="text" class="form-control" name="magamym" id="magamym" placeholder="2019/01" maxlength="100" style="text-align: left">
+                                        <input type="text" class="form-control" name="magamym" id="magamYm" placeholder="2019/01" maxlength="100" style="text-align: left">
                                     </div>
                                     <div class="col-xs-4">
                                         <label for="telno">締切（日）</label>
-                                        <input type="text" class="form-control" name="magamymd" id="magamymd" placeholder="2019/01/01" maxlength="100" style="text-align: left">
+                                        <input type="text" class="form-control" name="magamymd" id="magamYmd" placeholder="2019/01/01" maxlength="100" style="text-align: left">
                                     </div>
                                     <div class="col-xs-4">
                                         <label for="strymd">年間休暇時間</label>
                                         <input type="text" class="form-control" name="kyukatimelimit" id="kyukatimelimit" maxlength="10" placeholder="40" style="text-align: left">
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-xs-9">
-                                        <label for="address">住所</label>
-                                        <input type="text" class="form-control" name="address" id="address" maxlength="150" style="text-align: left" placeholder="東京都東京区1丁目2番地二ホンビル3階">
-                                    </div>
-                                    <div class="col-xs-3">
-                                        <label for="use_yn"><strong>使用</strong></label>
-                                        <div class="custom-control custom-radio">
-                                            <input type="radio" name="use_yn" value="1" checked>使用
-                                            <input type="radio" name="use_yn" value="0">中止
-                                        </div>
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <label for="joken">契約条件</label>
-                                        <input type="text" class="form-control" name="joken" id="joken" maxlength="200" style="text-align: left" placeholder="契約条件">
-                                    </div>
-                                </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <label for="bigo">備考</label>
-                                        <input type="text" class="form-control" name="bigo" id="bigo" maxlength="300" style="text-align: left" placeholder="備考">
                                     </div>
                                 </div>
                             </div>
@@ -193,7 +178,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 <div class="col-xs-4"></div>
                                 <div class="col-xs-2">
                                     <p class="text-center">
-                                        <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="登録">
+                                        <input type="submit" name="btnRegMMI" class="btn btn-primary" id="btnRegMMI" role="button" value="登録">
                                     </p>
                                 </div>
                                 <div class="col-xs-2">
@@ -207,6 +192,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             </div>
         </div>
     <?php else : ?>
+        <!-- Show data ADMIN -->
         <hr>
         <form method="post">
             <div class="row">
@@ -275,7 +261,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         dateFormat: 'yy/mm/dd'
     });
 
-    // Check Error
+    // Check Error ADMIN
     $(document).on('click', '#btnReg', function(e) {
         var magamYm = $("#magamYm").val();
         var magamYmd = $("#magamYmd").val();
@@ -310,6 +296,45 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     // New button: popup & clear 
     $(document).on('click', '#btnNewMI', function(e) {
         $('#modal').modal('toggle');
+    });
+
+    // Check Error MAIN_ADMIN
+    $(document).on('click', '#btnRegMMI', function(e) {
+        var companyname = $("#companyname").val();
+        var magamYm = $("#magamYm").val();
+        var magamYmd = $("#magamYmd").val();
+        var kyukatimeLimit = $("#kyukatimelimit").val();
+
+        if (companyname == "") {
+            alert("<?php echo $manage_Cname_empty; ?>");
+            $("#companyname").focus();
+            return false;
+        }
+
+        if (magamYm == "") {
+            alert("<?php echo $manage_magamym_empty; ?>");
+            $("#magamYm").focus();
+            return false;
+        }
+
+        if (magamYmd == "") {
+            alert("<?php echo $manage_magamymd_empty; ?>");
+            $("#magamYmd").focus();
+            return false;
+        }
+
+        if (kyukatimeLimit == "") {
+            alert("<?php echo $manage_kyukatimelimit_empty; ?>");
+            $("#kyukatimelimit").focus();
+            return false;
+        }
+
+        if (isNaN(kyukatimeLimit)) {
+            alert("<?php echo $manage_kyukatimelimit_no; ?>");
+            e.preventDefault();
+            $("#kyukatimelimit").focus();
+            return false;
+        }
     });
 </script>
 <?php include('../inc/footer.php'); ?>
