@@ -1,1 +1,0 @@
-<?php $uid_e = "admin";$name_e = "GANASYS";$genid_e = "111";$dept_e = "11";?>
