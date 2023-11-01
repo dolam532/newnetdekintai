@@ -7,7 +7,7 @@ $month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
 $day = isset($_POST["seldd"]) ? $_POST["seldd"] : date('d');
 
 // Select database from tbl_userlogin table
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_userlogin = 'SELECT * FROM `tbl_userlogin` 
     WHERE YEAR(`tbl_userlogin`.`workymd`) IN("' . $year . '")
     AND MONTH(`tbl_userlogin`.`workymd`) IN("' . $month . '")
