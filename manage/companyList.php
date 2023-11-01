@@ -319,7 +319,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             <div class="row">
                                 <div class="col-xs-2">
                                     <label for="companycode">会社ID</label>
-                                    <input type="text" class="form-control" name="udcompanyid" id="udcompanyid" maxlength="10" style="text-align: left" readonly>
+                                    <input type="text" class="form-control admchg" name="udcompanyid" id="udcompanyid" maxlength="10" style="text-align: left">
                                 </div>
                                 <div class="col-xs-3">
                                     <label for="companycode">会社コード</label>
