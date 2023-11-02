@@ -17,6 +17,11 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 }
 ?>
 
+ <!-- loading UX  -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.css">
+
+
 <style>
 	.sumtbl tr th {
 		background-color: #D9EDF7;
@@ -135,6 +140,43 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		border-radius: 5px;
 		display: inline-block;
 	}
+
+	
+	/* page data loading  loading UX  */
+	#overlay {
+		display: none;
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(255, 255, 255, 0.3);
+		z-index: 9999;
+	}
+
+	.loader {
+		border: 4px solid #3498db;
+		border-top: 4px solid transparent;
+		border-radius: 50%;
+		width: 50px;
+		height: 50px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-top: -25px;
+		margin-left: -25px;
+		animation: spin 1s linear infinite;
+	}
+
+	@keyframes spin {
+		0% {
+			transform: rotate(0deg);
+		}
+
+		100% {
+			transform: rotate(360deg);
+		}
+	}
 </style>
 
 <script>
@@ -236,6 +278,11 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		unset($_SESSION['delete_all_success']);
 	}
 	?>
+
+	
+<div id="overlay">
+		<div class="loader"></div>
+	</div>
 	<div class="row">
 		<div class="col-md-3 text-left" name="workYm_page_title">
 			<div class="title_name text-center">
@@ -1849,6 +1896,11 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			var genid = selectedOption.split(',')[0];
 			$('#selectedGenid').val(genid);
 		});
+
+			//	 loading UX
+		// load waiting , when loading can't click 
+		setTimeout(hideLoadingOverlay, 2000);
+		startLoading();
 	});
 
 
@@ -1934,6 +1986,27 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		for (var i = 0; i < ids.length; i++) {
 			$(ids[i]).val('');
 		}
+	}
+
+		// loading UX
+		function showLoadingOverlay() {
+		const overlay = document.getElementById("overlay");
+		overlay.style.display = "block";
+		document.body.style.pointerEvents = "none";
+	}
+
+	function hideLoadingOverlay() {
+		const overlay = document.getElementById("overlay");
+		overlay.style.display = "none";
+		document.body.style.pointerEvents = "auto";
+	}
+
+	showLoadingOverlay();
+	function startLoading() {
+		NProgress.start();
+		setTimeout(function () {
+			NProgress.done();
+		}, 2000);
 	}
 </script>
 

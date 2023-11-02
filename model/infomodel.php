@@ -106,11 +106,11 @@ if (isset($_POST['btnRegWdl'])) {
     $work_data = [];
     for ($month = 1; $month <= 12; $month++) {
         // Prepare the data for insertion
-        $work_data[] = "('$companyid', '$workyear', '$workmonth[$month]', '$workdays[$month]')";
+        $work_data[] = "('$companyid', '$workyear', '$workmonth[$month]', '$workdays[$month]' , '$reg_dt')";
     }
 
     // Prepare the SQL query to insert all data in a single query
-    $sql = "INSERT INTO `tbl_workday` (`companyid`, `workyear`, `workmonth`, `workdays`) VALUES " . implode(",", $work_data);
+    $sql = "INSERT INTO `tbl_workday` (`companyid`, `workyear`, `workmonth`, `workdays`, `reg_dt`) VALUES " . implode(",", $work_data);
     $result = mysqli_query($conn, $sql);
 
     if ($result) {
@@ -160,15 +160,15 @@ if (isset($_POST['btnUpdateWdl'])) {
 
     $update_queries = array();
     for ($month = 1; $month <= 12; $month++) {
-        $update_queries[] = "workmonth = '$workmonth_arr[$month]', workdays = '$workdays_arr[$month]'";
+        $update_queries[] = "workmonth = '$workmonth_arr[$month]', workdays = '$workdays_arr[$month]' ,  reg_dt = '$reg_dt'";
     }
 
-    $combined_sql = "INSERT INTO tbl_workday (companyid, workyear, workmonth, workdays) VALUES ";
+    $combined_sql = "INSERT INTO tbl_workday (companyid, workyear, workmonth, workdays , reg_dt) VALUES ";
     $insert_values = array();
     for ($month = 1; $month <= 12; $month++) {
-        $insert_values[] = "('$companyid', '$workyear', '$workmonth_arr[$month]', '$workdays_arr[$month]')";
+        $insert_values[] = "('$companyid', '$workyear', '$workmonth_arr[$month]', '$workdays_arr[$month]' , '$reg_dt')";
     }
-    $combined_sql .= implode(", ", $insert_values) . " ON DUPLICATE KEY UPDATE workmonth = VALUES(workmonth), workdays = VALUES(workdays)";
+    $combined_sql .= implode(", ", $insert_values) . " ON DUPLICATE KEY UPDATE workmonth = VALUES(workmonth), workdays = VALUES(workdays) , upt_dt = VALUES(reg_dt)";
     $result = mysqli_query($conn, $combined_sql);
     if ($result) {
         $_SESSION['update_success'] = $update_success;
@@ -216,8 +216,8 @@ if (isset($_POST['btnRegHdr'])) {
     $holiday = mysqli_real_escape_string($conn, $_POST['holiday']);
     $holiremark = mysqli_real_escape_string($conn, $_POST['holiremark']);
 
-    $sql_holiday_insert = "INSERT INTO `tbl_holiday` (`companyid`, `holiyear`, `holiday`, `holiremark`) 
-	VALUES('$companyid', '$holiyear', '$holiday', '$holiremark')";
+    $sql_holiday_insert = "INSERT INTO `tbl_holiday` (`companyid`, `holiyear`, `holiday`, `holiremark` , `reg_dt`) 
+	VALUES('$companyid', '$holiyear', '$holiday', '$holiremark' , '$reg_dt')";
     if (mysqli_query($conn, $sql_holiday_insert)) {
         $_SESSION['save_success'] = $save_success;
         header("Refresh:3");
@@ -235,7 +235,7 @@ if (isset($_POST['btnUpdateHdr'])) {
     $holiremark = mysqli_real_escape_string($conn, $_POST['udholiremark']);
 
     $sql = "UPDATE tbl_holiday SET 
-                holiremark='$holiremark'
+                holiremark='$holiremark' , upt_dt = '$reg_dt' 
             WHERE companyid ='$companyid'
             AND holiyear ='$holiyear'
             AND holiday ='$holiday'";
@@ -361,7 +361,7 @@ if (isset($_POST['btnUpdateUvl'])) {
     $sql = "INSERT INTO `tbl_vacationinfo` (`vacationid`, `uid`, `vacationstr`, `vacationend`, `oldcnt`, `newcnt`, `usecnt`, `usetime`, `restcnt`, `reg_dt`)
                 VALUES ('$vacationid', '$uid', '$vacationstr', '$vacationend', '$oldcnt', '$newcnt', '$usecnt', '$usetime', '$restcnt', '$reg_dt')
                 ON DUPLICATE KEY UPDATE
-                vacationstr='$vacationstr', vacationend='$vacationend', oldcnt='$oldcnt', newcnt='$newcnt', usecnt='$usecnt', usetime='$usetime', restcnt='$restcnt'";
+                vacationstr='$vacationstr', vacationend='$vacationend', oldcnt='$oldcnt', newcnt='$newcnt', usecnt='$usecnt', usetime='$usetime', restcnt='$restcnt' , upt_dt='$reg_dt'";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] = $save_success;

@@ -311,7 +311,8 @@ if (isset($_POST['DecideUpdateKyuka'])) {
         allowid='$allowid',
         allowok='$allowok',
         allowdecide='$allowdecide',
-        allowdt='$allowdt'
+        allowdt='$allowdt' , 
+        upt_dt = '$allowdt'
     WHERE uid ='$uid'";
 
         if ($conn->query($sql) === TRUE) {
@@ -329,7 +330,8 @@ if (isset($_POST['DecideUpdateKyuka'])) {
         allowid='$allowid',
         allowok='$allowok',
         allowdecide='$allowdecide',
-        allowdt='$allowdt'
+        allowdt='$allowdt' , 
+        upt_dt = '$allowdt'
     WHERE uid ='$uid'";
 
         $queries[] = "UPDATE tbl_vacationinfo SET 

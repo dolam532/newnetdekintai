@@ -383,8 +383,8 @@ if (isset($_POST['SaveKinmu'])) {
     $template = mysqli_real_escape_string($conn, $_POST['use_type']);
     $uid = $_SESSION['auth_uid'];
 
-    $sql_genba_insert = mysqli_query($conn, "INSERT INTO `tbl_genba` (`genbaname`, `genbacompany`, `companyid`, `strymd`, `endymd`, `use_yn`, `workstrtime`, `workendtime`,  `offtime1`, `offtime2`, `bigo`,  `template` , `uid` ,   `reg_dt`, `upt_dt`)
-                VALUES ('$genbaname', '$genbacompany', '$companyid', '$strymd', '$endymd', '$use_yn', '$workstrtime', '$workendtime', '$offtime1', '$offtime2', '$bigo',  '$template' , '$uid'  ,'$reg_dt', '$upt_dt')");
+    $sql_genba_insert = mysqli_query($conn, "INSERT INTO `tbl_genba` (`genbaname`, `genbacompany`, `companyid`, `strymd`, `endymd`, `use_yn`, `workstrtime`, `workendtime`,  `offtime1`, `offtime2`, `bigo`,  `template` , `uid` ,   `reg_dt`)
+                VALUES ('$genbaname', '$genbacompany', '$companyid', '$strymd', '$endymd', '$use_yn', '$workstrtime', '$workendtime', '$offtime1', '$offtime2', '$bigo',  '$template' , '$uid'  ,'$reg_dt')");
 
     if ($sql_genba_insert) {
         $_SESSION['save_success'] = $save_success;

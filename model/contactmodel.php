@@ -220,7 +220,7 @@ if (isset($_POST['btnUpdateNL'])) {
         }
 
         $sql = "UPDATE tbl_notice SET  title='$title', content='$content', reader='$reader', imagefile='$fileName'
-        , viewcnt='$viewcnt', reg_dt='$reg_dt' WHERE bid ='$bid' AND uid ='$uid'";
+        , viewcnt='$viewcnt', upt_dt='$reg_dt' WHERE bid ='$bid' AND uid ='$uid'";
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['update_success'] = $update_success;
@@ -412,7 +412,8 @@ if (isset($_POST['btnUpdateCL'])) {
 
     $sql = "UPDATE tbl_codebase SET 
                 name='$name',
-                remark='$remark'
+                remark='$remark',
+                upt_dt = '$reg_dt' 
             WHERE id ='$id'
             AND companyid ='$companyid'
             AND uid ='$uid'
