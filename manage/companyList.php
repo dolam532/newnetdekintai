@@ -636,7 +636,7 @@ window.onload = function() {
 		NProgress.start();
 		setTimeout(function () {
 			NProgress.done();
-		}, 1000);
+		}, 500);
 	}
 </script>
 

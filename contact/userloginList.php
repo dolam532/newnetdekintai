@@ -160,7 +160,7 @@ if ($_SESSION['auth'] == false) {
         NProgress.start();
         setTimeout(function () {
             NProgress.done();
-        }, 300);
+        }, 200);
     }
 </script>
 <?php include('../inc/footer.php'); ?>

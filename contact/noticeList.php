@@ -395,7 +395,7 @@ if ($_SESSION['auth'] == false) {
         $('#fileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
         // 2023-10-11/1340-005
         // pload image add end
-        setTimeout(hideLoadingOverlay, 1000);
+        setTimeout(hideLoadingOverlay, 500);
 		startLoading();
 
     });
@@ -647,7 +647,7 @@ if ($_SESSION['auth'] == false) {
         NProgress.start();
         setTimeout(function () {
             NProgress.done();
-        }, 1500);
+        }, 500);
     }
 </script>
 <?php include('../inc/footer.php'); ?>

@@ -1899,7 +1899,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 
 			//	 loading UX
 		// load waiting , when loading can't click 
-		setTimeout(hideLoadingOverlay, 2000);
+		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();
 	});
 
@@ -2006,7 +2006,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		NProgress.start();
 		setTimeout(function () {
 			NProgress.done();
-		}, 2000);
+		}, 1000);
 	}
 </script>
 

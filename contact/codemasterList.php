@@ -328,7 +328,7 @@ if ($_SESSION['auth'] == false) {
             $("#myForm").submit();
        
         });
-        setTimeout(hideLoadingOverlay, 1000);
+        setTimeout(hideLoadingOverlay, 200);
 		startLoading();
     });
 
@@ -352,7 +352,7 @@ if ($_SESSION['auth'] == false) {
 		NProgress.start();
 		setTimeout(function () {
 			NProgress.done();
-		}, 1000);
+		}, 200);
 	}
 
 

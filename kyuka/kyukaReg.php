@@ -779,7 +779,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 
 	window.onload = function() {
-		setTimeout(hideLoadingOverlay, 1000);
+		setTimeout(hideLoadingOverlay, 800);
 		startLoading();
 };
 
@@ -802,7 +802,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		NProgress.start();
 		setTimeout(function () {
 			NProgress.done();
-		}, 1500);
+		}, 1000);
 	}
 
 

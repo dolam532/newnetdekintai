@@ -746,7 +746,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		NProgress.start();
 		setTimeout(function () {
 			NProgress.done();
-		}, 1200);
+		}, 500);
 	}
 </script>
 <?php include('../inc/footer.php'); ?>
