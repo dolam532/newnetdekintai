@@ -424,7 +424,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<?php $allowedTypesString = "." . implode(", .", $ALLOWED_TYPES_STAMP); ?>
 		$('#udfileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
 		$('#fileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
-
+		setTimeout(hideLoadingOverlay, 1000);
+		startLoading();
 	});
 
 	// check size file upload
@@ -726,5 +727,26 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			return;
 		}
 	});
+
+	    	// loading UX
+			function showLoadingOverlay() {
+		const overlay = document.getElementById("overlay");
+		overlay.style.display = "block";
+		document.body.style.pointerEvents = "none";
+	}
+
+	function hideLoadingOverlay() {
+		const overlay = document.getElementById("overlay");
+		overlay.style.display = "none";
+		document.body.style.pointerEvents = "auto";
+	}
+
+	showLoadingOverlay();
+	function startLoading() {
+		NProgress.start();
+		setTimeout(function () {
+			NProgress.done();
+		}, 1200);
+	}
 </script>
 <?php include('../inc/footer.php'); ?>

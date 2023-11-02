@@ -13,9 +13,6 @@ if ($_SESSION['auth'] == false) {
 	header("Location: ../loginout/loginout.php");
 }
 ?>
- <!-- loading UX  -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.css">
 
 
 <style>
@@ -139,41 +136,7 @@ if ($_SESSION['auth'] == false) {
 
 
 
-	/* page data loading  loading UX  */
-	#overlay {
-		display: none;
-		position: fixed;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: rgba(255, 255, 255, 0.3);
-		z-index: 9999;
-	}
 
-	.loader {
-		border: 4px solid #3498db;
-		border-top: 4px solid transparent;
-		border-radius: 50%;
-		width: 50px;
-		height: 50px;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		margin-top: -25px;
-		margin-left: -25px;
-		animation: spin 1s linear infinite;
-	}
-
-	@keyframes spin {
-		0% {
-			transform: rotate(0deg);
-		}
-
-		100% {
-			transform: rotate(360deg);
-		}
-	}
 </style>
 
 <script>
@@ -273,10 +236,6 @@ if ($_SESSION['auth'] == false) {
 		unset($_SESSION['delete_all_success']);
 	}
 	?>
-
-	<div id="overlay">
-		<div class="loader"></div>
-	</div>
 
 
 	<div class="row">
@@ -1817,12 +1776,20 @@ if ($_SESSION['auth'] == false) {
 	function autoInputHandle() {
 		$('#modal').modal('toggle');
 		$("#weekdayCheckbox").prop('checked', true);
+				//	 loading UX
+		// load waiting , when loading can't click 
+		setTimeout(hideLoadingOverlay, 2000);
+		startLoading();
 	}
 
 	// Submit for 自動入力 Error Check
 	$("#submit-button").click(function (event) {
 		event.preventDefault(); // Prevent the default form submission
 		$("#autopdf").submit();
+				//	 loading UX
+		// load waiting , when loading can't click 
+		setTimeout(hideLoadingOverlay, 2000);
+		startLoading();
 	});
 
 	// Select input tag
@@ -1904,11 +1871,9 @@ if ($_SESSION['auth'] == false) {
 			var genid = selectedOption.split(',')[0];
 			$('#selectedGenid').val(genid);
 		});
-
-		//	 loading UX
-		// load waiting , when loading can't click 
-		setTimeout(hideLoadingOverlay, 2000);
+		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();
+
 
 	});
 
@@ -2019,7 +1984,7 @@ if ($_SESSION['auth'] == false) {
 		NProgress.start();
 		setTimeout(function () {
 			NProgress.done();
-		}, 2000);
+		}, 1000);
 	}
 
 

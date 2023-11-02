@@ -609,5 +609,36 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             return false;
         }
     });
+
+
+    
+window.onload = function() {
+		setTimeout(hideLoadingOverlay, 500);
+		startLoading();
+};
+
+
+	// loading UX
+	function showLoadingOverlay() {
+		const overlay = document.getElementById("overlay");
+		overlay.style.display = "block";
+		document.body.style.pointerEvents = "none";
+	}
+
+	function hideLoadingOverlay() {
+		const overlay = document.getElementById("overlay");
+		overlay.style.display = "none";
+		document.body.style.pointerEvents = "auto";
+	}
+
+	showLoadingOverlay();
+	function startLoading() {
+		NProgress.start();
+		setTimeout(function () {
+			NProgress.done();
+		}, 1000);
+	}
 </script>
+
+
 <?php include('../inc/footer.php'); ?>

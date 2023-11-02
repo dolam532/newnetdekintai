@@ -357,6 +357,9 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         <?php $allowedTypesString = "." . implode(", .", $ALLOWED_TYPES_STAMP); ?>
         $('#udfileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
         $('#fileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
+		setTimeout(hideLoadingOverlay, 500);
+		startLoading();
+
 
     });
 
@@ -632,5 +635,27 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             return true;
         }
     });
+
+
+	// loading UX
+	function showLoadingOverlay() {
+		const overlay = document.getElementById("overlay");
+		overlay.style.display = "block";
+		document.body.style.pointerEvents = "none";
+	}
+
+	function hideLoadingOverlay() {
+		const overlay = document.getElementById("overlay");
+		overlay.style.display = "none";
+		document.body.style.pointerEvents = "auto";
+	}
+
+	showLoadingOverlay();
+	function startLoading() {
+		NProgress.start();
+		setTimeout(function () {
+			NProgress.done();
+		}, 1000);
+	}
 </script>
 <?php include('../inc/footer.php'); ?>

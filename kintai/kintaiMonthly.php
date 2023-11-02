@@ -119,6 +119,33 @@ if ($_SESSION['auth'] == false) {
 		jQuery('.seldate').change(function() {
 			this.form.submit();
 		});
+			//	 loading UX
+		// load waiting , when loading can't click 
+		setTimeout(hideLoadingOverlay, 500);
+		startLoading();
 	});
+
+
+		// loading UX
+		function showLoadingOverlay() {
+		const overlay = document.getElementById("overlay");
+		overlay.style.display = "block";
+		document.body.style.pointerEvents = "none";
+	}
+
+	function hideLoadingOverlay() {
+		const overlay = document.getElementById("overlay");
+		overlay.style.display = "none";
+		document.body.style.pointerEvents = "auto";
+	}
+
+	showLoadingOverlay();
+	function startLoading() {
+		NProgress.start();
+		setTimeout(function () {
+			NProgress.done();
+		}, 500);
+	}
+
 </script>
 <?php include('../inc/footer.php'); ?>

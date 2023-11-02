@@ -395,6 +395,8 @@ if ($_SESSION['auth'] == false) {
         $('#fileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
         // 2023-10-11/1340-005
         // pload image add end
+        setTimeout(hideLoadingOverlay, 1000);
+		startLoading();
 
     });
 
@@ -625,5 +627,27 @@ if ($_SESSION['auth'] == false) {
     }
     // 2023-10-11/1340-005
     // upload image  add end
+
+    
+	// loading UX
+    function showLoadingOverlay() {
+        const overlay = document.getElementById("overlay");
+        overlay.style.display = "block";
+        document.body.style.pointerEvents = "none";
+    }
+
+    function hideLoadingOverlay() {
+        const overlay = document.getElementById("overlay");
+        overlay.style.display = "none";
+        document.body.style.pointerEvents = "auto";
+    }
+
+    showLoadingOverlay();
+    function startLoading() {
+        NProgress.start();
+        setTimeout(function () {
+            NProgress.done();
+        }, 1500);
+    }
 </script>
 <?php include('../inc/footer.php'); ?>
