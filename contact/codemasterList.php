@@ -157,7 +157,6 @@ if ($_SESSION['auth'] == false) {
                     } ?>
                 </tbody>
             </table>
-            <input type="button" onclick="window.location.href='./codetypeList.php'" value="型式コード登録">
         </div>
         <div class="col-md-8">
             <table class="table table-bordered datatable" id="tblcodebase">

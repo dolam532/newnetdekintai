@@ -452,7 +452,7 @@ if (isset($_POST['btnDelCML'])) {
 }
 
 // codetypeList.php
-// Save Data to tbl_codebase DB 
+// Save Data to tbl_codetype DB 
 if (isset($_POST['btnRegCTL'])) {
     $typecode = mysqli_real_escape_string($conn, $_POST['typecode']);
     $typename = mysqli_real_escape_string($conn, $_POST['typename']);
@@ -462,6 +462,41 @@ if (isset($_POST['btnRegCTL'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] = $save_success;
+        header("Refresh:3");
+    } else {
+        error_log('query error: ' . mysqli_error($conn));
+    }
+}
+
+// Update Data to tbl_codetype DB 
+if (isset($_POST['btnUpdateCTL'])) {
+    $typecode = mysqli_real_escape_string($conn, $_POST['udtypecode']);
+    $typename = mysqli_real_escape_string($conn, $_POST['udtypename']);
+    $typeremark = mysqli_real_escape_string($conn, $_POST['udtyperemark']);
+
+    $sql = "UPDATE tbl_codetype SET 
+                typename='$typename',
+                typeremark='$typeremark',
+                upt_dt = '$upt_dt' 
+            WHERE 
+                typecode ='$typecode'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['update_success'] = $update_success;
+        header("Refresh:3");
+    } else {
+        error_log('query error: ' . mysqli_error($conn));
+    }
+}
+
+// Delete Data to tbl_codetype DB 
+if (isset($_POST['btnDelCTL'])) {
+    $typecode = mysqli_real_escape_string($conn, $_POST['udtypecode']);
+
+    $sql = "DELETE FROM `tbl_codetype` 
+    WHERE typecode ='$typecode'";
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['delete_success'] = $delete_success;
         header("Refresh:3");
     } else {
         error_log('query error: ' . mysqli_error($conn));

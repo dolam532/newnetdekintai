@@ -200,21 +200,17 @@ if ($_SESSION['auth'] == false) {
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-md-2">
-                                    <label for="code">Code</label>
-                                    <input type="text" class="form-control" name="udcode" id="udcode" style="text-align: center" readonly>
-                                    <input type="hidden" name="udid" id="udid">
-                                    <input type="hidden" name="udcompanyid" id="udcompanyid">
-                                    <input type="hidden" name="uduid" id="uduid">
-                                    <input type="hidden" name="udtypecode" id="udtypecode">
+                                <div class="col-md-4">
+                                    <label for="code">Type Code</label>
+                                    <input type="text" class="form-control" name="udtypecode" id="udtypecode" style="text-align: center" readonly>
                                 </div>
-                                <div class="col-md-5">
-                                    <label for="name">Type</label>
-                                    <input type="text" class="form-control" name="udtypename" id="udtypename" placeholder="typename" style="text-align: left">
+                                <div class="col-md-4">
+                                    <label for="name">Type Name</label>
+                                    <input type="text" class="form-control" name="udtypename" id="udtypename" placeholder="タイプ名" style="text-align: left">
                                 </div>
-                                <div class="col-md-5">
-                                    <label for="remark">備考</label>
-                                    <input type="text" class="form-control" name="udtyperemark" id="udtyperemark" placeholder="typeremark" style="text-align: left">
+                                <div class="col-md-4">
+                                    <label for="remark">Type Remark</label>
+                                    <input type="text" class="form-control" name="udtyperemark" id="udtyperemark" placeholder="タイプ備考" style="text-align: left">
                                 </div>
                             </div>
                             <br>
@@ -323,21 +319,12 @@ if ($_SESSION['auth'] == false) {
         ?>
                 if ('<?php echo $key['typecode'] ?>' == Typecode) {
                     $("#udtcode").text('<?php echo $key['typecode'] ?>');
-                    var udid = $("input[name=udid]:hidden");
-                    udid.val("<?php echo $key['id'] ?>");
-                    var udid = udid.val();
-                    var udcompanyid = $("input[name=udcompanyid]:hidden");
-                    udcompanyid.val("<?php echo $key['companyid'] ?>");
-                    var udcompanyid = udcompanyid.val();
-                    var uduid = $("input[name=uduid]:hidden");
-                    uduid.val("<?php echo $key['uid'] ?>");
-                    var uduid = uduid.val();
                     var udtypecode = $("input[name=udtypecode]:hidden");
                     udtypecode.val("<?php echo $key['typecode'] ?>");
                     var udtypecode = udtypecode.val();
-                    $("#udcode").text($('[name="udcode"]').val("<?php echo $key['code'] ?>"));
-                    $("#udname").text($('[name="udname"]').val("<?php echo $key['name'] ?>"));
-                    $("#udremark").text($('[name="udremark"]').val("<?php echo $key['remark'] ?>"));
+                    $("#udtypecode").text($('[name="udtypecode"]').val("<?php echo $key['typecode'] ?>"));
+                    $("#udtypename").text($('[name="udtypename"]').val("<?php echo $key['typename'] ?>"));
+                    $("#udtyperemark").text($('[name="udtyperemark"]').val("<?php echo $key['typeremark'] ?>"));
                 }
         <?php
             }
@@ -347,10 +334,10 @@ if ($_SESSION['auth'] == false) {
 
     // Check Error
     $(document).on('click', '#btnUpdateCTL', function(e) {
-        var Name = $("#udname").val();
-        if (Name == "") {
-            alert("<?php echo $content_cmlN_empty; ?>");
-            $("#udname").focus();
+        var TypeName = $("#udtypename").val();
+        if (TypeName == "") {
+            alert("<?php echo $content_ctlN_empty; ?>");
+            $("#udtypename").focus();
             return false;
         }
     });
