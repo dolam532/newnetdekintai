@@ -35,15 +35,15 @@ if ($_SESSION['auth'] == false) {
         vertical-align: middle;
     }
 
-    span.codemasterList_class {
+    span.codetypeList_class {
         display: none;
     }
 </style>
-<title>基礎コード登録</title>
+<title>型式コード登録</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <?php
-    if (isset($_SESSION['save_success']) && isset($_POST['btnRegCL'])) {
+    if (isset($_SESSION['save_success']) && isset($_POST['btnRegCTL'])) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -54,7 +54,7 @@ if ($_SESSION['auth'] == false) {
     }
     ?>
     <?php
-    if (isset($_SESSION['update_success']) && isset($_POST['btnUpdateCML'])) {
+    if (isset($_SESSION['update_success']) && isset($_POST['btnUpdateCTL'])) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -65,7 +65,7 @@ if ($_SESSION['auth'] == false) {
     }
     ?>
     <?php
-    if (isset($_SESSION['delete_success']) && isset($_POST['btnDelCML'])) {
+    if (isset($_SESSION['delete_success']) && isset($_POST['btnDelCTL'])) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -78,13 +78,13 @@ if ($_SESSION['auth'] == false) {
     <div class="row">
         <div class="col-md-8">
             <div class="title_name">
-                <span class="text-left">基礎コード登録</span>
+                <span class="text-left">型式コード登録</span>
             </div>
         </div>
         <div class="col-md-4 text-right">
             <div class="title_btn">
                 <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                    <input type="button" id="btnNewCML" value="新規">
+                    <input type="button" id="btnNewCTL" value="新規">
                 <?php endif; ?>
             </div>
             <div class="title_btn">
@@ -93,115 +93,44 @@ if ($_SESSION['auth'] == false) {
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-12">
             <table class="table table-bordered datatable">
                 <thead>
                     <tr class="info">
-                        <th style="text-align: center; width: 30%;">Type Code</th>
-                        <th style="text-align: center; width: 70%;">Type Name</th>
+                        <th style="text-align: center; width: 20%;">Type Code</th>
+                        <th style="text-align: center; width: 50%;">Type Name</th>
+                        <th style="text-align: center; width: auto;">Type Remark</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <form id="myForm" method="post">
-                        <input type="hidden" name="typecode" id="typecode">
-                        <input type="hidden" name="typename" id="typename">
-                    </form>
                     <?php if (empty($codetype_list)) { ?>
                         <tr class="info">
-                            <td colspan="2" align="center">
+                            <td colspan="3" align="center">
                                 <?php echo $data_save_no; ?>
                             </td>
                         </tr>
                         <?php } elseif (!empty($codetype_list)) {
                         foreach ($codetype_list as $key) {
                         ?>
-                            <?php if ($key['typecode'] == $_POST['typecode']) : ?>
-                                <tr>
-                                    <td align="center">
-                                        <span style="font-weight:bold; color:red; text-decoration: underline;">
-                                            <?= $key['typecode'] ?>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="submitLink">
-                                            <span style="font-weight:bold; color:red; text-decoration: underline;">
-                                                <?= $key['typename'] ?>
-                                            </span>
-                                            <span class="codemasterList_class">
-                                                <?= $key['typecode'] . ',' . $key['typename'] ?>
-                                            </span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            <?php else : ?>
-                                <tr>
-                                    <td align="center">
-                                        <span>
-                                            <?= $key['typecode'] ?>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="submitLink" id="target_error">
-                                            <span>
-                                                <?= $key['typename'] ?>
-                                            </span>
-                                            <span class="codemasterList_class">
-                                                <?= $key['typecode'] . ',' . $key['typename'] ?>
-                                            </span>
-                                        </a>
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
-                    <?php
-                        }
-                    } ?>
-                </tbody>
-            </table>
-            <input type="button" onclick="window.location.href='./codetypeList.php'" value="型式コード登録">
-        </div>
-        <div class="col-md-8">
-            <table class="table table-bordered datatable" id="tblcodebase">
-                <thead>
-                    <tr class="info">
-                        <th style="text-align: center; width: 20%;">Code</th>
-                        <th style="text-align: center; width: 40%;">名</th>
-                        <th style="text-align: center; width: 40%;">備考</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (empty($codebase_list)) { ?>
-                        <tr>
-                            <td colspan="3" align="center">
-                                <?php echo $data_save_no; ?>
-                            </td>
-                        </tr>
-                        <?php } elseif (!empty($codebase_list)) {
-                        foreach ($codebase_list as $key) {
-                        ?>
                             <tr>
                                 <td align="center">
                                     <span>
-                                        <?= $key['code'] ?>
+                                        <?= $key['typecode'] ?>
                                     </span>
                                 </td>
                                 <td>
-                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                                        <a href="#">
-                                            <span class="showModal">
-                                                <span class="codemasterList_class">
-                                                    <?= $key['id'] . ',' ?>
-                                                </span>
-                                                <?= $key['name'] ?>
+                                    <a href="#">
+                                        <span class="showModal">
+                                            <span class="codetypeList_class">
+                                                <?= $key['typecode'] . ',' ?>
                                             </span>
-                                        </a>
-                                    <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
-                                        <?= $key['name'] ?>
-                                    <?php endif; ?>
-
+                                            <?= $key['typename'] ?>
+                                        </span>
+                                    </a>
                                 </td>
                                 <td>
                                     <span>
-                                        <?= $key['remark'] ?>
+                                        <?= $key['typeremark'] ?>
                                     </span>
                                 </td>
                             </tr>
@@ -218,25 +147,24 @@ if ($_SESSION['auth'] == false) {
         <div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false" style="display: none;">
             <div class="modal-dialog">
                 <form method="post">
-                    <input type="hidden" name="typecode" value="<?= $_POST['typecode'] ?>">
                     <div class="modal-content">
                         <div class="modal-header">
-                            基礎コード登録(<span id="sname">New</span>)
+                            型式コード登録(<span id="sname">New</span>)
                             <button class="close" data-dismiss="modal">x</button>
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-md-2">
-                                    <label for="code">Code</label>
-                                    <input type="text" class="form-control" name="code" id="code" placeholder="コード" style="text-align: center" maxlength=<?php echo $MAX_LENGTH_CODE ?>>
+                                <div class="col-md-4">
+                                    <label for="code">Type Code</label>
+                                    <input type="text" class="form-control" name="typecode" id="typecode" placeholder="タイプコード" style="text-align: center" maxlength=<?php echo $MAX_LENGTH_CODE ?>>
                                 </div>
-                                <div class="col-md-5">
-                                    <label for="name">名</label>
-                                    <input type="text" class="form-control" name="name" id="name" placeholder="name" style="text-align: left">
+                                <div class="col-md-4">
+                                    <label for="name">Type Name</label>
+                                    <input type="text" class="form-control" name="typename" id="typename" placeholder="タイプ名" style="text-align: left">
                                 </div>
-                                <div class="col-md-5">
-                                    <label for="remark">備考</label>
-                                    <input type="text" class="form-control" name="remark" id="remark" placeholder="remark" style="text-align: left">
+                                <div class="col-md-4">
+                                    <label for="remark">Type Remark</label>
+                                    <input type="text" class="form-control" name="typeremark" id="typeremark" placeholder="タイプ備考" style="text-align: left">
                                 </div>
                             </div>
                             <br>
@@ -245,7 +173,7 @@ if ($_SESSION['auth'] == false) {
                             <div class="col-xs-4"></div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input type="submit" name="btnRegCML" class="btn btn-primary" id="btnRegCML" role="button" value="登録">
+                                    <input type="submit" name="btnRegCTL" class="btn btn-primary" id="btnRegCTL" role="button" value="登録">
                                 </p>
                             </div>
                             <div class="col-xs-2">
@@ -281,12 +209,12 @@ if ($_SESSION['auth'] == false) {
                                     <input type="hidden" name="udtypecode" id="udtypecode">
                                 </div>
                                 <div class="col-md-5">
-                                    <label for="name">名</label>
-                                    <input type="text" class="form-control" name="udname" id="udname" placeholder="name" style="text-align: left">
+                                    <label for="name">Type</label>
+                                    <input type="text" class="form-control" name="udtypename" id="udtypename" placeholder="typename" style="text-align: left">
                                 </div>
                                 <div class="col-md-5">
                                     <label for="remark">備考</label>
-                                    <input type="text" class="form-control" name="udremark" id="udremark" placeholder="remark" style="text-align: left">
+                                    <input type="text" class="form-control" name="udtyperemark" id="udtyperemark" placeholder="typeremark" style="text-align: left">
                                 </div>
                             </div>
                             <br>
@@ -295,12 +223,12 @@ if ($_SESSION['auth'] == false) {
                             <div class="col-xs-3"></div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input type="submit" name="btnUpdateCML" class="btn btn-primary" id="btnUpdateCML" role="button" value="編集">
+                                    <input type="submit" name="btnUpdateCTL" class="btn btn-primary" id="btnUpdateCTL" role="button" value="編集">
                                 </p>
                             </div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input type="submit" name="btnDelCML" class="btn btn-warning" id="btnDelCML" role="button" value="削除">
+                                    <input type="submit" name="btnDelCTL" class="btn btn-warning" id="btnDelCTL" role="button" value="削除">
                                 </p>
                             </div>
                             <div class="col-xs-2">
@@ -317,23 +245,9 @@ if ($_SESSION['auth'] == false) {
 <script>
     // Change type code by submit 
     $(document).ready(function() {
-        $(".submitLink").click(function(event) {
-            event.preventDefault(); // Prevent the default link behavior
-            var ArrayData = $(this).find(".codemasterList_class").text();
-            var SeparateArr = ArrayData.split(',');
-            var Typecode = SeparateArr[0].trim();
-            var Typename = SeparateArr[1].trim();
-
-            $("#typecode").val(Typecode);
-            $("#typename").val(Typename);
-            $("#myForm").submit();
-
-        });
         setTimeout(hideLoadingOverlay, 200);
         startLoading();
     });
-
-
 
     // loading UX
     function showLoadingOverlay() {
@@ -357,47 +271,41 @@ if ($_SESSION['auth'] == false) {
         }, 200);
     }
 
-
     // New button: popup & clear 
-    $(document).on('click', '#btnNewCML', function(e) {
-        var typecode = <?php echo json_encode($_POST['typecode']); ?>;
-        if (typecode === null) {
-            alert("<?php echo $content_choice_empty; ?>");
-            $("#target_error").focus();
-            return false;
-        }
+    $(document).on('click', '#btnNewCTL', function(e) {
         $('#modal').modal('toggle');
     });
 
     // Check Error
-    $(document).on('click', '#btnRegCML', function(e) {
-        var Code = $("#code").val();
-        var Name = $("#name").val();
+    $(document).on('click', '#btnRegCTL', function(e) {
+        var TypeCode = $("#typecode").val();
+        var TypeName = $("#typename").val();
 
-        if (Code == "") {
-            alert("<?php echo $content_cmlC_empty; ?>");
-            $("#code").focus();
+        if (TypeCode == "") {
+            alert("<?php echo $content_ctl_empty; ?>");
+            $("#typecode").focus();
             return false;
         }
 
-        if (isNaN(Code)) {
-            alert("<?php echo $content_cmlC_no; ?>");
+        if (isNaN(TypeCode)) {
+            alert("<?php echo $content_ctl_no; ?>");
             e.preventDefault();
-            $("#code").focus();
+            $("#typecode").focus();
             return false;
         }
 
-        if (Name == "") {
-            alert("<?php echo $content_cmlN_empty; ?>");
-            $("#name").focus();
+        if (TypeName == "") {
+            alert("<?php echo $content_ctlN_empty; ?>");
+            $("#typename").focus();
             return false;
         }
+
         // check duplicate code 
-        var codes = <?php echo json_encode($codes); ?>;
-        for (var code of codes) {
-            if (code === Code) {
-                alert("<?php echo $content_cmlC_duplicate; ?>");
-                $("#code").focus();
+        var typecodes = <?php echo json_encode($typecodes); ?>;
+        for (var typecode of typecodes) {
+            if (typecode === TypeCode) {
+                alert("<?php echo $content_ctlC_duplicate; ?>");
+                $("#typecode").focus();
                 return false;
             }
         }
@@ -408,13 +316,13 @@ if ($_SESSION['auth'] == false) {
         $('#modal2').modal('toggle');
         var ArrayData = $(this).text();
         var SeparateArr = ArrayData.split(',');
-        var Id = SeparateArr[0].trim();
+        var Typecode = SeparateArr[0].trim();
         <?php
-        if (!empty($codebase_list)) {
-            foreach ($codebase_list as $key) {
+        if (!empty($codetype_list)) {
+            foreach ($codetype_list as $key) {
         ?>
-                if ('<?php echo $key['id'] ?>' == Id) {
-                    $("#udtcode").text('<?php echo $key['code'] ?>');
+                if ('<?php echo $key['typecode'] ?>' == Typecode) {
+                    $("#udtcode").text('<?php echo $key['typecode'] ?>');
                     var udid = $("input[name=udid]:hidden");
                     udid.val("<?php echo $key['id'] ?>");
                     var udid = udid.val();
@@ -438,7 +346,7 @@ if ($_SESSION['auth'] == false) {
     });
 
     // Check Error
-    $(document).on('click', '#btnUpdateCML', function(e) {
+    $(document).on('click', '#btnUpdateCTL', function(e) {
         var Name = $("#udname").val();
         if (Name == "") {
             alert("<?php echo $content_cmlN_empty; ?>");

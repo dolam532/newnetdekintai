@@ -1,5 +1,6 @@
 <?php
 $reg_dt = date('Y-m-d H:i:s');
+$upt_dt = date('Y-m-d H:i:s');
 
 // userloginList.php
 $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
@@ -342,6 +343,7 @@ if (isset($_POST['btnDelNL'])) {
 $sql_codetype = 'SELECT * FROM `tbl_codetype`';
 $result_codetype = mysqli_query($conn, $sql_codetype);
 $codetype_list = mysqli_fetch_all($result_codetype, MYSQLI_ASSOC);
+$typecodes = array_column($codetype_list, 'typecode');
 
 $codetype_list_a = array();
 foreach ($codetype_list as $k => $v) {
@@ -380,7 +382,7 @@ if ($_POST['typecode'] == NULL) {
 }
 
 // Save Data to tbl_codebase DB 
-if (isset($_POST['btnRegCL'])) {
+if (isset($_POST['btnRegCML'])) {
     $companyid = $_SESSION['auth_companyid'];
     $typecode = $_SESSION['typecode'] = $_POST['typecode'];
     $uid = $_SESSION['auth_uid'];
@@ -400,7 +402,7 @@ if (isset($_POST['btnRegCL'])) {
 }
 
 // Update Data to tbl_codebase DB 
-if (isset($_POST['btnUpdateCL'])) {
+if (isset($_POST['btnUpdateCML'])) {
     $_SESSION['typecode'] = $_POST['udtypecode'];
     $id = mysqli_real_escape_string($conn, $_POST['udid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
@@ -429,7 +431,7 @@ if (isset($_POST['btnUpdateCL'])) {
 }
 
 // Delete Data to tbl_codebase DB 
-if (isset($_POST['btnDelCL'])) {
+if (isset($_POST['btnDelCML'])) {
     $_SESSION['typecode'] = $_POST['udtypecode'];
     $id = mysqli_real_escape_string($conn, $_POST['udid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
@@ -443,6 +445,23 @@ if (isset($_POST['btnDelCL'])) {
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
 
+        header("Refresh:3");
+    } else {
+        error_log('query error: ' . mysqli_error($conn));
+    }
+}
+
+// codetypeList.php
+// Save Data to tbl_codebase DB 
+if (isset($_POST['btnRegCTL'])) {
+    $typecode = mysqli_real_escape_string($conn, $_POST['typecode']);
+    $typename = mysqli_real_escape_string($conn, $_POST['typename']);
+    $typeremark = mysqli_real_escape_string($conn, $_POST['typeremark']);
+    $sql = "INSERT INTO `tbl_codetype` (`typecode`, `typename`, `typeremark`, `reg_dt`, `upt_dt`)
+                VALUES ('$typecode', '$typename', '$typeremark', '$reg_dt', '$upt_dt')";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['save_success'] = $save_success;
         header("Refresh:3");
     } else {
         error_log('query error: ' . mysqli_error($conn));

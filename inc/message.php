@@ -177,3 +177,9 @@ $content_cmlC_empty = 'Codeを入力してください。';
 $content_cmlC_no = 'Codeをを番号で入力してください。';
 $content_cmlN_empty = '名を入力してください。';
 $content_cmlC_duplicate = 'コードが既存しましたので登録出来ませんでした。';
+
+// codetypeList
+$content_ctlC_empty = 'Type Codeを入力してください。';
+$content_ctlC_no = 'Type Codeをを番号で入力してください。';
+$content_ctlN_empty = 'Type Nameを入力してください。';
+$content_ctlC_duplicate = 'Type Codeが既存しましたので登録出来ませんでした。';
