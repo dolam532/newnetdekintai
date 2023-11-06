@@ -53,3 +53,7 @@ $ALLOWED_TYPES_STAMP = array("png");
 $STAMP_MAXSIZE = 2000000;  // 2MB = 2000000
 $LENGTH_RANDOM_UNIQUE_NAME_STAMP = 16;
 $IMAGE_UPLOAD_DIR_STAMP = '../assets/uploads/signstamp/';
+
+// MIN LENGTH 社員登録のID&email
+$MIN_LENGTH_ID_EMAIL_USER = 4;
+

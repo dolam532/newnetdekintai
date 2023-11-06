@@ -39,6 +39,9 @@ $user_grade_empty = '区分を入力してください。';
 $user_genba_list_empty = '勤務時間タイプを選択してください。';
 $file_size_isvalid_STAMP = 'ファイルサイズが無効です。ファイルサイズが' . round($STAMP_MAXSIZE / 1000000, 0) . 'MB未満のファイルを選択してください。';
 $file_extension_invalid_STAMP = 'ファイルの拡張子無効です。ファイルの拡張子が [ ' . implode(', ', $ALLOWED_TYPES_STAMP) . ' ] です';
+$min_invalid_useremail_length = 'メールが短すぎます。@の前に最低'.$MIN_LENGTH_ID_EMAIL_USER.'桁以上入力してください。';
+$min_invalid_userid_length = 'IDが短すぎます。@の前に最低'.$MIN_LENGTH_ID_EMAIL_USER.'桁以上入力してください。';
+$email_is_dupplicate = 'メールが存在されています。他のメールを登録してください。';
 
 // KyukaReg
 $kyuka_no_receive = '休暇はまだもらえません。';

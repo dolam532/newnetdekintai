@@ -67,4 +67,13 @@ if ($_SESSION['auth'] == false) {
         </table>
     </div>
 </div>
+
+<script>
+
+    
+	window.onload = function() {
+		setTimeout(hideLoadingOverlay, 500);
+		startLoading();
+};
+</script>
 <?php include('../inc/footer.php'); ?>

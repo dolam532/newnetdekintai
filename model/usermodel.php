@@ -143,6 +143,21 @@ if (isset($_POST['SaveUserList'])) {
         $uploadOk = false;
     }
 
+
+       //  check email is dupplicate  ?
+       $sqlCheckEmail = "SELECT * FROM tbl_user where `email`  = '$email'";
+       $result = $conn->query($sqlCheckEmail);
+   
+       if ($result === false) {
+           $uploadOk = false;
+           echo 'Query error: ' . mysqli_error($conn);
+       } else {
+           if (mysqli_num_rows($result) > 0) {
+               $uploadOk = false;
+               $_SESSION['email_dupplicate_error'] = $email_is_dupplicate;
+           } 
+       }
+
     // if not error save
     if ($uploadOk) {
         $fileName = $newFileName;
@@ -222,6 +237,22 @@ if (isset($_POST['UpdateUserList'])) {
     } else {
         $fileName = $udsignstamp_old;
     }
+
+    //  check email is dupplicate  ?
+    $email = mysqli_real_escape_string($conn, $_POST['ulemail']);
+    $sqlCheckEmail = "SELECT * FROM tbl_user where `email`  = '$email' AND `uid` NOT IN ('$uid') ";
+    $result = $conn->query($sqlCheckEmail);
+
+    if ($result === false) {
+        $uploadOk = false;
+        echo 'Query error: ' . mysqli_error($conn);
+    } else {
+        if (mysqli_num_rows($result) > 0) {
+            $uploadOk = false;
+            $_SESSION['email_dupplicate_error'] = $email_is_dupplicate;
+        } 
+    }
+
 
     // if not error save
     if ($uploadOk) {

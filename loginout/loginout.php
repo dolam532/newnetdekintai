@@ -125,5 +125,12 @@ include('../model/loginoutmodel.php');
     }
 });
 
+window.onload = function() {
+		setTimeout(hideLoadingOverlay, 100);
+		startLoading();
+};
+
+
+
 </script>
 <?php include('../inc/footer.php'); ?>

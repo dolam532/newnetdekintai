@@ -72,6 +72,29 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		unset($_SESSION['delete_success']);
 	}
 	?>
+	<?php
+	if (isset($_SESSION['email_dupplicate_error']) && isset($_POST['UpdateUserList'])) {
+		?>
+		<script>
+			alert("<?php echo $_SESSION['email_dupplicate_error']; ?>");
+		</script>
+		<?php
+		unset($_SESSION['email_dupplicate_error']);
+	}
+	?>
+
+<?php
+	if (isset($_SESSION['email_dupplicate_error']) && isset($_POST['SaveUserList'])) {
+		?>
+		<script>
+			alert("<?php echo $_SESSION['email_dupplicate_error']; ?>");
+		</script>
+		<?php
+		unset($_SESSION['email_dupplicate_error']);
+	}
+	?>
+
+
 	<div class="row">
 		<div class="col-md-2 text-left">
 			<div class="title_name">
@@ -680,6 +703,19 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			e.preventDefault();
 			return;
 		}
+		// check min length 
+		if (checkStringLengthAndCondition(uid) !== true) {
+			$("#uid").focus();
+			alert("<?php echo $min_invalid_userid_length ?>");
+			e.preventDefault();
+			return;
+		}
+		if (checkStringLengthAndCondition(email) !== true) {
+			$("#email").focus();
+			alert("<?php echo $min_invalid_useremail_length ?>");
+			e.preventDefault();
+			return;
+		}
 	});
 
 	// Check Error 社員編集
@@ -726,27 +762,29 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			e.preventDefault();
 			return;
 		}
+		if (checkStringLengthAndCondition(email) !== true) {
+			$("#ulemail").focus();
+			alert("<?php echo $min_invalid_useremail_length ?>");
+			e.preventDefault();
+			return;
+		}
 	});
 
-	    	// loading UX
-			function showLoadingOverlay() {
-		const overlay = document.getElementById("overlay");
-		overlay.style.display = "block";
-		document.body.style.pointerEvents = "none";
-	}
+	function checkStringLengthAndCondition(inputString) {
+		const minLength = parseInt("<?php echo $MIN_LENGTH_ID_EMAIL_USER ?>", 10);
 
-	function hideLoadingOverlay() {
-		const overlay = document.getElementById("overlay");
-		overlay.style.display = "none";
-		document.body.style.pointerEvents = "auto";
+		if (inputString.includes('@')) {
+			const atIndex = inputString.indexOf('@');
+			if (atIndex >= minLength) {
+				return true;
+			}
+		} else {
+			if (inputString.length >= minLength) {
+				return true;
+			}
+		}
+		return false;
 	}
-
-	showLoadingOverlay();
-	function startLoading() {
-		NProgress.start();
-		setTimeout(function () {
-			NProgress.done();
-		}, 500);
-	}
+	
 </script>
 <?php include('../inc/footer.php'); ?>

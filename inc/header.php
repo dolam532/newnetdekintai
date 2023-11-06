@@ -19,8 +19,8 @@
     <link rel="stylesheet" href="../assets/css/jquery-ui.min.css">
     <script src="../assets/js/jquery-ui.min.js"></script>
      <!-- loading UX  -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.css">
 
 
     <!-- common CSS -->
@@ -29,7 +29,7 @@
 
 <style>
 
-    	/* page data loading  loading UX  */
+    	/* page data loading  loading UX  */	
 	#overlay {
 		display: none;
 		position: fixed;
@@ -66,32 +66,34 @@
 	}
 </style>
 
-<script>
-
-    	// loading UX
-		function showLoadingOverlay() {
-		const overlay = document.getElementById("overlay");
-		overlay.style.display = "block";
-		document.body.style.pointerEvents = "none";
-	}
-
-	function hideLoadingOverlay() {
-		const overlay = document.getElementById("overlay");
-		overlay.style.display = "none";
-		document.body.style.pointerEvents = "auto";
-	}
-
-	showLoadingOverlay();
-	function startLoading() {
-		NProgress.start();
-		setTimeout(function () {
-			NProgress.done();
-		}, 2000);
-	}
-</script>
 
 <body>
     
 	<div id="overlay">
 		<div class="loader"></div>
 	</div>
+
+	
+<script>
+
+// loading UX
+function showLoadingOverlay() {
+const overlay = document.getElementById("overlay");
+overlay.style.display = "block";
+document.body.style.pointerEvents = "none";
+}
+
+function hideLoadingOverlay() {
+const overlay = document.getElementById("overlay");
+overlay.style.display = "none";
+document.body.style.pointerEvents = "auto";
+}
+
+showLoadingOverlay();
+function startLoading() {
+NProgress.start();
+setTimeout(function () {
+	NProgress.done();
+}, 1000);
+}
+</script>
