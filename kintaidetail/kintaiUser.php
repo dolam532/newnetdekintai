@@ -90,3 +90,13 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		</table>
 	</div>
 </div>
+
+<script>
+	
+	$(document).ready(function () {
+       
+        setTimeout(hideLoadingOverlay, 1000);
+        startLoading();
+
+    });
+</script>

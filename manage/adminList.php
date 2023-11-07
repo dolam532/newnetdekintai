@@ -357,7 +357,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         <?php $allowedTypesString = "." . implode(", .", $ALLOWED_TYPES_STAMP); ?>
         $('#udfileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
         $('#fileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
-		setTimeout(hideLoadingOverlay, 500);
+		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();
 
 
@@ -635,8 +635,6 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             return true;
         }
     });
-
-
 	// loading UX
 	function showLoadingOverlay() {
 		const overlay = document.getElementById("overlay");
@@ -655,7 +653,9 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		NProgress.start();
 		setTimeout(function () {
 			NProgress.done();
-		}, 1000);
+		}, 500);
 	}
+
+	
 </script>
 <?php include('../inc/footer.php'); ?>

@@ -129,7 +129,26 @@ window.onload = function() {
 		setTimeout(hideLoadingOverlay, 100);
 		startLoading();
 };
+	// loading UX
+	function showLoadingOverlay() {
+		const overlay = document.getElementById("overlay");
+		overlay.style.display = "block";
+		document.body.style.pointerEvents = "none";
+	}
 
+	function hideLoadingOverlay() {
+		const overlay = document.getElementById("overlay");
+		overlay.style.display = "none";
+		document.body.style.pointerEvents = "auto";
+	}
+
+	showLoadingOverlay();
+	function startLoading() {
+		NProgress.start();
+		setTimeout(function () {
+			NProgress.done();
+		}, 100);
+	}
 
 
 </script>

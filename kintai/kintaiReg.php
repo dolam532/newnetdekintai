@@ -1778,7 +1778,7 @@ if ($_SESSION['auth'] == false) {
 		$("#weekdayCheckbox").prop('checked', true);
 				//	 loading UX
 		// load waiting , when loading can't click 
-		setTimeout(hideLoadingOverlay, 2000);
+		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();
 	}
 
@@ -1788,7 +1788,7 @@ if ($_SESSION['auth'] == false) {
 		$("#autopdf").submit();
 				//	 loading UX
 		// load waiting , when loading can't click 
-		setTimeout(hideLoadingOverlay, 2000);
+		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();
 	});
 
@@ -1966,26 +1966,6 @@ if ($_SESSION['auth'] == false) {
 
 
 
-	// loading UX
-	function showLoadingOverlay() {
-		const overlay = document.getElementById("overlay");
-		overlay.style.display = "block";
-		document.body.style.pointerEvents = "none";
-	}
-
-	function hideLoadingOverlay() {
-		const overlay = document.getElementById("overlay");
-		overlay.style.display = "none";
-		document.body.style.pointerEvents = "auto";
-	}
-
-	showLoadingOverlay();
-	function startLoading() {
-		NProgress.start();
-		setTimeout(function () {
-			NProgress.done();
-		}, 1000);
-	}
 
 
 	// ------2023-10-23/1340-003 chg end---//

@@ -226,6 +226,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	</div>
 </div>
 <script>
+
+	
+$(document).ready(function () {
+       
+	   setTimeout(hideLoadingOverlay, 1000);
+	   startLoading();
+
+   });
+
 	// Calender datepicker
 	$("#usvacationstr").datepicker({
 		changeYear: true,

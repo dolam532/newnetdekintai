@@ -1439,7 +1439,10 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		jQuery('.seldate').change(function () {
 			this.form.submit();
 		});
+		setTimeout(hideLoadingOverlay, 1000);
+        startLoading();
 	});
+	
 
 	// Funtion for click day of week
 	$(document).on('click', '.showModal', function () {
@@ -1988,26 +1991,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		}
 	}
 
-		// loading UX
-		function showLoadingOverlay() {
-		const overlay = document.getElementById("overlay");
-		overlay.style.display = "block";
-		document.body.style.pointerEvents = "none";
-	}
-
-	function hideLoadingOverlay() {
-		const overlay = document.getElementById("overlay");
-		overlay.style.display = "none";
-		document.body.style.pointerEvents = "auto";
-	}
-
-	showLoadingOverlay();
-	function startLoading() {
-		NProgress.start();
-		setTimeout(function () {
-			NProgress.done();
-		}, 1000);
-	}
+	
 </script>
 
 <?php include('../inc/footer.php'); ?>
