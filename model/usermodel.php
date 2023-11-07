@@ -25,6 +25,19 @@ LEFT JOIN
 WHERE
     `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
     AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';  // don't select Main ADMIN
+
+if($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_user_select_db = 'SELECT DISTINCT
+    `tbl_user`.*,
+    `tbl_genba`.`genbaname`,
+    `tbl_genba`.`workstrtime`,
+    `tbl_genba`.`workendtime`
+FROM
+    `tbl_user`
+LEFT JOIN 
+    `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` ';
+}
+
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
@@ -40,6 +53,8 @@ WHERE
     AND `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
     AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';// don't select Main ADMIN
 }
+
+
 
 $sql_user_select = mysqli_query($conn, $sql_user_select_db);
 $result_user_select = mysqli_fetch_all($sql_user_select, MYSQLI_ASSOC);
@@ -73,17 +88,16 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
     if ($searchName !== "" && $searchName !== '%%') {
         $sql_user .= ' AND `tbl_user`.`name` LIKE "' . $searchName . '"';
     }
-
     if ($searchGrade !== "" && $searchGrade !== '%%') {
         $sql_user .= ' AND `tbl_user`.`grade` LIKE "' . $searchGrade . '"';
     }
-
     $sql_user_re = mysqli_query($conn, $sql_user);
     $userlist_list = mysqli_fetch_all($sql_user_re, MYSQLI_ASSOC);
 }
 
 // Select data from tbl_genba
 $sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", 0 ) ';
+
 $result_genba = mysqli_query($conn, $sql_genba);
 $genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
@@ -381,8 +395,12 @@ function generateRandomString($length)
 // (genbaList.php)
 // Select data from tbl_genba
 $sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", 0 ) ORDER BY `tbl_genba`.`genid`';
+
 if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $companyid = $_SESSION['auth_companyid'];
+    if($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+        $sql_genba = 'SELECT * FROM `tbl_genba` ;';
+    }
     $result_genba = mysqli_query($conn, $sql_genba);
     $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 } elseif ($_SESSION['auth_type'] == constant('USER')) {

@@ -48,13 +48,29 @@ if ($companyId == "" || $companyId == null) {
 // noticeList.php
 // Select database from tbl_notice table
 global $IMAGE_UPLOAD_DIR;
-$sql_notice_select = 'SELECT DISTINCT
-`tbl_notice`.*,
-`tbl_user`.`name`,
-`tbl_user`.`companyid`
-FROM `tbl_notice`
-LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
-ORDER BY `tbl_notice`.`bid`';
+$sql_notice_select = '';
+$currentCompanyID = $_SESSION['auth_companyid'];
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_notice_select = "SELECT
+    `tbl_notice`.*,
+    `tbl_user`.`name`,
+    `tbl_user`.`companyid`
+    FROM `tbl_notice`
+    LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid` 
+    ORDER BY `tbl_notice`.`bid`";
+} else {
+    $sql_notice_select = "SELECT
+    `tbl_notice`.*,
+    `tbl_user`.`name`,
+    `tbl_user`.`companyid`
+    FROM `tbl_notice`
+    LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid` 
+    WHERE `tbl_user`.`companyid` = '$currentCompanyID' 
+    ORDER BY `tbl_notice`.`bid`";
+}
+
+
+
 $result_notice_select = mysqli_query($conn, $sql_notice_select);
 $notice_list_select = mysqli_fetch_all($result_notice_select, MYSQLI_ASSOC);
 
@@ -86,9 +102,7 @@ if (isset($_POST['SearchButtonNL'])) {
 }
 $notice_list = array();
 foreach ($notice_list_ as $k => $v) {
-    if ($v['companyid'] == $_SESSION['auth_companyid']) {
         $notice_list[] = $v;
-    }
 }
 
 // 2023-10-09/1340-003 change end
