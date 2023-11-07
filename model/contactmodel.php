@@ -25,7 +25,6 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
 $result_userlogin = mysqli_query($conn, $sql_userlogin);
 $userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
 
-// 2023-10-09/1340-004 add start
 // get company id from loginned user id 
 $uid = $_SESSION['auth_uid'];
 $stmt = $conn->prepare("SELECT companyid FROM tbl_user WHERE uid = ?");
@@ -38,9 +37,7 @@ $stmt->close();
 if ($companyId == "" || $companyId == null) {
     $companyId = "x_xCompanyErrorx_xUid:" . $uid . "x_x";
 }
-// 2023-10-09/1340-004-add end
 
-// 2023-10-09/1340-003 change start
 // noticeList.php
 // Select database from tbl_notice table
 global $IMAGE_UPLOAD_DIR;
@@ -87,7 +84,6 @@ foreach ($notice_list_ as $k => $v) {
     }
 }
 
-// 2023-10-09/1340-003 change end
 // Save Data to tbl_notice DB 
 if (isset($_POST['btnRegNL'])) {
     $content_d = $_POST['content'];
@@ -99,7 +95,6 @@ if (isset($_POST['btnRegNL'])) {
     $viewcnt = mysqli_real_escape_string($conn, $_POST['viewcnt']);
     $reg_dt = mysqli_real_escape_string($conn, $_POST['reg_dt']);
 
-    // 2023-10-09/1340-004
     // upload image chg start
     $noticeId = $bid;
     $fileExtension_add = pathinfo($_FILES["imagefile"]["name"], PATHINFO_EXTENSION);
@@ -159,7 +154,6 @@ if (isset($_POST['btnRegNL'])) {
         }
     }
 }
-// 2023-10-09/1340-004
 // insert image chg end
 
 // Update Data to tbl_notice DB 
@@ -174,7 +168,6 @@ if (isset($_POST['btnUpdateNL'])) {
     $viewcnt = mysqli_real_escape_string($conn, $_POST['udviewcnt']);
     $udimagefile_old = mysqli_real_escape_string($conn, $_POST['udimagefile_old']);
 
-    // 2023-10-09/1340-004
     // upload image add start
     $noticeId = $bid;
     $fileExtension = pathinfo($_FILES["udimagefile_new"]["name"], PATHINFO_EXTENSION);
@@ -305,10 +298,8 @@ function generateRandomString($length)
     }
     return $randomString;
 }
-// 2023-10-09/1340-004
 // upload image add end
 
-// 023-10-09/1340-004
 // delete notice change start
 // Delete Data to tbl_notice DB 
 if (isset($_POST['btnDelNL'])) {
@@ -455,12 +446,11 @@ if (isset($_POST['btnDelCML'])) {
     $typecode = mysqli_real_escape_string($conn, $_POST['udtypecode']);
     $code = mysqli_real_escape_string($conn, $_POST['udcode']);
 
-
     $sql = "DELETE FROM `tbl_codebase` 
     WHERE id ='$id' AND companyid ='$companyid' AND uid ='$uid' AND typecode ='$typecode' AND code ='$code'";
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
-
+        unset($_SESSION['typecode']);
         header("Refresh:3");
     } else {
         error_log('query error: ' . mysqli_error($conn));
@@ -473,11 +463,12 @@ if (isset($_POST['btnRegCTL'])) {
     $typecode = mysqli_real_escape_string($conn, $_POST['typecode']);
     $typename = mysqli_real_escape_string($conn, $_POST['typename']);
     $typeremark = mysqli_real_escape_string($conn, $_POST['typeremark']);
-    $sql = "INSERT INTO `tbl_codetype` (`typecode`, `typename`, `typeremark`, `reg_dt`, `upt_dt`)
-                VALUES ('$typecode', '$typename', '$typeremark', '$reg_dt', '$upt_dt')";
+    $sql = "INSERT INTO `tbl_codetype` (`typecode`, `typename`, `typeremark`, `reg_dt`)
+                VALUES ('$typecode', '$typename', '$typeremark', '$reg_dt')";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] = $save_success;
+        unset($_SESSION['typecode']);
         header("Refresh:3");
     } else {
         error_log('query error: ' . mysqli_error($conn));
@@ -499,6 +490,7 @@ if (isset($_POST['btnUpdateCTL'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['update_success'] = $update_success;
+        unset($_SESSION['typecode']);
         header("Refresh:3");
     } else {
         error_log('query error: ' . mysqli_error($conn));
@@ -513,6 +505,7 @@ if (isset($_POST['btnDelCTL'])) {
     WHERE typecode ='$typecode'";
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
+        unset($_SESSION['typecode']);
         header("Refresh:3");
     } else {
         error_log('query error: ' . mysqli_error($conn));

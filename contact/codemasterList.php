@@ -43,7 +43,7 @@ if ($_SESSION['auth'] == false) {
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
     <?php
-    if (isset($_SESSION['save_success']) && isset($_POST['btnRegCL'])) {
+    if (isset($_SESSION['save_success']) && isset($_POST['btnRegCML'])) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -356,7 +356,6 @@ if ($_SESSION['auth'] == false) {
         }, 200);
     }
 
-
     // New button: popup & clear 
     $(document).on('click', '#btnNewCML', function(e) {
         var typecode = <?php echo json_encode($_POST['typecode']); ?>;
@@ -391,6 +390,7 @@ if ($_SESSION['auth'] == false) {
             $("#name").focus();
             return false;
         }
+        
         // check duplicate code 
         var codes = <?php echo json_encode($codes); ?>;
         for (var code of codes) {
