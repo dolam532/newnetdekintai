@@ -44,6 +44,7 @@ $decide_template_ = $currentTemplate;
 
 //----- 2023/10/18---- add start//
 $companyid = $_SESSION['auth_companyid'];
+error_log("CURRENT COMID: ".$companyid);
 $uid_ = $_SESSION['auth_uid'];
 
 $jobdays2;
@@ -335,9 +336,10 @@ if (isset($_POST['SaveUpdateKintai'])) {
         $holy_decide = array_keys($HOLY_DECIDE)[0];
     }
 
-    $sql = "INSERT INTO `tbl_worktime` (`uid`, `genid`, `workymd`, `daystarthh`, `daystartmm`, `dayendhh`, `dayendmm`, `jobstarthh`, `jobstartmm`,
+
+    $sql = "INSERT INTO `tbl_worktime` (`uid`,`companyid` ,  `genid`, `workymd`, `daystarthh`, `daystartmm`, `dayendhh`, `dayendmm`, `jobstarthh`, `jobstartmm`,
                 `jobendhh`, `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `janhh`, `janmm`, `comment`, `holy_decide`, `bigo`, `reg_dt`)
-                VALUES ('$uid', '$genid', '$workymd', '$daystarthh', '$daystartmm', '$dayendhh', '$dayendmm', '$jobstarthh', '$jobstartmm',
+                VALUES ('$uid', '$companyid' , '$genid', '$workymd', '$daystarthh', '$daystartmm', '$dayendhh', '$dayendmm', '$jobstarthh', '$jobstartmm',
                 '$jobendhh', '$jobendmm', '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$janhh', '$janmm', '$comment', '$holy_decide','$bigo', '$reg_dt')
                 ON DUPLICATE KEY UPDATE
                 genid='$genid', daystarthh='$daystarthh', daystartmm='$daystartmm', dayendhh='$dayendhh', dayendmm='$dayendmm', jobstarthh='$jobstarthh', jobstartmm='$jobstartmm',
@@ -364,7 +366,7 @@ if (isset($_POST['DeleteKintai'])) {
     $sql = "DELETE FROM `tbl_worktime` 
             WHERE uid ='$uid' AND companyid ='$companyid' AND workymd ='$workymd'";
 
-    error_log("uid: " . $uid . "genId: " . $genid . "workYMD: " . $workymd);
+    error_log("uid: " . $uid  ."workYMD: " . $workymd ." companyID :".$companyid);
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
