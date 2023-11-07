@@ -226,8 +226,8 @@ if (isset($_POST['SaveKyuka'])) {
     $allowdecide = "0";
     $allowdt = $reg_dt = date('Y-m-d H:i:s');
 
-    $sql_userkyuka_insert = mysqli_query($conn, "INSERT INTO `tbl_userkyuka` (`uid`, `vacationid`, `kyukaymd`, `kyukatype`, `strymd`, `endymd`, `ymdcnt`, `strtime`, `endtime`, `timecnt`, `kyukacode`, `destcode`, `destplace`, `desttel`, `allowok`, `allowid`, `allowdecide`, `allowdt`, `reg_dt`) 
-    VALUES ('$uid', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdecide', '$allowdt', '$reg_dt')");
+    $sql_userkyuka_insert = mysqli_query($conn, "INSERT INTO `tbl_userkyuka` (`uid`, `vacationid`, `kyukaymd`, `kyukatype`, `strymd`, `endymd`, `ymdcnt`, `strtime`, `endtime`, `timecnt`, `kyukacode`, `destcode`, `destplace`, `desttel`, `allowok`, `allowid`, `allowdecide`, `allowdt`, `reg_dt` , `upt_dt`) 
+    VALUES ('$uid', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdecide', '$allowdt', '$reg_dt' , null)");
 
     if ($sql_userkyuka_insert) {
         $_SESSION['save_success'] =  $save_success;
@@ -383,8 +383,8 @@ if (isset($_POST['SaveUpdateKyuka'])) {
             echo 'query error: ' . mysqli_error($conn);
         }
     } elseif ($_POST['usvacationid'] == "0") {
-        $sql_vacationinfo_insert = "INSERT INTO `tbl_vacationinfo` (`uid`, `vacationstr`, `vacationend`, `oldcnt`, `newcnt`, `usecnt`, `usetime`, `restcnt`, `reg_dt`) 
-	        VALUES('$uid', '$vacationstr' ,'$vacationend' ,'$oldcnt', '$newcnt', '$usecnt', '$usetime', '$restcnt', '$reg_dt')";
+        $sql_vacationinfo_insert = "INSERT INTO `tbl_vacationinfo` (`uid`, `vacationstr`, `vacationend`, `oldcnt`, `newcnt`, `usecnt`, `usetime`, `restcnt`, `reg_dt` , `upt_dt`) 
+	        VALUES('$uid', '$vacationstr' ,'$vacationend' ,'$oldcnt', '$newcnt', '$usecnt', '$usetime', '$restcnt', '$reg_dt' , null)";
         if (mysqli_query($conn, $sql_vacationinfo_insert)) {
             $_SESSION['save_success'] =  $save_success;
             header("Refresh:3");

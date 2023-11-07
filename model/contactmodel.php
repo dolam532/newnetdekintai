@@ -138,8 +138,8 @@ if (isset($_POST['btnRegNL'])) {
     // if not error change name 
     if ($uploadOk) {
         $fileName = $newFileName;
-        $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `imagefile`, `reader`, `viewcnt`, `uid`, `reg_dt`)
-             VALUES ('$title', '$content', '$fileName', '$reader', '$viewcnt', '$uid', '$reg_dt')";
+        $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `imagefile`, `reader`, `viewcnt`, `uid`, `reg_dt` , `upt_dt`)
+             VALUES ('$title', '$content', '$fileName', '$reader', '$viewcnt', '$uid', '$reg_dt' , null)";
         if ($conn->query($sql) === TRUE) {
             $_SESSION['save_success'] = $save_success;
 
@@ -477,8 +477,8 @@ if (isset($_POST['btnRegCTL'])) {
     $typecode = mysqli_real_escape_string($conn, $_POST['typecode']);
     $typename = mysqli_real_escape_string($conn, $_POST['typename']);
     $typeremark = mysqli_real_escape_string($conn, $_POST['typeremark']);
-    $sql = "INSERT INTO `tbl_codetype` (`typecode`, `typename`, `typeremark`, `reg_dt`)
-                VALUES ('$typecode', '$typename', '$typeremark', '$reg_dt')";
+    $sql = "INSERT INTO `tbl_codetype` (`typecode`, `typename`, `typeremark`, `reg_dt` , `upt_dt`)
+                VALUES ('$typecode', '$typename', '$typeremark', '$reg_dt' , null)";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] = $save_success;

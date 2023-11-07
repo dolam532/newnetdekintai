@@ -338,9 +338,9 @@ if (isset($_POST['SaveUpdateKintai'])) {
 
 
     $sql = "INSERT INTO `tbl_worktime` (`uid`,`companyid` ,  `genid`, `workymd`, `daystarthh`, `daystartmm`, `dayendhh`, `dayendmm`, `jobstarthh`, `jobstartmm`,
-                `jobendhh`, `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `janhh`, `janmm`, `comment`, `holy_decide`, `bigo`, `reg_dt`)
+                `jobendhh`, `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `janhh`, `janmm`, `comment`, `holy_decide`, `bigo`, `reg_dt` , `upt_dt`)
                 VALUES ('$uid', '$companyid' , '$genid', '$workymd', '$daystarthh', '$daystartmm', '$dayendhh', '$dayendmm', '$jobstarthh', '$jobstartmm',
-                '$jobendhh', '$jobendmm', '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$janhh', '$janmm', '$comment', '$holy_decide','$bigo', '$reg_dt')
+                '$jobendhh', '$jobendmm', '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$janhh', '$janmm', '$comment', '$holy_decide','$bigo', '$reg_dt' , null)
                 ON DUPLICATE KEY UPDATE
                 genid='$genid', daystarthh='$daystarthh', daystartmm='$daystartmm', dayendhh='$dayendhh', dayendmm='$dayendmm', jobstarthh='$jobstarthh', jobstartmm='$jobstartmm',
                 jobendhh='$jobendhh', jobendmm='$jobendmm', offtimehh='$offtimehh', offtimemm='$offtimemm', workhh='$workhh', workmm='$workmm', janhh='$janhh',
@@ -505,9 +505,9 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $bigo = $row['bigo'];
 
         $sql = "INSERT INTO `tbl_worktime` (`uid`, `companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`,
-            `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`, `holy_decide`, `bigo`, `reg_dt`)
+            `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`, `holy_decide`, `bigo`, `reg_dt` , `upt_dt`)
             VALUES (:uid, '$companyid' , :genid, :workymd, :jobstarthh, :jobstartmm, :jobendhh, :jobendmm,
-            :offtimehh, :offtimemm, :workhh, :workmm, :comment, 0 , :bigo, :reg_dt )
+            :offtimehh, :offtimemm, :workhh, :workmm, :comment, 0 , :bigo, :reg_dt ,null)
             ON DUPLICATE KEY UPDATE
             companyid = '$companyid',  genid = :genid, jobstarthh = :jobstarthh, jobstartmm = :jobstartmm, jobendhh = :jobendhh, jobendmm = :jobendmm,
             offtimehh = :offtimehh, offtimemm = :offtimemm, workhh = :workhh, workmm = :workmm, comment = :comment, holy_decide = 0  , bigo = :bigo, upt_dt = :upt_dt";
@@ -553,9 +553,9 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $bigo = mysqli_real_escape_string($conn, $bigo_rmodal);
 
         $sql = "INSERT INTO `tbl_worktime` (`uid`, `companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`, `jobendmm`, 
-                `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`,  `holy_decide`, `bigo`, `reg_dt`)
+                `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`,  `holy_decide`, `bigo`, `reg_dt` ,  `upt_dt`)
                 VALUES ('$uid', '$companyid' ,'$genid', '$workymd', '$jobstarthh', '$jobstartmm', '$jobendhh', '$jobendmm',
-                '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$comment', 0 ,'$bigo', '$reg_dt')
+                '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$comment', 0 ,'$bigo', '$reg_dt' , null)
                 ON DUPLICATE KEY UPDATE
                 companyid = '$companyid' ,genid='$genid', jobstarthh='$jobstarthh', jobstartmm='$jobstartmm', jobendhh='$jobendhh', jobendmm='$jobendmm',
                 offtimehh='$offtimehh', offtimemm='$offtimemm', workhh='$workhh', workmm='$workmm', comment='$comment',  holy_decide = 0 , bigo='$bigo', upt_dt='$upt_dt'";
@@ -613,9 +613,9 @@ if (isset($_POST['MonthSaveKintai'])) {
     $template = $currentTemplate;
 
     $sql = "INSERT INTO `tbl_workmonth` (`uid`,  `companyid` , `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
-                `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `reg_dt`)
+                `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `reg_dt` , `upt_dt`)
                 VALUES ('$uid', '$companyid' , '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
-                '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$template', '$reg_dt')
+                '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$template', '$reg_dt' , null)
                 ON DUPLICATE KEY UPDATE
                 companyid='$companyid', genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2',
                 janhour='$janhour', janminute='$janminute', janhour2='$janhour2', janminute2='$janminute2', jobdays='$jobdays', jobdays2='$jobdays2', workdays='$workdays', workdays2='$workdays2', holydays='$holydays',

@@ -43,13 +43,13 @@ if (isset($_POST['btnRegMMI'])) {
     $magamymd = mysqli_real_escape_string($conn, $_POST['magamymd']);
     $kyukatimelimit = mysqli_real_escape_string($conn, $_POST['kyukatimelimit']);
 
-    $sql = "INSERT INTO `tbl_manageinfo` (`companyid`, `magamym`, `magamymd`, `kyukatimelimit`, `reg_dt`)
-                VALUES ('$companyid', '$magamym', '$magamymd', '$kyukatimelimit', '$reg_dt')
+    $sql = "INSERT INTO `tbl_manageinfo` (`companyid`, `magamym`, `magamymd`, `kyukatimelimit`, `reg_dt` , `upt_dt`)
+                VALUES ('$companyid', '$magamym', '$magamymd', '$kyukatimelimit', '$reg_dt' , null)
             ON DUPLICATE KEY UPDATE
             `magamym` = '$magamym', `magamymd` = '$magamymd', `kyukatimelimit` = '$kyukatimelimit', `upt_dt` = '$upt_dt'";
 
-    $sql2 = "INSERT INTO `tbl_company` (`companyid`, `companyname`, `reg_dt`)
-                VALUES ('$companyid', '$companyname', '$reg_dt')
+    $sql2 = "INSERT INTO `tbl_company` (`companyid`, `companyname`, `reg_dt` , `upt_dt`)
+                VALUES ('$companyid', '$companyname', '$reg_dt' , null)
             ON DUPLICATE KEY UPDATE
             `companyname` = '$companyname', `upt_dt` = '$upt_dt'";
 
@@ -195,17 +195,17 @@ if (isset($_POST['btnRegCL'])) {
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
 
     $sql = "INSERT INTO `tbl_company` (`companyid`, `companycode`, `companyname`, `staff`, `telno`,
-                `strymd`, `endymd`, `address`, `use_yn`, `joken`, `bigo`, `reg_dt`)
+                `strymd`, `endymd`, `address`, `use_yn`, `joken`, `bigo`, `reg_dt` ,`upt_dt` )
                 VALUES ('$companyid', '$companycode', '$companyname', '$staff', '$telno',
-                '$strymd', '$endymd', '$address', '$use_yn', '$joken', '$bigo', '$reg_dt')
+                '$strymd', '$endymd', '$address', '$use_yn', '$joken', '$bigo', '$reg_dt' , null)
             ON DUPLICATE KEY UPDATE
                 `companycode` = '$companycode', `companyname` = '$companyname', `staff` = '$staff',
                 `telno` = '$telno', `strymd` = '$strymd', `endymd` = '$endymd', `address` = '$address',
                 `use_yn` = '$use_yn', `joken` = '$joken', `bigo` = '$bigo', `upt_dt` = '$upt_dt'";
 
 
-    $sql2 = "INSERT INTO `tbl_manageinfo` (`companyid`, `reg_dt`)
-                VALUES ('$companyid', '$reg_dt')
+    $sql2 = "INSERT INTO `tbl_manageinfo` (`companyid`, `reg_dt` ,`upt_dt` )
+                VALUES ('$companyid', '$reg_dt' , null)
             ON DUPLICATE KEY UPDATE
                 `upt_dt` = '$upt_dt'";
     if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE) {
@@ -405,13 +405,12 @@ if (isset($_POST['btnRegAM'])) {
 
         // insert to DB 
         $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`
-        , `signstamp`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `reg_dt`) 
+        , `signstamp`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `reg_dt` , `upt_dt`) 
          VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type'
-        , '$fileName', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$reg_dt')";
+        , '$fileName', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$reg_dt' , null )";
 
         if ($conn->query($sql_user_insert) === TRUE) {
             $_SESSION['save_success'] = $save_success;
-            error_log("*********Inserted success ID: " . $uid);
             header("Refresh:3");
         } else {
             echo 'query error: ' . mysqli_error($conn);
