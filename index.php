@@ -129,8 +129,8 @@ include('./model/inactive.php');
 						}
 					} else {
 						foreach ($notice_list as $notice) {
-							$filename = $notice['imagefile'];
-							if (strlen($filename) > 0 && $filename[0] === $_SESSION['auth_companyid']) {
+							if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+								$filename = $notice['imagefile'];
 							?>
 								<div class="media">
 									<div class="media-left">
@@ -155,7 +155,36 @@ include('./model/inactive.php');
 									</div>
 								</div>
 								<hr>
+								<?php
+							} else {
+								$filename = $notice['imagefile'];
+								if (strlen($filename) > 0 && $filename[0] === $_SESSION['auth_companyid']) {
+								?>
+									<div class="media">
+										<div class="media-left">
+											<a href="javascript:;" onclick="fn_showNotice(`<?= $notice['bid']; ?>`, `<?= $notice['imagenum']; ?>`, `<?= $notice['title']; ?>`, `<?= $notice['reader']; ?>`, `<?= $notice['name']; ?>`, `<?= $notice['viewcnt']; ?>`, `<?= $notice['reg_dt']; ?>`, `<?= $notice['content']; ?>`);"><img class="media-object" width="150" src="./assets/uploads/notice/<?= $filename; ?>" alt="お知らせ"></a>
+										</div>
+										<div class="media-body">
+											<h4 class="media-heading">
+												<a href="javascript:;" onclick="fn_showNotice(`<?= $notice['bid']; ?>`, `<?= $notice['imagenum']; ?>`, `<?= $notice['title']; ?>`, `<?= $notice['reader']; ?>`, `<?= $notice['name']; ?>`, `<?= $notice['viewcnt']; ?>`, `<?= $notice['reg_dt']; ?>`, `<?= $notice['content']; ?>`);">
+													<?= $notice['title']; ?>&nbsp;
+													<?php
+													$timestamp = strtotime($notice['reg_dt']);
+													$currentTimestamp = time();
+													$timeDifference = $currentTimestamp - $timestamp;
+													$oneMonthInSeconds = 30 * 24 * 60 * 60;
+													if ($timeDifference <= $oneMonthInSeconds) {
+														echo '<span class="badge">New</span>';
+													}
+													?>
+												</a>
+											</h4>
+											<?= $notice['content']; ?>
+										</div>
+									</div>
+									<hr>
 					<?php
+								}
 							}
 						}
 					}
