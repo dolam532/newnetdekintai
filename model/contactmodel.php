@@ -14,8 +14,6 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
     AND MONTH(`tbl_userlogin`.`workymd`) IN("' . $month . '")
     AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '")
     AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '")';
-    $result_userlogin = mysqli_query($conn, $sql_userlogin);
-    $userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_userlogin = 'SELECT * FROM `tbl_userlogin` 
     WHERE YEAR(`tbl_userlogin`.`workymd`) IN("' . $year . '")
@@ -23,11 +21,9 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
     AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '")
     AND `tbl_userlogin`.`uid` IN("' . $_SESSION['auth_uid'] . '")
     AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '")';
-    $result_userlogin = mysqli_query($conn, $sql_userlogin);
-    $userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
-
-    
 }
+$result_userlogin = mysqli_query($conn, $sql_userlogin);
+$userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
 
 // 2023-10-09/1340-004 add start
 // get company id from loginned user id 
@@ -356,26 +352,46 @@ $codetype_list_a_string = "'" . implode("','", $codetype_list_a) . "'";
 $codes;
 if ($_POST['typecode'] == NULL) {
     $_POST['typecode'] = $_SESSION['typecode'];
-    if ($_SESSION['typecode'] == '01') {
-        $sql_codebase = "SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`companyid` = '{$_SESSION['auth_companyid']}'
-        AND `tbl_codebase`.`typecode` IN ('01')";
-    } elseif ($_SESSION['typecode'] == '02') {
-        $sql_codebase = "SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`companyid` = '{$_SESSION['auth_companyid']}'
-        AND `tbl_codebase`.`typecode` IN ('02')";
+    if ($_SESSION['typecode'] == constant('DEPARTMENT')) {
+        if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+            $sql_codebase = 'SELECT * FROM `tbl_codebase`
+            WHERE `tbl_codebase`.`typecode` IN ("' . constant('DEPARTMENT') . '")';
+        } else {
+            $sql_codebase = 'SELECT * FROM `tbl_codebase`
+            WHERE `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+            AND `tbl_codebase`.`typecode` IN ("' . constant('DEPARTMENT') . '")';
+        }
+    } elseif ($_SESSION['typecode'] == constant('VACATION_TYPE')) {
+        if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+            $sql_codebase = 'SELECT * FROM `tbl_codebase`
+            WHERE `tbl_codebase`.`typecode` IN ("' . constant('VACATION_TYPE') . '")';
+        } else {
+            $sql_codebase = 'SELECT * FROM `tbl_codebase`
+            WHERE `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+            AND `tbl_codebase`.`typecode` IN ("' . constant('DEPARTMENT') . '")';
+        }
     } else {
-        $sql_codebase = "SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`companyid` = '{$_SESSION['auth_companyid']}'
-        AND `tbl_codebase`.`typecode` IN ({$codetype_list_a_string})";
+        if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+            $sql_codebase = "SELECT * FROM `tbl_codebase`
+            WHERE `tbl_codebase`.`typecode` IN ({$codetype_list_a_string})";
+        } else {
+            $sql_codebase = "SELECT * FROM `tbl_codebase`
+            WHERE `tbl_codebase`.`companyid` = '{$_SESSION['auth_companyid']}'
+            AND `tbl_codebase`.`typecode` IN ({$codetype_list_a_string})";
+        }
     }
     $result_codebase = mysqli_query($conn, $sql_codebase);
     $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
     $codes = array_column($codebase_list, 'code');
 } elseif (isset($_POST['typecode'])) {
-    $sql_codebase = 'SELECT * FROM `tbl_codebase`
+    if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+        $sql_codebase = 'SELECT * FROM `tbl_codebase`
+        WHERE `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';;
+    } else {
+        $sql_codebase = 'SELECT * FROM `tbl_codebase`
         WHERE `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")
         AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';
+    }
     $result_codebase = mysqli_query($conn, $sql_codebase);
     $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
     $codes = array_column($codebase_list, 'code');
