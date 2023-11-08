@@ -72,6 +72,10 @@ if ($_SESSION['auth'] == false) {
 	<table class="table table-bordered datatable">
 		<thead>
 			<tr class="info">
+
+			<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                <th style="text-align: center; width: 15%;">会社</th>
+                <?php endif; ?>
 				<th style="text-align: center; width: 12%;">名前</th>
 				<th style="text-align: center; width: 7%;">作業年月</th>
 				<th style="text-align: center; width: 7%;">実働時間</th>
@@ -95,6 +99,9 @@ if ($_SESSION['auth'] == false) {
 				foreach ($workmonth_select_list as $workmonth_select) {
 				?>
 					<tr>
+					<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+						<td><span><?= $workmonth_select['companyname'] ?></span></td>
+                <?php endif; ?>
 						<td><a href="../kintai/kintaiReg.php"><span><?= $workmonth_select['name'] ?></span></a></td>
 						<td><span><?= $workmonth_select['workym'] ?></span></td>
 						<td><span><?= $workmonth_select['jobhour'] ?></span></td>

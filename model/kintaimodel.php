@@ -44,7 +44,7 @@ $decide_template_ = $currentTemplate;
 
 //----- 2023/10/18---- add start//
 $companyid = $_SESSION['auth_companyid'];
-error_log("CURRENT COMID: ".$companyid);
+
 $uid_ = $_SESSION['auth_uid'];
 
 $jobdays2;
@@ -301,7 +301,6 @@ if (isset($_POST['SaveUpdateKintai'])) {
         $interval = $jobendtime->diff($jobstarttime);
         $totalMinutes = ($interval->h * 60) + $interval->i;
         $totalMinutes -= ($offtime->format('H') * 60) + $offtime->format('i');
-        error_log("OF TIME : " . $totalMinutes);
         $calculatedHours = floor($totalMinutes / 60);
         $calculatedMinutes = $totalMinutes % 60;
     }
@@ -366,7 +365,6 @@ if (isset($_POST['DeleteKintai'])) {
     $sql = "DELETE FROM `tbl_worktime` 
             WHERE uid ='$uid' AND companyid ='$companyid' AND workymd ='$workymd'";
 
-    error_log("uid: " . $uid  ."workYMD: " . $workymd ." companyID :".$companyid);
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
@@ -685,15 +683,33 @@ if (isset($_POST['selyyM']) && isset($_POST['selmmM'])) {
     $yearM = $year;
     $monthM = $month;
 }
-$sql_workmonth_select = 'SELECT
-    `tbl_workmonth`.*,
-    `tbl_user`.`name`
-FROM
-    `tbl_workmonth`
-CROSS JOIN `tbl_user` ON `tbl_workmonth`.`uid` = `tbl_user`.`uid`
-WHERE
-    `tbl_workmonth`.`uid` IN("' . $_SESSION['auth_uid'] . '")  
-    AND LEFT(`tbl_workmonth`.`workym`, 6) IN("' . $yearM . $monthM . '")';
+// $sql_workmonth_select = 'SELECT
+//     `tbl_workmonth`.*,
+//     `tbl_user`.`name`
+// FROM
+//     `tbl_workmonth`
+// CROSS JOIN `tbl_user` ON `tbl_workmonth`.`uid` = `tbl_user`.`uid`
+// WHERE
+//     `tbl_workmonth`.`uid` IN("' . $_SESSION['auth_uid'] . '")  
+//     AND LEFT(`tbl_workmonth`.`workym`, 6) IN("' . $yearM . $monthM . '")';
+
+$sql_workmonth_select = 'SELECT `tbl_workmonth`.*, `tbl_company`.`companyname` , `tbl_user`.`name` FROM `tbl_workmonth`   
+    LEFT JOIN `tbl_company` ON `tbl_workmonth`.`companyid` = `tbl_company`.`companyid` 
+	LEFT JOIN `tbl_user` ON `tbl_workmonth`.`uid` = `tbl_user`.`uid`
+    WHERE (`tbl_workmonth`.`workym`) IN("' . $yearM .  $monthM . '")';
+
+// Select database from tbl_userlogin table
+if( $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+
+} else if( $_SESSION['auth_type'] == constant('ADMINISTRATOR') ||$_SESSION['auth_type'] == constant('ADMIN') ) {
+
+    $sql_workmonth_select.=' AND `tbl_workmonth`.`companyid` IN("' . $companyid . '") ';
+
+} else {
+    $sql_workmonth_select.=' AND  `tbl_workmonth`.`uid` IN("' . $_SESSION['auth_uid'] . '")  AND `tbl_workmonth`.`companyid` IN("' . $companyid . '") ';
+}
+
+error_log($sql_workmonth_select);
 
 $result_workmonth_select = mysqli_query($conn, $sql_workmonth_select);
 $workmonth_select_list = mysqli_fetch_all($result_workmonth_select, MYSQLI_ASSOC);
