@@ -114,9 +114,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
-                    <th style="text-align: center; width: 20%;">年</th>
-                    <th style="text-align: center; width: 20%;">祝日</th>
-                    <th style="text-align: center; width: 60%;">備考</th>
+                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                <th style="text-align: center; width: 20%;">会社</th>
+                <?php endif; ?>
+                    <th style="text-align: center; width: 10%;">年</th>
+                    <th style="text-align: center; width: 15%;">祝日</th>
+                    <th style="text-align: center; width: auto;">備考</th>
                 </tr>
             </thead>
             <tbody>
@@ -128,15 +131,19 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                     foreach ($holiday_list as $key) {
                     ?>
                         <tr>
-                            <td><span><?= $key['holiyear'] ?></span></td>
-                            <td>
+                   
+                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                            <td><span><?= $key['companyname'] ?></span></td>
+                <?php endif; ?>
+                            <td align="center" ><span ><?= $key['holiyear'] ?></span></td>
+                            <td align="center">
                                 <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                                     <a href="#"><span class="showModal"><?= $key['holiday'] ?></span></a>
                                 <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
                                     <?= $key['holiday'] ?></span>
                                 <?php endif; ?>
                             </td>
-                            <td><span><?= $key['holiremark'] ?></span></td>
+                            <td align="center"><span><?= $key['holiremark'] ?></span></td>
                         </tr>
                 <?php
                     }

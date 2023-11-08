@@ -43,7 +43,8 @@ if (isset($_POST['btnLogin'])) {
             $workymd = date('Y/m/d');
             $logtype = $_SESSION['auth_type'];
             $logtime = date('Y-m-d H:i:s');
-            $ipaddress = gethostbyname(constant('DOMAIN_NAME'));
+            // $ipaddress = gethostbyname(constant('DOMAIN_NAME'));
+            $ipaddress = $_SERVER['REMOTE_ADDR'];  // browser ip -> localhost ::1 
 
             function getDomainFromURL($url)
             {

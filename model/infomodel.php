@@ -203,10 +203,22 @@ $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
 
 // Select database from tbl_holiday table
 $sql_holiday = 'SELECT * FROM `tbl_holiday` 
-    WHERE `tbl_holiday`.`companyid` IN("' . $companyId_ . '")
-    AND `tbl_holiday`.`holiyear` IN("' . $year . '")';
+    LEFT JOIN `tbl_company` ON `tbl_holiday`.`companyid` = `tbl_company`.`companyid`
+    WHERE `tbl_holiday`.`holiyear` IN("' . $year . '") ';
+
+
+// Select database from tbl_userlogin table
+if( $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
+    $sql_holiday.= 'AND `tbl_holiday`.`companyid` IN("' . $companyId_ . '")  ORDER BY `tbl_holiday`.`holiday`';
+} else {
+    $sql_holiday.=' ORDER BY `tbl_holiday`.`holiday`';
+}
+
+   
 $result_holiday = mysqli_query($conn, $sql_holiday);
 $holiday_list = mysqli_fetch_all($result_holiday, MYSQLI_ASSOC);
+
+
 
 // Save database to tbl_holiday table
 if (isset($_POST['btnRegHdr'])) {

@@ -7,21 +7,30 @@ $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
 $month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
 $day = isset($_POST["seldd"]) ? $_POST["seldd"] : date('d');
 
+
+
+$sql_userlogin = 'SELECT `tbl_userlogin`.*, `tbl_company`.`companyname`
+FROM `tbl_userlogin`
+LEFT JOIN `tbl_company` ON `tbl_userlogin`.`companyid` = `tbl_company`.`companyid`
+WHERE YEAR(`tbl_userlogin`.`workymd`) IN("' . $year . '")
+AND MONTH(`tbl_userlogin`.`workymd`) IN("' . $month . '")
+AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '") ';
+
 // Select database from tbl_userlogin table
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-    $sql_userlogin = 'SELECT * FROM `tbl_userlogin` 
-    WHERE YEAR(`tbl_userlogin`.`workymd`) IN("' . $year . '")
-    AND MONTH(`tbl_userlogin`.`workymd`) IN("' . $month . '")
-    AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '")
-    AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '")';
+if( $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+
+} else if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_userlogin.= 'AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '" , "' . constant('ADMINISTRATOR') . '")
+    AND `tbl_userlogin`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")  ';
+
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
-    $sql_userlogin = 'SELECT * FROM `tbl_userlogin` 
-    WHERE YEAR(`tbl_userlogin`.`workymd`) IN("' . $year . '")
-    AND MONTH(`tbl_userlogin`.`workymd`) IN("' . $month . '")
-    AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '")
-    AND `tbl_userlogin`.`uid` IN("' . $_SESSION['auth_uid'] . '")
-    AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '")';
+   $sql_userlogin.= ' AND `tbl_userlogin`.`uid` IN("' . $_SESSION['auth_uid'] . '")';
+   
+} else {
+    error_log('user type error: ' . mysqli_error($conn));
 }
+
+error_log($sql_userlogin);
 $result_userlogin = mysqli_query($conn, $sql_userlogin);
 $userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
 

@@ -47,7 +47,7 @@ if ($_SESSION['auth'] == false) {
             </div>
             <div class="col-md-4 text-center">
                 <div class="title_condition">
-                    <label>区分 :
+                    <label>日付 :
                         <select id="selyy" name="selyy" class="seldate" style="padding:5px;" onchange="this.form.submit()">
                             <?php
                             foreach (ConstArray::$search_year as $key => $value) {
@@ -101,6 +101,7 @@ if ($_SESSION['auth'] == false) {
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
+                <th style="text-align: center; width: 10%;">社名</th>
                     <th style="text-align: center; width: 10%;">名</th>
                     <th style="text-align: center; width: 15%;">日付</th>
                     <th style="text-align: center; width: 20%;">login time</th>
@@ -117,6 +118,7 @@ if ($_SESSION['auth'] == false) {
                     foreach ($userlogin_list as $key) {
                     ?>
                         <tr>
+                        <td><span><?= $key['companyname'] ?></span></td>
                             <td><span><?= $key['uid'] ?></span></td>
                             <td><span><?= $key['workymd'] ?></span></td>
                             <td><span><?= $key['logtime'] ?></span></td>
