@@ -296,7 +296,7 @@ foreach ($datas as &$row) { // write directly to $array1 while iterating
 if (isset($_POST['changeGenid'])) {
         $companyid = $current_CompanyId_;
         $selectedGenid = mysqli_real_escape_string($conn, $_POST['selectedGenid']);
-        $sql = "UPDATE tbl_user SET `genid` = '$selectedGenid' , `upt_dt`= '$upt_dt'  where `uid` = '$uid_' AND `companyid` = '$companyid' , `upt_dt` = '$upt_dt'  ;";
+        $sql = "UPDATE tbl_user SET `genid` = '$selectedGenid' , `upt_dt`= '$upt_dt'  where `uid` = '$uid_' AND `companyid` = '$companyid' ;";
         if ($conn->query($sql) === TRUE) {
                 $_SESSION['save_success'] = $save_success;
                 $_SESSION['auth_genid'] = $selectedGenid;
