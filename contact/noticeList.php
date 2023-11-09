@@ -134,6 +134,11 @@ if ($_SESSION['auth'] == false) {
             <table class="table table-bordered datatable">
                 <thead>
                     <tr class="info">
+
+                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                        <th style="text-align: center; width: 10%;">社名</th>
+                    <?php endif; ?>
+                  
                         <th style="text-align: center; width: 5%;">No</th>
                         <th style="text-align: center; width: auto;">
                             <?php if ($_POST['rdoSearch'] == "1") : ?>
@@ -151,6 +156,9 @@ if ($_SESSION['auth'] == false) {
                 </thead>
                 <tbody>
                     <?php if (empty($notice_list)) { ?>
+
+
+
                         <tr>
                             <td colspan="6" align="center">
                                 <?php echo $data_save_no; ?>
@@ -161,6 +169,13 @@ if ($_SESSION['auth'] == false) {
                         foreach ($notice_list as $key) {
                         ?>
                             <tr>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <td><span>
+                                        <?= $key['companyname'] ?>
+                                    </span></td>
+                    <?php endif; ?>
+            
+
                                 <td><span>
                                         <?= $counter++; // $key['bid'] change show number  
                                         ?>

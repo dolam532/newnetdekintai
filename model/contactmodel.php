@@ -9,30 +9,30 @@ $day = isset($_POST["seldd"]) ? $_POST["seldd"] : date('d');
 
 
 
-$sql_userlogin = 'SELECT `tbl_userlogin`.*, `tbl_company`.`companyname`
-FROM `tbl_userlogin`
-LEFT JOIN `tbl_company` ON `tbl_userlogin`.`companyid` = `tbl_company`.`companyid`
-WHERE YEAR(`tbl_userlogin`.`workymd`) IN("' . $year . '")
-AND MONTH(`tbl_userlogin`.`workymd`) IN("' . $month . '")
-AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '") ';
+// $sql_userlogin = 'SELECT `tbl_userlogin`.*, `tbl_company`.`companyname`
+// FROM `tbl_userlogin`
+// LEFT JOIN `tbl_company` ON `tbl_userlogin`.`companyid` = `tbl_company`.`companyid`
+// WHERE YEAR(`tbl_userlogin`.`workymd`) IN("' . $year . '")
+// AND MONTH(`tbl_userlogin`.`workymd`) IN("' . $month . '")
+// AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '") ';
 
-// Select database from tbl_userlogin table
-if( $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+// // Select database from tbl_userlogin table
+// if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
 
-} else if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
-    $sql_userlogin.= 'AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '" , "' . constant('ADMINISTRATOR') . '")
-    AND `tbl_userlogin`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")  ';
+// } else if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+//     $sql_userlogin .= 'AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '" , "' . constant('ADMINISTRATOR') . '")
+//     AND `tbl_userlogin`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")  ';
 
-} elseif ($_SESSION['auth_type'] == constant('USER')) {
-   $sql_userlogin.= ' AND `tbl_userlogin`.`uid` IN("' . $_SESSION['auth_uid'] . '")';
-   
-} else {
-    error_log('user type error: ' . mysqli_error($conn));
-}
+// } elseif ($_SESSION['auth_type'] == constant('USER')) {
+//     $sql_userlogin .= ' AND `tbl_userlogin`.`uid` IN("' . $_SESSION['auth_uid'] . '")';
 
-error_log($sql_userlogin);
-$result_userlogin = mysqli_query($conn, $sql_userlogin);
-$userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
+// } else {
+//     error_log('user type error: ' . mysqli_error($conn));
+// }
+
+// error_log("userLogin:".$sql_userlogin);
+// $result_userlogin = mysqli_query($conn, $sql_userlogin);
+// $userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
 
 // get company id from loginned user id 
 $uid = $_SESSION['auth_uid'];
@@ -55,22 +55,26 @@ $currentCompanyID = $_SESSION['auth_companyid'];
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_notice_select = "SELECT
     `tbl_notice`.*,
+    `tbl_user`.`companyid` AS COMPANYID,
     `tbl_user`.`name`,
-    `tbl_user`.`companyid`
+    `tbl_company`.`companyname` 
     FROM `tbl_notice`
-    LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid` 
+    LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+    LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
     ORDER BY `tbl_notice`.`bid`";
+
 } else {
     $sql_notice_select = "SELECT
     `tbl_notice`.*,
+    `tbl_user`.`companyid` AS COMPANYID,
     `tbl_user`.`name`,
-    `tbl_user`.`companyid`
+    `tbl_company`.`companyname` 
     FROM `tbl_notice`
-    LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid` 
-    WHERE `tbl_user`.`companyid` = '$currentCompanyID' 
+    LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+    LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
+    WHERE `tbl_user`.`companyid` = '$currentCompanyID'
     ORDER BY `tbl_notice`.`bid`";
 }
-
 
 
 $result_notice_select = mysqli_query($conn, $sql_notice_select);
@@ -89,13 +93,35 @@ if (isset($_POST['SearchButtonNL'])) {
     } else {
         $searchTitle = "%" . $searchKeyword . "%";
     }
-    $sql_notice = 'SELECT DISTINCT
+
+    $sql_notice = '';
+
+    if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+        $sql_notice = 'SELECT DISTINCT
+    `tbl_notice`.*,
+    `tbl_user`.`name`,
+    `tbl_user`.`companyid`,
+    `tbl_company`.`companyname` 
+    FROM `tbl_notice`
+    LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+    LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
+    WHERE (`tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '")';
+
+
+    } else {
+        $sql_notice = 'SELECT
     `tbl_notice`.*,
     `tbl_user`.`name`,
     `tbl_user`.`companyid`
-    FROM `tbl_notice`
-    LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
-    WHERE (`tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '")';
+  FROM `tbl_notice`
+  LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+  LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
+  WHERE `tbl_user`.`companyid` = ' . $currentCompanyID . '  
+  AND `tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '"';
+
+
+    }
+    error_log($sql_notice);
 
     $result_notice = mysqli_query($conn, $sql_notice);
     $notice_list_ = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
@@ -104,7 +130,7 @@ if (isset($_POST['SearchButtonNL'])) {
 }
 $notice_list = array();
 foreach ($notice_list_ as $k => $v) {
-        $notice_list[] = $v;
+    $notice_list[] = $v;
 }
 
 // Save Data to tbl_notice DB 
@@ -400,7 +426,8 @@ if ($_POST['typecode'] == NULL) {
 } elseif (isset($_POST['typecode'])) {
     if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';;
+        WHERE `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';
+        ;
     } else {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
         WHERE `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")
