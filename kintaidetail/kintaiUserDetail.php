@@ -1033,10 +1033,6 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 								role="button" value="選択">
 						</div>
 						<div class="col-md-2">
-							<input type="submit" name="RegGenid" class="btn btn-primary" id="RegGenId" role="button"
-								value="登録ヘ">
-						</div>
-						<div class="col-md-2">
 							<button type="button" class="btn btn-default" data-dismiss="modal"
 								id="modalClose">閉じる</button>
 						</div>
