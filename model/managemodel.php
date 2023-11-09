@@ -2,6 +2,11 @@
 $reg_dt = date('Y-m-d H:i:s');
 $upt_dt = date('Y-m-d H:i:s');
 
+//get current companyid of selected 
+
+
+
+
 // manageInfo.php
 // Select database from tbl_manageinfo table
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
@@ -33,6 +38,9 @@ $new_companyID_mi = $last_companyID_mi + 1;
 
 $result_manageinfo = mysqli_query($conn, $sql_manageinfo);
 $manageinfo_list = mysqli_fetch_all($result_manageinfo, MYSQLI_ASSOC);
+
+
+
 
 // Save data to tbl_manageinfo table of database(MAIN_ADMIN)
 if (isset($_POST['btnRegMMI'])) {
