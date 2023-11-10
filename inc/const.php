@@ -57,3 +57,10 @@ $IMAGE_UPLOAD_DIR_STAMP = '../assets/uploads/signstamp/';
 // MIN LENGTH 社員登録のID&email
 $MIN_LENGTH_ID_EMAIL_USER = 4;
 
+// WORK_MONTH - STATUS 
+$SUBMISSTION_STATUS = array(
+    0 => '編集中',
+    1 => '提出済み',
+    2 => '承認済み',
+);
+

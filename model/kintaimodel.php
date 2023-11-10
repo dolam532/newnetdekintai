@@ -125,6 +125,8 @@ for ($day = 1; $day <= $daysInMonth; $day++) {
     ];
 }
 
+
+
 // Get Data From tbl_worktime
 $sql_worktime = 'SELECT
     *
@@ -453,6 +455,7 @@ if (isset($_POST['AutoUpdateKintai'])) {
             'comment' => $workcontent_rmodal,
             'bigo' => $bigo_rmodal
         ];
+        
 
         // Categorize weekdays and weekends
         if ($weekday === '土' || $weekday === '日') {
@@ -461,6 +464,8 @@ if (isset($_POST['AutoUpdateKintai'])) {
             $weekdaysArray[] = $data_Array[$day - 1];
         }
     }
+
+
 
     if ($weekdayCheckbox == '1' && $weekendCheckbox == '2') {
         $Array_Result = $data_Array;
@@ -474,18 +479,23 @@ if (isset($_POST['AutoUpdateKintai'])) {
     foreach ($Array_Result as $element) {
         if (isset($element['workymd'])) {
             $lastValue = $element['workymd'];
+
         }
     }
 
     $keyed = array_column($worktime_list, NULL, 'workymd'); // replace indexes with ur_user_id values
-    foreach ($Array_Result as &$row) { // write directly to $array1 while iterating
+    foreach ($Array_Result as $row) { // write directly to $array1 while iterating
         if (isset($keyed[$row['workymd']])) { // check if shared key exists
             $row += $keyed[$row['workymd']]; // append associative elements
+          
         }
+        error_log("ROW " . $row['workymd'] . " \n");
     }
 
     $ArraySave = false;
     $c = 0;
+    $offTimeAutohh = '';
+    $offTimeAutomm = '';
     foreach ($Array_Result as $row) {
         $c++;
         $uid = $row['uid'];
@@ -501,6 +511,7 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $workmm = $row['workmm'];
         $comment = $row['comment'];
         $bigo = $row['bigo'];
+      
 
         $sql = "INSERT INTO `tbl_worktime` (`uid`, `companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`,
             `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`, `holy_decide`, `bigo`, `reg_dt` , `upt_dt`)
@@ -509,8 +520,12 @@ if (isset($_POST['AutoUpdateKintai'])) {
             ON DUPLICATE KEY UPDATE
             companyid = '$companyid',  genid = :genid, jobstarthh = :jobstarthh, jobstartmm = :jobstartmm, jobendhh = :jobendhh, jobendmm = :jobendmm,
             offtimehh = :offtimehh, offtimemm = :offtimemm, workhh = :workhh, workmm = :workmm, comment = :comment, holy_decide = 0  , bigo = :bigo, upt_dt = :upt_dt";
+            //   error_log("Day:" .$c .   ' YMD:' .  $row['workymd'] ." SQL: " .  $offtimehh . "\n");
+              error_log("sql :" .$c .   ' YMD:' .  $row['workymd'] ." SQL: " .  $offtimehh . "\n");
+            
         // Prepare the statement
         $stmt = $pdo->prepare($sql);
+
         // Bind the parameters
         $stmt->bindParam(':uid', $uid);
         $stmt->bindParam(':genid', $genid);
@@ -533,6 +548,13 @@ if (isset($_POST['AutoUpdateKintai'])) {
         } else {
             echo 'query error: ' . $stmt->errorInfo()[2];
         }
+
+        if($c > 1 && $c <3) {
+            $offTimeAutohh = $offtimehh;
+            $offTimeAutomm = $offtimemm;
+            error_log(' autoOFF:' .   $offTimeAutohh ." mm: " .   $offTimeAutomm. "\n");
+        }
+       
     }
 
     if ($ArraySave = true) {
@@ -543,8 +565,6 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $jobstartmm = mysqli_real_escape_string($conn, $startmm);
         $jobendhh = mysqli_real_escape_string($conn, $endhh);
         $jobendmm = mysqli_real_escape_string($conn, $endmm);
-        $offtimehh = mysqli_real_escape_string($conn, $offtimehh_);
-        $offtimehh = mysqli_real_escape_string($conn, $offtimemm_);
         $workhh = mysqli_real_escape_string($conn, $calculatedHours);
         $workmm = mysqli_real_escape_string($conn, $calculatedMinutes);
         $comment = mysqli_real_escape_string($conn, $workcontent_rmodal);
@@ -553,10 +573,10 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $sql = "INSERT INTO `tbl_worktime` (`uid`, `companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`, `jobendmm`, 
                 `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`,  `holy_decide`, `bigo`, `reg_dt` ,  `upt_dt`)
                 VALUES ('$uid', '$companyid' ,'$genid', '$workymd', '$jobstarthh', '$jobstartmm', '$jobendhh', '$jobendmm',
-                '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$comment', 0 ,'$bigo', '$reg_dt' , null)
+                '$offTimeAutohh', '$offTimeAutomm', '$workhh', '$workmm', '$comment', 0 ,'$bigo', '$reg_dt' , null)
                 ON DUPLICATE KEY UPDATE
                 companyid = '$companyid' ,genid='$genid', jobstarthh='$jobstarthh', jobstartmm='$jobstartmm', jobendhh='$jobendhh', jobendmm='$jobendmm',
-                offtimehh='$offtimehh', offtimemm='$offtimemm', workhh='$workhh', workmm='$workmm', comment='$comment',  holy_decide = 0 , bigo='$bigo', upt_dt='$upt_dt'";
+                offtimehh='$offTimeAutohh', offtimemm='$offTimeAutomm', workhh='$workhh', workmm='$workmm', comment='$comment',  holy_decide = 0 , bigo='$bigo', upt_dt='$upt_dt'";
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['autosave_success'] = $autosave_success;
@@ -564,6 +584,7 @@ if (isset($_POST['AutoUpdateKintai'])) {
         } else {
             echo 'query error: ' . mysqli_error($conn);
         }
+
     }
 }
 
@@ -609,16 +630,21 @@ if (isset($_POST['MonthSaveKintai'])) {
     $earlydays2 = mysqli_real_escape_string($conn, $_POST['earlydays_top']);
     $earlydays = mysqli_real_escape_string($conn, $_POST['earlydays_bottom']);
     $template = $currentTemplate;
+    //  2023/11/10 submission-status  chg start // 
+    $currentSubmissionStatus = mysqli_real_escape_string($conn, $_POST['submission-status']);
+
+
 
     $sql = "INSERT INTO `tbl_workmonth` (`uid`,  `companyid` , `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
-                `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `reg_dt` , `upt_dt`)
+                `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `submission_status`  , `reg_dt` , `upt_dt`)
                 VALUES ('$uid', '$companyid' , '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
-                '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$template', '$reg_dt' , null)
+                '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$template',  0  , '$reg_dt' , null)
                 ON DUPLICATE KEY UPDATE
                 companyid='$companyid', genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2',
                 janhour='$janhour', janminute='$janminute', janhour2='$janhour2', janminute2='$janminute2', jobdays='$jobdays', jobdays2='$jobdays2', workdays='$workdays', workdays2='$workdays2', holydays='$holydays',
-                holydays2='$holydays2', offdays='$offdays', offdays2='$offdays2', delaydays='$delaydays', delaydays2='$delaydays2',earlydays='$earlydays' , earlydays2='$earlydays2', template='$template', upt_dt='$upt_dt'";
+                holydays2='$holydays2', offdays='$offdays', offdays2='$offdays2', delaydays='$delaydays', delaydays2='$delaydays2',earlydays='$earlydays' , earlydays2='$earlydays2', template='$template' , upt_dt='$upt_dt'";
 
+   //  2023/11/10 submission-status  chg end //
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] = $save_success;
         header("Refresh:3");
@@ -626,6 +652,14 @@ if (isset($_POST['MonthSaveKintai'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+
+
+// 2023/11/10 submission-status  add start 
+
+
+
+// 2023/11/10 submission-status  add end 
 
 // Get Data From tbl_workmonth
 $sql_workmonth = 'SELECT
@@ -638,6 +672,9 @@ WHERE
 
 $result_workmonth = mysqli_query($conn, $sql_workmonth);
 $workmonth_list = mysqli_fetch_all($result_workmonth, MYSQLI_ASSOC);
+
+
+
 
 // Delete data to tbl_worktime table and tbl_workmonth of database
 if (isset($_POST['DeleteAll'])) {
@@ -683,15 +720,7 @@ if (isset($_POST['selyyM']) && isset($_POST['selmmM'])) {
     $yearM = $year;
     $monthM = $month;
 }
-// $sql_workmonth_select = 'SELECT
-//     `tbl_workmonth`.*,
-//     `tbl_user`.`name`
-// FROM
-//     `tbl_workmonth`
-// CROSS JOIN `tbl_user` ON `tbl_workmonth`.`uid` = `tbl_user`.`uid`
-// WHERE
-//     `tbl_workmonth`.`uid` IN("' . $_SESSION['auth_uid'] . '")  
-//     AND LEFT(`tbl_workmonth`.`workym`, 6) IN("' . $yearM . $monthM . '")';
+
 
 $sql_workmonth_select = 'SELECT `tbl_workmonth`.*, `tbl_company`.`companyname` , `tbl_user`.`name` FROM `tbl_workmonth`   
     LEFT JOIN `tbl_company` ON `tbl_workmonth`.`companyid` = `tbl_company`.`companyid` 
@@ -709,10 +738,31 @@ if( $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_workmonth_select.=' AND  `tbl_workmonth`.`uid` IN("' . $_SESSION['auth_uid'] . '")  AND `tbl_workmonth`.`companyid` IN("' . $companyid . '") ';
 }
 
-error_log($sql_workmonth_select);
 
 $result_workmonth_select = mysqli_query($conn, $sql_workmonth_select);
 $workmonth_select_list = mysqli_fetch_all($result_workmonth_select, MYSQLI_ASSOC);
+
+
+$uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
+//  2023/11/10 submission-status  add start //
+$submissionStatus ;
+foreach ($workmonth_select_list as $m) { 
+    if($m['uid'] == $uid) { 
+        $submissionStatus = $m['submission_status'];
+        $submissionStatusText = isset($SUBMISSTION_STATUS[$m['submission_status']]) ? $SUBMISSTION_STATUS[$m['submission_status']] : $SUBMISSTION_STATUS[0];
+        break;
+    }
+}
+
+if($submissionStatusText == null) {
+    $submissionStatusText = $SUBMISSTION_STATUS[0];
+}
+
+if($$submissionStatus == null) {
+    $submissionStatus = 0;
+}
+//  2023/11/10 submission-status  add end //
+
 
 $sql_user_admin = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMIN') . '"';
 $result_user_admin = mysqli_query($conn, $sql_user_admin);
