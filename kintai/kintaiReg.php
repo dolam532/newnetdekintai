@@ -134,9 +134,19 @@ if ($_SESSION['auth'] == false) {
 		display: inline-block;
 	}
 
+	.submission-status {
+		margin-left: 20px;
+	}
 
+	.submission-status_0 {}
 
+	.submission-status_1 {
+		color: red;
+	}
 
+	.submission-status_2 {
+		color: blue;
+	}
 </style>
 
 <script>
@@ -285,21 +295,16 @@ if ($_SESSION['auth'] == false) {
 							}
 							?>
 						</select>
-						<!-- <select id="template_table" name="template_table" class="seldate" style="padding:5px;"
-							onchange="this.form.submit()">
-							<?php
-							foreach (ConstArray::$search_template as $key => $value) {
-								?>
-								<option value="<?= $key ?>" <?php if ($key == $_POST["template_table"]) {
-									  echo ' selected="selected"';
-								  } ?>>
-									<?= $value ?>
-								</option>
-								<?php
-							}
-							?>
-						</select> -->
 					</label>
+					<!-- 2023/11/10 submission-status  add start -->
+					<p class="seldate submission-status">
+						<strong>状態</strong>:
+					<p id="submission-status" name="submission-status" value="<?php echo $submissionStatus ?>">
+						<?php echo $submissionStatusText ?>
+					</p>
+					</p>
+
+					<!-- 2023/11/10 submission-status  add end -->
 				</div>
 			</div>
 		</form>
@@ -1404,7 +1409,35 @@ if ($_SESSION['auth'] == false) {
 		jQuery('.seldate').change(function () {
 			this.form.submit();
 		});
+		//2023/11/10 submission-status  add start 
+
+		SetFormViewBySubmissionStatusHandler();
+
+		//2023/11/10 submission-status  add end 
 	});
+
+
+	//2023/11/10 submission-status  add start 
+	function SetFormViewBySubmissionStatusHandler() {
+		// set Color
+		SetColorToSubmissionStatus();
+
+		// Set Turn On Off Button
+
+
+	}
+
+	function SetColorToSubmissionStatus() {
+		var submissionStatusText = $('#submission-status').text().trim();
+		if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[0] ?>') {
+			$('#submission-status').removeClass();
+		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[1] ?>') {
+			$('#submission-status').addClass('submission-status_1');
+		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[2] ?>') {
+			$('#submission-status').addClass('submission-status_2');
+		}
+	}
+	//2023/11/10 submission-status  add end 	
 
 	// Funtion for click day of week
 	$(document).on('click', '.showModal', function () {
@@ -1776,7 +1809,7 @@ if ($_SESSION['auth'] == false) {
 	function autoInputHandle() {
 		$('#modal').modal('toggle');
 		$("#weekdayCheckbox").prop('checked', true);
-				//	 loading UX
+		//	 loading UX
 		// load waiting , when loading can't click 
 		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();
@@ -1786,7 +1819,7 @@ if ($_SESSION['auth'] == false) {
 	$("#submit-button").click(function (event) {
 		event.preventDefault(); // Prevent the default form submission
 		$("#autopdf").submit();
-				//	 loading UX
+		//	 loading UX
 		// load waiting , when loading can't click 
 		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();

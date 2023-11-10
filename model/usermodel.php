@@ -415,18 +415,34 @@ function generateRandomString($length)
 // (genbaList.php)
 // Select data from tbl_genba
 $sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", 0 ) ORDER BY `tbl_genba`.`genid`';
-
+$companyid = $_SESSION['auth_companyid'];
 if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-    $companyid = $_SESSION['auth_companyid'];
+
     if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         $sql_genba = 'SELECT * FROM `tbl_genba` ;';
     }
     $result_genba = mysqli_query($conn, $sql_genba);
     $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
-    $companyid = $_SESSION['auth_companyid'];
+
     $result_genba = mysqli_query($conn, $sql_genba);
     $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
+}
+
+
+//get current template
+$sql_current_template = "SELECT `template` FROM `tbl_company` WHERE `companyid` = $companyid LIMIT 1";
+$currentTemplate = '';
+
+$result = $conn->query($sql_current_template);
+
+if ($result === false) {
+    echo 'Query error: ' . mysqli_error($conn);
+} else {
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $currentTemplate = $row['template'];
+    }
 }
 
 // Save data to tbl_genba table of database
@@ -449,7 +465,7 @@ if (isset($_POST['SaveKinmu'])) {
     $offtime1 = mysqli_real_escape_string($conn, $_POST['offtime1']);
     $offtime2 = mysqli_real_escape_string($conn, $_POST['offtime2']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
-    $template = mysqli_real_escape_string($conn, $_POST['use_type']);
+    $template = $currentTemplate;
     $uid = $_SESSION['auth_uid'];
 
     $sql_genba_insert = mysqli_query($conn, "INSERT INTO `tbl_genba` (`genbaname`, `genbacompany`, `companyid`, `strymd`, `endymd`, `use_yn`, `workstrtime`, `workendtime`,  `offtime1`, `offtime2`, `bigo`,  `template` , `uid` ,   `reg_dt` , `upt_dt`)
@@ -475,6 +491,7 @@ if (isset($_POST['UpdateKinmu'])) {
         return;
     }
     //2023-10-20 ---- add end ----// 
+
     $genbaname = mysqli_real_escape_string($conn, $_POST['udgenbaname']);
     $genbacompany = mysqli_real_escape_string($conn, $_POST['udgenbacompany']);
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
@@ -486,7 +503,7 @@ if (isset($_POST['UpdateKinmu'])) {
     $offtime1 = mysqli_real_escape_string($conn, $_POST['udofftime1']);
     $offtime2 = mysqli_real_escape_string($conn, $_POST['udofftime2']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo_cmodal']);
-    $template = mysqli_real_escape_string($conn, $_POST['uduse_type']);
+    $template = $currentTemplate;
     $uid = $_SESSION['auth_uid'];
 
     $sql = "UPDATE tbl_genba SET 

@@ -615,6 +615,8 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
         }
         $ArraySave = false;
         $c = 0;
+        $offTimeAutohh = '';
+        $offTimeAutomm = '';
         foreach ($Array_Result as $row) {
                 $c++;
                 $uid = $row['uid'];
@@ -663,6 +665,13 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 } else {
                         echo 'query error: ' . $stmt->errorInfo()[2];
                 }
+
+
+                if($c > 1 && $c <3) {
+                        $offTimeAutohh = $offtimehh;
+                        $offTimeAutomm = $offtimemm;
+                        error_log(' autoOFF:' .   $offTimeAutohh ." mm: " .   $offTimeAutomm. "\n");
+                    }
         }
 
         if ($ArraySave = true) {
@@ -673,8 +682,7 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 $jobstartmm = mysqli_real_escape_string($conn, $startmm);
                 $jobendhh = mysqli_real_escape_string($conn, $endhh);
                 $jobendmm = mysqli_real_escape_string($conn, $endmm);
-                $offtimehh = mysqli_real_escape_string($conn, $offtimehh_);
-                $offtimehh = mysqli_real_escape_string($conn, $offtimemm_);
+             
                 $workhh = mysqli_real_escape_string($conn, $calculatedHours);
                 $workmm = mysqli_real_escape_string($conn, $calculatedMinutes);
                 $comment = mysqli_real_escape_string($conn, $workcontent_rmodal);
@@ -683,10 +691,10 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 $sql = "INSERT INTO `tbl_worktime` (`uid`, `companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`, `jobendmm`, 
                 `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`,  `holy_decide`, `bigo`, `reg_dt` , `upt_dt`)
                 VALUES ('$uid', '$companyid' ,'$genid', '$workymd', '$jobstarthh', '$jobstartmm', '$jobendhh', '$jobendmm',
-                '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$comment', 0 ,'$bigo', '$reg_dt' , null)
+                '$offTimeAutohh', '$offTimeAutomm', '$workhh', '$workmm', '$comment', 0 ,'$bigo', '$reg_dt' , null)
                 ON DUPLICATE KEY UPDATE
                 companyid = '$companyid' ,genid='$genid', jobstarthh='$jobstarthh', jobstartmm='$jobstartmm', jobendhh='$jobendhh', jobendmm='$jobendmm',
-                offtimehh='$offtimehh', offtimemm='$offtimemm', workhh='$workhh', workmm='$workmm', comment='$comment',  holy_decide = 0 , bigo='$bigo', upt_dt='$upt_dt'";
+                offtimehh='$offTimeAutohh', offtimemm='$offTimeAutomm', workhh='$workhh', workmm='$workmm', comment='$comment',  holy_decide = 0 , bigo='$bigo', upt_dt='$upt_dt'";
 
                 if ($conn->query($sql) === TRUE) {
                         $_SESSION['autosave_success'] = $autosave_success;

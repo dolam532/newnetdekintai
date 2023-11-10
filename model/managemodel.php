@@ -201,15 +201,17 @@ if (isset($_POST['btnRegCL'])) {
     $use_yn = mysqli_real_escape_string($conn, $_POST['use_yn']);
     $joken = mysqli_real_escape_string($conn, $_POST['joken']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
+    $template = mysqli_real_escape_string($conn, $_POST['use_type']);
+    
 
     $sql = "INSERT INTO `tbl_company` (`companyid`, `companycode`, `companyname`, `staff`, `telno`,
-                `strymd`, `endymd`, `address`, `use_yn`, `joken`, `bigo`, `reg_dt` ,`upt_dt` )
+                `strymd`, `endymd`, `address`, `use_yn`,`template` ,  `joken`, `bigo`, `reg_dt` ,`upt_dt` )
                 VALUES ('$companyid', '$companycode', '$companyname', '$staff', '$telno',
-                '$strymd', '$endymd', '$address', '$use_yn', '$joken', '$bigo', '$reg_dt' , null)
+                '$strymd', '$endymd', '$address', '$use_yn', '$template' , '$joken', '$bigo', '$reg_dt' , null)
             ON DUPLICATE KEY UPDATE
                 `companycode` = '$companycode', `companyname` = '$companyname', `staff` = '$staff',
                 `telno` = '$telno', `strymd` = '$strymd', `endymd` = '$endymd', `address` = '$address',
-                `use_yn` = '$use_yn', `joken` = '$joken', `bigo` = '$bigo', `upt_dt` = '$upt_dt'";
+                `use_yn` = '$use_yn', `template`  = '$template'  , `joken` = '$joken', `bigo` = '$bigo', `upt_dt` = '$upt_dt'";
 
 
     $sql2 = "INSERT INTO `tbl_manageinfo` (`companyid`, `reg_dt` ,`upt_dt` )
@@ -237,6 +239,7 @@ if (isset($_POST['btnUpdateCL'])) {
     $use_yn = mysqli_real_escape_string($conn, $_POST['uduse_yn']);
     $joken = mysqli_real_escape_string($conn, $_POST['udjoken']);
     $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
+    $template = mysqli_real_escape_string($conn, $_POST['use_type']);
 
     $sql = "UPDATE tbl_company SET 
     companyname='$companyname',
@@ -259,7 +262,9 @@ WHERE companyid ='$companyid'";
     use_yn='$use_yn',
     joken='$joken',
     bigo='$bigo',
-    companycode ='$companycode'
+    companycode ='$companycode',
+    template = '$template'
+
 WHERE companyid ='$companyid'";
     }
 

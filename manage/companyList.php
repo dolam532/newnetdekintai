@@ -51,6 +51,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         pointer-events: none;
         background-color: #ccc;
     }
+
+    .template-notice-text {
+    font-size: smaller; 
+    color: red; 
+    font-style: italic; 
+}
 </style>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
@@ -250,6 +256,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                     <label for="address">住所</label>
                                     <input type="text" class="form-control" name="address" id="address" maxlength="150" style="text-align: left" placeholder="東京都東京区1丁目2番地二ホンビル3階">
                                 </div>
+
                                 <div class="col-xs-3">
                                     <label for="use_yn"><strong>使用</strong></label>
                                     <div class="custom-control custom-radio">
@@ -257,6 +264,26 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                         <input type="radio" name="use_yn" value="0">中止
                                     </div>
                                 </div>
+
+                            </div>
+                            <br>
+                            <div class="row">
+                            <div class="col-xs-6">
+
+                                    <label for="use_type"><strong>タイプ</strong></label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="use_type" name="use_type" checked
+                                            value="<?php echo array_keys(ConstArray::$search_template)[0];  ?>">
+                                        <?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[0]]; ?>
+                                        <label class="template-notice-text">   (業務時間のみ) </label>
+
+                                        <br />
+                                        <input type="radio" id="use_type" name="use_type"
+                                            value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
+                                        <?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[1]]; ?>
+                                        <label class="template-notice-text">  (出退社時間+業務時間)</label>
+                                    </div>
+                                    </div>
                             </div>
                             <br>
                             <div class="row">
@@ -276,25 +303,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                         <div class="modal-footer" style="text-align: center">
                             <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                                 <div class="col-md-3"></div>
-                                <div class="col-md-2">
-                                    <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
+                                <div class="col-md-3">
+                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="登録"> 
                                 </div>
-                                <div class="col-md-2">
-                                    <input type="submit" name="DeleteCL" class="btn btn-warning" role="button" value="削除">
-                                </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
                                 </div>
                                 <div class="col-md-3"></div>
-                            <?php else : ?>
-                                <div class="col-md-4"></div>
-                                <div class="col-md-2">
-                                    <input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL" role="button" value="編集">
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
-                                </div>
-                                <div class="col-md-4"></div>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -365,6 +380,25 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             </div>
                             <br>
                             <div class="row">
+                            <div class="col-xs-6">
+                                
+                                    <label for="use_type"><strong>タイプ</strong></label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="use_type" name="use_type"
+                                            value="<?php echo array_keys(ConstArray::$search_template)[0]; ?>">
+                                        <?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[0]]; ?>
+                                        <label class="template-notice-text">   (業務時間のみ) </label>
+                                    
+                                        <br />
+                                        <input type="radio" id="use_type" name="use_type"
+                                            value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
+                                        <?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[1]]; ?>
+                                        <label class="template-notice-text">  (出退社時間+業務時間)</label>
+                                    </div>
+                                    </div>
+                            </div>
+                            <br>
+                            <div class="row">
                                 <div class="col-xs-12">
                                     <label for="joken">契約条件</label>
                                     <input type="text" class="form-control admchg" name="udjoken" id="udjoken" maxlength="200" style="text-align: left" placeholder="契約条件">
@@ -403,6 +437,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         $('#modal').modal('toggle');
     });
 
+ 
     // Check Error
     $(document).on('click', '#btnRegCL', function(e) {
         var Companycode = $("#companycode").val();
@@ -526,6 +561,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                 $("input[name='uduse_yn'][value='<?php echo $key['use_yn']; ?>']").prop('checked', true);
                 $("#udjoken").text($('[name="udjoken"]').val("<?php echo $key['joken'] ?>"));
                 $("#udbigo").text($('[name="udbigo"]').val("<?php echo $key['bigo'] ?>"));
+                $("input[name='use_type'][value='<?php echo $key['template']; ?>']").prop('checked', true);
             }
         <?php
         }

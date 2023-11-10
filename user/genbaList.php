@@ -211,22 +211,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="col-md-3">
 								<label for="use_yn"><strong>使用</strong></label>
 								<div class="custom-control custom-radio">
-									<input type="radio" id="use_yn" name="use_yn" value="1">使用
+									<input type="radio" id="use_yn" name="use_yn" value="1" checked>使用
 									<input type="radio" id="use_yn" name="use_yn" value="0">中止
 								</div>
 								<br />
-								<!-- 2023/10/20---- add start  -->
-								<label for="use_type"><strong>タイプ</strong></label>
-								<div class="custom-control custom-radio">
-									<input type="radio" id="use_type" name="use_type"
-										value="<?php echo array_keys(ConstArray::$search_template)[0]; ?>">
-									<?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[0]]; ?>
-									<br />
-									<input type="radio" id="use_type" name="use_type"
-										value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
-									<?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[1]]; ?>
-								</div>
-								<!-- 2023/10/20---- add end  -->
+							
 							</div>
 						</div>
 						<br>
@@ -318,18 +307,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<input type="radio" name="uduse_yn" id="uduse_yn1" value="1">使用
 									<input type="radio" name="uduse_yn" id="uduse_yn2" value="0">中止
 								</div>
-								<!-- 2023/10/20---- add start  -->
-								<label for="uduse_type"><strong>タイプ</strong></label>
-								<div class="custom-control custom-radio">
-									<input type="radio" id="uduse_type1" name="uduse_type"
-										value="<?php echo array_keys(ConstArray::$search_template)[0]; ?>">
-									<?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[0]]; ?>
-									<br />
-									<input type="radio" id="uduse_type2" name="uduse_type"
-										value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
-									<?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[1]]; ?>
-								</div>
-								<!-- 2023/10/20---- add end  -->
+							
 							</div>
 						</div>
 						<br>
@@ -464,7 +442,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#udgenbaname").text($('[name="udgenbaname"]').val("<?php echo $key['genbaname'] ?>"));
 					$("#udgenbacompany").text($('[name="udgenbacompany"]').val("<?php echo $key['genbacompany'] ?>"));
 					$("input[name='uduse_yn'][value='<?php echo $key['use_yn']; ?>']").prop('checked', true);
-					$("input[name='uduse_type'][value='<?php echo $key['template']; ?>']").prop('checked', true);
 					$("#udstrymd").text($('[name="udstrymd"]').val("<?php echo $key['strymd'] ?>"));
 					$("#udendymd").text($('[name="udendymd"]').val("<?php echo $key['endymd'] ?>"));
 					$("#udworkstrtime").text($('[name="udworkstrtime"]').val("<?php echo $key['workstrtime'] ?>"));
