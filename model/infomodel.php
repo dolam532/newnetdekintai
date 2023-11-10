@@ -195,8 +195,6 @@ if (isset($_POST['btnDelWdl'])) {
 }
 
 
-
-
 // (holidayReg.php)
 if ($_POST['selyy'] == NULL) {
     $_POST["selyy"] = $_SESSION['year_Hdr'];
@@ -207,7 +205,6 @@ $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
 $sql_holiday = 'SELECT * FROM `tbl_holiday` 
     LEFT JOIN `tbl_company` ON `tbl_holiday`.`companyid` = `tbl_company`.`companyid`
     WHERE `tbl_holiday`.`holiyear` IN("' . $year . '") ';
-
 
 // Select database from tbl_userlogin table
 if ($_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
@@ -275,8 +272,6 @@ if (isset($_POST['btnDelHdr'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
-
-
 
 
 // (uservacationList.php)

@@ -83,7 +83,7 @@ if ($_SESSION['auth'] == false) {
         </div>
         <div class="col-md-4 text-right">
             <div class="title_btn">
-                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                     <input type="button" id="btnNewCTL" value="新規">
                 <?php endif; ?>
             </div>
@@ -119,14 +119,20 @@ if ($_SESSION['auth'] == false) {
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="#">
-                                        <span class="showModal">
-                                            <span class="codetypeList_class">
-                                                <?= $key['typecode'] . ',' ?>
+                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                                        <a href="#">
+                                            <span class="showModal">
+                                                <span class="codetypeList_class">
+                                                    <?= $key['typecode'] . ',' ?>
+                                                </span>
+                                                <?= $key['typename'] ?>
                                             </span>
+                                        </a>
+                                    <?php else : ?>
+                                        <span>
                                             <?= $key['typename'] ?>
                                         </span>
-                                    </a>
+                                    <?php endif; ?>
                                 </td>
                                 <td>
                                     <span>
@@ -156,6 +162,7 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="code">Type Code</label>
+                                    <input type="hidden" name="companyid" value="<?= $_SESSION['auth_companyid'] ?>">
                                     <input type="text" class="form-control" name="typecode" id="typecode" placeholder="タイプコード" style="text-align: center" maxlength=<?php echo $MAX_LENGTH_CODE ?>>
                                 </div>
                                 <div class="col-md-4">
@@ -202,6 +209,7 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="code">Type Code</label>
+                                    <input type="hidden" name="udcompanyid" id="udcompanyid">
                                     <input type="text" class="form-control" name="udtypecode" id="udtypecode" style="text-align: center" readonly>
                                 </div>
                                 <div class="col-md-4">
@@ -319,9 +327,9 @@ if ($_SESSION['auth'] == false) {
         ?>
                 if ('<?php echo $key['typecode'] ?>' == Typecode) {
                     $("#udtcode").text('<?php echo $key['typecode'] ?>');
-                    var udtypecode = $("input[name=udtypecode]:hidden");
-                    udtypecode.val("<?php echo $key['typecode'] ?>");
-                    var udtypecode = udtypecode.val();
+                    var udcompanyid = $("input[name=udcompanyid]:hidden");
+                    udcompanyid.val("<?php echo $key['companyid'] ?>");
+                    var udcompanyid = udcompanyid.val();
                     $("#udtypecode").text($('[name="udtypecode"]').val("<?php echo $key['typecode'] ?>"));
                     $("#udtypename").text($('[name="udtypename"]').val("<?php echo $key['typename'] ?>"));
                     $("#udtyperemark").text($('[name="udtyperemark"]').val("<?php echo $key['typeremark'] ?>"));

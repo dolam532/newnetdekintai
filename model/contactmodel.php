@@ -2,12 +2,11 @@
 $reg_dt = date('Y-m-d H:i:s');
 $upt_dt = date('Y-m-d H:i:s');
 
+
 // userloginList.php
 $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
 $month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
 $day = isset($_POST["seldd"]) ? $_POST["seldd"] : date('d');
-
-
 
 $sql_userlogin = 'SELECT `tbl_userlogin`.*, `tbl_company`.`companyname`
 FROM `tbl_userlogin`
@@ -18,19 +17,16 @@ AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '") ';
 
 // Select database from tbl_userlogin table
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-
 } else if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $sql_userlogin .= 'AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '" , "' . constant('ADMINISTRATOR') . '")
     AND `tbl_userlogin`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")  ';
-
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_userlogin .= ' AND `tbl_userlogin`.`uid` IN("' . $_SESSION['auth_uid'] . '")';
-
 } else {
     error_log('user type error: ' . mysqli_error($conn));
 }
 
-error_log("userLogin:".$sql_userlogin);
+error_log("userLogin:" . $sql_userlogin);
 $result_userlogin = mysqli_query($conn, $sql_userlogin);
 $userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
 
@@ -47,6 +43,7 @@ if ($companyId == "" || $companyId == null) {
     $companyId = "x_xCompanyErrorx_xUid:" . $uid . "x_x";
 }
 
+
 // noticeList.php
 // Select database from tbl_notice table
 global $IMAGE_UPLOAD_DIR;
@@ -62,7 +59,6 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
     LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
     ORDER BY `tbl_notice`.`bid`";
-
 } else {
     $sql_notice_select = "SELECT
     `tbl_notice`.*,
@@ -98,28 +94,24 @@ if (isset($_POST['SearchButtonNL'])) {
 
     if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         $sql_notice = 'SELECT DISTINCT
-    `tbl_notice`.*,
-    `tbl_user`.`name`,
-    `tbl_user`.`companyid`,
-    `tbl_company`.`companyname` 
-    FROM `tbl_notice`
-    LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
-    LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
-    WHERE (`tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '")';
-
-
+        `tbl_notice`.*,
+        `tbl_user`.`name`,
+        `tbl_user`.`companyid`,
+        `tbl_company`.`companyname` 
+        FROM `tbl_notice`
+        LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+        LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
+        WHERE (`tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '")';
     } else {
         $sql_notice = 'SELECT
-    `tbl_notice`.*,
-    `tbl_user`.`name`,
-    `tbl_user`.`companyid`
-  FROM `tbl_notice`
-  LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
-  LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
-  WHERE `tbl_user`.`companyid` = ' . $currentCompanyID . '  
-  AND `tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '"';
-
-
+        `tbl_notice`.*,
+        `tbl_user`.`name`,
+        `tbl_user`.`companyid`
+        FROM `tbl_notice`
+        LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+        LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
+        WHERE `tbl_user`.`companyid` = ' . $currentCompanyID . '  
+        AND `tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '"';
     }
     error_log($sql_notice);
 
@@ -203,7 +195,6 @@ if (isset($_POST['btnRegNL'])) {
         }
     }
 }
-// insert image chg end
 
 // Update Data to tbl_notice DB 
 if (isset($_POST['btnUpdateNL'])) {
@@ -347,9 +338,7 @@ function generateRandomString($length)
     }
     return $randomString;
 }
-// upload image add end
 
-// delete notice change start
 // Delete Data to tbl_notice DB 
 if (isset($_POST['btnDelNL'])) {
     $bid = mysqli_real_escape_string($conn, $_POST['udbid']);
@@ -377,9 +366,18 @@ if (isset($_POST['btnDelNL'])) {
 // codemasterList.php
 // Select database from tbl_codetype table
 $sql_codetype = 'SELECT * FROM `tbl_codetype`';
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_codetype = 'SELECT * FROM `tbl_codetype`';
+} else {
+    $sql_codetype_all = 'SELECT * FROM `tbl_codetype`';
+    $sql_codetype = 'SELECT * FROM `tbl_codetype` 
+        WHERE `tbl_codetype`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
+    $result_codetype_all = mysqli_query($conn, $sql_codetype_all);
+    $codetype_list_all = mysqli_fetch_all($result_codetype_all, MYSQLI_ASSOC);
+    $typecodes = array_column($codetype_list_all, 'typecode');
+}
 $result_codetype = mysqli_query($conn, $sql_codetype);
 $codetype_list = mysqli_fetch_all($result_codetype, MYSQLI_ASSOC);
-$typecodes = array_column($codetype_list, 'typecode');
 
 $codetype_list_a = array();
 foreach ($codetype_list as $k => $v) {
@@ -426,8 +424,7 @@ if ($_POST['typecode'] == NULL) {
 } elseif (isset($_POST['typecode'])) {
     if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';
-        ;
+        WHERE `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';;
     } else {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
         WHERE `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")
@@ -507,14 +504,16 @@ if (isset($_POST['btnDelCML'])) {
     }
 }
 
+
 // codetypeList.php
 // Save Data to tbl_codetype DB 
 if (isset($_POST['btnRegCTL'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
     $typecode = mysqli_real_escape_string($conn, $_POST['typecode']);
     $typename = mysqli_real_escape_string($conn, $_POST['typename']);
     $typeremark = mysqli_real_escape_string($conn, $_POST['typeremark']);
-    $sql = "INSERT INTO `tbl_codetype` (`typecode`, `typename`, `typeremark`, `reg_dt` , `upt_dt`)
-                VALUES ('$typecode', '$typename', '$typeremark', '$reg_dt' , null)";
+    $sql = "INSERT INTO `tbl_codetype` (`typecode`, `companyid`, `typename`, `typeremark`, `reg_dt` , `upt_dt`)
+                VALUES ('$typecode', '$companyid', '$typename', '$typeremark', '$reg_dt' , null)";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] = $save_success;
@@ -527,6 +526,7 @@ if (isset($_POST['btnRegCTL'])) {
 
 // Update Data to tbl_codetype DB 
 if (isset($_POST['btnUpdateCTL'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $typecode = mysqli_real_escape_string($conn, $_POST['udtypecode']);
     $typename = mysqli_real_escape_string($conn, $_POST['udtypename']);
     $typeremark = mysqli_real_escape_string($conn, $_POST['udtyperemark']);
@@ -536,6 +536,8 @@ if (isset($_POST['btnUpdateCTL'])) {
                 typeremark='$typeremark',
                 upt_dt = '$upt_dt' 
             WHERE 
+                companyid ='$companyid'
+            AND
                 typecode ='$typecode'";
 
     if ($conn->query($sql) === TRUE) {
@@ -549,10 +551,14 @@ if (isset($_POST['btnUpdateCTL'])) {
 
 // Delete Data to tbl_codetype DB 
 if (isset($_POST['btnDelCTL'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $typecode = mysqli_real_escape_string($conn, $_POST['udtypecode']);
 
     $sql = "DELETE FROM `tbl_codetype` 
-    WHERE typecode ='$typecode'";
+            WHERE 
+                companyid ='$companyid'
+            AND
+                typecode ='$typecode'";
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
         unset($_SESSION['typecode']);
