@@ -367,7 +367,12 @@ if (isset($_POST['btnDelNL'])) {
 // Select database from tbl_codetype table
 $sql_codetype = 'SELECT * FROM `tbl_codetype`';
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-    $sql_codetype = 'SELECT * FROM `tbl_codetype`';
+    $sql_codetype = 'SELECT 
+        `tbl_codetype`.*,
+        `tbl_company`.`companyname`
+    FROM
+    `tbl_codetype`
+    LEFT JOIN `tbl_company` ON `tbl_codetype`.`companyid` = `tbl_company`.`companyid`';
 } else {
     $sql_codetype_all = 'SELECT * FROM `tbl_codetype`';
     $sql_codetype = 'SELECT * FROM `tbl_codetype` 

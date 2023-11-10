@@ -97,22 +97,38 @@ if ($_SESSION['auth'] == false) {
             <table class="table table-bordered datatable">
                 <thead>
                     <tr class="info">
-                        <th style="text-align: center; width: 20%;">Type Code</th>
-                        <th style="text-align: center; width: 50%;">Type Name</th>
+                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                            <th style="text-align: center; width: 15%;">会社名</th>
+                        <?php endif; ?>
+                        <th style="text-align: center; width: 10%;">Type Code</th>
+                        <th style="text-align: center; width: 40%;">Type Name</th>
                         <th style="text-align: center; width: auto;">Type Remark</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($codetype_list)) { ?>
                         <tr class="info">
-                            <td colspan="3" align="center">
-                                <?php echo $data_save_no; ?>
-                            </td>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <td colspan="4" align="center">
+                                    <?php echo $data_save_no; ?>
+                                </td>
+                            <?php else : ?>
+                                <td colspan="3" align="center">
+                                    <?php echo $data_save_no; ?>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                         <?php } elseif (!empty($codetype_list)) {
                         foreach ($codetype_list as $key) {
                         ?>
                             <tr>
+                                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                    <td align="center">
+                                        <span>
+                                            <?= $key['companyname'] ?>
+                                        </span>
+                                    </td>
+                                <?php endif; ?>
                                 <td align="center">
                                     <span>
                                         <?= $key['typecode'] ?>
