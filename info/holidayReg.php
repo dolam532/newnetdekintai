@@ -125,7 +125,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             <tbody>
                 <?php if (empty($holiday_list)) { ?>
                     <tr>
-                        <td colspan="3" align="center"><?php echo $data_save_no; ?></td>
+                        <td colspan="4" align="center"><?php echo $data_save_no; ?></td>
                     </tr>
                     <?php } elseif (!empty($holiday_list)) {
                     foreach ($holiday_list as $key) {

@@ -95,31 +95,33 @@ if ($_SESSION['auth'] == false) {
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
-                    <th style="text-align: center; width: 10%;">年</th>
-                    <th style="text-align: center; width: 7.5%;">1月</th>
-                    <th style="text-align: center; width: 7.5%;">2月</th>
-                    <th style="text-align: center; width: 7.5%;">3月</th>
-                    <th style="text-align: center; width: 7.5%;">4月</th>
-                    <th style="text-align: center; width: 7.5%;">5月</th>
-                    <th style="text-align: center; width: 7.5%;">6月</th>
-                    <th style="text-align: center; width: 7.5%;">7月</th>
-                    <th style="text-align: center; width: 7.5%;">8月</th>
-                    <th style="text-align: center; width: 7.5%;">9月</th>
-                    <th style="text-align: center; width: 7.5%;">10月</th>
-                    <th style="text-align: center; width: 7.5%;">11月</th>
-                    <th style="text-align: center; width: 7.5%;">12月</th>
+                    <th style="text-align: center; width: auto;">会社名</th>
+                    <th style="text-align: center; width: 8;">年</th>
+                    <th style="text-align: center; width: 7%;">1月</th>
+                    <th style="text-align: center; width: 7%;">2月</th>
+                    <th style="text-align: center; width: 7%;">3月</th>
+                    <th style="text-align: center; width: 7%;">4月</th>
+                    <th style="text-align: center; width: 7%;">5月</th>
+                    <th style="text-align: center; width: 7%;">6月</th>
+                    <th style="text-align: center; width: 7%;">7月</th>
+                    <th style="text-align: center; width: 7%;">8月</th>
+                    <th style="text-align: center; width: 7%;">9月</th>
+                    <th style="text-align: center; width: 7%;">10月</th>
+                    <th style="text-align: center; width: 7%;">11月</th>
+                    <th style="text-align: center; width: 7%;">12月</th>
                 </tr>
             </thead>
 
             <tbody>
                 <?php if (empty($workday_list)) { ?>
                     <tr>
-                        <td colspan="13" align="center"><?php echo $data_save_no; ?></td>
+                        <td colspan="14" align="center"><?php echo $data_save_no; ?></td>
                     </tr>
                     <?php } elseif (!empty($workday_list)) {
                     foreach ($workday_list as $key) {
                     ?>
                         <tr>
+                            <td><span><?= $key['companyid'] ?></span></td>
                             <td>
                                 <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                                     <a href="#"><span class="showModal"><?= $key['workyear'] ?></span></a>
@@ -160,7 +162,12 @@ if ($_SESSION['auth'] == false) {
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-xs-1">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="companyname">会社名</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" value="<?= $_SESSION['auth_companyid'] ?>" readonly>
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workyear">勤務年</label>
@@ -169,8 +176,7 @@ if ($_SESSION['auth'] == false) {
                                 <input type="text" class="form-control text-center" id="workyear" name="workyear" placeholder="0000" maxlength="4">
                                 <input type="hidden" name="companyid" value="<?= $_SESSION['auth_companyid'] ?>">
                             </div>
-                            <div class="col-xs-6">
-                            </div>
+                            <div class="col-xs-1"></div>
                         </div>
                         <div class="row">
                             <div class="col-xs-1"></div>
@@ -314,7 +320,12 @@ if ($_SESSION['auth'] == false) {
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-xs-1">
+                            <div class="col-xs-1"></div>
+                            <div class="col-xs-2 text-right">
+                                <label for="companyname">会社名</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text" class="form-control text-center" value="<?= $_SESSION['auth_companyid'] ?>" readonly>
                             </div>
                             <div class="col-xs-2 text-right">
                                 <label for="workyear">勤務年</label>
@@ -323,8 +334,7 @@ if ($_SESSION['auth'] == false) {
                                 <input type="text" class="form-control text-center" id="udworkyear" name="udworkyear" maxlength="4" readonly>
                                 <input type="hidden" name="udcompanyid" value="<?= $_SESSION['auth_companyid'] ?>">
                             </div>
-                            <div class="col-xs-6">
-                            </div>
+                            <div class="col-xs-1"></div>
                         </div>
                         <div class="row">
                             <div class="col-xs-1"></div>
@@ -749,11 +759,8 @@ if ($_SESSION['auth'] == false) {
     });
 
     window.onload = function() {
-		setTimeout(hideLoadingOverlay, 1000);
-		startLoading();
-};
-
-	
-
+        setTimeout(hideLoadingOverlay, 1000);
+        startLoading();
+    };
 </script>
 <?php include('../inc/footer.php'); ?>

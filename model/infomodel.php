@@ -195,6 +195,8 @@ if (isset($_POST['btnDelWdl'])) {
 }
 
 
+
+
 // (holidayReg.php)
 if ($_POST['selyy'] == NULL) {
     $_POST["selyy"] = $_SESSION['year_Hdr'];
@@ -208,17 +210,13 @@ $sql_holiday = 'SELECT * FROM `tbl_holiday`
 
 
 // Select database from tbl_userlogin table
-if( $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
-    $sql_holiday.= 'AND `tbl_holiday`.`companyid` IN("' . $companyId_ . '")  ORDER BY `tbl_holiday`.`holiday`';
+if ($_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
+    $sql_holiday .= 'AND `tbl_holiday`.`companyid` IN("' . $companyId_ . '")  ORDER BY `tbl_holiday`.`holiday`';
 } else {
-    $sql_holiday.=' ORDER BY `tbl_holiday`.`holiday`';
+    $sql_holiday .= ' ORDER BY `tbl_holiday`.`holiday`';
 }
-
-   
 $result_holiday = mysqli_query($conn, $sql_holiday);
 $holiday_list = mysqli_fetch_all($result_holiday, MYSQLI_ASSOC);
-
-
 
 // Save database to tbl_holiday table
 if (isset($_POST['btnRegHdr'])) {
@@ -269,7 +267,7 @@ if (isset($_POST['btnDelHdr'])) {
 
     $sql = "DELETE FROM `tbl_holiday` 
     WHERE companyid ='$companyid' AND holiyear ='$holiyear' AND holiday ='$holiday'";
-    
+
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
         header("Refresh:3");
@@ -277,6 +275,9 @@ if (isset($_POST['btnDelHdr'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+
+
 
 // (uservacationList.php)
 // Select data from tbl_user & tbl_vacationinfo
@@ -344,16 +345,16 @@ if ($_POST['uservacationListSearch'] == NULL) {
 FROM
 `tbl_user`
 LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
-WHERE `tbl_user`.`companyid` IN ("' . $companyId_ . '") ' ;
+WHERE `tbl_user`.`companyid` IN ("' . $companyId_ . '") ';
 
 
-if ($searchName !== "" && $searchName !=='%%') {
-    $sql_uservacation .= ' AND `tbl_user`.`name` LIKE "' . $searchName . '"';
-}
+    if ($searchName !== "" && $searchName !== '%%') {
+        $sql_uservacation .= ' AND `tbl_user`.`name` LIKE "' . $searchName . '"';
+    }
 
-if ($searchYmd !== "" && $searchYmd !=='%%') {
-    $sql_uservacation .= ' AND `tbl_user`.`inymd` LIKE "' . $searchYmd . '"';
-}
+    if ($searchYmd !== "" && $searchYmd !== '%%') {
+        $sql_uservacation .= ' AND `tbl_user`.`inymd` LIKE "' . $searchYmd . '"';
+    }
     $result_uservacation = mysqli_query($conn, $sql_uservacation);
     $uservacation_list = mysqli_fetch_all($result_uservacation, MYSQLI_ASSOC);
 }
