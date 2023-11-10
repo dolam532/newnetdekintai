@@ -347,7 +347,7 @@ if ($_SESSION['auth'] == false) {
 					if ($decide_template_ == "1"): ?>
 						<th style="text-align: center; width: 20%;" colspan="2">業務時間</th>
 					<?php else: ?>
-						<th style="text-align: center; width: 14%;" colspan="2">出退社時刻</th>
+						<th style="text-align: center; width: 14%;" colspan="2">出退社時間</th>
 						<th style="text-align: center; width: 14%;" colspan="2">業務時間</th>
 					<?php endif; ?>
 					<th style="text-align: center; width: 9%;">休憩時間</th>

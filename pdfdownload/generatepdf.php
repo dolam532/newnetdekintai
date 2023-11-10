@@ -101,8 +101,8 @@ $tcpdf->SetLineWidth(0.2); // Set the line width for the table borders
 $tcpdf->SetXY(140, 18); // Set the X and Y position for the table
 // $tcpdf->SetFillColor(240, 240, 240); // Set the fill color for the header
 $tcpdf->SetFillColor(217, 237, 247); // Set the fill color for the header //#d9edf7 water blue(217, 237, 247).
-$tcpdf->Cell(30, 7, '社長', 1, 0, 'C', true); // Output the first cell with background color
-$tcpdf->Cell(30, 7, '担当', 1, 1, 'C', true); // Output the second cell with background color
+$tcpdf->Cell(30, 7, '責任者', 1, 0, 'C', true); // Output the first cell with background color
+$tcpdf->Cell(30, 7, '担当者', 1, 1, 'C', true); // Output the second cell with background color
 
 $tcpdf->SetXY(140, 25); // Set the X and Y position for the table
 $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
@@ -131,7 +131,7 @@ if ($template == "1") {
 	$tcpdf->Cell(30, 7, '備考', 1, 1, 'C', true); // Add 1 to move to the next line
 } elseif ($template == "2") {
 	$tcpdf->Cell(16, 7, '日付', 1, 0, 'C', true); // Add 'LTRB' to draw an outer border for the cell
-	$tcpdf->Cell(25, 7, '出退社時刻', 1, 0, 'C', true);
+	$tcpdf->Cell(25, 7, '出退社時間', 1, 0, 'C', true);
 	$tcpdf->Cell(25, 7, '業務時間', 1, 0, 'C', true);
 	$tcpdf->Cell(18, 7, '休憩時間', 1, 0, 'C', true);
 	$tcpdf->Cell(18, 7, '就業時間', 1, 0, 'C', true);
