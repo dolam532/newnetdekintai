@@ -83,7 +83,7 @@ if ($_SESSION['auth'] == false) {
         </div>
         <div class="col-md-4 text-right">
             <div class="title_btn">
-                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                     <input type="button" id="btnNewCML" value="新規">
                 <?php endif; ?>
             </div>
@@ -97,14 +97,15 @@ if ($_SESSION['auth'] == false) {
             <table class="table table-bordered datatable">
                 <thead>
                     <tr class="info">
-                        <th style="text-align: center; width: 30%;">Type Code</th>
-                        <th style="text-align: center; width: 70%;">Type Name</th>
+                        <th style="text-align: center; width: 10%;">Type Code</th>
+                        <th style="text-align: center; width: auto;">Type Name</th>
                     </tr>
                 </thead>
                 <tbody>
                     <form id="myForm" method="post">
                         <input type="hidden" name="typecode" id="typecode">
                         <input type="hidden" name="typename" id="typename">
+                        <input type="hidden" name="companyid" id="companyid">
                     </form>
                     <?php if (empty($codetype_list)) { ?>
                         <tr class="info">
@@ -128,7 +129,7 @@ if ($_SESSION['auth'] == false) {
                                                 <?= $key['typename'] ?>
                                             </span>
                                             <span class="codemasterList_class">
-                                                <?= $key['typecode'] . ',' . $key['typename'] ?>
+                                                <?= $key['typecode'] . ',' . $key['typename'] . ',' . $key['companyid'] ?>
                                             </span>
                                         </a>
                                     </td>
@@ -146,7 +147,7 @@ if ($_SESSION['auth'] == false) {
                                                 <?= $key['typename'] ?>
                                             </span>
                                             <span class="codemasterList_class">
-                                                <?= $key['typecode'] . ',' . $key['typename'] ?>
+                                                <?= $key['typecode'] . ',' . $key['typename'] . ',' . $key['companyid'] ?>
                                             </span>
                                         </a>
                                     </td>
@@ -162,9 +163,9 @@ if ($_SESSION['auth'] == false) {
             <table class="table table-bordered datatable" id="tblcodebase">
                 <thead>
                     <tr class="info">
-                        <th style="text-align: center; width: 20%;">Code</th>
+                        <th style="text-align: center; width: 10%;">Code</th>
                         <th style="text-align: center; width: 40%;">名</th>
-                        <th style="text-align: center; width: 40%;">備考</th>
+                        <th style="text-align: center; width: auto;">備考</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -184,7 +185,7 @@ if ($_SESSION['auth'] == false) {
                                     </span>
                                 </td>
                                 <td>
-                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                                         <a href="#">
                                             <span class="showModal">
                                                 <span class="codemasterList_class">
@@ -193,7 +194,7 @@ if ($_SESSION['auth'] == false) {
                                                 <?= $key['name'] ?>
                                             </span>
                                         </a>
-                                    <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+                                    <?php else : ?>
                                         <?= $key['name'] ?>
                                     <?php endif; ?>
 
@@ -322,9 +323,11 @@ if ($_SESSION['auth'] == false) {
             var SeparateArr = ArrayData.split(',');
             var Typecode = SeparateArr[0].trim();
             var Typename = SeparateArr[1].trim();
+            var Companyid = SeparateArr[2].trim();
 
             $("#typecode").val(Typecode);
             $("#typename").val(Typename);
+            $("#companyid").val(Companyid);
             $("#myForm").submit();
 
         });
@@ -390,7 +393,7 @@ if ($_SESSION['auth'] == false) {
             $("#name").focus();
             return false;
         }
-        
+
         // check duplicate code 
         var codes = <?php echo json_encode($codes); ?>;
         for (var code of codes) {

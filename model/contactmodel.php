@@ -379,7 +379,7 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         WHERE `tbl_codetype`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
     $result_codetype_all = mysqli_query($conn, $sql_codetype_all);
     $codetype_list_all = mysqli_fetch_all($result_codetype_all, MYSQLI_ASSOC);
-    $typecodes = array_column($codetype_list_all, 'typecode');
+    $typecodes_all = array_column($codetype_list_all, 'typecode');
 }
 $result_codetype = mysqli_query($conn, $sql_codetype);
 $codetype_list = mysqli_fetch_all($result_codetype, MYSQLI_ASSOC);
@@ -389,56 +389,35 @@ foreach ($codetype_list as $k => $v) {
     $codetype_list_a[] = $v['typecode'];
 }
 $codetype_list_a = array_unique($codetype_list_a);
-$codetype_list_a_string = "'" . implode("','", $codetype_list_a) . "'";
+$codetype_list_a_string = implode('", "', $codetype_list_a);
 
 // Select database from tbl_codebase table
 $codes;
 if ($_POST['typecode'] == NULL) {
     $_POST['typecode'] = $_SESSION['typecode'];
-    if ($_SESSION['typecode'] == constant('DEPARTMENT')) {
-        if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-            $sql_codebase = 'SELECT * FROM `tbl_codebase`
-            WHERE `tbl_codebase`.`typecode` IN ("' . constant('DEPARTMENT') . '")';
-        } else {
-            $sql_codebase = 'SELECT * FROM `tbl_codebase`
-            WHERE `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-            AND `tbl_codebase`.`typecode` IN ("' . constant('DEPARTMENT') . '")';
-        }
-    } elseif ($_SESSION['typecode'] == constant('VACATION_TYPE')) {
-        if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-            $sql_codebase = 'SELECT * FROM `tbl_codebase`
-            WHERE `tbl_codebase`.`typecode` IN ("' . constant('VACATION_TYPE') . '")';
-        } else {
-            $sql_codebase = 'SELECT * FROM `tbl_codebase`
-            WHERE `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-            AND `tbl_codebase`.`typecode` IN ("' . constant('DEPARTMENT') . '")';
-        }
+    $codetype_result = isset($_POST['typecode']) ? $_POST['typecode'] : $codetype_list_a_string;
+
+    if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+        $sql_codebase = 'SELECT * FROM `tbl_codebase`';
     } else {
-        if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-            $sql_codebase = "SELECT * FROM `tbl_codebase`
-            WHERE `tbl_codebase`.`typecode` IN ({$codetype_list_a_string})";
-        } else {
-            $sql_codebase = "SELECT * FROM `tbl_codebase`
-            WHERE `tbl_codebase`.`companyid` = '{$_SESSION['auth_companyid']}'
-            AND `tbl_codebase`.`typecode` IN ({$codetype_list_a_string})";
-        }
+        $sql_codebase = 'SELECT * FROM `tbl_codebase`
+        WHERE `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+        AND `tbl_codebase`.`typecode` IN ("' . $codetype_result . '")';
     }
-    $result_codebase = mysqli_query($conn, $sql_codebase);
-    $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
-    $codes = array_column($codebase_list, 'code');
 } elseif (isset($_POST['typecode'])) {
     if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';;
+        WHERE `tbl_codebase`.`companyid` IN ("' . $_POST['companyid'] . '")
+        AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';
     } else {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
         WHERE `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")
         AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';
     }
-    $result_codebase = mysqli_query($conn, $sql_codebase);
-    $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
-    $codes = array_column($codebase_list, 'code');
 }
+$result_codebase = mysqli_query($conn, $sql_codebase);
+$codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
+$codes = array_column($codebase_list, 'code');
 
 // Save Data to tbl_codebase DB 
 if (isset($_POST['btnRegCML'])) {
@@ -502,7 +481,6 @@ if (isset($_POST['btnDelCML'])) {
     WHERE id ='$id' AND companyid ='$companyid' AND uid ='$uid' AND typecode ='$typecode' AND code ='$code'";
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
-        unset($_SESSION['typecode']);
         header("Refresh:3");
     } else {
         error_log('query error: ' . mysqli_error($conn));

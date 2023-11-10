@@ -321,7 +321,7 @@ if ($_SESSION['auth'] == false) {
         }
 
         // check duplicate code 
-        var typecodes = <?php echo json_encode($typecodes); ?>;
+        var typecodes = <?php echo json_encode($typecodes_all); ?>;
         for (var typecode of typecodes) {
             if (typecode === TypeCode) {
                 alert("<?php echo $content_ctlC_duplicate; ?>");

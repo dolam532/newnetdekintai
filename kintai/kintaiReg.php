@@ -138,8 +138,6 @@ if ($_SESSION['auth'] == false) {
 		margin-left: 20px;
 	}
 
-	.submission-status_0 {}
-
 	.submission-status_1 {
 		color: red;
 	}
