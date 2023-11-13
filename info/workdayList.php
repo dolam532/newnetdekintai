@@ -80,7 +80,7 @@ if ($_SESSION['auth'] == false) {
         </div>
         <div class="col-md-4"></div>
         <div class="col-md-4 text-right">
-            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                 <div class="title_btn">
                     <input type="button" id="btnNew" value="新規">
                 </div>
@@ -95,8 +95,10 @@ if ($_SESSION['auth'] == false) {
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
-                    <th style="text-align: center; width: auto;">会社名</th>
-                    <th style="text-align: center; width: 8;">年</th>
+                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                        <th style="text-align: center; width: 10%;">会社名</th>
+                    <?php endif; ?>
+                    <th style="text-align: center; width: auto;">年</th>
                     <th style="text-align: center; width: 7%;">1月</th>
                     <th style="text-align: center; width: 7%;">2月</th>
                     <th style="text-align: center; width: 7%;">3月</th>
@@ -114,18 +116,30 @@ if ($_SESSION['auth'] == false) {
 
             <tbody>
                 <?php if (empty($workday_list)) { ?>
-                    <tr>
-                        <td colspan="14" align="center"><?php echo $data_save_no; ?></td>
-                    </tr>
+                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                        <td colspan="14" align="center">
+                            <?php echo $data_save_no; ?>
+                        </td>
+                    <?php else : ?>
+                        <td colspan="13" align="center">
+                            <?php echo $data_save_no; ?>
+                        </td>
+                    <?php endif; ?>
                     <?php } elseif (!empty($workday_list)) {
                     foreach ($workday_list as $key) {
                     ?>
                         <tr>
-                            <td><span><?= $key['companyid'] ?></span></td>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <td align="center">
+                                    <span>
+                                        <?= $key['companyname'] ?>
+                                    </span>
+                                </td>
+                            <?php endif; ?>
                             <td>
-                                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                                     <a href="#"><span class="showModal"><?= $key['workyear'] ?></span></a>
-                                <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+                                <?php elseif ($_SESSION['auth_type'] == constant('USER') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                                     <span class="showModal"><?= $key['workyear'] ?></span>
                                 <?php endif; ?>
                             </td>
@@ -164,19 +178,13 @@ if ($_SESSION['auth'] == false) {
                         <div class="row">
                             <div class="col-xs-1"></div>
                             <div class="col-xs-2 text-right">
-                                <label for="companyname">会社名</label>
-                            </div>
-                            <div class="col-xs-3">
-                                <input type="text" class="form-control text-center" value="<?= $_SESSION['auth_companyid'] ?>" readonly>
-                            </div>
-                            <div class="col-xs-2 text-right">
                                 <label for="workyear">勤務年</label>
                             </div>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control text-center" id="workyear" name="workyear" placeholder="0000" maxlength="4">
                                 <input type="hidden" name="companyid" value="<?= $_SESSION['auth_companyid'] ?>">
                             </div>
-                            <div class="col-xs-1"></div>
+                            <div class="col-xs-6"></div>
                         </div>
                         <div class="row">
                             <div class="col-xs-1"></div>
@@ -322,19 +330,13 @@ if ($_SESSION['auth'] == false) {
                         <div class="row">
                             <div class="col-xs-1"></div>
                             <div class="col-xs-2 text-right">
-                                <label for="companyname">会社名</label>
-                            </div>
-                            <div class="col-xs-3">
-                                <input type="text" class="form-control text-center" value="<?= $_SESSION['auth_companyid'] ?>" readonly>
-                            </div>
-                            <div class="col-xs-2 text-right">
                                 <label for="workyear">勤務年</label>
                             </div>
                             <div class="col-xs-3">
                                 <input type="text" class="form-control text-center" id="udworkyear" name="udworkyear" maxlength="4" readonly>
                                 <input type="hidden" name="udcompanyid" value="<?= $_SESSION['auth_companyid'] ?>">
                             </div>
-                            <div class="col-xs-1"></div>
+                            <div class="col-xs-6"></div>
                         </div>
                         <div class="row">
                             <div class="col-xs-1"></div>
