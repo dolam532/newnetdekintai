@@ -1,5 +1,5 @@
 <?php
-// All
+// all
 include('../inc/const.php');
 
 $data_save_no = '登録されたデータがありません。';
@@ -21,16 +21,12 @@ $signstamp_empty_error = '印鑑を入力してください。';
 $login_is_not = '詳細情報はログイン後可能です。';
 
 // loginout
-$login_empty_id = 'ログイン失敗！  IDを入力してください。';
-$login_empty_pwd = 'ログイン失敗！  パスワードを入力してください。';
-$login_alphabet = 'IDをアルファベットで入力してください。';
 $login_success = 'ログインに成功しました。';
 $logout_success = 'ログアウトに成功しました。';
-$login_fail = 'IDまたはパスワードが正しくありません。もう一度お試しください。';
+$login_fail = 'Emailまたはパスワードが正しくありません。もう一度お試しください。';
 
 // userList
-$user_id_same = '他の社員が使用しているidです。';
-$user_id_empty = 'IDを入力してください。';
+$user_id_empty = 'Emailを入力してください。';
 $user_pwd_empty = 'Passwordを入力してください。';
 $user_name_empty = '社員名を入力してください。';
 $user_email_empty = 'mailを入力してください。';
@@ -43,7 +39,7 @@ $min_invalid_useremail_length = 'メールが短すぎます。@の前に最低'
 $min_invalid_userid_length = 'IDが短すぎます。@の前に最低'.$MIN_LENGTH_ID_EMAIL_USER.'桁以上入力してください。';
 $email_is_dupplicate = 'メールが存在されています。他のメールを登録してください。';
 
-// KyukaReg
+// kyukaReg
 $kyuka_no_receive = '休暇はまだもらえません。';
 $kyuka_ymdcnt_01 = '休暇の申込日は(';
 $kyuka_ymdcnt_02 = '日)を超えるわけにはいきません。';
@@ -76,7 +72,7 @@ $kyuka_usecnt_no = '休暇使用数を番号で入力してください。';
 $kyuka_usetime_no = '休暇使用時間を番号で入力してください。';
 $kyuka_restcnt_no = '休暇休憩回数を番号で入力してください。';
 
-// KintaiReg
+// kintaiReg
 $kintai_start_empty = '出社時刻を入力してください。';
 $kintai_start_no = '出社時刻を番号で入力してください。';
 $kintai_end_empty = '退社時刻を入力してください。';
@@ -98,7 +94,6 @@ $sekininshonin_success = '責任者承認成功しました。変更がある場
 $kakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
 $shonin_notkakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
 $sekininshonin_notkakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
-
 
 // genbaList
 $user_genbaname_empty = '勤務時間タイプを入力してください。';

@@ -487,20 +487,6 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             return true;
         }
 
-        <?php
-        if (!empty($admin_list)) {
-            foreach ($admin_list as $key) {
-        ?>
-                if ('<?php echo $key['uid'] ?>' == Uid) {
-                    alert("<?php echo $manage_Uid_have; ?>");
-                    $("#uid").focus();
-                    return false;
-                }
-        <?php
-            }
-        }
-        ?>
-
         if (Pwd == "") {
             alert("<?php echo $manage_pwd_empty; ?>");
             e.preventDefault();

@@ -74,61 +74,67 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	?>
 	<?php
 	if (isset($_SESSION['email_dupplicate_error']) && isset($_POST['UpdateUserList'])) {
-		?>
+	?>
 		<script>
 			alert("<?php echo $_SESSION['email_dupplicate_error']; ?>");
 		</script>
-		<?php
+	<?php
 		unset($_SESSION['email_dupplicate_error']);
 	}
 	?>
 
-<?php
+	<?php
 	if (isset($_SESSION['email_dupplicate_error']) && isset($_POST['SaveUserList'])) {
-		?>
+	?>
 		<script>
 			alert("<?php echo $_SESSION['email_dupplicate_error']; ?>");
 		</script>
-		<?php
+	<?php
 		unset($_SESSION['email_dupplicate_error']);
 	}
 	?>
-
-
 	<div class="row">
 		<div class="col-md-2 text-left">
 			<div class="title_name">
 				<span class="text-left">社員登録</span>
 			</div>
 		</div>
-		<form method="post">
-			<div class="col-md-3 text-left">
-				<div class="title_condition">
-					<label>区分 : <input type="text" id="searchGrade" name="searchGrade" value="<?= $_POST['searchGrade'] ?>" style="width: 100px;"></label>
-				</div>
-			</div>
-			<div class="col-md-3 text-left">
-				<div class="title_condition">
-					<label>社員名 : <input type="text" id="searchName" name="searchName" value="<?= $_POST['searchName'] ?>" style="width: 100px;"></label>
-				</div>
-			</div>
-			<div class="col-md-4 text-right">
-				<div class="title_btn">
-					<input type="submit" id="ClearButton" name="ClearButton" value="クリア">
-				</div>
-				<div class="title_btn">
-					<input type="submit" name="SearchButton" value="検索">
-				</div>
-				<div class="title_btn">
-					<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-						<input type="button" id="btnNew" value="新規">
-					<?php endif; ?>
-				</div>
+		<?php if ($_SESSION['auth_type'] == constant('USER')) : ?>
+			<div class="col-md-10 text-right">
 				<div class="title_btn">
 					<input type="button" onclick="window.location.href='../'" value="トップへ戻る">
 				</div>
 			</div>
-		</form>
+		<?php else : ?>
+			<form method="post">
+				<div class="col-md-3 text-left">
+					<div class="title_condition">
+						<label>区分 : <input type="text" id="searchGrade" name="searchGrade" value="<?= $_POST['searchGrade'] ?>" style="width: 100px;"></label>
+					</div>
+				</div>
+				<div class="col-md-3 text-left">
+					<div class="title_condition">
+						<label>社員名 : <input type="text" id="searchName" name="searchName" value="<?= $_POST['searchName'] ?>" style="width: 100px;"></label>
+					</div>
+				</div>
+				<div class="col-md-4 text-right">
+					<div class="title_btn">
+						<input type="submit" id="ClearButton" name="ClearButton" value="クリア">
+					</div>
+					<div class="title_btn">
+						<input type="submit" name="SearchButton" value="検索">
+					</div>
+					<div class="title_btn">
+						<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+							<input type="button" id="btnNew" value="新規">
+						<?php endif; ?>
+					</div>
+					<div class="title_btn">
+						<input type="button" onclick="window.location.href='../'" value="トップへ戻る">
+					</div>
+				</div>
+			</form>
+		<?php endif; ?>
 	</div>
 
 	<!-- ビュー -->
@@ -283,7 +289,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<br>
 						<div class="row">
 							<div class="col-xs-12">
-								<label for="signstamp_addNew">印鑑</label><span style="font-size:smaller; color:red;"> (印鑑はpngタイプを選択してください。)</span>
+								<label for="signstamp_addNew">印鑑</label>
+								<span style="font-size:smaller; color:red;"> (印鑑はpngタイプを選択してください。)</span>
 								<img width="50" id="signstamp_addNew">
 								<input type="file" name="signstamp" id="fileInput" onchange=checkFileSize(this)>
 							</div>
@@ -405,7 +412,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
-						<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+						<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
 							<div class="col-xs-3"></div>
 							<div class="col-xs-2">
 								<p class="text-center">
@@ -440,7 +447,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	</div>
 </div>
 <script>
-	// 2023-10-11/1340-005
 	// upload image  add start
 	$(document).ready(function() {
 		// load valid extention to element check 
@@ -538,8 +544,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		}
 	}
 
-	// 2023-10-11/1340-005
-	// upload image  add end
 	// Datepicker Calender
 	$("#genstrymd").datepicker({
 		changeYear: true,
@@ -644,17 +648,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var dept = $("#dept").val();
 		var grade = $("#grade").val();
 		var genba_list = $("#genba_list").val();
-		var fileInput = $("#fileInput").val();
-
-		<?php foreach ($userlist_list as $user) : ?>
-			var user_uid = '<?php echo $user["uid"] ?>';
-			if (uid == user_uid) {
-				alert("<?php echo $user_id_same; ?>");
-				$("#uid").focus();
-				e.preventDefault();
-				return;
-			}
-		<?php endforeach; ?>
 
 		if (uid == "") {
 			alert("<?php echo $user_id_empty; ?>");
@@ -679,6 +672,19 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			$("#email").focus();
 			return;
 		}
+		<?php
+		if (!empty($userlist_list)) {
+			foreach ($userlist_list as $key) {
+		?>
+				if ('<?php echo $key['email'] ?>' == email) {
+					alert("<?php echo $email_is_dupplicate; ?>");
+					$("#email").focus();
+					return false;
+				}
+		<?php
+			}
+		}
+		?>
 		if (dept == "") {
 			alert("<?php echo $user_dept_empty; ?>");
 			$("#dept").focus();
@@ -694,12 +700,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (genba_list == "") {
 			alert("<?php echo $user_genba_list_empty; ?>");
 			$("#genba_list").focus();
-			e.preventDefault();
-			return;
-		}
-		if (fileInput == "") {
-			alert("<?php echo $signstamp_empty_error; ?>");
-			$("#fileInput").focus();
 			e.preventDefault();
 			return;
 		}
@@ -723,6 +723,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var pwd = $("#ulpwd").val();
 		var name = $("#ulname").val();
 		var email = $("#ulemail").val();
+		alert(email);
 		var dept = $("#uldept").val();
 		var grade = $("#ulgrade").val();
 		var genba_list = $("#ulgenba_list").val();
@@ -744,6 +745,19 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			$("#ulemail").focus();
 			return;
 		}
+		<?php
+		if (!empty($admin_list)) {
+			foreach ($admin_list as $key) {
+		?>
+				if ('<?php echo $key['email'] ?>' == email) {
+					alert("<?php echo $email_is_dupplicate; ?>");
+					$("#ulemail").focus();
+					return false;
+				}
+		<?php
+			}
+		}
+		?>
 		if (dept == "") {
 			alert("<?php echo $user_dept_empty; ?>");
 			$("#uldept").focus();
@@ -785,6 +799,5 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		}
 		return false;
 	}
-	
 </script>
 <?php include('../inc/footer.php'); ?>
