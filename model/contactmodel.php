@@ -406,7 +406,11 @@ if ($_POST['typecode'] == NULL) {
     }
 } elseif (isset($_POST['typecode'])) {
     if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-        $sql_codebase = 'SELECT * FROM `tbl_codebase`
+        $sql_codebase = 'SELECT 
+        `tbl_codebase`.*,
+        `tbl_company`.`companyname`
+        FROM `tbl_codebase`
+        LEFT JOIN `tbl_company` ON `tbl_codebase`.`companyid` = `tbl_company`.`companyid`
         WHERE `tbl_codebase`.`companyid` IN ("' . $_POST['companyid'] . '")
         AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';
     } else {

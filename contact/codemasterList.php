@@ -97,6 +97,9 @@ if ($_SESSION['auth'] == false) {
             <table class="table table-bordered datatable">
                 <thead>
                     <tr class="info">
+                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                            <th style="text-align: center; width: 40%;">会社名</th>
+                        <?php endif; ?>
                         <th style="text-align: center; width: 10%;">Type Code</th>
                         <th style="text-align: center; width: auto;">Type Name</th>
                     </tr>
@@ -109,15 +112,28 @@ if ($_SESSION['auth'] == false) {
                     </form>
                     <?php if (empty($codetype_list)) { ?>
                         <tr class="info">
-                            <td colspan="2" align="center">
-                                <?php echo $data_save_no; ?>
-                            </td>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <td colspan="3" align="center">
+                                    <?php echo $data_save_no; ?>
+                                </td>
+                            <?php else : ?>
+                                <td colspan="2" align="center">
+                                    <?php echo $data_save_no; ?>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                         <?php } elseif (!empty($codetype_list)) {
                         foreach ($codetype_list as $key) {
                         ?>
                             <?php if ($key['typecode'] == $_POST['typecode']) : ?>
                                 <tr>
+                                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                        <td align="center">
+                                            <span>
+                                                <?= $key['companyname'] ?>
+                                            </span>
+                                        </td>
+                                    <?php endif; ?>
                                     <td align="center">
                                         <span style="font-weight:bold; color:red; text-decoration: underline;">
                                             <?= $key['typecode'] ?>
@@ -136,6 +152,13 @@ if ($_SESSION['auth'] == false) {
                                 </tr>
                             <?php else : ?>
                                 <tr>
+                                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                        <td align="center">
+                                            <span>
+                                                <?= $key['companyname'] ?>
+                                            </span>
+                                        </td>
+                                    <?php endif; ?>
                                     <td align="center">
                                         <span>
                                             <?= $key['typecode'] ?>
@@ -163,22 +186,38 @@ if ($_SESSION['auth'] == false) {
             <table class="table table-bordered datatable" id="tblcodebase">
                 <thead>
                     <tr class="info">
+                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                            <th style="text-align: center; width: 40%;">会社名</th>
+                        <?php endif; ?>
                         <th style="text-align: center; width: 10%;">Code</th>
-                        <th style="text-align: center; width: 40%;">名</th>
+                        <th style="text-align: center; width: 30%;">名</th>
                         <th style="text-align: center; width: auto;">備考</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($codebase_list)) { ?>
                         <tr>
-                            <td colspan="3" align="center">
-                                <?php echo $data_save_no; ?>
-                            </td>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <td colspan="4" align="center">
+                                    <?php echo $data_save_no; ?>
+                                </td>
+                            <?php else : ?>
+                                <td colspan="3" align="center">
+                                    <?php echo $data_save_no; ?>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                         <?php } elseif (!empty($codebase_list)) {
                         foreach ($codebase_list as $key) {
                         ?>
                             <tr>
+                                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                    <td align="center">
+                                        <span>
+                                            <?= $key['companyname'] ?>
+                                        </span>
+                                    </td>
+                                <?php endif; ?>
                                 <td align="center">
                                     <span>
                                         <?= $key['code'] ?>
