@@ -100,7 +100,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             </div>
         </form>
         <div class="col-md-4 text-right">
-            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')  || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                 <div class="title_btn">
                     <input type="button" id="btnNew" value="新規">
                 </div>
@@ -114,9 +114,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
-                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                <th style="text-align: center; width: 20%;">会社</th>
-                <?php endif; ?>
+                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                        <th style="text-align: center; width: 20%;">会社名</th>
+                    <?php endif; ?>
                     <th style="text-align: center; width: 10%;">年</th>
                     <th style="text-align: center; width: 15%;">祝日</th>
                     <th style="text-align: center; width: auto;">備考</th>
@@ -125,21 +125,28 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             <tbody>
                 <?php if (empty($holiday_list)) { ?>
                     <tr>
-                        <td colspan="4" align="center"><?php echo $data_save_no; ?></td>
+                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                            <td colspan="4" align="center">
+                                <?php echo $data_save_no; ?>
+                            </td>
+                        <?php else : ?>
+                            <td colspan="3" align="center">
+                                <?php echo $data_save_no; ?>
+                            </td>
+                        <?php endif; ?>
                     </tr>
                     <?php } elseif (!empty($holiday_list)) {
                     foreach ($holiday_list as $key) {
                     ?>
                         <tr>
-                   
-                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                            <td><span><?= $key['companyname'] ?></span></td>
-                <?php endif; ?>
-                            <td align="center" ><span ><?= $key['holiyear'] ?></span></td>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <td><span><?= $key['companyname'] ?></span></td>
+                            <?php endif; ?>
+                            <td align="center"><span><?= $key['holiyear'] ?></span></td>
                             <td align="center">
-                                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                                     <a href="#"><span class="showModal"><?= $key['holiday'] ?></span></a>
-                                <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+                                <?php elseif ($_SESSION['auth_type'] == constant('USER') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                                     <?= $key['holiday'] ?></span>
                                 <?php endif; ?>
                             </td>
@@ -255,9 +262,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         jQuery('.seldate').change(function() {
             this.form.submit();
         });
-
         setTimeout(hideLoadingOverlay, 1000);
-		startLoading();
+        startLoading();
     });
 
     // New button: popup & clear 
@@ -319,7 +325,5 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         }
         ?>
     });
-
-  
 </script>
 <?php include('../inc/footer.php'); ?>
