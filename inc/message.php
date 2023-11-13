@@ -91,6 +91,13 @@ $kintai_click_month = '月合計登録まだ保存されてないです。確認
 $kintai_bigo_or_comment = 'コメントか備考を入力してください。';
 $kintai_check_input_err = ' 桁まで入力してください';
 $kintai_reg_workmonth = '勤務日登録されてないです。確認してください。';
+$kakutei_success = '提出確定しました。変更がある場合は管理者へ連絡してください';
+$modoshi_success = '編集中に戻しました。';
+$shonin_success = '承認成功しました。変更がある場合は編集中に戻し編集してください';
+$sekininshonin_success = '責任者承認成功しました。変更がある場合は編集中に戻し編集してください';
+$kakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
+$shonin_notkakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
+$sekininshonin_notkakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
 
 
 // genbaList

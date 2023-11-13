@@ -48,7 +48,7 @@ $template = json_decode($_POST['template'], true);
 $data = json_decode($_POST['data'], true);
 $workmonth_list = json_decode($_POST['workmonth_list'], true);
 $companyName = json_decode($_POST['companyName'], true);
- ;
+
 
 
 // top

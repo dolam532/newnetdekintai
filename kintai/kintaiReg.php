@@ -47,9 +47,15 @@ if ($_SESSION['auth'] == false) {
 		text-overflow: ellipsis;
 	}
 
-	.print_btn {
+
+	.print_btn-submit {
 		display: inline-block;
 		padding-top: 30px;
+	}
+
+	.print_btn {
+		display: inline-block;
+		padding-top: 10px;
 	}
 
 	span.kintaiReg_class {
@@ -98,11 +104,20 @@ if ($_SESSION['auth'] == false) {
 		align-items: flex-end;
 	}
 
+	.top-action-btn-admin {
+		display: flex;
+		justify-content: flex-end;
+		align-items: flex-end;
+		margin-top: -10px;
+
+	}
+
 
 	.top-action-btn {
 		display: flex;
 		justify-content: flex-end;
 		align-items: flex-end;
+		margin-top: -10px;
 
 	}
 
@@ -110,6 +125,14 @@ if ($_SESSION['auth'] == false) {
 		text-align: right;
 		margin: 5px 0;
 	}
+
+	.submit-top {
+		text-align: right;
+		/* padding-right: -15px; */
+		margin-left: 5px;
+	}
+
+
 
 
 	/* lanscape notice */
@@ -144,6 +167,14 @@ if ($_SESSION['auth'] == false) {
 
 	.submission-status_2 {
 		color: blue;
+	}
+
+	.submission-status_3 {
+		color: green;
+	}
+
+	.workmonth-submit{
+		box-shadow: 0 0 2px #3498db;
 	}
 </style>
 
@@ -244,7 +275,96 @@ if ($_SESSION['auth'] == false) {
 		unset($_SESSION['delete_all_success']);
 	}
 	?>
+	<!-- 2023/11/13 submission-status  add start -->
+	<?php
+	if (isset($_SESSION['kakutei_success']) && isset($_POST['WorkmonthKakutei'])) {
+		?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['kakutei_success']; ?>
+		</div>
+		<?php
+		unset($_SESSION['kakutei_success']);
+	}
+	?>
 
+	<?php
+	if (isset($_SESSION['kakutei_fail']) && isset($_POST['WorkmonthKakutei'])) {
+		?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['kakutei_fail']; ?>
+		</div>
+		<?php
+		unset($_SESSION['kakutei_fail']);
+	}
+	?>
+
+
+
+	<?php
+	if (isset($_SESSION['modoshi_success']) && isset($_POST['WorkmonthModoshi'])) {
+		?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="5000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['modoshi_success']; ?>
+		</div>
+		<?php
+		unset($_SESSION['modoshi_success']);
+	}
+	?>
+
+	<?php
+	if (isset($_SESSION['shonin_success']) && isset($_POST['WorkmonthShonin'])) {
+		?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['shonin_success']; ?>
+		</div>
+		<?php
+		unset($_SESSION['shonin_success']);
+	}
+	?>
+
+
+	<?php
+	if (isset($_SESSION['shonin_notkakutei_fail']) && isset($_POST['WorkmonthShonin'])) {
+		?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['shonin_notkakutei_fail']; ?>
+		</div>
+		<?php
+		unset($_SESSION['shonin_notkakutei_fail']);
+	}
+	?>
+
+
+
+	<?php
+	if (isset($_SESSION['sekininshonin_success']) && isset($_POST['WorkmonthSekininShonin'])) {
+		?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['sekininshonin_success']; ?>
+		</div>
+		<?php
+		unset($_SESSION['sekininshonin_success']);
+	}
+	?>
+
+	<?php
+	if (isset($_SESSION['sekininshonin_notkakutei_fail']) && isset($_POST['WorkmonthSekininShonin'])) {
+		?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['sekininshonin_notkakutei_fail']; ?>
+		</div>
+		<?php
+		unset($_SESSION['sekininshonin_notkakutei_fail']);
+	}
+	?>
+	<!-- 2023/11/13 submission-status  add end -->
 
 	<div class="row">
 		<div class="col-md-3 text-left page-top" name="workYm_page_title">
@@ -307,21 +427,62 @@ if ($_SESSION['auth'] == false) {
 			</div>
 		</form>
 	</div>
+	<!-- 2023/11/10 submission-status  add start -->
+	<div class="row"><br/></div>
+	<div class="row top-action-btn-admin">
+	<div class="col-md-6 right">
+		<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
+		
+				<div class="print_btn-submit">
+					<form method="post">
+					<a href="../kintaidetail/kintaiUser.php" class="btn btn-default workmonth-submit" style="width: auto;">社員勤務表</a>
+					</form>
+			</div>
+			
+			
+				<div class="print_btn-submit">
+					<form method="post">
+						<button type="submit" href="#" name="WorkmonthSekininShonin"
+							class="btn btn-default workmonth-submit workmonth-submit-sekininshonin" style="width: auto;"
+							onclick="return confirm('責任者承認済みでよろしいでしょうか？ \n変更がある場合は編集中に戻して、編集してください')">責任者承認</button>
+					</form>
+				</div>
 
+				<div class="print_btn-submit">
+					<form method="post">
+						<button type="submit" href="#" name="WorkmonthShonin"
+							class="btn btn-default workmonth-submit workmonth-submit-shonin" style="width: auto;"
+							onclick="return confirm('承認済みでよろしいでしょうか？ \n変更がある場合は編集中に戻て、編集してください')">承認</button>
+					</form>
+
+			</div>
+				<div class="print_btn-submit">
+					<form method="post">
+						<button type="submit" href="#" name="WorkmonthModoshi"
+							class="btn btn-default workmonth-submit workmonth-submit-modoshi" style="width: auto;"
+							onclick="return confirm('編集中に戻してよろしいでしょうか？')">戻す</button>
+					</form>
+
+			</div>
+		<?php endif; ?>
+			<div class="print_btn-submit">
+				<form method="post">
+					<button type="submit" href="#" name="WorkmonthKakutei"
+						class="btn btn-default workmonth-submit workmonth-submit-kakutei" style="width: auto;"
+						onclick="return confirm('提出確定してよろしいでしょうか？ \n確定したら編集できません!')">提出</button>
+				</form>
+			</div>
+			</div>
+	</div>
+	<!-- 2023/11/10 submission-status  add end -->
 	<div class="row top-action-btn">
+
 		<div class="col-md-6 right">
 
-			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
-				<div class="print_btn">
-					<a href="../kintaidetail/kintaiUser.php" class="btn btn-default" style="width: auto;">社員勤務表</a>
-				</div>
-			<?php endif; ?>
 
-			<!-- 2023/10/20 ---- add start  -->
 			<div class="print_btn">
 				<a href="#" onclick="kinmutypeHandle()" ; class="btn btn-default" style="width: auto;">勤務タイプ選択</a>
 			</div>
-			<!-- 2023/10/20 ---- add end  -->
 
 
 			<div class="print_btn">
@@ -1430,9 +1591,14 @@ if ($_SESSION['auth'] == false) {
 		if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[0] ?>') {
 			$('#submission-status').removeClass();
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[1] ?>') {
+			$('#submission-status').removeClass();
 			$('#submission-status').addClass('submission-status_1');
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[2] ?>') {
+			$('#submission-status').removeClass();
 			$('#submission-status').addClass('submission-status_2');
+		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[3] ?>') {
+			$('#submission-status').removeClass();
+			$('#submission-status').addClass('submission-status_3');
 		}
 	}
 	//2023/11/10 submission-status  add end 	
