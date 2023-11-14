@@ -5,10 +5,17 @@ $upt_dt = date('Y-m-d H:i:s');
 
 // (userList.php)
 // Select data from tbl_codebase
-$sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
-WHERE `tbl_codebase`.`typecode` = "' . constant('DEPARTMENT') . '"
-AND `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-GROUP BY `code`, `name`';
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_codebase = 'SELECT `code`, `name`, `companyid` FROM `tbl_codebase`
+    WHERE `tbl_codebase`.`typecode` = "' . constant('DEPARTMENT') . '"
+    GROUP BY `code`, `name`, `companyid`
+    ORDER BY `companyid`';
+} else {
+    $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
+    WHERE `tbl_codebase`.`typecode` = "' . constant('DEPARTMENT') . '"
+    AND `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+    GROUP BY `code`, `name`';
+}
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
@@ -31,11 +38,15 @@ WHERE
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
     `tbl_genba`.`workstrtime`,
-    `tbl_genba`.`workendtime`
+    `tbl_genba`.`workendtime`,
+    `tbl_company`.`companyname` 
 FROM
     `tbl_user`
 LEFT JOIN 
-    `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` ';
+    `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
+LEFT JOIN 
+    `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
+ORDER BY `tbl_user`.`companyid`';
     }
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_user_select_db = 'SELECT DISTINCT
@@ -74,19 +85,24 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
     `tbl_genba`.`workstrtime`,
-    `tbl_genba`.`workendtime`
+    `tbl_genba`.`workendtime`,
+    `tbl_company`.`companyname` 
  FROM
     `tbl_user`
  LEFT JOIN 
- `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` ';
+ `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
+ LEFT JOIN 
+ `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`';
 
     if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
 
         if ($searchName !== "" && $searchName !== '%%') {
-            $sql_user .= ' WHERE `tbl_user`.`name` LIKE "' . $searchName . '"';
+            $sql_user .= ' WHERE `tbl_user`.`name` LIKE "' . $searchName . '"
+                            ORDER BY `tbl_user`.`companyid`';
         }
         if ($searchGrade !== "" && $searchGrade !== '%%') {
-            $sql_user .= ' WHERE `tbl_user`.`grade` LIKE "' . $searchGrade . '"';
+            $sql_user .= ' WHERE `tbl_user`.`grade` LIKE "' . $searchGrade . '"
+                            ORDER BY `tbl_user`.`companyid`';
         }
     } else {
         if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
@@ -112,7 +128,6 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
 
 // Select data from tbl_genba
 $sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", 0 ) ';
-
 $result_genba = mysqli_query($conn, $sql_genba);
 $genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 

@@ -153,13 +153,27 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					?>
 						<tr>
 							<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-								<td><span><?= $key['companyname'] ?></span></td>
+								<td><span><?= $user['companyname'] ?></span></td>
 							<?php endif; ?>
-							<td>
-								<a href="#">
-									<span class="showModal"><?= $user['uid'] ?></span>
-								</a>
-							</td>
+							<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+								<?php if (constant('MAIN_ADMIN') == $user['type']) { ?>
+									<td>
+										<a href="#">
+											<span class="showModal"><?= $user['uid'] ?></span>
+										</a>
+									</td>
+								<?php } else { ?>
+									<td>
+										<span><?= $user['uid'] ?></span>
+									</td>
+								<?php } ?>
+							<?php else : ?>
+								<td>
+									<a href="#">
+										<span class="showModal"><?= $user['uid'] ?></span>
+									</a>
+								</td>
+							<?php endif; ?>
 							<td><span name="pwd"><?= $user['pwd'] ?></span></td>
 							<td><span name="name"><?= $user['name'] ?></span></td>
 							<td><span name="email"><?= $user['email'] ?></span></td>
@@ -167,8 +181,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<span>
 									<?php foreach ($codebase_list as $key) : ?>
 										<?php
-										if ($key['code'] == $user['dept']) {
-											echo $key['name'];
+										if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+											if ($key['code'] == $user['dept']) {
+												echo $key['name'];
+											}elseif($key['companyid'] == $user['companyid'] && $key['code'] == $user['dept']){
+												echo $key['name'];
+											}
+										} else {
+											if ($key['code'] == $user['dept']) {
+												echo $key['name'];
+											}
 										}
 										?>
 									<?php endforeach; ?>
