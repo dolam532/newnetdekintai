@@ -372,7 +372,8 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         `tbl_company`.`companyname`
     FROM
     `tbl_codetype`
-    LEFT JOIN `tbl_company` ON `tbl_codetype`.`companyid` = `tbl_company`.`companyid`';
+    LEFT JOIN `tbl_company` ON `tbl_codetype`.`companyid` = `tbl_company`.`companyid`
+    ORDER BY `tbl_codetype`.`companyid`';
 } else {
     $sql_codetype_all = 'SELECT * FROM `tbl_codetype`';
     $sql_codetype = 'SELECT * FROM `tbl_codetype` 
@@ -398,7 +399,12 @@ if ($_POST['typecode'] == NULL) {
     $codetype_result = isset($_POST['typecode']) ? $_POST['typecode'] : $codetype_list_a_string;
 
     if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-        $sql_codebase = 'SELECT * FROM `tbl_codebase`';
+        $sql_codebase = 'SELECT 
+        `tbl_codebase`.*,
+        `tbl_company`.`companyname`
+        FROM `tbl_codebase`
+        LEFT JOIN `tbl_company` ON `tbl_codebase`.`companyid` = `tbl_company`.`companyid`
+        ORDER BY `tbl_codebase`.`companyid`';
     } else {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
         WHERE `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
@@ -412,7 +418,8 @@ if ($_POST['typecode'] == NULL) {
         FROM `tbl_codebase`
         LEFT JOIN `tbl_company` ON `tbl_codebase`.`companyid` = `tbl_company`.`companyid`
         WHERE `tbl_codebase`.`companyid` IN ("' . $_POST['companyid'] . '")
-        AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';
+        AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")
+        ORDER BY `tbl_codebase`.`companyid`';
     } else {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
         WHERE `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")

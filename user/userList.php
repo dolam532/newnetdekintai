@@ -40,7 +40,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 <?php include('../inc/menu.php'); ?>
 <div class="container">
 	<?php
-	if (isset($_SESSION['save_success'])) {
+	if (isset($_SESSION['save_success']) && isset($_POST['SaveUserList'])) {
 	?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -70,27 +70,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		</div>
 	<?php
 		unset($_SESSION['delete_success']);
-	}
-	?>
-	<?php
-	if (isset($_SESSION['email_dupplicate_error']) && isset($_POST['UpdateUserList'])) {
-	?>
-		<script>
-			alert("<?php echo $_SESSION['email_dupplicate_error']; ?>");
-		</script>
-	<?php
-		unset($_SESSION['email_dupplicate_error']);
-	}
-	?>
-
-	<?php
-	if (isset($_SESSION['email_dupplicate_error']) && isset($_POST['SaveUserList'])) {
-	?>
-		<script>
-			alert("<?php echo $_SESSION['email_dupplicate_error']; ?>");
-		</script>
-	<?php
-		unset($_SESSION['email_dupplicate_error']);
 	}
 	?>
 	<div class="row">
@@ -142,13 +121,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<table class="table table-bordered datatable">
 			<thead>
 				<tr class="info">
-					<th style="text-align: center; width: 8%;">ID</th>
-					<th style="text-align: center; width: 8%;">PASSWORD</th>
+					<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+						<th style="text-align: center; width: 10%;">会社名</th>
+					<?php endif; ?>
+					<th style="text-align: center; width: 5%;">ID</th>
+					<th style="text-align: center; width: 5%;">PASSWORD</th>
 					<th style="text-align: center; width: 8%;">社員名</th>
-					<th style="text-align: center; width: 15%;">Email</th>
-					<th style="text-align: center; width: 10%;">部署</th>
+					<th style="text-align: center; width: 8%;">Email</th>
+					<th style="text-align: center; width: 8%;">部署</th>
 					<th style="text-align: center; width: 8%;">区分</th>
-					<th style="text-align: center; width: 15%;">勤務時間タイプ</th>
+					<th style="text-align: center; width: 10%;">勤務時間タイプ</th>
 					<th style="text-align: center; width: 10%;">印鑑</th>
 					<th style="text-align: center; width: auto;">備考</th>
 				</tr>
@@ -156,12 +138,23 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			<tbody>
 				<?php if (empty($userlist_list)) { ?>
 					<tr>
-						<td colspan="8" align="center"><?php echo $data_save_no; ?></td>
+						<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+							<td colspan="9" align="center">
+								<?php echo $data_save_no; ?>
+							</td>
+						<?php else : ?>
+							<td colspan="8" align="center">
+								<?php echo $data_save_no; ?>
+							</td>
+						<?php endif; ?>
 					</tr>
 					<?php } elseif (!empty($userlist_list)) {
 					foreach (@$userlist_list as $user) {
 					?>
 						<tr>
+							<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+								<td><span><?= $key['companyname'] ?></span></td>
+							<?php endif; ?>
 							<td>
 								<a href="#">
 									<span class="showModal"><?= $user['uid'] ?></span>
@@ -676,10 +669,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (!empty($userlist_list)) {
 			foreach ($userlist_list as $key) {
 		?>
-				if ('<?php echo $key['email'] ?>' == email) {
+				if ('<?php echo $key['email'] ?>' === email) {
 					alert("<?php echo $email_is_dupplicate; ?>");
 					$("#email").focus();
-					return false;
+					e.preventDefault();
+					return;
 				}
 		<?php
 			}
@@ -723,7 +717,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var pwd = $("#ulpwd").val();
 		var name = $("#ulname").val();
 		var email = $("#ulemail").val();
-		alert(email);
 		var dept = $("#uldept").val();
 		var grade = $("#ulgrade").val();
 		var genba_list = $("#ulgenba_list").val();
@@ -749,10 +742,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (!empty($admin_list)) {
 			foreach ($admin_list as $key) {
 		?>
-				if ('<?php echo $key['email'] ?>' == email) {
+				if ('<?php echo $key['email'] ?>' === email) {
 					alert("<?php echo $email_is_dupplicate; ?>");
 					$("#ulemail").focus();
-					return false;
+					e.preventDefault();
+					return;
 				}
 		<?php
 			}

@@ -6,6 +6,7 @@ $companyId_ = $_SESSION['auth_companyid'];
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_workday = "SELECT workyear,
     `tbl_company`.`companyname` AS companyname,
+    `tbl_workday`.`companyid` AS companyid,
     MAX(CASE WHEN workmonth = '01' THEN workmonth END) AS one_month,
     MAX(CASE WHEN workmonth = '01' THEN workdays END) AS one_monthwd,
     MAX(CASE WHEN workmonth = '02' THEN workmonth END) AS two_month,
@@ -32,8 +33,8 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     MAX(CASE WHEN workmonth = '12' THEN workdays END) AS twelve_monthwd
     FROM `tbl_workday`
     LEFT JOIN `tbl_company` ON `tbl_workday`.`companyid` = `tbl_company`.`companyid`
-    GROUP BY workyear, companyname
-    ORDER BY workyear DESC, one_month ASC";
+    GROUP BY workyear, companyid, companyname
+    ORDER BY companyid ASC, workyear DESC, one_month ASC";
 } else {
     $sql_workday = "SELECT workyear,
     MAX(CASE WHEN workmonth = '01' THEN workmonth END) AS one_month,
@@ -240,10 +241,10 @@ $sql_holiday = 'SELECT * FROM `tbl_holiday`
     WHERE `tbl_holiday`.`holiyear` IN("' . $year . '") ';
 
 // Select database from tbl_userlogin table
-if ($_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
-    $sql_holiday .= 'AND `tbl_holiday`.`companyid` IN("' . $companyId_ . '")  ORDER BY `tbl_holiday`.`holiday`';
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_holiday .= ' ORDER BY `tbl_holiday`.`companyid`, `tbl_holiday`.`holiday`';
 } else {
-    $sql_holiday .= ' ORDER BY `tbl_holiday`.`holiday`';
+    $sql_holiday .= 'AND `tbl_holiday`.`companyid` IN("' . $companyId_ . '")  ORDER BY `tbl_holiday`.`holiday`';
 }
 $result_holiday = mysqli_query($conn, $sql_holiday);
 $holiday_list = mysqli_fetch_all($result_holiday, MYSQLI_ASSOC);
