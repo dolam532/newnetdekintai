@@ -48,10 +48,7 @@ if ($_SESSION['auth'] == false) {
 	}
 
 
-	.print_btn-submit {
-		display: inline-block;
-		padding-top: 30px;
-	}
+	
 
 	.print_btn {
 		display: inline-block;
@@ -104,13 +101,7 @@ if ($_SESSION['auth'] == false) {
 		align-items: flex-end;
 	}
 
-	.top-action-btn-admin {
-		display: flex;
-		justify-content: flex-end;
-		align-items: flex-end;
-		margin-top: -10px;
 
-	}
 
 
 	.top-action-btn {
@@ -157,6 +148,25 @@ if ($_SESSION['auth'] == false) {
 		display: inline-block;
 	}
 
+	/* 2023/11/13 submission-status  add start --> */
+
+	.print_btn-submit {
+		display: inline-block;
+		margin-top: 30px;
+	}
+
+	.top-action-btn-admin {
+		display: flex;
+		justify-content: flex-end;
+		align-items: flex-end;
+		margin-top: -40px;
+	}
+
+	.col-md-12.right {
+		text-align: right;
+		margin-bottom: 5px;
+	}
+
 	.submission-status {
 		margin-left: 20px;
 	}
@@ -173,9 +183,19 @@ if ($_SESSION['auth'] == false) {
 		color: green;
 	}
 
-	.workmonth-submit{
+	.workmonth-submit {
 		box-shadow: 0 0 2px #3498db;
 	}
+
+	.submissionStatus {
+		display: flex;
+		margin-top: -10px;
+		align-content: center;
+		justify-content: center;
+		flex-wrap: nowrap;
+	}
+
+	/* 2023/11/13 submission-status  add end --> */
 </style>
 
 <script>
@@ -206,7 +226,6 @@ if ($_SESSION['auth'] == false) {
 <title>勤 務 表</title>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top: -20px;">
-	<!-- // 2023-10-20----- add start //  -->
 	<?php
 	if (isset($_SESSION['save_success']) && isset($_POST['changeGenid'])) {
 		?>
@@ -218,7 +237,6 @@ if ($_SESSION['auth'] == false) {
 		unset($_SESSION['save_success']);
 	}
 	?>
-	<!-- // 2023-10-20----- add end // 	 -->
 
 	<?php
 	if (isset($_SESSION['save_success']) && isset($_POST['SaveUpdateKintai'])) {
@@ -364,6 +382,21 @@ if ($_SESSION['auth'] == false) {
 		unset($_SESSION['sekininshonin_notkakutei_fail']);
 	}
 	?>
+
+
+<?php
+	if (isset($_SESSION['is_submissed_notchange']) ) {
+		?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['is_submissed_notchange']; ?>
+		</div>
+		<?php
+		unset($_SESSION['is_submissed_notchange']);
+	}
+	?>
+
+
 	<!-- 2023/11/13 submission-status  add end -->
 
 	<div class="row">
@@ -378,7 +411,7 @@ if ($_SESSION['auth'] == false) {
 
 				画面を横向きにすると、コンテンツが正しく表示されます。
 				<br>
-				(どこかをクリックして閉じる)
+				(どこかをクリックすると閉じます)
 			</p>
 		</div>
 		<form method="post">
@@ -414,35 +447,41 @@ if ($_SESSION['auth'] == false) {
 							?>
 						</select>
 					</label>
-					<!-- 2023/11/10 submission-status  add start -->
-					<p class="seldate submission-status">
-						<strong>状態</strong>:
-					<p id="submission-status" name="submission-status" value="<?php echo $submissionStatus ?>">
-						<?php echo $submissionStatusText ?>
-					</p>
-					</p>
 
-					<!-- 2023/11/10 submission-status  add end -->
 				</div>
 			</div>
 		</form>
 	</div>
 	<!-- 2023/11/10 submission-status  add start -->
-	<div class="row"><br/></div>
+	<div class="row"> <br /> </div>
+	<div class="row submissionStatus">
+		<p class="seldate submission-status">
+			<strong>状態</strong>:
+		<p id="submission-status" name="submission-status" value="<?php echo $submissionStatus ?>">
+			<?php echo $submissionStatusText ?>
+		</p>
+		</p>
+
+
+	</div>
+	<br />
 	<div class="row top-action-btn-admin">
-	<div class="col-md-6 right">
-		<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
-		
+		<!-- 2023/11/10 submission-status  change start -->
+		<!-- <div class="col-md-6 right"> -->
+		<div class="col-md-12 right">
+			<!-- 2023/11/10 submission-status  change start -->
+			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
+
 				<div class="print_btn-submit">
 					<form method="post">
-					<a href="../kintaidetail/kintaiUser.php" class="btn btn-default workmonth-submit" style="width: auto;">社員勤務表</a>
+						<a href="../kintaidetail/kintaiUser.php" class="btn btn-default workmonth-submit"
+							style="width: auto;">社員勤務表</a>
 					</form>
-			</div>
-			
-			
+				</div>
+
 				<div class="print_btn-submit">
 					<form method="post">
-						<button type="submit" href="#" name="WorkmonthSekininShonin"
+						<button type="submit" href="#" name="WorkmonthSekininShonin" id="WorkmonthSekininShonin"
 							class="btn btn-default workmonth-submit workmonth-submit-sekininshonin" style="width: auto;"
 							onclick="return confirm('責任者承認済みでよろしいでしょうか？ \n変更がある場合は編集中に戻して、編集してください')">責任者承認</button>
 					</form>
@@ -450,36 +489,42 @@ if ($_SESSION['auth'] == false) {
 
 				<div class="print_btn-submit">
 					<form method="post">
-						<button type="submit" href="#" name="WorkmonthShonin"
+						<button type="submit" href="#" name="WorkmonthShonin" id="WorkmonthShonin"
 							class="btn btn-default workmonth-submit workmonth-submit-shonin" style="width: auto;"
 							onclick="return confirm('承認済みでよろしいでしょうか？ \n変更がある場合は編集中に戻て、編集してください')">承認</button>
 					</form>
 
-			</div>
+				</div>
 				<div class="print_btn-submit">
 					<form method="post">
-						<button type="submit" href="#" name="WorkmonthModoshi"
+						<button type="submit" href="#" name="WorkmonthModoshi" id="WorkmonthModoshi"
 							class="btn btn-default workmonth-submit workmonth-submit-modoshi" style="width: auto;"
 							onclick="return confirm('編集中に戻してよろしいでしょうか？')">戻す</button>
 					</form>
 
-			</div>
-		<?php endif; ?>
-			<div class="print_btn-submit">
-				<form method="post">
-					<button type="submit" href="#" name="WorkmonthKakutei"
-						class="btn btn-default workmonth-submit workmonth-submit-kakutei" style="width: auto;"
-						onclick="return confirm('提出確定してよろしいでしょうか？ \n確定したら編集できません!')">提出</button>
-				</form>
-			</div>
-			</div>
+				</div>
+			<?php endif; ?>
+
+		</div>
 	</div>
 	<!-- 2023/11/10 submission-status  add end -->
 	<div class="row top-action-btn">
-
-		<div class="col-md-6 right">
-
-
+		<!-- 2023/11/10 submission-status  add start -->
+		<!-- 2023/11/10 submission-status  change start -->
+		<!-- <div class="col-md-6 right"> -->
+		<div class="col-md-12 right">
+			<!-- 2023/11/10 submission-status  change end -->
+			<div class="print_btn">
+				<form method="post">
+			<!-- 2023/11/10 submission-status  change start -->
+			<button type="submit" href="#" name="WorkmonthKakutei" id="WorkmonthKakutei"
+						class="btn btn-default workmonth-submit-kakutei" style="width: auto;"
+						onclick="return checkSubmisBefore()">提出</button>  
+					<!-- 2023/11/10 submission-status  change end -->
+				
+				</form>
+			</div>
+			<!-- 2023/11/10 submission-status  add end -->
 			<div class="print_btn">
 				<a href="#" onclick="kinmutypeHandle()" ; class="btn btn-default" style="width: auto;">勤務タイプ選択</a>
 			</div>
@@ -490,11 +535,14 @@ if ($_SESSION['auth'] == false) {
 					<input type="hidden" value="<?= $year ?>" name="year">
 					<input type="hidden" value="<?= $month ?>" name="month">
 					<button name="DeleteAll" class="btn btn-default" style="width: auto;" type="submit"
-						onclick="return confirm('以下のデータを全て削除しますか？')">すべて削除</button>
+						id="DeleteAllBtn" onclick="return confirm('以下のデータを全て削除しますか？')">すべて削除</button>
 				</form>
 			</div>
+
+
 			<div class="print_btn">
-				<a href="#" onclick="autoInputHandle()" class="btn btn-default" style="width: auto;">自動入力</a>
+				<button href="#" onclick="autoInputHandle()" id="AutoRegisterBtn" class="btn btn-default"
+					style="width: auto;">自動入力</button>
 			</div>
 			<div class="print_btn">
 				<button id="submit-button" class="btn btn-default" style="width: auto;" type="button">勤務表印刷</button>
@@ -840,8 +888,8 @@ if ($_SESSION['auth'] == false) {
 							<input type="hidden" value="<?= $delaydayswork_top ?>" name="delaydays_top">
 							<input type="hidden" value="<?= $earlydayswork_top ?>" name="earlydays_top">
 						<?php endif; ?>
-						<input type="submit" name="MonthSaveKintai" class="btn btn-primary" id="btnSaveMonth"
-							role="button" value="月合計登録">
+						<button type="submit" name="MonthSaveKintai" class="btn btn-primary" id="btnSaveMonth"
+							role="button" value="月合計登録">月合計登録</button>
 					</td>
 					<?php
 					if (!empty($workmonth_list)) {
@@ -1037,31 +1085,39 @@ if ($_SESSION['auth'] == false) {
 						|| $key['holydays2'] !== $holydayswork_top || $key['offdays2'] !== $offdayswork_top
 						|| $key['delaydays2'] !== $delaydayswork_top || $key['earlydays2'] !== $earlydayswork_top
 					) {
-						echo '<p style="color: red;">' . $kintai_click_month . '</p>';
+						// 2023/11/10 submission-status  chg start  //
+						// echo '<p style="color: red;" >' . $kintai_click_month . '</p>';
+						echo '<p style="color: red;" id="kintaiWorkMonth-registing">' . $kintai_click_month . '</p>';
+						// 2023/11/10 submission-status  chg end  //
 					}
-					// ---- 2023-10-18------ add start //	
+
 					if ($cnprejob_top === '0') {
 						echo '<p style="color: red;">' . $kintai_reg_workmonth . '</p>';
 					}
-					// ---- 2023-10-18------ add end //	
+
 				} elseif ($decide_template_ == "2") {
+
 					if (
 						$key['jobhour2'] !== $totaldayhh_top || $key['jobminute2'] !== $totaldaymm_top
 						|| $key['jobdays2'] !== $cnprejob_top || $key['workdays2'] !== $cnactjob_top
 						|| $key['holydays2'] !== $holydayswork_top || $key['offdays2'] !== $offdayswork_top
 						|| $key['delaydays2'] !== $delaydayswork_top || $key['earlydays2'] !== $earlydayswork_top
 					) {
-						echo '<p style="color: red;">' . $kintai_click_month . '</p>';
+						// 2023/11/10 submission-status  chg start  //
+						// echo '<p style="color: red;" >' . $kintai_click_month . '</p>';
+						echo '<p style="color: red;" id="kintaiWorkMonth-registing">' . $kintai_click_month . '</p>';
+						// 2023/11/10 submission-status  chg end  //
 					}
-					//---- 2023-10-18------ add start //	
+
 					if ($cnprejob_top === '0') {
 						echo '<p style="color: red;">' . $kintai_reg_workmonth . '</p>';
 					}
-					//---- 2023-10-18------ add end //	
+
 				}
 			}
 		} else {
-			echo '<p style="color: red;">' . $kintai_click_month . '</p>';
+			echo '<p style="color: red;" id="kintaiWorkMonth-registing">' . $kintai_click_month . '</p>';
+
 		}
 		?>
 
@@ -1563,16 +1619,22 @@ if ($_SESSION['auth'] == false) {
 	</div>
 </div>
 <script>
+
+	//kintaiWorkMonth-
+	//2023/11/10 submission-status  add start 
+	SubmisstionStatusNotice = "";
+	//2023/11/10 submission-status  add end
+
 	// Submit for select
 	jQuery(function () {
 		jQuery('.seldate').change(function () {
 			this.form.submit();
 		});
 		//2023/11/10 submission-status  add start 
-
 		SetFormViewBySubmissionStatusHandler();
-
 		//2023/11/10 submission-status  add end 
+
+
 	});
 
 
@@ -1580,16 +1642,16 @@ if ($_SESSION['auth'] == false) {
 	function SetFormViewBySubmissionStatusHandler() {
 		// set Color
 		SetColorToSubmissionStatus();
-
 		// Set Turn On Off Button
-
-
+		setFormInputableWithSubmissionStatus();
 	}
+
 
 	function SetColorToSubmissionStatus() {
 		var submissionStatusText = $('#submission-status').text().trim();
 		if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[0] ?>') {
 			$('#submission-status').removeClass();
+
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[1] ?>') {
 			$('#submission-status').removeClass();
 			$('#submission-status').addClass('submission-status_1');
@@ -1601,10 +1663,70 @@ if ($_SESSION['auth'] == false) {
 			$('#submission-status').addClass('submission-status_3');
 		}
 	}
+
+
+	function setFormInputableWithSubmissionStatus() {
+
+		var submissionStatusText = $('#submission-status').text().trim();
+		//  buttons -> Default On
+		var adminButtons = $("WorkmonthSekininShonin, #WorkmonthShonin, #WorkmonthModoshi ");
+		var userButtons = $("#AutoRegisterBtn , #DeleteAllBtn, #btnSaveMonth , #WorkmonthKakutei ");
+		var modalButons = $("#btnReg , #btnDel ");
+		adminButtons.prop("disabled", false);
+		userButtons.prop("disabled", false);
+		modalButons.prop("disabled", false);
+		SubmisstionStatusNotice = "<?php echo $submised_not_change ?>"
+
+
+		// when match -> off element 
+		if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[0] ?>') {
+			adminButtons.prop("disabled", true);
+			SubmisstionStatusNotice = ""
+
+		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[1] ?>') {
+			userButtons.prop("disabled", true);
+			modalButons.prop("disabled", true);
+
+		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[2] ?>') {
+			userButtons.prop("disabled", true);
+			modalButons.prop("disabled", true);
+			$("#WorkmonthShonin").prop("disabled", true);
+
+		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[3] ?>') {
+			userButtons.prop("disabled", true);
+			modalButons.prop("disabled", true);
+			$("#WorkmonthShonin").prop("disabled", true);
+			$("#WorkmonthSekininShonin").prop("disabled", true);
+
+		}
+
+
+	}
+
+
+	// add check before submiss
+	function checkSubmisBefore() {
+		if ($("#kintaiWorkMonth-registing").length) {
+			alert("<?php echo $is_not_registed_WorkMonth ?>");
+			return false;
+		} else {
+			if (confirm('提出確定してよろしいでしょうか？ \n確定したら編集できません!')) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+
 	//2023/11/10 submission-status  add end 	
 
 	// Funtion for click day of week
 	$(document).on('click', '.showModal', function () {
+
+
+
+
+
 		$('#modal2').modal('toggle');
 		var ArrayData = $(this).text();
 		var SeparateArr = ArrayData.split('/');
@@ -1630,7 +1752,12 @@ if ($_SESSION['auth'] == false) {
 		date_show.val("<?php echo $date_show ?>" + Date_);
 		var date_show = date_show.val();
 		$("#workymd").text($('[name="workymd"]').val(date_show));
-		$("#selkindate").text(date_show);
+		//2023/11/10 submission-status  chg start 
+		//$("#selkindate").text(date_show + SubmisstionStatusNotice);
+		var fullText = date_show + " " + SubmisstionStatusNotice;
+		var redText = "<span style='color: red; font-style: italic;'>" + SubmisstionStatusNotice + "</span>";
+		$("#selkindate").html(fullText.replace(SubmisstionStatusNotice, redText));
+		//2023/11/10 submission-status  chg end 
 		<?php
 		foreach ($datas as $key) {
 			?>

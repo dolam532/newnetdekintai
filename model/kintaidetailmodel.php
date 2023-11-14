@@ -9,6 +9,8 @@ $result_user = mysqli_query($conn, $sql_user);
 $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 
 
+
+
 $uid_g = $_SESSION['auth_uid'];
 $name_g = $_SESSION['auth_name'];
 $dept_g = $_SESSION['auth_dept'];
@@ -60,6 +62,16 @@ $signstamp_admin = mysqli_fetch_all($result_user_admin, MYSQLI_ASSOC);
 $sql_user_kanri = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMINISTRATOR') . '"';
 $result_user_kanri = mysqli_query($conn, $sql_user_kanri);
 $signstamp_kanri = mysqli_fetch_all($result_user_kanri, MYSQLI_ASSOC);
+
+
+if ($_POST['selmm'] == NULL && $_POST['selyy'] == NULL && $_POST['template_table'] == NULL) {
+        $_POST['selmm'] = $_SESSION['selmm'];
+        $_POST['selyy'] = $_SESSION['selyy'];
+        $_POST['template_table'] = $currentTemplate;
+}
+
+$_SESSION['selmm'] = $_POST['selmm'];
+$_SESSION['selyy'] = $_POST['selyy'];
 
 
 $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
@@ -151,6 +163,38 @@ $weekdays = array(
         6 => '土',
         7 => '日'
 );
+
+
+//----- 2023/11/13---- submisstion add start//
+// get current submisstion -> when != 0 no change
+
+$sql_get_currentSubmission_status = 'SELECT `submission_status` FROM tbl_workmonth WHERE `tbl_workmonth`.`uid` 
+IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $current_CompanyId_ . '")  AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+$currentSubmission_status;
+
+$result = $conn->query($sql_get_currentSubmission_status);
+if ($result) {
+        $row = $result->fetch_assoc();
+        if ($row) {
+                $currentSubmission_status = $row['submission_status'];
+        }
+}
+if ($currentSubmission_status == null) {
+        $currentSubmission_status = 0;
+}
+$submissionStatusText = "";
+if ($submissionStatusText == null) {
+        $submissionStatusText = $SUBMISSTION_STATUS[0];
+}
+
+if ($submissionStatus == null) {
+        $submissionStatus = 0;
+}
+$submissionStatusText = isset($SUBMISSTION_STATUS[$currentSubmission_status]) ? $SUBMISSTION_STATUS[$currentSubmission_status] : $SUBMISSTION_STATUS[0];
+// error_log("CURRENT SUBMIS STATUS: " . $currentSubmission_status);
+//----- 2023/11/13---- submisstion add end//
+
+
 
 // Display the dates, months, weekdays, and weekends in Japanese
 for ($day = 1; $day <= $daysInMonth; $day++) {
@@ -310,6 +354,10 @@ if (isset($_POST['changeGenid'])) {
 
 // Save data to tbl_worktime table of database 
 if (isset($_POST['SaveUpdateKintaiUserDetail'])) {
+        if ($currentSubmission_status != 0) {
+                $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
+                return;
+        }
 
         $genid_ = intval($_POST['genid']);
         $holy_decide = mysqli_real_escape_string($conn, $_POST['holy_decide']);
@@ -393,6 +441,13 @@ if (isset($_POST['SaveUpdateKintaiUserDetail'])) {
 
 // Delete data to tbl_worktime table of database
 if (isset($_POST['DeleteKintaiUserDetail'])) {
+
+        if ($currentSubmission_status != 0) {
+                $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
+                return;
+        }
+
+
         $_SESSION['selmm'] = substr($_POST['date_show'], 5, 2);
         $_SESSION['selyy'] = substr($_POST['date_show'], 0, 4);
         $uid = $employee_uid;
@@ -409,6 +464,12 @@ if (isset($_POST['DeleteKintaiUserDetail'])) {
 
 // Save data to tbl_workmonth table of database
 if (isset($_POST['MonthSaveKintaiUserDetail'])) {
+        error_log("Current Status: " . $currentSubmission_status);
+        if ($currentSubmission_status != 0) {
+                $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
+                return;
+        }
+
         $_SESSION['selmm'] = $month;
         $_SESSION['selyy'] = $year;
         $yearmonth = $year . $month;
@@ -451,9 +512,9 @@ if (isset($_POST['MonthSaveKintaiUserDetail'])) {
         $template = $currentTemplate_;
 
         $sql = "INSERT INTO `tbl_workmonth` (`uid`,  `companyid` , `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
-        `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `reg_dt` , `upt_dt`)
+        `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `submission_status` , `reg_dt` , `upt_dt`)
         VALUES ('$uid', '$companyid' , '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
-        '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$template', '$reg_dt' , null)
+        '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$template',  0  ,  '$reg_dt' , null)
         ON DUPLICATE KEY UPDATE
         companyid='$companyid', genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2',
         janhour='$janhour', janminute='$janminute', janhour2='$janhour2', janminute2='$janminute2', jobdays='$jobdays', jobdays2='$jobdays2', workdays='$workdays', workdays2='$workdays2', holydays='$holydays',
@@ -517,6 +578,10 @@ $genba_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
 // 自動入力
 if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
+        if ($currentSubmission_status != 0) {
+                $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
+                return;
+        }
         $_SESSION['selmm'] = $_POST['month'];
         $_SESSION['selyy'] = $_POST["year"];
         $genba_selection_rmodal = $_POST['genba_selection_rmodal'];
@@ -667,11 +732,11 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 }
 
 
-                if($c > 1 && $c <3) {
+                if ($c > 1 && $c < 3) {
                         $offTimeAutohh = $offtimehh;
                         $offTimeAutomm = $offtimemm;
-                        error_log(' autoOFF:' .   $offTimeAutohh ." mm: " .   $offTimeAutomm. "\n");
-                    }
+                        error_log(' autoOFF:' . $offTimeAutohh . " mm: " . $offTimeAutomm . "\n");
+                }
         }
 
         if ($ArraySave = true) {
@@ -682,7 +747,7 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 $jobstartmm = mysqli_real_escape_string($conn, $startmm);
                 $jobendhh = mysqli_real_escape_string($conn, $endhh);
                 $jobendmm = mysqli_real_escape_string($conn, $endmm);
-             
+
                 $workhh = mysqli_real_escape_string($conn, $calculatedHours);
                 $workmm = mysqli_real_escape_string($conn, $calculatedMinutes);
                 $comment = mysqli_real_escape_string($conn, $workcontent_rmodal);
@@ -704,3 +769,91 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 }
         }
 }
+
+
+// 2023/11/10 submission-status  add start 
+
+
+
+// WorkmonthKakutei 
+if (isset($_POST['WorkmonthKakutei'])) {
+        // check is registed workmonth ?
+        $sql_check_workmonth = 'SELECT * FROM tbl_workmonth WHERE `tbl_workmonth`.`uid` 
+    IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $current_CompanyId_ . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+        $result = $conn->query($sql_check_workmonth);
+        if ($result === false) {
+                echo 'Query error: ' . mysqli_error($conn);
+        } else {
+                $rowCount = mysqli_num_rows($result);
+                if ($rowCount <= 0) {
+                        $_SESSION['kakutei_fail'] = $kakutei_fail;
+                        // header("Refresh: 3");
+                        return;
+                }
+        }
+        // check submisstion status
+        if ($currentSubmission_status == 0) {
+                $query_kakutei = 'UPDATE tbl_workmonth SET `submission_status` = 1 , `upt_dt`="' . $upt_dt . ' "  WHERE `tbl_workmonth`.`uid` 
+        IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $current_CompanyId_ . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+
+                if ($conn->query($query_kakutei) === TRUE) {
+                        $_SESSION['kakutei_success'] = $kakutei_success;
+                        header("Refresh: 3");
+                } else {
+                        $_SESSION['kakutei_fail'] = $kakutei_fail;
+                }
+        }
+}
+
+
+if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+        // WorkmonthModoshi
+        if (isset($_POST['WorkmonthModoshi'])) {
+                $query_modoshi = 'UPDATE tbl_workmonth SET `submission_status` = 0 , `upt_dt`="' . $upt_dt . ' "  WHERE `tbl_workmonth`.`uid` 
+            IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $current_CompanyId_ . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+                error_log($query_modoshi);
+                if ($conn->query($query_modoshi) === TRUE) {
+                        $_SESSION['modoshi_success'] = $modoshi_success;
+                        header("Refresh: 2");
+                } else {
+                        echo 'query error: ' . mysqli_error($conn);
+                }
+        }
+        // WorkmonthShonin
+        if (isset($_POST['WorkmonthShonin'])) {
+                if ($currentSubmission_status == 1 || $currentSubmission_status == 2) {
+                        $query_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 2 , `upt_dt`="' . $upt_dt . ' "  WHERE `tbl_workmonth`.`uid` 
+            IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $current_CompanyId_ . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+                        error_log($query_shonin);
+                        if ($conn->query($query_shonin) === TRUE) {
+                                $_SESSION['shonin_success'] = $shonin_success;
+                                header("Refresh: 2");
+                        } else {
+                                echo 'query error: ' . mysqli_error($conn);
+                        }
+                } else {
+                        $_SESSION['shonin_notkakutei_fail'] = $shonin_notkakutei_fail;
+                        header("Refresh: 5");
+                }
+        }
+        // WorkmonthSekininShonin
+        if (isset($_POST['WorkmonthSekininShonin'])) {
+                if ($currentSubmission_status == 1 || $currentSubmission_status == 2 || $currentSubmission_status == 3) {
+                        $query_sekinin_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 3 , `upt_dt`="' . $upt_dt . ' " WHERE `tbl_workmonth`.`uid` 
+            IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $current_CompanyId_ . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+                        error_log($query_sekinin_shonin);
+                        if ($conn->query($query_sekinin_shonin) === TRUE) {
+                                $_SESSION['sekininshonin_success'] = $sekininshonin_success;
+                                header("Refresh: 2");
+                        } else {
+                                echo 'query error: ' . mysqli_error($conn);
+                        }
+                } else {
+                        $_SESSION['sekininshonin_notkakutei_fail'] = $sekininshonin_notkakutei_fail;
+                        header("Refresh: 5");
+                }
+        }
+
+}
+
+// 2023/11/10 submission-status  add end 
