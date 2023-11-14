@@ -94,6 +94,9 @@ $sekininshonin_success = '責任者承認成功しました。変更がある場
 $kakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
 $shonin_notkakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
 $sekininshonin_notkakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
+$submised_not_change = '  *提出した勤務表を編集又は登録不可です。！';
+$is_not_registed_WorkMonth = '  月合計登録まだ登録されてないです。確認してください。！\n 登録されていない場合は提出出来ません';
+$is_submissed_notchange ='勤務表提出しましたので編集出来ません、管理者へ連絡してください。';
 
 // genbaList
 $user_genbaname_empty = '勤務時間タイプを入力してください。';
