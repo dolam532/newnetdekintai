@@ -102,11 +102,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		</div>
 		<div class="col-md-4"></div>
 		<div class="col-md-4 text-right">
-			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-				<div class="title_btn">
-					<input type="button" id="btnNew" value="新規">
-				</div>
-			<?php endif; ?>
+			<div class="title_btn">
+				<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+					<input type="button" id="btnNewCTL" value="新規">
+				<?php endif; ?>
+			</div>
 			<div class="title_btn">
 				<input type="button" onclick="window.location.href='../'" value="トップへ戻る">
 			</div>
@@ -117,48 +117,80 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<table class="table table-bordered datatable">
 			<thead>
 				<tr class="info">
+					<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+						<th style="text-align: center; width: 10%;">会社名</th>
+					<?php endif; ?>
 					<th style="text-align: center; width: 3%;">ID</th>
 					<th style="text-align: center; width: 13%;">勤務時間タイプ</th>
 					<th style="text-align: center; width: 13%;">勤務会社名</th>
-					<th style="text-align: center; width: 13%;">勤務作業期間</th>
-					<th style="text-align: center; width: 10%;">勤務開始時間</th>
-					<th style="text-align: center; width: 10%;">勤務終了時間</th>
+					<th style="text-align: center; width: 8%;">勤務作業期間</th>
+					<th style="text-align: center; width: 8%;">勤務開始時間</th>
+					<th style="text-align: center; width: 8%;">勤務終了時間</th>
 					<th style="text-align: center; width: 5%;">昼休</th>
 					<th style="text-align: center; width: 5%;">夜休</th>
-					<th style="text-align: center; width: 7%;">使用</th>
+					<th style="text-align: center; width: 5%;">使用</th>
 					<th style="text-align: center; width: auto;">備考</th>
 				</tr>
 			</thead>
-
 			<tbody>
 				<?php if (empty($genbadatas_list)) { ?>
 					<tr>
-						<td colspan="10" align="center">
-							<?php echo $data_save_no; ?>
-						</td>
+						<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+							<td colspan="11" align="center">
+								<?php echo $data_save_no; ?>
+							</td>
+						<?php else : ?>
+							<td colspan="10" align="center">
+								<?php echo $data_save_no; ?>
+							</td>
+						<?php endif; ?>
 					</tr>
 					<?php } elseif (!empty($genbadatas_list)) {
 					foreach ($genbadatas_list as $genba) {
 					?>
 						<tr>
+							<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+								<td align="center">
+									<span>
+										<?= $genba['companyname'] ?>
+									</span>
+								</td>
+							<?php endif; ?>
 							<td class="td1">
 								<span>
 									<?= $genba['genid'] ?>
 								</span>
 							</td>
 							<td class="td2">
-								<?php if ($_SESSION['auth_type'] == constant('USER')) : ?>
-									<span>
-										<?= $genba['genbaname'] ?>
-									</span>
-								<?php else : ?>
-									<a href="#">
-										<span class="showModal" id="showModalChange" style="text-decoration-line: underline;" data-genid="<?= $genba['genid'] ?>">
+								<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+									<?php if ($genba['companyid'] == constant('MAIN_COMPANY_ID')) : ?>
+										<span>
 											<?= $genba['genbaname'] ?>
 										</span>
-									</a>
+									<?php else : ?>
+										<a href="#">
+											<span class="showModal" id="showModalChange" style="text-decoration-line: underline;" data-genid="<?= $genba['genid'] ?>">
+												<?= $genba['genbaname'] ?>
+											</span>
+										</a>
+									<?php endif; ?>
+								<?php else : ?>
+									<?php if ($genba['companyid'] == constant('MAIN_COMPANY_ID')) : ?>
+										<?php if ($user['companyid'] == constant('MAIN_COMPANY_ID')) : ?>
+											<a href="#">
+												<span class="showModal" id="showModalChange" style="text-decoration-line: underline;" data-genid="<?= $genba['genid'] ?>">
+													<?= $genba['genbaname'] ?>
+												</span>
+											</a>
+										<?php else : ?>
+											<?= $genba['genbaname'] ?>
+										<?php endif; ?>
+									<?php else : ?>
+										<span>
+											<?= $genba['genbaname'] ?>
+										</span>
+									<?php endif; ?>
 								<?php endif; ?>
-							</td>
 							<td class="td3">
 								<span>
 									<?= $genba['genbacompany'] ?>
@@ -235,7 +267,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<input type="radio" id="use_yn" name="use_yn" value="0">中止
 								</div>
 								<br />
-
 							</div>
 						</div>
 						<br>
@@ -412,7 +443,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	// Click (modify) employee ID in the grid: popup & display contents
 	$(document).on('click', '.showModal', function() {
 		// check when user admin 
-
 		$(".admin-action").removeClass("admin-action-hidden");
 		var genid = $(this).attr('data-genid');
 		<?php if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) : ?>

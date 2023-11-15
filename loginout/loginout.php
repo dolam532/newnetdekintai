@@ -60,8 +60,8 @@ include('../model/loginoutmodel.php');
         <?php if (isset($_SESSION['auth'])) : ?>
             <title>ログアウト</title>
             <div class="form-label-group">
-                <input id="uid" name="uid" placeholder="User ID" class="form-control" type="text" value="<?= $_SESSION['auth_uid'] ?>">
-                <label for="uid" class="sr-only">User ID</label>
+                <input id="email" name="email" placeholder="User Email" class="form-control" type="text" value="<?= $_SESSION['auth_email'] ?>">
+                <label for="email" class="sr-only">User Email</label>
             </div>
             <br>
             <div class="form-label-group" id="divpwd">
@@ -73,8 +73,8 @@ include('../model/loginoutmodel.php');
         <?php else : ?>
             <title>ログイン</title>
             <div class="form-label-group">
-                <input id="uid" name="uid" placeholder="User ID" class="form-control" type="text" value="<?= $_POST['uid'] ?>">
-                <label for="uid" class="sr-only">User ID</label>
+                <input id="email" name="email" placeholder="User Email" class="form-control" type="text" value="<?= $_POST['email'] ?>">
+                <label for="email" class="sr-only">User Email</label>
             </div>
             <br>
             <div class="form-label-group" id="divpwd">
@@ -91,15 +91,15 @@ include('../model/loginoutmodel.php');
 <script>
     // Login button handling
     $(document).on('click', '#btnLogin', function(e) {
-    var uid = $("#uid").val();
+    var email = $("#email").val();
     var pwd = $("#pwd").val();
     var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     var passwordRegex = /^[A-Za-z0-9]+$/; // 半角英数字のみを許可
 
-    if (uid == "") {
+    if (email == "") {
         alert("メールアドレスを入力してください。");
         e.preventDefault();
-        $("#uid").focus();
+        $("#email").focus();
         return false;
     }
 
@@ -110,10 +110,10 @@ include('../model/loginoutmodel.php');
         return false;
     }
 
-    if (!emailRegex.test(uid)) {
+    if (!emailRegex.test(email)) {
         alert("正しいメールアドレスを入力してください。");
         e.preventDefault();
-        $("#uid").focus();
+        $("#email").focus();
         return false;
     }
 

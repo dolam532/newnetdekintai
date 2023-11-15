@@ -241,14 +241,20 @@ if ($_SESSION['auth'] == false) {
                                         <?php endif; ?>
                                     <?php else : ?>
                                         <?php if ($key['companyid'] == constant('MAIN_COMPANY_ID')) : ?>
-                                            <a href="#">
-                                                <span class="showModal">
-                                                    <span class="codemasterList_class">
-                                                        <?= $key['id'] . ',' ?>
-                                                    </span>
+                                            <?php if ($_SESSION['auth_type'] == constant('USER')) : ?>
+                                                <span>
                                                     <?= $key['name'] ?>
                                                 </span>
-                                            </a>
+                                            <?php else : ?>
+                                                <a href="#">
+                                                    <span class="showModal">
+                                                        <span class="codemasterList_class">
+                                                            <?= $key['id'] . ',' ?>
+                                                        </span>
+                                                        <?= $key['name'] ?>
+                                                    </span>
+                                                </a>
+                                            <?php endif; ?>
                                         <?php else : ?>
                                             <span>
                                                 <?= $key['name'] ?>

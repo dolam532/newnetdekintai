@@ -428,7 +428,11 @@ if ($_POST['typecode'] == NULL) {
 }
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
-$codes = array_column($codebase_list, 'code');
+
+$sql_codebase_all = 'SELECT * FROM `tbl_codebase`';
+$result_codebase_all = mysqli_query($conn, $sql_codebase_all);
+$codebase_list_all = mysqli_fetch_all($result_codebase_all, MYSQLI_ASSOC);
+$codes = array_column($codebase_list_all, 'code');
 
 // Save Data to tbl_codebase DB 
 if (isset($_POST['btnRegCML'])) {

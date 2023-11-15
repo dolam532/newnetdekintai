@@ -69,8 +69,6 @@ if ($_SESSION['auth'] == false) {
 </div>
 
 <script>
-
-    
 	window.onload = function() {
 		setTimeout(hideLoadingOverlay, 500);
 		startLoading();

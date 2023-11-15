@@ -13,55 +13,73 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
 } else {
     $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
     WHERE `tbl_codebase`.`typecode` = "' . constant('DEPARTMENT') . '"
-    AND `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+    AND `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '", "' . constant('MAIN_COMPANY_ID') . '" )
     GROUP BY `code`, `name`';
 }
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+if ( $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
     `tbl_genba`.`workstrtime`,
-    `tbl_genba`.`workendtime`
+    `tbl_genba`.`workendtime`,
+    `tbl_codebase`.`name` AS code_name,
+    `tbl_company`.`companyname`
 FROM
     `tbl_user`
 LEFT JOIN 
-    `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
-WHERE
-    `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")'; // don't select Main ADMIN
-
-    if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-        $sql_user_select_db = 'SELECT DISTINCT
+    `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
+LEFT JOIN 
+    `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`
+LEFT JOIN 
+    `tbl_codebase` ON `tbl_user`.`dept` = `tbl_codebase`.`code`
+ORDER BY
+    `tbl_user`.`companyid`';
+}elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
     `tbl_genba`.`workstrtime`,
     `tbl_genba`.`workendtime`,
-    `tbl_company`.`companyname` 
+    `tbl_codebase`.`name` AS code_name,
+    `tbl_company`.`companyname`
 FROM
     `tbl_user`
 LEFT JOIN 
-    `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
+    `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`
 LEFT JOIN 
-    `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
-ORDER BY `tbl_user`.`companyid`';
-    }
+    `tbl_codebase` ON `tbl_user`.`dept` = `tbl_codebase`.`code`
+LEFT JOIN 
+    `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid` 
+WHERE
+    `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
+ORDER BY
+    `tbl_user`.`companyid`';
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
     `tbl_genba`.`workstrtime`,
-    `tbl_genba`.`workendtime`
+    `tbl_genba`.`workendtime`,
+    `tbl_codebase`.`name` AS code_name,
+    `tbl_company`.`companyname`
 FROM
     `tbl_user`
 LEFT JOIN 
-    `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid` 
+    `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`
+LEFT JOIN 
+    `tbl_codebase` ON `tbl_user`.`dept` = `tbl_codebase`.`code`
+LEFT JOIN 
+    `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid` 
 WHERE
-    `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"
-    AND `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-    AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")'; // don't select Main ADMIN
+    `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+    AND `tbl_user`.`type` IN("' . constant('USER') . '")
+    AND `tbl_user`.`uid` IN("' . $_SESSION['auth_uid'] . '")
+ORDER BY
+    `tbl_user`.`companyid`';
 }
 
 $sql_user_select = mysqli_query($conn, $sql_user_select_db);
@@ -127,7 +145,7 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
 }
 
 // Select data from tbl_genba
-$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", 0 ) ';
+$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", "' . constant('MAIN_COMPANY_ID') . '" )';
 $result_genba = mysqli_query($conn, $sql_genba);
 $genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
@@ -277,9 +295,8 @@ if (isset($_POST['UpdateUserList'])) {
         }
 
         $sql = "UPDATE tbl_user SET  
-        companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName'
-        , type='$type', email='$email',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd'
-        , outymd='$outymd', genstrymd='$genstrymd', genendymd='$genendymd', upt_dt='$upt_dt' WHERE uid ='$uid'";
+        companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName', type='$type', email='$email',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd',
+        outymd='$outymd', genstrymd='$genstrymd', genendymd='$genendymd', upt_dt='$upt_dt' WHERE uid ='$uid'";
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['update_success'] = $update_success;
@@ -391,23 +408,24 @@ function generateRandomString($length)
 
 // (genbaList.php)
 // Select data from tbl_genba
-$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", 0 ) ORDER BY `tbl_genba`.`genid`';
-$companyid = $_SESSION['auth_companyid'];
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-
-    if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-        $sql_genba = 'SELECT * FROM `tbl_genba` ;';
-    }
-    $result_genba = mysqli_query($conn, $sql_genba);
-    $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
-} elseif ($_SESSION['auth_type'] == constant('USER')) {
-
-    $result_genba = mysqli_query($conn, $sql_genba);
-    $genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
+$companyid_ = $_SESSION['auth_companyid'];
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_genba = 'SELECT 
+    `tbl_genba`.*,
+    `tbl_company`.`companyname`
+    FROM `tbl_genba`
+    LEFT JOIN `tbl_company` ON `tbl_genba`.`companyid` = `tbl_company`.`companyid`
+    ORDER BY `tbl_genba`.`companyid`, `tbl_genba`.`genid`';
+} else {
+    $sql_genba = 'SELECT * FROM `tbl_genba`
+    WHERE `companyid` IN ("' . constant('MAIN_COMPANY_ID') . '", "' . $_SESSION['auth_companyid'] . '") 
+    ORDER BY `tbl_genba`.`genid`';
 }
+$result_genba = mysqli_query($conn, $sql_genba);
+$genbadatas_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
 //get current template
-$sql_current_template = "SELECT `template` FROM `tbl_company` WHERE `companyid` = $companyid LIMIT 1";
+$sql_current_template = "SELECT `template` FROM `tbl_company` WHERE `companyid` = $companyid_ LIMIT 1";
 $currentTemplate = '';
 
 $result = $conn->query($sql_current_template);
@@ -428,7 +446,7 @@ if (isset($_POST['SaveKinmu'])) {
         return;
     }
 
-    $companyid = $_SESSION['auth_companyid'];
+    $companyid_i = $_SESSION['auth_companyid'];
     $genbaname = mysqli_real_escape_string($conn, $_POST['genbaname']);
     $genbacompany = mysqli_real_escape_string($conn, $_POST['genbacompany']);
     $strymd = mysqli_real_escape_string($conn, $_POST['strymd']);
@@ -443,7 +461,7 @@ if (isset($_POST['SaveKinmu'])) {
     $uid = $_SESSION['auth_uid'];
 
     $sql_genba_insert = mysqli_query($conn, "INSERT INTO `tbl_genba` (`genbaname`, `genbacompany`, `companyid`, `strymd`, `endymd`, `use_yn`, `workstrtime`, `workendtime`,  `offtime1`, `offtime2`, `bigo`,  `template` , `uid` ,   `reg_dt` , `upt_dt`)
-                VALUES ('$genbaname', '$genbacompany', '$companyid', '$strymd', '$endymd', '$use_yn', '$workstrtime', '$workendtime', '$offtime1', '$offtime2', '$bigo',  '$template' , '$uid'  ,'$reg_dt' , null)");
+                VALUES ('$genbaname', '$genbacompany', '$companyid_i', '$strymd', '$endymd', '$use_yn', '$workstrtime', '$workendtime', '$offtime1', '$offtime2', '$bigo',  '$template' , '$uid'  ,'$reg_dt' , null)");
 
     if ($sql_genba_insert) {
         $_SESSION['save_success'] = $save_success;
