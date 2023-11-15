@@ -225,18 +225,36 @@ if ($_SESSION['auth'] == false) {
                                 </td>
                                 <td>
                                     <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-                                        <a href="#">
-                                            <span class="showModal">
-                                                <span class="codemasterList_class">
-                                                    <?= $key['id'] . ',' ?>
-                                                </span>
+                                        <?php if ($key['companyid'] == constant('MAIN_COMPANY_ID')) : ?>
+                                            <span>
                                                 <?= $key['name'] ?>
                                             </span>
-                                        </a>
+                                        <?php else : ?>
+                                            <a href="#">
+                                                <span class="showModal">
+                                                    <span class="codemasterList_class">
+                                                        <?= $key['id'] . ',' ?>
+                                                    </span>
+                                                    <?= $key['name'] ?>
+                                                </span>
+                                            </a>
+                                        <?php endif; ?>
                                     <?php else : ?>
-                                        <?= $key['name'] ?>
+                                        <?php if ($key['companyid'] == constant('MAIN_COMPANY_ID')) : ?>
+                                            <a href="#">
+                                                <span class="showModal">
+                                                    <span class="codemasterList_class">
+                                                        <?= $key['id'] . ',' ?>
+                                                    </span>
+                                                    <?= $key['name'] ?>
+                                                </span>
+                                            </a>
+                                        <?php else : ?>
+                                            <span>
+                                                <?= $key['name'] ?>
+                                            </span>
+                                        <?php endif; ?>
                                     <?php endif; ?>
-
                                 </td>
                                 <td>
                                     <span>
@@ -257,7 +275,7 @@ if ($_SESSION['auth'] == false) {
         <div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false" style="display: none;">
             <div class="modal-dialog">
                 <form method="post">
-                    <input type="hidden" name="typecode" value="<?= $_POST['typecode'] ?>">
+                    <input type="hidden" name="typecode" id="typecode" value="<?= $_POST['typecode'] ?>">
                     <div class="modal-content">
                         <div class="modal-header">
                             基礎コード登録(<span id="sname">New</span>)
@@ -413,6 +431,7 @@ if ($_SESSION['auth'] == false) {
     $(document).on('click', '#btnRegCML', function(e) {
         var Code = $("#code").val();
         var Name = $("#name").val();
+        var typecode_ = <?php echo json_encode($_POST['typecode']); ?>;
 
         if (Code == "") {
             alert("<?php echo $content_cmlC_empty; ?>");
@@ -439,6 +458,16 @@ if ($_SESSION['auth'] == false) {
             if (code === Code) {
                 alert("<?php echo $content_cmlC_duplicate; ?>");
                 $("#code").focus();
+                return false;
+            }
+        }
+
+        // check duplicate typecode 
+        var typecodes = <?php echo json_encode($typecodes_all); ?>;
+        for (var typecode of typecodes) {
+            if (typecode === typecode_) {
+                alert("<?php echo $content_cmlC_own_company; ?>");
+                $("#typecode").focus();
                 return false;
             }
         }

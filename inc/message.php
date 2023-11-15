@@ -177,11 +177,12 @@ $manage_dept_empty = '部署を入力してください。';
 $manage_companyid_empty = '会社名を選択してください。';
 
 // codemasterList
-$content_choice_empty = '部署または休暇種類のTypeをどちらか選んでください。';
+$content_choice_empty = '部署または休暇種類のType Nameをどちらか選んでください。';
 $content_cmlC_empty = 'Codeを入力してください。';
 $content_cmlC_no = 'Codeをを番号で入力してください。';
 $content_cmlN_empty = '名を入力してください。';
 $content_cmlC_duplicate = 'コードが既存しましたので登録出来ませんでした。';
+$content_cmlC_own_company = '自分のType Nameを選択してください。';
 
 // codetypeList
 $content_ctlC_empty = 'Type Codeを入力してください。';

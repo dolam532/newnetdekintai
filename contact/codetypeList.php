@@ -136,18 +136,35 @@ if ($_SESSION['auth'] == false) {
                                 </td>
                                 <td>
                                     <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-                                        <a href="#">
-                                            <span class="showModal">
-                                                <span class="codetypeList_class">
-                                                    <?= $key['typecode'] . ',' ?>
-                                                </span>
+                                        <?php if ($key['companyid'] == constant('MAIN_COMPANY_ID')) : ?>
+                                            <span>
                                                 <?= $key['typename'] ?>
                                             </span>
-                                        </a>
+                                        <?php else : ?>
+                                            <a href="#">
+                                                <span class="showModal">
+                                                    <span class="codetypeList_class">
+                                                        <?= $key['typecode'] . ',' ?>
+                                                    </span>
+                                                    <?= $key['typename'] ?>
+                                                </span>
+                                            </a>
+                                        <?php endif; ?>
                                     <?php else : ?>
-                                        <span>
-                                            <?= $key['typename'] ?>
-                                        </span>
+                                        <?php if ($key['companyid'] == constant('MAIN_COMPANY_ID')) : ?>
+                                            <a href="#">
+                                                <span class="showModal">
+                                                    <span class="codetypeList_class">
+                                                        <?= $key['typecode'] . ',' ?>
+                                                    </span>
+                                                    <?= $key['typename'] ?>
+                                                </span>
+                                            </a>
+                                        <?php else : ?>
+                                            <span>
+                                                <?= $key['typename'] ?>
+                                            </span>
+                                        <?php endif; ?>
                                     <?php endif; ?>
                                 </td>
                                 <td>

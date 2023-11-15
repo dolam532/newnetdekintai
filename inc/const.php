@@ -8,6 +8,7 @@ DEFINE('DB_NAME', 'newndk');
 
 // Loginout Admin, User, ADMINISTRATOR
 DEFINE('MAIN_ADMIN', '9');
+DEFINE('MAIN_COMPANY_ID', '0');
 DEFINE('ADMIN', '6');
 DEFINE('USER', '1');
 DEFINE('ADMINISTRATOR', '3');
@@ -18,7 +19,7 @@ DEFINE('URL_NAME', 'http://new.netdekintai.com/index.php');
 DEFINE('USE_NO', '0');
 DEFINE('USE_YES', '1');
 
-// CODE TYPE
+// MAIN_ADMIN CODE TYPE
 DEFINE('DEPARTMENT', '01');
 DEFINE('VACATION_TYPE', '02');
 

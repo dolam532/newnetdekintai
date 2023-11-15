@@ -156,17 +156,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<td><span><?= $user['companyname'] ?></span></td>
 							<?php endif; ?>
 							<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-								<?php if (constant('MAIN_ADMIN') == $user['type']) { ?>
-									<td>
-										<a href="#">
-											<span class="showModal"><?= $user['uid'] ?></span>
-										</a>
-									</td>
-								<?php } else { ?>
-									<td>
-										<span><?= $user['uid'] ?></span>
-									</td>
-								<?php } ?>
+								<td>
+									<span><?= $user['uid'] ?></span>
+								</td>
 							<?php else : ?>
 								<td>
 									<a href="#">
@@ -182,13 +174,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<?php foreach ($codebase_list as $key) : ?>
 										<?php
 										if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-											if ($key['code'] == $user['dept']) {
-												echo $key['name'];
-											}elseif($key['companyid'] == $user['companyid'] && $key['code'] == $user['dept']){
-												echo $key['name'];
-											}
-										} else {
-											if ($key['code'] == $user['dept']) {
+											if (($key['code'] == $user['dept']) && ($key['companyid'] == $user['companyid'])) {
 												echo $key['name'];
 											}
 										}

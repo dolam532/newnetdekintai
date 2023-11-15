@@ -363,6 +363,7 @@ if (isset($_POST['btnDelNL'])) {
 
 // codemasterList.php
 // Select database from tbl_codetype table
+$typecodes_all;
 $sql_codetype = 'SELECT * FROM `tbl_codetype`';
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_codetype = 'SELECT 
@@ -373,9 +374,10 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     LEFT JOIN `tbl_company` ON `tbl_codetype`.`companyid` = `tbl_company`.`companyid`
     ORDER BY `tbl_codetype`.`companyid`';
 } else {
-    $sql_codetype_all = 'SELECT * FROM `tbl_codetype`';
+    $sql_codetype_all = 'SELECT * FROM `tbl_codetype`
+    WHERE `tbl_codetype`.`companyid` IN ("' . constant('MAIN_COMPANY_ID') . '")';
     $sql_codetype = 'SELECT * FROM `tbl_codetype` 
-        WHERE `tbl_codetype`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
+    WHERE `tbl_codetype`.`companyid` IN ("' . constant('MAIN_COMPANY_ID') . '", "' . $_SESSION['auth_companyid'] . '")';
     $result_codetype_all = mysqli_query($conn, $sql_codetype_all);
     $codetype_list_all = mysqli_fetch_all($result_codetype_all, MYSQLI_ASSOC);
     $typecodes_all = array_column($codetype_list_all, 'typecode');
@@ -405,7 +407,7 @@ if ($_POST['typecode'] == NULL) {
         ORDER BY `tbl_codebase`.`companyid`';
     } else {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+        WHERE `tbl_codebase`.`companyid` IN ("' . constant('MAIN_COMPANY_ID') . '", "' . $_SESSION['auth_companyid'] . '")
         AND `tbl_codebase`.`typecode` IN ("' . $codetype_result . '")';
     }
 } elseif (isset($_POST['typecode'])) {
@@ -420,16 +422,13 @@ if ($_POST['typecode'] == NULL) {
         ORDER BY `tbl_codebase`.`companyid`';
     } else {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")
+        WHERE `tbl_codebase`.`companyid` IN ("' . constant('MAIN_COMPANY_ID') . '", "' . $_SESSION['auth_companyid'] . '")
         AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';
     }
 }
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
-$sql_codebase_all = 'SELECT * FROM `tbl_codebase`';
-$result_codebase_all = mysqli_query($conn, $sql_codebase_all);
-$codebase_list_all = mysqli_fetch_all($result_codebase_all, MYSQLI_ASSOC);
-$codes = array_column($codebase_list_all, 'code');
+$codes = array_column($codebase_list, 'code');
 
 // Save Data to tbl_codebase DB 
 if (isset($_POST['btnRegCML'])) {
