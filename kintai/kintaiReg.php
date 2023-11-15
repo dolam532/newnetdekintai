@@ -189,10 +189,20 @@ if ($_SESSION['auth'] == false) {
 
 	.submissionStatus {
 		display: flex;
-		margin-top: -10px;
 		align-content: center;
 		justify-content: center;
 		flex-wrap: nowrap;
+	}
+	.submissionStatusNotice {
+		display: flex;
+		margin-top: -10px;
+		margin-right: 5px;
+		justify-content: flex-end;
+		flex-wrap: nowrap;
+		
+	}
+	.submissionNoticeElem {
+		background: rgba(0, 255, 0, 0.1);
 	}
 
 	/* 2023/11/13 submission-status  add end --> */
@@ -461,9 +471,14 @@ if ($_SESSION['auth'] == false) {
 			<?php echo $submissionStatusText ?>
 		</p>
 		</p>
-
+		
 
 	</div>
+	<?php if ($submissionStatusText !==  $SUBMISSTION_STATUS[0]): ?>
+	<div class="row submissionStatusNotice">
+		<p class="submissionNoticeElem" style=' font-style: italic; font-size: smaller;'>*<?php echo $kakutei_success?></p>
+	</div>
+	<?php endif; ?>
 	<br />
 	<div class="row top-action-btn-admin">
 		<!-- 2023/11/10 submission-status  change start -->
@@ -503,6 +518,10 @@ if ($_SESSION['auth'] == false) {
 					</form>
 
 				</div>
+
+				<?php else : ?>
+				<br/>
+
 			<?php endif; ?>
 
 		</div>
@@ -1138,6 +1157,7 @@ if ($_SESSION['auth'] == false) {
 	<input type="hidden" name="date_show" value="<?php echo htmlspecialchars(json_encode($date_show)); ?>">
 	<input type="hidden" name="companyName" value="<?php echo htmlspecialchars(json_encode($companyName_)); ?>">
 	<input type="hidden" name="template" value="<?php echo htmlspecialchars(json_encode($decide_template_)); ?>">
+	<input type="hidden" name="submission_status" value="<?php echo htmlspecialchars(json_encode($currentSubmission_status)); ?>">
 	<!-- top   earlydayswork_top -->
 	<input type="hidden" name="totalworkhh_top" value="<?php echo htmlspecialchars(json_encode($totalworkhh_top)); ?>">
 	<input type="hidden" name="totalworkmm_top" value="<?php echo htmlspecialchars(json_encode($totalworkmm_top)); ?>">
@@ -1669,7 +1689,7 @@ if ($_SESSION['auth'] == false) {
 
 		var submissionStatusText = $('#submission-status').text().trim();
 		//  buttons -> Default On
-		var adminButtons = $("WorkmonthSekininShonin, #WorkmonthShonin, #WorkmonthModoshi ");
+		var adminButtons = $("#WorkmonthSekininShonin, #WorkmonthShonin, #WorkmonthModoshi ");
 		var userButtons = $("#AutoRegisterBtn , #DeleteAllBtn, #btnSaveMonth , #WorkmonthKakutei ");
 		var modalButons = $("#btnReg , #btnDel ");
 		adminButtons.prop("disabled", false);
