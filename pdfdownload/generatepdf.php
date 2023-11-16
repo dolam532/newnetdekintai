@@ -9,8 +9,11 @@ $tcpdf->SetLeftMargin(10); // Set the left margin to 0
 $tcpdf->AddPage();
 
 // Image file path
+
 $signstamp_admin = json_decode($_POST['signstamp_admin'], true);
 $signstamp_kanri = json_decode($_POST['signstamp_kanri'], true);
+
+
 $signstamp_user = json_decode($_POST['signstamp_user'], true);
 // var_dump($signstamp_kanri);
 
@@ -24,6 +27,12 @@ $x_user = 56;
 $y_user = 29;
 $x_StampMark = 60;
 $y_StampMark = 33;
+
+$x_name = 20;
+$y_name = 33;
+
+$x_dept = 20;
+$y_dept = 26;
 
 
 $x_admin = 105;
@@ -55,9 +64,7 @@ $companyName = json_decode($_POST['companyName'], true);
 $submission_status = json_decode($_POST['submission_status'], true);
 
 //set output file name
-$fileOutputName = $name.'_'. substr($date_show, 0, 4) .  substr($date_show, 5, 2).'_勤務表'.'_.pdf';
-
-
+$fileOutputName = str_replace(' ', '', $name).'_'. substr($date_show, 0, 4) .  substr($date_show, 5, 2).'_勤務表'.'_.pdf';
 
 
 
@@ -94,39 +101,35 @@ $tcpdf->SetFont("kozgopromedium", "U", 18); // Set the font, style, and size for
 $tcpdf->writeHTMLCell(0, 8, '', '', '<span style="' . $style_bold . '">' . substr($date_show, 0, 4) . '年' . substr($date_show, 5, 2) . '月 勤務表' . '</span>', 0, 1, false, true, 'C');
 
 
+
+$blankInName = str_repeat(' ', 45);
 // Text in the top left corner
 $tcpdf->SetFont("kozgopromedium", "B", 12); // Set the font and style for the text
 $tcpdf->SetXY(10, 18); // Set the X and Y position for the text
 $tcpdf->Cell(0, 7, $companyName.' 御中', 0, 1, 'L'); // Output the text aligned to the left
 $tcpdf->SetFont("kozgopromedium", "U", 10);
-$tcpdf->Cell(0, 7, '所属：' . $dept . '', 0, 1, 'L'); // Output the text aligned to the left
+$tcpdf->Cell(0, 7, '所属：' . $blankInName. '', 0, 1, 'L'); // Output the text aligned to the left
 
 $textInMark = '(印)';
-$blankInName = '';
-
-$showName = $name;
-$maxHalfNameLength = 15; 
 $showName = mb_convert_kana($name, 'R', 'UTF-8');
-$nameWidth = mb_strwidth($showName , 'UTF-8'); 
-$plusAfterChangeFullWith = 0;
-
-if( $nameWidth > mb_strwidth($name)) {
-	$plusAfterChangeFullWith = 2;
-} else {
-
-}
-
-$maxNameLength = $maxHalfNameLength;
-$extraSpaces = $maxNameLength -  mb_strwidth($showName, 'UTF-8') + $plusAfterChangeFullWith; 
-
-$blankInName = str_repeat('　', $extraSpaces);
 
 
-$tcpdf->Cell(0, 7, '氏名：' . $showName , 0, 0.3, 'L');
+
+
+
+
+$tcpdf->Cell(0, 7, '氏名：' . $blankInName , 0, 0.3, 'L');
 $tcpdf->SetFont("kozgopromedium", "", 10);
 
+
+//dept $dept 
+$tcpdf->writeHTMLCell($w, $h, $x_dept, $y_dept, $dept, $border, $ln, 0, true, $align);
+// name 
+$tcpdf->writeHTMLCell($w, $h, $x_name, $y_name, $showName, $border, $ln, 0, true, $align);
+// (印)
 $tcpdf->writeHTMLCell($w, $h, $x_StampMark, $y_StampMark, $textInMark, $border, $ln, 0, true, $align);
 if($submission_status > 0) {
+// 印鑑
 $tcpdf->writeHTMLCell($w, $h, $x_user, $y_user, $signstamp_user_, $border, $ln, 0, true, $align);
 }
 
@@ -154,10 +157,10 @@ $signstamp_admin_show = '';
 $signstamp_kanri_show = '';
 
 if($submission_status > 1) {
-	$signstamp_admin_show = $signstamp_admin_ ;
+	$signstamp_kanri_show = $signstamp_kanri_ ;
 } 
 if($submission_status > 2) {
-	$signstamp_kanri_show = $signstamp_kanri_ ;
+	$signstamp_admin_show = $signstamp_admin_ ;
 } 
 
 $tcpdf->writeHTMLCell($w, $h, $x_admin, $y_admin, $signstamp_admin_show, $border, $ln, 0, true, 'C');

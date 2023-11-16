@@ -821,7 +821,7 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
         }
         // WorkmonthShonin
         if (isset($_POST['WorkmonthShonin'])) {
-                if ($currentSubmission_status == 1 || $currentSubmission_status == 2) {
+                if ($currentSubmission_status == 1 || $currentSubmission_status == 2 || $currentSubmission_status == 3) {
                         $query_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 2 , `upt_dt`="' . $upt_dt . ' "  WHERE `tbl_workmonth`.`uid` 
             IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $current_CompanyId_ . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
                         error_log($query_shonin);

@@ -97,6 +97,9 @@ $sekininshonin_notkakutei_fail = '月勤務表がまだ提出されていない�
 $submised_not_change = '  *提出した勤務表を編集又は登録不可です。！';
 $is_not_registed_WorkMonth = '  月合計登録まだ登録されてないです。確認してください。！\n 登録されていない場合は提出出来ません';
 $is_submissed_notchange ='勤務表提出しましたので編集出来ません、管理者へ連絡してください。';
+$Shonin_KanriSha_Undefine = '選択した管理者はエラー発生したました。システム管理者へご連絡ください';
+$Shonin_SekininSha_Undefine = '選択した責任者はエラー発生したました。システム管理者へご連絡ください';
+$is_admin_changed_saveWaiting = '責任者、管理者の変更があります、「承認」ボタン押すと保存します。';
 
 // genbaList
 $user_genbaname_empty = '勤務時間タイプを入力してください。';
