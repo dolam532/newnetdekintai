@@ -1761,13 +1761,10 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[2] ?>') {
 			userButtons.prop("disabled", true);
 			modalButons.prop("disabled", true);
-			$("#WorkmonthShonin").prop("disabled", true);
 
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[3] ?>') {
 			userButtons.prop("disabled", true);
 			modalButons.prop("disabled", true);
-			$("#WorkmonthShonin").prop("disabled", true);
-			$("#WorkmonthSekininShonin").prop("disabled", true);
 
 		}
 

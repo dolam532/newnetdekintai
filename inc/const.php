@@ -62,7 +62,7 @@ $MIN_LENGTH_ID_EMAIL_USER = 3;
 $SUBMISSTION_STATUS = array(
     0 => '編集中',
     1 => '提出済み',
-    2 => '承認済み',
+    2 => '担当者承認済み',
     3 => '責任者承認済み',
 );
 
