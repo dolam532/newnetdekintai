@@ -8,9 +8,9 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         `tbl_notice`.*
         FROM
         `tbl_notice`
-        JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+        JOIN `tbl_user` ON `tbl_notice`.`email` = `tbl_user`.`email`
         WHERE
-        `tbl_notice`.`uid` = `tbl_user`.`uid`
+        `tbl_notice`.`email` = `tbl_user`.`email`
         ORDER BY
         `tbl_notice`.`bid`';
 }
