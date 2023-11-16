@@ -19,7 +19,7 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
-if ( $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
@@ -37,7 +37,7 @@ LEFT JOIN
     `tbl_codebase` ON `tbl_user`.`dept` = `tbl_codebase`.`code`
 ORDER BY
     `tbl_user`.`companyid`';
-}elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+} elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_genba`.`genbaname`,
@@ -546,15 +546,24 @@ if (isset($_POST['DeleteKinmu'])) {
 
 // genbaUserList.php
 // Select data from tbl_user
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_user_g = 'SELECT
+        `tbl_user`.*,
+        `tbl_genba`.`genbaname`,
+        `tbl_company`.`companyname`
+    FROM
+    `tbl_user`
+    LEFT JOIN `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`
+    LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
+    ORDER BY `tbl_user`.`companyid`';
+} elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $sql_user_g = 'SELECT
         `tbl_user`.*,
         `tbl_genba`.`genbaname`
     FROM
     `tbl_user`
-    LEFT JOIN `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`';
-    $result_user_g = mysqli_query($conn, $sql_user_g);
-    $user_list_g = mysqli_fetch_all($result_user_g, MYSQLI_ASSOC);
+    LEFT JOIN `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`
+    WHERE `tbl_user`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_user_g = 'SELECT
         `tbl_user`.*,
@@ -562,7 +571,8 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
     FROM
     `tbl_user`
     LEFT JOIN `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`
-    WHERE `tbl_user`.`uid` IN ("' . $_SESSION['auth_uid'] . '")';
-    $result_user_g = mysqli_query($conn, $sql_user_g);
-    $user_list_g = mysqli_fetch_all($result_user_g, MYSQLI_ASSOC);
+    WHERE `tbl_user`.`uid` IN ("' . $_SESSION['auth_uid'] . '")
+    AND `tbl_user`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
 }
+$result_user_g = mysqli_query($conn, $sql_user_g);
+$user_list_g = mysqli_fetch_all($result_user_g, MYSQLI_ASSOC);

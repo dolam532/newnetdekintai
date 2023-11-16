@@ -101,8 +101,10 @@ if ($_SESSION['auth'] == false) {
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
-                <th style="text-align: center; width: 10%;">社名</th>
-                    <th style="text-align: center; width: 10%;">名</th>
+                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                        <th style="text-align: center; width: 12%;">会社名</th>
+                    <?php endif; ?>
+                    <th style="text-align: center; width: 10%;">ID</th>
                     <th style="text-align: center; width: 15%;">日付</th>
                     <th style="text-align: center; width: 20%;">login time</th>
                     <th style="text-align: center; width: 20%;">IP</th>
@@ -112,13 +114,25 @@ if ($_SESSION['auth'] == false) {
             <tbody>
                 <?php if (empty($userlogin_list)) { ?>
                     <tr>
-                        <td colspan="5" align="center"><?php echo $data_save_no; ?></td>
+                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                            <td colspan="6" align="center">
+                                <?php echo $data_save_no; ?>
+                            </td>
+                        <?php else : ?>
+                            <td colspan="5" align="center">
+                                <?php echo $data_save_no; ?>
+                            </td>
+                        <?php endif; ?>
                     </tr>
                     <?php } elseif (!empty($userlogin_list)) {
                     foreach ($userlogin_list as $key) {
                     ?>
                         <tr>
-                        <td><span><?= $key['companyname'] ?></span></td>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <td>
+                                    <span><?= $key['companyname'] ?></span>
+                                </td>
+                            <?php endif; ?>
                             <td><span><?= $key['uid'] ?></span></td>
                             <td><span><?= $key['workymd'] ?></span></td>
                             <td><span><?= $key['logtime'] ?></span></td>
@@ -139,12 +153,10 @@ if ($_SESSION['auth'] == false) {
             this.form.submit();
         });
         setTimeout(hideLoadingOverlay, 200);
-		startLoading();
+        startLoading();
     });
 
-
-
-	// loading UX
+    // loading UX
     function showLoadingOverlay() {
         const overlay = document.getElementById("overlay");
         overlay.style.display = "block";
@@ -158,9 +170,10 @@ if ($_SESSION['auth'] == false) {
     }
 
     showLoadingOverlay();
+
     function startLoading() {
         NProgress.start();
-        setTimeout(function () {
+        setTimeout(function() {
             NProgress.done();
         }, 200);
     }

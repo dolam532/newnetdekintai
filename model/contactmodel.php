@@ -17,11 +17,13 @@ AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '") ';
 
 // Select database from tbl_userlogin table
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_userlogin .= $sql_userlogin;
 } else if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
-    $sql_userlogin .= 'AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '", "' . constant('ADMIN') . '" , "' . constant('ADMINISTRATOR') . '")
-    AND `tbl_userlogin`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")  ';
+    $sql_userlogin .= 'AND `tbl_userlogin`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
-    $sql_userlogin .= ' AND `tbl_userlogin`.`uid` IN("' . $_SESSION['auth_uid'] . '")';
+    $sql_userlogin .= 'AND `tbl_userlogin`.`uid` IN("' . $_SESSION['auth_uid'] . '")
+    AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '")
+    AND `tbl_userlogin`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
 } else {
     error_log('user type error: ' . mysqli_error($conn));
 }
@@ -39,9 +41,6 @@ $result = $stmt->get_result();
 $row = $result->fetch_assoc();
 $companyId = $row['companyid'];
 $stmt->close();
-if ($companyId == "" || $companyId == null) {
-    $companyId = "x_xCompanyErrorx_xUid:" . $uid . "x_x";
-}
 
 
 // noticeList.php

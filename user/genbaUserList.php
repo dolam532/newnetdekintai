@@ -35,9 +35,12 @@ if ($_SESSION['auth'] == false) {
             <thead>
                 <tr class="info">
                     <th style="text-align: center; width: 5%;">No</th>
+                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                        <th style="text-align: center; width: 12%;">会社名</th>
+                    <?php endif; ?>
                     <th style="text-align: center; width: 20%;">勤務時間タイプ</th>
                     <th style="text-align: center; width: 15%;">社員名</th>
-                    <th style="text-align: center; width: 26%;" colspan="2">契約期間</th>
+                    <th style="text-align: center; width: 20%;" colspan="2">契約期間</th>
                     <th style="text-align: center; width: auto;">備考</th>
                 </tr>
             </thead>
@@ -45,7 +48,15 @@ if ($_SESSION['auth'] == false) {
             <tbody>
                 <?php if (empty($user_list_g)) { ?>
                     <tr>
-                        <td colspan="6" align="center"><?php echo $data_save_no; ?></td>
+                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                            <td colspan="7" align="center">
+                                <?php echo $data_save_no; ?>
+                            </td>
+                        <?php else : ?>
+                            <td colspan="6" align="center">
+                                <?php echo $data_save_no; ?>
+                            </td>
+                        <?php endif; ?>
                     </tr>
                     <?php } elseif (!empty($user_list_g)) {
                     $index = 1;
@@ -53,6 +64,11 @@ if ($_SESSION['auth'] == false) {
                     ?>
                         <tr>
                             <td><span><?= $index ?></span></td>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <td>
+                                    <span><?= $genba['companyname'] ?></span>
+                                </td>
+                            <?php endif; ?>
                             <td><span><?= $genba['genbaname'] ?></span></td>
                             <td><span><?= $genba['name'] ?></span></td>
                             <td><span><?= $genba['genstrymd'] ?></span></td>
@@ -69,9 +85,9 @@ if ($_SESSION['auth'] == false) {
 </div>
 
 <script>
-	window.onload = function() {
-		setTimeout(hideLoadingOverlay, 500);
-		startLoading();
-};
+    window.onload = function() {
+        setTimeout(hideLoadingOverlay, 500);
+        startLoading();
+    };
 </script>
 <?php include('../inc/footer.php'); ?>

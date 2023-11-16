@@ -42,11 +42,11 @@ if (isset($_POST['btnLogin'])) {
             $_SESSION['last_login_timestamp'] =  time();
 
             $uid = $_SESSION['auth_uid'];
+            $companyid = $_SESSION['auth_companyid'];
             $workymd = date('Y/m/d');
             $logtype = $_SESSION['auth_type'];
             $logtime = date('Y-m-d H:i:s');
-            // $ipaddress = gethostbyname(constant('DOMAIN_NAME'));
-            $ipaddress = $_SERVER['REMOTE_ADDR'];  // browser ip -> localhost ::1 
+            $ipaddress = gethostbyname(constant('DOMAIN_NAME'));
 
             function getDomainFromURL($url)
             {
@@ -59,9 +59,8 @@ if (isset($_POST['btnLogin'])) {
                 return $domain;
             }
             $domain = getDomainFromURL(constant('URL_NAME'));
-
-            $sql_userlogin_insert = "INSERT INTO `tbl_userlogin` (`uid`, `workymd`, `logtype`, `logtime`, `ipaddress`, `domain`) 
-            VALUES('$uid', '$workymd' ,'$logtype' ,'$logtime', '$ipaddress', '$domain')";
+            $sql_userlogin_insert = "INSERT INTO `tbl_userlogin` (`uid`, `companyid`, `workymd`, `logtype`, `logtime`, `ipaddress`, `domain`) 
+            VALUES('$uid', '$companyid', '$workymd' ,'$logtype' ,'$logtime', '$ipaddress', '$domain')";
             if (mysqli_query($conn, $sql_userlogin_insert)) {
             } else {
                 echo 'query error: ' . mysqli_error($conn);
