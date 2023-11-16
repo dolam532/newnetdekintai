@@ -376,26 +376,28 @@ if (isset($_POST['btnRegAM'])) {
     $uploadOk = true;
     global $STAMP_MAXSIZE;
 
+    if ($originalFileName == "") {
+        $fileName == '';
+    } else {
+        // Check file name is exists
+        if (file_exists($uploadFile)) {
+            error_log("File name is exists -> Delete old file name");
+            unlink($uploadFile);
+        }
+        // check size 
+        if (!isFileSizeValid($_FILES["signstamp"], $STAMP_MAXSIZE)) {
+            error_log("File is BIG!");
+            $uploadOk = false;
+        }
+        // check valid extention 
+        $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
+        if (!checkValidExtension($fileExtension)) {
 
-    // Check file name is exists
-    if (file_exists($uploadFile)) {
-        error_log("File name is exists -> Delete old file name");
-        unlink($uploadFile);
+            error_log("Image only(png)." . $fileExtension);
+            error_log("FileName" . $originalFileName);
+            $uploadOk = false;
+        }
     }
-    // check size 
-    if (!isFileSizeValid($_FILES["signstamp"], $STAMP_MAXSIZE)) {
-        error_log("File is BIG!");
-        $uploadOk = false;
-    }
-    // check valid extention 
-    $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
-    if (!checkValidExtension($fileExtension)) {
-
-        error_log("Image only(png)." . $fileExtension);
-        error_log("FileName" . $originalFileName);
-        $uploadOk = false;
-    }
-
     // if not error save
     if ($uploadOk) {
         $fileName = $newFileName;
@@ -405,10 +407,6 @@ if (isset($_POST['btnRegAM'])) {
         } else {
             error_log("Upload Error");
         }
-        if ($fileName == null) {
-            $fileName == '';
-        }
-
 
         // insert to DB 
         $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`

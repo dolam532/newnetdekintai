@@ -350,15 +350,14 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
     </div>
 </div>
 <script>
-    // 2023-10-12/1340-006
     // upload image  add start
     $(document).ready(function() {
         // load valid extention to element check 
         <?php $allowedTypesString = "." . implode(", .", $ALLOWED_TYPES_STAMP); ?>
         $('#udfileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
         $('#fileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
-		setTimeout(hideLoadingOverlay, 1000);
-		startLoading();
+        setTimeout(hideLoadingOverlay, 1000);
+        startLoading();
 
 
     });
@@ -406,7 +405,6 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         }
     }
 
-
     function displaySelectedImageAddNew(input) {
         if (input.files.length > 0) {
             const selectedFile = input.files[0];
@@ -451,8 +449,6 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         }
     }
 
-    // 2023-10-12/1340-006
-    // upload image  add end
     // New button: popup & clear 
     $(document).on('click', '#btnNewAL', function(e) {
         $('#modal').modal('toggle');
@@ -471,7 +467,6 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         var Dept = $("#dept").val();
         var Companyid = $("#companyid").val();
         var letters = /^[A-Za-z]+$/;
-        var FileInput = $("#fileInput").val();
 
         if (Uid == "") {
             alert("<?php echo $manage_id_empty; ?>");
@@ -515,6 +510,21 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             return true;
         }
 
+        <?php
+		if (!empty($admin_list)) {
+			foreach ($admin_list as $key) {
+		?>
+				if ('<?php echo $key['email'] ?>' === Email) {
+					alert("<?php echo $email_is_dupplicate; ?>");
+					$("#email").focus();
+					e.preventDefault();
+					return;
+				}
+		<?php
+			}
+		}
+		?>
+
         if (Dept == "") {
             alert("<?php echo $manage_dept_empty; ?>");
             e.preventDefault();
@@ -526,13 +536,6 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             alert("<?php echo $manage_companyid_empty; ?>");
             e.preventDefault();
             $("#companyid").focus();
-            return true;
-        }
-
-        if (FileInput == "") {
-            alert("<?php echo $signstamp_empty_error; ?>");
-            e.preventDefault();
-            $("#fileInput").focus();
             return true;
         }
     });
@@ -621,27 +624,26 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
             return true;
         }
     });
-	// loading UX
-	function showLoadingOverlay() {
-		const overlay = document.getElementById("overlay");
-		overlay.style.display = "block";
-		document.body.style.pointerEvents = "none";
-	}
+    // loading UX
+    function showLoadingOverlay() {
+        const overlay = document.getElementById("overlay");
+        overlay.style.display = "block";
+        document.body.style.pointerEvents = "none";
+    }
 
-	function hideLoadingOverlay() {
-		const overlay = document.getElementById("overlay");
-		overlay.style.display = "none";
-		document.body.style.pointerEvents = "auto";
-	}
+    function hideLoadingOverlay() {
+        const overlay = document.getElementById("overlay");
+        overlay.style.display = "none";
+        document.body.style.pointerEvents = "auto";
+    }
 
-	showLoadingOverlay();
-	function startLoading() {
-		NProgress.start();
-		setTimeout(function () {
-			NProgress.done();
-		}, 500);
-	}
+    showLoadingOverlay();
 
-	
+    function startLoading() {
+        NProgress.start();
+        setTimeout(function() {
+            NProgress.done();
+        }, 500);
+    }
 </script>
 <?php include('../inc/footer.php'); ?>

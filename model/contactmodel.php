@@ -365,27 +365,10 @@ if (isset($_POST['btnDelNL'])) {
 
 // codemasterList.php
 // Select database from tbl_codetype table
-$typecodes_all;
-$sql_codetype = 'SELECT * FROM `tbl_codetype`';
-if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-    $sql_codetype = 'SELECT 
-        `tbl_codetype`.*,
-        `tbl_company`.`companyname`
-    FROM
-    `tbl_codetype`
-    LEFT JOIN `tbl_company` ON `tbl_codetype`.`companyid` = `tbl_company`.`companyid`
-    ORDER BY `tbl_codetype`.`companyid`';
-} else {
-    $sql_codetype_all = 'SELECT * FROM `tbl_codetype`
-    WHERE `tbl_codetype`.`companyid` IN ("' . constant('MAIN_COMPANY_ID') . '")';
-    $sql_codetype = 'SELECT * FROM `tbl_codetype` 
-    WHERE `tbl_codetype`.`companyid` IN ("' . constant('MAIN_COMPANY_ID') . '", "' . $_SESSION['auth_companyid'] . '")';
-    $result_codetype_all = mysqli_query($conn, $sql_codetype_all);
-    $codetype_list_all = mysqli_fetch_all($result_codetype_all, MYSQLI_ASSOC);
-    $typecodes_all = array_column($codetype_list_all, 'typecode');
-}
+$sql_codetype = 'SELECT * FROM `tbl_codetype` ORDER BY `tbl_codetype`.`typecode`';
 $result_codetype = mysqli_query($conn, $sql_codetype);
 $codetype_list = mysqli_fetch_all($result_codetype, MYSQLI_ASSOC);
+$typecodes_all = array_column($codetype_list, 'typecode');
 
 $codetype_list_a = array();
 foreach ($codetype_list as $k => $v) {
@@ -395,7 +378,6 @@ $codetype_list_a = array_unique($codetype_list_a);
 $codetype_list_a_string = implode('", "', $codetype_list_a);
 
 // Select database from tbl_codebase table
-$codes;
 if ($_POST['typecode'] == NULL) {
     $_POST['typecode'] = $_SESSION['typecode'];
     $codetype_result = isset($_POST['typecode']) ? $_POST['typecode'] : $codetype_list_a_string;
@@ -419,18 +401,16 @@ if ($_POST['typecode'] == NULL) {
         `tbl_company`.`companyname`
         FROM `tbl_codebase`
         LEFT JOIN `tbl_company` ON `tbl_codebase`.`companyid` = `tbl_company`.`companyid`
-        WHERE `tbl_codebase`.`companyid` IN ("' . $_POST['companyid'] . '")
-        AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")
+        WHERE `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")
         ORDER BY `tbl_codebase`.`companyid`';
     } else {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`companyid` IN ("' . constant('MAIN_COMPANY_ID') . '", "' . $_SESSION['auth_companyid'] . '")
+        WHERE `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")
         AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';
     }
 }
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
-
 $sql_codebase_all = 'SELECT * FROM `tbl_codebase`';
 $result_codebase_all = mysqli_query($conn, $sql_codebase_all);
 $codebase_list_all = mysqli_fetch_all($result_codebase_all, MYSQLI_ASSOC);
@@ -508,12 +488,11 @@ if (isset($_POST['btnDelCML'])) {
 // codetypeList.php
 // Save Data to tbl_codetype DB 
 if (isset($_POST['btnRegCTL'])) {
-    $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
     $typecode = mysqli_real_escape_string($conn, $_POST['typecode']);
     $typename = mysqli_real_escape_string($conn, $_POST['typename']);
     $typeremark = mysqli_real_escape_string($conn, $_POST['typeremark']);
-    $sql = "INSERT INTO `tbl_codetype` (`typecode`, `companyid`, `typename`, `typeremark`, `reg_dt` , `upt_dt`)
-                VALUES ('$typecode', '$companyid', '$typename', '$typeremark', '$reg_dt' , null)";
+    $sql = "INSERT INTO `tbl_codetype` (`typecode`, `typename`, `typeremark`, `reg_dt` , `upt_dt`)
+                VALUES ('$typecode', '$typename', '$typeremark', '$reg_dt' , null)";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] = $save_success;
@@ -526,7 +505,6 @@ if (isset($_POST['btnRegCTL'])) {
 
 // Update Data to tbl_codetype DB 
 if (isset($_POST['btnUpdateCTL'])) {
-    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $typecode = mysqli_real_escape_string($conn, $_POST['udtypecode']);
     $typename = mysqli_real_escape_string($conn, $_POST['udtypename']);
     $typeremark = mysqli_real_escape_string($conn, $_POST['udtyperemark']);
@@ -535,9 +513,7 @@ if (isset($_POST['btnUpdateCTL'])) {
                 typename='$typename',
                 typeremark='$typeremark',
                 upt_dt = '$upt_dt' 
-            WHERE 
-                companyid ='$companyid'
-            AND
+            WHERE
                 typecode ='$typecode'";
 
     if ($conn->query($sql) === TRUE) {

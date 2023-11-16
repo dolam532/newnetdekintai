@@ -83,9 +83,7 @@ if ($_SESSION['auth'] == false) {
         </div>
         <div class="col-md-4 text-right">
             <div class="title_btn">
-                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-                    <input type="button" id="btnNewCTL" value="新規">
-                <?php endif; ?>
+                <input type="button" id="btnNewCTL" value="新規">
             </div>
             <div class="title_btn">
                 <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
@@ -97,9 +95,6 @@ if ($_SESSION['auth'] == false) {
             <table class="table table-bordered datatable">
                 <thead>
                     <tr class="info">
-                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                            <th style="text-align: center; width: 15%;">会社名</th>
-                        <?php endif; ?>
                         <th style="text-align: center; width: 10%;">Type Code</th>
                         <th style="text-align: center; width: 40%;">Type Name</th>
                         <th style="text-align: center; width: auto;">Type Remark</th>
@@ -108,70 +103,28 @@ if ($_SESSION['auth'] == false) {
                 <tbody>
                     <?php if (empty($codetype_list)) { ?>
                         <tr class="info">
-                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                                <td colspan="4" align="center">
-                                    <?php echo $data_save_no; ?>
-                                </td>
-                            <?php else : ?>
-                                <td colspan="3" align="center">
-                                    <?php echo $data_save_no; ?>
-                                </td>
-                            <?php endif; ?>
+                            <td colspan="3" align="center">
+                                <?php echo $data_save_no; ?>
+                            </td>
                         </tr>
                         <?php } elseif (!empty($codetype_list)) {
                         foreach ($codetype_list as $key) {
                         ?>
                             <tr>
-                                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                                    <td align="center">
-                                        <span>
-                                            <?= $key['companyname'] ?>
-                                        </span>
-                                    </td>
-                                <?php endif; ?>
                                 <td align="center">
                                     <span>
                                         <?= $key['typecode'] ?>
                                     </span>
                                 </td>
                                 <td>
-                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-                                        <?php if ($key['companyid'] == constant('MAIN_COMPANY_ID')) : ?>
-                                            <span>
-                                                <?= $key['typename'] ?>
+                                    <a href="#">
+                                        <span class="showModal">
+                                            <span class="codetypeList_class">
+                                                <?= $key['typecode'] . ',' ?>
                                             </span>
-                                        <?php else : ?>
-                                            <a href="#">
-                                                <span class="showModal">
-                                                    <span class="codetypeList_class">
-                                                        <?= $key['typecode'] . ',' ?>
-                                                    </span>
-                                                    <?= $key['typename'] ?>
-                                                </span>
-                                            </a>
-                                        <?php endif; ?>
-                                    <?php else : ?>
-                                        <?php if ($key['companyid'] == constant('MAIN_COMPANY_ID')) : ?>
-                                            <?php if ($_SESSION['auth_type'] == constant('USER')) : ?>
-                                                <span>
-                                                    <?= $key['typename'] ?>
-                                                </span>
-                                            <?php else : ?>
-                                                <a href="#">
-                                                    <span class="showModal">
-                                                        <span class="codetypeList_class">
-                                                            <?= $key['typecode'] . ',' ?>
-                                                        </span>
-                                                        <?= $key['typename'] ?>
-                                                    </span>
-                                                </a>
-                                            <?php endif; ?>
-                                        <?php else : ?>
-                                            <span>
-                                                <?= $key['typename'] ?>
-                                            </span>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
+                                            <?= $key['typename'] ?>
+                                        </span>
+                                    </a>
                                 </td>
                                 <td>
                                     <span>
@@ -201,7 +154,6 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="code">Type Code</label>
-                                    <input type="hidden" name="companyid" value="<?= $_SESSION['auth_companyid'] ?>">
                                     <input type="text" class="form-control" name="typecode" id="typecode" placeholder="タイプコード" style="text-align: center" maxlength=<?php echo $MAX_LENGTH_CODE ?>>
                                 </div>
                                 <div class="col-md-4">
@@ -248,7 +200,6 @@ if ($_SESSION['auth'] == false) {
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="code">Type Code</label>
-                                    <input type="hidden" name="udcompanyid" id="udcompanyid">
                                     <input type="text" class="form-control" name="udtypecode" id="udtypecode" style="text-align: center" readonly>
                                 </div>
                                 <div class="col-md-4">
@@ -366,9 +317,6 @@ if ($_SESSION['auth'] == false) {
         ?>
                 if ('<?php echo $key['typecode'] ?>' == Typecode) {
                     $("#udtcode").text('<?php echo $key['typecode'] ?>');
-                    var udcompanyid = $("input[name=udcompanyid]:hidden");
-                    udcompanyid.val("<?php echo $key['companyid'] ?>");
-                    var udcompanyid = udcompanyid.val();
                     $("#udtypecode").text($('[name="udtypecode"]').val("<?php echo $key['typecode'] ?>"));
                     $("#udtypename").text($('[name="udtypename"]').val("<?php echo $key['typename'] ?>"));
                     $("#udtyperemark").text($('[name="udtyperemark"]').val("<?php echo $key['typeremark'] ?>"));

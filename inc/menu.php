@@ -57,7 +57,9 @@
                         <a class="dropdown-toggle" data-toggle="dropdown" href="../#" aria-expanded="false">基本情報
                             <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li class="menu-level3"><a href="../contact/codetypeList.php">型式コード登録</a></li>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <li class="menu-level3"><a href="../contact/codetypeList.php">型式コード登録</a></li>
+                            <?php endif; ?>
                             <li class="menu-level3"><a href="../contact/codemasterList.php">基礎コード登録</a></li>
                             <li class="menu-level3"><a href="../info/workdayList.php">勤務日登録</a></li>
                             <li class="menu-level3"><a href="../info/holidayReg.php">祝日登録</a></li>
