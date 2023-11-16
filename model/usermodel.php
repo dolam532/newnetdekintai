@@ -57,7 +57,7 @@ WHERE
     `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
     AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
 ORDER BY
-    `tbl_user`.`companyid`';
+    `tbl_user`.`reg_dt`';
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
@@ -213,9 +213,6 @@ if (isset($_POST['SaveUserList'])) {
                 deleteNoticeImages($IMAGE_UPLOAD_DIR_STAMP, $uid, $newFileName);
             } else {
                 error_log("Upload Error");
-            }
-            if ($fileName == null) {
-                $fileName == '';
             }
         }
     }

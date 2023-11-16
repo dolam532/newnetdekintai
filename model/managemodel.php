@@ -2,10 +2,6 @@
 $reg_dt = date('Y-m-d H:i:s');
 $upt_dt = date('Y-m-d H:i:s');
 
-//get current companyid of selected 
-
-
-
 
 // manageInfo.php
 // Select database from tbl_manageinfo table
@@ -202,7 +198,7 @@ if (isset($_POST['btnRegCL'])) {
     $joken = mysqli_real_escape_string($conn, $_POST['joken']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
     $template = mysqli_real_escape_string($conn, $_POST['use_type']);
-    
+
 
     $sql = "INSERT INTO `tbl_company` (`companyid`, `companycode`, `companyname`, `staff`, `telno`,
                 `strymd`, `endymd`, `address`, `use_yn`,`template` ,  `joken`, `bigo`, `reg_dt` ,`upt_dt` )
@@ -242,30 +238,30 @@ if (isset($_POST['btnUpdateCL'])) {
     $template = mysqli_real_escape_string($conn, $_POST['use_type']);
 
     $sql = "UPDATE tbl_company SET 
-    companyname='$companyname',
-    staff='$staff',
-    telno='$telno',
-    address='$address',
-    bigo='$bigo',
-    companycode ='$companycode'
-WHERE companyid ='$companyid'";
+            companyname='$companyname',
+            staff='$staff',
+            telno='$telno',
+            address='$address',
+            bigo='$bigo',
+            companycode ='$companycode'
+        WHERE companyid ='$companyid'";
 
     // check  main admin
     if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         $sql = "UPDATE tbl_company SET 
-    companyname='$companyname',
-    staff='$staff',
-    telno='$telno',
-    strymd='$strymd',
-    endymd='$endymd',
-    address='$address',
-    use_yn='$use_yn',
-    joken='$joken',
-    bigo='$bigo',
-    companycode ='$companycode',
-    template = '$template'
+            companyname='$companyname',
+            staff='$staff',
+            telno='$telno',
+            strymd='$strymd',
+            endymd='$endymd',
+            address='$address',
+            use_yn='$use_yn',
+            joken='$joken',
+            bigo='$bigo',
+            companycode ='$companycode',
+            template = '$template'
 
-WHERE companyid ='$companyid'";
+        WHERE companyid ='$companyid'";
     }
 
     if ($conn->query($sql) === TRUE) {
@@ -298,8 +294,6 @@ if (isset($_POST['DeleteCL'])) {
     }
 }
 
-// 2023-10-11/1340-006
-// upload image  add start
 // adminList.php
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`

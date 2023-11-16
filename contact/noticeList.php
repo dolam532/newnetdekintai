@@ -67,7 +67,6 @@ if ($_SESSION['auth'] == false) {
 
     ?>
     <?php
-
     if (isset($_SESSION['delete_success']) && isset($_POST['btnDelNL'])) {
     ?>
         <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
@@ -113,18 +112,17 @@ if ($_SESSION['auth'] == false) {
                         <?php else : ?>
                             タイトル :
                         <?php endif; ?>
-                        <input type="text" id="searchKeyword" name="searchKeywordTC" value="<?= $_POST['searchKeywordTC'] ?>" style="width: 200px;">
+                        <input type="text" id="searchKeywordTC" name="searchKeywordTC" value="<?= $_POST['searchKeywordTC'] ?>" style="width: 200px;">
                         <input type="hidden" name="rdoSearch" value="<?= $_POST['rdoSearch'] ?>">
                     </label>
                 </div>
             </div>
             <div class="col-md-3 text-right">
                 <div class="title_btn">
-                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                        <input type="submit" name="SearchButtonNL" value="検索">
+                    <input type="submit" id="ClearButton" name="ClearButton" value="クリア">
+                    <input type="submit" name="SearchButtonNL" value="検索">
+                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
                         <input type="button" id="btnNewNL" value="新規">
-                    <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
-                        <input type="submit" name="SearchButtonNL" value="検索">
                     <?php endif; ?>
                     <input type="button" onclick="window.location.href='../'" value="トップへ戻る">
                 </div>
@@ -134,11 +132,9 @@ if ($_SESSION['auth'] == false) {
             <table class="table table-bordered datatable">
                 <thead>
                     <tr class="info">
-
-                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                        <th style="text-align: center; width: 10%;">社名</th>
-                    <?php endif; ?>
-                  
+                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                            <th style="text-align: center; width: 10%;">会社名</th>
+                        <?php endif; ?>
                         <th style="text-align: center; width: 5%;">No</th>
                         <th style="text-align: center; width: auto;">
                             <?php if ($_POST['rdoSearch'] == "1") : ?>
@@ -156,45 +152,37 @@ if ($_SESSION['auth'] == false) {
                 </thead>
                 <tbody>
                     <?php if (empty($notice_list)) { ?>
-
-
-
                         <tr>
-                            <td colspan="6" align="center">
-                                <?php echo $data_save_no; ?>
-                            </td>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <td colspan="8" align="center">
+                                    <?php echo $data_save_no; ?>
+                                </td>
+                            <?php else : ?>
+                                <td colspan="7" align="center">
+                                    <?php echo $data_save_no; ?>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                         <?php } elseif (!empty($notice_list)) {
                         $counter = 1;
                         foreach ($notice_list as $key) {
                         ?>
                             <tr>
-                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                                <td><span>
-                                        <?= $key['companyname'] ?>
-                                    </span></td>
-                    <?php endif; ?>
-            
-
-                                <td><span>
+                                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                    <td>
+                                        <span>
+                                            <?= $key['companyname'] ?>
+                                        </span>
+                                    </td>
+                                <?php endif; ?>
+                                <td>
+                                    <span>
                                         <?= $counter++; // $key['bid'] change show number  
                                         ?>
-                                    </span></td>
+                                    </span>
+                                </td>
                                 <td style="text-align:left">
-                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                                        <a href="#">
-                                            <span class="showModal">
-                                                <span class="noticeList_class">
-                                                    <?= $key['bid'] . ',' . $key['uid'] . ',' ?>
-                                                </span>
-                                                <?php if ($_POST['rdoSearch'] == "1") : ?>
-                                                    <?= $key['content'] ?>
-                                                <?php else : ?>
-                                                    <?= $key['title'] ?>
-                                                <?php endif; ?>
-                                            </span>
-                                        </a>
-                                    <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+                                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')|| $_SESSION['auth_type'] == constant('USER')) : ?>
                                         <?php if ($_POST['rdoSearch'] == "1") : ?>
                                             <span>
                                                 <?= $key['content'] ?>
@@ -204,6 +192,19 @@ if ($_SESSION['auth'] == false) {
                                                 <?= $key['title'] ?>
                                             </span>
                                         <?php endif; ?>
+                                    <?php elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+                                        <a href="#">
+                                            <span class="showModal">
+                                                <span class="noticeList_class">
+                                                    <?= $key['bid'] . ',' . $key['email'] . ',' ?>
+                                                </span>
+                                                <?php if ($_POST['rdoSearch'] == "1") : ?>
+                                                    <?= $key['content'] ?>
+                                                <?php else : ?>
+                                                    <?= $key['title'] ?>
+                                                <?php endif; ?>
+                                            </span>
+                                        </a>
                                     <?php endif; ?>
                                 </td>
                                 <td><span>
@@ -226,7 +227,8 @@ if ($_SESSION['auth'] == false) {
                                 </td>
                                 <td><span>
                                         <?= $key['viewcnt'] ?>
-                                    </span></td>
+                                    </span>
+                                </td>
                             </tr>
                     <?php
                         }
@@ -253,7 +255,7 @@ if ($_SESSION['auth'] == false) {
                                 <div class="col-xs-12">
                                     <label for="title">タイトル</label>
                                     <input type="text" class="form-control" name="title" id="title" placeholder="タイトル">
-                                    <input type="hidden" name="uid" value="<?= $_SESSION['auth_uid'] ?>">
+                                    <input type="hidden" name="email" value="<?= $_SESSION['auth_email'] ?>">
                                 </div>
                             </div>
                             <br>
@@ -329,7 +331,7 @@ if ($_SESSION['auth'] == false) {
                                     <label for="title">タイトル</label>
                                     <input type="text" class="form-control" name="udtitle" id="udtitle">
                                     <input type="hidden" name="udbid" id="udbid">
-                                    <input type="hidden" name="uduid" id="uduid">
+                                    <input type="hidden" name="udemail" id="udemail">
                                     <input type="hidden" name="udimagefile_name" id="udimagefile_name">
                                 </div>
                             </div>
@@ -402,16 +404,14 @@ if ($_SESSION['auth'] == false) {
             $("#searchForm").submit(); // Trigger form submission
         });
 
-        // 2023-10-11/1340-005
-        // upload image add start
         // load valid extention to element check 
         <?php $allowedTypesString = "." . implode(", .", $ALLOWED_TYPES); ?>
         $('#udfileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
         $('#fileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
-        // 2023-10-11/1340-005
+
         // pload image add end
         setTimeout(hideLoadingOverlay, 500);
-		startLoading();
+        startLoading();
 
     });
 
@@ -427,7 +427,6 @@ if ($_SESSION['auth'] == false) {
         var Title = $("#title").val();
         var Content = $("#content").val();
         var Reader = $("#reader").val();
-        var FileInput = $("#fileInput").val();
 
         if (Title == "") {
             alert("<?php echo $content_noteT_empty; ?>");
@@ -446,12 +445,6 @@ if ($_SESSION['auth'] == false) {
             $("#reader").focus();
             return false;
         }
-
-        if (FileInput == "") {
-            alert("<?php echo $image_empty_error; ?>");
-            $("#fileInput").focus();
-            return false;
-        }
     });
 
     // Year/month click on grid (edit): popup & content display
@@ -463,13 +456,13 @@ if ($_SESSION['auth'] == false) {
         var ArrayData = $(this).text();
         var SeparateArr = ArrayData.split(',');
         var Bid = SeparateArr[0].trim();
-        var Uid = SeparateArr[1].trim();
+        var Email = SeparateArr[1].trim();
 
         <?php
         if (!empty($notice_list)) {
             foreach ($notice_list as $key) {
         ?>
-                if ('<?php echo $key['bid'] ?>' == Bid && '<?php echo $key['uid'] ?>' == Uid) {
+                if ('<?php echo $key['bid'] ?>' == Bid && '<?php echo $key['email'] ?>' == Email) {
                     $("#udtname").text('<?php echo $key['name'] ?>');
                     $("#udtitle").text($('[name="udtitle"]').val("<?php echo $key['title'] ?>"));
                     $("#udcontent").text($('[name="udcontent"]').val("<?php echo $key['content'] ?>"));
@@ -481,8 +474,6 @@ if ($_SESSION['auth'] == false) {
                     var udimagefile_old = $("input[name=udimagefile_old]:hidden");
                     udimagefile_old.val("<?php echo $key['imagefile'] ?>");
                     var udimagefile_old = udimagefile_old.val();
-                    // $("#udimagefile_name").text('<?php // echo $key['imagefile'] 
-                                                    ?>');
                     var imagePath = "<?php echo $PATH_IMAGE_NOTICE . $key['imagefile']; ?>";
                     $("#udimagefile").attr("src", imagePath);
 
@@ -490,14 +481,13 @@ if ($_SESSION['auth'] == false) {
                     udbid.val("<?php echo $key['bid'] ?>");
                     var udbid = udbid.val();
 
-                    var uduid = $("input[name=uduid]:hidden");
-                    uduid.val("<?php echo $key['uid'] ?>");
-                    var uduid = uduid.val();
+                    var udemail = $("input[name=udemail]:hidden");
+                    udemail.val("<?php echo $key['email'] ?>");
+                    var udemail = udemail.val();
 
                     var udimagefile_name = $("input[name=udimagefile_name]:hidden");
                     udimagefile_name.val("<?php echo $key['imagefile'] ?>");
                     var udimagefile_name = udimagefile_name.val();
-
                 }
         <?php
             }
@@ -550,8 +540,11 @@ if ($_SESSION['auth'] == false) {
         }
     });
 
-    // 2023-10-11/1340-005
-    // upload image add start
+    // Clear Input Tag
+    $(document).on('click', '#ClearButton', function(e) {
+        $("#searchKeywordTC").val("");
+    });
+
     // check size file upload 
     function checkFileSize(input) {
         if (input.files.length > 0) {
@@ -640,11 +633,8 @@ if ($_SESSION['auth'] == false) {
             }
         }
     }
-    // 2023-10-11/1340-005
-    // upload image  add end
 
-    
-	// loading UX
+    // loading UX
     function showLoadingOverlay() {
         const overlay = document.getElementById("overlay");
         overlay.style.display = "block";
@@ -658,9 +648,10 @@ if ($_SESSION['auth'] == false) {
     }
 
     showLoadingOverlay();
+
     function startLoading() {
         NProgress.start();
-        setTimeout(function () {
+        setTimeout(function() {
             NProgress.done();
         }, 500);
     }

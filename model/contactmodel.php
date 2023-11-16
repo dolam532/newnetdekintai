@@ -17,18 +17,19 @@ AND DAY(`tbl_userlogin`.`workymd`) IN("' . $day . '") ';
 
 // Select database from tbl_userlogin table
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-    $sql_userlogin .= $sql_userlogin;
+    $sql_userlogin .= 'ORDER BY `tbl_userlogin`.`companyid`, `tbl_userlogin`.`logcnt`';
 } else if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
-    $sql_userlogin .= 'AND `tbl_userlogin`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
+    $sql_userlogin .= 'AND `tbl_userlogin`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")
+    ORDER BY `tbl_userlogin`.`logcnt`';
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_userlogin .= 'AND `tbl_userlogin`.`uid` IN("' . $_SESSION['auth_uid'] . '")
     AND `tbl_userlogin`.`logtype` IN("' . constant('USER') . '")
-    AND `tbl_userlogin`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
+    AND `tbl_userlogin`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")
+    ORDER BY `tbl_userlogin`.`logcnt`';
 } else {
     error_log('user type error: ' . mysqli_error($conn));
 }
 
-error_log("userLogin:" . $sql_userlogin);
 $result_userlogin = mysqli_query($conn, $sql_userlogin);
 $userlogin_list = mysqli_fetch_all($result_userlogin, MYSQLI_ASSOC);
 
@@ -55,9 +56,9 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     `tbl_user`.`name`,
     `tbl_company`.`companyname` 
     FROM `tbl_notice`
-    LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+    LEFT JOIN `tbl_user` ON `tbl_notice`.`email` = `tbl_user`.`email`
     LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
-    ORDER BY `tbl_notice`.`bid`";
+    ORDER BY `tbl_user`.`companyid`, `tbl_notice`.`bid`";
 } else {
     $sql_notice_select = "SELECT
     `tbl_notice`.*,
@@ -65,11 +66,21 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     `tbl_user`.`name`,
     `tbl_company`.`companyname` 
     FROM `tbl_notice`
-    LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+    LEFT JOIN `tbl_user` ON `tbl_notice`.`email` = `tbl_user`.`email`
     LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
     WHERE `tbl_user`.`companyid` = '$currentCompanyID'
     ORDER BY `tbl_notice`.`bid`";
 }
+$sql_notice_select_ = "SELECT * FROM `tbl_notice` ORDER BY `tbl_notice`.`bid`";
+$result_nl = $conn->query($sql_notice_select_);
+$last_BID_nl = null;
+if ($result_nl->num_rows > 0) {
+    while ($row = $result_nl->fetch_assoc()) {
+        $last_BID_nl = $row["bid"];
+    }
+}
+$new_BID_nl = $last_BID_nl + 1;
+
 $result_notice_select = mysqli_query($conn, $sql_notice_select);
 $notice_list_select = mysqli_fetch_all($result_notice_select, MYSQLI_ASSOC);
 
@@ -88,7 +99,6 @@ if (isset($_POST['SearchButtonNL'])) {
     }
 
     $sql_notice = '';
-
     if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         $sql_notice = 'SELECT DISTINCT
         `tbl_notice`.*,
@@ -96,16 +106,17 @@ if (isset($_POST['SearchButtonNL'])) {
         `tbl_user`.`companyid`,
         `tbl_company`.`companyname` 
         FROM `tbl_notice`
-        LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+        LEFT JOIN `tbl_user` ON `tbl_notice`.`email` = `tbl_user`.`email`
         LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
-        WHERE (`tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '")';
+        WHERE (`tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '")
+        ORDER BY `tbl_user`.`companyid`';
     } else {
         $sql_notice = 'SELECT
         `tbl_notice`.*,
         `tbl_user`.`name`,
         `tbl_user`.`companyid`
         FROM `tbl_notice`
-        LEFT JOIN `tbl_user` ON `tbl_notice`.`uid` = `tbl_user`.`uid`
+        LEFT JOIN `tbl_user` ON `tbl_notice`.`email` = `tbl_user`.`email`
         LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
         WHERE `tbl_user`.`companyid` = ' . $currentCompanyID . '  
         AND `tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '"';
@@ -113,20 +124,16 @@ if (isset($_POST['SearchButtonNL'])) {
     error_log($sql_notice);
 
     $result_notice = mysqli_query($conn, $sql_notice);
-    $notice_list_ = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
+    $notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
 } else {
-    $notice_list_ = $notice_list_select;
-}
-$notice_list = array();
-foreach ($notice_list_ as $k => $v) {
-    $notice_list[] = $v;
+    $notice_list = $notice_list_select;
 }
 
 // Save Data to tbl_notice DB 
 if (isset($_POST['btnRegNL'])) {
     $content_d = $_POST['content'];
     $content_f = str_replace(array("\n", "\r"), '', $content_d);
-    $uid = mysqli_real_escape_string($conn, $_POST['uid']);
+    $email = mysqli_real_escape_string($conn, $_POST['email']);
     $title = mysqli_real_escape_string($conn, $_POST['title']);
     $content = mysqli_real_escape_string($conn, $content_f);
     $reader = mysqli_real_escape_string($conn, $_POST['reader']);
@@ -138,58 +145,54 @@ if (isset($_POST['btnRegNL'])) {
     $fileExtension_add = pathinfo($_FILES["imagefile"]["name"], PATHINFO_EXTENSION);
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR, $fileExtension_add, $noticeId, $companyId);
     $originalFileName = $_FILES["imagefile"]["name"];
+    if ($originalFileName == "") {
+        $fileName == '';
+    } else {
+        $uploadOk = true;
+        global $NOTICE_IMAGE_MAXSIZE;
+        $uploadFile = $IMAGE_UPLOAD_DIR . $newFileName;
 
-    $uploadOk = true;
-    global $NOTICE_IMAGE_MAXSIZE;
-
-    // Check file name is exists
-    if (file_exists($uploadFile)) {
-        error_log("File name is exists -> Delete old file name");
-        unlink($uploadFile);
-    }
-    // check size 
-    if (!isFileSizeValid($originalFileName, $NOTICE_IMAGE_MAXSIZE)) {
-        error_log("File is BIG!");
-        $uploadOk = false;
-    }
-    // check valid extention 
-    $fileExtension_add = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
-    if (!checkValidExtension($fileExtension_add)) {
-        error_log("Image only(jpg, jpeg, png, gif):");
-        $uploadOk = false;
-    }
-
-    // if not error change name 
-    if ($uploadOk) {
-        $fileName = $newFileName;
-        $sql = "INSERT INTO `tbl_notice` (`title`, `content`, `imagefile`, `reader`, `viewcnt`, `uid`, `reg_dt` , `upt_dt`)
-             VALUES ('$title', '$content', '$fileName', '$reader', '$viewcnt', '$uid', '$reg_dt' , null)";
-        if ($conn->query($sql) === TRUE) {
-            $_SESSION['save_success'] = $save_success;
-
-            // set id to image 
-            $insertedId = mysqli_insert_id($conn);
-            $fileName = str_replace('__', '_' . $insertedId . '_', $fileName);
-            $updateSql = "UPDATE tbl_notice SET `imagefile` = '$fileName' WHERE `bid` = $insertedId";
-            if ($conn->query($updateSql) === TRUE) {
-                $_SESSION['save_success'] = $save_success;
-                header("Refresh:3");
-            } else {
-                error_log('query error: ' . mysqli_error($conn));
-            }
-
-            // upload file 
-            if ($uploadOk) {
-                $uploadFile = $IMAGE_UPLOAD_DIR . $fileName;
-                if (move_uploaded_file($_FILES["imagefile"]["tmp_name"], $uploadFile)) {
-                    deleteNoticeImages($IMAGE_UPLOAD_DIR, $noticeId, $fileName);
-                } else {
-                    error_log("Upload Error");
-                }
-            }
-        } else {
-            error_log('query error: ' . mysqli_error($conn));
+        // Check file name is exists
+        if (file_exists($uploadFile)) {
+            error_log("File name is exists -> Delete old file name");
+            unlink($uploadFile);
         }
+        // check size 
+        if (!isFileSizeValid($originalFileName, $NOTICE_IMAGE_MAXSIZE)) {
+            error_log("File is BIG!");
+            $uploadOk = false;
+        }
+        // check valid extention 
+        $fileExtension_add = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
+        if (!checkValidExtension($fileExtension_add)) {
+            error_log("Image only(jpg, jpeg, png, gif):");
+            $uploadOk = false;
+        }
+
+        // if not error save
+        if ($uploadOk) {
+            $fileName = $newFileName;
+            $fileName = str_replace('__', '_' . $new_BID_nl . '_', $fileName);
+
+            // upload to server
+            $uploadFile = $IMAGE_UPLOAD_DIR . $fileName;
+            if (move_uploaded_file($_FILES["imagefile"]["tmp_name"], $uploadFile)) {
+                deleteNoticeImages($IMAGE_UPLOAD_DIR, $noticeId, $fileName);
+            } else {
+                error_log("Upload Error");
+            }
+        }
+    }
+
+    // insert to DB 
+    $sql = "INSERT INTO `tbl_notice` (`bid`, `title`, `content`, `imagefile`, `reader`, `viewcnt`, `email`, `reg_dt` , `upt_dt`)
+             VALUES ('$new_BID_nl', '$title', '$content', '$fileName', '$reader', '$viewcnt', '$email', '$reg_dt' , null)";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['save_success'] = $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
     }
 }
 
@@ -198,7 +201,7 @@ if (isset($_POST['btnUpdateNL'])) {
     $udcontent_d = $_POST['udcontent'];
     $udcontent_f = str_replace(array("\n", "\r"), '', $udcontent_d);
     $bid = mysqli_real_escape_string($conn, $_POST['udbid']);
-    $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+    $email = mysqli_real_escape_string($conn, $_POST['udemail']);
     $title = mysqli_real_escape_string($conn, $_POST['udtitle']);
     $content = mysqli_real_escape_string($conn, $udcontent_f);
     $reader = mysqli_real_escape_string($conn, $_POST['udreader']);
@@ -246,8 +249,8 @@ if (isset($_POST['btnUpdateNL'])) {
             error_log("Upload Error");
         }
 
-        $sql = "UPDATE tbl_notice SET  title='$title', content='$content', reader='$reader', imagefile='$fileName'
-        , viewcnt='$viewcnt', upt_dt='$reg_dt' WHERE bid ='$bid' AND uid ='$uid'";
+        $sql = "UPDATE tbl_notice SET  title='$title', content='$content', reader='$reader', imagefile='$fileName', 
+        viewcnt='$viewcnt', upt_dt='$reg_dt' WHERE bid ='$bid' AND email ='$email'";
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['update_success'] = $update_success;
@@ -339,11 +342,11 @@ function generateRandomString($length)
 // Delete Data to tbl_notice DB 
 if (isset($_POST['btnDelNL'])) {
     $bid = mysqli_real_escape_string($conn, $_POST['udbid']);
-    $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+    $email = mysqli_real_escape_string($conn, $_POST['udemail']);
     $fileImgName = mysqli_real_escape_string($conn, $_POST['udimagefile_name']);
     $removeDir = $IMAGE_UPLOAD_DIR;
     $sql = "DELETE FROM `tbl_notice` 
-    WHERE bid ='$bid' AND uid ='$uid'";
+    WHERE bid ='$bid' AND email ='$email'";
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
 
