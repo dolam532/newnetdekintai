@@ -310,7 +310,26 @@ if (isset($_POST['btnDelHdr'])) {
 
 // (uservacationList.php)
 // Select data from tbl_user & tbl_vacationinfo
-if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')  || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_uservacation_select = 'SELECT
+    `tbl_user`.*,
+    `tbl_vacationinfo`.`vacationid`,
+    `tbl_vacationinfo`.`vacationstr`,
+    `tbl_vacationinfo`.`vacationend`,
+    `tbl_vacationinfo`.`oldcnt`,
+    `tbl_vacationinfo`.`newcnt`,
+    `tbl_vacationinfo`.`usecnt`,
+    `tbl_vacationinfo`.`usetime`,
+    `tbl_vacationinfo`.`restcnt`,
+    `tbl_company`.`companyname`
+FROM
+    `tbl_user`
+LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`email` = `tbl_vacationinfo`.`email`
+LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
+ORDER By `tbl_company`.`companyid`, `tbl_user`.`type` DESC';
+    $result_uservacation_select = mysqli_query($conn, $sql_uservacation_select);
+    $uservacation_list_select = mysqli_fetch_all($result_uservacation_select, MYSQLI_ASSOC);
+} elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $sql_uservacation_select = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_vacationinfo`.`vacationid`,
@@ -323,8 +342,9 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
     `tbl_vacationinfo`.`restcnt`
     FROM
     `tbl_user`
-    LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
-    WHERE `tbl_user`.`companyid` IN ("' . $companyId_ . '")';
+    LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`email` = `tbl_vacationinfo`.`email`
+    WHERE `tbl_user`.`companyid` IN ("' . $companyId_ . '")
+    ORDER BY `tbl_user`.`type` DESC, `tbl_user`.`uid`';
     $result_uservacation_select = mysqli_query($conn, $sql_uservacation_select);
     $uservacation_list_select = mysqli_fetch_all($result_uservacation_select, MYSQLI_ASSOC);
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
@@ -340,9 +360,9 @@ if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == con
     `tbl_vacationinfo`.`restcnt` 
     FROM
     `tbl_user`
-    LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
+    LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`email` = `tbl_vacationinfo`.`email`
     WHERE `tbl_user`.`companyid` IN ("' . $companyId_ . '")
-    AND `tbl_user`.`uid` IN ("' . $_SESSION['auth_uid'] . '")';
+    AND `tbl_user`.`email` IN ("' . $_SESSION['auth_email'] . '")';
     $result_uservacation_select = mysqli_query($conn, $sql_uservacation_select);
     $uservacation_list_select = mysqli_fetch_all($result_uservacation_select, MYSQLI_ASSOC);
 }
@@ -391,7 +411,7 @@ WHERE `tbl_user`.`companyid` IN ("' . $companyId_ . '") ';
 if (isset($_POST['btnUpdateUvl'])) {
     $udvacationid = intval($_POST['udvacationid']);
     $vacationid = mysqli_real_escape_string($conn, $udvacationid);
-    $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+    $email = mysqli_real_escape_string($conn, $_POST['udemail']);
     $vacationstr = mysqli_real_escape_string($conn, $_POST['udvacationstr']);
     $vacationend = mysqli_real_escape_string($conn, $_POST['udvacationend']);
     $oldcnt = mysqli_real_escape_string($conn, $_POST['udoldcnt']);
@@ -400,8 +420,8 @@ if (isset($_POST['btnUpdateUvl'])) {
     $usetime = mysqli_real_escape_string($conn, $_POST['udusetime']);
     $restcnt = mysqli_real_escape_string($conn, $_POST['udrestcnt']);
 
-    $sql = "INSERT INTO `tbl_vacationinfo` (`vacationid`, `uid`, `vacationstr`, `vacationend`, `oldcnt`, `newcnt`, `usecnt`, `usetime`, `restcnt`, `reg_dt`)
-                VALUES ('$vacationid', '$uid', '$vacationstr', '$vacationend', '$oldcnt', '$newcnt', '$usecnt', '$usetime', '$restcnt', '$reg_dt')
+    $sql = "INSERT INTO `tbl_vacationinfo` (`vacationid`, `email`, `vacationstr`, `vacationend`, `oldcnt`, `newcnt`, `usecnt`, `usetime`, `restcnt`, `reg_dt`)
+                VALUES ('$vacationid', '$email', '$vacationstr', '$vacationend', '$oldcnt', '$newcnt', '$usecnt', '$usetime', '$restcnt', '$reg_dt')
                 ON DUPLICATE KEY UPDATE
                 vacationstr='$vacationstr', vacationend='$vacationend', oldcnt='$oldcnt', newcnt='$newcnt', usecnt='$usecnt', usetime='$usetime', restcnt='$restcnt' , upt_dt='$reg_dt'";
 
@@ -415,10 +435,10 @@ if (isset($_POST['btnUpdateUvl'])) {
 
 if (isset($_POST['btnDelUvl'])) {
     $vacationid = mysqli_real_escape_string($conn, $_POST['udvacationid']);
-    $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+    $email = mysqli_real_escape_string($conn, $_POST['udemail']);
 
     $sql = "DELETE FROM `tbl_vacationinfo` 
-    WHERE vacationid ='$vacationid' AND uid ='$uid'";
+    WHERE vacationid ='$vacationid' AND email ='$email'";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
@@ -430,13 +450,13 @@ if (isset($_POST['btnDelUvl'])) {
 
 // Update Database of tbl_user inymd column
 if (isset($_POST['btnUpdateUser'])) {
-    $uid = mysqli_real_escape_string($conn, $_POST['useruid']);
+    $email = mysqli_real_escape_string($conn, $_POST['useremail']);
     $name = mysqli_real_escape_string($conn, $_POST['username']);
     $inymd = mysqli_real_escape_string($conn, $_POST['userinymd']);
 
     $sql = "UPDATE tbl_user SET 
     inymd='$inymd'
-    WHERE uid ='$uid'
+    WHERE email ='$email'
     AND name ='$name'";
 
     if ($conn->query($sql) === TRUE) {

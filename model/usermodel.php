@@ -6,10 +6,10 @@ $upt_dt = date('Y-m-d H:i:s');
 // (userList.php)
 // Select data from tbl_codebase
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-    $sql_codebase = 'SELECT `code`, `name`, `companyid` FROM `tbl_codebase`
+    $sql_codebase = 'SELECT `id`, `code`, `name`, `companyid` FROM `tbl_codebase`
     WHERE `tbl_codebase`.`typecode` = "' . constant('DEPARTMENT') . '"
-    GROUP BY `code`, `name`, `companyid`
-    ORDER BY `companyid`';
+    GROUP BY `id`, `code`, `name`, `companyid`
+    ORDER BY `companyid`, `id`';
 } else {
     $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
     WHERE `tbl_codebase`.`typecode` = "' . constant('DEPARTMENT') . '"
@@ -57,7 +57,7 @@ WHERE
     `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
     AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
 ORDER BY
-    `tbl_user`.`reg_dt`';
+    `tbl_user`.`type` DESC, `tbl_user`.`uid`';
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_user_select_db = 'SELECT DISTINCT
     `tbl_user`.*,
@@ -552,7 +552,7 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     `tbl_user`
     LEFT JOIN `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`
     LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
-    ORDER BY `tbl_user`.`companyid`';
+    ORDER BY `tbl_user`.`companyid`, `tbl_user`.`type` DESC';
 } elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $sql_user_g = 'SELECT
         `tbl_user`.*,
@@ -560,7 +560,8 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     FROM
     `tbl_user`
     LEFT JOIN `tbl_genba` ON `tbl_user`.`genid` = `tbl_genba`.`genid`
-    WHERE `tbl_user`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")';
+    WHERE `tbl_user`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")
+    ORDER BY `tbl_user`.`type` DESC';
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_user_g = 'SELECT
         `tbl_user`.*,

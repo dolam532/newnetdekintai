@@ -96,6 +96,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                 </div>
                 <div class="col-md-3 text-right">
                     <div class="title_btn">
+                        <input type="submit" id="ClearButton" name="ClearButton" value="クリア">
+                    </div>
+                    <div class="title_btn">
                         <input type="submit" name="uservacationListSearch" value="検索">&nbsp;
                     </div>
                     <div class="title_btn">
@@ -112,30 +115,46 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
-                    <th style="text-align: center; width: 10%;">社員名</th>
+                    <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                        <th style="text-align: center; width: 10%;">会社名</th>
+                    <?php endif; ?>
+                    <th style="text-align: center; width: 8%;">社員名</th>
                     <th style="text-align: center; width: 8%;">入社日</th>
                     <th style="text-align: center; width: 8%;">勤続年数</th>
-                    <th style="text-align: center; width: 10%;">年次開始日</th>
-                    <th style="text-align: center; width: 10%;">年次終了日</th>
-                    <th style="text-align: center; width: 8%;">前年残数</th>
-                    <th style="text-align: center; width: 8%;">当年付与</th>
-                    <th style="text-align: center; width: 8%;">使用(日)</th>
-                    <th style="text-align: center; width: 8%;">使用(時)</th>
-                    <th style="text-align: center; width: 8%;">残数(日)</th>
+                    <th style="text-align: center; width: 8%;">年次開始日</th>
+                    <th style="text-align: center; width: 8%;">年次終了日</th>
+                    <th style="text-align: center; width: 7%;">前年残数</th>
+                    <th style="text-align: center; width: 7%;">当年付与</th>
+                    <th style="text-align: center; width: 7%;">使用(日)</th>
+                    <th style="text-align: center; width: 7%;">使用(時)</th>
+                    <th style="text-align: center; width: 7%;">残数(日)</th>
                     <th style="text-align: center; width: auto;">備考</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($uservacation_list)) { ?>
                     <tr>
-                        <td colspan="11" align="center">
-                            <?php echo $data_save_no; ?>
-                        </td>
+                        <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                            <td colspan="12" align="center">
+                                <?php echo $data_save_no; ?>
+                            </td>
+                        <?php else : ?>
+                            <td colspan="11" align="center">
+                                <?php echo $data_save_no; ?>
+                            </td>
+                        <?php endif; ?>
                     </tr>
                     <?php } elseif (!empty($uservacation_list)) {
                     foreach ($uservacation_list as $key) {
                     ?>
                         <tr>
+                            <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                <td align="center">
+                                    <span>
+                                        <?= $key['companyname'] ?>
+                                    </span>
+                                </td>
+                            <?php endif; ?>
                             <td><span>
                                     <?= $key['name'] ?>
                                 </span></td>
@@ -151,14 +170,21 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 echo $years;
                                 ?>
                             </td>
-                            <td><a href="#">
-                                    <span class="showModal">
+                            <td>
+                                <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN') || $_SESSION['auth_type'] == constant('USER')) : ?>
+                                    <span>
                                         <?= isset($key['vacationstr']) ? $key['vacationstr'] : '未登錄'; ?>
-                                        <span class="uservacationList_class">
-                                            <?= ',' . $key['uid'] . ',' . $key['inymd'] . ',' . $key['vacationstr'] . ',' . $key['name'] ?>
-                                        </span>
                                     </span>
-                                </a>
+                                <?php else : ?>
+                                    <a href="#">
+                                        <span class="showModal">
+                                            <?= isset($key['vacationstr']) ? $key['vacationstr'] : '未登錄'; ?>
+                                            <span class="uservacationList_class">
+                                                <?= ',' . $key['email'] . ',' . $key['inymd'] . ',' . $key['vacationstr'] . ',' . $key['name'] ?>
+                                            </span>
+                                        </span>
+                                    </a>
+                                <?php endif; ?>
                             </td>
                             <td align="center"><span>
                                     <?= $key['vacationend'] ?>
@@ -190,94 +216,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     </div>
 </div>
 
-<div class="row">
-    <div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <form method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <span id="ustitle"></span>
-                        (<span id="usname"></span>)
-                        <button class="close" data-dismiss="modal">x</button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label for="uid">ID</label>
-                                <input type="text" class="form-control" name="uduid" id="uduid" style="text-align: left" readonly>
-                                <input type="hidden" name="udvacationid" id="udvacationid">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="name">名</label>
-                                <input type="text" class="form-control" name="udname" id="udname" style="text-align: center" readonly>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="inymd">入社日</label>
-                                <input type="text" class="form-control" name="udinymd" id="udinymd" style="text-align: center" readonly>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="yearcnt">勤続年数</label>
-                                <input type="text" class="form-control" name="udyearcnt" id="udyearcnt" style="text-align: center" readonly>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label for="vacationstr">年次開始日</label>
-                                <input type="text" class="form-control" name="udvacationstr" id="udvacationstr" maxlength="10" style="text-align: center">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="vacationend">年次終了日</label>
-                                <input type="text" class="form-control" name="udvacationend" id="udvacationend" maxlength="10" style="text-align: center">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="oldcnt">前年残数</label>
-                                <input type="text" class="form-control" name="udoldcnt" id="udoldcnt" maxlength="2" style="text-align: center">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="newcnt">当年付与</label>
-                                <input type="text" class="form-control" name="udnewcnt" id="udnewcnt" maxlength="2" style="text-align: center">
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label for="usecnt">使用(日)</label>
-                                <input type="text" class="form-control" name="udusecnt" id="udusecnt" maxlength="2" style="text-align: center">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="usetime">使用(時)</label>
-                                <input type="text" class="form-control" name="udusetime" id="udusetime" maxlength="2" style="text-align: center">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="restcnt">残数(日)</label>
-                                <input type="text" class="form-control" name="udrestcnt" id="udrestcnt" maxlength="2" style="text-align: center" readonly>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer" style="text-align: center">
-                        <div class="col-md-3"></div>
-                        <div class="col-md-2">
-                            <p class="text-center">
-                                <input type="submit" name="btnUpdateUvl" class="btn btn-primary" id="btnUpdateUvl" role="button">
-                            </p>
-                        </div>
-                        <div class="col-md-2">
-                            <p class="text-center">
-                                <input type="submit" name="btnDelUvl" class="btn btn-warning" id="btnDel" role="button" value="削除">
-                            </p>
-                        </div>
-                        <div class="col-md-2">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
-                        </div>
-                        <div class="col-md-3"></div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
+<!-- 新規入社日　-->
 <div class="row">
     <div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
@@ -290,10 +229,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-2">
-                                <label for="uid">ID</label>
+                                <label for="email">Email</label>
                             </div>
                             <div class="col-md-10">
-                                <input type="text" class="form-control" name="useruid" id="useruid" style="text-align: left" readonly>
+                                <input type="text" class="form-control" name="useremail" id="useremail" style="text-align: left" readonly>
                             </div>
                             <br>
                             <br>
@@ -330,13 +269,102 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         </div>
     </div>
 </div>
+
+<!-- 新規 & 編集 -->
+<div class="row">
+    <div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <form method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span id="ustitle"></span>
+                        (<span id="usname"></span>)
+                        <button class="close" data-dismiss="modal">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="email">Email</label>
+                                <input type="text" class="form-control" name="udemail" id="udemail" style="text-align: left" readonly>
+                                <input type="hidden" name="udvacationid" id="udvacationid">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="name">名</label>
+                                <input type="text" class="form-control" name="udname" id="udname" style="text-align: center" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="inymd">入社日</label>
+                                <input type="text" class="form-control" name="udinymd" id="udinymd" style="text-align: center" readonly>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="yearcnt">勤続年数</label>
+                                <input type="text" class="form-control" name="udyearcnt" id="udyearcnt" style="text-align: center" readonly>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="vacationstr">年次開始日</label>
+                                <input type="text" class="form-control" name="udvacationstr" id="udvacationstr" maxlength="10" style="text-align: center">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="vacationend">年次終了日</label>
+                                <input type="text" class="form-control" name="udvacationend" id="udvacationend" maxlength="10" style="text-align: center">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="oldcnt">前年残数</label>
+                                <input type="text" class="form-control" name="udoldcnt" id="udoldcnt" maxlength="2" style="text-align: center">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="newcnt">当年付与</label>
+                                <input type="text" class="form-control" name="udnewcnt" id="udnewcnt" maxlength="2" style="text-align: center">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="usecnt">使用(日)</label>
+                                <input type="text" class="form-control" name="udusecnt" id="udusecnt" maxlength="2" style="text-align: center">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="usetime">使用(時)</label>
+                                <input type="text" class="form-control" name="udusetime" id="udusetime" maxlength="2" style="text-align: center">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="restcnt">残数(日)</label>
+                                <input type="text" class="form-control" name="udrestcnt" id="udrestcnt" maxlength="2" style="text-align: center" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: center">
+                        <div class="col-md-3"></div>
+                        <div class="col-md-2">
+                            <p class="text-center">
+                                <input type="submit" name="btnUpdateUvl" class="btn btn-primary" id="btnUpdateUvl" role="button">
+                            </p>
+                        </div>
+                        <div class="col-md-2">
+                            <p class="text-center">
+                                <input type="submit" name="btnDelUvl" class="btn btn-warning" id="btnDel" role="button" value="削除">
+                            </p>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
     // Year/month click on grid (edit): popup & content display
     $(document).on('click', '.showModal', function() {
         var ArrayData = $(this).text();
         var SeparateArr = ArrayData.split(',');
         var Vacationstr = SeparateArr[0];
-        var Uid = SeparateArr[1];
+        var Email = SeparateArr[1];
         var Inymd = SeparateArr[2];
         var CheckData = SeparateArr[3];
         var Name = SeparateArr[4];
@@ -351,20 +379,20 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         if (Inymd == "") {
             alert("<?php echo $info_uvl_joincompany_empty; ?>");
             $('#modal2').modal('toggle');
-            $("#usernametitle").text(Uid);
-            $("#useruid").text($('[name="useruid"]').val(Uid));
+            $("#usernametitle").text(Email);
+            $("#useremail").text($('[name="useremail"]').val(Email));
             $("#username").text($('[name="username"]').val(Name));
             $("#username").text(Name);
         } else {
             $('#modal').modal('toggle');
-            $("#usname").text(Uid);
-            $("#uduid").text($('[name="uduid"]').val(Uid));
+            $("#usname").text(Email);
+            $("#udemail").text($('[name="udemail"]').val(Email));
             $("#udinymd").text($('[name="udinymd"]').val(Inymd));
             <?php
             if (!empty($uservacation_list)) {
                 foreach ($uservacation_list as $key) {
             ?>
-                    if ('<?php echo $key['uid'] ?>' == Uid) {
+                    if ('<?php echo $key['email'] ?>' == Email) {
                         $("#udvacationstr").text($('[name="udvacationstr"]').val("<?php echo $key['vacationstr'] ?>"));
                         $("#udname").text($('[name="udname"]').val("<?php echo $key['name'] ?>"));
                         var targetDate = new Date("<?php echo $key['inymd']; ?>");
@@ -443,6 +471,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         setTimeout(hideLoadingOverlay, 1000);
         startLoading();
 
+    });
+
+    // Clear Input Tag
+    $(document).on('click', '#ClearButton', function(e) {
+        $("#searchYmd").val("");
+        $("#searchName").val("");
     });
 </script>
 <?php include('../inc/footer.php'); ?>

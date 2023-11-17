@@ -109,7 +109,7 @@ if (isset($_POST['SearchButtonNL'])) {
         LEFT JOIN `tbl_user` ON `tbl_notice`.`email` = `tbl_user`.`email`
         LEFT JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
         WHERE (`tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '")
-        ORDER BY `tbl_user`.`companyid`';
+        ORDER BY `tbl_user`.`companyid`, `tbl_user`.`type` DESC';
     } else {
         $sql_notice = 'SELECT
         `tbl_notice`.*,
@@ -392,7 +392,8 @@ if ($_POST['typecode'] == NULL) {
     } else {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
         WHERE `tbl_codebase`.`companyid` IN ("' . constant('MAIN_COMPANY_ID') . '", "' . $_SESSION['auth_companyid'] . '")
-        AND `tbl_codebase`.`typecode` IN ("' . $codetype_result . '")';
+        AND `tbl_codebase`.`typecode` IN ("' . $codetype_result . '")
+        ORDER BY `tbl_codebase`.`code`';
     }
 } elseif (isset($_POST['typecode'])) {
     if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
@@ -402,11 +403,12 @@ if ($_POST['typecode'] == NULL) {
         FROM `tbl_codebase`
         LEFT JOIN `tbl_company` ON `tbl_codebase`.`companyid` = `tbl_company`.`companyid`
         WHERE `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")
-        ORDER BY `tbl_codebase`.`companyid`';
+        ORDER BY `tbl_codebase`.`companyid`, `tbl_codebase`.`id`';
     } else {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
         WHERE `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")
-        AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")';
+        AND `tbl_codebase`.`typecode` IN ("' . $_POST['typecode'] . '")
+        ORDER BY `tbl_codebase`.`code`';
     }
 }
 $result_codebase = mysqli_query($conn, $sql_codebase);

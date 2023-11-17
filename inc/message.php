@@ -23,13 +23,13 @@ $login_is_not = '詳細情報はログイン後可能です。';
 // loginout
 $login_success = 'ログインに成功しました。';
 $logout_success = 'ログアウトに成功しました。';
-$login_fail = 'Emailまたはパスワードが正しくありません。もう一度お試しください。';
+$login_fail = 'メールまたはパスワードが正しくありません。もう一度お試しください。';
 
 // userList
-$user_id_empty = 'Emailを入力してください。';
+$user_id_empty = 'IDを入力してください。';
 $user_pwd_empty = 'Passwordを入力してください。';
 $user_name_empty = '社員名を入力してください。';
-$user_email_empty = 'mailを入力してください。';
+$user_email_empty = 'メールを入力してください。';
 $user_dept_empty = '部署を入力してください。';
 $user_grade_empty = '区分を入力してください。';
 $user_genba_list_empty = '勤務時間タイプを選択してください。';
@@ -175,7 +175,7 @@ $manage_Uid_have = '登録済みIDです。';
 $manage_pwd_empty = 'Passwordを入力してください。';
 $manage_name_empty = '社員名を入力してください。';
 $manage_grade_empty = '区分を入力してください。';
-$manage_email_empty = 'Emailを入力してください。';
+$manage_email_empty = 'メールを入力してください。';
 $manage_dept_empty = '部署を入力してください。';
 $manage_companyid_empty = '会社名を選択してください。';
 

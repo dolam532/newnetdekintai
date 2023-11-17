@@ -92,13 +92,35 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <?php if (isset($_SESSION['auth'])) : ?>
-                        <li><a href=""><span class="glyphicon glyphicon-user" id="username">
-                                    <?= $_SESSION['auth_name'] ?></span></a></li>
-                        <li class="logout"><a href="../loginout/loginout.php"><span class="glyphicon glyphicon-log-out" id="logout"> Logout</span></a></li>
+                        <li>
+                            <a href="../contact/noticeList.php">
+                                <span class="glyphicon glyphicon-user" id="username">
+                                    <?= $_SESSION['auth_name'] ?>
+                                </span>
+                            </a>
+                        </li>
+                        <li class="logout">
+                            <a href="../loginout/loginout.php">
+                                <span class="glyphicon glyphicon-log-out" id="logout">
+                                    Logout
+                                </span>
+                            </a>
+                        </li>
                     <?php else : ?>
-                        <li><a href=""><span class="glyphicon glyphicon-user" id="username">
-                                    社員名</span></a></li>
-                        <li class="login"><a href="../loginout/loginout.php"><span class="glyphicon glyphicon-log-in" id="login"> Login</span></a></li>
+                        <li>
+                            <a href="../loginout/loginout.php">
+                                <span class="glyphicon glyphicon-user" id="username">
+                                    社員名
+                                </span>
+                            </a>
+                        </li>
+                        <li class="login">
+                            <a href="../loginout/loginout.php">
+                                <span class="glyphicon glyphicon-log-in" id="login">
+                                    Login
+                                </span>
+                            </a>
+                        </li>
                     <?php endif; ?>
                 </ul>
             </div>
