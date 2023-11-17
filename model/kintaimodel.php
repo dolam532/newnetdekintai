@@ -215,10 +215,10 @@ function sortUsersByAuthUid($userList, $authUid)
     $key = array_search($authUid, array_column($userList, 'uid'));
     if ($key !== false) {
         $authUser = $userList[$key];
-        unset($userList[$key]); 
-        array_splice($userList, 0, 0, [$authUser]); 
+        unset($userList[$key]);
+        array_splice($userList, 0, 0, [$authUser]);
     }
-    
+
     return array_values($userList);
 }
 
@@ -612,7 +612,6 @@ if (isset($_POST['AutoUpdateKintai'])) {
     foreach ($Array_Result as $element) {
         if (isset($element['workymd'])) {
             $lastValue = $element['workymd'];
-
         }
     }
 
@@ -687,7 +686,6 @@ if (isset($_POST['AutoUpdateKintai'])) {
             $offTimeAutomm = $offtimemm;
             error_log(' autoOFF:' . $offTimeAutohh . " mm: " . $offTimeAutomm . "\n");
         }
-
     }
 
     if ($ArraySave = true) {
@@ -717,7 +715,6 @@ if (isset($_POST['AutoUpdateKintai'])) {
         } else {
             echo 'query error: ' . mysqli_error($conn);
         }
-
     }
 }
 
@@ -871,16 +868,12 @@ $sql_workmonth_select = 'SELECT `tbl_workmonth`.*, `tbl_company`.`companyname` ,
 
 // Select database from tbl_userlogin table
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-
+    $sql_workmonth_select .= 'ORDER BY `tbl_workmonth`.`companyid`, `tbl_user`.`type` DESC';
 } else if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN')) {
-
     $sql_workmonth_select .= ' AND `tbl_workmonth`.`companyid` IN("' . $companyid . '") ';
-
 } else {
     $sql_workmonth_select .= ' AND  `tbl_workmonth`.`uid` IN("' . $_SESSION['auth_uid'] . '")  AND `tbl_workmonth`.`companyid` IN("' . $companyid . '") ';
 }
-
-
 $result_workmonth_select = mysqli_query($conn, $sql_workmonth_select);
 $workmonth_select_list = mysqli_fetch_all($result_workmonth_select, MYSQLI_ASSOC);
 
@@ -954,7 +947,7 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
         //2023-11-16   Update Sekinin  Kanri  add end // 
 
 
-        if ($currentSubmission_status == 1 || $currentSubmission_status == 2 ) {
+        if ($currentSubmission_status == 1 || $currentSubmission_status == 2) {
             // 2023-11-16 Update Sekinin  Kanri  chg start // 
             $query_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 2 , `upt_dt`="' . $upt_dt . ' " , `kanrisha_uid`="' . $kanrishaUid . ' "   WHERE `tbl_workmonth`.`uid` 
             IN("' . $currentUseUid . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
@@ -1015,14 +1008,13 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
             header("Refresh: 5");
         }
     }
-
 }
 
 // 2023/11/10 submission-status  add end 
 
 
 
- // 2023-11-16  Update Sekinin  Kanri  chg start // 
+// 2023-11-16  Update Sekinin  Kanri  chg start // 
 // $sql_user_admin = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMIN') . '"';
 // $result_user_admin = mysqli_query($conn, $sql_user_admin);
 // $signstamp_admin = mysqli_fetch_all($result_user_admin, MYSQLI_ASSOC);
@@ -1040,17 +1032,17 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
 
 
 $sql_user_kanri = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMINISTRATOR') . '"';
-if($selectedKanri != '' &&  isset($selectedKanri)) {
+if ($selectedKanri != '' &&  isset($selectedKanri)) {
     $sql_user_kanri = "SELECT * FROM `tbl_user` WHERE  `tbl_user`.`uid` = '$selectedKanri'";
-} 
+}
 
 $sql_user_admin = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMIN') . '"';
-if($selectedSekinin != '' &&  isset($selectedSekinin)) {
+if ($selectedSekinin != '' &&  isset($selectedSekinin)) {
     $sql_user_admin = "SELECT * FROM `tbl_user` WHERE `tbl_user`.`uid` = '$selectedSekinin'";
-} 
+}
 
-error_log("Querry KANRI ".$sql_user_kanri);
-error_log("Querry ADMIN ".$sql_user_admin);
+error_log("Querry KANRI " . $sql_user_kanri);
+error_log("Querry ADMIN " . $sql_user_admin);
 
 $result_user_admin = mysqli_query($conn, $sql_user_admin);
 $signstamp_admin = mysqli_fetch_all($result_user_admin, MYSQLI_ASSOC);

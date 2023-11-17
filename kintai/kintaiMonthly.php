@@ -92,7 +92,15 @@ if ($_SESSION['auth'] == false) {
 		<tbody>
 			<?php if (empty($workmonth_select_list)) { ?>
 				<tr>
-					<td colspan="12" align="center"><?php echo $data_save_no; ?></td>
+					<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+						<td colspan="13" align="center">
+							<?php echo $data_save_no; ?>
+						</td>
+					<?php else : ?>
+						<td colspan="12" align="center">
+							<?php echo $data_save_no; ?>
+						</td>
+					<?php endif; ?>
 				</tr>
 				<?php } elseif (!empty($workmonth_select_list)) {
 				foreach ($workmonth_select_list as $workmonth_select) {
@@ -101,7 +109,13 @@ if ($_SESSION['auth'] == false) {
 						<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
 							<td><span><?= $workmonth_select['companyname'] ?></span></td>
 						<?php endif; ?>
-						<td><a href="../kintai/kintaiReg.php"><span><?= $workmonth_select['name'] ?></span></a></td>
+						<td>
+							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('USER')) : ?>
+								<a href="../kintai/kintaiReg.php"><span><?= $workmonth_select['name'] ?></span></a>
+							<?php elseif ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+								<span><?= $workmonth_select['name'] ?></span>
+							<?php endif; ?>
+						</td>
 						<td><span><?= $workmonth_select['workym'] ?></span></td>
 						<td><span><?= $workmonth_select['jobhour'] ?></span></td>
 						<td><span><?= $workmonth_select['jobminute'] ?></span></td>
