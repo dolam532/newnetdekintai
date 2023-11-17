@@ -293,7 +293,7 @@ if ($_SESSION['auth'] == false) {
                                     <input type="text" class="form-control" name="udcode" id="udcode" style="text-align: center" readonly>
                                     <input type="hidden" name="udid" id="udid">
                                     <input type="hidden" name="udcompanyid" id="udcompanyid">
-                                    <input type="hidden" name="uduid" id="uduid">
+                                    <input type="hidden" name="udemail" id="udemail">
                                     <input type="hidden" name="udtypecode" id="udtypecode">
                                 </div>
                                 <div class="col-md-5">
@@ -439,9 +439,9 @@ if ($_SESSION['auth'] == false) {
                     var udcompanyid = $("input[name=udcompanyid]:hidden");
                     udcompanyid.val("<?php echo $key['companyid'] ?>");
                     var udcompanyid = udcompanyid.val();
-                    var uduid = $("input[name=uduid]:hidden");
-                    uduid.val("<?php echo $key['uid'] ?>");
-                    var uduid = uduid.val();
+                    var udemail = $("input[name=udemail]:hidden");
+                    udemail.val("<?php echo $key['email'] ?>");
+                    var udemail = udemail.val();
                     var udtypecode = $("input[name=udtypecode]:hidden");
                     udtypecode.val("<?php echo $key['typecode'] ?>");
                     var udtypecode = udtypecode.val();

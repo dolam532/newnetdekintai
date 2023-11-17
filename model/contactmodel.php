@@ -391,8 +391,8 @@ if ($_POST['typecode'] == NULL) {
         ORDER BY `tbl_codebase`.`companyid`';
     } else {
         $sql_codebase = 'SELECT * FROM `tbl_codebase`
-        WHERE `tbl_codebase`.`companyid` IN ("' . constant('MAIN_COMPANY_ID') . '", "' . $_SESSION['auth_companyid'] . '")
-        AND `tbl_codebase`.`typecode` IN ("' . $codetype_result . '")
+        WHERE `tbl_codebase`.`companyid` IN ("' . $_SESSION['auth_companyid'] . '")
+        AND `tbl_codebase`.`typecode` IN ("' .  $codetype_result . '")
         ORDER BY `tbl_codebase`.`code`';
     }
 } elseif (isset($_POST['typecode'])) {
@@ -422,13 +422,13 @@ $codes = array_column($codebase_list_all, 'code');
 if (isset($_POST['btnRegCML'])) {
     $companyid = $_SESSION['auth_companyid'];
     $typecode = $_SESSION['typecode'] = $_POST['typecode'];
-    $uid = $_SESSION['auth_uid'];
+    $email = $_SESSION['auth_email'];
     $code = mysqli_real_escape_string($conn, $_POST['code']);
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $remark = mysqli_real_escape_string($conn, $_POST['remark']);
 
-    $sql = "INSERT INTO `tbl_codebase` (`companyid`, `typecode`, `code`, `name`, `remark`, `uid`, `reg_dt`)
-                VALUES ('$companyid', '$typecode', '$code', '$name', '$remark', '$uid', '$reg_dt')";
+    $sql = "INSERT INTO `tbl_codebase` (`companyid`, `typecode`, `code`, `name`, `remark`, `email`, `reg_dt`)
+                VALUES ('$companyid', '$typecode', '$code', '$name', '$remark', '$email', '$reg_dt')";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] = $save_success;
@@ -443,7 +443,7 @@ if (isset($_POST['btnUpdateCML'])) {
     $_SESSION['typecode'] = $_POST['udtypecode'];
     $id = mysqli_real_escape_string($conn, $_POST['udid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
-    $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+    $email = mysqli_real_escape_string($conn, $_POST['udemail']);
     $typecode = mysqli_real_escape_string($conn, $_POST['udtypecode']);
     $code = mysqli_real_escape_string($conn, $_POST['udcode']);
     $name = mysqli_real_escape_string($conn, $_POST['udname']);
@@ -455,7 +455,7 @@ if (isset($_POST['btnUpdateCML'])) {
                 upt_dt = '$reg_dt' 
             WHERE id ='$id'
             AND companyid ='$companyid'
-            AND uid ='$uid'
+            AND email ='$email'
             AND typecode ='$typecode'
             AND code ='$code'";
 
@@ -472,12 +472,12 @@ if (isset($_POST['btnDelCML'])) {
     $_SESSION['typecode'] = $_POST['udtypecode'];
     $id = mysqli_real_escape_string($conn, $_POST['udid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
-    $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+    $email = mysqli_real_escape_string($conn, $_POST['udemail']);
     $typecode = mysqli_real_escape_string($conn, $_POST['udtypecode']);
     $code = mysqli_real_escape_string($conn, $_POST['udcode']);
 
     $sql = "DELETE FROM `tbl_codebase` 
-    WHERE id ='$id' AND companyid ='$companyid' AND uid ='$uid' AND typecode ='$typecode' AND code ='$code'";
+    WHERE id ='$id' AND companyid ='$companyid' AND email ='$email' AND typecode ='$typecode' AND code ='$code'";
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
         header("Refresh:3");

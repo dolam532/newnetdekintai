@@ -212,6 +212,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		</div>
 	</form>
 
+	<!-- 新規 -->
 	<div class="row">
 		<div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog">
@@ -361,6 +362,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		</div>
 	</div>
 
+	<!-- お知らせ -->
 	<div class="row">
 		<div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog">
