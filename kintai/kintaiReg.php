@@ -208,9 +208,6 @@ if ($_SESSION['auth'] == false) {
 	}
 
 
-	.adminChangedSaveWaiting {
-		background: rgba(255, 0, 0, 0.1);
-	}
 
 	/* 2023/11/13 submission-status  add end --> */
 </style>
@@ -509,15 +506,6 @@ if ($_SESSION['auth'] == false) {
 		</p>
 		</p>
 	</div>
-	<!-- 2023/11/16 submission-status  add start -->
-	<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
-		<div class="row submissionStatusNotice" id="adminChangedSaveWaitingStatus" style="display: none;">
-			<p class="adminChangedSaveWaiting" style=' font-style: italic; font-size: smaller;'>*
-				<?php echo $is_admin_changed_saveWaiting ?>
-			</p>
-		</div>
-	<?php endif; ?>
-	<!-- 2023/11/16 submission-status  add end -->
 
 	<?php if ($submissionStatusText !== $SUBMISSTION_STATUS[0]): ?>
 		<div class="row submissionStatusNotice">
@@ -534,57 +522,14 @@ if ($_SESSION['auth'] == false) {
 		<div class="col-md-12 right">
 			<!-- 2023/11/10 submission-status  change start -->
 			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
-				<!-- Admin Select Add Start -->
-
-				<div class="print_btn-submit">
-					<label for="sekinin_select">責任者指定</label>
-					<select id="sekinin_select" name="sekinin_select" class="seldate" style="padding:5px;">
-						<?php
-						$nCount = 0;
-						foreach ($admin_listSekinin as $item) {
-							?>
-							<option value="<?= $item['uid'] ?>" <?php if ($nCount == 0) {
-								  echo ' selected="selected"';
-							  } ?>>
-								<?= $item['name'] ?>
-							</option>
-							<?php
-							$nCount++;
-						}
-						?>
-					</select>
-				</div>
-				<div class="print_btn-submit">　　</div>
-				<div class="print_btn-submit">
-					<label for="kanri_select">担当者指定</label>
-					<select id="kanri_select" name="kanri_select" class="seldate" style="padding:5px;">
-						<?php
-
-						$nCount = 0;
-						foreach ($admin_listKanri as $item) {
-							?>
-							<option value="<?= $item['uid'] ?>" <?php if ($nCount == 0) {
-								  echo ' selected="selected"';
-							  } ?>>
-								<?= $item['name'] ?>
-							</option>
-							<?php
-							$nCount++;
-						}
-						?>
-					</select>
-				</div>
-
-				<div class="print_btn-submit">　　</div>
-
-				<!-- Admin Select Add End -->
+				
 				<div class="print_btn-submit">
 					<form method="post">
 						<a href="../kintaidetail/kintaiUser.php" class="btn btn-default workmonth-submit"
 							style="width: auto;">社員勤務表</a>
 					</form>
 				</div>
-
+				<?php if ( $_SESSION['auth_type'] !== constant('ADMINISTRATOR') ): ?>
 				<div class="print_btn-submit">
 					<form method="post">
 						<button type="submit" href="#" name="WorkmonthSekininShonin" id="WorkmonthSekininShonin"
@@ -598,7 +543,7 @@ if ($_SESSION['auth'] == false) {
 						<!-- 2023-11-16 Admin Select Add end -->
 					</form>
 				</div>
-
+				<?php endif; ?>
 				<div class="print_btn-submit">
 					<form method="post">
 						<button type="submit" href="#" name="WorkmonthShonin" id="WorkmonthShonin"
@@ -619,12 +564,9 @@ if ($_SESSION['auth'] == false) {
 							class="btn btn-default workmonth-submit workmonth-submit-modoshi" style="width: auto;"
 							onclick="return confirm('編集中に戻してよろしいでしょうか？')">戻す</button>
 					</form>
-
 				</div>
-
 			<?php else: ?>
 				<br />
-
 			<?php endif; ?>
 
 		</div>
@@ -1255,11 +1197,11 @@ if ($_SESSION['auth'] == false) {
 	<input type="hidden" name="signstamp_kanri"
 		value="<?php echo htmlspecialchars(json_encode($signstamp_kanri[0]['signstamp'])); ?>">
 
-
+		
 
 
 	<input type="hidden" name="signstamp_user"
-		value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_signstamp_user'])); ?>">
+		value="<?php echo htmlspecialchars(json_encode($signstamp_teishutsu[0]['signstamp'])); ?>">
 	<input type="hidden" name="name" value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_name'])); ?>">
 	<input type="hidden" name="dept" value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_dept'])); ?>">
 	<input type="hidden" name="date_show" value="<?php echo htmlspecialchars(json_encode($date_show)); ?>">
@@ -1346,10 +1288,7 @@ if ($_SESSION['auth'] == false) {
 							<input type="submit" name="changeGenid" class="btn btn-primary" id="btnchgGenid"
 								role="button" value="選択">
 						</div>
-						<!-- <div class="col-md-2">
-							<input type="submit" name="RegGenid" class="btn btn-primary" id="RegGenId" role="button"
-								value="登録ヘ">
-						</div> -->
+		
 						<div class="col-md-2">
 							<button type="button" class="btn btn-default" data-dismiss="modal"
 								id="modalClose">閉じる</button>
@@ -1776,49 +1715,9 @@ if ($_SESSION['auth'] == false) {
 		// Set Turn On Off Button
 		setFormInputableWithSubmissionStatus();
 
-		// 2023-11-16 Update Sekinin  Kanri  add start // 
-		// binding selectedAdmin 
-		bindingSelectedAdmin();
-		// 2023-11-16 Update Sekinin  Kanri  add end // 
+	
 
 	}
-	// 2023-11-16 Update Sekinin  Kanri  add start // 
-
-	function bindingSelectedAdmin() {
-		// show notice 
-		$("#kanri_select").change(function () {
-			var selectedValueKanri = $(this).val();
-			$("input[name='selectedKanri']").val(selectedValueKanri);
-			checkAdminChangeShowStatus();
-		});
-
-		$("#sekinin_select").change(function () {
-			var selectedValueSekinin = $(this).val();
-			$("input[name='selectedSekinin']").val(selectedValueSekinin);
-			checkAdminChangeShowStatus();
-		});
-	}
-
-
-	function checkAdminChangeShowStatus() {
-		$('#adminChangedSaveWaitingStatus').hide();
-		var result = false;
-		var newValueKanri = $("input[name='selectedKanri']").val();
-		var admin_listKanriCurrent = <?php echo json_encode($admin_listKanri[0]['uid']); ?>;
-		if (admin_listKanriCurrent !== newValueKanri) {
-			result = true;
-		}
-		var newValueSekinin = $("input[name='selectedSekinin']").val();
-		var admin_listSekininCurrent = <?php echo json_encode($admin_listSekinin[0]['uid']); ?>;
-		if (admin_listSekininCurrent !== newValueSekinin) {
-			result = true;
-		}
-
-		if (result) {
-			$('#adminChangedSaveWaitingStatus').show();
-		}
-	}
-	// 2023-11-16 Update Sekinin  Kanri  add end // 
 
 	function SetColorToSubmissionStatus() {
 		var submissionStatusText = $('#submission-status').text().trim();
@@ -1839,7 +1738,6 @@ if ($_SESSION['auth'] == false) {
 
 
 	function setFormInputableWithSubmissionStatus() {
-
 		var submissionStatusText = $('#submission-status').text().trim();
 		//  buttons -> Default On
 		var adminButtons = $("#WorkmonthSekininShonin, #WorkmonthShonin, #WorkmonthModoshi ");
@@ -1869,8 +1767,6 @@ if ($_SESSION['auth'] == false) {
 			userButtons.prop("disabled", true);
 			modalButons.prop("disabled", true);
 		}
-
-
 	}
 
 
@@ -2082,7 +1978,6 @@ if ($_SESSION['auth'] == false) {
 		var jobendmm = $("#jobendmm option:selected").val();
 		var offtimehh = $("#offtimehh option:selected").val();
 		var offtimemm = $("#offtimemm option:selected").val();
-
 
 		<?php if ($decide_template_ == "2"): ?>
 			var daystarthh = $("#daystarthh option:selected").val();

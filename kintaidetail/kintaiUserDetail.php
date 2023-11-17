@@ -56,7 +56,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 
 	.print_btn {
 		display: inline-block;
-		
+
 	}
 
 	span.kintaiReg_class {
@@ -110,7 +110,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		display: flex;
 		justify-content: flex-end;
 		align-items: flex-end;
-		
+
 		/* margin-bottom: 30px; */
 	}
 
@@ -193,7 +193,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		justify-content: flex-end;
 		align-items: flex-end;
 		margin-top: -40px;
-	
+
 	}
 
 	.col-md-12.right {
@@ -211,7 +211,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	}
 
 	.submission-status_1 {
-		color: red;
+		color: #337ab7;
 	}
 
 	.submission-status_2 {
@@ -240,11 +240,15 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		margin-right: 5px;
 		justify-content: flex-end;
 		flex-wrap: nowrap;
-		
+
 	}
+
 	.submissionNoticeElem {
 		background: rgba(0, 255, 0, 0.1);
 	}
+
+
+
 
 	/* 2023/11/13 submission-status  add end --> */
 </style>
@@ -348,7 +352,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	?>
 	<!-- 2023/11/13 submission-status  add start -->
 	<?php
-	if (isset($_SESSION['kakutei_success']) && isset($_POST['WorkmonthKakutei'])) {
+	if (isset($_SESSION['kakutei_success']) && isset($_POST['WorkmonthKakuteiUserDetail'])) {
 		?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -360,7 +364,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	?>
 
 	<?php
-	if (isset($_SESSION['kakutei_fail']) && isset($_POST['WorkmonthKakutei'])) {
+	if (isset($_SESSION['kakutei_fail']) && isset($_POST['WorkmonthKakuteiUserDetail'])) {
 		?>
 		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -374,7 +378,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 
 
 	<?php
-	if (isset($_SESSION['modoshi_success']) && isset($_POST['WorkmonthModoshi'])) {
+	if (isset($_SESSION['modoshi_success']) && isset($_POST['WorkmonthModoshiUserDetail'])) {
 		?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="5000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -386,7 +390,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	?>
 
 	<?php
-	if (isset($_SESSION['shonin_success']) && isset($_POST['WorkmonthShonin'])) {
+	if (isset($_SESSION['shonin_success']) && isset($_POST['WorkmonthShoninUserDetail'])) {
 		?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -399,7 +403,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 
 
 	<?php
-	if (isset($_SESSION['shonin_notkakutei_fail']) && isset($_POST['WorkmonthShonin'])) {
+	if (isset($_SESSION['shonin_notkakutei_fail']) && isset($_POST['WorkmonthShoninUserDetail'])) {
 		?>
 		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -413,7 +417,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 
 
 	<?php
-	if (isset($_SESSION['sekininshonin_success']) && isset($_POST['WorkmonthSekininShonin'])) {
+	if (isset($_SESSION['sekininshonin_success']) && isset($_POST['WorkmonthSekininShoninUserDetail'])) {
 		?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -425,7 +429,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	?>
 
 	<?php
-	if (isset($_SESSION['sekininshonin_notkakutei_fail']) && isset($_POST['WorkmonthSekininShonin'])) {
+	if (isset($_SESSION['sekininshonin_notkakutei_fail']) && isset($_POST['WorkmonthSekininShoninUserDetail'])) {
 		?>
 		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -437,7 +441,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	?>
 
 	<?php
-	if (isset($_SESSION['is_submissed_notchange']) ) {
+	if (isset($_SESSION['is_submissed_notchange'])) {
 		?>
 		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -448,7 +452,37 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	}
 	?>
 
+
 	<!-- 2023/11/13 submission-status  add end -->
+
+	<!-- 2023/11/16 Update Sekinin  Kanri   add start -->
+	<?php
+	if (isset($_SESSION['Shonin_KanriSha_Undefine']) && isset($_POST['WorkmonthShonin'])) {
+		?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['Shonin_KanriSha_Undefine']; ?>
+		</div>
+		<?php
+		unset($_SESSION['Shonin_KanriSha_Undefine']);
+	}
+	?>
+
+	<?php
+	if (isset($_SESSION['Shonin_SekininSha_Undefine']) && isset($_POST['WorkmonthSekininShonin'])) {
+		?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['Shonin_SekininSha_Undefine']; ?>
+		</div>
+		<?php
+		unset($_SESSION['Shonin_SekininSha_Undefine']);
+	}
+	?>
+
+	<!-- 2023/11/16 Update Sekinin  Kanri   add end -->
+
+
 
 
 	<div id="overlay">
@@ -520,13 +554,14 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			<?php echo $submissionStatusText ?>
 		</p>
 		</p>
-
-
 	</div>
-	<?php if ($submissionStatusText !==  $SUBMISSTION_STATUS[0]): ?>
-	<div class="row submissionStatusNotice">
-		<p class="submissionNoticeElem" style=' font-style: italic; font-size: smaller;'>*<?php echo $kakutei_success?></p>
-	</div>
+
+	<?php if ($submissionStatusText !== $SUBMISSTION_STATUS[0]): ?>
+		<div class="row submissionStatusNotice">
+			<p class="submissionNoticeElem" style=' font-style: italic; font-size: smaller;'>*
+				<?php echo $kakutei_success_admin ?>
+			</p>
+		</div>
 	<?php endif; ?>
 	<br />
 	<div class="row top-action-btn-admin">
@@ -542,35 +577,48 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 							style="width: auto;">社員勤務表</a>
 					</form>
 				</div>
-
+				<?php if ( $_SESSION['auth_type'] !== constant('ADMINISTRATOR') ): ?>
 				<div class="print_btn-submit">
 					<form method="post">
-						<button type="submit" href="#" name="WorkmonthSekininShonin" id="WorkmonthSekininShonin"
+						<button type="submit" href="#" name="WorkmonthSekininShoninUserDetail" id="WorkmonthSekininShonin"
 							class="btn btn-default workmonth-submit workmonth-submit-sekininshonin" style="width: auto;"
 							onclick="return confirm('責任者承認済みでよろしいでしょうか？ \n変更がある場合は編集中に戻して、編集してください')">責任者承認</button>
+						<!-- 2023-11-16 Admin Select Add Start -->
+						<input type="hidden" id="selectedKanri" name="selectedKanri"
+							value="<?= $admin_listKanri[0]['uid'] ?>">
+						<input type="hidden" id="selectedSekinin" name="selectedSekinin"
+							value="<?= $admin_listSekinin[0]['uid'] ?>">
+						<!-- 2023-11-16 Admin Select Add end -->
+
 					</form>
 				</div>
-
+				<?php endif; ?>
 				<div class="print_btn-submit">
 					<form method="post">
-						<button type="submit" href="#" name="WorkmonthShonin" id="WorkmonthShonin"
+						<button type="submit" href="#" name="WorkmonthShoninUserDetail" id="WorkmonthShonin"
 							class="btn btn-default workmonth-submit workmonth-submit-shonin" style="width: auto;"
-							onclick="return confirm('承認済みでよろしいでしょうか？ \n変更がある場合は編集中に戻て、編集してください')">承認</button>
+							onclick="return confirm('担当者承認済みでよろしいでしょうか？ \n変更がある場合は編集中に戻て、編集してください')">担当者承認</button>
+						<!-- 2023-11-16 Admin Select Add Start -->
+						<input type="hidden" id="selectedKanri" name="selectedKanri"
+							value="<?= $admin_listKanri[0]['uid'] ?>">
+						<input type="hidden" id="selectedSekinin" name="selectedSekinin"
+							value="<?= $admin_listSekinin[0]['uid'] ?>">
+						<!-- 2023-11-16 Admin Select Add end -->
 					</form>
-
 				</div>
+	
+
+
 				<div class="print_btn-submit">
 					<form method="post">
-						<button type="submit" href="#" name="WorkmonthModoshi" id="WorkmonthModoshi"
+						<button type="submit" href="#" name="WorkmonthModoshiUserDetail" id="WorkmonthModoshi"
 							class="btn btn-default workmonth-submit workmonth-submit-modoshi" style="width: auto;"
 							onclick="return confirm('編集中に戻してよろしいでしょうか？')">戻す</button>
 					</form>
-
 				</div>
 
-				
-				<?php else : ?>
-				<br/>
+			<?php else: ?>
+				<br />
 			<?php endif; ?>
 
 		</div>
@@ -588,11 +636,10 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			</div>
 		</div>
 		<div class="col-md-9 right">
-
 			<div class="print_btn">
 				<form method="post">
 					<!-- 2023/11/10 submission-status  change start -->
-					<button type="submit" href="#" name="WorkmonthKakutei" id="WorkmonthKakutei"
+					<button type="submit" href="#" name="WorkmonthKakuteiUserDetail" id="WorkmonthKakutei"
 						class="btn btn-default workmonth-submit-kakutei" style="width: auto;"
 						onclick="return checkSubmisBefore()">提出</button>
 					<!-- 2023/11/10 submission-status  change end -->
@@ -616,7 +663,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 				</form>
 			</div>
 			<div class="print_btn">
-				<button href="#" onclick="autoInputHandle()" id="AutoRegisterBtn"  class="btn btn-default" style="width: auto;">自動入力</button>
+				<button href="#" onclick="autoInputHandle()" id="AutoRegisterBtn" class="btn btn-default"
+					style="width: auto;">自動入力</button>
 			</div>
 			<div class="print_btn">
 				<button id="submit-button" class="btn btn-default" style="width: auto;" type="button">勤務表印刷</button>
@@ -1193,7 +1241,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			}
 		} else {
 			echo '<p style="color: red;" id="kintaiWorkMonth-registing">' . $kintai_click_month . '</p>';
-			
+
 		}
 		?>
 	</table>
@@ -1206,14 +1254,18 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		value="<?php echo htmlspecialchars(json_encode($signstamp_admin[0]['signstamp'])); ?>">
 	<input type="hidden" name="signstamp_kanri"
 		value="<?php echo htmlspecialchars(json_encode($signstamp_kanri[0]['signstamp'])); ?>">
-	<input type="hidden" name="signstamp_user"
-		value="<?php echo htmlspecialchars(json_encode($employee_signstamp)); ?>">
+
+	<?php
+	$signstamp_value = !isset($signstamp_teishutsu[0]['signstamp']) ? '' : htmlspecialchars(json_encode($signstamp_teishutsu[0]['signstamp']));
+	?>
+	<input type="hidden" name="signstamp_user" value="<?php echo $signstamp_value; ?>">
 	<input type="hidden" name="name" value="<?php echo htmlspecialchars(json_encode($employee_name)); ?>">
 	<input type="hidden" name="dept" value="<?php echo htmlspecialchars(json_encode($employee_dept)); ?>">
 	<input type="hidden" name="date_show" value="<?php echo htmlspecialchars(json_encode($date_show)); ?>">
 	<input type="hidden" name="companyName" value="<?php echo htmlspecialchars(json_encode($companyName_)); ?>">
 	<input type="hidden" name="template" value="<?php echo htmlspecialchars(json_encode($decide_template_)); ?>">
-	<input type="hidden" name="submission_status" value="<?php echo htmlspecialchars(json_encode($currentSubmission_status)); ?>">
+	<input type="hidden" name="submission_status"
+		value="<?php echo htmlspecialchars(json_encode($currentSubmission_status)); ?>">
 	<!-- top   earlydayswork_top -->
 	<input type="hidden" name="totalworkhh_top" value="<?php echo htmlspecialchars(json_encode($totalworkhh_top)); ?>">
 	<input type="hidden" name="totalworkmm_top" value="<?php echo htmlspecialchars(json_encode($totalworkmm_top)); ?>">
