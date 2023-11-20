@@ -613,7 +613,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 					<form method="post">
 						<button type="submit" href="#" name="WorkmonthModoshiUserDetail" id="WorkmonthModoshi"
 							class="btn btn-default workmonth-submit workmonth-submit-modoshi" style="width: auto;"
-							onclick="return confirm('編集中に戻してよろしいでしょうか？')">戻す</button>
+							onclick="return confirm('編集中に戻してよろしいでしょうか？')">編集中に戻す</button>
 					</form>
 				</div>
 
@@ -1826,7 +1826,9 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 
 	// add check before submiss
 	function checkSubmisBefore() {
+		
 		if ($("#kintaiWorkMonth-registing").length) {
+			$("#kintaiWorkMonth-registing")[0].scrollIntoView();
 			alert("<?php echo $is_not_registed_WorkMonth ?>");
 			return false;
 		} else {

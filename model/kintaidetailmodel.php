@@ -11,10 +11,14 @@ $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 
 
 
+$email_g = $_SESSION['auth_email'];
 $uid_g = $_SESSION['auth_uid'];
 $name_g = $_SESSION['auth_name'];
 $dept_g = $_SESSION['auth_dept'];
 
+if (isset($_POST['email_g'])) {
+        $_SESSION['email_g'] = $_POST['email_g'];
+}
 if (isset($_POST['uid_g'])) {
         $_SESSION['uid_g'] = $_POST['uid_g'];
 }
@@ -24,18 +28,20 @@ if (isset($_POST['name_g'])) {
 if (isset($_POST['dept_g'])) {
         $_SESSION['dept_g'] = $_POST['dept_g'];
 }
+$email_g = isset($_SESSION['email_g']) ? $_SESSION['email_g'] : $_SESSION['auth_email'];
 $uid_g = isset($_SESSION['uid_g']) ? $_SESSION['uid_g'] : $_SESSION['auth_uid'];
 $name_g = isset($_SESSION['name_g']) ? $_SESSION['name_g'] : $_SESSION['auth_name'];
 $dept_g = isset($_SESSION['dept_g']) ? $_SESSION['dept_g'] : $_SESSION['auth_dept'];
 
 
-if ($uid_g === '' || $name_g === '' || $dept_g === '') {
+if ($uid_g === '' || $name_g === '' || $dept_g === '' || $email_g === '') {
         echo 'error' . '選択した会員のデータが異常が発生したました。サイト管理者へ連絡してください';
 }
 
 
 // Now you can access the variables from temporary.php
 $employee_uid = $uid_g;
+$employee_email = $email_g;
 $employee_name = $name_g;
 $employee_genid = 0;
 $employee_dept = $dept_g;
@@ -43,7 +49,7 @@ $current_CompanyId_ = $_SESSION['auth_companyid'];
 $employee_signstamp = '';
 
 // get current genId of uid 
-$sql_employee_genid = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`uid`="' . $employee_uid . '" 
+$sql_employee_genid = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`email`="' . $employee_email . '" 
                          AND `tbl_user`.`companyid` = ' . $current_CompanyId_ . '  ';
 $result = $conn->query($sql_employee_genid);
 if ($result) {
@@ -75,7 +81,7 @@ $sql_workmonth = 'SELECT
 FROM
     `tbl_workmonth`
 WHERE
-    `tbl_workmonth`.`uid` IN("' . $employee_uid . '")  
+    `tbl_workmonth`.`email` IN("' . $employee_email . '")  
     AND LEFT(`tbl_workmonth`.`workym`, 6) IN("' . $year . $month . '")';
 $result_workmonth = mysqli_query($conn, $sql_workmonth);
 $workmonth_list = mysqli_fetch_all($result_workmonth, MYSQLI_ASSOC);
@@ -125,7 +131,7 @@ if ($result) {
 
 // get count workdays 
 $companyid = $current_CompanyId_;
-$uid_ = $employee_uid;
+$uid_ = $employee_email;
 $jobdays2;
 $sql_getjd_currentMonth = "SELECT `workdays` FROM tbl_workday WHERE `companyid` = '$companyid' AND `workyear` = '$year' AND `workmonth` = '$month' LIMIT 1;";
 $result = mysqli_query($conn, $sql_getjd_currentMonth);
@@ -160,8 +166,8 @@ $weekdays = array(
 //----- 2023/11/13---- submisstion add start//
 // get current submisstion -> when != 0 no change
 
-$sql_get_currentSubmission_status = 'SELECT `submission_status` FROM tbl_workmonth WHERE `tbl_workmonth`.`uid` 
-IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $current_CompanyId_ . '")  AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+$sql_get_currentSubmission_status = 'SELECT `submission_status` FROM tbl_workmonth WHERE `tbl_workmonth`.`email` 
+IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $current_CompanyId_ . '")  AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
 $currentSubmission_status;
 
 $result = $conn->query($sql_get_currentSubmission_status);
@@ -237,12 +243,13 @@ $admin_listSekinin_select = mysqli_fetch_all($result_adminSekinin_select, MYSQLI
 // SORT BY REGISTED ADMIN
 $selectedKanri = '';
 $selectedSekinin = '';
-$selectedTeishutsu= $uid_;
+$selectedTeishutsu= $employee_email;
 $currentUseCompanyId = $_SESSION['auth_companyid'];
 $currentUseUid = $_SESSION['auth_uid'];
 
-$sql_getAdminId_workmonth = 'SELECT  `tbl_workmonth`.`teishutsu_uid` , `tbl_workmonth`.`kanrisha_uid` , `tbl_workmonth`.`sekininsha_uid`  FROM tbl_workmonth WHERE `tbl_workmonth`.`uid` 
-IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+$sql_getAdminId_workmonth = 'SELECT  `tbl_workmonth`.`teishutsu_uid` , `tbl_workmonth`.`kanrisha_uid` , `tbl_workmonth`.`sekininsha_uid`  
+FROM tbl_workmonth WHERE `tbl_workmonth`.`email` 
+IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
 
 $result_AdminId_workmonth = mysqli_query($conn, $sql_getAdminId_workmonth);
 $AdminId_list = mysqli_fetch_all($result_AdminId_workmonth, MYSQLI_ASSOC);
@@ -285,7 +292,7 @@ $sql_worktime = 'SELECT
 FROM
     `tbl_worktime`
 WHERE
-    `tbl_worktime`.`uid` IN("' . $employee_uid . '")  
+    `tbl_worktime`.`email` IN("' . $employee_email . '")  
     AND LEFT(`tbl_worktime`.`workymd`, 8) IN("' . $date_show . '")';
 $result_worktime = mysqli_query($conn, $sql_worktime);
 $worktime_list = mysqli_fetch_all($result_worktime, MYSQLI_ASSOC);
@@ -405,7 +412,7 @@ foreach ($datas as &$row) { // write directly to $array1 while iterating
 if (isset($_POST['changeGenid'])) {
         $companyid = $current_CompanyId_;
         $selectedGenid = mysqli_real_escape_string($conn, $_POST['selectedGenid']);
-        $sql = "UPDATE tbl_user SET `genid` = '$selectedGenid' , `upt_dt`= '$upt_dt'  where `uid` = '$uid_' AND `companyid` = '$companyid' ;";
+        $sql = "UPDATE tbl_user SET `genid` = '$selectedGenid' , `upt_dt`= '$upt_dt'  where `email` = '$employee_email' AND `companyid` = '$companyid' ;";
         if ($conn->query($sql) === TRUE) {
                 $_SESSION['save_success'] = $save_success;
                 $_SESSION['auth_genid'] = $selectedGenid;
@@ -486,9 +493,9 @@ if (isset($_POST['SaveUpdateKintaiUserDetail'])) {
                 $holy_decide = array_keys($HOLY_DECIDE)[0];
         }
 
-        $sql = "INSERT INTO `tbl_worktime` (`uid`,  `companyid` ,`genid`, `workymd`, `daystarthh`, `daystartmm`, `dayendhh`, `dayendmm`, `jobstarthh`, `jobstartmm`,
+        $sql = "INSERT INTO `tbl_worktime` (`uid`, `email` , `companyid` ,`genid`, `workymd`, `daystarthh`, `daystartmm`, `dayendhh`, `dayendmm`, `jobstarthh`, `jobstartmm`,
                 `jobendhh`, `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `janhh`, `janmm`, `comment`, `holy_decide`, `bigo`, `reg_dt` , `upt_dt`)
-                VALUES ('$uid',  '$companyid' , '$genid', '$workymd', '$daystarthh', '$daystartmm', '$dayendhh', '$dayendmm', '$jobstarthh', '$jobstartmm',
+                VALUES ('$uid',  '$employee_email'  , '$companyid' , '$genid', '$workymd', '$daystarthh', '$daystartmm', '$dayendhh', '$dayendmm', '$jobstarthh', '$jobstartmm',
                 '$jobendhh', '$jobendmm', '$offtimehh', '$offtimemm', '$workhh', '$workmm', '$janhh', '$janmm', '$comment', '$holy_decide','$bigo', '$reg_dt' , null)
                 ON DUPLICATE KEY UPDATE
                 genid='$genid', daystarthh='$daystarthh', daystartmm='$daystartmm', dayendhh='$dayendhh', dayendmm='$dayendmm', jobstarthh='$jobstarthh', jobstartmm='$jobstartmm',
@@ -516,9 +523,10 @@ if (isset($_POST['DeleteKintaiUserDetail'])) {
         $_SESSION['selmm'] = substr($_POST['date_show'], 5, 2);
         $_SESSION['selyy'] = substr($_POST['date_show'], 0, 4);
         $uid = $employee_uid;
+
         $workymd = mysqli_real_escape_string($conn, $_POST['date_show']);
         $sql = "DELETE FROM `tbl_worktime` 
-                  WHERE uid ='$uid' AND companyid ='$companyid' AND workymd ='$workymd'";
+                  WHERE `email` ='$employee_uid' AND companyid ='$companyid' AND workymd ='$workymd'";
         if ($conn->query($sql) === TRUE) {
                 $_SESSION['delete_success'] = $delete_success;
                 header("Refresh:3");
@@ -576,9 +584,9 @@ if (isset($_POST['MonthSaveKintaiUserDetail'])) {
 
         $template = $currentTemplate_;
 
-        $sql = "INSERT INTO `tbl_workmonth` (`uid`,  `companyid` , `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
+        $sql = "INSERT INTO `tbl_workmonth` (`uid`,  `email` , `companyid` , `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
         `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `submission_status` , `reg_dt` , `upt_dt`)
-        VALUES ('$uid', '$companyid' , '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
+        VALUES ('$uid', '$employee_email'  ,'$companyid' , '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
         '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$template',  0  ,  '$reg_dt' , null)
         ON DUPLICATE KEY UPDATE
         companyid='$companyid', genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2',
@@ -609,7 +617,7 @@ if (isset($_POST['DeleteAllKintaiUserDetail'])) {
         $workymS = mysqli_real_escape_string($conn, $yearmonthSlet);
         $workym = $yearmonth;
         $sql = "DELETE FROM `tbl_worktime` 
-                WHERE uid ='$uid' 
+                WHERE `email` ='$employee_email' 
                 AND LEFT(`tbl_worktime`.`workymd`, 7) IN('$workymS')";
 
         if ($conn->query($sql) === TRUE) {
@@ -619,7 +627,7 @@ if (isset($_POST['DeleteAllKintaiUserDetail'])) {
         }
         if ($deleteAllData = true) {
                 $sql2 = "DELETE FROM `tbl_workmonth` 
-                WHERE uid ='$uid' 
+                WHERE `email` ='$employee_email' 
                 AND LEFT(`tbl_workmonth`.`workym`, 6) IN('$workym')";
 
                 if ($conn->query($sql2) === TRUE) {
@@ -651,7 +659,8 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
         $_SESSION['selyy'] = $_POST["year"];
         $genba_selection_rmodal = $_POST['genba_selection_rmodal'];
         $uid_ = $employee_uid;
-        $dataArray = explode(",", $genba_selection_rmodal);
+        $email_ = $employee_email;
+        $dataArray = explode(",", $genba_selection_rmodal);  
         $genid_ = $dataArray[0];
         $starttime = $dataArray[1];
         $starttimeArray = explode(":", $starttime);
@@ -701,7 +710,8 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 $month_ = date("m", strtotime($dateString . "-" . $day));
                 $weekday = $weekdays[date("N", strtotime($date))];
                 $data_Array[] = [
-                        'uid' => $uid_,
+                        'uid' => $uid_, 
+                        'email' => $email_ , 
                         'genid' => $genid_,
                         'workymd' => $Year_ . "/" . $month_ . "/" . $date_,
                         'jobstarthh' => $starthh,
@@ -750,6 +760,7 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
         foreach ($Array_Result as $row) {
                 $c++;
                 $uid = $row['uid'];
+                $email = $row['email'];
                 $genid = $row['genid'];
                 $workymd = $row['workymd'];
                 $jobstarthh = $row['jobstarthh'];
@@ -763,9 +774,9 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 $comment = $row['comment'];
                 $bigo = $row['bigo'];
 
-                $sql = "INSERT INTO `tbl_worktime` (`uid`, `companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`,
+                $sql = "INSERT INTO `tbl_worktime` (`uid`,`email` ,`companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`,
             `jobendmm`, `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`, `holy_decide`, `bigo`, `reg_dt` , `upt_dt`)
-            VALUES (:uid, '$companyid' , :genid, :workymd, :jobstarthh, :jobstartmm, :jobendhh, :jobendmm,
+            VALUES (:uid,  '$employee_email' , '$companyid' , :genid, :workymd, :jobstarthh, :jobstartmm, :jobendhh, :jobendmm,
             :offtimehh, :offtimemm, :workhh, :workmm, :comment, 0 , :bigo, :reg_dt , null)
             ON DUPLICATE KEY UPDATE
             companyid = '$companyid',  genid = :genid, jobstarthh = :jobstarthh, jobstartmm = :jobstartmm, jobendhh = :jobendhh, jobendmm = :jobendmm,
@@ -806,6 +817,7 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
 
         if ($ArraySave = true) {
                 $uid = mysqli_real_escape_string($conn, $uid_);
+                $email = mysqli_real_escape_string($conn, $email_);
                 $genid = mysqli_real_escape_string($conn, $genid_);
                 $workymd = mysqli_real_escape_string($conn, $lastValue);
                 $jobstarthh = mysqli_real_escape_string($conn, $starthh);
@@ -818,9 +830,9 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 $comment = mysqli_real_escape_string($conn, $workcontent_rmodal);
                 $bigo = mysqli_real_escape_string($conn, $bigo_rmodal);
 
-                $sql = "INSERT INTO `tbl_worktime` (`uid`, `companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`, `jobendmm`, 
+                $sql = "INSERT INTO `tbl_worktime` (`uid`,  `email` ,`companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`, `jobendmm`, 
                 `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`,  `holy_decide`, `bigo`, `reg_dt` , `upt_dt`)
-                VALUES ('$uid', '$companyid' ,'$genid', '$workymd', '$jobstarthh', '$jobstartmm', '$jobendhh', '$jobendmm',
+                VALUES ('$uid',  '$employee_email'  ,'$companyid' ,'$genid', '$workymd', '$jobstarthh', '$jobstartmm', '$jobendhh', '$jobendmm',
                 '$offTimeAutohh', '$offTimeAutomm', '$workhh', '$workmm', '$comment', 0 ,'$bigo', '$reg_dt' , null)
                 ON DUPLICATE KEY UPDATE
                 companyid = '$companyid' ,genid='$genid', jobstarthh='$jobstarthh', jobstartmm='$jobstartmm', jobendhh='$jobendhh', jobendmm='$jobendmm',
@@ -843,7 +855,7 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
 // $currentUseCompanyId = $current_CompanyId_;
 $currentUseUid = $_SESSION['auth_uid'];
 $currentUseCompanyId = $current_CompanyId_;
-
+$currentUseEmail = $_SESSION['auth_email'];
 
 // WorkmonthKakutei 
 
@@ -851,8 +863,8 @@ $currentUseCompanyId = $current_CompanyId_;
 // WorkmonthKakutei 
 if (isset($_POST['WorkmonthKakuteiUserDetail'])) {
         // check is registed workmonth ?
-        $sql_check_workmonth = 'SELECT * FROM tbl_workmonth WHERE `tbl_workmonth`.`uid` 
-        IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+        $sql_check_workmonth = 'SELECT * FROM tbl_workmonth WHERE `tbl_workmonth`.`email` 
+        IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
         $result = $conn->query($sql_check_workmonth);
         error_log("SQL".$sql_check_workmonth);
         if ($result === false) {
@@ -867,8 +879,8 @@ if (isset($_POST['WorkmonthKakuteiUserDetail'])) {
         }
         // check submisstion status
         if ($currentSubmission_status == 0) {
-            $query_kakutei = 'UPDATE tbl_workmonth SET `teishutsu_uid` = "'.$currentUseUid.'" , `submission_status` = 1 , `upt_dt`="' . $upt_dt . ' "  WHERE `tbl_workmonth`.`uid` 
-            IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+            $query_kakutei = 'UPDATE tbl_workmonth SET `teishutsu_uid` = "'.$currentUseEmail.'" , `submission_status` = 1 , `upt_dt`="' . $upt_dt . ' "  WHERE `tbl_workmonth`.`email` 
+            IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
             if ($conn->query($query_kakutei) === TRUE) {
                 $_SESSION['kakutei_success'] = $kakutei_success;
                 header("Refresh: 3");
@@ -882,8 +894,8 @@ if (isset($_POST['WorkmonthKakuteiUserDetail'])) {
     if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         // WorkmonthModoshi
         if (isset($_POST['WorkmonthModoshiUserDetail'])) {
-            $query_modoshi = 'UPDATE tbl_workmonth SET `submission_status` = 0 , `upt_dt`="' . $upt_dt . ' " , `sekininsha_uid` = null , `kanrisha_uid` = null , `teishutsu_uid` = null  WHERE `tbl_workmonth`.`uid` 
-                IN("' . $employee_uid. '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+            $query_modoshi = 'UPDATE tbl_workmonth SET `submission_status` = 0 , `upt_dt`="' . $upt_dt . ' " , `sekininsha_uid` = null , `kanrisha_uid` = null , `teishutsu_uid` = null  WHERE `tbl_workmonth`.`email` 
+                IN("' . $employee_email. '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
             error_log($query_modoshi);
             if ($conn->query($query_modoshi) === TRUE) {
                 $_SESSION['modoshi_success'] = $modoshi_success;
@@ -897,8 +909,8 @@ if (isset($_POST['WorkmonthKakuteiUserDetail'])) {
             // 2023-11-16  Update Sekinin  Kanri  add start // 
             // $kanrishaUid = mysqli_real_escape_string($conn, $_POST['selectedKanri']);
             // $sekininshaUid = mysqli_real_escape_string($conn, $_POST['selectedSekinin']);
-            $kanrishaUid = $_SESSION['auth_uid'];
-            $sekininshaUid = $_SESSION['auth_uid'];
+            $kanrishaUid = $currentUseEmail;
+            $sekininshaUid = $currentUseEmail;
     
             //Check Invalid Kanrisha , SekininSha
             if (!isset($kanrishaUid) || $kanrishaUid == '') {
@@ -910,8 +922,8 @@ if (isset($_POST['WorkmonthKakuteiUserDetail'])) {
             if ($currentSubmission_status == 1 || $currentSubmission_status == 2 ) {
 
                 // 2023-11-16 Update Sekinin  Kanri  chg start // 
-                $query_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 2 , `upt_dt`="' . $upt_dt . ' " , `kanrisha_uid`="' . $kanrishaUid . ' "   WHERE `tbl_workmonth`.`uid` 
-                IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+                $query_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 2 , `upt_dt`="' . $upt_dt . ' " , `kanrisha_uid`="' . $kanrishaUid . ' "   WHERE `tbl_workmonth`.`email` 
+                IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
                 // 2023-11-16 Update Sekinin  Kanri  chg end // 
                 if ($conn->query($query_shonin) === TRUE) {
                     $_SESSION['shonin_success'] = $shonin_success;
@@ -923,8 +935,8 @@ if (isset($_POST['WorkmonthKakuteiUserDetail'])) {
                 // 2023-11-16 Update Sekinin  Kanri  add start // 
             } else if ($currentSubmission_status == 3) {
                 // change kanrisha uid when sekininsha shoninzumi 
-                $query_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 3 , `upt_dt`="' . $upt_dt . ' " , `kanrisha_uid`="' . $kanrishaUid . ' "   WHERE `tbl_workmonth`.`uid` 
-                IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+                $query_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 3 , `upt_dt`="' . $upt_dt . ' " , `kanrisha_uid`="' . $kanrishaUid . ' "   WHERE `tbl_workmonth`.`email` 
+                IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
                 // 2023-11-16 Update Sekinin  Kanri  chg end // 
                 if ($conn->query($query_shonin) === TRUE) {
                     $_SESSION['shonin_success'] = $shonin_success;
@@ -945,8 +957,8 @@ if (isset($_POST['WorkmonthKakuteiUserDetail'])) {
             // 2023-11-16 Update Sekinin  Kanri  add start // 
             // $kanrishaUid = mysqli_real_escape_string($conn, $_POST['selectedKanri']);
             // $sekininshaUid = mysqli_real_escape_string($conn, $_POST['selectedSekinin']);
-            $kanrishaUid = $_SESSION['auth_uid'];
-            $sekininshaUid = $_SESSION['auth_uid'];
+            $kanrishaUid = $currentUseEmail;
+            $sekininshaUid = $currentUseEmail;
     
     
             // Check Invalid Kanrisha , SekininSha
@@ -961,8 +973,8 @@ if (isset($_POST['WorkmonthKakuteiUserDetail'])) {
     
             if ($currentSubmission_status == 1 || $currentSubmission_status == 2 || $currentSubmission_status == 3) {
                 // 2023-11-16 Update Sekinin  Kanri  chg start // 
-                $query_sekinin_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 3 , `upt_dt`="' . $upt_dt . ' " , `sekininsha_uid`="' . $sekininshaUid . ' "  WHERE `tbl_workmonth`.`uid` 
-                IN("' . $employee_uid . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+                $query_sekinin_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 3 , `upt_dt`="' . $upt_dt . ' " , `sekininsha_uid`="' . $sekininshaUid . ' "  WHERE `tbl_workmonth`.`email` 
+                IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
                 // 2023-11-16 Update Sekinin  Kanri  chg end // 
                 if ($conn->query($query_sekinin_shonin) === TRUE) {
                     $_SESSION['sekininshonin_success'] = $sekininshonin_success;
@@ -991,18 +1003,18 @@ if (isset($_POST['WorkmonthKakuteiUserDetail'])) {
 
 $sql_user_kanri = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMINISTRATOR') . '"';
 if($selectedKanri != '' &&  isset($selectedKanri)) {
-    $sql_user_kanri = "SELECT * FROM `tbl_user` WHERE  `tbl_user`.`uid` = '$selectedKanri'";
+    $sql_user_kanri = "SELECT * FROM `tbl_user` WHERE  `tbl_user`.`email` = '$selectedKanri'";
 } 
 error_log("SELECTED KANRI:" .$selectedKanri );
 error_log("SQL:" .$sql_user_kanri );
 $sql_user_admin = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMIN') . '"';
 if($selectedSekinin != '' &&  isset($selectedSekinin)) {
-    $sql_user_admin = "SELECT * FROM `tbl_user` WHERE `tbl_user`.`uid` = '$selectedSekinin'";
+    $sql_user_admin = "SELECT * FROM `tbl_user` WHERE `tbl_user`.`email` = '$selectedSekinin'";
 } 
 
 $sql_user_teishutsu = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMIN') . '"';
 if($selectedTeishutsu != '' &&  isset($selectedTeishutsu)) {
-    $sql_user_teishutsu = "SELECT * FROM `tbl_user` WHERE `tbl_user`.`uid` = '$selectedTeishutsu'";
+    $sql_user_teishutsu = "SELECT * FROM `tbl_user` WHERE `tbl_user`.`email` = '$selectedTeishutsu'";
 } 
 
 
@@ -1017,22 +1029,14 @@ $signstamp_teishutsu = mysqli_fetch_all($result_user_teishutsu, MYSQLI_ASSOC);
 
 
 if($selectedSekinin == '' || $selectedSekinin == null) {
-        error_log("UID:" .$signstamp_teishutsu[0]['uid'] );
-        error_log("EMPID:" .$employee_uid );
         $signstamp_admin[0]['signstamp'] = '';
 }
 
-
 if($selectedKanri == '' || $selectedKanri == null) {
-        error_log("UID:" .$signstamp_teishutsu[0]['uid'] );
-        error_log("EMPID:" .$employee_uid );
         $signstamp_kanri[0]['signstamp'] = '';
 }
 
-
-if($signstamp_teishutsu[0]['uid'] != $employee_uid) {
-        error_log("UID:" .$signstamp_teishutsu[0]['uid'] );
-        error_log("EMPID:" .$employee_uid );
+if($signstamp_teishutsu[0]['email'] != $employee_email) {
         $signstamp_teishutsu = '';
 }
 

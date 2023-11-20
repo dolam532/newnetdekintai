@@ -562,7 +562,7 @@ if ($_SESSION['auth'] == false) {
 					<form method="post">
 						<button type="submit" href="#" name="WorkmonthModoshi" id="WorkmonthModoshi"
 							class="btn btn-default workmonth-submit workmonth-submit-modoshi" style="width: auto;"
-							onclick="return confirm('編集中に戻してよろしいでしょうか？')">戻す</button>
+							onclick="return confirm('編集中に戻してよろしいでしょうか？')">編集中に戻す</button>
 					</form>
 				</div>
 			<?php else: ?>
@@ -791,7 +791,7 @@ if ($_SESSION['auth'] == false) {
 <div class="container">
 	<table id="footer-Table" class="table table-bordered datatable">
 		<tbody class="sumtbl">
-			<tr id="footer_table_title">
+			<tr id="footer_table_title" >
 				<th style="width: 10%; padding-top: 30px;" rowspan="2">実働時間</th>
 				<th style="width: 8%;">時間</th>
 				<th style="width: 8%;">分</th>
@@ -1197,11 +1197,10 @@ if ($_SESSION['auth'] == false) {
 	<input type="hidden" name="signstamp_kanri"
 		value="<?php echo htmlspecialchars(json_encode($signstamp_kanri[0]['signstamp'])); ?>">
 
-		
-
-
+	
 	<input type="hidden" name="signstamp_user"
 		value="<?php echo htmlspecialchars(json_encode($signstamp_teishutsu[0]['signstamp'])); ?>">
+
 	<input type="hidden" name="name" value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_name'])); ?>">
 	<input type="hidden" name="dept" value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_dept'])); ?>">
 	<input type="hidden" name="date_show" value="<?php echo htmlspecialchars(json_encode($date_show)); ?>">
@@ -1773,6 +1772,7 @@ if ($_SESSION['auth'] == false) {
 	// add check before submiss
 	function checkSubmisBefore() {
 		if ($("#kintaiWorkMonth-registing").length) {
+			$("#kintaiWorkMonth-registing")[0].scrollIntoView();
 			alert("<?php echo $is_not_registed_WorkMonth ?>");
 			return false;
 		} else {

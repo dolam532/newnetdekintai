@@ -75,8 +75,9 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 							<td><span name="genbaname"><?= $user['genbaname'] ?></span></td>
 
 							<td class="text-center">
-								<form method="post" action="../kintaidetail/kintaiUserDetail.php?uid=<?= $user['uid'] ?>&name=<?= $user['name'] ?>&dept=<?= $user['dept'] ?>">
+								<form method="post" action="../kintaidetail/kintaiUserDetail.php?uid=<?= $user['uid'] ?>&name=<?= $user['name'] ?>&dept=<?= $user['dept'] ?>&email=<?= $user['email'] ?>">
 									<input type="hidden" value="<?= $user['uid'] ?>" name="uid_g">
+									<input type="hidden" value="<?= $user['email'] ?>" name="email_g">
 									<input type="hidden" value="<?= $user['name'] ?>" name="name_g">
 									<input type="hidden" value="<?= $user['genid'] ?>" name="genid_g">
 									<input type="hidden" value="<?= $user['dept'] ?>" name="dept_g">
