@@ -1,6 +1,18 @@
 <?php
 // Select data from tbl_user
 $sql_user = 'SELECT * FROM `tbl_user`';
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_user .= 'ORDER BY `tbl_user`.`companyid`';
+} elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_user .= 'WHERE
+            `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+        ORDER BY `tbl_user`.`reg_dt`';
+} elseif ($_SESSION['auth_type'] == constant('USER')) {
+    $sql_user .= 'WHERE
+            `tbl_user`.`type` = "' . $_SESSION['auth_type'] . '"
+        AND
+            `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"';
+}
 $result_user = mysqli_query($conn, $sql_user);
 $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 
@@ -52,7 +64,7 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
             `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"';
 }
 
-// Search Button Click kyukaReg.php
+// Search Button Click
 $sql_userkyuka_select = mysqli_query($conn, $sql_userkyuka_select_db);
 $result_userkyuka_select = mysqli_fetch_all($sql_userkyuka_select, MYSQLI_ASSOC);
 if (!empty($result_userkyuka_select)) {
@@ -70,6 +82,7 @@ $KyukaY = array_unique($KyukaY);
 $Name = array_unique($Name);
 $VacationY = array_unique($VacationY);
 
+// Select data from tbl_vacationinfo(kyukaReg.php && vacationReg.php)
 $sql_vacationinfo = 'SELECT DISTINCT
     `tbl_user`.*,
     `tbl_vacationinfo`.`vacationid`,
@@ -143,33 +156,8 @@ $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 
 
-// Select data from tbl_user, tbl_vacationinfo and tbl_manageinfo of table
-$sql_select_table3_db = 'SELECT DISTINCT
-`tbl_user`.*,
-`tbl_vacationinfo`.`vacationid`,
-`tbl_vacationinfo`.`vacationstr`,
-`tbl_vacationinfo`.`vacationend`,
-`tbl_vacationinfo`.`oldcnt`,
-`tbl_vacationinfo`.`newcnt`,
-`tbl_vacationinfo`.`usecnt`,
-`tbl_vacationinfo`.`usetime`,
-`tbl_vacationinfo`.`restcnt`,
-`tbl_manageinfo`.`kyukatimelimit`
-FROM
-`tbl_vacationinfo`
-CROSS JOIN `tbl_user` ON `tbl_vacationinfo`.`uid` = `tbl_user`.`uid`
-CROSS JOIN `tbl_manageinfo` ON `tbl_user`.`companyid` = `tbl_manageinfo`.`companyid`
-WHERE
-`tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '
-AND
-`tbl_user`.`type` = "' . $_SESSION['auth_type'] . '"
-AND
-`tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"';
-$sql_table3_select = mysqli_query($conn, $sql_select_table3_db);
-$result_uservacationmanage_select = mysqli_fetch_all($sql_table3_select, MYSQLI_ASSOC);
-
-
-// Search Button Click kyukaMonthly.php
+// kyukaMonthly.php
+// Search Button Click
 if ($_POST['btnSearchMon'] != NULL) {
     if ($_POST['searchUid'] == "") {
         $searchUid = implode('","', $UId);
@@ -227,7 +215,6 @@ WHERE
     AND `tbl_codebase`.`typecode` = 02';
     }
 }
-
 
 // Save data to tbl_userkyuka table of database
 if (isset($_POST['SaveKyuka'])) {

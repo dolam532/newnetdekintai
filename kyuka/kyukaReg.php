@@ -44,14 +44,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	span.vacationid_class {
 		display: none;
 	}
-
-	.col-md-6.col-sm-6.col-sx-6.sub-bar.text-right.all-div.last {
-		float: right;
-	}
-
-	.title_sub{
-		margin-top: 35px;
-	}
 </style>
 <title>休暇届</title>
 <?php include('../inc/menu.php'); ?>
@@ -69,14 +61,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	?>
 	<form method="post">
 		<div class="row">
-			<div class="col-md-2 col-sm-2 col-sx-2 text-left all-div">
+			<div class="col-md-2 text-left">
 				<div class="title_name">
 					<span class="text-left">休暇届</span>
 				</div>
 			</div>
-			<div class="col-md-4 col-sm-4 col-sx-4 sub-bar text-center">
-				<div class="title_sub custom-control custom-radio" id="divAllowok">
-					<label>&nbsp;
+			<div class="col-md-4 text-left">
+				<div class="title_condition">
+					<label>
 						<?php
 						foreach (ConstArray::$search_allowok as $key => $value) {
 						?>
@@ -91,10 +83,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					</label>
 				</div>
 			</div>
-			<div class="col-md-3 col-sm-3 col-sx-3 sub-bar all-div" id="divUid">
-				<div class="title_sub">
+			<div class="col-md-3 text-left">
+				<div class="title_condition">
 					<label>社員名 :
-						<select id="searchUid" name="searchUid" style="padding:5px; width:70%;">
+						<select id="searchUid" name="searchUid" style="padding:2px; width:70%;">
 							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
 								<option value="" selected="">選択なし</option>
 								<?php
@@ -115,31 +107,32 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					</label>
 				</div>
 			</div>
-			<div class="col-md-3 col-sm-3 col-sx-3 sub-bar text-right all-div">
-				<div class="title_sub">
-					<label>基準日 :
-						<select id="searchYY" name="searchYY" style="padding:5px;">
-							<option value="" selected="selected">選択なし</option>
-							<?php
-							foreach (ConstArray::$search_year as $key => $value) {
-							?>
-								<option value="<?= $key ?>" <?php if ($value == $_POST['searchYY']) {
-																echo ' selected="selected"';
-															} ?>>
-									<?= $value ?>
-								</option>
-							<?php
-							}
-							?>
-						</select>
-					</label>
+			<div class="col-md-3 text-right">
+				<div class="title_condition">
+				<label>基準日 :
+                        <select id="searchYY" name="searchYY" style="padding:2px;">
+                            <option value="" selected="selected">選択なし</option>
+                            <?php
+                            foreach (ConstArray::$search_year as $key => $value) {
+                            ?>
+                                <option value="<?= $key ?>" <?php if ($value == $_POST['searchYY']) {
+                                                                echo ' selected="selected"';
+                                                            } ?>>
+                                    <?= $value ?>
+                                </option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </label>
 				</div>
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-6 col-sm-6 col-sx-6" style="margin-top: -30px;"></div>
-			<div class="col-md-6 col-sm-6 col-sx-6 sub-bar text-right all-div last" style="margin-top: -30px;">
+			<div class="col-md-6"></div>
+			<div class="col-md-6 text-right">
 				<div class="title_btn">
+					<input type="submit" id="ClearButton" name="ClearButton" value="クリア ">&nbsp;
 					<input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
 					<input type="button" id="btnNew" value="新規 ">&nbsp;
 					<input type="button" id="btnAnnt" value="お知らせ ">&nbsp;
@@ -227,7 +220,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukaymd">
 									<label for="kyukaymd">申請日</label>
 									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
-									<?php foreach ($result_uservacationmanage_select as $key) : ?>
+									<?php foreach ($userkyuka_list as $key) : ?>
 										<input type="hidden" name="companyid" value="<?= $key['companyid'] ?>">
 										<input type="hidden" name="uid" value="<?= $key['uid'] ?>">
 										<input type="hidden" name="vacationid" value="<?= $key['vacationid'] ?>">
@@ -783,9 +776,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	window.onload = function() {
 		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();
-};
-
-
-
+	};
 </script>
 <?php include('../inc/footer.php'); ?>
