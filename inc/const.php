@@ -27,7 +27,6 @@ DEFINE('VACATION_TYPE', '02');
 $MAX_INPUT_LENGTH_COMMENT = 17;
 $MAX_INPUT_LENGTH_BIGO = 8;
 
-// 2023/10/16-----add start
 // holy_decide 
 $HOLY_DECIDE = array(
     0 => '通常',
@@ -36,7 +35,6 @@ $HOLY_DECIDE = array(
     3 => '代休',
     9 => '欠勤'
 );
-// 2023/10/16-----add end
 
 // CODEMASTER CONFIG 
 $MAX_LENGTH_CODE = 2;
@@ -66,3 +64,5 @@ $SUBMISSTION_STATUS = array(
     3 => '責任者承認済み',
 );
 
+// ALLOW TYPE
+DEFINE('SEARCH_ALLOW', '9');
