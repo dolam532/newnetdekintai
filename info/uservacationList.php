@@ -240,7 +240,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 <label for="name">名</label>
                             </div>
                             <div class="col-md-10">
-                                <input type="text" class="form-control" name="username" id="username" style="text-align: left" readonly>
+                                <input type="text" class="form-control" name="username" id="username_id" style="text-align: left" readonly>
                             </div>
                             <br>
                             <br>
@@ -381,8 +381,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
             $('#modal2').modal('toggle');
             $("#usernametitle").text(Email);
             $("#useremail").text($('[name="useremail"]').val(Email));
-            $("#username").text($('[name="username"]').val(Name));
-            $("#username").text(Name);
+            $("#username_id").text($('[name="username"]').val(Name));
         } else {
             $('#modal').modal('toggle');
             $("#usname").text(Email);

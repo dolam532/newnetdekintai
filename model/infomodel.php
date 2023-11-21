@@ -393,7 +393,7 @@ if ($_POST['uservacationListSearch'] == NULL) {
 `tbl_vacationinfo`.`restcnt`
 FROM
 `tbl_user`
-LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`uid` = `tbl_vacationinfo`.`uid`
+LEFT JOIN `tbl_vacationinfo` ON `tbl_user`.`email` = `tbl_vacationinfo`.`email`
 WHERE `tbl_user`.`companyid` IN ("' . $companyId_ . '") ';
 
 

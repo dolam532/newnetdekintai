@@ -104,7 +104,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<div class="col-md-4 text-right">
 			<div class="title_btn">
 				<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-					<input type="button" id="btnNewCTL" value="新規">
+					<input type="button" id="btnNewGL" value="新規">
 				<?php endif; ?>
 			</div>
 			<div class="title_btn">
@@ -414,7 +414,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 <script>
 	// New button
-	$(document).on('click', '#btnNew', function(e) {
+	$(document).on('click', '#btnNewGL', function(e) {
 		$("use_yn").prop('checked', true);
 		$('#modal').modal('toggle');
 	});

@@ -41,7 +41,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		font-weight: bold;
 	}
 
-	span.vacationid_class {
+	span.vacationid_class,
+	span.kyukaReg_class {
 		display: none;
 	}
 </style>
@@ -109,22 +110,22 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			</div>
 			<div class="col-md-3 text-right">
 				<div class="title_condition">
-				<label>基準日 :
-                        <select id="searchYY" name="searchYY" style="padding:2px;">
-                            <option value="" selected="selected">選択なし</option>
-                            <?php
-                            foreach (ConstArray::$search_year as $key => $value) {
-                            ?>
-                                <option value="<?= $key ?>" <?php if ($value == $_POST['searchYY']) {
-                                                                echo ' selected="selected"';
-                                                            } ?>>
-                                    <?= $value ?>
-                                </option>
-                            <?php
-                            }
-                            ?>
-                        </select>
-                    </label>
+					<label>基準日 :
+						<select id="searchYY" name="searchYY" style="padding:2px;">
+							<option value="" selected="selected">選択なし</option>
+							<?php
+							foreach (ConstArray::$search_year as $key => $value) {
+							?>
+								<option value="<?= $key ?>" <?php if ($value == $_POST['searchYY']) {
+																echo ' selected="selected"';
+															} ?>>
+									<?= $value ?>
+								</option>
+							<?php
+							}
+							?>
+						</select>
+					</label>
 				</div>
 			</div>
 		</div>
@@ -144,15 +145,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			<table class="table table-bordered datatable">
 				<thead>
 					<tr class="info">
-						<th class="th0" style="text-align: center; width: 1%;">ID</th>
-						<th class="th1" style="text-align: center; width: 11%;">申請日</th>
-						<th class="th2" style="text-align: center; width: 10%;">休暇区分</th>
-						<th class="th3" style="text-align: center; width: 16%;">申請期間</th>
-						<th class="th4" style="text-align: center; width: 10%;">申込日(時)</th>
-						<th class="th5" style="text-align: center; width: 16%;">年次期間</th>
+						<th class="th0" style="text-align: center; width: 5%;">ID</th>
+						<th class="th1" style="text-align: center; width: 8%;">申請日</th>
+						<th class="th2" style="text-align: center; width: 8%;">休暇区分</th>
+						<th class="th3" style="text-align: center; width: 15%;">申請期間</th>
+						<th class="th4" style="text-align: center; width: 8%;">申込日(時)</th>
+						<th class="th5" style="text-align: center; width: 15%;">年次期間</th>
 						<th class="th6" style="text-align: center; width: 8%;">総休暇数</th>
-						<th class="th7" style="text-align: center; width: 8%;">残日数</th>
-						<th class="th8" style="text-align: center; width: 8%;">決裁</th>
+						<th class="th7" style="text-align: center; width: 7%;">残日数</th>
+						<th class="th8" style="text-align: center; width: 10%;">決裁</th>
 						<th class="th9" style="text-align: center; width: auto;">暇中居る連絡先</th>
 					</tr>
 				</thead>
@@ -165,7 +166,22 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						foreach ($userkyuka_list as $userkyuka) {
 						?>
 							<tr>
-								<td class="td0"><span><?= $userkyuka['uid'] ?></span></td>
+								<td class="td0">
+									<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+										<a href="#">
+											<span class="showModal">
+												<span class="kyukaReg_class">
+													<?= $userkyuka['kyukaid'] . ',' ?>
+												</span>
+												<?= $userkyuka['uid'] ?>
+											</span>
+										</a>
+									<?php else : ?>
+										<span>
+											<?= $userkyuka['uid'] ?>
+										</span>
+									<?php endif; ?>
+								</td>
 								<td class="td1"><span><?= $userkyuka['kyukaymd'] ?></span></td>
 								<td class="td2"><span><?= $userkyuka['name'] ?></span></td>
 								<td class="td3">
@@ -179,7 +195,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										<?php
 										if ($userkyuka['allowok'] == "0") { ?>
 											<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-												<a href="#"><span style="color:red;text-decoration-line: underline;" class="showModal">未決裁<span class="vacationid_class"><?= ',' . $userkyuka['uid'] . ',' . $userkyuka['ymdcnt']  . ',' . $userkyuka['timecnt'] ?></span></span>
+												<a href="#"><span style="color:red;text-decoration-line: underline;" class="showModal2">未決裁<span class="vacationid_class"><?= ',' . $userkyuka['uid'] . ',' . $userkyuka['ymdcnt']  . ',' . $userkyuka['timecnt'] ?></span></span>
 												<?php else : ?>
 													<span style="color:red;">未決裁</span>
 												<?php endif; ?>
@@ -235,14 +251,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<div class="col-md-5 col-sm-5 col-sx-5 kyukacode">
 									<label for="kyukacode">休暇区分</label>
 									<select class="form-control" id="kyukaname" name="kyukacode">
-										<option value=""></option>
-										<?php
-										foreach ($codebase_list as $key) {
-										?>
+										<option value="" disabled selected>選択してください。</option>
+										<?php foreach ($codebase_list as $key) : ?>
 											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
-										<?php
-										}
-										?>
+										<?php endforeach; ?>
 									</select>
 								</div>
 								<div class="col-md-4 col-sm-4 col-sx-4 kyukatype">
@@ -277,8 +289,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<br>
 							<div class="row three">
 								<?php
-								if (!empty($vacationinfo_list)) {
-									foreach ($vacationinfo_list as $key) {
+								if (!empty($userkyuka_list)) {
+									foreach ($userkyuka_list as $key) {
 										if ($key['uid'] == $_SESSION['auth_uid']) {
 								?>
 											<div class="col-md-2 col-sm-2 col-sx-2 no">
@@ -363,7 +375,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<div class="modal-header"><span class="popup-title">お知らせ(注意)</span>
 						<button class="close" data-dismiss="modal">x</button>
 					</div>
-
 					<div class="modal-body" style="text-align: left">
 						<div class="row">
 							<div class="col-md-12 col-ms-12">
@@ -424,6 +435,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		</div>
 	</div>
 
+	<!-- Decide 決裁 -->
 	<div class="row">
 		<div class="modal" id="modal3" tabindex="-1" data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog">
@@ -734,7 +746,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	// Click (modify) employee ID in the grid: popup & display contents
-	$(document).on('click', '.showModal', function() {
+	$(document).on('click', '.showModal2', function() {
 		$('#modal3').modal('toggle');
 		var ArrayData = $(this).text();
 		var SeparateArr = ArrayData.split(',');
@@ -751,8 +763,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		newtimecnt.val(Timecnt);
 		var newtimecnt = newtimecnt.val();
 		<?php
-		if (!empty($vacationinfo_list)) {
-			foreach ($vacationinfo_list as $key) {
+		if (!empty($userkyuka_list)) {
+			foreach ($userkyuka_list as $key) {
 		?>
 				if ('<?php echo $key['uid'] ?>' == Uid) {
 					var oldusecnt = $("input[name=oldusecnt]:hidden");

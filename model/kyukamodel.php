@@ -81,38 +81,6 @@ $UId = array_unique($UId);
 $KyukaY = array_unique($KyukaY);
 $Name = array_unique($Name);
 $VacationY = array_unique($VacationY);
-
-// Select data from tbl_vacationinfo(kyukaReg.php && vacationReg.php)
-$sql_vacationinfo = 'SELECT DISTINCT
-    `tbl_user`.*,
-    `tbl_vacationinfo`.`vacationid`,
-    `tbl_vacationinfo`.`vacationstr`,
-    `tbl_vacationinfo`.`vacationend`,
-    `tbl_vacationinfo`.`oldcnt`,
-    `tbl_vacationinfo`.`newcnt`,
-    `tbl_vacationinfo`.`usecnt`,
-    `tbl_vacationinfo`.`usetime`,
-    `tbl_vacationinfo`.`restcnt`,
-    `tbl_vacationinfo`.`reg_dt`
-FROM
-    `tbl_user`
-LEFT JOIN 
-`tbl_vacationinfo` ON `tbl_user`.`email` = `tbl_vacationinfo`.`email`
-WHERE
-    `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-AND 
-    `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '", "' . constant('ADMIN') . '")';
-if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-} elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
-    $sql_vacationinfo .= 'WHERE `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-        AND `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '", "' . constant('ADMIN') . '")';
-} elseif ($_SESSION['auth_type'] == constant('USER')) {
-    $sql_vacationinfo .= 'WHERE `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-        AND `tbl_user`.`type` IN("' . constant('USER') . '")';
-}
-$result_vacationinfo = mysqli_query($conn, $sql_vacationinfo);
-$vacationinfo_list = mysqli_fetch_all($result_vacationinfo, MYSQLI_ASSOC);
-
 if ($_POST['btnSearchReg'] == NULL) {
     $_POST['searchAllowok'] = constant('SEARCH_ALLOW');
     $sql_userkyuka = $sql_userkyuka_select_db;
@@ -135,18 +103,22 @@ if ($_POST['btnSearchReg'] == NULL) {
     $sql_userkyuka = 'SELECT DISTINCT
     `tbl_userkyuka`.*,
     `tbl_user`.`uid`,
+    `tbl_user`.`companyid`,
     `tbl_user`.`name`,
+    `tbl_user`.`dept`,
     `tbl_vacationinfo`.`vacationstr`,
     `tbl_vacationinfo`.`vacationend`,
     `tbl_vacationinfo`.`oldcnt`,
     `tbl_vacationinfo`.`newcnt`,
     `tbl_vacationinfo`.`usecnt`,
     `tbl_vacationinfo`.`usetime`,
-    `tbl_vacationinfo`.`restcnt`
+    `tbl_vacationinfo`.`restcnt`,
+    `tbl_manageinfo`.`kyukatimelimit`
 FROM
     `tbl_userkyuka`
 CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`email` = `tbl_user`.`email`
 CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinfo`.`vacationid`
+CROSS JOIN `tbl_manageinfo` ON `tbl_user`.`companyid` = `tbl_manageinfo`.`companyid`
     WHERE
         `tbl_userkyuka`.`allowok` IN("' . $searchAllowok . '") 
         AND `tbl_user`.`uid` IN ("' . $searchUid . '") 
@@ -306,6 +278,36 @@ if (isset($_POST['DecideUpdateKyuka'])) {
 
 
 // vacactionReg.php
+// Select data from tbl_vacationinfo
+$sql_vacationinfo = 'SELECT DISTINCT
+    `tbl_user`.*,
+    `tbl_vacationinfo`.`vacationid`,
+    `tbl_vacationinfo`.`vacationstr`,
+    `tbl_vacationinfo`.`vacationend`,
+    `tbl_vacationinfo`.`oldcnt`,
+    `tbl_vacationinfo`.`newcnt`,
+    `tbl_vacationinfo`.`usecnt`,
+    `tbl_vacationinfo`.`usetime`,
+    `tbl_vacationinfo`.`restcnt`,
+    `tbl_vacationinfo`.`reg_dt`
+FROM
+    `tbl_user`
+LEFT JOIN 
+`tbl_vacationinfo` ON `tbl_user`.`email` = `tbl_vacationinfo`.`email`
+WHERE
+    `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+AND 
+    `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '", "' . constant('ADMIN') . '")';
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+} elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_vacationinfo .= 'WHERE `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+        AND `tbl_user`.`type` IN("' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '", "' . constant('ADMIN') . '")';
+} elseif ($_SESSION['auth_type'] == constant('USER')) {
+    $sql_vacationinfo .= 'WHERE `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+        AND `tbl_user`.`type` IN("' . constant('USER') . '")';
+}
+$result_vacationinfo = mysqli_query($conn, $sql_vacationinfo);
+$vacationinfo_list = mysqli_fetch_all($result_vacationinfo, MYSQLI_ASSOC);
 // Save data to tbl_vacationinfo table of database
 if (isset($_POST['SaveUpdateKyuka'])) {
     $reg_dt = date('Y-m-d H:i:s');
