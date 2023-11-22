@@ -151,6 +151,9 @@ $genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
 // Save data to tbl_user table of database
 if (isset($_POST['SaveUserList'])) {
+
+    global $MAX_LENGTH_UID_USER;
+    
     $_POST['companyid'] = intval($_POST['companyid']);
     $uid = mysqli_real_escape_string($conn, $_POST['uid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
@@ -217,10 +220,22 @@ if (isset($_POST['SaveUserList'])) {
         }
     }
 
+    // general random uid 
+
+    $RandomUid = '';
+    do {
+        $RandomUid = generateRandomString($MAX_LENGTH_UID_USER);
+        $sql_check_uid = "SELECT COUNT(*) AS count FROM tbl_user WHERE uid = '$RandomUid'";
+        $result = $conn->query($sql_check_uid);
+        $row = $result->fetch_assoc();
+        $uidExists = $row['count'] > 0;
+    
+    } while ($uidExists);
+
     // insert to DB 
     $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`
     , `signstamp`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt` , `upt_dt`) 
-     VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type'
+     VALUES('$RandomUid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type'
     , '$fileName', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$genid', '$genstrymd', '$genendymd', '$reg_dt' , null)";
 
     if ($conn->query($sql_user_insert) === TRUE) {
@@ -229,7 +244,10 @@ if (isset($_POST['SaveUserList'])) {
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
+
 }
+
+
 
 // Update data to tbl_user table of database
 if (isset($_POST['UpdateUserList'])) {
