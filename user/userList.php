@@ -204,21 +204,21 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<div class="modal-dialog">
 			<form method="post" enctype="multipart/form-data">
 				<div class="modal-content">
-					<div class="modal-header">社員登録(<span id="sname">New</span>)
+					<div class="modal-header">社員登録<span id="sname"></span>
 						<button class="close" data-dismiss="modal">&times;</button>
 					</div>
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-xs-6">
-								<label for="uid">ID</label>
-								<label for="email">email</label>
+							
+								<label for="email">Email</label>
 								<input type="email" class="form-control" id="email" name="email" placeholder="email@" required="required" maxlength="100" style="text-align: left">
 							
 								<input type="hidden" name="companyid" value="<?= $_SESSION['auth_companyid'] ?>">
 								<input type="hidden" name="type" value="<?= $_SESSION['auth_type'] ?>">
 							</div>
 							<div class="col-xs-6">
-								<label for="pwd">PASSWORD</label>
+								<label for="pwd">Password</label>
 								<input type="text" class="form-control" id="pwd" name="pwd" placeholder="パスワード" required="required" maxlength="20" style="text-align: left" value="1111" readonly>
 							</div>
 
@@ -227,7 +227,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<br>
 						<div class="row">
 		
-							<div class="col-xs-6">
+							<div class="col-xs-4">
 								<label for="dept">部署</label>
 								<select class="form-control" id="dept" name="dept">
 									<option value="" disabled selected>選択してください。</option>
@@ -237,13 +237,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</select>
 							</div>
 
-							<div class="col-xs-3">
+							<div class="col-xs-4">
 								<label for="name">社員名</label>
 								<input type="text" class="form-control" id="name" name="name" placeholder="日本 太郎" required="required" maxlength="100" style="text-align: left">
 							</div>
-							<div class="col-xs-3">
+							<div class="col-xs-4">
 								<label for="grade">区分</label>
-								<input type="text" class="form-control" id="grade" name="grade" placeholder="役員/管理/社員" required="required" maxlength="30" style="text-align: left">
+								<input type="text" class="form-control" id="grade" name="grade" placeholder="役員/管理職/社員" required="required" maxlength="30" style="text-align: left">
 							</div>
 						</div>
 						<br>
@@ -319,7 +319,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<div class="modal-dialog">
 			<form method="post" enctype="multipart/form-data">
 				<div class="modal-content">
-					<div class="modal-header">社員編集(<span id="ulnametitle"></span>)
+					<div class="modal-header">社員編集
 						<button class="close" data-dismiss="modal">&times;</button>
 					</div>
 
@@ -328,7 +328,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="col-xs-6">
 						
 			
-								<label for="email">email</label>
+								<label for="email">Email</label>
 								<input type="email" class="form-control" id="ulemail" name="ulemail" placeholder="email@" required="required" maxlength="100" style="text-align: left" readonly>
 		
 						
@@ -336,7 +336,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<input type="hidden" id="ultype" name="ultype" value="">
 							</div>
 							<div class="col-xs-6">
-								<label for="pwd">PASSWORD</label>
+								<label for="pwd">Password</label>
 								<input type="text" class="form-control" id="ulpwd" name="ulpwd" placeholder="パスワード" required="required" maxlength="20" style="text-align: left">
 							</div>
 							
@@ -344,7 +344,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<br>
 						<div class="row">
 
-							<div class="col-xs-6">
+							<div class="col-xs-4">
 								<label for="dept">部署</label>
 								<select class="form-control" id="uldept" name="uldept">
 									<option value="" disabled selected>選択してください。</option>
@@ -354,13 +354,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</select>
 							</div>
 
-							<div class="col-xs-3">
+							<div class="col-xs-4">
 								<label for="name">社員名</label>
 								<input type="text" class="form-control" id="ulname" name="ulname" placeholder="日本 太郎" required="required" maxlength="100" style="text-align: left">
 							</div>
-							<div class="col-xs-3">
+							<div class="col-xs-4">
 								<label for="grade">区分</label>
-								<input type="text" class="form-control" id="ulgrade" name="ulgrade" placeholder="役員/管理/社員" required="required" maxlength="30" style="text-align: left">
+								<input type="text" class="form-control" id="ulgrade" name="ulgrade" placeholder="役員/管理職/社員" required="required" maxlength="30" style="text-align: left">
 							</div>
 						</div>
 						<br>
