@@ -60,26 +60,26 @@ include('../model/loginoutmodel.php');
         <?php if (isset($_SESSION['auth'])) : ?>
             <title>ログアウト</title>
             <div class="form-label-group">
-                <input id="email" name="email" placeholder="User Email" class="form-control" type="text" value="<?= $_SESSION['auth_email'] ?>">
-                <label for="email" class="sr-only">User Email</label>
+                <input id="email" name="email" placeholder="Email" class="form-control" type="text" value="<?= $_SESSION['auth_email'] ?>">
+                <label for="email" class="sr-only">Email</label>
             </div>
             <br>
             <div class="form-label-group" id="divpwd">
                 <input id="name" name="name" class="form-control" type="text" value="<?= $_SESSION['auth_name'] ?>">
-                <label for="name" class="sr-only">User Name</label>
+                <label for="name" class="sr-only">Name</label>
             </div>
             <br>
             <input class="btn btn-lg btn-primary btn-block" type="submit" id="btnLogout" name="btnLogout" value="Sign out">
         <?php else : ?>
             <title>ログイン</title>
             <div class="form-label-group">
-                <input id="email" name="email" placeholder="User Email" class="form-control" type="text" value="<?= $_POST['email'] ?>">
-                <label for="email" class="sr-only">User Email</label>
+                <input id="email" name="email" placeholder="Email" class="form-control" type="text" value="<?= $_POST['email'] ?>">
+                <label for="email" class="sr-only">Email</label>
             </div>
             <br>
             <div class="form-label-group" id="divpwd">
-                <input id="pwd" name="pwd" placeholder="User Password" class="form-control" type="password" value="<?= $_POST['pwd'] ?>">
-                <label for="pwd" class="sr-only">User Password</label>
+                <input id="pwd" name="pwd" placeholder="Password" class="form-control" type="password" value="<?= $_POST['pwd'] ?>">
+                <label for="pwd" class="sr-only">Password</label>
             </div>
             <br>
             <input class="btn btn-lg btn-primary btn-block" type="submit" id="btnLogin" name="btnLogin" value="Sign in">
