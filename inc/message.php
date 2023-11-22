@@ -24,9 +24,11 @@ $login_is_not = '詳細情報はログイン後可能です。';
 $login_success = 'ログインに成功しました。';
 $logout_success = 'ログアウトに成功しました。';
 $login_fail = 'メールまたはパスワードが正しくありません。もう一度お試しください。';
+$login_email_fail = '正しいメールアドレスを入力してください。';
+$login_pwd_fail = 'パスワードは半角英数字のみを許可します。';
 
 // userList
-$user_id_empty = 'IDを入力してください。';
+$user_email_empty = 'Emailを入力してください。';
 $user_pwd_empty = 'Passwordを入力してください。';
 $user_name_empty = '社員名を入力してください。';
 $user_email_empty = 'メールを入力してください。';
@@ -35,8 +37,6 @@ $user_grade_empty = '区分を入力してください。';
 $user_genba_list_empty = '勤務時間タイプを選択してください。';
 $file_size_isvalid_STAMP = 'ファイルサイズが無効です。ファイルサイズが' . round($STAMP_MAXSIZE / 1000000, 0) . 'MB未満のファイルを選択してください。';
 $file_extension_invalid_STAMP = 'ファイルの拡張子無効です。ファイルの拡張子が [ ' . implode(', ', $ALLOWED_TYPES_STAMP) . ' ] です';
-$min_invalid_useremail_length = 'メールが短すぎます。@の前に最低'.$MIN_LENGTH_ID_EMAIL_USER.'桁以上入力してください。';
-$min_invalid_userid_length = 'IDが短すぎます。@の前に最低'.$MIN_LENGTH_ID_EMAIL_USER.'桁以上入力してください。';
 $email_is_dupplicate = 'メールが存在されています。他のメールを登録してください。';
 
 // kyukaReg
@@ -97,7 +97,7 @@ $shonin_notkakutei_fail = '月勤務表がまだ提出されていないです�
 $sekininshonin_notkakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
 $submised_not_change = '  *提出した勤務表を編集又は登録不可です。！';
 $is_not_registed_WorkMonth = '  月合計登録まだ登録されてないです。確認してください。！\n 登録されていない場合は提出出来ません';
-$is_submissed_notchange ='勤務表提出しましたので編集出来ません、管理者へ連絡してください。';
+$is_submissed_notchange = '勤務表提出しましたので編集出来ません、管理者へ連絡してください。';
 $Shonin_KanriSha_Undefine = '選択した管理者はエラー発生したました。システム管理者へご連絡ください';
 $Shonin_SekininSha_Undefine = '選択した責任者はエラー発生したました。システム管理者へご連絡ください';
 $is_admin_changed_saveWaiting = '責任者、管理者の変更があります、「承認」ボタン押すと保存します。';

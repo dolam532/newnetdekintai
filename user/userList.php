@@ -210,10 +210,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-xs-6">
-							
+
 								<label for="email">Email</label>
 								<input type="email" class="form-control" id="email" name="email" placeholder="email@" required="required" maxlength="100" style="text-align: left">
-							
+
 								<input type="hidden" name="companyid" value="<?= $_SESSION['auth_companyid'] ?>">
 								<input type="hidden" name="type" value="<?= $_SESSION['auth_type'] ?>">
 							</div>
@@ -226,7 +226,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						</div>
 						<br>
 						<div class="row">
-		
+
 							<div class="col-xs-4">
 								<label for="dept">部署</label>
 								<select class="form-control" id="dept" name="dept">
@@ -326,12 +326,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-xs-6">
-						
-			
+
+
 								<label for="email">Email</label>
 								<input type="email" class="form-control" id="ulemail" name="ulemail" placeholder="email@" required="required" maxlength="100" style="text-align: left" readonly>
-		
-						
+
+
 								<input type="hidden" id="ulcompanyid" name="ulcompanyid" value="">
 								<input type="hidden" id="ultype" name="ultype" value="">
 							</div>
@@ -339,7 +339,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<label for="pwd">Password</label>
 								<input type="text" class="form-control" id="ulpwd" name="ulpwd" placeholder="パスワード" required="required" maxlength="20" style="text-align: left">
 							</div>
-							
+
 						</div>
 						<br>
 						<div class="row">
@@ -643,20 +643,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 	// Check Error 社員登録
 	$(document).on('click', '#btnReg', function(e) {
-		var uid = $("#uid").val();
 		var pwd = $("#pwd").val();
 		var name = $("#name").val();
 		var email = $("#email").val();
+		var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+		var passwordRegex = /^[A-Za-z0-9]+$/; // 半角英数字のみを許可
 		var dept = $("#dept").val();
 		var grade = $("#grade").val();
 		var genba_list = $("#genba_list").val();
 
-		if (uid == "") {
-			alert("<?php echo $user_id_empty; ?>");
-			$("#uid").focus();
-			e.preventDefault();
-			return;
-		}
 		if (pwd == "") {
 			alert("<?php echo $user_pwd_empty; ?>");
 			$("#pwd").focus();
@@ -673,6 +668,18 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			alert("<?php echo $user_email_empty; ?>");
 			$("#email").focus();
 			return;
+		}
+		if (!emailRegex.test(email)) {
+			alert("<?php echo $login_email_fail; ?>");
+			e.preventDefault();
+			$("#email").focus();
+			return false;
+		}
+		if (!passwordRegex.test(pwd)) {
+			alert("<?php echo $$login_pwd_fail; ?>");
+			e.preventDefault();
+			$("#pwd").focus();
+			return false;
 		}
 		<?php
 		if (!empty($userlist_list)) {
@@ -706,19 +713,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			e.preventDefault();
 			return;
 		}
-		// check min length 
-		if (checkStringLengthAndCondition(uid) !== true) {
-			$("#uid").focus();
-			alert("<?php echo $min_invalid_userid_length ?>");
-			e.preventDefault();
-			return;
-		}
-		if (checkStringLengthAndCondition(email) !== true) {
-			$("#email").focus();
-			alert("<?php echo $min_invalid_useremail_length ?>");
-			e.preventDefault();
-			return;
-		}
 	});
 
 	// Check Error 社員編集
@@ -726,6 +720,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var pwd = $("#ulpwd").val();
 		var name = $("#ulname").val();
 		var email = $("#ulemail").val();
+		var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+		var passwordRegex = /^[A-Za-z0-9]+$/; // 半角英数字のみを許可
 		var dept = $("#uldept").val();
 		var grade = $("#ulgrade").val();
 		var genba_list = $("#ulgenba_list").val();
@@ -746,6 +742,18 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			alert("<?php echo $user_email_empty; ?>");
 			$("#ulemail").focus();
 			return;
+		}
+		if (!emailRegex.test(email)) {
+			alert("<?php echo $login_email_fail; ?>");
+			e.preventDefault();
+			$("#ulemail").focus();
+			return false;
+		}
+		if (!passwordRegex.test(pwd)) {
+			alert("<?php echo $$login_pwd_fail; ?>");
+			e.preventDefault();
+			$("#ulpwd").focus();
+			return false;
 		}
 		<?php
 		if (!empty($admin_list)) {
@@ -779,28 +787,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			e.preventDefault();
 			return;
 		}
-		if (checkStringLengthAndCondition(email) !== true) {
-			$("#ulemail").focus();
-			alert("<?php echo $min_invalid_useremail_length ?>");
-			e.preventDefault();
-			return;
-		}
 	});
-
-	function checkStringLengthAndCondition(inputString) {
-		const minLength = parseInt("<?php echo $MIN_LENGTH_ID_EMAIL_USER ?>", 10);
-
-		if (inputString.includes('@')) {
-			const atIndex = inputString.indexOf('@');
-			if (atIndex >= minLength) {
-				return true;
-			}
-		} else {
-			if (inputString.length >= minLength) {
-				return true;
-			}
-		}
-		return false;
-	}
 </script>
 <?php include('../inc/footer.php'); ?>

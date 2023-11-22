@@ -97,28 +97,28 @@ include('../model/loginoutmodel.php');
     var passwordRegex = /^[A-Za-z0-9]+$/; // 半角英数字のみを許可
 
     if (email == "") {
-        alert("メールアドレスを入力してください。");
+        alert("<?php echo $user_email_empty; ?>");
         e.preventDefault();
         $("#email").focus();
         return false;
     }
 
     if (pwd == "") {
-        alert("パスワードを入力してください。");
+        alert("<?php echo $user_pwd_empty; ?>");
         e.preventDefault();
         $("#pwd").focus();
         return false;
     }
 
     if (!emailRegex.test(email)) {
-        alert("正しいメールアドレスを入力してください。");
+        alert("<?php echo $login_email_fail; ?>");
         e.preventDefault();
         $("#email").focus();
         return false;
     }
 
     if (!passwordRegex.test(pwd)) {
-        alert("パスワードは半角英数字のみを許可します。");
+        alert("<?php echo $$login_pwd_fail; ?>");
         e.preventDefault();
         $("#pwd").focus();
         return false;
