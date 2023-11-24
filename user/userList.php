@@ -331,7 +331,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<label for="email">Email</label>
 								<input type="email" class="form-control" id="ulemail" name="ulemail" placeholder="email@" required="required" maxlength="100" style="text-align: left" readonly>
 
-
+								<input type="hidden" id="uluid" name="uluid" value="">
 								<input type="hidden" id="ulcompanyid" name="ulcompanyid" value="">
 								<input type="hidden" id="ultype" name="ultype" value="">
 							</div>

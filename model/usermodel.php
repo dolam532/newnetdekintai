@@ -177,9 +177,20 @@ if (isset($_POST['SaveUserList'])) {
         $genid = 0;
     }
 
+    
+    $RandomUid = '';
+    do {
+        $RandomUid = generateRandomString($MAX_LENGTH_UID_USER);
+        $sql_check_uid = "SELECT COUNT(*) AS count FROM tbl_user WHERE uid = '$RandomUid'";
+        $result = $conn->query($sql_check_uid);
+        $row = $result->fetch_assoc();
+        $uidExists = $row['count'] > 0;
+    
+    } while ($uidExists);
+
     // 2023-10-11/1340-006 change start
     $fileExtension = pathinfo($_FILES["signstamp"]["name"], PATHINFO_EXTENSION);
-    $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
+    $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $RandomUid, $companyid);
     $originalFileName = $_FILES["signstamp"]["name"];
     if ($originalFileName == "") {
         $fileName == '';
@@ -213,7 +224,7 @@ if (isset($_POST['SaveUserList'])) {
             $fileName = $newFileName;
             // upload to server
             if (move_uploaded_file($_FILES["signstamp"]["tmp_name"], $uploadFile)) {
-                deleteNoticeImages($IMAGE_UPLOAD_DIR_STAMP, $uid, $newFileName);
+                deleteNoticeImages($IMAGE_UPLOAD_DIR_STAMP, $RandomUid, $newFileName);
             } else {
                 error_log("Upload Error");
             }
@@ -222,15 +233,6 @@ if (isset($_POST['SaveUserList'])) {
 
     // general random uid 
 
-    $RandomUid = '';
-    do {
-        $RandomUid = generateRandomString($MAX_LENGTH_UID_USER);
-        $sql_check_uid = "SELECT COUNT(*) AS count FROM tbl_user WHERE uid = '$RandomUid'";
-        $result = $conn->query($sql_check_uid);
-        $row = $result->fetch_assoc();
-        $uidExists = $row['count'] > 0;
-    
-    } while ($uidExists);
 
     // insert to DB 
     $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`
@@ -269,6 +271,8 @@ if (isset($_POST['UpdateUserList'])) {
     $udsignstamp_old = mysqli_real_escape_string($conn, $_POST['udsignstamp_old']);
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
+
+    error_log("Current UID:" .$uid );
 
     $fileExtension = pathinfo($_FILES["udsignstamp_new"]["name"], PATHINFO_EXTENSION);
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
