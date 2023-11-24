@@ -210,10 +210,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-xs-6">
-
 								<label for="email">Email</label>
 								<input type="email" class="form-control" id="email" name="email" placeholder="email@" required="required" maxlength="100" style="text-align: left">
-
 								<input type="hidden" name="companyid" value="<?= $_SESSION['auth_companyid'] ?>">
 								<input type="hidden" name="type" value="<?= $_SESSION['auth_type'] ?>">
 							</div>
@@ -221,8 +219,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<label for="pwd">Password</label>
 								<input type="text" class="form-control" id="pwd" name="pwd" placeholder="パスワード" required="required" maxlength="20" style="text-align: left" value="1111" readonly>
 							</div>
-
-
 						</div>
 						<br>
 						<div class="row">
@@ -236,7 +232,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<?php endforeach; ?>
 								</select>
 							</div>
-
 							<div class="col-xs-4">
 								<label for="name">社員名</label>
 								<input type="text" class="form-control" id="name" name="name" placeholder="日本 太郎" required="required" maxlength="100" style="text-align: left">
