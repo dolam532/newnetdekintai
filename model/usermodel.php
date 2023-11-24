@@ -153,7 +153,6 @@ $genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 if (isset($_POST['SaveUserList'])) {
 
     global $MAX_LENGTH_UID_USER;
-    
     $_POST['companyid'] = intval($_POST['companyid']);
     $uid = mysqli_real_escape_string($conn, $_POST['uid']);
     $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
@@ -177,7 +176,16 @@ if (isset($_POST['SaveUserList'])) {
         $genid = 0;
     }
 
-    
+    // check duplicate mail  $email
+    $sql_check_email = "SELECT COUNT(*) AS count FROM tbl_user WHERE email = '$email'";
+    $result = $conn->query($sql_check_email);
+    $row = $result->fetch_assoc();
+    $emailExists = $row['count'] > 0;
+    if ($emailExists) {
+        $_SESSION['email_is_dupplicate'] = $email_is_dupplicate;
+        return;
+    }
+
     $RandomUid = '';
     do {
         $RandomUid = generateRandomString($MAX_LENGTH_UID_USER);
@@ -185,7 +193,6 @@ if (isset($_POST['SaveUserList'])) {
         $result = $conn->query($sql_check_uid);
         $row = $result->fetch_assoc();
         $uidExists = $row['count'] > 0;
-    
     } while ($uidExists);
 
     // 2023-10-11/1340-006 change start
@@ -231,9 +238,6 @@ if (isset($_POST['SaveUserList'])) {
         }
     }
 
-    // general random uid 
-
-
     // insert to DB 
     $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`
     , `signstamp`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `genid`, `genstrymd`, `genendymd`, `reg_dt` , `upt_dt`) 
@@ -246,7 +250,6 @@ if (isset($_POST['SaveUserList'])) {
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }
-
 }
 
 
@@ -271,8 +274,7 @@ if (isset($_POST['UpdateUserList'])) {
     $udsignstamp_old = mysqli_real_escape_string($conn, $_POST['udsignstamp_old']);
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
-
-    error_log("Current UID:" .$uid );
+    error_log("Current UID:" . $uid);
 
     $fileExtension = pathinfo($_FILES["udsignstamp_new"]["name"], PATHINFO_EXTENSION);
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);

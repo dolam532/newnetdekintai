@@ -72,6 +72,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		unset($_SESSION['delete_success']);
 	}
 	?>
+	<?php
+	if (isset($_SESSION['email_is_dupplicate']) && isset($_POST['SaveUserList'])) {
+	?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['email_is_dupplicate']; ?>
+		</div>
+	<?php
+		unset($_SESSION['email_is_dupplicate']);
+	}
+	?>
 	<div class="row">
 		<div class="col-md-2 text-left">
 			<div class="title_name">
@@ -317,15 +328,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<div class="modal-header">社員編集
 						<button class="close" data-dismiss="modal">&times;</button>
 					</div>
-
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-xs-6">
-
-
 								<label for="email">Email</label>
 								<input type="email" class="form-control" id="ulemail" name="ulemail" placeholder="email@" required="required" maxlength="100" style="text-align: left" readonly>
-
 								<input type="hidden" id="uluid" name="uluid" value="">
 								<input type="hidden" id="ulcompanyid" name="ulcompanyid" value="">
 								<input type="hidden" id="ultype" name="ultype" value="">
@@ -334,11 +341,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<label for="pwd">Password</label>
 								<input type="text" class="form-control" id="ulpwd" name="ulpwd" placeholder="パスワード" required="required" maxlength="20" style="text-align: left">
 							</div>
-
 						</div>
 						<br>
 						<div class="row">
-
 							<div class="col-xs-4">
 								<label for="dept">部署</label>
 								<select class="form-control" id="uldept" name="uldept">
