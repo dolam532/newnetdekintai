@@ -177,6 +177,16 @@ if (isset($_POST['SaveUserList'])) {
         $genid = 0;
     }
 
+
+    // check duplicate mail  $email
+    $sql_check_email = "SELECT COUNT(*) AS count FROM tbl_user WHERE email = '$email'";
+    $result = $conn->query($sql_check_email);
+    $row = $result->fetch_assoc();
+    $emailExists = $row['count'] > 0;
+    if ($emailExists) {
+        $_SESSION['email_is_dupplicate'] = $email_is_dupplicate;
+        return;
+    }
     
     $RandomUid = '';
     do {
