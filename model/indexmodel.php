@@ -1,9 +1,7 @@
 <?php
 // Select data from tbl_notice
 // (index.php)
-if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-    $sql_notice = 'SELECT * FROM `tbl_notice` ORDER BY `tbl_notice`.`bid`';
-} else {
+if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('USER')) {
     $sql_notice = 'SELECT
         `tbl_notice`.*
         FROM
@@ -13,6 +11,8 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         `tbl_notice`.`email` = `tbl_user`.`email`
         ORDER BY
         `tbl_notice`.`bid`';
+} else {
+    $sql_notice = 'SELECT * FROM `tbl_notice` ORDER BY `tbl_notice`.`bid`';
 }
 $result_notice = mysqli_query($conn, $sql_notice);
 $notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
