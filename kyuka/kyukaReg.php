@@ -146,11 +146,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<thead>
 					<tr class="info">
 						<th class="th0" style="text-align: center; width: 5%;">ID</th>
-						<th class="th1" style="text-align: center; width: 8%;">申請日</th>
-						<th class="th2" style="text-align: center; width: 8%;">休暇区分</th>
-						<th class="th3" style="text-align: center; width: 15%;">申請期間</th>
+						<th class="th1" style="text-align: center; width: 5%;">申請日</th>
+						<th class="th1" style="text-align: center; width: 7%;">社員名</th>
+						<th class="th2" style="text-align: center; width: 7%;">休暇区分</th>
+						<th class="th3" style="text-align: center; width: 12%;">申請期間</th>
 						<th class="th4" style="text-align: center; width: 8%;">申込日(時)</th>
-						<th class="th5" style="text-align: center; width: 15%;">年次期間</th>
+						<th class="th5" style="text-align: center; width: 12%;">年次期間</th>
 						<th class="th6" style="text-align: center; width: 8%;">総休暇数</th>
 						<th class="th7" style="text-align: center; width: 7%;">残日数</th>
 						<th class="th8" style="text-align: center; width: 10%;">決裁</th>
@@ -160,7 +161,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<tbody>
 					<?php if (empty($userkyuka_list)) { ?>
 						<tr>
-							<td colspan="12" align="center"><?php echo $data_save_no; ?></td>
+							<td colspan="11" align="center"><?php echo $data_save_no; ?></td>
 						</tr>
 						<?php } elseif (!empty($userkyuka_list)) {
 						foreach ($userkyuka_list as $userkyuka) {
@@ -185,13 +186,22 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<td class="td1"><span><?= $userkyuka['kyukaymd'] ?></span></td>
 								<td class="td2"><span><?= $userkyuka['name'] ?></span></td>
 								<td class="td3">
-									<span><?= $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'] ?></span>
+									<span>
+										<?php foreach ($codebase_list as $k) : ?>
+											<?php
+											if ($k['code'] == $userkyuka['dept']) {
+												echo $k['name'];
+											}
+											?>
+										<?php endforeach; ?>
+									</span>
 								</td>
-								<td class="td4"><span><?= $userkyuka['ymdcnt'] ?>日(<?= $userkyuka['timecnt'] ?>時)</span></td>
-								<td class="td5"><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
-								<td class="td6"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
-								<td class="td7"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] - $userkyuka['usecnt'] - (int)($userkyuka['usetime'] / 8) ?></span></td>
-								<td class="td8"><span name="allowok">
+								<td class="td4"><span><?= $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'] ?></span></td>
+								<td class="td5"><span><?= $userkyuka['ymdcnt'] ?>日(<?= $userkyuka['timecnt'] ?>時)</span></td>
+								<td class="td6"><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
+								<td class="td7"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
+								<td class="td8"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] - $userkyuka['usecnt'] - (int)($userkyuka['usetime'] / 8) ?></span></td>
+								<td class="td9"><span name="allowok">
 										<?php
 										if ($userkyuka['allowok'] == "0") { ?>
 											<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
@@ -212,7 +222,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 											<?php } ?>
 									</span>
 								</td>
-								<td class="td9"><span><?= $userkyuka['destplace'] ?></span></td>
+								<td class="td10"><span><?= $userkyuka['destplace'] ?></span></td>
 							</tr>
 					<?php }
 					} ?>
@@ -230,34 +240,31 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="modal-header">休年届登録(<span id="sname">New</span>)
 							<button class="close" data-dismiss="modal">x</button>
 						</div>
-
 						<div class="modal-body" style="text-align: left">
 							<div class="row one">
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukaymd">
 									<label for="kyukaymd">申請日</label>
 									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
-									<?php foreach ($userkyuka_list as $key) : ?>
-										<input type="hidden" name="companyid" value="<?= $key['companyid'] ?>">
-										<input type="hidden" name="uid" value="<?= $key['uid'] ?>">
-										<input type="hidden" name="vacationid" value="<?= $key['vacationid'] ?>">
-										<input type="hidden" id="vacationstr" name="vacationstr" value="<?= $key['vacationstr'] ?>">
-										<input type="hidden" id="vacationend" name="vacationend" value="<?= $key['vacationend'] ?>">
-										<input type="hidden" id="oldcnt" name="oldcnt" value="<?= $key['oldcnt'] ?>">
-										<input type="hidden" id="newcnt" name="newcnt" value="<?= $key['newcnt'] ?>">
-										<input type="hidden" id="restcnt" name="restcnt" value="<?= $key['restcnt'] ?>">
-										<input type="hidden" id="kyukatimelimit" name="kyukatimelimit" value="<?= $key['kyukatimelimit'] ?>">
-									<?php endforeach; ?>
 								</div>
-								<div class="col-md-5 col-sm-5 col-sx-5 kyukacode">
+								<div class="col-md-3 col-sm-3 col-sx-3 kyukacompanyname">
+									<label for="kyukaymd">社員名</label>
+									<select class="form-control" id="kyukaname" name="kyukacode">
+										<option value="" disabled selected>選択</option>
+										<?php foreach ($user_list as $key) : ?>
+											<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3 kyukacode">
 									<label for="kyukacode">休暇区分</label>
 									<select class="form-control" id="kyukaname" name="kyukacode">
-										<option value="" disabled selected>選択してください。</option>
+										<option value="" disabled selected style="font-size:10px;">選択</option>
 										<?php foreach ($codebase_list as $key) : ?>
 											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
 										<?php endforeach; ?>
 									</select>
 								</div>
-								<div class="col-md-4 col-sm-4 col-sx-4 kyukatype">
+								<div class="col-md-3 col-sm-3 col-sx-3 kyukatype">
 									<label for="kyukatype">申込区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
@@ -288,29 +295,18 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<br>
 							<div class="row three">
-								<?php
-								if (!empty($userkyuka_list)) {
-									foreach ($userkyuka_list as $key) {
-										if ($key['uid'] == $_SESSION['auth_uid']) {
-								?>
-											<div class="col-md-2 col-sm-2 col-sx-2 no">
-												<label for="totcnt">当年付与</label>
-												<input type="hidden" id="va_uid" name="va_uid" value="<?= $key['uid'] ?>">
-												<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="<?= $key['oldcnt'] + $key['newcnt'] ?>">
-											</div>
-											<div class="col-md-2 col-sm-2 col-sx-2 no">
-												<label for="usecnt">使用日数</label>
-												<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="<?= $key['usecnt'] ?>">
-											</div>
-											<div class=" col-md-2 col-sm-2 col-sx-2 no">
-												<label for="usetime">使用時間</label>
-												<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="<?= $key['usetime'] ?>">
-											</div>
-								<?php
-										}
-									}
-								}
-								?>
+								<div class="col-md-2 col-sm-2 col-sx-2 no">
+									<label for="totcnt">当年付与</label>
+									<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="<?= $key['oldcnt'] + $key['newcnt'] ?>">
+								</div>
+								<div class="col-md-2 col-sm-2 col-sx-2 no">
+									<label for="usecnt">使用日数</label>
+									<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="<?= $key['usecnt'] ?>">
+								</div>
+								<div class=" col-md-2 col-sm-2 col-sx-2 no">
+									<label for="usetime">使用時間</label>
+									<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="<?= $key['usetime'] ?>">
+								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2 no"></div>
 								<div class="col-md-2 col-sm-2 col-sx-2 no">
 									<label for="ymdcnt">申込日</label>
@@ -495,13 +491,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var totcnt = $("#totcnt").val();
 		var usecnt = $("#usecnt").val();
 		var usetime = $("#usetime").val();
-		var va_uid = $("#va_uid").val();
-
-		if (totcnt == '0' && usecnt == '' && usetime == '') {
-			alert("<?php echo $kyuka_no_receive; ?>");
-			e.preventDefault();
-			return;
-		}
 
 		$('#modal').modal('toggle');
 
