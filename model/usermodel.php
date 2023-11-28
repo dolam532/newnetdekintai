@@ -274,7 +274,7 @@ if (isset($_POST['UpdateUserList'])) {
     $udsignstamp_old = mysqli_real_escape_string($conn, $_POST['udsignstamp_old']);
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
-    error_log("Current UID:" . $uid);
+   
 
     $fileExtension = pathinfo($_FILES["udsignstamp_new"]["name"], PATHINFO_EXTENSION);
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
@@ -316,8 +316,8 @@ if (isset($_POST['UpdateUserList'])) {
         }
 
         $sql = "UPDATE tbl_user SET  
-        companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName', type='$type', email='$email',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd',
-        outymd='$outymd', genstrymd='$genstrymd', genendymd='$genendymd', upt_dt='$upt_dt' WHERE uid ='$uid'";
+        companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName', type='$type',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd',
+        outymd='$outymd', genstrymd='$genstrymd', genendymd='$genendymd', upt_dt='$upt_dt' WHERE email ='$email'";
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['update_success'] = $update_success;
@@ -332,9 +332,10 @@ if (isset($_POST['UpdateUserList'])) {
 if (isset($_POST['btnDelUserList'])) {
     $uid = mysqli_real_escape_string($conn, $_POST['uluid']);
     $filePath = $IMAGE_UPLOAD_DIR_STAMP . $_POST['udsignstamp_old'];
+    $email = mysqli_real_escape_string($conn, $_POST['ulemail']);
 
     $sql = "DELETE FROM `tbl_user` 
-            WHERE uid ='$uid'";
+            WHERE email ='$email'";
     // error_log("xxxxx****xxxxx DELETE FILE PATH".$filePath);
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;

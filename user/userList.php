@@ -41,45 +41,45 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 <div class="container">
 	<?php
 	if (isset($_SESSION['save_success']) && isset($_POST['SaveUserList'])) {
-	?>
+		?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<?php echo $_SESSION['save_success']; ?>
 		</div>
-	<?php
+		<?php
 		unset($_SESSION['save_success']);
 	}
 	?>
 	<?php
 	if (isset($_SESSION['update_success']) && isset($_POST['UpdateUserList'])) {
-	?>
+		?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<?php echo $_SESSION['update_success']; ?>
 		</div>
-	<?php
+		<?php
 		unset($_SESSION['update_success']);
 	}
 	?>
 	<?php
 	if (isset($_SESSION['delete_success']) && isset($_POST['btnDelUserList'])) {
-	?>
+		?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<?php echo $_SESSION['delete_success']; ?>
 		</div>
-	<?php
+		<?php
 		unset($_SESSION['delete_success']);
 	}
 	?>
 	<?php
 	if (isset($_SESSION['email_is_dupplicate']) && isset($_POST['SaveUserList'])) {
-	?>
+		?>
 		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
 			<?php echo $_SESSION['email_is_dupplicate']; ?>
 		</div>
-	<?php
+		<?php
 		unset($_SESSION['email_is_dupplicate']);
 	}
 	?>
@@ -89,22 +89,24 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<span class="text-left">社員登録</span>
 			</div>
 		</div>
-		<?php if ($_SESSION['auth_type'] == constant('USER')) : ?>
+		<?php if ($_SESSION['auth_type'] == constant('USER')): ?>
 			<div class="col-md-10 text-right">
 				<div class="title_btn">
 					<input type="button" onclick="window.location.href='../'" value="トップへ戻る">
 				</div>
 			</div>
-		<?php else : ?>
+		<?php else: ?>
 			<form method="post">
 				<div class="col-md-3 text-left">
 					<div class="title_condition">
-						<label>区分 : <input type="text" id="searchGrade" name="searchGrade" value="<?= $_POST['searchGrade'] ?>" style="width: 100px;"></label>
+						<label>区分 : <input type="text" id="searchGrade" name="searchGrade"
+								value="<?= $_POST['searchGrade'] ?>" style="width: 100px;"></label>
 					</div>
 				</div>
 				<div class="col-md-3 text-left">
 					<div class="title_condition">
-						<label>社員名 : <input type="text" id="searchName" name="searchName" value="<?= $_POST['searchName'] ?>" style="width: 100px;"></label>
+						<label>社員名 : <input type="text" id="searchName" name="searchName"
+								value="<?= $_POST['searchName'] ?>" style="width: 100px;"></label>
 					</div>
 				</div>
 				<div class="col-md-4 text-right">
@@ -115,7 +117,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<input type="submit" name="SearchButton" value="検索">
 					</div>
 					<div class="title_btn">
-						<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+						<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
 							<input type="button" id="btnNew" value="新規">
 						<?php endif; ?>
 					</div>
@@ -132,7 +134,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<table class="table table-bordered datatable">
 			<thead>
 				<tr class="info">
-					<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+					<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
 						<th style="text-align: center; width: 10%;">会社名</th>
 					<?php endif; ?>
 					<th style="text-align: center; width: 5%;">ID</th>
@@ -149,60 +151,82 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			<tbody>
 				<?php if (empty($userlist_list)) { ?>
 					<tr>
-						<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+						<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
 							<td colspan="9" align="center">
 								<?php echo $data_save_no; ?>
 							</td>
-						<?php else : ?>
+						<?php else: ?>
 							<td colspan="8" align="center">
 								<?php echo $data_save_no; ?>
 							</td>
 						<?php endif; ?>
 					</tr>
-					<?php } elseif (!empty($userlist_list)) {
+				<?php } elseif (!empty($userlist_list)) {
 					foreach (@$userlist_list as $user) {
-					?>
+						?>
 						<tr>
-							<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+							<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
 								<td>
-									<span><?= $user['companyname'] ?></span>
+									<span>
+										<?= $user['companyname'] ?>
+									</span>
 								</td>
 							<?php endif; ?>
-							<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+							<?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
 								<td>
-									<?php if ($user['companyid'] == constant('MAIN_COMPANY_ID')) : ?>
+									<?php if ($user['companyid'] == constant('MAIN_COMPANY_ID')): ?>
 										<a href="#">
-											<span class="showModal"><?= $user['uid'] ?></span>
+											<span class="showModal">
+												<?= $user['uid'] ?>
+											</span>
 										</a>
-									<?php else : ?>
-										<span><?= $user['uid'] ?></span>
+									<?php else: ?>
+										<span>
+											<?= $user['uid'] ?>
+										</span>
 									<?php endif; ?>
 								</td>
-							<?php else : ?>
+							<?php else: ?>
 								<td>
 									<a href="#">
-										<span class="showModal"><?= $user['uid'] ?></span>
+										<span class="showModal">
+											<?= $user['uid'] ?>
+										</span>
 									</a>
 								</td>
 							<?php endif; ?>
-							<td><span name="pwd"><?= $user['pwd'] ?></span></td>
-							<td><span name="name"><?= $user['name'] ?></span></td>
-							<td><span name="email"><?= $user['email'] ?></span></td>
-							<td><span name="dept"><?= $user['code_name'] ?></span></td>
-							<td><span name="grade"><?= $user['grade'] ?></span></td>
-							<td><span name="genbaname"><?= $user['genbaname'] ?></span></td>
+							<td><span name="pwd">
+									<?= $user['pwd'] ?>
+								</span></td>
+							<td><span name="name">
+									<?= $user['name'] ?>
+								</span></td>
+							<td><span name="email">
+									<?= $user['email'] ?>
+								</span></td>
+							<td><span name="dept">
+									<?= $user['code_name'] ?>
+								</span></td>
+							<td><span name="grade">
+									<?= $user['grade'] ?>
+								</span></td>
+							<td><span name="genbaname">
+									<?= $user['genbaname'] ?>
+								</span></td>
 							<td>
 								<span name="signstamp">
-									<?php if ($user['signstamp'] == NULL) : ?>
+									<?php if ($user['signstamp'] == NULL): ?>
 										印鑑無し
-									<?php else : ?>
+									<?php else: ?>
 										<img width="50" src="<?= $PATH_IMAGE_STAMP . $user['signstamp'] ?>"><br>
 									<?php endif; ?>
 								</span>
 							</td>
-							<td><span name="bigo"><?= $user['bigo'] ?></span></td>
+							<td><span name="bigo">
+									<?= $user['bigo'] ?>
+								</span></td>
 						</tr>
-				<?php }
+					<?php }
 				} ?>
 			</tbody>
 		</table>
@@ -222,13 +246,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="email">Email</label>
-								<input type="email" class="form-control" id="email" name="email" placeholder="email@" required="required" maxlength="100" style="text-align: left">
+								<input type="email" class="form-control" id="email" name="email" placeholder="email@"
+									required="required" maxlength="100" style="text-align: left">
 								<input type="hidden" name="companyid" value="<?= $_SESSION['auth_companyid'] ?>">
 								<input type="hidden" name="type" value="<?= $_SESSION['auth_type'] ?>">
 							</div>
 							<div class="col-xs-6">
 								<label for="pwd">Password</label>
-								<input type="text" class="form-control" id="pwd" name="pwd" placeholder="パスワード" required="required" maxlength="20" style="text-align: left" value="1111" readonly>
+								<input type="text" class="form-control" id="pwd" name="pwd" placeholder="パスワード"
+									required="required" maxlength="20" style="text-align: left" value="1111" readonly>
 							</div>
 						</div>
 						<br>
@@ -238,33 +264,40 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<label for="dept">部署</label>
 								<select class="form-control" id="dept" name="dept">
 									<option value="" disabled selected>選択してください。</option>
-									<?php foreach ($codebase_list as $key) : ?>
-										<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
+									<?php foreach ($codebase_list as $key): ?>
+										<option value="<?= $key["code"] ?>">
+											<?= $key["name"] ?>
+										</option>
 									<?php endforeach; ?>
 								</select>
 							</div>
 							<div class="col-xs-4">
 								<label for="name">社員名</label>
-								<input type="text" class="form-control" id="name" name="name" placeholder="日本 太郎" required="required" maxlength="100" style="text-align: left">
+								<input type="text" class="form-control" id="name" name="name" placeholder="日本 太郎"
+									required="required" maxlength="100" style="text-align: left">
 							</div>
 							<div class="col-xs-4">
 								<label for="grade">区分</label>
-								<input type="text" class="form-control" id="grade" name="grade" placeholder="役員/管理職/社員" required="required" maxlength="30" style="text-align: left">
+								<input type="text" class="form-control" id="grade" name="grade" placeholder="役員/管理職/社員"
+									required="required" maxlength="30" style="text-align: left">
 							</div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="bigo">備考</label>
-								<input type="text" class="form-control" name="bigo" maxlength="1000" style="text-align: left" placeholder="備考">
+								<input type="text" class="form-control" name="bigo" maxlength="1000"
+									style="text-align: left" placeholder="備考">
 							</div>
 							<div class="col-xs-3">
 								<label for="inymd">入社日</label>
-								<input type="text" class="form-control" id="inymd" name="inymd" maxlength="10" placeholder="日付" style="text-align: left">
+								<input type="text" class="form-control" id="inymd" name="inymd" maxlength="10"
+									placeholder="日付" style="text-align: left">
 							</div>
 							<div class="col-xs-3">
 								<label for="outymd">退社日</label>
-								<input type="text" class="form-control" id="outymd" name="outymd" maxlength="10" placeholder="日付" style="text-align: left">
+								<input type="text" class="form-control" id="outymd" name="outymd" maxlength="10"
+									placeholder="日付" style="text-align: left">
 							</div>
 						</div>
 						<br>
@@ -275,20 +308,25 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<option value="" disabled selected>選択してください。</option>
 									<?php
 									foreach ($genba_list_db as $key) {
-									?>
-										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["workstrtime"] . ',' . $key["workendtime"] ?>"><?= $key["genbaname"] .  '(' . $key["workstrtime"] . '-' . $key["workendtime"]  . ')' ?></option>
-									<?php
+										?>
+										<option
+											value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["workstrtime"] . ',' . $key["workendtime"] ?>">
+											<?= $key["genbaname"] . '(' . $key["workstrtime"] . '-' . $key["workendtime"] . ')' ?>
+										</option>
+										<?php
 									}
 									?>
 								</select>
 							</div>
 							<div class="col-xs-3">
 								<label for="genstrymd">契約期間(F)</label>
-								<input type="text" class="form-control" id="genstrymd" name="genstrymd" maxlength="10" placeholder="日付" style="text-align: left">
+								<input type="text" class="form-control" id="genstrymd" name="genstrymd" maxlength="10"
+									placeholder="日付" style="text-align: left">
 							</div>
 							<div class="col-xs-3">
 								<label for="genendymd">契約期間(T)</label>
-								<input type="text" class="form-control" id="genendymd" name="genendymd" maxlength="10" placeholder="日付" style="text-align: left">
+								<input type="text" class="form-control" id="genendymd" name="genendymd" maxlength="10"
+									placeholder="日付" style="text-align: left">
 							</div>
 						</div>
 						<br>
@@ -305,11 +343,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="col-xs-4"></div>
 						<div class="col-xs-2">
 							<p class="text-center">
-								<input type="submit" name="SaveUserList" class="btn btn-primary btn-md" id="btnReg" role="button" value="登録">
+								<input type="submit" name="SaveUserList" class="btn btn-primary btn-md" id="btnReg"
+									role="button" value="登録">
 							</p>
 						</div>
 						<div class="col-xs-2">
-							<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+							<button type="button" class="btn btn-default" data-dismiss="modal"
+								id="modalClose">閉じる</button>
 						</div>
 						<div class="col-xs-4"></div>
 					</div>
@@ -332,14 +372,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="email">Email</label>
-								<input type="email" class="form-control" id="ulemail" name="ulemail" placeholder="email@" required="required" maxlength="100" style="text-align: left" readonly>
+								<input type="email" class="form-control" id="ulemail" name="ulemail"
+									placeholder="email@" required="required" maxlength="100" style="text-align: left"
+									readonly>
 								<input type="hidden" id="uluid" name="uluid" value="">
 								<input type="hidden" id="ulcompanyid" name="ulcompanyid" value="">
 								<input type="hidden" id="ultype" name="ultype" value="">
 							</div>
 							<div class="col-xs-6">
 								<label for="pwd">Password</label>
-								<input type="text" class="form-control" id="ulpwd" name="ulpwd" placeholder="パスワード" required="required" maxlength="20" style="text-align: left">
+								<input type="text" class="form-control" id="ulpwd" name="ulpwd" placeholder="パスワード"
+									required="required" maxlength="20" style="text-align: left">
 							</div>
 						</div>
 						<br>
@@ -348,34 +391,41 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<label for="dept">部署</label>
 								<select class="form-control" id="uldept" name="uldept">
 									<option value="" disabled selected>選択してください。</option>
-									<?php foreach ($codebase_list as $key) : ?>
-										<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
+									<?php foreach ($codebase_list as $key): ?>
+										<option value="<?= $key["code"] ?>">
+											<?= $key["name"] ?>
+										</option>
 									<?php endforeach; ?>
 								</select>
 							</div>
 
 							<div class="col-xs-4">
 								<label for="name">社員名</label>
-								<input type="text" class="form-control" id="ulname" name="ulname" placeholder="日本 太郎" required="required" maxlength="100" style="text-align: left">
+								<input type="text" class="form-control" id="ulname" name="ulname" placeholder="日本 太郎"
+									required="required" maxlength="100" style="text-align: left">
 							</div>
 							<div class="col-xs-4">
 								<label for="grade">区分</label>
-								<input type="text" class="form-control" id="ulgrade" name="ulgrade" placeholder="役員/管理職/社員" required="required" maxlength="30" style="text-align: left">
+								<input type="text" class="form-control" id="ulgrade" name="ulgrade"
+									placeholder="役員/管理職/社員" required="required" maxlength="30" style="text-align: left">
 							</div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="bigo">備考</label>
-								<input type="text" class="form-control" id="ulbigo" name="ulbigo" maxlength="1000" style="text-align: left" placeholder="備考">
+								<input type="text" class="form-control" id="ulbigo" name="ulbigo" maxlength="1000"
+									style="text-align: left" placeholder="備考">
 							</div>
 							<div class="col-xs-3">
 								<label for="inymd">入社日</label>
-								<input type="text" class="form-control" id="ulinymd" name="ulinymd" maxlength="10" placeholder="日付け" style="text-align: left">
+								<input type="text" class="form-control" id="ulinymd" name="ulinymd" maxlength="10"
+									placeholder="日付け" style="text-align: left">
 							</div>
 							<div class="col-xs-3">
 								<label for="outymd">退社日</label>
-								<input type="text" class="form-control" id="uloutymd" name="uloutymd" maxlength="10" placeholder="日付け" style="text-align: left">
+								<input type="text" class="form-control" id="uloutymd" name="uloutymd" maxlength="10"
+									placeholder="日付け" style="text-align: left">
 							</div>
 						</div>
 						<br>
@@ -386,26 +436,31 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<option value="" selected=""></option>
 									<?php
 									foreach ($genba_list_db as $key) {
-									?>
-										<option value="<?= $key["genid"] . ',' . $key["genbaname"] . ',' . $key["workstrtime"] . ',' . $key["workendtime"] ?>"><?= $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?></option>
-									<?php
+										?>
+										<option value="<?= $key["genid"] ?>">
+											<?= $key["genbaname"] . '(' . $key["workstrtime"] . ' : ' . $key["workendtime"] . ')' ?>
+										</option>
+										<?php
 									}
 									?>
 								</select>
 							</div>
 							<div class="col-xs-3">
 								<label for="genstrymd">契約期間(F)</label>
-								<input type="text" class="form-control" id="ulgenstrymd" name="ulgenstrymd" maxlength="10" placeholder="日付け" style="text-align: left">
+								<input type="text" class="form-control" id="ulgenstrymd" name="ulgenstrymd"
+									maxlength="10" placeholder="日付け" style="text-align: left">
 							</div>
 							<div class="col-xs-3">
 								<label for="genendymd">契約期間(T)</label>
-								<input type="text" class="form-control" id="ulgenendymd" name="ulgenendymd" maxlength="10" placeholder="日付け" style="text-align: left">
+								<input type="text" class="form-control" id="ulgenendymd" name="ulgenendymd"
+									maxlength="10" placeholder="日付け" style="text-align: left">
 							</div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-xs-12">
-								<label for="signstamp">印鑑</label><span style="font-size:smaller; color:red;"> (印鑑はpngタイプを選択してください。)</span><br>
+								<label for="signstamp">印鑑</label><span style="font-size:smaller; color:red;">
+									(印鑑はpngタイプを選択してください。)</span><br>
 								<img width="50" id="udsignstamp">
 								<span id="udsignstamp_name"></span>
 								<input type="hidden" name="udsignstamp_old" id="udsignstamp_old">
@@ -414,31 +469,36 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
-						<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+						<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
 							<div class="col-xs-3"></div>
 							<div class="col-xs-2">
 								<p class="text-center">
-									<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md" id="UpdatebtnReg" role="button" value="編集">
+									<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md"
+										id="UpdatebtnReg" role="button" value="編集">
 								</p>
 							</div>
 							<div class="col-xs-2">
 								<p class="text-center">
-									<input type="submit" name="btnDelUserList" class="btn btn-warning" id="btnDel" role="button" value="削除">
+									<input type="submit" name="btnDelUserList" class="btn btn-warning" id="btnDel"
+										role="button" value="削除">
 								</p>
 							</div>
 							<div class="col-xs-2">
-								<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal"
+									id="modalClose">閉じる</button>
 							</div>
 							<div class="col-xs-3"></div>
-						<?php else : ?>
+						<?php else: ?>
 							<div class="col-xs-4"></div>
 							<div class="col-xs-2">
 								<p class="text-center">
-									<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md" id="UpdatebtnReg" role="button" value="編集">
+									<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md"
+										id="UpdatebtnReg" role="button" value="編集">
 								</p>
 							</div>
 							<div class="col-xs-2">
-								<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+								<button type="button" class="btn btn-default" data-dismiss="modal"
+									id="modalClose">閉じる</button>
 							</div>
 							<div class="col-xs-4"></div>
 						<?php endif; ?>
@@ -450,7 +510,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 </div>
 <script>
 	// upload image  add start
-	$(document).ready(function() {
+	$(document).ready(function () {
 		// load valid extention to element check 
 		<?php $allowedTypesString = "." . implode(", .", $ALLOWED_TYPES_STAMP); ?>
 		$('#udfileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
@@ -510,7 +570,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 			if (selectedFile.type.match('image.*')) {
 				const reader = new FileReader();
-				reader.onload = function(e) {
+				reader.onload = function (e) {
 					imageElement.src = e.target.result;
 					imageElement.alt = selectedFile.name;
 					labelElement.style.display = 'none';
@@ -532,7 +592,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			if (selectedFile.type.match('image.*')) {
 				const reader = new FileReader();
 
-				reader.onload = function(e) {
+				reader.onload = function (e) {
 					imageElement.src = e.target.result;
 					imageElement.alt = selectedFile.name;
 					document.getElementById('udsignstamp_name').innerText = selectedFile.name;
@@ -582,16 +642,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	// 社員登録 POP UP
-	$(document).on('click', '#btnNew', function(e) {
+	$(document).on('click', '#btnNew', function (e) {
 		$('#modal').modal('toggle');
 		$('label[for="signstamp"]').show();
 		$('#fileInput').val('');
 	});
 
 	//社員編集 POP UP
-	$(document).on('click', '.showModal', function() {
+	$(document).on('click', '.showModal', function () {
 		$('#modal2').modal('toggle');
-		var Uid = $(this).text();
+		var Uid = $(this).text().trim();
 		$('label[for="signstamp"]').show();
 		$('#udfileInput').val('');
 		$('#udsignstamp_name').text('');
@@ -599,7 +659,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<?php
 		if (!empty($userlist_list)) {
 			foreach ($userlist_list as $key) {
-		?>
+				?>
 				if ('<?php echo $key['uid'] ?>' == Uid) {
 					$("#ulnametitle").text('<?php echo $key['name'] ?>');
 					$("#uluid").text($('[name="uluid"]').val("<?php echo $key['uid'] ?>"));
@@ -618,7 +678,19 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#ulinymd").text($('[name="ulinymd"]').val("<?php echo $key['inymd'] ?>"));
 					$("#uloutymd").text($('[name="uloutymd"]').val("<?php echo $key['outymd'] ?>"));
 					$("#ulinymd").text($('[name="ulinymd"]').val("<?php echo $key['inymd'] ?>"));
-					$("#ulgenba_list option:selected").text("<?php echo $key["genbaname"] . $key["workstrtime"] . $key["workendtime"] ?>").val("<?php echo $key['genid'] ?>");
+					var genbaId = "<?php echo $key['genid']; ?>";
+					var options = $("#ulgenba_list option");
+					options.each(function (index, option) {
+						console.log(option.value);
+						if (option.value == genbaId) {
+							$(option).prop("selected", true);
+							return false;
+						}
+					});
+
+					if (genbaId !== '' && $("#ulgenba_list option:selected").val() !== genbaId) {
+						$("#ulgenba_list option").eq(0).prop("selected", true);
+					}
 					$("#ulgenstrymd").text($('[name="ulgenstrymd"]').val("<?php echo $key['genstrymd'] ?>"));
 					$("#ulgenendymd").text($('[name="ulgenendymd"]').val("<?php echo $key['genendymd'] ?>"));
 
@@ -629,20 +701,20 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					var imagePath = "<?= $PATH_IMAGE_STAMP . $key['signstamp'] ?>";
 					$("#udsignstamp").attr("src", imagePath);
 				}
-		<?php
+				<?php
 			}
 		}
 		?>
 	});
 
 	// Clear Input Tag
-	$(document).on('click', '#ClearButton', function(e) {
+	$(document).on('click', '#ClearButton', function (e) {
 		$("#searchName").val("");
 		$("#searchGrade").val("");
 	});
 
 	// Check Error 社員登録
-	$(document).on('click', '#btnReg', function(e) {
+	$(document).on('click', '#btnReg', function (e) {
 		var pwd = $("#pwd").val();
 		var name = $("#name").val();
 		var email = $("#email").val();
@@ -684,14 +756,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<?php
 		if (!empty($userlist_list)) {
 			foreach ($userlist_list as $key) {
-		?>
+				?>
 				if ('<?php echo $key['email'] ?>' === email) {
 					alert("<?php echo $email_is_dupplicate; ?>");
 					$("#email").focus();
 					e.preventDefault();
 					return;
 				}
-		<?php
+				<?php
 			}
 		}
 		?>
@@ -716,7 +788,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	// Check Error 社員編集
-	$(document).on('click', '#UpdatebtnReg', function(e) {
+	$(document).on('click', '#UpdatebtnReg', function (e) {
 		var pwd = $("#ulpwd").val();
 		var name = $("#ulname").val();
 		var email = $("#ulemail").val();
@@ -758,14 +830,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<?php
 		if (!empty($admin_list)) {
 			foreach ($admin_list as $key) {
-		?>
+				?>
 				if ('<?php echo $key['email'] ?>' === email) {
 					alert("<?php echo $email_is_dupplicate; ?>");
 					$("#ulemail").focus();
 					e.preventDefault();
 					return;
 				}
-		<?php
+				<?php
 			}
 		}
 		?>

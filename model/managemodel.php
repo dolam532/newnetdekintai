@@ -35,7 +35,10 @@ $new_companyID_mi = $last_companyID_mi + 1;
 $result_manageinfo = mysqli_query($conn, $sql_manageinfo);
 $manageinfo_list = mysqli_fetch_all($result_manageinfo, MYSQLI_ASSOC);
 
-
+// Select data from tbl_genba
+$sql_genba = 'SELECT * FROM `tbl_genba` WHERE `companyid` IN ("' . $_SESSION['auth_companyid'] . '", "' . constant('MAIN_COMPANY_ID') . '" )';
+$result_genba = mysqli_query($conn, $sql_genba);
+$genba_list_db = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
 
 // Save data to tbl_manageinfo table of database(MAIN_ADMIN)
@@ -324,6 +327,8 @@ if ($_POST['SearchButtonAM'] == NULL) {
             $AdminGrade[] = $key['grade'];
         }
     }
+
+    $companyid = $_SESSION['auth_companyid'];
     $AdminName = array_unique($AdminName);
     $AdminGrade = array_unique($AdminGrade);
 
@@ -334,7 +339,6 @@ if ($_POST['SearchButtonAM'] == NULL) {
         $admin_list = $admin_list_select; // No filtering needed, display all data
     } else {
         $whereClause = array();
-
         if (!empty($searchAdminName)) {
             $whereClause[] = '`tbl_user`.`name` LIKE "%' . $searchAdminName . '%"';
         }
@@ -345,10 +349,17 @@ if ($_POST['SearchButtonAM'] == NULL) {
             foreach ($searchAdminGradeArray as $grade) {
                 $gradeConditions[] = '"' . $grade . '"';
             }
-            $whereClause[] = '`tbl_user`.`grade` IN (' . implode(',', $gradeConditions) . ')';
+            $preparedConditions = array_map(function ($grade) {
+                return str_replace('"', '', $grade);
+            }, $gradeConditions);
+            
+            $whereClause[] = "`tbl_user`.`grade` LIKE '%" . implode("%' OR `tbl_user`.`grade` LIKE '%", $preparedConditions) . "%'";
+            
         }
-
+        $whereClause[] = '`tbl_user`.`companyid` = ' . $companyid;
+        $whereClause[] = '`tbl_user`.`type` IN ("' . constant('ADMIN') . '", "' . constant('ADMINISTRATOR') . '")';
         $sql_admin = 'SELECT * FROM `tbl_user` WHERE ' . implode(' AND ', $whereClause);
+      
         $result_admin = mysqli_query($conn, $sql_admin);
         $admin_list = mysqli_fetch_all($result_admin, MYSQLI_ASSOC);
     }
@@ -363,14 +374,46 @@ if (isset($_POST['btnRegAM'])) {
     $grade = mysqli_real_escape_string($conn, $_POST['grade']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $dept = mysqli_real_escape_string($conn, $_POST['dept']);
-    $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
+    $companyid = $_SESSION['auth_companyid'];
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
     $inymd = "";
     $outymd = "";
     $type = constant('ADMINISTRATOR');
 
+    $genba_list = mysqli_real_escape_string($conn, $_POST['udgenba_list']);
+    $gen_id_dev = explode(",", $genba_list);
+    $genid = $gen_id_dev[0];
+
+    $genid = isset($genid) ? $genid : '0';
+    if (!isset($genid)) {
+        $genid = 0;
+    }
+
+
+  // check duplicate mail  $email
+  $sql_check_email = "SELECT COUNT(*) AS count FROM tbl_user WHERE email = '$email'";
+  $result = $conn->query($sql_check_email);
+  $row = $result->fetch_assoc();
+  $emailExists = $row['count'] > 0;
+  if ($emailExists) {
+      $_SESSION['email_is_dupplicate'] = $email_is_dupplicate;
+      return;
+  }
+
+
+    // generate random id 
+    $RandomUid = '';
+    do {
+        $RandomUid = generateRandomString($MAX_LENGTH_UID_USER);
+        $sql_check_uid = "SELECT COUNT(*) AS count FROM tbl_user WHERE uid = '$RandomUid'";
+        $result = $conn->query($sql_check_uid);
+        $row = $result->fetch_assoc();
+        $uidExists = $row['count'] > 0;
+    } while ($uidExists);
+
+
     $fileExtension = pathinfo($_FILES["signstamp"]["name"], PATHINFO_EXTENSION);
-    $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
+    $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $RandomUid, $companyid);
     $originalFileName = $_FILES["signstamp"]["name"];
     $uploadFile = $IMAGE_UPLOAD_DIR_STAMP . $newFileName;
     $uploadOk = true;
@@ -381,20 +424,15 @@ if (isset($_POST['btnRegAM'])) {
     } else {
         // Check file name is exists
         if (file_exists($uploadFile)) {
-            error_log("File name is exists -> Delete old file name");
             unlink($uploadFile);
         }
         // check size 
         if (!isFileSizeValid($_FILES["signstamp"], $STAMP_MAXSIZE)) {
-            error_log("File is BIG!");
             $uploadOk = false;
         }
         // check valid extention 
         $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
         if (!checkValidExtension($fileExtension)) {
-
-            error_log("Image only(png)." . $fileExtension);
-            error_log("FileName" . $originalFileName);
             $uploadOk = false;
         }
     }
@@ -403,16 +441,16 @@ if (isset($_POST['btnRegAM'])) {
         $fileName = $newFileName;
         // upload to server
         if (move_uploaded_file($_FILES["signstamp"]["tmp_name"], $uploadFile)) {
-            deleteNoticeImages($IMAGE_UPLOAD_DIR_STAMP, $uid, $newFileName);
+            deleteNoticeImages($IMAGE_UPLOAD_DIR_STAMP, $RandomUid, $newFileName);
         } else {
             error_log("Upload Error");
         }
 
         // insert to DB 
         $sql_user_insert = "INSERT INTO `tbl_user` (`uid`, `companyid`, `pwd`, `name`, `grade`, `type`
-        , `signstamp`, `email`, `dept`, `bigo`, `inymd`, `outymd`, `reg_dt` , `upt_dt`) 
-         VALUES('$uid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type'
-        , '$fileName', '$email', '$dept', '$bigo', '$inymd', '$outymd', '$reg_dt' , null )";
+        , `signstamp`, `email`, `dept`, `bigo`,  `genid`   ,`inymd`, `outymd`, `reg_dt` , `upt_dt`) 
+         VALUES('$RandomUid', '$companyid' ,'$pwd' ,'$name', '$grade', '$type'
+        , '$fileName', '$email', '$dept', '$bigo',   '$genid' ,'$inymd', '$outymd', '$reg_dt' , null )";
 
         if ($conn->query($sql_user_insert) === TRUE) {
             $_SESSION['save_success'] = $save_success;
@@ -431,9 +469,20 @@ if (isset($_POST['btnUpdateAM'])) {
     $grade = mysqli_real_escape_string($conn, $_POST['udgrade']);
     $email = mysqli_real_escape_string($conn, $_POST['udemail']);
     $dept = mysqli_real_escape_string($conn, $_POST['uddept']);
-    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $companyid = $_SESSION['auth_companyid'];
     $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
     $udsignstamp_old = mysqli_real_escape_string($conn, $_POST['udsignstamp_old']);
+    $genba_list = mysqli_real_escape_string($conn, $_POST['udgenba_list']);
+    $gen_id_dev = explode(",", $genba_list);
+    $genid = $gen_id_dev[0];
+
+    $genid = isset($genid) ? $genid : '0';
+    if (!isset($genid)) {
+        $genid = 0;
+    }
+
+      // check duplicate mail  $email
+ 
 
     $fileExtension = pathinfo($_FILES["udsignstamp_new"]["name"], PATHINFO_EXTENSION);
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
@@ -444,13 +493,11 @@ if (isset($_POST['btnUpdateAM'])) {
 
     // Check file name is exists
     if (file_exists($uploadFile)) {
-        error_log("File name is exists -> Delete old file name");
         unlink($uploadFile);
     }
 
     // check size 
     if (!isFileSizeValid($_FILES["udsignstamp_new"], $STAMP_MAXSIZE)) {
-        error_log("File is BIG!");
         $uploadOk = false;
     }
 
@@ -458,7 +505,6 @@ if (isset($_POST['btnUpdateAM'])) {
     if (!empty($originalFileName)) {
         $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
         if (!checkValidExtension($fileExtension)) {
-            error_log("Image only(png).");
             $uploadOk = false;
         }
     } else {
@@ -473,9 +519,8 @@ if (isset($_POST['btnUpdateAM'])) {
         } else {
             error_log("Upload Error");
         }
-        $sql = "UPDATE tbl_user SET  
-        companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName', 
-        email='$email', dept='$dept', bigo='$bigo', upt_dt='$upt_dt' WHERE uid ='$uid'";
+        $sql = "UPDATE tbl_user SET  pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName'
+        , dept='$dept', bigo='$bigo',   genid='$genid' , upt_dt='$upt_dt' WHERE email ='$email'";
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['update_success'] = $update_success;
@@ -489,6 +534,7 @@ if (isset($_POST['btnUpdateAM'])) {
 // Delete data to tbl_user table of database
 if (isset($_POST['DeleteAM'])) {
     $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+    $email = mysqli_real_escape_string($conn, $_POST['udemail']);
     $filePath = $IMAGE_UPLOAD_DIR_STAMP . $_POST['udsignstamp_old'];
 
     if (file_exists($filePath)) {
@@ -496,7 +542,7 @@ if (isset($_POST['DeleteAM'])) {
     }
 
     $sql = "DELETE FROM `tbl_user` 
-            WHERE uid ='$uid'";
+            WHERE email ='$email'";
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
