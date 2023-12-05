@@ -77,6 +77,7 @@ $cnprejob_top = json_decode($_POST['cnprejob_top'], true);
 $cnactjob_top = json_decode($_POST['cnactjob_top'], true);
 $holydayswork_top = json_decode($_POST['holydayswork_top'], true);
 $offdayswork_top = json_decode($_POST['offdayswork_top'], true);
+$closedayswork_top = json_decode($_POST['closedayswork_top'], true);
 $delaydayswork_top = json_decode($_POST['delaydayswork_top'], true);
 $earlydayswork_top = json_decode($_POST['earlydayswork_top'], true);
 
@@ -90,6 +91,7 @@ $cnprejob = json_decode($_POST['cnprejob_bottom'], true);
 $cnactjob = json_decode($_POST['cnactjob_bottom'], true);
 $holydayswork = json_decode($_POST['holydayswork_bottom'], true);
 $offdayswork = json_decode($_POST['offdayswork_bottom'], true);
+$closedayswork = json_decode($_POST['closedayswork_bottom'], true);
 $delaydayswork = json_decode($_POST['delaydayswork_bottom'], true);
 $earlydayswork = json_decode($_POST['earlydayswork_bottom'], true);
 
@@ -280,10 +282,10 @@ $tcpdf->Ln(5);
 
 
 
-// Set up the table header
+// Set up the table header  15
 $tcpdf->SetFillColor(217, 237, 247); // Set the fill color for the header //#d9edf7 water blue(217, 237, 247).
 $tcpdf->SetTextColor(0, 0, 0); // Set the text color for the header
-$tcpdf->Cell(45, 6.8, '実働時間', 1, 0, 'C', true);
+$tcpdf->Cell(30, 6.8, '実働時間', 1, 0, 'C', true);
 
 
 $tcpdf->SetFillColor(217, 237, 247); // Set the fill color for the header //#d9edf7 water blue(217, 237, 247).
@@ -298,6 +300,7 @@ $tcpdf->Cell(30, 6.8, '所定勤務日数', 1, 0, 'C', true);
 $tcpdf->Cell(30, 6.8, '日実勤務日数', 1, 0, 'C', true);
 $tcpdf->Cell(15, 6.8, '休暇', 1, 0, 'C', true);
 $tcpdf->Cell(15, 6.8, '欠勤', 1, 0, 'C', true);
+$tcpdf->Cell(15, 6.8, '休業', 1, 0, 'C', true);
 $tcpdf->Cell(15, 6.8, '遲刻', 1, 0, 'C', true);
 $tcpdf->Cell(15, 6.8, '早退', 1, 1, 'C', true); // Add 1 to move to the next line
 
@@ -309,58 +312,64 @@ if (!empty($workmonth_list)) {
 	if ($template == "1") {
 		// top
 
-		$tcpdf->Cell(45, 6.8, formatHour($totalworkhh_top) . ':' . $totalworkmm_top, 1, 0, 'C', true);
+		$tcpdf->Cell(30, 6.8, formatHour($totalworkhh_top) . ':' . $totalworkmm_top, 1, 0, 'C', true);
 		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob_top, 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $cnactjob_top, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $holydayswork_top, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $offdayswork_top, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $closedayswork_top, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $delaydayswork_top, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $earlydayswork_top, 1, 1, 'C', true);
 
 		// bottom
-		$tcpdf->Cell(45, 6.8, formatHour($totalworkhh). ':' . $totalworkmm, 1, 0, 'C', true);
+		$tcpdf->Cell(30, 6.8, formatHour($totalworkhh). ':' . $totalworkmm, 1, 0, 'C', true);
 		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $offdayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $closedayswork, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
 	} elseif ($template == "2") {
 		// top 
-		$tcpdf->Cell(45, 6.8, 	formatHour($totaldayhh_top) . ':' . $totaldaymm_top, 1, 0, 'C', true);
+		$tcpdf->Cell(30, 6.8, 	formatHour($totaldayhh_top) . ':' . $totaldaymm_top, 1, 0, 'C', true);
 		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob_top, 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $cnactjob_top, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $holydayswork_top, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $offdayswork_top, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $closedayswork_top, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $delaydayswork_top, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $earlydayswork_top, 1, 1, 'C', true);
 		// bottom
-		$tcpdf->Cell(45, 6.8,		formatHour($totalworkhh). ':' . $totalworkmm, 1, 0, 'C', true);
+		$tcpdf->Cell(30, 6.8,		formatHour($totalworkhh). ':' . $totalworkmm, 1, 0, 'C', true);
 		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $offdayswork, 1, 0, 'C', true);
+		$tcpdf->Cell(15, 6.8, $closedayswork, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
 	}
 } else {
-	$tcpdf->Cell(45, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 1, 'C', true);
 
-	$tcpdf->Cell(45, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(30, 6.8, '', 1, 0, 'C', true);
+	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
