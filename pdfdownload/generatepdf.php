@@ -297,7 +297,7 @@ $tcpdf->SetFillColor(217, 237, 247); // Set the fill color for the header //#d9e
 $tcpdf->SetTextColor(0, 0, 0); // Set the text color for the header
 $tcpdf->Cell(25, 20.4, '勤務状況', 1, 0, 'C', true);
 $tcpdf->Cell(30, 6.8, '所定勤務日数', 1, 0, 'C', true);
-$tcpdf->Cell(30, 6.8, '日実勤務日数', 1, 0, 'C', true);
+$tcpdf->Cell(30, 6.8, '実勤務日数', 1, 0, 'C', true);
 $tcpdf->Cell(15, 6.8, '休暇', 1, 0, 'C', true);
 $tcpdf->Cell(15, 6.8, '欠勤', 1, 0, 'C', true);
 $tcpdf->Cell(15, 6.8, '休業', 1, 0, 'C', true);
