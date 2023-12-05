@@ -121,7 +121,7 @@ if (isset($_POST['SearchButtonNL'])) {
         WHERE `tbl_user`.`companyid` = ' . $currentCompanyID . '  
         AND `tbl_notice`.`title` LIKE "' . $searchTitle . '" OR `tbl_notice`.`content` LIKE "' . $searchContent . '"';
     }
-    error_log($sql_notice);
+
 
     $result_notice = mysqli_query($conn, $sql_notice);
     $notice_list = mysqli_fetch_all($result_notice, MYSQLI_ASSOC);
@@ -154,18 +154,18 @@ if (isset($_POST['btnRegNL'])) {
 
         // Check file name is exists
         if (file_exists($uploadFile)) {
-            error_log("File name is exists -> Delete old file name");
+  
             unlink($uploadFile);
         }
         // check size 
         if (!isFileSizeValid($originalFileName, $NOTICE_IMAGE_MAXSIZE)) {
-            error_log("File is BIG!");
+
             $uploadOk = false;
         }
         // check valid extention 
         $fileExtension_add = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
         if (!checkValidExtension($fileExtension_add)) {
-            error_log("Image only(jpg, jpeg, png, gif):");
+ 
             $uploadOk = false;
         }
 
@@ -179,7 +179,7 @@ if (isset($_POST['btnRegNL'])) {
             if (move_uploaded_file($_FILES["imagefile"]["tmp_name"], $uploadFile)) {
                 deleteNoticeImages($IMAGE_UPLOAD_DIR, $noticeId, $fileName);
             } else {
-                error_log("Upload Error");
+         
             }
         }
     }
@@ -219,13 +219,11 @@ if (isset($_POST['btnUpdateNL'])) {
 
     // Check file name is exists
     if (file_exists($uploadFile)) {
-        error_log("File name is exists -> Delete old file name");
         unlink($uploadFile);
     }
 
     // check size 
     if (!isFileSizeValid($_FILES["udimagefile_new"], $NOTICE_IMAGE_MAXSIZE)) {
-        error_log("File is BIG!");
         $uploadOk = false;
     }
 
@@ -233,7 +231,6 @@ if (isset($_POST['btnUpdateNL'])) {
     if (!empty($originalFileName)) {
         $fileExtension = strtolower(pathinfo($originalFileName, PATHINFO_EXTENSION));
         if (!checkValidExtension($fileExtension)) {
-            error_log("Image only(jpg, jpeg, png, gif).");
             $uploadOk = false;
         }
     } else {
@@ -246,7 +243,6 @@ if (isset($_POST['btnUpdateNL'])) {
             deleteNoticeImages($IMAGE_UPLOAD_DIR, $noticeId, $newFileName);
             $fileName = $newFileName;
         } else {
-            error_log("Upload Error");
         }
 
         $sql = "UPDATE tbl_notice SET  title='$title', content='$content', reader='$reader', imagefile='$fileName', 
@@ -285,18 +281,14 @@ function deleteNoticeImages($uploadDir, $noticeId, $newFileName)
         if ($file !== $newFileName && strpos($file, $noticeId) === 0) {
             $filePath = $uploadDir . $file;
             if (unlink($filePath)) {
-                error_log("******Deleted file: " . $file);
             } else {
-                error_log("****Failed to delete file:" . $file);
             }
         }
         if ($file !== $newFileName) {
             if (preg_match('/_' . preg_quote($noticeId, '/') . '_/', $file)) {
                 $filePath = $uploadDir . $file;
                 if (unlink($filePath)) {
-                    error_log("******Deleted file: " . $file);
                 } else {
-                    error_log("****Failed to delete file:" . $file);
                 }
             }
         }
@@ -309,9 +301,7 @@ function deleteNoticeImages($uploadDir, $noticeId, $newFileName)
         if (!ctype_alnum($file[0])) { // when start not number or word
             $filePath = $uploadDir . $file;
             if (unlink($filePath)) {
-                error_log("******Deleted file: " . $file);
             } else {
-                error_log("****Failed to delete file:" . $file);
             }
         }
     }
@@ -352,7 +342,6 @@ if (isset($_POST['btnDelNL'])) {
 
         // when success   -> delete img 
         if (unlink($removeDir . $fileImgName)) {
-            error_log("******Deleted file: " . $fileImgName);
         } else {
             error_log("****Failed to delete file:" . $fileImgName);
         }

@@ -739,23 +739,20 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 								<?php endif; ?>
 							</td>
 							<td>
-								<?= $key['jobstarthh'] ?>:
-								<?= $key['jobstartmm'] ?>
+								<?= $key['jobstarthh'] ?>:<?= $key['jobstartmm'] ?>
 								<!-- fix 18: 00  -> 18:00 to show  -->
 							</td>
 							<td>
-								<?= $key['jobendhh'] ?>:
-								<?= $key['jobendmm'] ?>
+								<?= $key['jobendhh'] ?>:<?= $key['jobendmm'] ?>
 								<!-- fix 18: 00  -> 18:00 to show  -->
 							</td>
 							<td>
-								<?= $key['offtimehh'] ?>:
-								<?= $key['offtimemm'] ?>
+								<?= $key['offtimehh'] ?>:<?= $key['offtimemm'] ?>
 								<!-- fix 18: 00  -> 18:00 to show  -->
 							</td>
 							<td>
 								<!-- fix 8:0  -> 08:00 to show   -->
-								<?= (empty($key['workhh']) && empty($key['workmm'])) || ($key['workhh'] === '00' && $key['workmm'] === '00') ? '' : sprintf('%02d:%02d', $key['workhh'], $key['workmm']) ?>
+								<?= (empty($key['workhh']) && empty($key['workmm'])) || ($key['workhh'] === '00' && $key['workmm'] === '00') ? '' : sprintf('%2d:%02d', $key['workhh'], $key['workmm']) ?>
 							</td>
 							<td>
 								<?= $key['comment'] ?>
@@ -812,28 +809,23 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 								<?php endif; ?>
 							</td>
 							<td>
-								<?= $key['daystarthh'] ?>:
-								<?= $key['daystartmm'] ?>
+								<?= $key['daystarthh'] ?>:<?= $key['daystartmm'] ?>
 							</td>
 							<td>
-								<?= $key['dayendhh'] ?>:
-								<?= $key['dayendmm'] ?>
+								<?= $key['dayendhh'] ?>:<?= $key['dayendmm'] ?>
 							</td>
 							<td>
-								<?= $key['jobstarthh'] ?>:
-								<?= $key['jobstartmm'] ?>
+								<?= $key['jobstarthh'] ?>:<?= $key['jobstartmm'] ?>
 							</td>
 							<td>
-								<?= $key['jobendhh'] ?>:
-								<?= $key['jobendmm'] ?>
+								<?= $key['jobendhh'] ?>:<?= $key['jobendmm'] ?>
 							</td>
 							<td>
-								<?= $key['offtimehh'] ?>:
-								<?= $key['offtimemm'] ?>
+								<?= $key['offtimehh'] ?>:<?= $key['offtimemm'] ?>
 							</td>
 							<td>
 								<!-- fix 8:0  08:00 to show   -->
-								<?= (empty($key['workhh']) && empty($key['workmm'])) || ($key['workhh'] === '00' && $key['workmm'] === '00') ? '' : sprintf('%02d:%02d', $key['workhh'], $key['workmm']) ?>
+								<?= (empty($key['workhh']) && empty($key['workmm'])) || ($key['workhh'] === '00' && $key['workmm'] === '00') ? '' : sprintf('%2d:%02d', $key['workhh'], $key['workmm']) ?>
 							</td>
 							<td>
 								<?= $key['comment'] ?>
@@ -1634,7 +1626,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 						<div class="row">
 							<!-- 2023/10-16/ add start -->
 							<div class="col-xs-4 holder">
-								<label>休業理由</label>
+								<label>休暇理由</label>
 								<select id="holy_decide" name="holy_decide" class="form-control" size="1"
 									onfocus='this.size=6;' onblur='this.size=1;'
 									onchange='this.size=1; this.blur();handleSelectDayStatusChange(this)'>
@@ -1993,7 +1985,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	function formatHour(value) {
 
 		if (isNaN(value) || value <= 0) {
-			console.log("HOURS " + value);
+	
 			return "00";
 		}
 		value = parseInt(value);
@@ -2002,7 +1994,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		} else if (value > 23) {
 			return "23";
 		} else if (value < 10) {
-			return "0" + value;
+			return  value;
 		}
 		return value.toString();
 	}
@@ -2394,6 +2386,9 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			$(ids[i]).val('');
 		}
 	}
+
+
+
 
 
 </script>

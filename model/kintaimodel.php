@@ -403,11 +403,12 @@ if (isset($_POST['SaveUpdateKintai'])) {
     $jobstarttime = 0;
     $jobendtime = 0;
 
+
     if (isset($_POST['jobstarthh']) && isset($_POST['jobstartmm']) && isset($_POST['jobendhh']) && isset($_POST['jobendmm'])) {
-        $jobstarttime = DateTime::createFromFormat('H:i', $_POST['jobstarthh'] . ':' . $_POST['jobstartmm']);
-        $jobendtime = DateTime::createFromFormat('H:i', $_POST['jobendhh'] . ':' . $_POST['jobendmm']);
+        $jobstarttime = DateTime::createFromFormat('H:i', formatHour($_POST['jobstarthh']) . ':' . $_POST['jobstartmm']);
+        $jobendtime = DateTime::createFromFormat('H:i', formatHour($_POST['jobendhh']) . ':' . $_POST['jobendmm']);
         if (isset($_POST['offtimehh']) && isset($_POST['offtimemm'])) {
-            $offtime = DateTime::createFromFormat('H:i', $_POST['offtimehh'] . ':' . $_POST['offtimemm']);
+            $offtime = DateTime::createFromFormat('H:i', formatHour($_POST['offtimehh']) . ':' . $_POST['offtimemm']);
         }
     }
     $calculatedHours = 0;
@@ -437,19 +438,19 @@ if (isset($_POST['SaveUpdateKintai'])) {
         $janmm = $_POST['workmm'] - $calculatedMinutes;
     }
 
-    $jobstarthh = mysqli_real_escape_string($conn, $_POST['jobstarthh']);
+    $jobstarthh = formatHour(mysqli_real_escape_string($conn, $_POST['jobstarthh']));
     $jobstartmm = mysqli_real_escape_string($conn, $_POST['jobstartmm']);
-    $jobendhh = mysqli_real_escape_string($conn, $_POST['jobendhh']);
+    $jobendhh = formatHour(mysqli_real_escape_string($conn, $_POST['jobendhh']));
     $jobendmm = mysqli_real_escape_string($conn, $_POST['jobendmm']);
-    $daystarthh = mysqli_real_escape_string($conn, $_POST['daystarthh']);
+    $daystarthh = formatHour(mysqli_real_escape_string($conn, $_POST['daystarthh']));
     $daystartmm = mysqli_real_escape_string($conn, $_POST['daystartmm']);
-    $dayendhh = mysqli_real_escape_string($conn, $_POST['dayendhh']);
+    $dayendhh = formatHour(mysqli_real_escape_string($conn, $_POST['dayendhh']));
     $dayendmm = mysqli_real_escape_string($conn, $_POST['dayendmm']);
-    $offtimehh = mysqli_real_escape_string($conn, $_POST['offtimehh']);
+    $offtimehh = formatHour(mysqli_real_escape_string($conn, $_POST['offtimehh']));
     $offtimemm = mysqli_real_escape_string($conn, $_POST['offtimemm']);
-    $workhh = mysqli_real_escape_string($conn, $_POST['workhh']);
+    $workhh = formatHour(mysqli_real_escape_string($conn, $_POST['workhh']));
     $workmm = mysqli_real_escape_string($conn, $_POST['workmm']);
-    
+
 
     // $holy_decide = mysqli_real_escape_string($conn, $_POST['holy_decide']);
     if (!isset($holy_decide) || $holy_decide == null || $holy_decide == '') {
@@ -501,6 +502,7 @@ if (isset($_POST['DeleteKintai'])) {
     }
 }
 
+
 // 自動入力
 if (isset($_POST['AutoUpdateKintai'])) {
     if ($currentSubmission_status != 0) {
@@ -512,35 +514,48 @@ if (isset($_POST['AutoUpdateKintai'])) {
     $_SESSION['selyy'] = $_POST["year"];
     $_SESSION['template_table'] = $currentTemplate;
 
+
+
     $genba_selection_rmodal = $_POST['genba_selection_rmodal'];
     $uid_ = $_SESSION['auth_uid'];
-
     $dataArray = explode(",", $genba_selection_rmodal);
     $genid_ = $dataArray[0];
     $starttime = $dataArray[1];
     $starttimeArray = explode(":", $starttime);
-    $starthh = $starttimeArray[0];
+
+    $starthh = formatHour($starttimeArray[0]);
     $startmm = $starttimeArray[1];
     $endtime = $dataArray[2];
     $endtimeArray = explode(":", $endtime);
-    $endhh = $endtimeArray[0];
+    $endhh = formatHour($endtimeArray[0]);
+
     $endmm = $endtimeArray[1];
     $dayoff = $dataArray[3];
     $dayoffArray = explode(":", $dayoff);
-    $offtimehh_ = $dayoffArray[0];
+    $offtimehh_ = formatHour($dayoffArray[0]);
     $offtimemm_ = $dayoffArray[1];
+
+
     $nightoff = $dataArray[4];
+    $nightoffArray = explode(":", $nightoff);
+    $offtimehh_ += formatHour($nightoffArray[0]);
+    $offtimemm_ += $nightoffArray[1];
+    $offtimemm_ = formatMinute($offtimemm_);
+
     $workcontent_rmodal = $_POST['workcontent_rmodal'];
     $bigo_rmodal = $_POST['bigo_rmodal'];
     $weekdayCheckbox = $_POST['weekdayCheckbox'];
     $weekendCheckbox = $_POST['weekendCheckbox'];
 
     $offtime = DateTime::createFromFormat('H:i', $offtimehh_ . ':' . $offtimemm_);
+
     $jobstarttime = DateTime::createFromFormat('H:i', $starthh . ':' . $startmm);
     $jobendtime = DateTime::createFromFormat('H:i', $endhh . ':' . $endmm);
 
     $interval = $jobendtime->diff($jobstarttime);
     $totalMinutes = ($interval->h * 60) + $interval->i;
+    error_log("Total Minutes HH" . $offtimehh_ . " mm: " . $offtimemm_);
+    error_log($offtime);
     $totalMinutes -= ($offtime->format('H') * 60) + $offtime->format('i');
     $calculatedHours = floor($totalMinutes / 60);
     $calculatedMinutes = $totalMinutes % 60;
@@ -619,7 +634,6 @@ if (isset($_POST['AutoUpdateKintai'])) {
             $row += $keyed[$row['workymd']]; // append associative elements
 
         }
-        error_log("ROW " . $row['workymd'] . " \n");
     }
 
     $ArraySave = false;
@@ -631,16 +645,17 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $uid = $row['uid'];
         $genid = $row['genid'];
         $workymd = $row['workymd'];
-        $jobstarthh = $row['jobstarthh'];
+        $jobstarthh = formatHour($row['jobstarthh']);
         $jobstartmm = $row['jobstartmm'];
-        $jobendhh = $row['jobendhh'];
+        $jobendhh = formatHour($row['jobendhh']);
         $jobendmm = $row['jobendmm'];
-        $offtimehh = $row['offtimehh'];
+        $offtimehh = formatHour($row['offtimehh']);
         $offtimemm = $row['offtimemm'];
-        $workhh = $row['workhh'];
+        $workhh = formatHour($row['workhh']);
         $workmm = $row['workmm'];
         $comment = $row['comment'];
         $bigo = $row['bigo'];
+
 
 
         $sql = "INSERT INTO `tbl_worktime` (`uid`, `email`, `companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`,
@@ -680,7 +695,7 @@ if (isset($_POST['AutoUpdateKintai'])) {
         if ($c > 1 && $c < 3) {
             $offTimeAutohh = $offtimehh;
             $offTimeAutomm = $offtimemm;
-            error_log(' autoOFF:' . $offTimeAutohh . " mm: " . $offTimeAutomm . "\n");
+
         }
     }
 
@@ -688,14 +703,17 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $uid = mysqli_real_escape_string($conn, $uid_);
         $genid = mysqli_real_escape_string($conn, $genid_);
         $workymd = mysqli_real_escape_string($conn, $lastValue);
-        $jobstarthh = mysqli_real_escape_string($conn, $starthh);
+        $jobstarthh = formatHour(mysqli_real_escape_string($conn, $starthh));
         $jobstartmm = mysqli_real_escape_string($conn, $startmm);
-        $jobendhh = mysqli_real_escape_string($conn, $endhh);
+        $jobendhh = formatHour(mysqli_real_escape_string($conn, $endhh));
         $jobendmm = mysqli_real_escape_string($conn, $endmm);
-        $workhh = mysqli_real_escape_string($conn, $calculatedHours);
+        $workhh = formatHour(mysqli_real_escape_string($conn, $calculatedHours));
         $workmm = mysqli_real_escape_string($conn, $calculatedMinutes);
         $comment = mysqli_real_escape_string($conn, $workcontent_rmodal);
         $bigo = mysqli_real_escape_string($conn, $bigo_rmodal);
+
+        // $offTimeAutohh = formatHour($offTimeAutohh);
+
 
         $sql = "INSERT INTO `tbl_worktime` (`uid`, `email`,  `companyid` ,`genid`, `workymd`, `jobstarthh`, `jobstartmm`, `jobendhh`, `jobendmm`, 
                 `offtimehh`, `offtimemm`, `workhh`, `workmm`, `comment`,  `holy_decide`, `bigo`, `reg_dt` ,  `upt_dt`)
@@ -725,6 +743,7 @@ if (isset($_POST['MonthSaveKintai'])) {
     $yearmonth = $_POST["year"] . $_POST["month"];
     // $_SESSION['template_table'] = $_POST["template_table_"];
 
+
     $gen_id_ = intval($_SESSION['auth_genid']);
     $jobhh_top_ = intval($_POST['jobhh_top']);
     $jobmm_top_ = intval($_POST['jobmm_top']);
@@ -737,14 +756,15 @@ if (isset($_POST['MonthSaveKintai'])) {
     $genid = mysqli_real_escape_string($conn, $gen_id_);
     $workym = mysqli_real_escape_string($conn, $yearmonth);
 
-    $jobhour2 = mysqli_real_escape_string($conn, $jobhh_top_);
+    
+    
+    $jobhour2 = formatHour(mysqli_real_escape_string($conn, $jobhh_top_));
     $jobminute2 = mysqli_real_escape_string($conn, $jobmm_top_);
-    $jobhour = mysqli_real_escape_string($conn, $jobhh_bottom_);
+    $jobhour = formatHour(mysqli_real_escape_string($conn, $jobhh_bottom_));
     $jobminute = mysqli_real_escape_string($conn, $jobmm_bottom_);
-
-    $janhour2 = mysqli_real_escape_string($conn, $_POST['janhh_top']);
+    $janhour2 = formatHour(mysqli_real_escape_string($conn, $_POST['janhh_top']));
     $janminute2 = mysqli_real_escape_string($conn, $_POST['janmm_top']);
-    $janhour = mysqli_real_escape_string($conn, $_POST['janhh_bottom']);
+    $janhour = formatHour(mysqli_real_escape_string($conn, $_POST['janhh_bottom']));
     $janminute = mysqli_real_escape_string($conn, $_POST['janmm_bottom']);
 
 
@@ -791,7 +811,7 @@ $sql_workmonth = 'SELECT
 FROM
     `tbl_workmonth`
 WHERE
-    `tbl_workmonth`.`email` IN("' . $email_. '")  AND `tbl_workmonth`.`companyid` IN("' . $companyid . '") 
+    `tbl_workmonth`.`email` IN("' . $email_ . '")  AND `tbl_workmonth`.`companyid` IN("' . $companyid . '") 
     AND LEFT(`tbl_workmonth`.`workym`, 6) IN("' . $Year_ . $month_ . '")';
 
 $result_workmonth = mysqli_query($conn, $sql_workmonth);
@@ -1031,12 +1051,12 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
 
 
 $sql_user_kanri = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMINISTRATOR') . '"';
-if ($selectedKanri != '' &&  isset($selectedKanri)) {
+if ($selectedKanri != '' && isset($selectedKanri)) {
     $sql_user_kanri = "SELECT * FROM `tbl_user` WHERE  `tbl_user`.`email` = '$selectedKanri'";
 }
 
 $sql_user_admin = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMIN') . '"';
-if ($selectedSekinin != '' &&  isset($selectedSekinin)) {
+if ($selectedSekinin != '' && isset($selectedSekinin)) {
     $sql_user_admin = "SELECT * FROM `tbl_user` WHERE `tbl_user`.`email` = '$selectedSekinin'";
 }
 
@@ -1067,4 +1087,23 @@ $result_user_teishutsu = mysqli_query($conn, $sql_user_teishutsu);
 $signstamp_teishutsu = mysqli_fetch_all($result_user_teishutsu, MYSQLI_ASSOC);
 
 
-      // 2023-11-16  Update Sekinin  Kanri  chg end //  
+
+// 2023-11-16  Update Sekinin  Kanri  chg end //  
+
+function formatHour($hours)
+{
+    if (strlen($hours) > 1 && substr($hours, 0, 1) === '0') {
+        return substr($hours, 1);
+    } else {
+        return $hours;
+    }
+}
+
+function formatMinute($minute)
+{
+    if (strlen($minute) === 1 && intval($minute) < 10) {
+        return '0' . $minute;
+    } else {
+        return $minute;
+    }
+}

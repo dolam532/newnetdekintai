@@ -675,23 +675,20 @@ if ($_SESSION['auth'] == false) {
 								<?php endif; ?>
 							</td>
 							<td>
-								<?= $key['jobstarthh'] ?>:
-								<?= $key['jobstartmm'] ?>
+								<?= $key['jobstarthh'] ?>:<?= $key['jobstartmm'] ?>
 								<!-- fix 18: 00  -> 18:00 to show  -->
 							</td>
 							<td>
-								<?= $key['jobendhh'] ?>:
-								<?= $key['jobendmm'] ?>
+								<?= $key['jobendhh'] ?>:<?= $key['jobendmm'] ?>
 								<!-- fix 18: 00  -> 18:00 to show  -->
 							</td>
 							<td>
-								<?= $key['offtimehh'] ?>:
-								<?= $key['offtimemm'] ?>
+								<?= $key['offtimehh'] ?>:<?= $key['offtimemm'] ?>
 								<!-- fix 18: 00  -> 18:00 to show  -->
 							</td>
 							<td>
 								<!-- fix 8:0  -> 08:00 to show   -->
-								<?= (empty($key['workhh']) && empty($key['workmm'])) || ($key['workhh'] === '00' && $key['workmm'] === '00') ? '' : sprintf('%02d:%02d', $key['workhh'], $key['workmm']) ?>
+								<?= (empty($key['workhh']) && empty($key['workmm'])) || ($key['workhh'] === '00' && $key['workmm'] === '00') ? '' : sprintf('%2d:%02d', $key['workhh'], $key['workmm']) ?>
 							</td>
 							<td>
 								<?= $key['comment'] ?>
@@ -1578,7 +1575,7 @@ if ($_SESSION['auth'] == false) {
 						<div class="row">
 							<!-- 2023/10-16/ add start -->
 							<div class="col-xs-4 holder">
-								<label>休業理由</label>
+								<label>休暇理由</label>
 								<select id="holy_decide" name="holy_decide" class="form-control" size="1"
 									onfocus='this.size=6;' onblur='this.size=1;'
 									onchange='this.size=1; this.blur();handleSelectDayStatusChange(this)'>
@@ -1878,7 +1875,7 @@ if ($_SESSION['auth'] == false) {
 
 		var jobstarthh = $('#jobstarthh').val() || "00";
 		var jobstartmm = $('#jobstartmm').val() || "00";
-		var jobendhh = $('#jobendhh').val() || "00";
+		var jobendhh = $('#jobendhh').val() || "0";
 		var jobendmm = $('#jobendmm').val() || "00";
 
 		<?php if ($decide_template_ == "1"): ?>
@@ -1889,7 +1886,7 @@ if ($_SESSION['auth'] == false) {
 		<?php elseif ($decide_template_ == "2"): ?>
 			var daystarthh = $('#daystarthh').val() || "00";
 			var daystartmm = $('#daystartmm').val() || "00";
-			var dayendhh = $('#dayendhh').val() || "00";
+			var dayendhh = $('#dayendhh').val() || "0";
 			var dayendmm = $('#dayendmm').val() || "00";
 			var daystartime_ = daystarthh + ':' + daystartmm;
 			var dayendtime_ = dayendhh + ':' + dayendmm;
@@ -1935,7 +1932,6 @@ if ($_SESSION['auth'] == false) {
 	function formatHour(value) {
 
 		if (isNaN(value) || value <= 0) {
-			console.log("HOURS " + value);
 			return "00";
 		}
 		value = parseInt(value);
@@ -1944,7 +1940,7 @@ if ($_SESSION['auth'] == false) {
 		} else if (value > 23) {
 			return "23";
 		} else if (value < 10) {
-			return "0" + value;
+			return  value;
 		}
 		return value.toString();
 	}
