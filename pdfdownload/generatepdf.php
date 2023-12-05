@@ -228,16 +228,17 @@ foreach ($data as $row) {
 		$tcpdf->SetLineWidth(0.2);
 
 
-		$tcpdf->Cell(20, 6.8, $row["jobstarthh"] . ':' . $row["jobstartmm"], 1, 0, 'C', true);
-		$tcpdf->Cell(20, 6.8, $row["jobendhh"] . ':' . $row["jobendmm"], 1, 0, 'C', true);
-		$tcpdf->Cell(20, 6.8, $row["offtimehh"] . ':' . $row["offtimemm"], 1, 0, 'C', true);
+		$tcpdf->Cell(20, 6.8, 	formatHour($row["jobstarthh"]). ':' . $row["jobstartmm"], 1, 0, 'C', true);
+		$tcpdf->Cell(20, 6.8, 		formatHour($row["jobendhh"]). ':' . $row["jobendmm"], 1, 0, 'C', true);
+		$tcpdf->Cell(20, 6.8, 	formatHour($row["offtimehh"]). ':' . $row["offtimemm"], 1, 0, 'C', true);
 
+		// formatHour($row["offtimehh"])
 		$workhh = $row["workhh"];
 		$workmm = $row["workmm"];
 		if (empty($workhh) && empty($workmm)) {
 			$workTime = '';
 		} else {
-			$workTime = sprintf('%02d:%02d', $workhh, $workmm);
+			$workTime = sprintf('%2d:%02d', $workhh, $workmm);
 		}
 		$tcpdf->Cell(20, 6.8, $workTime, 1, 0, 'C', true);
 
@@ -307,7 +308,8 @@ $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the dat
 if (!empty($workmonth_list)) {
 	if ($template == "1") {
 		// top
-		$tcpdf->Cell(45, 6.8, $totalworkhh_top . ':' . $totalworkmm_top, 1, 0, 'C', true);
+
+		$tcpdf->Cell(45, 6.8, formatHour($totalworkhh_top) . ':' . $totalworkmm_top, 1, 0, 'C', true);
 		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob_top, 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $cnactjob_top, 1, 0, 'C', true);
@@ -317,7 +319,7 @@ if (!empty($workmonth_list)) {
 		$tcpdf->Cell(15, 6.8, $earlydayswork_top, 1, 1, 'C', true);
 
 		// bottom
-		$tcpdf->Cell(45, 6.8, $totalworkhh . ':' . $totalworkmm, 1, 0, 'C', true);
+		$tcpdf->Cell(45, 6.8, formatHour($totalworkhh). ':' . $totalworkmm, 1, 0, 'C', true);
 		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
@@ -327,7 +329,7 @@ if (!empty($workmonth_list)) {
 		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
 	} elseif ($template == "2") {
 		// top 
-		$tcpdf->Cell(45, 6.8, $totaldayhh_top . ':' . $totaldaymm_top, 1, 0, 'C', true);
+		$tcpdf->Cell(45, 6.8, 	formatHour($totaldayhh_top) . ':' . $totaldaymm_top, 1, 0, 'C', true);
 		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob_top, 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $cnactjob_top, 1, 0, 'C', true);
@@ -336,7 +338,7 @@ if (!empty($workmonth_list)) {
 		$tcpdf->Cell(15, 6.8, $delaydayswork_top, 1, 0, 'C', true);
 		$tcpdf->Cell(15, 6.8, $earlydayswork_top, 1, 1, 'C', true);
 		// bottom
-		$tcpdf->Cell(45, 6.8, $totalworkhh . ':' . $totalworkmm, 1, 0, 'C', true);
+		$tcpdf->Cell(45, 6.8,		formatHour($totalworkhh). ':' . $totalworkmm, 1, 0, 'C', true);
 		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
 		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
 		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
@@ -363,6 +365,15 @@ if (!empty($workmonth_list)) {
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 0, 'C', true);
 	$tcpdf->Cell(15, 6.8, '', 1, 1, 'C', true);
+}
+
+function formatHour($hours)
+{
+        if (strlen($hours) > 1 && substr($hours, 0, 1) === '0') {
+                return substr($hours, 1);
+        } else {
+                return $hours;
+        }
 }
 
 

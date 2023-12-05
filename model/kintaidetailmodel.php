@@ -34,7 +34,7 @@ $name_g = isset($_SESSION['name_g']) ? $_SESSION['name_g'] : $_SESSION['auth_nam
 $dept_g = isset($_SESSION['dept_g']) ? $_SESSION['dept_g'] : $_SESSION['auth_dept'];
 
 
-if ($uid_g === '' || $name_g === '' || $dept_g === '' || $email_g === '') {
+if (($uid_g === '' || $email_g === '') && isset($_POST['email_g'])) {
         echo 'error' . '選択した会員のデータが異常が発生したました。サイト管理者へ連絡してください';
 }
 
@@ -243,7 +243,7 @@ $admin_listSekinin_select = mysqli_fetch_all($result_adminSekinin_select, MYSQLI
 // SORT BY REGISTED ADMIN
 $selectedKanri = '';
 $selectedSekinin = '';
-$selectedTeishutsu= $employee_email;
+$selectedTeishutsu = $employee_email;
 $currentUseCompanyId = $_SESSION['auth_companyid'];
 $currentUseUid = $_SESSION['auth_uid'];
 
@@ -255,15 +255,15 @@ $result_AdminId_workmonth = mysqli_query($conn, $sql_getAdminId_workmonth);
 $AdminId_list = mysqli_fetch_all($result_AdminId_workmonth, MYSQLI_ASSOC);
 
 if ($AdminId_list && isset($AdminId_list[0]['kanrisha_uid'])) {
-    $selectedKanri = $AdminId_list[0]['kanrisha_uid'];
+        $selectedKanri = $AdminId_list[0]['kanrisha_uid'];
 }
 
 
 if ($AdminId_list && isset($AdminId_list[0]['sekininsha_uid'])) {
-    $selectedSekinin = $AdminId_list[0]['sekininsha_uid'];
+        $selectedSekinin = $AdminId_list[0]['sekininsha_uid'];
 }
 if ($AdminId_list && isset($AdminId_list[0]['teishutsu_uid'])) {
-    $selectedTeishutsu = $AdminId_list[0]['teishutsu_uid'];
+        $selectedTeishutsu = $AdminId_list[0]['teishutsu_uid'];
 }
 // SORT List
 
@@ -273,14 +273,14 @@ $admin_listSekinin = sortUsersByAuthUid($admin_listSekinin_select, trim($selecte
 // SORT List Function
 function sortUsersByAuthUid($userList, $authUid)
 {
-    $key = array_search($authUid, array_column($userList, 'uid'));
-    if ($key !== false) {
-        $authUser = $userList[$key];
-        unset($userList[$key]); 
-        array_splice($userList, 0, 0, [$authUser]); 
-    }
-    
-    return array_values($userList);
+        $key = array_search($authUid, array_column($userList, 'uid'));
+        if ($key !== false) {
+                $authUser = $userList[$key];
+                unset($userList[$key]);
+                array_splice($userList, 0, 0, [$authUser]);
+        }
+
+        return array_values($userList);
 }
 
 
@@ -442,13 +442,16 @@ if (isset($_POST['SaveUpdateKintaiUserDetail'])) {
         $jobstarttime = 0;
         $jobendtime = 0;
 
+
         if (isset($_POST['jobstarthh']) && isset($_POST['jobstartmm']) && isset($_POST['jobendhh']) && isset($_POST['jobendmm'])) {
-                $jobstarttime = DateTime::createFromFormat('H:i', $_POST['jobstarthh'] . ':' . $_POST['jobstartmm']);
-                $jobendtime = DateTime::createFromFormat('H:i', $_POST['jobendhh'] . ':' . $_POST['jobendmm']);
+                $jobstarttime = DateTime::createFromFormat('H:i', formatHour($_POST['jobstarthh']) . ':' . $_POST['jobstartmm']);
+                $jobendtime = DateTime::createFromFormat('H:i', formatHour($_POST['jobendhh']) . ':' . $_POST['jobendmm']);
                 if (isset($_POST['offtimehh']) && isset($_POST['offtimemm'])) {
-                        $offtime = DateTime::createFromFormat('H:i', $_POST['offtimehh'] . ':' . $_POST['offtimemm']);
+                        $offtime = DateTime::createFromFormat('H:i', formatHour($_POST['offtimehh']) . ':' . $_POST['offtimemm']);
                 }
         }
+
+
 
         $calculatedHours = 0;
         $calculatedMinutes = 0;
@@ -475,17 +478,17 @@ if (isset($_POST['SaveUpdateKintaiUserDetail'])) {
                 $janhh = $_POST['workhh'] - $calculatedHours;
                 $janmm = $_POST['workmm'] - $calculatedMinutes;
         }
-        $jobstarthh = mysqli_real_escape_string($conn, $_POST['jobstarthh']);
+        $jobstarthh = formatHour(mysqli_real_escape_string($conn, $_POST['jobstarthh']));
         $jobstartmm = mysqli_real_escape_string($conn, $_POST['jobstartmm']);
-        $jobendhh = mysqli_real_escape_string($conn, $_POST['jobendhh']);
+        $jobendhh = formatHour(mysqli_real_escape_string($conn, $_POST['jobendhh']));
         $jobendmm = mysqli_real_escape_string($conn, $_POST['jobendmm']);
-        $daystarthh = mysqli_real_escape_string($conn, $_POST['daystarthh']);
+        $daystarthh = formatHour(mysqli_real_escape_string($conn, $_POST['daystarthh']));
         $daystartmm = mysqli_real_escape_string($conn, $_POST['daystartmm']);
-        $dayendhh = mysqli_real_escape_string($conn, $_POST['dayendhh']);
+        $dayendhh = formatHour(mysqli_real_escape_string($conn, $_POST['dayendhh']));
         $dayendmm = mysqli_real_escape_string($conn, $_POST['dayendmm']);
-        $offtimehh = mysqli_real_escape_string($conn, $_POST['offtimehh']);
+        $offtimehh = formatHour(mysqli_real_escape_string($conn, $_POST['offtimehh']));
         $offtimemm = mysqli_real_escape_string($conn, $_POST['offtimemm']);
-        $workhh = mysqli_real_escape_string($conn, $_POST['workhh']);
+        $workhh = formatHour(mysqli_real_escape_string($conn, $_POST['workhh']));
         $workmm = mysqli_real_escape_string($conn, $_POST['workmm']);
 
         // $holy_decide = mysqli_real_escape_string($conn, $_POST['holy_decide']);
@@ -537,7 +540,7 @@ if (isset($_POST['DeleteKintaiUserDetail'])) {
 
 // Save data to tbl_workmonth table of database
 if (isset($_POST['MonthSaveKintaiUserDetail'])) {
-        error_log("Current Status: " . $currentSubmission_status);
+
         if ($currentSubmission_status != 0) {
                 $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
                 return;
@@ -558,15 +561,15 @@ if (isset($_POST['MonthSaveKintaiUserDetail'])) {
         $genid = $currentGenid;
         $workym = $yearmonth;
 
-        $jobhour2 = mysqli_real_escape_string($conn, $jobhh_top_);
+        $jobhour2 = formatHour(mysqli_real_escape_string($conn, $jobhh_top_));
         $jobminute2 = mysqli_real_escape_string($conn, $jobmm_top_);
-        $jobhour = mysqli_real_escape_string($conn, $jobhh_bottom_);
+        $jobhour = formatHour(mysqli_real_escape_string($conn, $jobhh_bottom_));
         $jobminute = mysqli_real_escape_string($conn, $jobmm_bottom_);
 
 
-        $janhour2 = mysqli_real_escape_string($conn, $_POST['janhh_top']);
+        $janhour2 = formatHour(mysqli_real_escape_string($conn, $_POST['janhh_top']));
         $janminute2 = mysqli_real_escape_string($conn, $_POST['janmm_top']);
-        $janhour = mysqli_real_escape_string($conn, $_POST['janhh_bottom']);
+        $janhour = formatHour(mysqli_real_escape_string($conn, $_POST['janhh_bottom']));
         $janminute = mysqli_real_escape_string($conn, $_POST['janmm_bottom']);
 
         $jobdays2 = mysqli_real_escape_string($conn, $_POST['jobdays_top']);
@@ -660,25 +663,34 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
         $genba_selection_rmodal = $_POST['genba_selection_rmodal'];
         $uid_ = $employee_uid;
         $email_ = $employee_email;
-        $dataArray = explode(",", $genba_selection_rmodal);  
+        $dataArray = explode(",", $genba_selection_rmodal);
         $genid_ = $dataArray[0];
         $starttime = $dataArray[1];
         $starttimeArray = explode(":", $starttime);
-        $starthh = $starttimeArray[0];
+        $starthh = formatHour($starttimeArray[0]);
         $startmm = $starttimeArray[1];
         $endtime = $dataArray[2];
         $endtimeArray = explode(":", $endtime);
-        $endhh = $endtimeArray[0];
+        $endhh = formatHour($endtimeArray[0]);
         $endmm = $endtimeArray[1];
         $dayoff = $dataArray[3];
         $dayoffArray = explode(":", $dayoff);
-        $offtimehh_ = $dayoffArray[0];
+        $offtimehh_ = formatHour($dayoffArray[0]);
         $offtimemm_ = $dayoffArray[1];
         $nightoff = $dataArray[4];
         $workcontent_rmodal = $_POST['workcontent_rmodal'];
         $bigo_rmodal = $_POST['bigo_rmodal'];
         $weekdayCheckbox = $_POST['weekdayCheckbox'];
         $weekendCheckbox = $_POST['weekendCheckbox'];
+
+
+
+
+        $nightoffArray = explode(":", $nightoff);
+        $offtimehh_ += formatHour($nightoffArray[0]);
+        $offtimemm_ += $nightoffArray[1];
+        $offtimemm_ = formatMinute($offtimemm_);
+
         $offtime = DateTime::createFromFormat('H:i', $offtimehh_ . ':' . $offtimemm_);
         $jobstarttime = DateTime::createFromFormat('H:i', $starthh . ':' . $startmm);
         $jobendtime = DateTime::createFromFormat('H:i', $endhh . ':' . $endmm);
@@ -710,8 +722,8 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 $month_ = date("m", strtotime($dateString . "-" . $day));
                 $weekday = $weekdays[date("N", strtotime($date))];
                 $data_Array[] = [
-                        'uid' => $uid_, 
-                        'email' => $email_ , 
+                        'uid' => $uid_,
+                        'email' => $email_,
                         'genid' => $genid_,
                         'workymd' => $Year_ . "/" . $month_ . "/" . $date_,
                         'jobstarthh' => $starthh,
@@ -763,11 +775,11 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 $email = $row['email'];
                 $genid = $row['genid'];
                 $workymd = $row['workymd'];
-                $jobstarthh = $row['jobstarthh'];
+                $jobstarthh = formatHour($row['jobstarthh']);
                 $jobstartmm = $row['jobstartmm'];
-                $jobendhh = $row['jobendhh'];
+                $jobendhh = formatHour($row['jobendhh']);
                 $jobendmm = $row['jobendmm'];
-                $offtimehh = $row['offtimehh'];
+                $offtimehh = formatHour($row['offtimehh']);
                 $offtimemm = $row['offtimemm'];
                 $workhh = $row['workhh'];
                 $workmm = $row['workmm'];
@@ -811,7 +823,7 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 if ($c > 1 && $c < 3) {
                         $offTimeAutohh = $offtimehh;
                         $offTimeAutomm = $offtimemm;
-                        error_log(' autoOFF:' . $offTimeAutohh . " mm: " . $offTimeAutomm . "\n");
+
                 }
         }
 
@@ -820,12 +832,12 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 $email = mysqli_real_escape_string($conn, $email_);
                 $genid = mysqli_real_escape_string($conn, $genid_);
                 $workymd = mysqli_real_escape_string($conn, $lastValue);
-                $jobstarthh = mysqli_real_escape_string($conn, $starthh);
+                $jobstarthh = formatHour(mysqli_real_escape_string($conn, $starthh));
                 $jobstartmm = mysqli_real_escape_string($conn, $startmm);
-                $jobendhh = mysqli_real_escape_string($conn, $endhh);
+                $jobendhh = formatHour(mysqli_real_escape_string($conn, $endhh));
                 $jobendmm = mysqli_real_escape_string($conn, $endmm);
 
-                $workhh = mysqli_real_escape_string($conn, $calculatedHours);
+                $workhh = formatHour(mysqli_real_escape_string($conn, $calculatedHours));
                 $workmm = mysqli_real_escape_string($conn, $calculatedMinutes);
                 $comment = mysqli_real_escape_string($conn, $workcontent_rmodal);
                 $bigo = mysqli_real_escape_string($conn, $bigo_rmodal);
@@ -866,130 +878,130 @@ if (isset($_POST['WorkmonthKakuteiUserDetail'])) {
         $sql_check_workmonth = 'SELECT * FROM tbl_workmonth WHERE `tbl_workmonth`.`email` 
         IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
         $result = $conn->query($sql_check_workmonth);
-        error_log("SQL".$sql_check_workmonth);
+
         if ($result === false) {
-            echo 'Query error: ' . mysqli_error($conn);
+                echo 'Query error: ' . mysqli_error($conn);
         } else {
-            $rowCount = mysqli_num_rows($result);
-            if ($rowCount <= 0) {
-                $_SESSION['kakutei_fail'] = $kakutei_fail;
-                // header("Refresh: 3");
-                return;
-            }
+                $rowCount = mysqli_num_rows($result);
+                if ($rowCount <= 0) {
+                        $_SESSION['kakutei_fail'] = $kakutei_fail;
+                        // header("Refresh: 3");
+                        return;
+                }
         }
         // check submisstion status
         if ($currentSubmission_status == 0) {
-            $query_kakutei = 'UPDATE tbl_workmonth SET `teishutsu_uid` = "'.$currentUseEmail.'" , `submission_status` = 1 , `upt_dt`="' . $upt_dt . ' "  WHERE `tbl_workmonth`.`email` 
+                $query_kakutei = 'UPDATE tbl_workmonth SET `teishutsu_uid` = "' . $currentUseEmail . '" , `submission_status` = 1 , `upt_dt`="' . $upt_dt . ' "  WHERE `tbl_workmonth`.`email` 
             IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
-            if ($conn->query($query_kakutei) === TRUE) {
-                $_SESSION['kakutei_success'] = $kakutei_success;
-                header("Refresh: 3");
-            } else {
-                $_SESSION['kakutei_fail'] = $kakutei_fail;
-            }
+                if ($conn->query($query_kakutei) === TRUE) {
+                        $_SESSION['kakutei_success'] = $kakutei_success;
+                        header("Refresh: 3");
+                } else {
+                        $_SESSION['kakutei_fail'] = $kakutei_fail;
+                }
         }
-    }
-    
-    
-    if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+}
+
+
+if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         // WorkmonthModoshi
         if (isset($_POST['WorkmonthModoshiUserDetail'])) {
-            $query_modoshi = 'UPDATE tbl_workmonth SET `submission_status` = 0 , `upt_dt`="' . $upt_dt . ' " , `sekininsha_uid` = null , `kanrisha_uid` = null , `teishutsu_uid` = null  WHERE `tbl_workmonth`.`email` 
-                IN("' . $employee_email. '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
-            error_log($query_modoshi);
-            if ($conn->query($query_modoshi) === TRUE) {
-                $_SESSION['modoshi_success'] = $modoshi_success;
-                header("Refresh: 2");
-            } else {
-                echo 'query error: ' . mysqli_error($conn);
-            }
+                $query_modoshi = 'UPDATE tbl_workmonth SET `submission_status` = 0 , `upt_dt`="' . $upt_dt . ' " , `sekininsha_uid` = null , `kanrisha_uid` = null , `teishutsu_uid` = null  WHERE `tbl_workmonth`.`email` 
+                IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+
+                if ($conn->query($query_modoshi) === TRUE) {
+                        $_SESSION['modoshi_success'] = $modoshi_success;
+                        header("Refresh: 2");
+                } else {
+                        echo 'query error: ' . mysqli_error($conn);
+                }
         }
         // WorkmonthShonin
         if (isset($_POST['WorkmonthShoninUserDetail'])) {
-            // 2023-11-16  Update Sekinin  Kanri  add start // 
-            // $kanrishaUid = mysqli_real_escape_string($conn, $_POST['selectedKanri']);
-            // $sekininshaUid = mysqli_real_escape_string($conn, $_POST['selectedSekinin']);
-            $kanrishaUid = $currentUseEmail;
-            $sekininshaUid = $currentUseEmail;
-    
-            //Check Invalid Kanrisha , SekininSha
-            if (!isset($kanrishaUid) || $kanrishaUid == '') {
-                $_SESSION['Shonin_KanriSha_Undefine'] = $Shonin_KanriSha_Undefine;
-                return;
-            }
-            //2023-11-16   Update Sekinin  Kanri  add end // 
-    
-            if ($currentSubmission_status == 1 || $currentSubmission_status == 2 ) {
+                // 2023-11-16  Update Sekinin  Kanri  add start // 
+                // $kanrishaUid = mysqli_real_escape_string($conn, $_POST['selectedKanri']);
+                // $sekininshaUid = mysqli_real_escape_string($conn, $_POST['selectedSekinin']);
+                $kanrishaUid = $currentUseEmail;
+                $sekininshaUid = $currentUseEmail;
 
-                // 2023-11-16 Update Sekinin  Kanri  chg start // 
-                $query_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 2 , `upt_dt`="' . $upt_dt . ' " , `kanrisha_uid`="' . $kanrishaUid . ' "   WHERE `tbl_workmonth`.`email` 
-                IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
-                // 2023-11-16 Update Sekinin  Kanri  chg end // 
-                if ($conn->query($query_shonin) === TRUE) {
-                    $_SESSION['shonin_success'] = $shonin_success;
-                    header("Refresh: 2");
-                } else {
-                    echo 'query error: ' . mysqli_error($conn);
+                //Check Invalid Kanrisha , SekininSha
+                if (!isset($kanrishaUid) || $kanrishaUid == '') {
+                        $_SESSION['Shonin_KanriSha_Undefine'] = $Shonin_KanriSha_Undefine;
+                        return;
                 }
-    
-                // 2023-11-16 Update Sekinin  Kanri  add start // 
-            } else if ($currentSubmission_status == 3) {
-                // change kanrisha uid when sekininsha shoninzumi 
-                $query_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 3 , `upt_dt`="' . $upt_dt . ' " , `kanrisha_uid`="' . $kanrishaUid . ' "   WHERE `tbl_workmonth`.`email` 
+                //2023-11-16   Update Sekinin  Kanri  add end // 
+
+                if ($currentSubmission_status == 1 || $currentSubmission_status == 2) {
+
+                        // 2023-11-16 Update Sekinin  Kanri  chg start // 
+                        $query_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 2 , `upt_dt`="' . $upt_dt . ' " , `kanrisha_uid`="' . $kanrishaUid . ' "   WHERE `tbl_workmonth`.`email` 
                 IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
-                // 2023-11-16 Update Sekinin  Kanri  chg end // 
-                if ($conn->query($query_shonin) === TRUE) {
-                    $_SESSION['shonin_success'] = $shonin_success;
-                    header("Refresh: 2");
+                        // 2023-11-16 Update Sekinin  Kanri  chg end // 
+                        if ($conn->query($query_shonin) === TRUE) {
+                                $_SESSION['shonin_success'] = $shonin_success;
+                                header("Refresh: 2");
+                        } else {
+                                echo 'query error: ' . mysqli_error($conn);
+                        }
+
+                        // 2023-11-16 Update Sekinin  Kanri  add start // 
+                } else if ($currentSubmission_status == 3) {
+                        // change kanrisha uid when sekininsha shoninzumi 
+                        $query_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 3 , `upt_dt`="' . $upt_dt . ' " , `kanrisha_uid`="' . $kanrishaUid . ' "   WHERE `tbl_workmonth`.`email` 
+                IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+                        // 2023-11-16 Update Sekinin  Kanri  chg end // 
+                        if ($conn->query($query_shonin) === TRUE) {
+                                $_SESSION['shonin_success'] = $shonin_success;
+                                header("Refresh: 2");
+                        } else {
+                                echo 'query error: ' . mysqli_error($conn);
+                        }
+
+                        // 2023-11-16  Update Sekinin  Kanri  add end // 
+
                 } else {
-                    echo 'query error: ' . mysqli_error($conn);
+                        $_SESSION['shonin_notkakutei_fail'] = $shonin_notkakutei_fail;
+                        header("Refresh: 5");
                 }
-    
-                // 2023-11-16  Update Sekinin  Kanri  add end // 
-    
-            } else {
-                $_SESSION['shonin_notkakutei_fail'] = $shonin_notkakutei_fail;
-                header("Refresh: 5");
-            }
         }
         // WorkmonthSekininShonin
         if (isset($_POST['WorkmonthSekininShoninUserDetail'])) {
-            // 2023-11-16 Update Sekinin  Kanri  add start // 
-            // $kanrishaUid = mysqli_real_escape_string($conn, $_POST['selectedKanri']);
-            // $sekininshaUid = mysqli_real_escape_string($conn, $_POST['selectedSekinin']);
-            $kanrishaUid = $currentUseEmail;
-            $sekininshaUid = $currentUseEmail;
-    
-    
-            // Check Invalid Kanrisha , SekininSha
-            if (!isset($sekininshaUid) || $sekininshaUid == '') {
-                $_SESSION['Shonin_SekininSha_Undefine'] = $Shonin_SekininSha_Undefine;
-                return;
-            }
-            if ($_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
-                return;
-            }
-            // 2023-11-16  Update Sekinin  Kanri  add end //  
-    
-            if ($currentSubmission_status == 1 || $currentSubmission_status == 2 || $currentSubmission_status == 3) {
-                // 2023-11-16 Update Sekinin  Kanri  chg start // 
-                $query_sekinin_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 3 , `upt_dt`="' . $upt_dt . ' " , `sekininsha_uid`="' . $sekininshaUid . ' "  WHERE `tbl_workmonth`.`email` 
-                IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
-                // 2023-11-16 Update Sekinin  Kanri  chg end // 
-                if ($conn->query($query_sekinin_shonin) === TRUE) {
-                    $_SESSION['sekininshonin_success'] = $sekininshonin_success;
-                    header("Refresh: 2");
-                } else {
-                    echo 'query error: ' . mysqli_error($conn);
+                // 2023-11-16 Update Sekinin  Kanri  add start // 
+                // $kanrishaUid = mysqli_real_escape_string($conn, $_POST['selectedKanri']);
+                // $sekininshaUid = mysqli_real_escape_string($conn, $_POST['selectedSekinin']);
+                $kanrishaUid = $currentUseEmail;
+                $sekininshaUid = $currentUseEmail;
+
+
+                // Check Invalid Kanrisha , SekininSha
+                if (!isset($sekininshaUid) || $sekininshaUid == '') {
+                        $_SESSION['Shonin_SekininSha_Undefine'] = $Shonin_SekininSha_Undefine;
+                        return;
                 }
-            } else {
-                $_SESSION['sekininshonin_notkakutei_fail'] = $sekininshonin_notkakutei_fail;
-                header("Refresh: 5");
-            }
+                if ($_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+                        return;
+                }
+                // 2023-11-16  Update Sekinin  Kanri  add end //  
+
+                if ($currentSubmission_status == 1 || $currentSubmission_status == 2 || $currentSubmission_status == 3) {
+                        // 2023-11-16 Update Sekinin  Kanri  chg start // 
+                        $query_sekinin_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 3 , `upt_dt`="' . $upt_dt . ' " , `sekininsha_uid`="' . $sekininshaUid . ' "  WHERE `tbl_workmonth`.`email` 
+                IN("' . $employee_email . '")  AND `tbl_workmonth`.`companyid` IN("' . $currentUseCompanyId . '") AND (`tbl_workmonth`.`workym`) IN("' . $year . $month . '")';
+                        // 2023-11-16 Update Sekinin  Kanri  chg end // 
+                        if ($conn->query($query_sekinin_shonin) === TRUE) {
+                                $_SESSION['sekininshonin_success'] = $sekininshonin_success;
+                                header("Refresh: 2");
+                        } else {
+                                echo 'query error: ' . mysqli_error($conn);
+                        }
+                } else {
+                        $_SESSION['sekininshonin_notkakutei_fail'] = $sekininshonin_notkakutei_fail;
+                        header("Refresh: 5");
+                }
         }
-    
-    }
-    
+
+}
+
 
 // 2023/11/10 submission-status  add end 
 // $employee_signstamp = $signstamp_e; ///**** NOT VALUE NEED work*/
@@ -1002,20 +1014,19 @@ if (isset($_POST['WorkmonthKakuteiUserDetail'])) {
 // $signstamp_kanri = mysqli_fetch_all($result_user_kanri, MYSQLI_ASSOC);
 
 $sql_user_kanri = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMINISTRATOR') . '"';
-if($selectedKanri != '' &&  isset($selectedKanri)) {
-    $sql_user_kanri = "SELECT * FROM `tbl_user` WHERE  `tbl_user`.`email` = '$selectedKanri'";
-} 
-error_log("SELECTED KANRI:" .$selectedKanri );
-error_log("SQL:" .$sql_user_kanri );
+if ($selectedKanri != '' && isset($selectedKanri)) {
+        $sql_user_kanri = "SELECT * FROM `tbl_user` WHERE  `tbl_user`.`email` = '$selectedKanri'";
+}
+
 $sql_user_admin = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMIN') . '"';
-if($selectedSekinin != '' &&  isset($selectedSekinin)) {
-    $sql_user_admin = "SELECT * FROM `tbl_user` WHERE `tbl_user`.`email` = '$selectedSekinin'";
-} 
+if ($selectedSekinin != '' && isset($selectedSekinin)) {
+        $sql_user_admin = "SELECT * FROM `tbl_user` WHERE `tbl_user`.`email` = '$selectedSekinin'";
+}
 
 $sql_user_teishutsu = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMIN') . '"';
-if($selectedTeishutsu != '' &&  isset($selectedTeishutsu)) {
-    $sql_user_teishutsu = "SELECT * FROM `tbl_user` WHERE `tbl_user`.`email` = '$selectedTeishutsu'";
-} 
+if ($selectedTeishutsu != '' && isset($selectedTeishutsu)) {
+        $sql_user_teishutsu = "SELECT * FROM `tbl_user` WHERE `tbl_user`.`email` = '$selectedTeishutsu'";
+}
 
 
 $result_user_admin = mysqli_query($conn, $sql_user_admin);
@@ -1028,16 +1039,36 @@ $result_user_teishutsu = mysqli_query($conn, $sql_user_teishutsu);
 $signstamp_teishutsu = mysqli_fetch_all($result_user_teishutsu, MYSQLI_ASSOC);
 
 
-if($selectedSekinin == '' || $selectedSekinin == null) {
+if ($selectedSekinin == '' || $selectedSekinin == null) {
         $signstamp_admin[0]['signstamp'] = '';
 }
 
-if($selectedKanri == '' || $selectedKanri == null) {
+if ($selectedKanri == '' || $selectedKanri == null) {
         $signstamp_kanri[0]['signstamp'] = '';
 }
 
-if($signstamp_teishutsu[0]['email'] != $employee_email) {
+if ($signstamp_teishutsu[0]['email'] != $employee_email) {
         $signstamp_teishutsu = '';
+}
+
+function formatHour($hours)
+{
+        if (strlen($hours) > 1 && substr($hours, 0, 1) === '0') {
+                return substr($hours, 1);
+        } else {
+                return $hours;
+        }
+}
+
+
+
+function formatMinute($minute)
+{
+        if (strlen($minute) === 1 && intval($minute) < 10) {
+                return '0' . $minute;
+        } else {
+                return $minute;
+        }
 }
 
 
