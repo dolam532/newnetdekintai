@@ -577,21 +577,21 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 							style="width: auto;">社員勤務表</a>
 					</form>
 				</div>
-				<?php if ( $_SESSION['auth_type'] !== constant('ADMINISTRATOR') ): ?>
-				<div class="print_btn-submit">
-					<form method="post">
-						<button type="submit" href="#" name="WorkmonthSekininShoninUserDetail" id="WorkmonthSekininShonin"
-							class="btn btn-default workmonth-submit workmonth-submit-sekininshonin" style="width: auto;"
-							onclick="return confirm('責任者承認済みでよろしいでしょうか？ \n変更がある場合は編集中に戻して、編集してください')">責任者承認</button>
-						<!-- 2023-11-16 Admin Select Add Start -->
-						<input type="hidden" id="selectedKanri" name="selectedKanri"
-							value="<?= $admin_listKanri[0]['uid'] ?>">
-						<input type="hidden" id="selectedSekinin" name="selectedSekinin"
-							value="<?= $admin_listSekinin[0]['uid'] ?>">
-						<!-- 2023-11-16 Admin Select Add end -->
+				<?php if ($_SESSION['auth_type'] !== constant('ADMINISTRATOR')): ?>
+					<div class="print_btn-submit">
+						<form method="post">
+							<button type="submit" href="#" name="WorkmonthSekininShoninUserDetail" id="WorkmonthSekininShonin"
+								class="btn btn-default workmonth-submit workmonth-submit-sekininshonin" style="width: auto;"
+								onclick="return confirm('責任者承認済みでよろしいでしょうか？ \n変更がある場合は編集中に戻して、編集してください')">責任者承認</button>
+							<!-- 2023-11-16 Admin Select Add Start -->
+							<input type="hidden" id="selectedKanri" name="selectedKanri"
+								value="<?= $admin_listKanri[0]['uid'] ?>">
+							<input type="hidden" id="selectedSekinin" name="selectedSekinin"
+								value="<?= $admin_listSekinin[0]['uid'] ?>">
+							<!-- 2023-11-16 Admin Select Add end -->
 
-					</form>
-				</div>
+						</form>
+					</div>
 				<?php endif; ?>
 				<div class="print_btn-submit">
 					<form method="post">
@@ -606,7 +606,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 						<!-- 2023-11-16 Admin Select Add end -->
 					</form>
 				</div>
-	
+
 
 
 				<div class="print_btn-submit">
@@ -739,15 +739,18 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 								<?php endif; ?>
 							</td>
 							<td>
-								<?= $key['jobstarthh'] ?>:<?= $key['jobstartmm'] ?>
+								<?= $key['jobstarthh'] ?>:
+								<?= $key['jobstartmm'] ?>
 								<!-- fix 18: 00  -> 18:00 to show  -->
 							</td>
 							<td>
-								<?= $key['jobendhh'] ?>:<?= $key['jobendmm'] ?>
+								<?= $key['jobendhh'] ?>:
+								<?= $key['jobendmm'] ?>
 								<!-- fix 18: 00  -> 18:00 to show  -->
 							</td>
 							<td>
-								<?= $key['offtimehh'] ?>:<?= $key['offtimemm'] ?>
+								<?= $key['offtimehh'] ?>:
+								<?= $key['offtimemm'] ?>
 								<!-- fix 18: 00  -> 18:00 to show  -->
 							</td>
 							<td>
@@ -809,19 +812,24 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 								<?php endif; ?>
 							</td>
 							<td>
-								<?= $key['daystarthh'] ?>:<?= $key['daystartmm'] ?>
+								<?= $key['daystarthh'] ?>:
+								<?= $key['daystartmm'] ?>
 							</td>
 							<td>
-								<?= $key['dayendhh'] ?>:<?= $key['dayendmm'] ?>
+								<?= $key['dayendhh'] ?>:
+								<?= $key['dayendmm'] ?>
 							</td>
 							<td>
-								<?= $key['jobstarthh'] ?>:<?= $key['jobstartmm'] ?>
+								<?= $key['jobstarthh'] ?>:
+								<?= $key['jobstartmm'] ?>
 							</td>
 							<td>
-								<?= $key['jobendhh'] ?>:<?= $key['jobendmm'] ?>
+								<?= $key['jobendhh'] ?>:
+								<?= $key['jobendmm'] ?>
 							</td>
 							<td>
-								<?= $key['offtimehh'] ?>:<?= $key['offtimemm'] ?>
+								<?= $key['offtimehh'] ?>:
+								<?= $key['offtimemm'] ?>
 							</td>
 							<td>
 								<!-- fix 8:0  08:00 to show   -->
@@ -848,14 +856,15 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	<table id="footer-Table" class="table table-bordered datatable">
 		<tbody class="sumtbl">
 			<tr id="footer_table_title">
-				<th style="width: 10%; margin-top: 30px;" rowspan="2">実働時間</th>
+				<th style="width: 10%; padding-top: 30px;" rowspan="2">実働時間</th>
 				<th style="width: 8%;">時間</th>
 				<th style="width: 8%;">分</th>
-				<th style="width: 10%; margin-top: 30px;" rowspan="3">勤務状況</th>
-				<th style="width: 12%;">所定勤務日数</th>
-				<th style="width: 12%;">実勤務日数</th>
+				<th style="width: 5%; padding-top: 30px;" rowspan="3">勤務状況</th>
+				<th style="width: 10%;">所定勤務日数</th>
+				<th style="width: 10%;">実勤務日数</th>
 				<th style="width: 10%;">休暇</th>
 				<th style="width: 10%;">欠勤</th>
+				<th style="width: 10%;">休業</th>
 				<th style="width: 10%;">遅刻</th>
 				<th style="width: auto;">早退</th>
 			</tr>
@@ -883,6 +892,11 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 							<td><strong>
 									<?= $offdayswork_top = isset($countKekkin) ? $countKekkin : (isset($key['offdays2']) ? $key['offdays2'] : '0'); ?>
 								</strong></td>
+
+							<td><strong>
+									<?= $closedayswork_top = isset($countClose) ? $countClose : (isset($key['closedays2']) ? $key['closedays2'] : '0'); ?>
+								</strong></td>
+
 							<td><strong>
 									<?= $delaydayswork_top = isset($countLate) ? $countLate : (isset($key['delaydays2']) ? $key['delaydays2'] : '0'); ?>
 								</strong></td>
@@ -905,6 +919,9 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 								</strong></td>
 							<td><strong>
 									<?= $holydayswork_top = isset($countKuyka) ? $countKuyka : (isset($key['holydays2']) ? $key['holydays2'] : '0'); ?>
+								</strong></td>
+							<td><strong>
+									<?= $closedayswork_top = isset($countClose) ? $countClose : (isset($key['closedays2']) ? $key['closedays2'] : '0'); ?>
 								</strong></td>
 							<td><strong>
 									<?= $offdayswork_top = isset($countKekkin) ? $countKekkin : (isset($key['offdays2']) ? $key['offdays2'] : '0'); ?>
@@ -939,6 +956,10 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 						<td><strong>
 								<?= $offdayswork_top = isset($countKekkin) ? $countKekkin : '0'; ?>
 							</strong></td>
+
+						<td><strong>
+								<?= $closedayswork_top = isset($countClose) ? $countClose : '0'; ?>
+							</strong></td>
 						<td><strong>
 								<?= $delaydayswork_top = '0'; ?>
 							</strong></td>
@@ -963,6 +984,9 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 							</strong></td>
 						<td><strong>
 								<?= $offdayswork_top = isset($countKekkin) ? $countKekkin : '0'; ?>
+							</strong></td>
+						<td><strong>
+								<?= $closedayswork_top = isset($countClose) ? $countClose : '0'; ?>
 							</strong></td>
 						<td><strong>
 								<?= $delaydayswork_top = isset($countLate) ? $countLate : '0'; ?>
@@ -990,6 +1014,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 							<input type="hidden" value="<?= $cnactjob_top ?>" name="workdays_top">
 							<input type="hidden" value="<?= $holydayswork_top ?>" name="holydays_top">
 							<input type="hidden" value="<?= $offdayswork_top ?>" name="offdays_top">
+							<input type="hidden" value="<?= $closedayswork_top ?>" name="closedays_top">
 							<input type="hidden" value="<?= $delaydayswork_top = '0' ?>" name="delaydays_top">
 							<input type="hidden" value="<?= $earlydayswork_top = '0' ?>" name="earlydays_top">
 						<?php elseif ($decide_template_ == "2"): ?>
@@ -1005,6 +1030,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 							<input type="hidden" value="<?= $cnactjob_top ?>" name="workdays_top">
 							<input type="hidden" value="<?= $holydayswork_top ?>" name="holydays_top">
 							<input type="hidden" value="<?= $offdayswork_top ?>" name="offdays_top">
+							<input type="hidden" value="<?= $closedayswork_top ?>" name="closedays_top">
 							<input type="hidden" value="<?= $delaydayswork_top ?>" name="delaydays_top">
 							<input type="hidden" value="<?= $earlydayswork_top ?>" name="earlydays_top">
 						<?php endif; ?>
@@ -1052,6 +1078,11 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 										value="<?= $offdayswork_bottom_pdf = (isset($key['offdays']) && $key['offdays'] !== '') ? $key['offdays'] : $offdayswork_top; ?>">
 								</td>
 
+								<td><input type="text" class="form-control" style="text-align: center" name="closedays_bottom"
+										id="closedays_bottom" maxlength="2"
+										value="<?= $closedayswork_bottom_pdf = (isset($key['closedays']) && $key['closedays'] !== '') ? $key['closedays'] : $closedayswork_top; ?>">
+								</td>
+
 								<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom"
 										id="delaydays_bottom" maxlength="2"
 										value="<?= $delaydayswork_bottom_pdf = (isset($key['delaydays']) && $key['delaydays'] !== '') ? $key['delaydays'] : $delaydayswork_top; ?>">
@@ -1090,6 +1121,11 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 								<td><input type="text" class="form-control" style="text-align: center" name="offdays_bottom"
 										id="offdays_bottom" maxlength="2"
 										value="<?= $offdayswork_bottom_pdf = (isset($key['offdays']) && $key['offdays'] !== '') ? $key['offdays'] : $offdayswork_top; ?>">
+								</td>
+
+								<td><input type="text" class="form-control" style="text-align: center" name="closedays_bottom"
+										id="closedays_bottom" maxlength="2"
+										value="<?= $closedayswork_bottom_pdf = (isset($key['closedays']) && $key['closedays'] !== '') ? $key['closedays'] : $closedayswork_top; ?>">
 								</td>
 								<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom"
 										id="delaydays_bottom" maxlength="2"
@@ -1133,6 +1169,10 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 									id="offdays_bottom" maxlength="2"
 									value="<?= $offdayswork_bottom_pdf = (isset($key['offdays']) && $key['offdays'] !== '') ? $key['offdays'] : $offdayswork_top; ?>">
 							</td>
+							<td><input type="text" class="form-control" style="text-align: center" name="closedays_bottom"
+									id="closedays_bottom" maxlength="2"
+									value="<?= $closedayswork_bottom_pdf = (isset($key['closedays']) && $key['closedays'] !== '') ? $key['closedays'] : $closedayswork_top; ?>">
+							</td>
 							<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom"
 									id="delaydays_bottom" maxlength="2" value="0"></td>
 							<td><input type="text" class="form-control" style="text-align: center;" name="earlydays_bottom"
@@ -1166,6 +1206,11 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 									id="offdays_bottom" maxlength="2"
 									value="<?= $offdayswork_bottom_pdf = (isset($key['offdays']) && $key['offdays'] !== '') ? $key['offdays'] : $offdayswork_top; ?>">
 							</td>
+
+							<td><input type="text" class="form-control" style="text-align: center" name="closedays_bottom"
+									id="closedays_bottom" maxlength="2"
+									value="<?= $closedayswork_bottom_pdf = (isset($key['closedays']) && $key['closedays'] !== '') ? $key['closedays'] : $closedayswork_top; ?>">
+							</td>
 							<td><input type="text" class="form-control" style="text-align: center" name="delaydays_bottom"
 									id="delaydays_bottom" maxlength="2"
 									value="<?= $delaydayswork_bottom_pdf = isset($delaydayswork_top) ? $delaydayswork_top : '0'; ?>">
@@ -1193,6 +1238,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 				$cnactjob_top = strval($cnactjob_top);
 				$holydayswork_top = strval($holydayswork_top);
 				$offdayswork_top = strval($offdayswork_top);
+				$closedayswork_top = strval($closedayswork_top);
 				$delaydayswork_top = strval($delaydayswork_top);
 				$earlydayswork_top = strval($earlydayswork_top);
 
@@ -1268,6 +1314,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	<input type="hidden" name="holydayswork_top"
 		value="<?php echo htmlspecialchars(json_encode($holydayswork_top)); ?>">
 	<input type="hidden" name="offdayswork_top" value="<?php echo htmlspecialchars(json_encode($offdayswork_top)); ?>">
+	<input type="hidden" name="closedayswork_top"
+		value="<?php echo htmlspecialchars(json_encode($closedayswork_top)); ?>">
 	<input type="hidden" name="delaydayswork_top"
 		value="<?php echo htmlspecialchars(json_encode($delaydayswork_top)); ?>">
 	<input type="hidden" name="earlydayswork_top"
@@ -1291,6 +1339,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		value="<?php echo htmlspecialchars(json_encode($holydayswork_bottom_pdf)); ?>">
 	<input type="hidden" name="offdayswork_bottom"
 		value="<?php echo htmlspecialchars(json_encode($offdayswork_bottom_pdf)); ?>">
+	<input type="hidden" name="closedayswork_bottom"
+		value="<?php echo htmlspecialchars(json_encode($closedayswork_bottom_pdf)); ?>">
 	<input type="hidden" name="delaydayswork_bottom"
 		value="<?php echo htmlspecialchars(json_encode($delaydayswork_bottom_pdf)); ?>">
 	<input type="hidden" name="earlydayswork_bottom"
@@ -1818,7 +1868,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 
 	// add check before submiss
 	function checkSubmisBefore() {
-		
+
 		if ($("#kintaiWorkMonth-registing").length) {
 			$("#kintaiWorkMonth-registing")[0].scrollIntoView();
 			alert("<?php echo $is_not_registed_WorkMonth ?>");
@@ -1985,7 +2035,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	function formatHour(value) {
 
 		if (isNaN(value) || value <= 0) {
-	
+
 			return "00";
 		}
 		value = parseInt(value);
@@ -1994,7 +2044,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		} else if (value > 23) {
 			return "23";
 		} else if (value < 10) {
-			return  value;
+			return value;
 		}
 		return value.toString();
 	}

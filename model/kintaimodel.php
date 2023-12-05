@@ -258,6 +258,7 @@ $countHoliday = 0;
 $countKuyka = 0;
 $countDaikyu = 0;
 $countKekkin = 0;
+$countClose= 0;
 //---2023-10-18 add end ------//
 foreach ($worktime_list as $work) {
     if (isset($work['jobstarthh']) && !empty($work['jobstarthh'])) {
@@ -323,6 +324,9 @@ foreach ($worktime_list as $work) {
             $countDaikyu++;
         }
         if ($work['holy_decide'] == array_keys($HOLY_DECIDE)[4]) {
+            $countClose++;
+        }
+        if ($work['holy_decide'] == array_keys($HOLY_DECIDE)[5]) {
             $countKekkin++;
         }
     }
@@ -775,6 +779,8 @@ if (isset($_POST['MonthSaveKintai'])) {
     $holydays = mysqli_real_escape_string($conn, $holydays_bottom_);
     $offdays2 = mysqli_real_escape_string($conn, $_POST['offdays_top']);
     $offdays = mysqli_real_escape_string($conn, $_POST['offdays_bottom']);
+    $closedays = mysqli_real_escape_string($conn, $_POST['closedays_bottom']);
+    $closedays2 = mysqli_real_escape_string($conn, $_POST['closedays_top']);
     $delaydays2 = mysqli_real_escape_string($conn, $_POST['delaydays_top']);
     $delaydays = mysqli_real_escape_string($conn, $_POST['delaydays_bottom']);
     $earlydays2 = mysqli_real_escape_string($conn, $_POST['earlydays_top']);
@@ -786,13 +792,13 @@ if (isset($_POST['MonthSaveKintai'])) {
 
 
     $sql = "INSERT INTO `tbl_workmonth` (`uid`, `email` ,  `companyid` , `genid`, `workym`, `jobhour`, `jobminute`, `jobhour2`, `jobminute2`, `janhour`, `janminute`, `janhour2`, `janminute2`,
-                `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`, `delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `submission_status`  , `reg_dt` , `upt_dt`)
+                `jobdays`, `jobdays2`, `workdays`, `workdays2`, `holydays`, `holydays2`, `offdays`, `offdays2`,  `closedays` , `closedays2`  ,`delaydays`, `delaydays2`, `earlydays`, `earlydays2`, `template`, `submission_status`  , `reg_dt` , `upt_dt`)
                 VALUES ('$uid',  '$email_'  ,'$companyid'   , '$genid', '$workym', '$jobhour', '$jobminute', '$jobhour2', '$jobminute2', '$janhour', '$janminute', '$janhour2', '$janminute2',
-                '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2', '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$template',  0  , '$reg_dt' , null)
+                '$jobdays', '$jobdays2', '$workdays', '$workdays2', '$holydays', '$holydays2', '$offdays', '$offdays2',    '$closedays'   , '$closedays2' ,  '$delaydays', '$delaydays2', '$earlydays', '$earlydays2', '$template',  0  , '$reg_dt' , null)
                 ON DUPLICATE KEY UPDATE
                 companyid='$companyid' ,  genid='$genid', jobhour='$jobhour', jobminute='$jobminute', jobhour2='$jobhour2', jobminute2='$jobminute2',
                 janhour='$janhour', janminute='$janminute', janhour2='$janhour2', janminute2='$janminute2', jobdays='$jobdays', jobdays2='$jobdays2', workdays='$workdays', workdays2='$workdays2', holydays='$holydays',
-                holydays2='$holydays2', offdays='$offdays', offdays2='$offdays2', delaydays='$delaydays', delaydays2='$delaydays2',earlydays='$earlydays' , earlydays2='$earlydays2', template='$template' , upt_dt='$upt_dt'";
+                holydays2='$holydays2', offdays='$offdays', offdays2='$offdays2',  closedays='$closedays'  ,  closedays2='$closedays2' ,  delaydays='$delaydays', delaydays2='$delaydays2',earlydays='$earlydays' , earlydays2='$earlydays2', template='$template' , upt_dt='$upt_dt'";
 
     //  2023/11/10 submission-status  chg end //
     if ($conn->query($sql) === TRUE) {
