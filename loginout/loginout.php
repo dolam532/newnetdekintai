@@ -118,7 +118,7 @@ include('../model/loginoutmodel.php');
     }
 
     if (!passwordRegex.test(pwd)) {
-        alert("<?php echo $$login_pwd_fail; ?>");
+        alert("<?php echo $login_pwd_fail; ?>");
         e.preventDefault();
         $("#pwd").focus();
         return false;
