@@ -1914,12 +1914,12 @@ if ($_SESSION['auth'] == false) {
 
 	// Time calculate Func
 	function calculateWorkTime() {
-		var offtimehh = $('#offtimehh').val() || "00";
+		var offtimehh = $('#offtimehh').val() || "0";
 		var offtimemm = $('#offtimemm').val() || "00";
 		var offtime_ = offtimehh + ':' + offtimemm;
 		var o = offtime_.split(':');
 
-		var jobstarthh = $('#jobstarthh').val() || "00";
+		var jobstarthh = $('#jobstarthh').val() || "0";
 		var jobstartmm = $('#jobstartmm').val() || "00";
 		var jobendhh = $('#jobendhh').val() || "0";
 		var jobendmm = $('#jobendmm').val() || "00";
@@ -1930,7 +1930,7 @@ if ($_SESSION['auth'] == false) {
 			var s = jobstartime_.split(':');
 			var e = jobendtime_.split(':');
 		<?php elseif ($decide_template_ == "2"): ?>
-			var daystarthh = $('#daystarthh').val() || "00";
+			var daystarthh = $('#daystarthh').val() || "0";
 			var daystartmm = $('#daystartmm').val() || "00";
 			var dayendhh = $('#dayendhh').val() || "0";
 			var dayendmm = $('#dayendmm').val() || "00";
@@ -1977,12 +1977,12 @@ if ($_SESSION['auth'] == false) {
 	// check format hours  0 -> 23 
 	function formatHour(value) {
 
-		if (isNaN(value) || value <= 0) {
-			return "00";
+		if (isNaN(value)) {
+			return "0";
 		}
 		value = parseInt(value);
 		if (value <= 0) {
-			return "00";
+			return "0";
 		} else if (value > 23) {
 			return "23";
 		} else if (value < 10) {
@@ -2229,9 +2229,9 @@ if ($_SESSION['auth'] == false) {
 			inputValue.on('input', function () {
 				var c;
 				if ($(this)[0].attributes.id.value.includes('hh')) {
-					formattedValue = formatValue(formatValue($(this).val(), true));
+					formattedValue = formatValue($(this).val(), true);
 				} else if ($(this)[0].attributes.id.value.includes('mm')) {
-					formattedValue = formatValue(formatValue($(this).val(), false));
+					formattedValue = formatValue($(this).val(), false) ;
 				}
 
 				$(this).val(formattedValue);
@@ -2273,10 +2273,10 @@ if ($_SESSION['auth'] == false) {
 			} else {
 				value = formatMinute(value);
 			}
-			if (isNaN(value) || value <= 0) {
-				value = "00";
+			if (isNaN(value) ) {
+				value = "0";
 			}
-			return value;
+			return value.toString();
 		}
 		// 2023-10-02 add end//
 
