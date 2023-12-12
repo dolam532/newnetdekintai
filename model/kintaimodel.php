@@ -13,8 +13,9 @@ $genba_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
 // get template from genid 
 $currentGenid = $_SESSION['auth_genid'];
+$companyid = $_SESSION['auth_companyid'];
 $currentTemplate = 1;
-$sqlTemplate = "SELECT `template` from tbl_genba WHERE `genid` = '$currentGenid';";
+$sqlTemplate = "SELECT `template` from tbl_company WHERE `companyid` = '$companyid';";
 $result = $conn->query($sqlTemplate);
 if ($result) {
     if ($result->num_rows > 0) {
@@ -26,7 +27,7 @@ if ($result) {
     echo 'error' . mysqli_error($conn);
 }
 
-$companyid = $_SESSION['auth_companyid'];
+
 $uid_ = $_SESSION['auth_uid'];
 $email_ = $_SESSION['auth_email'];
 
@@ -48,6 +49,7 @@ $month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
 
 
 $decide_template_ = $currentTemplate;
+error_log("Current template" . $decide_template_);
 
 
 $jobdays2;

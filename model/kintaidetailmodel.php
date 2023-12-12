@@ -75,6 +75,25 @@ $_SESSION['selyy'] = $_POST['selyy'];
 $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
 $month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
 
+
+// get template from genid 
+$currentGenid = $employee_genid;
+$currentTemplate_ = 1;
+
+$sqlTemplate = "SELECT `template` from tbl_company WHERE `companyid` = '$current_CompanyId_';";
+$result = $conn->query($sqlTemplate);
+if ($result) {
+        if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $currentTemplate_ = $row['template'];
+        } else {
+        }
+} else {
+        echo 'error' . mysqli_error($conn);
+}
+$decide_template_ = $currentTemplate_;
+
+
 // Get Data From tbl_workmonth
 $sql_workmonth = 'SELECT
     *
@@ -89,21 +108,7 @@ foreach ($workmonth_list as $key) {
         $template_ = $key['template'];
 }
 
-// get template from genid 
-$currentGenid = $employee_genid;
-$currentTemplate_ = 1;
-$sqlTemplate = "SELECT `template` from tbl_genba WHERE `genid` = '$currentGenid';";
-$result = $conn->query($sqlTemplate);
-if ($result) {
-        if ($result->num_rows > 0) {
-                $row = $result->fetch_assoc();
-                $currentTemplate_ = $row['template'];
-        } else {
-        }
-} else {
-        echo 'error' . mysqli_error($conn);
-}
-$decide_template_ = $currentTemplate_;
+
 
 // get company Name 
 $getCompanysql = "SELECT `companyname` FROM tbl_company WHERE `companyid` = '$current_CompanyId_' LIMIT 1";
