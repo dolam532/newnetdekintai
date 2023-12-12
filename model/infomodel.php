@@ -71,6 +71,15 @@ $workday_list = mysqli_fetch_all($result_workday, MYSQLI_ASSOC);
 
 // Save data to tbl_workday table of database
 if (isset($_POST['btnRegWdl'])) {
+    // check admin 
+    $isAdmin = false;
+    if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+        $isAdmin = true;
+    }
+    if (!$isAdmin) {
+        return;
+    }
+
     $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
     $workyear = mysqli_real_escape_string($conn, $_POST['workyear']);
     if ($_POST['workday01'] == "") {
@@ -157,6 +166,15 @@ if (isset($_POST['btnRegWdl'])) {
 
 // Update data to tbl_workday table of database
 if (isset($_POST['btnUpdateWdl'])) {
+       // check admin 
+    $isAdmin = false;
+    if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+        $isAdmin = true;
+    }
+    if (!$isAdmin) {
+        return;
+    }
+
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $workyear = mysqli_real_escape_string($conn, $_POST['udworkyear']);
 
@@ -214,6 +232,15 @@ if (isset($_POST['btnUpdateWdl'])) {
 
 // Delete data to tbl_workday table of database
 if (isset($_POST['btnDelWdl'])) {
+    // check admin 
+    $isAdmin = false;
+    if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+        $isAdmin = true;
+    }
+    if (!$isAdmin) {
+        return;
+    }
+
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
     $workyear = mysqli_real_escape_string($conn, $_POST['udworkyear']);
 

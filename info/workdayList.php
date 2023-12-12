@@ -593,9 +593,10 @@ if ($_SESSION['auth'] == false) {
 
     // Year/month click on grid (edit): popup & content display
     $(document).on('click', '.showModal', function() {
+        // check user
+      <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
         var Workyear = $(this).text();
         $('#modal2').modal('toggle');
-
         <?php
         if (!empty($workday_list)) {
             foreach ($workday_list as $key) {
@@ -657,6 +658,8 @@ if ($_SESSION['auth'] == false) {
             }
         }
         ?>
+
+<?php endif; ?>
     });
 
     // Check Error
