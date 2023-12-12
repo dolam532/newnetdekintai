@@ -1241,7 +1241,7 @@ if ($_SESSION['auth'] == false) {
 		value="<?php echo htmlspecialchars(json_encode($signstamp_teishutsu[0]['signstamp'])); ?>">
 
 	<input type="hidden" name="name" value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_name'])); ?>">
-	<input type="hidden" name="dept" value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_dept'])); ?>">
+	<input type="hidden" name="dept" value="<?php echo htmlspecialchars(json_encode($currentDeptText)); ?>">
 	<input type="hidden" name="date_show" value="<?php echo htmlspecialchars(json_encode($date_show)); ?>">
 	<input type="hidden" name="companyName" value="<?php echo htmlspecialchars(json_encode($companyName_)); ?>">
 	<input type="hidden" name="template" value="<?php echo htmlspecialchars(json_encode($decide_template_)); ?>">

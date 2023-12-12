@@ -28,6 +28,24 @@ if ($result) {
 }
 
 
+// get dept text 
+$currentDeptId = $_SESSION['auth_dept'];
+$currentDeptText = '';
+
+$sqlGetDeptText = "SELECT `name` from tbl_codebase WHERE `code` = '$currentDeptId' AND `companyid` = '$companyid';";
+$result = $conn->query($sqlGetDeptText);
+if ($result) {
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $currentDeptText = $row['name'];
+    } else {
+    }
+}
+if(!isset($currentDeptText)) {
+    $currentDeptText = '';
+}
+
+
 $uid_ = $_SESSION['auth_uid'];
 $email_ = $_SESSION['auth_email'];
 

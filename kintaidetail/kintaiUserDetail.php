@@ -1298,7 +1298,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 	?>
 	<input type="hidden" name="signstamp_user" value="<?php echo $signstamp_value; ?>">
 	<input type="hidden" name="name" value="<?php echo htmlspecialchars(json_encode($employee_name)); ?>">
-	<input type="hidden" name="dept" value="<?php echo htmlspecialchars(json_encode($employee_dept)); ?>">
+	<input type="hidden" name="dept" value="<?php echo htmlspecialchars(json_encode($currentDeptText)); ?>">
 	<input type="hidden" name="date_show" value="<?php echo htmlspecialchars(json_encode($date_show)); ?>">
 	<input type="hidden" name="companyName" value="<?php echo htmlspecialchars(json_encode($companyName_)); ?>">
 	<input type="hidden" name="template" value="<?php echo htmlspecialchars(json_encode($decide_template_)); ?>">

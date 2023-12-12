@@ -76,6 +76,24 @@ $year = isset($_POST["selyy"]) ? $_POST["selyy"] : date('Y');
 $month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
 
 
+// get dept text 
+$currentDeptId = $employee_dept;
+$currentDeptText = '';
+
+$sqlGetDeptText = "SELECT `name` from tbl_codebase WHERE `code` = '$currentDeptId' AND `companyid` = '$current_CompanyId_';";
+$result = $conn->query($sqlGetDeptText);
+if ($result) {
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $currentDeptText = $row['name'];
+    } else {
+    }
+}
+if(!isset($currentDeptText)) {
+    $currentDeptText = '';
+}
+
+
 // get template from genid 
 $currentGenid = $employee_genid;
 $currentTemplate_ = 1;
