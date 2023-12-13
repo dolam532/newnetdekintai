@@ -1967,7 +1967,10 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 					let date = currentMonthHolydays[dateKey];
 					if (dateKey === date_show) {
 						$("#holy_decide").val(<?php echo json_encode(array_keys($HOLY_DECIDE)[1]) ?>);
-						$("#bigo").text($('[name="bigo"]').val(date));
+						if("<?php echo $key['bigo'] ?>" === "") {
+							$("#bigo").text($('[name="bigo"]').val(date));
+						}
+				
 						break;
 					}
 				}

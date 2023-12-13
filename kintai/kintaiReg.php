@@ -1890,6 +1890,8 @@ if ($_SESSION['auth'] == false) {
 				} else {
 					$("#holy_decide").val(holyDecideValue);
 				}
+
+			
 				$("#IVjobstarthh").val("<?php echo $key['jobstarthh'] ?>");
 				$("#IVjobstartmm").val("<?php echo $key['jobstartmm'] ?>");
 				$("#IVjobendhh").val("<?php echo $key['jobendhh'] ?>");
@@ -1905,17 +1907,20 @@ if ($_SESSION['auth'] == false) {
 				$("#IVdayendhh").val("<?php echo $key['dayendhh'] ?>");
 				$("#IVdayendmm").val("<?php echo $key['dayendmm'] ?>");
 				// 2023-10-03/1340-001 add end start
-
-				// selected when holydays
+						// selected when holydays
 				const currentMonthHolydays = <?php echo json_encode($holidayDates_) ?>;
 				for (let dateKey in currentMonthHolydays) {
 					let date = currentMonthHolydays[dateKey];
 					if (dateKey === date_show) {
 						$("#holy_decide").val(<?php echo json_encode(array_keys($HOLY_DECIDE)[1]) ?>);
-						$("#bigo").text($('[name="bigo"]').val(date));
+						if("<?php echo $key['bigo'] ?>" === "") {
+							$("#bigo").text($('[name="bigo"]').val(date));
+						}
 						break;
 					}
 				}
+
+			
 			}
 			<?php
 		}
