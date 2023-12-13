@@ -1861,20 +1861,15 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			modalButons.prop("disabled", true);
 
 		}
-
-
 	}
-
-
 	// add check before submiss
 	function checkSubmisBefore() {
-
 		if ($("#kintaiWorkMonth-registing").length) {
 			$("#kintaiWorkMonth-registing")[0].scrollIntoView();
 			alert("<?php echo $is_not_registed_WorkMonth ?>");
 			return false;
 		} else {
-			if (confirm('提出確定してよろしいでしょうか？ \n確定したら編集できません!')) {
+			if (confirm("<?php echo $kakutei_ninsho_message ?>")) {
 				return true;
 			} else {
 				return false;
@@ -1965,6 +1960,17 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 				$("#IVdayendhh").val("<?php echo $key['dayendhh'] ?>");
 				$("#IVdayendmm").val("<?php echo $key['dayendmm'] ?>");
 				// 2023-10-03/1340-001 add end start
+
+				// selected when holydays
+				const currentMonthHolydays = <?php echo json_encode($holidayDates_) ?>;
+				for (let dateKey in currentMonthHolydays) {
+					let date = currentMonthHolydays[dateKey];
+					if (dateKey === date_show) {
+						$("#holy_decide").val(<?php echo json_encode(array_keys($HOLY_DECIDE)[1]) ?>);
+						$("#bigo").text($('[name="bigo"]').val(date));
+						break;
+					}
+				}
 			}
 			<?php
 		}

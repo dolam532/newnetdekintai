@@ -1,5 +1,6 @@
 <?php
 // Select data from tbl_genba
+
 $sql_genba = 'SELECT * FROM `tbl_genba` 
     WHERE 
         (`tbl_genba`.`use_yn`="' . constant('USE_YES') . '"
@@ -67,7 +68,6 @@ $month = isset($_POST["selmm"]) ? $_POST["selmm"] : date('m');
 
 
 $decide_template_ = $currentTemplate;
-error_log("Current template" . $decide_template_);
 
 
 $jobdays2;
@@ -89,7 +89,10 @@ $dateString = $year . "-" . $month;
 
 //----- 2023/10/26---- add start//
 
-$sqlGetCurrentMonthHolydays = "SELECT `holiday` FROM tbl_holiday 
+
+
+
+$sqlGetCurrentMonthHolydays = "SELECT `holiday`, `holiremark` FROM tbl_holiday 
 WHERE `companyid` = '$companyid' 
 AND `holiyear` = '$year' 
 AND `holiday` LIKE '$year/$month/%' ";
@@ -99,9 +102,12 @@ $result = $conn->query($sqlGetCurrentMonthHolydays);
 
 if ($result) {
     while ($row = $result->fetch_assoc()) {
-        $holidayDates_[] = $row['holiday'];
+        $holidayDates_[$row['holiday']] = $row['holiremark'];
     }
 }
+
+
+
 
 
 // get company Name 
@@ -167,7 +173,8 @@ for ($day = 1; $day <= $daysInMonth; $day++) {
     $month_ = date("m", strtotime($dateString . "-" . $day));
     $date_show = $Year_ . "/" . $month_ . "/";
     $weekday = $weekdays[date("N", strtotime($date))];
-    $isHoliday = in_array($Year_ . "/" . $month_ . "/" . $date_, $holidayDates_);
+    $isHoliday = in_array($Year_ . "/" . $month_ . "/" . $date_, array_keys($holidayDates_));
+
 
     $datas[] = [
         'date' => $month_ . "/" . $date_ . "(" . $weekday . ")",
@@ -578,8 +585,7 @@ if (isset($_POST['AutoUpdateKintai'])) {
 
     $interval = $jobendtime->diff($jobstarttime);
     $totalMinutes = ($interval->h * 60) + $interval->i;
-    error_log("Total Minutes HH" . $offtimehh_ . " mm: " . $offtimemm_);
-    error_log($offtime);
+
     $totalMinutes -= ($offtime->format('H') * 60) + $offtime->format('i');
     $calculatedHours = floor($totalMinutes / 60);
     $calculatedMinutes = $totalMinutes % 60;
@@ -645,25 +651,33 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $Array_Result = $weekendsArray;
     }
 
+ 
+
+    $tmpArray = array(); 
+    $keyed = array_column($worktime_list, NULL, 'workymd'); // replace indexes with ur_user_id values
+    foreach ($Array_Result as $row) { // write directly to $array1 while iterating
+        if (isset($keyed[$row['workymd']])) { // check if shared key exists
+            $row += $keyed[$row['workymd']]; // append associative elements
+        }
+        if (!in_array($row['workymd'], array_keys($holidayDates_))) {
+            $tmpArray[] = $row; 
+        }
+
+    }
+    $Array_Result =   $tmpArray;
     $lastValue = null;
     foreach ($Array_Result as $element) {
         if (isset($element['workymd'])) {
             $lastValue = $element['workymd'];
         }
     }
-
-    $keyed = array_column($worktime_list, NULL, 'workymd'); // replace indexes with ur_user_id values
-    foreach ($Array_Result as $row) { // write directly to $array1 while iterating
-        if (isset($keyed[$row['workymd']])) { // check if shared key exists
-            $row += $keyed[$row['workymd']]; // append associative elements
-
-        }
-    }
-
+    
     $ArraySave = false;
     $c = 0;
     $offTimeAutohh = '';
     $offTimeAutomm = '';
+
+
     foreach ($Array_Result as $row) {
         $c++;
         $uid = $row['uid'];
@@ -754,6 +768,9 @@ if (isset($_POST['AutoUpdateKintai'])) {
             echo 'query error: ' . mysqli_error($conn);
         }
     }
+
+
+
 }
 
 // Save data to tbl_workmonth table of database

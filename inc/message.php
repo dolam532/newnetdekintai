@@ -101,6 +101,8 @@ $is_submissed_notchange = '勤務表提出しましたので編集出来ませ�
 $Shonin_KanriSha_Undefine = '選択した管理者はエラー発生したました。システム管理者へご連絡ください';
 $Shonin_SekininSha_Undefine = '選択した責任者はエラー発生したました。システム管理者へご連絡ください';
 $is_admin_changed_saveWaiting = '責任者、管理者の変更があります、「承認」ボタン押すと保存します。';
+$kakutei_ninsho_message = '提出確定してよろしいでしょうか？ \n確定したら編集できません!';
+
 
 // genbaList
 $user_genbaname_empty = '勤務時間タイプを入力してください。';

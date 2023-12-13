@@ -34,9 +34,10 @@ $name_g = isset($_SESSION['name_g']) ? $_SESSION['name_g'] : $_SESSION['auth_nam
 $dept_g = isset($_SESSION['dept_g']) ? $_SESSION['dept_g'] : $_SESSION['auth_dept'];
 
 
-if (($uid_g === '' || $email_g === '') && isset($_POST['email_g'])) {
-        echo 'error' . '選択した会員のデータが異常が発生したました。サイト管理者へ連絡してください';
-}
+// if (($uid_g === '' || $email_g === '') && isset($_POST['email_g'])) {
+//         echo 'error' . '選択した会員のデータが異常が発生したました。サイト管理者へ連絡してください';
+
+// }
 
 
 // Now you can access the variables from temporary.php
@@ -83,14 +84,14 @@ $currentDeptText = '';
 $sqlGetDeptText = "SELECT `name` from tbl_codebase WHERE `code` = '$currentDeptId' AND `companyid` = '$current_CompanyId_';";
 $result = $conn->query($sqlGetDeptText);
 if ($result) {
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        $currentDeptText = $row['name'];
-    } else {
-    }
+        if ($result->num_rows > 0) {
+                $row = $result->fetch_assoc();
+                $currentDeptText = $row['name'];
+        } else {
+        }
 }
-if(!isset($currentDeptText)) {
-    $currentDeptText = '';
+if (!isset($currentDeptText)) {
+        $currentDeptText = '';
 }
 
 
@@ -140,17 +141,22 @@ if ($result) {
 }
 
 // get list holyday to show red date 
-$sqlGetCurrentMonthHolydays = "SELECT `holiday` FROM tbl_holiday 
+$sqlGetCurrentMonthHolydays = "SELECT `holiday`, `holiremark` FROM tbl_holiday 
 WHERE `companyid` = '$current_CompanyId_' 
 AND `holiyear` = '$year' 
 AND `holiday` LIKE '$year/$month/%' ";
+
 $holidayDates_ = array();
 $result = $conn->query($sqlGetCurrentMonthHolydays);
+
 if ($result) {
         while ($row = $result->fetch_assoc()) {
-                $holidayDates_[] = $row['holiday'];
+                $holidayDates_[$row['holiday']] = $row['holiremark'];
         }
 }
+
+
+
 
 // get count workdays 
 $companyid = $current_CompanyId_;
@@ -225,7 +231,7 @@ for ($day = 1; $day <= $daysInMonth; $day++) {
         $month_ = date("m", strtotime($dateString . "-" . $day));
         $date_show = $Year_ . "/" . $month_ . "/";
         $weekday = $weekdays[date("N", strtotime($date))];
-        $isHoliday = in_array($Year_ . "/" . $month_ . "/" . $date_, $holidayDates_);
+        $isHoliday = in_array($Year_ . "/" . $month_ . "/" . $date_, array_keys($holidayDates_));
         $datas[] = [
                 'date' => $month_ . "/" . $date_ . "(" . $weekday . ")",
                 'decide_color' => $weekday,
@@ -783,16 +789,21 @@ if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
                 $Array_Result = $weekendsArray;
         }
 
-        $lastValue = null;
-        foreach ($Array_Result as $element) {
-                if (isset($element['workymd'])) {
-                        $lastValue = $element['workymd'];
-                }
-        }
+        $tmpArray = array();
         $keyed = array_column($worktime_list, NULL, 'workymd'); // replace indexes with ur_user_id values
         foreach ($Array_Result as &$row) { // write directly to $array1 while iterating
                 if (isset($keyed[$row['workymd']])) { // check if shared key exists
                         $row += $keyed[$row['workymd']]; // append associative elements
+                }
+                if (!in_array($row['workymd'], array_keys($holidayDates_))) {
+                        $tmpArray[] = $row;
+                }
+        }
+        $Array_Result = $tmpArray;
+        $lastValue = null;
+        foreach ($Array_Result as $element) {
+                if (isset($element['workymd'])) {
+                        $lastValue = $element['workymd'];
                 }
         }
         $ArraySave = false;
