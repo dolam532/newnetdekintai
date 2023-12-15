@@ -701,7 +701,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 					<?php
 					foreach ($datas as $key) {
 						?>
-						<tr>
+						<tr name="workDayOfMonth">
 							<td>
 								<?php if ($key['decide_color'] == "土"): ?>
 									<a href="#" style="color:blue;">
@@ -773,7 +773,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 					<?php
 					foreach ($datas as $key) {
 						?>
-						<tr>
+					<tr name="workDayOfMonth">
 							<td>
 								<?php if ($key['decide_color'] == "土"): ?>
 									<a href="#" style="color:blue;">
@@ -1288,6 +1288,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 <!-- PDF product -->
 <form id="autopdf" action="../pdfdownload/generatepdf.php" method="post" target="_blank">
 	<input type="hidden" name="data" value="<?php echo htmlspecialchars(json_encode($datas)); ?>">
+	<input type="hidden" name="holidaysdata" value="<?php echo htmlspecialchars(json_encode($holidayDates_)); ?>">
 	<input type="hidden" name="signstamp_admin"
 		value="<?php echo htmlspecialchars(json_encode($signstamp_admin[0]['signstamp'])); ?>">
 	<input type="hidden" name="signstamp_kanri"
@@ -1799,8 +1800,32 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		});
 		//2023/11/10 submission-status  add start 
 		SetFormViewBySubmissionStatusHandler();
-		//2023/11/10 submission-status  add end 
+		//2023/11/10 submission-status  add end
+		
+		SetHollyDaysTextHandler();
 	});
+
+
+	function SetHollyDaysTextHandler() {
+		var elements = document.querySelectorAll('tr[name="workDayOfMonth"]');
+		const currentMonthHolydays = <?php echo json_encode($holidayDates_) ?>;
+		let currentSelectedYear = $('#selyy').val();
+		const currentMonthDatas = <?php echo json_encode($datas) ?>;
+		for (var i = 0; i < elements.length; i++) {
+			var monthFromElement = elements[i].textContent.trim();
+			var cleanMonth = monthFromElement.replace(/\([^)]*\)/g, '');
+			var dateToCompare = (currentSelectedYear + '/' + cleanMonth).substring(0, 10);
+
+			for (var j = 0; j < currentMonthDatas.length; j++) {
+				var currentDate = currentMonthDatas[j];
+				if (currentDate.workymd === dateToCompare && currentDate.bigo === undefined && currentDate.isHoliday == true) {
+					var lastTdElement = elements[i].querySelector('td:last-child'); 
+					lastTdElement.textContent = currentMonthHolydays[dateToCompare]; 
+				}
+			}
+		}
+
+	}
 
 
 	//2023/11/10 submission-status  add start 

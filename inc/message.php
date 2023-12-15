@@ -24,7 +24,7 @@ $login_is_not = '詳細情報はログイン後可能です。';
 $login_success = 'ログインに成功しました。';
 $logout_success = 'ログアウトに成功しました。';
 $login_fail = 'メールまたはパスワードが正しくありません。もう一度お試しください。';
-$login_email_fail = '正しいメールアドレスを入力してください。';
+$login_email_fail = 'メールアドレスまたパスワードを正しく入力してください。';
 $login_pwd_fail = 'パスワードは半角英数字のみを許可します。';
 
 // userList
