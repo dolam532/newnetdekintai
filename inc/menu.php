@@ -93,7 +93,7 @@
                 <ul class="nav navbar-nav navbar-right">
                     <?php if (isset($_SESSION['auth'])) : ?>
                         <li>
-                            <a href="../contact/noticeList.php">
+                            <a href="../user/userList.php">
                                 <span class="glyphicon glyphicon-user" id="username">
                                     <?= $_SESSION['auth_name'] ?>
                                 </span>

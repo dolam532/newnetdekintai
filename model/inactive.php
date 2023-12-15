@@ -1,6 +1,6 @@
 <?php
 // Auto logout inactive page
-if (isset($_SESSION['last_login_timestamp']) && (time() - $_SESSION['last_login_timestamp']) > 600) {
+if (isset($_SESSION['last_login_timestamp']) && (time() - $_SESSION['last_login_timestamp']) > 1200) {
     session_destroy();
     header("Location: ../index.php");
 } else {
