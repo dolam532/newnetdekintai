@@ -59,13 +59,24 @@ $dept = json_decode($_POST['dept'], true);
 $date_show = json_decode($_POST['date_show'], true);
 $template = json_decode($_POST['template'], true);
 $data = json_decode($_POST['data'], true);
+$holidaysdata = json_decode($_POST['holidaysdata'], true);
 $workmonth_list = json_decode($_POST['workmonth_list'], true);
 $companyName = json_decode($_POST['companyName'], true);
 $submission_status = json_decode($_POST['submission_status'], true);
 
+foreach ($data as &$element) {
+    if ($element['bigo'] === null && $element['isHoliday'] === true) {
+        if (isset($holidaysdata[$element['workymd']])) {
+            $element['bigo'] = $holidaysdata[$element['workymd']];
+        }
+    }
+}
+unset($element);
+
+
+
 //set output file name
 $fileOutputName = str_replace(' ', '', $name).'_'. substr($date_show, 0, 4) .  substr($date_show, 5, 2).'_勤務表'.'_.pdf';
-
 
 
 // top

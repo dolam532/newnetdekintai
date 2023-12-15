@@ -637,7 +637,7 @@ if ($_SESSION['auth'] == false) {
 					<?php
 					foreach ($datas as $key) {
 						?>
-						<tr>
+						<tr name="workDayOfMonth">
 							<td>
 								<?php if ($key['decide_color'] == "土"): ?>
 									<a href="#" style="color:blue;">
@@ -709,7 +709,7 @@ if ($_SESSION['auth'] == false) {
 					<?php
 					foreach ($datas as $key) {
 						?>
-						<tr>
+						<tr name="workDayOfMonth">
 							<td>
 								<?php if ($key['decide_color'] == "土"): ?>
 									<a href="#" style="color:blue;">
@@ -1230,6 +1230,7 @@ if ($_SESSION['auth'] == false) {
 <!-- PDF product -->
 <form id="autopdf" action="../pdfdownload/generatepdf.php" method="post" target="_blank">
 	<input type="hidden" name="data" value="<?php echo htmlspecialchars(json_encode($datas)); ?>">
+	<input type="hidden" name="holidaysdata" value="<?php echo htmlspecialchars(json_encode($holidayDates_)); ?>">
 
 	<input type="hidden" name="signstamp_admin"
 		value="<?php echo htmlspecialchars(json_encode($signstamp_admin[0]['signstamp'])); ?>">
@@ -1747,7 +1748,30 @@ if ($_SESSION['auth'] == false) {
 		//2023/11/10 submission-status  add start 
 		SetFormViewBySubmissionStatusHandler();
 		//2023/11/10 submission-status  add end 
+
+		SetHollyDaysTextHandler();
 	});
+
+	function SetHollyDaysTextHandler() {
+		var elements = document.querySelectorAll('tr[name="workDayOfMonth"]');
+		const currentMonthHolydays = <?php echo json_encode($holidayDates_) ?>;
+		let currentSelectedYear = $('#selyy').val();
+		const currentMonthDatas = <?php echo json_encode($datas) ?>;
+		for (var i = 0; i < elements.length; i++) {
+			var monthFromElement = elements[i].textContent.trim();
+			var cleanMonth = monthFromElement.replace(/\([^)]*\)/g, '');
+			var dateToCompare = (currentSelectedYear + '/' + cleanMonth).substring(0, 10);
+
+			for (var j = 0; j < currentMonthDatas.length; j++) {
+				var currentDate = currentMonthDatas[j];
+				if (currentDate.workymd === dateToCompare && currentDate.bigo === undefined && currentDate.isHoliday == true) {
+					var lastTdElement = elements[i].querySelector('td:last-child'); 
+					lastTdElement.textContent = currentMonthHolydays[dateToCompare]; 
+				}
+			}
+		}
+
+	}
 
 
 	//2023/11/10 submission-status  add start 
@@ -1891,7 +1915,7 @@ if ($_SESSION['auth'] == false) {
 					$("#holy_decide").val(holyDecideValue);
 				}
 
-			
+
 				$("#IVjobstarthh").val("<?php echo $key['jobstarthh'] ?>");
 				$("#IVjobstartmm").val("<?php echo $key['jobstartmm'] ?>");
 				$("#IVjobendhh").val("<?php echo $key['jobendhh'] ?>");
@@ -1907,20 +1931,20 @@ if ($_SESSION['auth'] == false) {
 				$("#IVdayendhh").val("<?php echo $key['dayendhh'] ?>");
 				$("#IVdayendmm").val("<?php echo $key['dayendmm'] ?>");
 				// 2023-10-03/1340-001 add end start
-						// selected when holydays
+				// selected when holydays
 				const currentMonthHolydays = <?php echo json_encode($holidayDates_) ?>;
 				for (let dateKey in currentMonthHolydays) {
 					let date = currentMonthHolydays[dateKey];
 					if (dateKey === date_show) {
 						$("#holy_decide").val(<?php echo json_encode(array_keys($HOLY_DECIDE)[1]) ?>);
-						if("<?php echo $key['bigo'] ?>" === "") {
+						if ("<?php echo $key['bigo'] ?>" === "") {
 							$("#bigo").text($('[name="bigo"]').val(date));
 						}
 						break;
 					}
 				}
 
-			
+
 			}
 			<?php
 		}
