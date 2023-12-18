@@ -39,40 +39,43 @@ include('../model/loginoutmodel.php');
             margin-left: 15px;
         }
     }
+
     .form-control {
         padding: 25px 12px;
-}
+    }
 
     label {
-    float: left;
-}
+        float: left;
+    }
+
+    button#toggle-password {
+        margin-right: -85%;
+        margin-top: -22%;
+    }
 </style>
 <div id="tile_body">
     <!-- loginout form {s} -->
     <form action="" method="post">
         <?php
         if (isset($_SESSION['login_fail'])) {
-            ?>
+        ?>
             <div class="alert alert-warning alert-dismissible" role="alert" auto-close="3000">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <?php echo $_SESSION['login_fail']; ?>
             </div>
-            <?php
+        <?php
             unset($_SESSION['login_fail']);
         }
         ?>
         <div class="text-center mb-4">
             <strong>
-            <h1 class="h2 mb-3 font-weight-normal" style="margin-bottom:40px; font-weight: bold; font-size: 45px;">ネットで勤怠</h1>
-
-         
+                <h1 class="h2 mb-3 font-weight-normal" style="margin-bottom:40px; font-weight: bold; font-size: 45px;">ネットで勤怠</h1>
+            </strong>
         </div>
-        <?php if (isset($_SESSION['auth'])): ?>
+        <?php if (isset($_SESSION['auth'])) : ?>
             <title>ログアウト</title>
             <div class="form-label-group">
-
-                <input id="email" name="email" placeholder="Email" class="form-control" type="text"
-                    value="<?= $_SESSION['auth_email'] ?>">
+                <input id="email" name="email" placeholder="Email" class="form-control" type="text" value="<?= $_SESSION['auth_email'] ?>">
                 <label for="email" class="sr-only">Email</label>
             </div>
             <br>
@@ -82,33 +85,32 @@ include('../model/loginoutmodel.php');
             </div>
             <br>
             <input class="btn btn-lg btn-primary btn-block" type="submit" id="btnLogout" name="btnLogout" value="Sign out">
-        <?php else: ?>
+        <?php else : ?>
             <title>ログイン</title>
-                <label for="email" >メールアドレス</label>
-                <div class="form-label-group">
-                    <label for="email" class="sr-only">メールアドレス</label>
-                    <input id="email" name="email" placeholder="メールアドレス" class="form-control" type="text"
-                        value="<?= $_POST['email'] ?>">
-                </div>
-                <br>
-                <label for="email" >パスワード</label>
-            <div class="form-label-group" id="divpwd">
-                <input id="pwd" name="pwd" placeholder="パスワード" class="form-control" type="password"
-                    value="<?= $_POST['pwd'] ?>">
-                <label for="pwd" class="sr-only">パスワード</label>
+            <label for="email">メールアドレス</label><br>
+            <div class="form-label-group">
+                <label for="email" class="sr-only">メールアドレス</label>
+                <input id="email" name="email" placeholder="メールアドレス" class="form-control" type="text" value="<?= $_POST['email'] ?>">
             </div>
-
-
-    <br>
-    <input class="btn btn-lg btn-primary btn-block" type="submit" id="btnLogin" name="btnLogin" value="ログイン">
-<?php endif; ?>
-<span style="font-size:0.7em;">毎月の勤怠資料がない場合は新規登録するからログイン時間がかかる場合もあります。</span>
-<p class="mt-5 mb-3 text-muted text-center" style="margin-top:40px">© 2019. GANASYS. All rights reserved.</p>
-</form>
+            <br>
+            <label for="password">パスワード</label><br>
+            <div class="form-label-group" id="divpwd">
+                <label for="pwd" class="sr-only">パスワード</label>
+                <input id="pwd" name="pwd" placeholder="パスワード" class="form-control" type="password" value="<?= $_POST['pwd'] ?>">
+                <button class="btn btn-default" type="button" id="toggle-password">
+                    <span id="eye-icon" class="glyphicon glyphicon-eye-close"></span>
+                </button>
+            </div>
+            <br>
+            <input class="btn btn-lg btn-primary btn-block" type="submit" id="btnLogin" name="btnLogin" value="ログイン">
+        <?php endif; ?>
+        <span style="font-size:0.7em;">毎月の勤怠資料がない場合は新規登録するからログイン時間がかかる場合もあります。</span>
+        <p class="mt-5 mb-3 text-muted text-center" style="margin-top:40px">© 2019. GANASYS. All rights reserved.</p>
+    </form>
 </div>
 <script>
     // Login button handling
-    $(document).on('click', '#btnLogin', function (e) {
+    $(document).on('click', '#btnLogin', function(e) {
         var email = $("#email").val();
         var pwd = $("#pwd").val();
         var emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
@@ -143,7 +145,7 @@ include('../model/loginoutmodel.php');
         }
     });
 
-    window.onload = function () {
+    window.onload = function() {
         setTimeout(hideLoadingOverlay, 100);
         startLoading();
     };
@@ -161,13 +163,29 @@ include('../model/loginoutmodel.php');
     }
 
     showLoadingOverlay();
+
     function startLoading() {
         NProgress.start();
-        setTimeout(function () {
+        setTimeout(function() {
             NProgress.done();
         }, 100);
     }
 
+    // JavaScript to toggle password visibility
+    $(document).ready(function() {
+        $("#toggle-password").click(function() {
+            var pwdInput = $("#pwd");
+            var eyeIcon = $("#eye-icon");
 
+            // Toggle password visibility
+            if (pwdInput.attr("type") === "password") {
+                pwdInput.attr("type", "text");
+                eyeIcon.removeClass("glyphicon-eye-close").addClass("glyphicon-eye-open");
+            } else {
+                pwdInput.attr("type", "password");
+                eyeIcon.removeClass("glyphicon-eye-open").addClass("glyphicon-eye-close");
+            }
+        });
+    });
 </script>
 <?php include('../inc/footer.php'); ?>
