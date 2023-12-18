@@ -95,8 +95,8 @@
                         <li>
                             <a href="../user/userList.php">
                                 <span class="glyphicon glyphicon-user" id="username">
+                                    </span>
                                     <?= $_SESSION['auth_name'] ?>
-                                </span>
                             </a>
                         </li>
                         <li class="logout">
