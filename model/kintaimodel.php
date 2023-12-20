@@ -42,7 +42,7 @@ if ($result) {
     } else {
     }
 }
-if(!isset($currentDeptText)) {
+if (!isset($currentDeptText)) {
     $currentDeptText = '';
 }
 
@@ -150,18 +150,16 @@ if ($result) {
         $currentSubmission_status = $row['submission_status'];
     }
 }
+    // ----2023-12-20--- add admin status chg start // 
 if ($currentSubmission_status == null) {
-    $currentSubmission_status = 0;
+    $currentSubmission_status = 11;
+ 
 }
-$submissionStatusText = "";
-if ($submissionStatusText == null) {
-    $submissionStatusText = $SUBMISSTION_STATUS[0];
-}
+$submissionStatusText = $SUBMISSTION_STATUS[$currentSubmission_status];
 
-if ($submissionStatus == null) {
-    $submissionStatus = 0;
-}
-$submissionStatusText = isset($SUBMISSTION_STATUS[$currentSubmission_status]) ? $SUBMISSTION_STATUS[$currentSubmission_status] : $SUBMISSTION_STATUS[0];
+// ----2023-12-20--- add admin status chg end // 
+
+
 
 //----- 2023/11/13---- submisstion add end//
 
@@ -174,8 +172,6 @@ for ($day = 1; $day <= $daysInMonth; $day++) {
     $date_show = $Year_ . "/" . $month_ . "/";
     $weekday = $weekdays[date("N", strtotime($date))];
     $isHoliday = in_array($Year_ . "/" . $month_ . "/" . $date_, array_keys($holidayDates_));
-
-
     $datas[] = [
         'date' => $month_ . "/" . $date_ . "(" . $weekday . ")",
         'decide_color' => $weekday,
@@ -184,6 +180,7 @@ for ($day = 1; $day <= $daysInMonth; $day++) {
         'isHoliday' => $isHoliday
     ];
 }
+
 
 //----- 2023/11/16 ---- submisstion add start//
 // Get List Kanrisha 
@@ -285,7 +282,7 @@ $countHoliday = 0;
 $countKuyka = 0;
 $countDaikyu = 0;
 $countKekkin = 0;
-$countClose= 0;
+$countClose = 0;
 //---2023-10-18 add end ------//
 foreach ($worktime_list as $work) {
     if (isset($work['jobstarthh']) && !empty($work['jobstarthh'])) {
@@ -391,8 +388,7 @@ foreach ($datas as &$row) { // write directly to $array1 while iterating
 
 
 
-
-// 2023-10-20----- add start //   $email_
+// 2023-10-20----- add start //   
 if (isset($_POST['changeGenid'])) {
     $selectedGenid = mysqli_real_escape_string($conn, $_POST['selectedGenid']);
     $sql = "UPDATE tbl_user SET `genid` = '$selectedGenid' , `upt_dt`= '$upt_dt'  where `email` = '$email_' AND `companyid` = ' $companyid' ;";
@@ -411,7 +407,7 @@ if (isset($_POST['SaveUpdateKintai'])) {
 
     // $currentSubmission_status
     //----- 2023/11/13---- submisstion add start//
-    if ($currentSubmission_status != 0) {
+    if ($currentSubmission_status != 0 && $currentSubmission_status != 11) {
         $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
         return;
     }
@@ -509,7 +505,7 @@ if (isset($_POST['SaveUpdateKintai'])) {
 // Delete data to tbl_worktime table of database
 if (isset($_POST['DeleteKintai'])) {
 
-    if ($currentSubmission_status != 0) {
+    if ($currentSubmission_status != 0 && $currentSubmission_status != 11) {
         $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
         return;
     }
@@ -536,7 +532,7 @@ if (isset($_POST['DeleteKintai'])) {
 
 // 自動入力
 if (isset($_POST['AutoUpdateKintai'])) {
-    if ($currentSubmission_status != 0) {
+    if ($currentSubmission_status != 0 && $currentSubmission_status != 11) {
         $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
         return;
     }
@@ -651,27 +647,27 @@ if (isset($_POST['AutoUpdateKintai'])) {
         $Array_Result = $weekendsArray;
     }
 
- 
 
-    $tmpArray = array(); 
+
+    $tmpArray = array();
     $keyed = array_column($worktime_list, NULL, 'workymd'); // replace indexes with ur_user_id values
     foreach ($Array_Result as $row) { // write directly to $array1 while iterating
         if (isset($keyed[$row['workymd']])) { // check if shared key exists
             $row += $keyed[$row['workymd']]; // append associative elements
         }
         if (!in_array($row['workymd'], array_keys($holidayDates_))) {
-            $tmpArray[] = $row; 
+            $tmpArray[] = $row;
         }
 
     }
-    $Array_Result =   $tmpArray;
+    $Array_Result = $tmpArray;
     $lastValue = null;
     foreach ($Array_Result as $element) {
         if (isset($element['workymd'])) {
             $lastValue = $element['workymd'];
         }
     }
-    
+
     $ArraySave = false;
     $c = 0;
     $offTimeAutohh = '';
@@ -775,7 +771,8 @@ if (isset($_POST['AutoUpdateKintai'])) {
 
 // Save data to tbl_workmonth table of database
 if (isset($_POST['MonthSaveKintai'])) {
-    if ($currentSubmission_status != 0) {
+    error_log("CURRENT STATUS:" . $currentSubmission_status);
+    if ($currentSubmission_status != 0 && $currentSubmission_status != 11) {
         $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
         return;
     }
@@ -797,8 +794,8 @@ if (isset($_POST['MonthSaveKintai'])) {
     $genid = mysqli_real_escape_string($conn, $gen_id_);
     $workym = mysqli_real_escape_string($conn, $yearmonth);
 
-    
-    
+
+
     $jobhour2 = formatHour(mysqli_real_escape_string($conn, $jobhh_top_));
     $jobminute2 = mysqli_real_escape_string($conn, $jobmm_top_);
     $jobhour = formatHour(mysqli_real_escape_string($conn, $jobhh_bottom_));
@@ -860,12 +857,24 @@ WHERE
 $result_workmonth = mysqli_query($conn, $sql_workmonth);
 $workmonth_list = mysqli_fetch_all($result_workmonth, MYSQLI_ASSOC);
 
+// ----2023-12-20--- add admin status add start // 
 
+if ($currentSubmission_status == 11) {
+    if (count($worktime_list) == 0 && count($workmonth_list) == 0) {
+        $currentSubmission_status = 11;  // key of $SUBMISSTION_STATUS
+    } 
+    if(count($worktime_list) != 0 || count($workmonth_list) != 0) {
+        $currentSubmission_status = 0 ;  // key of $SUBMISSTION_STATUS
+    }
+    $submissionStatusText = $SUBMISSTION_STATUS[$currentSubmission_status];
+}
+
+// ----2023-12-20--- add admin status add end // 
 
 
 // Delete data to tbl_worktime table and tbl_workmonth of database
 if (isset($_POST['DeleteAll'])) {
-    if ($currentSubmission_status != 0) {
+    if ($currentSubmission_status != 0 && $currentSubmission_status != 11) {
         $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
         return;
     }
@@ -901,6 +910,7 @@ if (isset($_POST['DeleteAll'])) {
         }
     }
 }
+
 
 
 // kintaiMonthly.php

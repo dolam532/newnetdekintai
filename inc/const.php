@@ -60,6 +60,7 @@ $SUBMISSTION_STATUS = array(
     1 => '提出済み',
     2 => '担当者承認済み',
     3 => '責任者承認済み',
+    11 => '作成前',
 );
 
 // ALLOW TYPE

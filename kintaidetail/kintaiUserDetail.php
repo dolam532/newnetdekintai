@@ -555,8 +555,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		</p>
 		</p>
 	</div>
-
-	<?php if ($submissionStatusText !== $SUBMISSTION_STATUS[0]): ?>
+	
+	<?php if (($submissionStatusText !== $SUBMISSTION_STATUS[0]) && ($submissionStatusText !== $SUBMISSTION_STATUS[11])): ?>
 		<div class="row submissionStatusNotice">
 			<p class="submissionNoticeElem" style=' font-style: italic; font-size: smaller;'>*
 				<?php echo $kakutei_success_admin ?>
@@ -1836,12 +1836,10 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		setFormInputableWithSubmissionStatus();
 	}
 
-
 	function SetColorToSubmissionStatus() {
 		var submissionStatusText = $('#submission-status').text().trim();
 		if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[0] ?>') {
 			$('#submission-status').removeClass();
-
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[1] ?>') {
 			$('#submission-status').removeClass();
 			$('#submission-status').addClass('submission-status_1');
@@ -1851,12 +1849,13 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[3] ?>') {
 			$('#submission-status').removeClass();
 			$('#submission-status').addClass('submission-status_3');
+		}  else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[11] ?>') {
+			$('#submission-status').removeClass();
 		}
 	}
 
 
 	function setFormInputableWithSubmissionStatus() {
-
 		var submissionStatusText = $('#submission-status').text().trim();
 		//  buttons -> Default On
 		var adminButtons = $("#WorkmonthSekininShonin, #WorkmonthShonin, #WorkmonthModoshi ");
@@ -1867,24 +1866,22 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 		modalButons.prop("disabled", false);
 		SubmisstionStatusNotice = "<?php echo $submised_not_change ?>"
 
-
 		// when match -> off element 
 		if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[0] ?>') {
 			adminButtons.prop("disabled", true);
 			SubmisstionStatusNotice = ""
-
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[1] ?>') {
 			userButtons.prop("disabled", true);
 			modalButons.prop("disabled", true);
-
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[2] ?>') {
 			userButtons.prop("disabled", true);
 			modalButons.prop("disabled", true);
-
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[3] ?>') {
 			userButtons.prop("disabled", true);
 			modalButons.prop("disabled", true);
-
+		}else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[11] ?>') {
+			adminButtons.prop("disabled", true);
+			SubmisstionStatusNotice = ""
 		}
 	}
 	// add check before submiss
@@ -1901,9 +1898,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			}
 		}
 	}
-
 	//2023/11/10 submission-status  add end 	
-
 
 	// Funtion for click day of week
 	$(document).on('click', '.showModal', function () {

@@ -128,7 +128,6 @@ foreach ($workmonth_list as $key) {
 }
 
 
-
 // get company Name 
 $getCompanysql = "SELECT `companyname` FROM tbl_company WHERE `companyid` = '$current_CompanyId_' LIMIT 1";
 $companyName_ = "";
@@ -207,17 +206,11 @@ if ($result) {
         }
 }
 if ($currentSubmission_status == null) {
-        $currentSubmission_status = 0;
-}
-$submissionStatusText = "";
-if ($submissionStatusText == null) {
-        $submissionStatusText = $SUBMISSTION_STATUS[0];
+        $currentSubmission_status = 11;
 }
 
-if ($submissionStatus == null) {
-        $submissionStatus = 0;
-}
-$submissionStatusText = isset($SUBMISSTION_STATUS[$currentSubmission_status]) ? $SUBMISSTION_STATUS[$currentSubmission_status] : $SUBMISSTION_STATUS[0];
+$submissionStatusText = $SUBMISSTION_STATUS[$currentSubmission_status];
+
 // error_log("CURRENT SUBMIS STATUS: " . $currentSubmission_status);
 //----- 2023/11/13---- submisstion add end//
 
@@ -443,6 +436,26 @@ foreach ($datas as &$row) { // write directly to $array1 while iterating
         }
 }
 
+
+
+// ----2023-12-20--- add admin status add start // 
+
+if ($currentSubmission_status == 11) {
+        if (count($worktime_list) == 0 && count($workmonth_list) == 0) {
+            $currentSubmission_status = 11;  // key of $SUBMISSTION_STATUS
+        } 
+        if(count($worktime_list) != 0 || count($workmonth_list) != 0) {
+            $currentSubmission_status = 0 ;  // key of $SUBMISSTION_STATUS
+        }
+        $submissionStatusText = $SUBMISSTION_STATUS[$currentSubmission_status];
+    }
+    
+    // ----2023-12-20--- add admin status add end // 
+
+
+
+
+
 // 2023-10-20----- add start // 
 if (isset($_POST['changeGenid'])) {
         $companyid = $current_CompanyId_;
@@ -461,7 +474,7 @@ if (isset($_POST['changeGenid'])) {
 
 // Save data to tbl_worktime table of database 
 if (isset($_POST['SaveUpdateKintaiUserDetail'])) {
-        if ($currentSubmission_status != 0) {
+        if ($currentSubmission_status != 0 && $currentSubmission_status != 11) {
                 $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
                 return;
         }
@@ -552,7 +565,7 @@ if (isset($_POST['SaveUpdateKintaiUserDetail'])) {
 // Delete data to tbl_worktime table of database
 if (isset($_POST['DeleteKintaiUserDetail'])) {
 
-        if ($currentSubmission_status != 0) {
+        if ($currentSubmission_status != 0 && $currentSubmission_status != 11) {
                 $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
                 return;
         }
@@ -576,7 +589,7 @@ if (isset($_POST['DeleteKintaiUserDetail'])) {
 // Save data to tbl_workmonth table of database
 if (isset($_POST['MonthSaveKintaiUserDetail'])) {
 
-        if ($currentSubmission_status != 0) {
+        if ($currentSubmission_status != 0 && $currentSubmission_status != 11) {
                 $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
                 return;
         }
@@ -690,7 +703,7 @@ $genba_list = mysqli_fetch_all($result_genba, MYSQLI_ASSOC);
 
 // 自動入力
 if (isset($_POST['AutoUpdateKintaiUserDetail'])) {
-        if ($currentSubmission_status != 0) {
+        if ($currentSubmission_status != 0 && $currentSubmission_status != 11) {
                 $_SESSION['is_submissed_notchange'] = $is_submissed_notchange;
                 return;
         }

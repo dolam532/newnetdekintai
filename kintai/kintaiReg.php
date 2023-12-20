@@ -507,7 +507,7 @@ if ($_SESSION['auth'] == false) {
 		</p>
 	</div>
 
-	<?php if ($submissionStatusText !== $SUBMISSTION_STATUS[0]): ?>
+	<?php if (($submissionStatusText !== $SUBMISSTION_STATUS[0]) && ($submissionStatusText !== $SUBMISSTION_STATUS[11])): ?>
 		<div class="row submissionStatusNotice">
 			<p class="submissionNoticeElem" style=' font-style: italic; font-size: smaller;'>*
 				<?php echo $kakutei_success ?>
@@ -611,6 +611,10 @@ if ($_SESSION['auth'] == false) {
 			<div class="print_btn">
 				<button id="submit-button" class="btn btn-default" style="width: auto;" type="button">勤務表印刷</button>
 			</div>
+			<div class="print_btn" style="display: none;">
+    			<button id="submitzip-button" class="btn btn-default" style="width: auto;" type="button">Zipダウンロード</button>
+		</div>
+
 		</div>
 	</div>
 
@@ -1227,70 +1231,10 @@ if ($_SESSION['auth'] == false) {
 	</table>
 </div>
 
-<!-- PDF product -->
-<form id="autopdf" action="../pdfdownload/generatepdf.php" method="post" target="_blank">
-	<input type="hidden" name="data" value="<?php echo htmlspecialchars(json_encode($datas)); ?>">
-	<input type="hidden" name="holidaysdata" value="<?php echo htmlspecialchars(json_encode($holidayDates_)); ?>">
-
-	<input type="hidden" name="signstamp_admin"
-		value="<?php echo htmlspecialchars(json_encode($signstamp_admin[0]['signstamp'])); ?>">
-	<input type="hidden" name="signstamp_kanri"
-		value="<?php echo htmlspecialchars(json_encode($signstamp_kanri[0]['signstamp'])); ?>">
 
 
-	<input type="hidden" name="signstamp_user"
-		value="<?php echo htmlspecialchars(json_encode($signstamp_teishutsu[0]['signstamp'])); ?>">
-
-	<input type="hidden" name="name" value="<?php echo htmlspecialchars(json_encode($_SESSION['auth_name'])); ?>">
-	<input type="hidden" name="dept" value="<?php echo htmlspecialchars(json_encode($currentDeptText)); ?>">
-	<input type="hidden" name="date_show" value="<?php echo htmlspecialchars(json_encode($date_show)); ?>">
-	<input type="hidden" name="companyName" value="<?php echo htmlspecialchars(json_encode($companyName_)); ?>">
-	<input type="hidden" name="template" value="<?php echo htmlspecialchars(json_encode($decide_template_)); ?>">
-	<input type="hidden" name="submission_status"
-		value="<?php echo htmlspecialchars(json_encode($currentSubmission_status)); ?>">
-	<!-- top   earlydayswork_top -->
-	<input type="hidden" name="totalworkhh_top" value="<?php echo htmlspecialchars(json_encode($totalworkhh_top)); ?>">
-	<input type="hidden" name="totalworkmm_top" value="<?php echo htmlspecialchars(json_encode($totalworkmm_top)); ?>">
-	<input type="hidden" name="cnprejob_top" value="<?php echo htmlspecialchars(json_encode($cnprejob_top)); ?>">
-	<input type="hidden" name="cnactjob_top" value="<?php echo htmlspecialchars(json_encode($cnactjob_top)); ?>">
-	<input type="hidden" name="totaldayhh_top" value="<?php echo htmlspecialchars(json_encode($totaldayhh_top)); ?>">
-	<input type="hidden" name="totaldaymm_top" value="<?php echo htmlspecialchars(json_encode($totaldaymm_top)); ?>">
-	<input type="hidden" name="holydayswork_top"
-		value="<?php echo htmlspecialchars(json_encode($holydayswork_top)); ?>">
-	<input type="hidden" name="offdayswork_top" value="<?php echo htmlspecialchars(json_encode($offdayswork_top)); ?>">
-	<input type="hidden" name="closedayswork_top"
-		value="<?php echo htmlspecialchars(json_encode($closedayswork_top)); ?>">
-	<input type="hidden" name="delaydayswork_top"
-		value="<?php echo htmlspecialchars(json_encode($delaydayswork_top)); ?>">
-	<input type="hidden" name="earlydayswork_top"
-		value="<?php echo htmlspecialchars(json_encode($earlydayswork_top)); ?>">
 
 
-	<!-- bottom -->
-	<input type="hidden" name="totalworkhh_bottom"
-		value="<?php echo htmlspecialchars(json_encode($totalworkhh_bottom_pdf)); ?>">
-	<input type="hidden" name="totalworkmm_bottom"
-		value="<?php echo htmlspecialchars(json_encode($totalworkmm_bottom_pdf)); ?>">
-	<input type="hidden" name="cnprejob_bottom"
-		value="<?php echo htmlspecialchars(json_encode($cnprejob_bottom_pdf)); ?>">
-	<input type="hidden" name="cnactjob_bottom"
-		value="<?php echo htmlspecialchars(json_encode($cnactjob_bottom_pdf)); ?>">
-	<input type="hidden" name="totaldayhh_bottom"
-		value="<?php echo htmlspecialchars(json_encode($totaldayhh_bottom_pdf)); ?>">
-	<input type="hidden" name="totaldaymm_bottom"
-		value="<?php echo htmlspecialchars(json_encode($totaldaymm_bottom_pdf)); ?>">
-	<input type="hidden" name="holydayswork_bottom"
-		value="<?php echo htmlspecialchars(json_encode($holydayswork_bottom_pdf)); ?>">
-	<input type="hidden" name="offdayswork_bottom"
-		value="<?php echo htmlspecialchars(json_encode($offdayswork_bottom_pdf)); ?>">
-	<input type="hidden" name="closedayswork_bottom"
-		value="<?php echo htmlspecialchars(json_encode($closedayswork_bottom_pdf)); ?>">
-	<input type="hidden" name="delaydayswork_bottom"
-		value="<?php echo htmlspecialchars(json_encode($delaydayswork_bottom_pdf)); ?>">
-	<input type="hidden" name="earlydayswork_bottom"
-		value="<?php echo htmlspecialchars(json_encode($earlydayswork_bottom_pdf)); ?>">
-	<input type="hidden" name="workmonth_list" value="<?php echo htmlspecialchars(json_encode($workmonth_list)); ?>">
-</form>
 
 <!-- Modal 勤務タイプ選択 -->
 <div class="row">
@@ -1787,9 +1731,8 @@ if ($_SESSION['auth'] == false) {
 
 	function SetColorToSubmissionStatus() {
 		var submissionStatusText = $('#submission-status').text().trim();
-		if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[0] ?>') {
+		if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[0] ?>' ) {
 			$('#submission-status').removeClass();
-
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[1] ?>') {
 			$('#submission-status').removeClass();
 			$('#submission-status').addClass('submission-status_1');
@@ -1799,6 +1742,8 @@ if ($_SESSION['auth'] == false) {
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[3] ?>') {
 			$('#submission-status').removeClass();
 			$('#submission-status').addClass('submission-status_3');
+		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[11] ?>') {
+			$('#submission-status').removeClass();
 		}
 	}
 
@@ -1828,10 +1773,13 @@ if ($_SESSION['auth'] == false) {
 			userButtons.prop("disabled", true);
 			modalButons.prop("disabled", true);
 
-
 		} else if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[3] ?>') {
 			userButtons.prop("disabled", true);
 			modalButons.prop("disabled", true);
+		} else if  (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[11] ?>') {
+			adminButtons.prop("disabled", true);
+			SubmisstionStatusNotice = ""
+
 		}
 	}
 
@@ -2251,6 +2199,16 @@ if ($_SESSION['auth'] == false) {
 	$("#submit-button").click(function (event) {
 		event.preventDefault(); // Prevent the default form submission
 		$("#autopdf").submit();
+		//	 loading UX
+		// load waiting , when loading can't click 
+		setTimeout(hideLoadingOverlay, 1000);
+		startLoading();
+	});
+
+		// Submit for 自動入力 Error Check
+		$("#submitzip-button").click(function (event) {
+		event.preventDefault(); // Prevent the default form submission
+		$("#autozip").submit();
 		//	 loading UX
 		// load waiting , when loading can't click 
 		setTimeout(hideLoadingOverlay, 1000);
