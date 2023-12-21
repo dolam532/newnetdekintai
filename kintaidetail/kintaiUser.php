@@ -147,7 +147,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 									<?= $user['email'] ?>
 								</span></td>
 							<td><span name="dept">
-									<?= $user['dept'] ?>
+									<?= $user['deptname'] ?>
 								</span></td>
 							<td><span name="grade">
 									<?= $user['grade'] ?>

@@ -4,9 +4,17 @@ $reg_dt = date('Y-m-d H:i:s');
 $upt_dt = date('Y-m-d H:i:s');
 
 // Select data from tbl_user
-$sql_user = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`companyid`="' . $_SESSION['auth_companyid'] . '"';
+
+$sql_user = 'SELECT tbl_user.*, tbl_codebase.name AS deptname
+             FROM `tbl_user`
+             LEFT JOIN `tbl_codebase` ON `tbl_user`.`dept` = `tbl_codebase`.`code`
+             WHERE `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+              AND  `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"';
+
 $result_user = mysqli_query($conn, $sql_user);
 $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
+
+// --> add dept text 部署
 
 // ----2023-12-20--- add admin status add start // 
 $year = $_POST['selyy'];
