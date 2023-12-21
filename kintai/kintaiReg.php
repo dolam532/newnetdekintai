@@ -1746,7 +1746,7 @@ if ($_SESSION['auth'] == false) {
 			$('#submission-status').removeClass();
 		}
 	}
-
+	
 
 	function setFormInputableWithSubmissionStatus() {
 		var submissionStatusText = $('#submission-status').text().trim();

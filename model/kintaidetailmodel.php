@@ -8,8 +8,109 @@ $sql_user = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`companyid`="' . $_SESSIO
 $result_user = mysqli_query($conn, $sql_user);
 $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 
+// ----2023-12-20--- add admin status add start // 
+$year = $_POST['selyy'];
+$month = $_POST['selmm'];
+
+if (!isset($year)) {
+        $year = $_SESSION['selyy'];
+}
+if (!isset($month)) {
+        $month = $_SESSION['selmm'];
+}
+
+$sql_getListSubmissionStatus = 'SELECT `uid`, `email`, `submission_status` 
+    FROM `tbl_workmonth` 
+    WHERE `tbl_workmonth`.`workym` = \'' . $year . $month . '\' 
+    AND `tbl_workmonth`.`companyid` = "' . $_SESSION['auth_companyid'] . '"';
+
+$result_listSubmissionStatus = mysqli_query($conn, $sql_getListSubmissionStatus);
+$listSubmissionStatus = mysqli_fetch_all($result_listSubmissionStatus, MYSQLI_ASSOC);
+
+$companyId = $_SESSION['auth_companyid'];
+$searchYearMonthDay = $year . '/' . $month . '/%';
+
+$sql_getListEditting = "SELECT `uid`, `email`
+    FROM `tbl_worktime` 
+    WHERE `tbl_worktime`.`workymd` LIKE '$searchYearMonthDay'
+    AND `tbl_worktime`.`companyid` = $companyId
+    GROUP BY `uid`, `email`";
 
 
+$result_listEditting = mysqli_query($conn, $sql_getListEditting);
+$listEditting = mysqli_fetch_all($result_listEditting, MYSQLI_ASSOC);
+
+foreach ($listEditting as $editting) {
+        $found = false;
+        foreach ($listSubmissionStatus as $submission) {
+                if ($submission['uid'] === $editting['uid'] && $submission['email'] === $editting['email']) {
+                        $found = true;
+                        break;
+                }
+        }
+        if (!$found) {
+                $newSubmission = array(
+                        'uid' => $editting['uid'],
+                        'email' => $editting['email'],
+                        'submission_status' => 0 // Set submission_status to 0
+                );
+                $listSubmissionStatus[] = $newSubmission;
+        }
+}
+
+foreach ($user_list as $key => $user) {
+        $found = false;
+        foreach ($listSubmissionStatus as $submission) {
+            if ($submission['uid'] === $user['uid'] && $submission['email'] === $user['email']) {
+                $found = true;
+                $user_list[$key]['submission_status'] = $submission['submission_status'];
+                break;
+            }
+        }
+        if (!$found) {
+            $user_list[$key]['submission_status'] = 11; // Set submission_status to 11 as default
+        }
+    }
+    
+
+
+// change show by filter key $SUBMISSTION_STATUS_FILTER
+$keys = array_keys($SUBMISSTION_STATUS_FILTER);
+$selectedFilter = $_POST['filterShow'];
+if (!isset($selectedFilter)) {
+        $selectedFilter = -1;
+} 
+if ($selectedFilter == $keys[1]) {  // 11 
+        $filteredUserList = array_filter($user_list, function ($user) use ($keys) {
+                return $user['submission_status'] == $keys[1];
+            });
+            $user_list = $filteredUserList;
+}
+if ($selectedFilter == $keys[2]) {  // 0 
+        $filteredUserList = array_filter($user_list, function ($user) use ($keys) {
+                return $user['submission_status'] == $keys[2];
+            });
+            $user_list = $filteredUserList;
+}
+if ($selectedFilter == $keys[3]) {  // 1 
+        $filteredUserList = array_filter($user_list, function ($user) use ($keys) {
+                return $user['submission_status'] == $keys[3];
+            });
+            $user_list = $filteredUserList;
+}
+if ($selectedFilter == $keys[4]) {  // 2 
+        $filteredUserList = array_filter($user_list, function ($user) use ($keys) {
+                return $user['submission_status'] == $keys[4];
+            });
+            $user_list = $filteredUserList;
+}
+if ($selectedFilter == $keys[5]) {  // 3
+        $filteredUserList = array_filter($user_list, function ($user) use ($keys) {
+                return $user['submission_status'] == $keys[5];
+            });
+            $user_list = $filteredUserList;
+}
+// ----2023-12-20--- add admin status add end // 
 
 $email_g = $_SESSION['auth_email'];
 $uid_g = $_SESSION['auth_uid'];
@@ -442,15 +543,15 @@ foreach ($datas as &$row) { // write directly to $array1 while iterating
 
 if ($currentSubmission_status == 11) {
         if (count($worktime_list) == 0 && count($workmonth_list) == 0) {
-            $currentSubmission_status = 11;  // key of $SUBMISSTION_STATUS
-        } 
-        if(count($worktime_list) != 0 || count($workmonth_list) != 0) {
-            $currentSubmission_status = 0 ;  // key of $SUBMISSTION_STATUS
+                $currentSubmission_status = 11;  // key of $SUBMISSTION_STATUS
+        }
+        if (count($worktime_list) != 0 || count($workmonth_list) != 0) {
+                $currentSubmission_status = 0;  // key of $SUBMISSTION_STATUS
         }
         $submissionStatusText = $SUBMISSTION_STATUS[$currentSubmission_status];
-    }
-    
-    // ----2023-12-20--- add admin status add end // 
+}
+
+// ----2023-12-20--- add admin status add end // 
 
 
 

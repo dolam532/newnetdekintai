@@ -62,6 +62,16 @@ $SUBMISSTION_STATUS = array(
     3 => '責任者承認済み',
     11 => '作成前',
 );
+// 社員勤務表 - STATUS - FILTER 
+$SUBMISSTION_STATUS_FILTER = array(
+    -1 => '全て',
+    11 => '作成前',
+    0 => '編集中',
+    1 => '提出済み',
+    2 => '担当者承認済み',
+    3 => '責任者承認済み',
+    
+);
 
 // ALLOW TYPE
 DEFINE('SEARCH_ALLOW', '9');
