@@ -1265,10 +1265,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 						|| $key['holydays2'] !== $holydayswork_top || $key['offdays2'] !== $offdayswork_top
 						|| $key['delaydays2'] !== $delaydayswork_top || $key['earlydays2'] !== $earlydayswork_top
 					) {
-						// 2023/11/10 submission-status  chg start  //
-						// echo '<p style="color: red;" >' . $kintai_click_month . '</p>';
 						echo '<p style="color: red;" id="kintaiWorkMonth-registing">' . $kintai_click_month . '</p>';
-						// 2023/11/10 submission-status  chg end  //
 					}
 					//---- 2023-10-18------ add start //	
 					if ($cnprejob_top === '0') {

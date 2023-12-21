@@ -611,9 +611,7 @@ if ($_SESSION['auth'] == false) {
 			<div class="print_btn">
 				<button id="submit-button" class="btn btn-default" style="width: auto;" type="button">勤務表印刷</button>
 			</div>
-			<div class="print_btn" style="display: none;">
-    			<button id="submitzip-button" class="btn btn-default" style="width: auto;" type="button">Zipダウンロード</button>
-		</div>
+
 
 		</div>
 	</div>
@@ -1192,10 +1190,7 @@ if ($_SESSION['auth'] == false) {
 						|| $key['holydays2'] !== $holydayswork_top || $key['offdays2'] !== $offdayswork_top || $key['closedays2'] !== $closedayswork_top
 						|| $key['delaydays2'] !== $delaydayswork_top || $key['earlydays2'] !== $earlydayswork_top
 					) {
-						// 2023/11/10 submission-status  chg start  //
-						// echo '<p style="color: red;" >' . $kintai_click_month . '</p>';
 						echo '<p style="color: red;" id="kintaiWorkMonth-registing">' . $kintai_click_month . '</p>';
-						// 2023/11/10 submission-status  chg end  //
 					}
 
 					if ($cnprejob_top === '0') {
@@ -1210,10 +1205,7 @@ if ($_SESSION['auth'] == false) {
 						|| $key['holydays2'] !== $holydayswork_top || $key['offdays2'] !== $offdayswork_top || $key['closedays2'] !== $closedayswork_top
 						|| $key['delaydays2'] !== $delaydayswork_top || $key['earlydays2'] !== $earlydayswork_top
 					) {
-						// 2023/11/10 submission-status  chg start  //
-						// echo '<p style="color: red;" >' . $kintai_click_month . '</p>';
 						echo '<p style="color: red;" id="kintaiWorkMonth-registing">' . $kintai_click_month . '</p>';
-						// 2023/11/10 submission-status  chg end  //
 					}
 
 					if ($cnprejob_top === '0') {
@@ -1232,8 +1224,69 @@ if ($_SESSION['auth'] == false) {
 </div>
 
 
+<!-- PDF product -->
+<form id="autopdf" action="../pdfdownload/generatepdf.php" method="post" target="_blank">
+	<input type="hidden" name="data" value="<?php echo htmlspecialchars(json_encode($datas)); ?>">
+	<input type="hidden" name="holidaysdata" value="<?php echo htmlspecialchars(json_encode($holidayDates_)); ?>">
+	<input type="hidden" name="signstamp_admin"
+		value="<?php echo htmlspecialchars(json_encode($signstamp_admin[0]['signstamp'])); ?>">
+	<input type="hidden" name="signstamp_kanri"
+		value="<?php echo htmlspecialchars(json_encode($signstamp_kanri[0]['signstamp'])); ?>">
+
+	<?php
+	$signstamp_value = !isset($signstamp_teishutsu[0]['signstamp']) ? '' : htmlspecialchars(json_encode($signstamp_teishutsu[0]['signstamp']));
+	?>
+	<input type="hidden" name="signstamp_user" value="<?php echo $signstamp_value; ?>">
+	<input type="hidden" name="name" value="<?php echo htmlspecialchars(json_encode($employee_name)); ?>">
+	<input type="hidden" name="dept" value="<?php echo htmlspecialchars(json_encode($currentDeptText)); ?>">
+	<input type="hidden" name="date_show" value="<?php echo htmlspecialchars(json_encode($date_show)); ?>">
+	<input type="hidden" name="companyName" value="<?php echo htmlspecialchars(json_encode($companyName_)); ?>">
+	<input type="hidden" name="template" value="<?php echo htmlspecialchars(json_encode($decide_template_)); ?>">
+	<input type="hidden" name="submission_status"
+		value="<?php echo htmlspecialchars(json_encode($currentSubmission_status)); ?>">
+	<!-- top   earlydayswork_top -->
+	<input type="hidden" name="totalworkhh_top" value="<?php echo htmlspecialchars(json_encode($totalworkhh_top)); ?>">
+	<input type="hidden" name="totalworkmm_top" value="<?php echo htmlspecialchars(json_encode($totalworkmm_top)); ?>">
+	<input type="hidden" name="cnprejob_top" value="<?php echo htmlspecialchars(json_encode($cnprejob_top)); ?>">
+	<input type="hidden" name="cnactjob_top" value="<?php echo htmlspecialchars(json_encode($cnactjob_top)); ?>">
+	<input type="hidden" name="totaldayhh_top" value="<?php echo htmlspecialchars(json_encode($totaldayhh_top)); ?>">
+	<input type="hidden" name="totaldaymm_top" value="<?php echo htmlspecialchars(json_encode($totaldaymm_top)); ?>">
+	<input type="hidden" name="holydayswork_top"
+		value="<?php echo htmlspecialchars(json_encode($holydayswork_top)); ?>">
+	<input type="hidden" name="offdayswork_top" value="<?php echo htmlspecialchars(json_encode($offdayswork_top)); ?>">
+	<input type="hidden" name="closedayswork_top"
+		value="<?php echo htmlspecialchars(json_encode($closedayswork_top)); ?>">
+	<input type="hidden" name="delaydayswork_top"
+		value="<?php echo htmlspecialchars(json_encode($delaydayswork_top)); ?>">
+	<input type="hidden" name="earlydayswork_top"
+		value="<?php echo htmlspecialchars(json_encode($earlydayswork_top)); ?>">
 
 
+	<!-- bottom -->
+	<input type="hidden" name="totalworkhh_bottom"
+		value="<?php echo htmlspecialchars(json_encode($totalworkhh_bottom_pdf)); ?>">
+	<input type="hidden" name="totalworkmm_bottom"
+		value="<?php echo htmlspecialchars(json_encode($totalworkmm_bottom_pdf)); ?>">
+	<input type="hidden" name="cnprejob_bottom"
+		value="<?php echo htmlspecialchars(json_encode($cnprejob_bottom_pdf)); ?>">
+	<input type="hidden" name="cnactjob_bottom"
+		value="<?php echo htmlspecialchars(json_encode($cnactjob_bottom_pdf)); ?>">
+	<input type="hidden" name="totaldayhh_bottom"
+		value="<?php echo htmlspecialchars(json_encode($totaldayhh_bottom_pdf)); ?>">
+	<input type="hidden" name="totaldaymm_bottom"
+		value="<?php echo htmlspecialchars(json_encode($totaldaymm_bottom_pdf)); ?>">
+	<input type="hidden" name="holydayswork_bottom"
+		value="<?php echo htmlspecialchars(json_encode($holydayswork_bottom_pdf)); ?>">
+	<input type="hidden" name="offdayswork_bottom"
+		value="<?php echo htmlspecialchars(json_encode($offdayswork_bottom_pdf)); ?>">
+	<input type="hidden" name="closedayswork_bottom"
+		value="<?php echo htmlspecialchars(json_encode($closedayswork_bottom_pdf)); ?>">
+	<input type="hidden" name="delaydayswork_bottom"
+		value="<?php echo htmlspecialchars(json_encode($delaydayswork_bottom_pdf)); ?>">
+	<input type="hidden" name="earlydayswork_bottom"
+		value="<?php echo htmlspecialchars(json_encode($earlydayswork_bottom_pdf)); ?>">
+	<input type="hidden" name="workmonth_list" value="<?php echo htmlspecialchars(json_encode($workmonth_list)); ?>">
+</form>
 
 
 <!-- Modal 勤務タイプ選択 -->
@@ -1689,10 +1742,7 @@ if ($_SESSION['auth'] == false) {
 
 			}
 		});
-		//2023/11/10 submission-status  add start 
 		SetFormViewBySubmissionStatusHandler();
-		//2023/11/10 submission-status  add end 
-
 		SetHollyDaysTextHandler();
 	});
 
@@ -1718,15 +1768,11 @@ if ($_SESSION['auth'] == false) {
 	}
 
 
-	//2023/11/10 submission-status  add start 
 	function SetFormViewBySubmissionStatusHandler() {
 		// set Color
 		SetColorToSubmissionStatus();
 		// Set Turn On Off Button
 		setFormInputableWithSubmissionStatus();
-
-
-
 	}
 
 	function SetColorToSubmissionStatus() {
@@ -1758,7 +1804,6 @@ if ($_SESSION['auth'] == false) {
 		userButtons.prop("disabled", false);
 		modalButons.prop("disabled", false);
 		SubmisstionStatusNotice = "<?php echo $submised_not_change ?>"
-
 
 		// when match -> off element 
 		if (submissionStatusText === '<?php echo $SUBMISSTION_STATUS[0] ?>') {
@@ -1949,7 +1994,6 @@ if ($_SESSION['auth'] == false) {
 			calculateWorkTime();
 		});
 
-	// 2023-10-03/1340-001 add start
 	//  input Time calculate 
 	$('#IVjobstarthh, #IVjobstartmm , #IVjobendhh, #IVjobendmm, #IVdaystarthh, #IVdaystartmm, #IVdayendhh, #IVdayendmm, #IVofftimehh, #IVofftimemm')
 		.on('change', function (e) {
@@ -1993,9 +2037,6 @@ if ($_SESSION['auth'] == false) {
 		}
 		return value.toString();
 	}
-	// 2023-10-03/1340-001 add end
-
-
 
 	// Check Error
 	$(document).on('click', '#btnReg', function (e) {
@@ -2189,31 +2230,18 @@ if ($_SESSION['auth'] == false) {
 	function autoInputHandle() {
 		$('#modal').modal('toggle');
 		$("#weekdayCheckbox").prop('checked', true);
-		//	 loading UX
-		// load waiting , when loading can't click 
 		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();
 	}
 
 	// Submit for 自動入力 Error Check
 	$("#submit-button").click(function (event) {
-		event.preventDefault(); // Prevent the default form submission
+		event.preventDefault();
 		$("#autopdf").submit();
-		//	 loading UX
-		// load waiting , when loading can't click 
 		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();
 	});
 
-		// Submit for 自動入力 Error Check
-		$("#submitzip-button").click(function (event) {
-		event.preventDefault(); // Prevent the default form submission
-		$("#autozip").submit();
-		//	 loading UX
-		// load waiting , when loading can't click 
-		setTimeout(hideLoadingOverlay, 1000);
-		startLoading();
-	});
 
 	// Select input tag
 	$(document).ready(function () {
@@ -2221,7 +2249,6 @@ if ($_SESSION['auth'] == false) {
 		function handleInput(inputId, selectId) {
 			var inputValue = $(inputId);
 			var selectOption = $(selectId);
-			// 2023-10-02/1340-001 add start(Modal text box fix)
 			// 入力した値を正しく選択ボックスへ反映
 			inputValue.on('input', function () {
 				var c;
@@ -2259,7 +2286,6 @@ if ($_SESSION['auth'] == false) {
 				result = "0" + value;
 			} else {
 
-				// if length > 2  -> get last 
 				if (value.length > 2) {
 					result = value.slice(-2);
 				}
@@ -2275,7 +2301,6 @@ if ($_SESSION['auth'] == false) {
 			}
 			return value.toString();
 		}
-		// 2023-10-02 add end//
 
 		// Usage of the function for each input-select pair
 		handleInput('#IVjobstarthh', '#jobstarthh');
@@ -2310,16 +2335,13 @@ if ($_SESSION['auth'] == false) {
 		}
 	});
 
-	// 2023-10-04/1340-003 add start---//
 	// check input length call ↓
 	validateLength("comment");
 	validateLength("bigo");
 	validateLength("workcontent_rmodal");
 	validateLength("bigo_rmodal");
 
-	// Check Maxlength on input function
-	// Create a function to check input length based on the provided input element's ID, 
-	// Automatically extracting the character limit from the maxlength attribute of that element."
+
 	function validateLength(inputId) {
 		var $input = $("#" + inputId);
 		var $errorMsg = $("#" + inputId + "-error");
@@ -2337,11 +2359,9 @@ if ($_SESSION['auth'] == false) {
 			}
 		});
 	}
-	// ------2023-10-04/1340-003 add end---//
 
 
 
-	// ------2023-10-23/1340-003 chg start
 	// date status change , not nomal is off day and input time is readonly
 	function handleSelectDayStatusChange(elem) {
 		var selectedOption = elem.options[elem.selectedIndex];
@@ -2391,6 +2411,5 @@ if ($_SESSION['auth'] == false) {
 
 
 
-	// ------2023-10-23/1340-003 chg end---//
 </script>
 <?php include('../inc/footer.php'); ?>

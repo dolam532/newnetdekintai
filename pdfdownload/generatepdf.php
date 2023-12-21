@@ -12,10 +12,7 @@ $tcpdf->AddPage();
 
 $signstamp_admin = json_decode($_POST['signstamp_admin'], true);
 $signstamp_kanri = json_decode($_POST['signstamp_kanri'], true);
-
-
 $signstamp_user = json_decode($_POST['signstamp_user'], true);
-// var_dump($signstamp_kanri);
 
 // Assuming $signstamp_data contains HTML code, including an image tag.
 $signstamp_admin_ = '<img src="../assets/uploads/signstamp/' . $signstamp_admin . '" width="40" height="40" />';
@@ -141,7 +138,7 @@ $tcpdf->writeHTMLCell($w, $h, $x_dept, $y_dept, $dept, $border, $ln, 0, true, $a
 $tcpdf->writeHTMLCell($w, $h, $x_name, $y_name, $showName, $border, $ln, 0, true, $align);
 // (印)
 $tcpdf->writeHTMLCell($w, $h, $x_StampMark, $y_StampMark, $textInMark, $border, $ln, 0, true, $align);
-if($submission_status > 0) {
+if($submission_status > 0 && $submission_status < 11) {
 // 印鑑
 $tcpdf->writeHTMLCell($w, $h, $x_user, $y_user, $signstamp_user_, $border, $ln, 0, true, $align);
 }
@@ -169,10 +166,10 @@ $tcpdf->Cell(30, 17, '', 1, 1, 'C');
 $signstamp_admin_show = '';
 $signstamp_kanri_show = '';
 
-if($submission_status > 1) {
+if($submission_status > 1 && $submission_status < 11) {
 	$signstamp_kanri_show = $signstamp_kanri_ ;
 } 
-if($submission_status > 2) {
+if($submission_status > 2 && $submission_status < 11) {
 	$signstamp_admin_show = $signstamp_admin_ ;
 } 
 
