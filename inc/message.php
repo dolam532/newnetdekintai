@@ -36,7 +36,7 @@ $user_dept_empty = '部署を入力してください。';
 $user_grade_empty = '区分を入力してください。';
 $user_genba_list_empty = '勤務時間タイプを選択してください。';
 $file_size_isvalid_STAMP = 'ファイルサイズが無効です。ファイルサイズが' . round($STAMP_MAXSIZE / 1000000, 0) . 'MB未満のファイルを選択してください。';
-$file_extension_invalid_STAMP = 'ファイルの拡張子無効です。ファイルの拡張子が [ ' . implode(', ', $ALLOWED_TYPES_STAMP) . ' ] です';
+$file_extension_invalid_STAMP = 'ファイルの拡張子無効です。ファイルの拡張子が [ ' . implode(', ', $ALLOWED_TYPES_STAMP) . ' ] です。';
 $email_is_dupplicate = 'メールが存在されています。他のメールを登録してください。';
 
 // kyukaReg
@@ -91,7 +91,7 @@ $kakutei_success = '提出確定しました。変更がある場合は管理者
 $kakutei_success_admin = '提出確定しました。変更がある場合は「戻す」ボタンを押下して修正してください。';
 $modoshi_success = '編集中に戻しました。';
 $shonin_success = '承認成功しました。変更がある場合は編集中に戻し編集してください。';
-$sekininshonin_success = '責任者承認成功しました。変更がある場合は編集中に戻し編集してください';
+$sekininshonin_success = '責任者承認成功しました。変更がある場合は編集中に戻し編集してください。';
 $kakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
 $shonin_notkakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
 $sekininshonin_notkakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
