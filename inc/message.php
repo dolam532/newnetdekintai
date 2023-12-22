@@ -157,7 +157,7 @@ $content_noteR_empty = '確認者を入力してください。';
 $content_noteRegdt_empty = '作成日を入力してください。';
 $content_noteViewcnt_empty = 'view Cntを入力してください。';
 $file_size_isvalid = 'ファイルサイズが無効です。ファイルサイズが' . round($NOTICE_IMAGE_MAXSIZE / 1000000, 0) . 'MB未満のファイルを選択してください。';
-$file_extension_invalid = 'ファイルの拡張子無効です。ファイルの拡張子が [ ' . implode(', ', $ALLOWED_TYPES) . ' ] です';
+$file_extension_invalid = 'ファイルの拡張子無効です。ファイルの拡張子が [ ' . implode(', ', $ALLOWED_TYPES) . ' ] です。';
 
 // companyList
 $manage_Ccode_empty = '会社コードを入力してください。';
