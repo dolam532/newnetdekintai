@@ -138,8 +138,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<th style="text-align: center; width: 10%;">会社名</th>
 					<?php endif; ?>
 					<th style="text-align: center; width: 5%;">ID</th>
-					<th style="text-align: center; width: 5%;">PASSWORD</th>
-					<th style="text-align: center; width: 8%;">社員名</th>
+
+					<th style="text-align: center; width: 13%;">社員名</th>
 					<th style="text-align: center; width: 8%;">Email</th>
 					<th style="text-align: center; width: 8%;">部署</th>
 					<th style="text-align: center; width: 8%;">区分</th>
@@ -195,9 +195,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									</a>
 								</td>
 							<?php endif; ?>
-							<td><span name="pwd">
-									<?= $user['pwd'] ?>
-								</span></td>
+
 							<td><span name="name">
 									<?= $user['name'] ?>
 								</span></td>
@@ -256,6 +254,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<input type="text" class="form-control" id="pwd" name="pwd" placeholder="パスワード"
 									required="required" maxlength="20" style="text-align: left" value="1111" readonly>
 							</div>
+
+
 						</div>
 						<br>
 						<div class="row">
@@ -379,10 +379,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<input type="hidden" id="ulcompanyid" name="ulcompanyid" value="">
 								<input type="hidden" id="ultype" name="ultype" value="">
 							</div>
+
 							<div class="col-xs-6">
 								<label for="pwd">Password</label>
-								<input type="text" class="form-control" id="ulpwd" name="ulpwd" placeholder="パスワード"
+								<input type="password" class="form-control" id="ulpwd" name="ulpwd" placeholder="パスワード"
 									required="required" maxlength="20" style="text-align: left">
+								<input type="checkbox" id="showPwd"> パスワード表示
 							</div>
 						</div>
 						<br>
@@ -517,7 +519,18 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$('#fileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
 		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();
+		modalInitSetting();
 	});
+
+	function modalInitSetting() {
+		$('#showPwd').change(function () {
+			if ($(this).is(':checked')) {
+				$('#ulpwd').attr('type', 'text');
+			} else {
+				$('#ulpwd').attr('type', 'password');
+			}
+		});
+	}
 
 	// check size file upload
 	function checkFileSize(input) {
@@ -651,6 +664,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	//社員編集 POP UP
 	$(document).on('click', '.showModal', function () {
 		$('#modal2').modal('toggle');
+
+		$('#showPwd').prop('checked', false);
+		$('#ulpwd').attr('type', 'password');
+
 		var Uid = $(this).text().trim();
 		$('label[for="signstamp"]').show();
 		$('#udfileInput').val('');
