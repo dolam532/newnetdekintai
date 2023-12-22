@@ -49,6 +49,9 @@ if (!isset($currentDeptText)) {
 
 $uid_ = $_SESSION['auth_uid'];
 $email_ = $_SESSION['auth_email'];
+$employee_name = $_SESSION['auth_name'];
+
+
 
 // kintaiReg.php
 if ($_POST['selmm'] == NULL && $_POST['selyy'] == NULL && $_POST['template_table'] == NULL) {
