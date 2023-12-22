@@ -83,25 +83,25 @@ $kintai_bend_empty = '業務終了を入力してください。';
 $kintai_bend_no = '業務終了を番号で入力してください。';
 $kintai_offtime_empty = '休憩時間を入力してください。';
 $kintai_offtime_no = '休憩時間を番号で入力してください。';
-$kintai_click_month = '月合計登録まだ保存されてないです。確認してください。';
+$kintai_click_month = '月合計がまだ登録されていません。「月合計登録」ボタンを押してください。';
 $kintai_bigo_or_comment = 'コメントか備考を入力してください。';
-$kintai_check_input_err = ' 桁まで入力してください';
+$kintai_check_input_err = ' 桁まで入力してください。';
 $kintai_reg_workmonth = '勤務日登録されてないです。確認してください。';
-$kakutei_success = '提出確定しました。変更がある場合は管理者へ連絡してください';
+$kakutei_success = '提出確定しました。変更がある場合は管理者へ連絡してください。';
 $kakutei_success_admin = '提出確定しました。変更がある場合は「戻す」ボタンを押下して修正してください。';
 $modoshi_success = '編集中に戻しました。';
-$shonin_success = '承認成功しました。変更がある場合は編集中に戻し編集してください';
+$shonin_success = '承認成功しました。変更がある場合は編集中に戻し編集してください。';
 $sekininshonin_success = '責任者承認成功しました。変更がある場合は編集中に戻し編集してください';
 $kakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
 $shonin_notkakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
 $sekininshonin_notkakutei_fail = '月勤務表がまだ提出されていないです。ご確認お願い致します。';
-$submised_not_change = '  *提出した勤務表を編集又は登録不可です。！';
-$is_not_registed_WorkMonth = '  月合計登録まだ登録されてないです。確認してください。！\n 登録されていない場合は提出出来ません';
+$submised_not_change = '  *提出した勤務表を編集又は登録不可です。';
+$is_not_registed_WorkMonth = '月合計がまだ登録されていません。「月合計登録」ボタンを押してください。\n 登録されていない場合は提出出来ません。';
 $is_submissed_notchange = '勤務表提出しましたので編集出来ません、管理者へ連絡してください。';
-$Shonin_KanriSha_Undefine = '選択した管理者はエラー発生したました。システム管理者へご連絡ください';
-$Shonin_SekininSha_Undefine = '選択した責任者はエラー発生したました。システム管理者へご連絡ください';
+$Shonin_KanriSha_Undefine = '選択した管理者はエラー発生したました。システム管理者へご連絡ください。';
+$Shonin_SekininSha_Undefine = '選択した責任者はエラー発生したました。システム管理者へご連絡ください。';
 $is_admin_changed_saveWaiting = '責任者、管理者の変更があります、「承認」ボタン押すと保存します。';
-$kakutei_ninsho_message = '提出確定してよろしいでしょうか？ \n確定したら編集できません!';
+$kakutei_ninsho_message = '提出確定してよろしいでしょうか？ \n確定したら編集できません。';
 
 
 // genbaList

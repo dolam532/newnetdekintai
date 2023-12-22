@@ -91,7 +91,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 			<form method="post">
 				<div class="col-md-6 text-center page-top-selection" name="workYm_page_condition">
 					<div class="title_condition">
-						<label>フィルター
+						<label>状態
 							<select id="filterShow" name="filterShow" class="seldate" style="padding:5px;"
 								onchange="this.form.submit()">
 								<?php foreach ($SUBMISSTION_STATUS_FILTER as $key => $value) { ?>
@@ -126,7 +126,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 					<th style="text-align: center; width: 10%;">区分</th>
 					<th style="text-align: center; width: auto;">勤務時間タイプ</th>
 					<th style="text-align: center; width: auto;">状態</th>
-					<th style="text-align: center; width: 10%;">詳しい情報</th>
+					<th style="text-align: center; width: 10%;">詳細情報 </th>
 				</tr>
 			</thead>
 			<tbody>
