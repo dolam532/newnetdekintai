@@ -22,10 +22,17 @@ $month = $_POST['selmm'];
 
 if (!isset($year)) {
         $year = $_SESSION['selyy'];
+        if(!isset($year)) {
+                $year = date('Y', strtotime($reg_dt));
+        }
 }
 if (!isset($month)) {
         $month = $_SESSION['selmm'];
+        if(!isset($month)) {
+                $month = date('m', strtotime($reg_dt)); 
+        }
 }
+
 
 $sql_getListSubmissionStatus = 'SELECT `uid`, `email`, `submission_status` 
     FROM `tbl_workmonth` 
