@@ -83,6 +83,46 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		unset($_SESSION['email_is_dupplicate']);
 	}
 	?>
+
+	<?php
+	if (isset($_SESSION['$user_type_undefined']) && isset($_POST['SaveUserList'])) {
+		?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['$user_type_undefined']; ?>
+		</div>
+		<?php
+		unset($_SESSION['$user_type_undefined']);
+	}
+	?>
+
+
+	<?php
+	if (isset($_SESSION['$user_type_undefined']) && isset($_POST['UpdateUserList'])) {
+		?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['$user_type_undefined']; ?>
+		</div>
+		<?php
+		unset($_SESSION['$user_type_undefined']);
+	}
+	?>
+
+	<?php
+	if (isset($_SESSION['email_is_dupplicate']) && isset($_POST['UpdateUserList'])) {
+		?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="7000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['email_is_dupplicate']; ?>
+		</div>
+		<?php
+		unset($_SESSION['email_is_dupplicate']);
+	}
+	?>
+
+
+
 	<div class="row">
 		<div class="col-md-2 text-left">
 			<div class="title_name">
@@ -138,13 +178,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<th style="text-align: center; width: 10%;">会社名</th>
 					<?php endif; ?>
 					<th style="text-align: center; width: 5%;">ID</th>
-
 					<th style="text-align: center; width: 13%;">社員名</th>
-					<th style="text-align: center; width: 8%;">Email</th>
+					<th style="text-align: center; width: 20%;">Email</th>
 					<th style="text-align: center; width: 8%;">部署</th>
 					<th style="text-align: center; width: 8%;">区分</th>
-					<th style="text-align: center; width: 10%;">勤務時間タイプ</th>
+					<th style="text-align: center; width: 15%;">勤務時間タイプ</th>
 					<th style="text-align: center; width: 10%;">印鑑</th>
+					<th style="text-align: center; width: 8%;">権限</th>
 					<th style="text-align: center; width: auto;">備考</th>
 				</tr>
 			</thead>
@@ -220,6 +260,18 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<?php endif; ?>
 								</span>
 							</td>
+							<td><span name="usertype">
+									<?php
+									foreach ($USER_TYPE_TEXT as $key => $value) {
+										?>
+										<?php if ($key == $user['type']) {
+											echo $value;
+										} ?>
+										<?php
+									}
+									?>
+								</span></td>
+
 							<td><span name="bigo">
 									<?= $user['bigo'] ?>
 								</span></td>
@@ -331,12 +383,31 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						</div>
 						<br>
 						<div class="row">
-							<div class="col-xs-12">
+							<div class="col-xs-6">
 								<label for="signstamp_addNew">印鑑</label>
 								<span style="font-size:smaller; color:red;"> (印鑑はpngタイプを選択してください。)</span>
 								<img width="50" id="signstamp_addNew">
 								<input type="file" name="signstamp" id="fileInput" onchange=checkFileSize(this)>
 							</div>
+							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
+								<div class="col-xs-6">
+									<div>
+										<label for="user_type">権限</label><br>
+										<?php $count = 0; ?>
+										<?php foreach ($USER_TYPE_TEXT as $key => $value): ?>
+											<input type="radio" id="user_type<?= $key ?>" name="user_type" value="<?= $key ?>"
+												<?php if ($value === $USER_TYPE_TEXT[1]) {
+													echo 'checked="checked"';
+													$count++;
+												} ?>>
+											<label for="user_type<?= $key ?>">
+												<?= $value ?>
+											</label>
+										<?php endforeach; ?>
+									</div>
+								</div>
+							<?php endif ?>
+
 						</div>
 					</div>
 					<div class="modal-footer" style="text-align: center">
@@ -372,10 +443,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="row">
 							<div class="col-xs-6">
 								<label for="email">Email</label>
+
 								<input type="email" class="form-control" id="ulemail" name="ulemail"
 									placeholder="email@" required="required" maxlength="100" style="text-align: left"
 									readonly>
 								<input type="hidden" id="uluid" name="uluid" value="">
+								<input type="hidden" id="currentEmail" name="currentEmail" value="">
 								<input type="hidden" id="ulcompanyid" name="ulcompanyid" value="">
 								<input type="hidden" id="ultype" name="ultype" value="">
 							</div>
@@ -460,7 +533,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						</div>
 						<br>
 						<div class="row">
-							<div class="col-xs-12">
+							<div class="col-xs-6">
 								<label for="signstamp">印鑑</label><span style="font-size:smaller; color:red;">
 									(印鑑はpngタイプを選択してください。)</span><br>
 								<img width="50" id="udsignstamp">
@@ -468,44 +541,61 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<input type="hidden" name="udsignstamp_old" id="udsignstamp_old">
 								<input type="file" name="udsignstamp_new" id="udfileInput" onchange=checkFileSize(this)>
 							</div>
+
+							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
+								<div class="col-xs-6">
+									<div>
+										<label for="uluser_type">権限</label><br>
+										<?php foreach ($USER_TYPE_TEXT as $key => $value): ?>
+											<input type="radio" id="uluser_type<?= $key ?>" name="uluser_type"
+												value="<?= $key ?>">
+											<label for="uluser_type<?= $key ?>">
+												<?= $value ?>
+											</label>
+										<?php endforeach; ?>
+									</div>
+
+								<?php endif ?>
+
+
+							</div>
+						</div>
+						<div class="modal-footer" style="text-align: center">
+							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
+								<div class="col-xs-3"></div>
+								<div class="col-xs-2">
+									<p class="text-center">
+										<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md"
+											id="UpdatebtnReg" role="button" value="編集">
+									</p>
+								</div>
+								<div class="col-xs-2">
+									<p class="text-center">
+										<input type="submit" name="btnDelUserList" class="btn btn-warning" id="btnDel"
+											role="button" value="削除">
+									</p>
+								</div>
+								<div class="col-xs-2">
+									<button type="button" class="btn btn-default" data-dismiss="modal"
+										id="modalClose">閉じる</button>
+								</div>
+								<div class="col-xs-3"></div>
+							<?php else: ?>
+								<div class="col-xs-4"></div>
+								<div class="col-xs-2">
+									<p class="text-center">
+										<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md"
+											id="UpdatebtnReg" role="button" value="編集">
+									</p>
+								</div>
+								<div class="col-xs-2">
+									<button type="button" class="btn btn-default" data-dismiss="modal"
+										id="modalClose">閉じる</button>
+								</div>
+								<div class="col-xs-4"></div>
+							<?php endif; ?>
 						</div>
 					</div>
-					<div class="modal-footer" style="text-align: center">
-						<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')): ?>
-							<div class="col-xs-3"></div>
-							<div class="col-xs-2">
-								<p class="text-center">
-									<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md"
-										id="UpdatebtnReg" role="button" value="編集">
-								</p>
-							</div>
-							<div class="col-xs-2">
-								<p class="text-center">
-									<input type="submit" name="btnDelUserList" class="btn btn-warning" id="btnDel"
-										role="button" value="削除">
-								</p>
-							</div>
-							<div class="col-xs-2">
-								<button type="button" class="btn btn-default" data-dismiss="modal"
-									id="modalClose">閉じる</button>
-							</div>
-							<div class="col-xs-3"></div>
-						<?php else: ?>
-							<div class="col-xs-4"></div>
-							<div class="col-xs-2">
-								<p class="text-center">
-									<input type="submit" name="UpdateUserList" class="btn btn-primary btn-md"
-										id="UpdatebtnReg" role="button" value="編集">
-								</p>
-							</div>
-							<div class="col-xs-2">
-								<button type="button" class="btn btn-default" data-dismiss="modal"
-									id="modalClose">閉じる</button>
-							</div>
-							<div class="col-xs-4"></div>
-						<?php endif; ?>
-					</div>
-				</div>
 			</form>
 		</div>
 	</div>
@@ -673,6 +763,20 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$('#udfileInput').val('');
 		$('#udsignstamp_name').text('');
 
+
+
+
+		var authType = '<?php echo $_SESSION['auth_type']; ?>';
+		var ulemailInput = $('#ulemail');
+
+
+		if (authType === '<?php echo constant('ADMIN') ?>' || authType === '<?php echo constant('ADMINISTRATOR') ?>' || authType === '<?php echo constant('MAIN_ADMIN') ?>') {
+			ulemailInput.removeAttr('readonly');
+		} else {
+			ulemailInput.attr('readonly', 'readonly');
+		}
+
+
 		<?php
 		if (!empty($userlist_list)) {
 			foreach ($userlist_list as $key) {
@@ -690,6 +794,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#ulname").text($('[name="ulname"]').val("<?php echo $key['name'] ?>"));
 					$("#ulgrade").text($('[name="ulgrade"]').val("<?php echo $key['grade'] ?>"));
 					$("#ulemail").text($('[name="ulemail"]').val("<?php echo $key['email'] ?>"));
+					$("#currentEmail").text($('[name="currentEmail"]').val("<?php echo $key['email'] ?>"));
 					$("#uldept").val("<?php echo $key['dept'] ?>");
 					$("#ulbigo").text($('[name="ulbigo"]').val("<?php echo $key['bigo'] ?>"));
 					$("#ulinymd").text($('[name="ulinymd"]').val("<?php echo $key['inymd'] ?>"));
@@ -710,6 +815,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					}
 					$("#ulgenstrymd").text($('[name="ulgenstrymd"]').val("<?php echo $key['genstrymd'] ?>"));
 					$("#ulgenendymd").text($('[name="ulgenendymd"]').val("<?php echo $key['genendymd'] ?>"));
+					$("#ulgenendymd").text($('[name="ulgenendymd"]').val("<?php echo $key['genendymd'] ?>"));
+
+					//  get current usertype 
+					var ultypeValue = $('#ultype').val();
+					$('input[name="uluser_type"]').each(function () {
+						if ($(this).val() === ultypeValue) {
+							$(this).prop('checked', true);
+						}
+					});
 
 					var udsignstamp_old = $("input[name=udsignstamp_old]:hidden");
 					udsignstamp_old.val("<?php echo $key['signstamp'] ?>");

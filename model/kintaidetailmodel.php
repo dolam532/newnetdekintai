@@ -148,12 +148,29 @@ $email_g = isset($_SESSION['email_g']) ? $_SESSION['email_g'] : $_SESSION['auth_
 $uid_g = isset($_SESSION['uid_g']) ? $_SESSION['uid_g'] : $_SESSION['auth_uid'];
 $name_g = isset($_SESSION['name_g']) ? $_SESSION['name_g'] : $_SESSION['auth_name'];
 $dept_g = isset($_SESSION['dept_g']) ? $_SESSION['dept_g'] : $_SESSION['auth_dept'];
+ 
 
 
-// if (($uid_g === '' || $email_g === '') && isset($_POST['email_g'])) {
-//         echo 'error' . '選択した会員のデータが異常が発生したました。サイト管理者へ連絡してください';
 
-// }
+
+if(isset($_POST['uid_g'])) {
+        $fromSite = $_POST['fromsite'];
+        $_SESSION['fromSite'] =   $_POST['fromsite'];
+} 
+$fromSite = $_SESSION['fromSite'];
+if(!isset($fromSite)) {
+        $fromSite = 'kintaiUser';
+}
+
+$backSite = './'.$fromSite.'.php';   // default 
+// Set link modoru 
+if($fromSite === 'kintaiMonthly') {
+        $backSite = '../kintai/'.$fromSite.'.php';
+} 
+if($fromSite === 'kintaiUser')  {
+        $backSite = './'.$fromSite.'.php';  
+} 
+
 
 
 // Now you can access the variables from temporary.php
@@ -452,6 +469,7 @@ $countKuyka = 0;
 $countDaikyu = 0;
 $countKekkin = 0;
 $countClose = 0;
+$countFurikyu = 0;
 //---2023-10-18 add end ------//
 foreach ($worktime_list as $work) {
         if (isset($work['jobstarthh']) && !empty($work['jobstarthh'])) {
@@ -514,9 +532,12 @@ foreach ($worktime_list as $work) {
                         $countDaikyu++;
                 }
                 if ($work['holy_decide'] == array_keys($HOLY_DECIDE)[4]) {
-                        $countClose++;
+                        $countFurikyu++;
                 }
                 if ($work['holy_decide'] == array_keys($HOLY_DECIDE)[5]) {
+                        $countClose++;
+                }
+                if ($work['holy_decide'] == array_keys($HOLY_DECIDE)[6]) {
                         $countKekkin++;
                 }
 

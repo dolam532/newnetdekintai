@@ -85,7 +85,51 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         unset($_SESSION['email_is_dupplicate']);
     }
     ?>
+        <?php
+    if (isset($_SESSION['$user_type_undefined']) && isset($_POST['btnRegAM'])) {
+        ?>
+        <div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['$user_type_undefined']; ?>
+        </div>
+        <?php
+        unset($_SESSION['$user_type_undefined']);
+    }
+    ?>
+            <?php
+    if (isset($_SESSION['$user_type_undefined']) && isset($_POST['btnUpdateAM'])) {
+        ?>
+        <div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['$user_type_undefined']; ?>
+        </div>
+        <?php
+        unset($_SESSION['$user_type_undefined']);
+    }
+    ?>
 
+<?php
+    if (isset($_SESSION['$user_type_undefined']) && isset($_POST['DeleteAM'])) {
+        ?>
+        <div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['$user_type_undefined']; ?>
+        </div>
+        <?php
+        unset($_SESSION['$user_type_undefined']);
+    }
+    ?>
+	<?php
+	if (isset($_SESSION['email_is_dupplicate']) && isset($_POST['btnUpdateAM'])) {
+		?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="7000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['email_is_dupplicate']; ?>
+		</div>
+		<?php
+		unset($_SESSION['email_is_dupplicate']);
+	}
+	?>
 
     <form method="post">
         <div class="row">
@@ -121,14 +165,16 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
-                    <th style="text-align: center; width: 8%;">ID</th>
-                    <th style="text-align: center; width: 8%;">PASSWORD</th>
-                    <th style="text-align: center; width: 15%;">社員名</th>
+                    <th style="text-align: center; width: 5%;">ID</th>
+
+                    <th style="text-align: center; width: 13%;">社員名</th>
                     <th style="text-align: center; width: 20%;">Email</th>
-                    <th style="text-align: center; width: 10%;">部署</th>
-                    <th style="text-align: center; width: 10%;">区分</th>
+                    <th style="text-align: center; width: 8%;">部署</th>
+                    <th style="text-align: center; width: 8%;">区分</th>
+                    <th style="text-align: center; width: 15%;">勤務時間タイプ</th>
                     <!-- <th style="text-align: center; width: 12%;">会社名</th> -->
                     <th style="text-align: center; width: 8%;">印鑑</th>
+                    <th style="text-align: center; width: 8%;">権限</th>
                     <th style="text-align: center; width: auto;">備考</th>
                 </tr>
             </thead>
@@ -146,9 +192,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                             <td><a href="#"><span class="showModal">
                                         <?= $key['uid'] ?>
                                     </span></a></td>
-                            <td><span>
-                                    <?= $key['pwd'] ?>
-                                </span></td>
+                    
                             <td><span>
                                     <?= $key['name'] ?>
                                 </span></td>
@@ -169,7 +213,10 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                             <td><span>
                                     <?= $key['grade'] ?>
                                 </span></td>
-                            <!-- <td><span><?= $key['companyname'] ?></span></td> -->
+
+                                <td><span name="genbaname">
+									<?= $key['genbaname'] ?>
+								</span></td>               
                             <td>
                                 <span>
                                     <?php if ($key['signstamp'] == NULL): ?>
@@ -179,6 +226,18 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                     <?php endif; ?>
                                 </span>
                             </td>
+
+                            <td><span name="usertype">
+									<?php
+									foreach ($USER_TYPE_TEXT as $k => $value) {
+										?>
+										 <?php if ($k == $key['type']) {
+											  echo $value ;
+										  } ?>
+										<?php
+									}
+									?>
+								</span></td>
                             <td><span>
                                     <?= $key['bigo'] ?>
                                 </span></td>
@@ -258,19 +317,43 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                         ?>
                                     </select>
                                 </div>
+                      
+
                                 <div class="col-xs-6">
-                                    <label for="signstamp_addNew">印鑑</label>
-                                    <img width="50" id="signstamp_addNew">
-                                    <input type="file" name="signstamp" onchange=checkFileSize(this) id="fileInput">
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-xs-12">
                                     <label for="bigo">備考</label>
                                     <input type="text" class="form-control" name="bigo" id="bigo" maxlength="1000"
                                         style="text-align: left" placeholder="備考">
                                 </div>
+
+                            </div>
+                            <br>
+                            <div class="row">
+                            <div class="col-xs-6">
+                                    <label for="signstamp_addNew">印鑑</label>
+                                    <img width="50" id="signstamp_addNew">
+                                    <input type="file" name="signstamp" onchange=checkFileSize(this) id="fileInput">
+                                </div>
+
+                                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
+								<div class="col-xs-6">
+									<div>
+										<label for="user_type">権限</label><br>
+										<?php $count = 0; ?>
+										<?php foreach ($USER_TYPE_TEXT as $key => $value): ?>
+											<input type="radio" id="user_type<?= $key ?>" name="user_type" value="<?= $key ?>"
+												<?php if ($value === $USER_TYPE_TEXT[3]) {
+													echo 'checked="checked"';
+													$count++;
+												} ?>>
+											<label for="user_type<?= $key ?>">
+												<?= $value ?>
+											</label>
+										<?php endforeach; ?>
+									</div>
+								</div>
+							<?php endif ?>
+
+
                             </div>
                         </div>
                         <div class="modal-footer" style="text-align: center">
@@ -300,7 +383,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                 <form method="post" enctype="multipart/form-data">
                     <div class="modal-content">
                         <div class="modal-header">
-                            社員編集
+                            管理者編集
                             <span id="usname"></span>
                             <button class="close" data-dismiss="modal">x</button>
                         </div>
@@ -313,14 +396,15 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                     <label for="email">Email</label>
                                     <input type="text" class="form-control" name="udemail" id="udemail"
                                         placeholder="email" maxlength="100" style="text-align: left" readonly>
-
+                                        <input type="hidden" id="ultype" name="ultype" value="">   
+                                        <input type="hidden" id="currentEmail" name="currentEmail" value="">      
                                 </div>
                                 <div class="col-xs-6">
                                     <label for="pwd">Password</label>
-                                    <input type="text" class="form-control" name="udpwd" id="udpwd" placeholder="pwd"
+                                    <input type="text" class="form-control" name="udpwd" id="udpwd" placeholder="パスワード"
                                         maxlength="20" style="text-align: left">
+                                        <input type="checkbox" id="showPwd"> パスワード表示
                                 </div>
-
                             </div>
                             <br>
                             <div class="row">
@@ -363,7 +447,17 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                         ?>
                                     </select>
                                 </div>
+            
                                 <div class="col-xs-6">
+                                    <label for="bigo">備考</label>
+                                    <input type="text" class="form-control" name="udbigo" id="udbigo" maxlength="1000"
+                                        style="text-align: left" placeholder="備考">
+                                </div>
+
+                            </div>
+                            <br>
+                            <div class="row">
+                            <div class="col-xs-6">
                                     <label for="signstamp">印鑑</label><br>
                                     <img width="50" id="udsignstamp">
                                     <span id="udsignstamp_name"></span>
@@ -372,14 +466,22 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                         onchange=checkFileSize(this)>
                                 </div>
 
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <label for="bigo">備考</label>
-                                    <input type="text" class="form-control" name="udbigo" id="udbigo" maxlength="1000"
-                                        style="text-align: left" placeholder="備考">
-                                </div>
+                                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')): ?>
+								<div class="col-xs-6">
+									<div>
+										<label for="uluser_type">権限</label><br>
+										<?php foreach ($USER_TYPE_TEXT as $key => $value): ?>
+											<input type="radio" id="uluser_type<?= $key ?>" name="uluser_type"
+												value="<?= $key ?>" >
+											<label for="uluser_type<?= $key ?>">
+												<?= $value ?>
+											</label>
+										<?php endforeach; ?>
+									</div>
+								<?php endif ?>
+
+
+							</div>
 
                             </div>
                         </div>
@@ -413,9 +515,20 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         $('#fileInput').attr('accept', "<?php echo $allowedTypesString; ?>");
         setTimeout(hideLoadingOverlay, 1000);
         startLoading();
-
+        modalInitSetting();
 
     });
+
+
+    function modalInitSetting() {
+		$('#showPwd').change(function () {
+			if ($(this).is(':checked')) {
+				$('#udpwd').attr('type', 'text');
+			} else {
+				$('#udpwd').attr('type', 'password');
+			}
+		});
+	}
 
     // check size file upload 
     function checkFileSize(input) {
@@ -590,6 +703,17 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
         $('label[for="signstamp"]').show();
         $('#udfileInput').val('');
         $('#udsignstamp_name').text('');
+        
+		$('#showPwd').prop('checked', false);
+		$('#udpwd').attr('type', 'password');
+
+        var authType = '<?php echo $_SESSION['auth_type']; ?>';
+		var ulemailInput = $('#udemail');
+		if (authType === '<?php echo constant('ADMIN') ?>' || authType === '<?php echo constant('ADMINISTRATOR') ?>' || authType === '<?php echo constant('MAIN_ADMIN') ?>') {
+			ulemailInput.removeAttr('readonly');
+		} else {
+			ulemailInput.attr('readonly', 'readonly');
+		}
 
         <?php
         foreach ($admin_list as $key) {
@@ -601,6 +725,8 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                 $("#udname").text($('[name="udname"]').val("<?php echo $key['name'] ?>"));
                 $("#udgrade").text($('[name="udgrade"]').val("<?php echo $key['grade'] ?>"));
                 $("#udemail").text($('[name="udemail"]').val("<?php echo $key['email'] ?>"));
+                $("#currentEmail").text($('[name="currentEmail"]').val("<?php echo $key['email'] ?>"));
+       
                 $("#uddept").val("<?php echo $key['dept'] ?>");
                 $("#udcompanyid").val("<?php echo $key['companyid']; ?>");
                 var genbaId = "<?php echo $key['genid']; ?>";
@@ -622,6 +748,18 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                 var imagePath = "<?= $PATH_IMAGE_STAMP . $key['signstamp'] ?>";
                 $("#udsignstamp").attr("src", imagePath);
                 $("#udbigo").text($('[name="udbigo"]').val("<?php echo $key['bigo'] ?>"));
+
+			    //  get current usertype 
+                var type = $("input[name=ultype]:hidden");
+					type.val("<?php echo $key['type'] ?>");
+                 var ultypeValue = $('#ultype').val();
+						$('input[name="uluser_type"]').each(function () {
+							if ($(this).val() === ultypeValue) {
+								$(this).prop('checked', true);
+							}
+						});
+
+
             }
             <?php
         }

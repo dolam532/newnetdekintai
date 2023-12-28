@@ -533,7 +533,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 									  echo ' selected="selected"';
 								  } ?>>
 									<?= $value ?>
-								</option>
+								</option>$user
 								<?php
 							}
 							?>
@@ -670,8 +670,9 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
 				<button id="submit-button" class="btn btn-default" style="width: auto;" type="button">勤務表印刷</button>
 			</div>
 			<div class="print_btn">
+
 				<input type="button" class="btn btn-default" style="width: auto;"
-					onclick="window.location.href='./kintaiUser.php'" value="戻る ">
+					onclick="window.location.href='<?php echo $backSite ?>'" value="戻る">
 			</div>
 		</div>
 	</div>

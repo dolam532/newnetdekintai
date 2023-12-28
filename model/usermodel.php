@@ -139,7 +139,6 @@ if ($_POST['SearchButton'] == NULL || isset($_POST['ClearButton'])) {
             $sql_user .= ' AND `tbl_user`.`grade` LIKE "' . $searchGrade . '"';
         }
     }
-    error_log($sql_user);
     $sql_user_re = mysqli_query($conn, $sql_user);
     $userlist_list = mysqli_fetch_all($sql_user_re, MYSQLI_ASSOC);
 }
@@ -159,7 +158,8 @@ if (isset($_POST['SaveUserList'])) {
     $pwd = mysqli_real_escape_string($conn, $_POST['pwd']);
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $grade = mysqli_real_escape_string($conn, $_POST['grade']);
-    $type = constant('USER');
+    // $type = constant('USER');
+    $type = mysqli_real_escape_string($conn, $_POST['user_type']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $dept = mysqli_real_escape_string($conn, $_POST['dept']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
@@ -174,6 +174,13 @@ if (isset($_POST['SaveUserList'])) {
     $genid = isset($genid) ? $genid : '0';
     if (!isset($genid)) {
         $genid = 0;
+    }
+
+    if ($type !== array_search($USER_TYPE_TEXT[1], $USER_TYPE_TEXT)) {
+        if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
+            $_SESSION['$user_type_undefined'] = $user_type_undefined;
+            return;
+        }
     }
 
     // check duplicate mail  $email
@@ -262,7 +269,10 @@ if (isset($_POST['UpdateUserList'])) {
     $pwd = mysqli_real_escape_string($conn, $_POST['ulpwd']);
     $name = mysqli_real_escape_string($conn, $_POST['ulname']);
     $grade = mysqli_real_escape_string($conn, $_POST['ulgrade']);
-    $type = mysqli_real_escape_string($conn, $_POST['ultype']);
+    $type = mysqli_real_escape_string($conn, $_POST['uluser_type']);
+    if (!isset($type) || $type == '') {
+        $type = array_search($USER_TYPE_TEXT[1], $USER_TYPE_TEXT);
+    }
     $email = mysqli_real_escape_string($conn, $_POST['ulemail']);
     $dept = mysqli_real_escape_string($conn, $_POST['uldept']);
     $bigo = mysqli_real_escape_string($conn, $_POST['ulbigo']);
@@ -274,7 +284,14 @@ if (isset($_POST['UpdateUserList'])) {
     $udsignstamp_old = mysqli_real_escape_string($conn, $_POST['udsignstamp_old']);
     $gen_id_dev = explode(",", $genba_list);
     $genid = $gen_id_dev[0];
-   
+    $currentEmail = mysqli_real_escape_string($conn, $_POST['currentEmail']);
+
+
+    $isEmailChanged = false;
+    if ($currentEmail !== $email) {
+        $isEmailChanged = true;
+    }
+
 
     $fileExtension = pathinfo($_FILES["udsignstamp_new"]["name"], PATHINFO_EXTENSION);
     $newFileName = generateUniqueFileName($IMAGE_UPLOAD_DIR_STAMP, $fileExtension, $uid, $companyid);
@@ -306,6 +323,14 @@ if (isset($_POST['UpdateUserList'])) {
         $fileName = $udsignstamp_old;
     }
 
+
+    if ($type !== array_search($USER_TYPE_TEXT[1], $USER_TYPE_TEXT)) {
+        if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
+            $_SESSION['$user_type_undefined'] = $user_type_undefined;
+            return;
+        }
+    }
+
     // if not error save
     if ($uploadOk) {
         if (move_uploaded_file($_FILES["udsignstamp_new"]["tmp_name"], $uploadFile)) {
@@ -315,9 +340,33 @@ if (isset($_POST['UpdateUserList'])) {
             error_log("Upload Error");
         }
 
-        $sql = "UPDATE tbl_user SET  
-        companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName', type='$type',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd',
-        outymd='$outymd', genstrymd='$genstrymd', genendymd='$genendymd', upt_dt='$upt_dt' WHERE email ='$email'";
+
+        if ($isEmailChanged) {
+            // check admin 
+            if ($_SESSION['auth_type'] === constant('ADMIN') || $_SESSION['auth_type'] === constant('ADMINISTRATOR') || $_SESSION['auth_type'] === constant('MAIN_ADMIN')) {
+                // check duplicate mail  $email
+                $sql_check_email = "SELECT COUNT(*) AS count FROM tbl_user WHERE email = '$email'";
+                $result = $conn->query($sql_check_email);
+                $row = $result->fetch_assoc();
+                $emailExists = $row['count'] > 0;
+                if ($emailExists) {
+                    $_SESSION['email_is_dupplicate'] = $email_is_dupplicate;
+                    return;
+                }
+
+                $sql = "UPDATE tbl_user SET  
+                 companyid='$companyid', pwd='$pwd', name='$name',  email ='$email' , grade='$grade', signstamp='$fileName', type='$type',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd',
+            outymd='$outymd', genstrymd='$genstrymd', genendymd='$genendymd', upt_dt='$upt_dt' WHERE `uid` ='$uid'";
+            } else {
+                $_SESSION['$user_type_undefined'] = $user_type_undefined;
+                return;
+            }
+        } else {
+            $sql = "UPDATE tbl_user SET  
+            companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName', type='$type',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd',
+            outymd='$outymd', genstrymd='$genstrymd', genendymd='$genendymd', upt_dt='$upt_dt' WHERE email ='$email'";
+        }
+
 
         if ($conn->query($sql) === TRUE) {
             $_SESSION['update_success'] = $update_success;
@@ -334,9 +383,15 @@ if (isset($_POST['btnDelUserList'])) {
     $filePath = $IMAGE_UPLOAD_DIR_STAMP . $_POST['udsignstamp_old'];
     $email = mysqli_real_escape_string($conn, $_POST['ulemail']);
 
+    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
+        $_SESSION['$user_type_undefined'] = $user_type_undefined;
+        return;
+    }
+
+
     $sql = "DELETE FROM `tbl_user` 
             WHERE email ='$email'";
-    // error_log("xxxxx****xxxxx DELETE FILE PATH".$filePath);
+
     if ($conn->query($sql) === TRUE) {
         $_SESSION['delete_success'] = $delete_success;
         if (file_exists($filePath)) {

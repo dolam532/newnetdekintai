@@ -109,10 +109,6 @@ if ($result) {
     }
 }
 
-
-
-
-
 // get company Name 
 $auth_companyid = $_SESSION['auth_companyid'];
 $getCompanysql = "SELECT `companyname` FROM tbl_company WHERE `companyid` = '$auth_companyid' LIMIT 1";
@@ -286,6 +282,7 @@ $countKuyka = 0;
 $countDaikyu = 0;
 $countKekkin = 0;
 $countClose = 0;
+$countFurikyu = 0;
 //---2023-10-18 add end ------//
 foreach ($worktime_list as $work) {
     if (isset($work['jobstarthh']) && !empty($work['jobstarthh'])) {
@@ -351,9 +348,12 @@ foreach ($worktime_list as $work) {
             $countDaikyu++;
         }
         if ($work['holy_decide'] == array_keys($HOLY_DECIDE)[4]) {
-            $countClose++;
+            $countFurikyu++;
         }
         if ($work['holy_decide'] == array_keys($HOLY_DECIDE)[5]) {
+            $countClose++;
+        }
+        if ($work['holy_decide'] == array_keys($HOLY_DECIDE)[6]) {
             $countKekkin++;
         }
     }
@@ -929,7 +929,7 @@ if (isset($_POST['selyyM']) && isset($_POST['selmmM'])) {
 
 
 
-$sql_workmonth_select = 'SELECT `tbl_workmonth`.*, `tbl_company`.`companyname` , `tbl_user`.`name` FROM `tbl_workmonth`   
+$sql_workmonth_select = 'SELECT `tbl_workmonth`.*, `tbl_company`.`companyname` , `tbl_user`.`name`, `tbl_user`.`dept` FROM `tbl_workmonth`   
     LEFT JOIN `tbl_company` ON `tbl_workmonth`.`companyid` = `tbl_company`.`companyid` 
 	LEFT JOIN `tbl_user` ON `tbl_workmonth`.`email` = `tbl_user`.`email`
     WHERE (`tbl_workmonth`.`workym`) IN("' . $yearM . $monthM . '")';

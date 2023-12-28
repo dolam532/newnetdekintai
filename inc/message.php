@@ -38,6 +38,7 @@ $user_genba_list_empty = '勤務時間タイプを選択してください。';
 $file_size_isvalid_STAMP = 'ファイルサイズが無効です。ファイルサイズが' . round($STAMP_MAXSIZE / 1000000, 0) . 'MB未満のファイルを選択してください。';
 $file_extension_invalid_STAMP = 'ファイルの拡張子無効です。ファイルの拡張子が [ ' . implode(', ', $ALLOWED_TYPES_STAMP) . ' ] です。';
 $email_is_dupplicate = 'メールが存在されています。他のメールを登録してください。';
+$user_type_undefined = '権限がありませんでした。担当者まで連絡してください。';
 
 // kyukaReg
 $kyuka_no_receive = '休暇はまだもらえません。';

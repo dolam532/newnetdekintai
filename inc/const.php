@@ -33,8 +33,16 @@ $HOLY_DECIDE = array(
     1 => '祝日',
     2 => '休暇',
     3 => '代休',
-    4 => '休業',
+    4 => '振休',
+    5 => '休業',
     9 => '欠勤'
+);
+
+// holy_decide 
+$USER_TYPE_TEXT = array(
+    1 => '社員',
+    3 => '担当者',
+    6 => '責任者',
 );
 
 // CODEMASTER CONFIG 

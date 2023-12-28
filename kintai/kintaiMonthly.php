@@ -23,6 +23,8 @@ if ($_SESSION['auth'] == false) {
 		height: 30px;
 		background-color: #4CAF50;
 	}
+
+
 </style>
 <title>月勤務表</title>
 <?php include('../inc/menu.php'); ?>
@@ -111,8 +113,18 @@ if ($_SESSION['auth'] == false) {
 						<?php endif; ?>
 						<td>
 							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('USER')) : ?>
-								<a href="../kintai/kintaiReg.php"><span><?= $workmonth_select['name'] ?></span></a>
-							<?php elseif ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+									<form method="post"
+									action="../kintaidetail/kintaiUserDetail.php" >
+									<input type="hidden" value="<?= $workmonth_select['uid'] ?>" name="uid_g">
+									<input type="hidden" value="<?= $workmonth_select['email'] ?>" name="email_g">
+									<input type="hidden" value="<?= $workmonth_select['name'] ?>" name="name_g">
+									<input type="hidden" value="<?= $workmonth_select['genid'] ?>" name="genid_g">
+									<input type="hidden" value="<?= $workmonth_select['dept'] ?>" name="dept_g">
+									<input type="hidden" value="kintaiMonthly" name="fromsite">
+									<input type="submit" name="btnUpdateCL" class="btn btn-primary" id="btnUpdateCL"
+										role="button" value="<?= $workmonth_select['name'] ?>">
+								</form>
+								<?php elseif ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
 								<span><?= $workmonth_select['name'] ?></span>
 							<?php endif; ?>
 						</td>
