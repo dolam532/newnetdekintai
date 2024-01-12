@@ -340,7 +340,6 @@ if (isset($_POST['UpdateUserList'])) {
             error_log("Upload Error");
         }
 
-
         if ($isEmailChanged) {
             // check admin 
             if ($_SESSION['auth_type'] === constant('ADMIN') || $_SESSION['auth_type'] === constant('ADMINISTRATOR') || $_SESSION['auth_type'] === constant('MAIN_ADMIN')) {
@@ -355,7 +354,7 @@ if (isset($_POST['UpdateUserList'])) {
                 }
 
                 $sql = "UPDATE tbl_user SET  
-                 companyid='$companyid', pwd='$pwd', name='$name',  email ='$email' , grade='$grade', signstamp='$fileName', type='$type',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd',
+                 pwd='$pwd', name='$name',  email ='$email' , grade='$grade', signstamp='$fileName', type='$type',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd',
             outymd='$outymd', genstrymd='$genstrymd', genendymd='$genendymd', upt_dt='$upt_dt' WHERE `uid` ='$uid'";
             } else {
                 $_SESSION['$user_type_undefined'] = $user_type_undefined;
@@ -363,8 +362,14 @@ if (isset($_POST['UpdateUserList'])) {
             }
         } else {
             $sql = "UPDATE tbl_user SET  
-            companyid='$companyid', pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName', type='$type',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd',
+             pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName', type='$type',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd',
             outymd='$outymd', genstrymd='$genstrymd', genendymd='$genendymd', upt_dt='$upt_dt' WHERE email ='$email'";
+        }
+
+        // when user change only password , image  , genid
+        if($_SESSION['auth_type'] === constant('USER') ) {
+            $sql = "UPDATE tbl_user SET  
+            pwd='$pwd',  signstamp='$fileName',  genid='$genid' WHERE email ='$email'";
         }
 
 
