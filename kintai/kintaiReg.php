@@ -1225,7 +1225,7 @@ if ($_SESSION['auth'] == false) {
 
 
 <!-- PDF product -->
-<form id="autopdf" action="../pdfdownload/generatepdf.php" method="post" target="_blank">
+<form id="autopdf" action="../pdfdownload/generatekinmuhyopdf.php" method="post" target="_blank">
 	<input type="hidden" name="data" value="<?php echo htmlspecialchars(json_encode($datas)); ?>">
 	<input type="hidden" name="holidaysdata" value="<?php echo htmlspecialchars(json_encode($holidayDates_)); ?>">
 	<input type="hidden" name="signstamp_admin"
