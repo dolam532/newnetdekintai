@@ -45,6 +45,20 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	span.kyukaReg_class {
 		display: none;
 	}
+
+	.groupinput {
+		display: table;
+	}
+
+	.table-wrap {
+		overflow-x: scroll;
+	}
+
+	.table {
+		width: 100%;
+		border-collapse: collapse;
+		white-space: nowrap;
+	}
 </style>
 <title>休暇届</title>
 <?php include('../inc/menu.php'); ?>
@@ -153,33 +167,43 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				</div>
 			<?php endif; ?>
 		</div>
-		<div class="form-group">
-			<table class="table table-bordered datatable">
+		<div class="form-group table-wrap">
+			<table class="table table-bordered datatable" style="overflow-x: auto;">
 				<thead>
 					<tr class="info">
-						<th class="th0" style="text-align: center; width: 5%;">ID</th>
-						<th class="th1" style="text-align: center; width: 5%;">申請日</th>
-						<th class="th1" style="text-align: center; width: 7%;">社員名</th>
-						<th class="th2" style="text-align: center; width: 7%;">休暇区分</th>
-						<th class="th3" style="text-align: center; width: 12%;">申請期間</th>
-						<th class="th4" style="text-align: center; width: 8%;">申込日(時)</th>
-						<th class="th5" style="text-align: center; width: 12%;">年次期間</th>
-						<th class="th6" style="text-align: center; width: 8%;">総休暇数</th>
-						<th class="th7" style="text-align: center; width: 7%;">残日数</th>
-						<th class="th8" style="text-align: center; width: 10%;">決裁</th>
-						<th class="th9" style="text-align: center; width: auto;">暇中居る連絡先</th>
+						<th style="text-align: center;">ID</th>
+						<th style="text-align: center;">申請日</th>
+						<th style="text-align: center;">入社年月</th>
+						<th style="text-align: center;">社員名</th>
+						<th style="text-align: center;">申込区分</th>
+						<th style="text-align: center;">休暇区分</th>
+						<th style="text-align: center;">年度算定期間</th>
+						<th style="text-align: center;">申請期間</th>
+						<th style="text-align: center;">申込日(時)</th>
+						<th style="text-align: center;">総有給休暇</th>
+						<th style="text-align: center;">前年度の繰越残</th>
+						<th style="text-align: center;">当該年度付与</th>
+						<th style="text-align: center;">使用済数</th>
+						<th style="text-align: center;">使用前残</th>
+						<th style="text-align: center;">今回使用</th>
+						<th style="text-align: center;">使用後済</th>
+						<th style="text-align: center;">使用後残</th>
+						<th style="text-align: center;">事由</th>
+						<th style="text-align: center;">暇中居る連絡先</th>
+						<th style="text-align: center;">Tel</th>
+						<th style="text-align: center;">決裁</th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php if (empty($userkyuka_list)) { ?>
 						<tr>
-							<td colspan="11" align="center"><?php echo $data_save_no; ?></td>
+							<td colspan="21" align="center"><?php echo $data_save_no; ?></td>
 						</tr>
 						<?php } elseif (!empty($userkyuka_list)) {
 						foreach ($userkyuka_list as $userkyuka) {
 						?>
 							<tr>
-								<td class="td0">
+								<td>
 									<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
 										<a href="#">
 											<span class="showModal">
@@ -195,25 +219,67 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										</span>
 									<?php endif; ?>
 								</td>
-								<td class="td1"><span><?= $userkyuka['kyukaymd'] ?></span></td>
-								<td class="td2"><span><?= $userkyuka['name'] ?></span></td>
-								<td class="td3">
+								<td><span><?= $userkyuka['kyukaymd'] ?></span></td>
+								<td><span><?= substr($userkyuka['inymd'], 0, 4) ?>年<?= substr($userkyuka['inymd'], 5, 2) ?>月</span></td>
+								<td><span><?= $userkyuka['name'] ?></span></td>
+								<td>
+									<span>
+										<?php
+										if ($userkyuka['kyukatype'] == 1) {
+											echo "日付";
+										} else {
+											echo "時間";
+										}
+										?>
+									</span>
+								</td>
+								<td>
 									<span>
 										<?php foreach ($codebase_list as $k) : ?>
 											<?php
-											if ($k['code'] == $userkyuka['dept']) {
+											if ($k['code'] == $userkyuka['kyukacode']) {
 												echo $k['name'];
 											}
 											?>
 										<?php endforeach; ?>
 									</span>
 								</td>
-								<td class="td4"><span><?= $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'] ?></span></td>
-								<td class="td5"><span><?= $userkyuka['ymdcnt'] ?>日(<?= $userkyuka['timecnt'] ?>時)</span></td>
-								<td class="td6"><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
-								<td class="td7"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] ?></span></td>
-								<td class="td8"><span><?= $userkyuka['oldcnt'] + $userkyuka['newcnt'] - $userkyuka['usecnt'] - (int)($userkyuka['usetime'] / 8) ?></span></td>
-								<td class="td9"><span name="allowok">
+								<td><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
+								<td>
+									<span>
+										<?php
+										if ($userkyuka['kyukatype'] == 1) {
+											echo $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'];
+																		} else {
+																			echo $userkyuka['strymd'] ?>~<?= $userkyuka['strymd'];
+																										}
+																											?>
+									</span>
+								</td>
+								<td>
+									<span>
+										<?php
+										if ($userkyuka['kyukatype'] == 1) {
+											echo $userkyuka['ymdcnt'] . "日";
+										} else {
+											echo $userkyuka['timecnt'] . "時間";
+										}
+										?>
+									</span>
+								</td>
+								<td><span><?= $userkyuka['tothday'] ?></span></td>
+								<td><span><?= $userkyuka['oldcnt'] ?></span></td>
+								<td><span><?= $userkyuka['newcnt'] ?></span></td>
+								<td><span><?= $userkyuka['usefinishcnt'] ?></span></td>
+								<td><span><?= $userkyuka['usebeforecnt'] ?></span></td>
+								<td><span><?= $userkyuka['usenowcnt'] ?></span></td>
+								<td><span><?= $userkyuka['usefinishaftercnt'] ?></span></td>
+								<td><span><?= $userkyuka['useafterremaincnt'] ?></span></td>
+								<td><span><?= $userkyuka['reason'] ?></span></td>
+								<td><span><?= $userkyuka['destplace'] ?></span></td>
+								<td><span><?= $userkyuka['desttel'] ?></span></td>
+								<td>
+									<span>
 										<?php
 										if ($userkyuka['allowok'] == "0") { ?>
 											<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
@@ -234,7 +300,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 											<?php } ?>
 									</span>
 								</td>
-								<td class="td10"><span><?= $userkyuka['destplace'] ?></span></td>
 							</tr>
 					<?php }
 					} ?>
@@ -252,27 +317,27 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="modal-header">休年届登録(<span id="sname">New</span>)
 							<button class="close" data-dismiss="modal">x</button>
 						</div>
-						<div class="modal-body" style="text-align: left; height: 400px; overflow-y: auto;">
+						<div class="modal-body" style="text-align: left; height: 600px; overflow-y: auto;">
 							<div class="row one">
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukaymd">
 									<label for="kyukaymd">申請日</label>
 									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 inymd">
-									<label for="kyukaymd">入社年月</label>
+									<label for="inymd">入社年月</label>
 									<input type="text" class="form-control" name="inymd" style="text-align: center" value="<?= substr($_SESSION['auth_inymd'], 0, 4) ?>年<?= substr($_SESSION['auth_inymd'], 5, 2) ?>月" readonly>
 								</div>
 								<div class="col-md-6 col-sm-6 col-sx-6 kyukacompanyname">
-									<label for="kyukaymd">社員名</label>
+									<label for="name">社員名</label>
 									<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-										<select class="form-control" id="kyukaname" name="kyukacode">
+										<select class="form-control" id="kyukaname" name="kyukaname">
 											<option value="" disabled selected>選択</option>
 											<?php foreach ($user_list as $key) : ?>
 												<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
 											<?php endforeach; ?>
 										</select>
 									<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
-										<select class="form-control" id="kyukaname" name="kyukacode">
+										<select class="form-control" id="kyukaname" name="kyukaname">
 											<?php foreach ($user_list as $key) : ?>
 												<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
 											<?php endforeach; ?>
@@ -291,18 +356,22 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										<input type="radio" name="kyukatype" value="1">日付
 									</div>
 								</div>
-								<div class="col-md-4 col-sm-4 col-sx-4 kyukacode">
+								<div class="col-md-3 col-sm-3 col-sx-3 kyukacode">
 									<label for="kyukacode">休暇区分</label>
-									<select class="form-control" id="kyukaname" name="kyukacode">
+									<select class="form-control" id="kyukacode" name="kyukacode">
 										<option value="" disabled selected style="font-size:10px;">選択</option>
 										<?php foreach ($codebase_list as $key) : ?>
 											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
 										<?php endforeach; ?>
 									</select>
 								</div>
-								<div class="col-md-5 col-sm-5 col-sx-5 kyukatype">
+								<div class="col-md-6 col-sm-6 col-xs-6 kyukatype">
 									<label for="kyukatype">年度算定期間</label>
-									<input type="text" class="form-control" id="annualcp" name="annualcp" placeholder="日付" required="required" maxlength="10" style="text-align: center">
+									<div class="groupinput">
+										<input type="text" class="form-control" id="vacationstr" name="vacationstr" placeholder="開始日" required="required" maxlength="10" style="text-align: center;" value="<?= $startdate_ ?>">
+										<div class="input-group-addon">~</div>
+										<input type="text" class="form-control" id="vacationend" name="vacationend" placeholder="終了日" required="required" maxlength="10" style="text-align: center;" value="<?= $enddate_ ?>">
+									</div>
 								</div>
 							</div>
 							<br>
@@ -331,42 +400,227 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<input type="number" class="form-control" id="tothday" name="tothday" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
-									<label for="rdpyear">前年度の繰越残</label>
-									<input type="number" class="form-control" id="rdpyear" name="rdpyear" placeholder="番号" style="text-align: center" value="">
+									<label for="oldcnt">前年度の繰越残</label>
+									<input type="number" class="form-control" id="oldcnt" name="oldcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class=" col-md-3 col-sm-3 col-sx-3">
-									<label for="gdyear">当該年度付与</label>
-									<input type="number" class="form-control" id="gdyear" name="gdyear" placeholder="番号" style="text-align: center" value="">
+									<label for="newcnt">当該年度付与</label>
+									<input type="number" class="form-control" id="newcnt" name="newcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 no">
-									<label for="ufcnt">使用済数</label>
-									<input type="number" class="form-control" id="ufcnt" name="ufcnt" placeholder="番号" style="text-align: center" value="">
+									<label for="usefinishcnt">使用済数</label>
+									<input type="number" class="form-control" id="usefinishcnt" name="usefinishcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
 							<div class="row five">
 								<div class="col-md-3 col-sm-3 col-sx-3">
-									<label for="totcnt">使用前残</label>
-									<input type="number" class="form-control" id="totcnt" name="totcnt" placeholder="番号" style="text-align: center" value="">
+									<label for="usebeforecnt">使用前残</label>
+									<input type="number" class="form-control" id="usebeforecnt" name="usebeforecnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
-									<label for="usecnt">今回使用</label>
-									<input type="number" class="form-control" id="usecnt" name="usecnt" placeholder="番号" style="text-align: center" value="">
+									<label for="usenowcnt">今回使用</label>
+									<input type="number" class="form-control" id="usenowcnt" name="usenowcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
-									<label for="usetime">使用後済</label>
-									<input type="number" class="form-control" id="usetime" name="usetime" placeholder="番号" style="text-align: center" value="">
+									<label for="usefinishaftercnt">使用後済</label>
+									<input type="number" class="form-control" id="usefinishaftercnt" name="usefinishaftercnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
-									<label for="usetime">使用後残</label>
-									<input type="number" class="form-control" id="usetime" name="usetime" placeholder="番号" style="text-align: center" value="">
+									<label for="useafterremaincnt">使用後残</label>
+									<input type="number" class="form-control" id="useafterremaincnt" name="useafterremaincnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
 							<div class="row six">
 								<div class="col-md-8 col-sm-8 col-sx-8">
-									<label for="reasion">事由</label>
-									<textarea class="form-control" id="reasion" name="reasion" rows="2"></textarea>
+									<label for="reason">事由</label>
+									<textarea class="form-control" id="reason" name="reason" rows="2"></textarea>
+								</div>
+								<div class="col-md-2 col-sm-2 col-sx-2">
+									<label for="ymdcnt">申込日</label>
+									<input type="number" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class="col-md-2 col-sm-2 col-sx-2">
+									<label for="timecnt">申込時間</label>
+									<input type="number" class="form-control" id="timecnt" name="timecnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+							</div>
+							<br>
+							<div class="row seven">
+								<div class="col-md-4 col-sm-4 col-sx-4 address">
+									<label for="destcode">暇中居る連絡先</label>
+									<div class="custom-control custom-radio">
+										&nbsp;&nbsp;
+										<input type="radio" name="destcode" value="0">日本
+										<input type="radio" name="destcode" value="1">韓国
+										<input type="radio" name="destcode" value="2">その他
+									</div>
+								</div>
+								<div class="col-md-4 col-sm-4 col-sx-4 address">
+									<label for="destplace">場所</label>
+									<input type="text" class="form-control" name="destplace" id="destplace" placeholder="国" required="required" style="text-align: left">
+								</div>
+								<div class="col-md-4 col-sm-4 col-sx-4 address">
+									<label for="desttel">Tel</label>
+									<input type="text" class="form-control" name="desttel" id="desttel" placeholder="090xxxxxxxx" required="required" style="text-align: left">
+								</div>
+							</div>
+							<br>
+							<div class="row eight">
+								<div class="col-md-3 col-sm-3 col-sx-3"></div>
+								<div class="col-md-2 col-sm-2 col-sx-2 btn">
+									<p class="text-center">
+										<input type="submit" name="SaveKyuka" class="btn btn-primary btn-ms" id="btnReg" role="button" value="登録">
+									</p>
+								</div>
+								<div class="col-md-2 col-sm-2 col-sx-2 btn" style="margin-left: 5px;margin-right: 5px;">
+									<p class="text-center">
+										<a class="btn btn-success btn-ms" id="btnClear" role="button">クリア </a>
+									</p>
+								</div>
+								<div class="col-md-2 col-sm-2 col-sx-2 btn">
+									<p class="text-center">
+										<a class="btn btn-default btn-ms" data-dismiss="modal" role="button">閉じる </a>
+									</p>
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3"></div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+	<!-- 編集 -->
+	<div class="row">
+		<div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
+			<div class="modal-dialog">
+				<form method="post">
+					<div class="modal-content">
+						<div class="modal-header">休年届登録(<span id="sname">New</span>)
+							<button class="close" data-dismiss="modal">x</button>
+						</div>
+						<div class="modal-body" style="text-align: left; height: 600px; overflow-y: auto;">
+							<div class="row one">
+								<div class="col-md-3 col-sm-3 col-sx-3 kyukaymd">
+									<label for="kyukaymd">申請日</label>
+									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3 inymd">
+									<label for="inymd">入社年月</label>
+									<input type="text" class="form-control" name="inymd" style="text-align: center" value="<?= substr($_SESSION['auth_inymd'], 0, 4) ?>年<?= substr($_SESSION['auth_inymd'], 5, 2) ?>月" readonly>
+								</div>
+								<div class="col-md-6 col-sm-6 col-sx-6 kyukacompanyname">
+									<label for="name">社員名</label>
+									<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+										<select class="form-control" id="kyukaname" name="kyukaname">
+											<option value="" disabled selected>選択</option>
+											<?php foreach ($user_list as $key) : ?>
+												<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
+											<?php endforeach; ?>
+										</select>
+									<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+										<select class="form-control" id="kyukaname" name="kyukaname">
+											<?php foreach ($user_list as $key) : ?>
+												<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
+											<?php endforeach; ?>
+										</select>
+									<?php endif; ?>
+								</div>
+							</div>
+							<br>
+							<div class="row two">
+								<div class="col-md-3 col-sm-3 col-sx-3 kyukatype">
+									<label for="kyukatype">申込区分</label>
+									<div class="custom-control custom-radio">
+										&nbsp;
+										<input type="radio" name="kyukatype" value="0">時間
+										&nbsp;&nbsp;
+										<input type="radio" name="kyukatype" value="1">日付
+									</div>
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3 kyukacode">
+									<label for="kyukacode">休暇区分</label>
+									<select class="form-control" id="kyukacode" name="kyukacode">
+										<option value="" disabled selected style="font-size:10px;">選択</option>
+										<?php foreach ($codebase_list as $key) : ?>
+											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+								<div class="col-md-6 col-sm-6 col-xs-6 kyukatype">
+									<label for="kyukatype">年度算定期間</label>
+									<div class="groupinput">
+										<input type="text" class="form-control" id="vacationstr" name="vacationstr" placeholder="開始日" required="required" maxlength="10" style="text-align: center;" value="<?= $startdate_ ?>">
+										<div class="input-group-addon">~</div>
+										<input type="text" class="form-control" id="vacationend" name="vacationend" placeholder="終了日" required="required" maxlength="10" style="text-align: center;" value="<?= $enddate_ ?>">
+									</div>
+								</div>
+							</div>
+							<br>
+							<div class="row three">
+								<div class="col-md-3 col-sm-3 col-sx-3 day">
+									<label for="strymd">期間(F)</label>
+									<input type="text" class="form-control" id="strymd" name="strymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3 day">
+									<label for="endymd">期間(T)</label>
+									<input type="text" class="form-control" id="endymd" name="endymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3 day">
+									<label for="strtime">時間(F)</label>
+									<input type="number" class="form-control" id="strtime" name="strtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3 day">
+									<label for="endtime">時間(T)</label>
+									<input type="number" class="form-control" id="endtime" name="endtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+								</div>
+							</div>
+							<br>
+							<div class="row four">
+								<div class="col-md-3 col-sm-3 col-sx-3">
+									<label for="tothday">総有給休暇</label>
+									<input type="number" class="form-control" id="tothday" name="tothday" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3">
+									<label for="oldcnt">前年度の繰越残</label>
+									<input type="number" class="form-control" id="oldcnt" name="oldcnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class=" col-md-3 col-sm-3 col-sx-3">
+									<label for="newcnt">当該年度付与</label>
+									<input type="number" class="form-control" id="newcnt" name="newcnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3 no">
+									<label for="usefinishcnt">使用済数</label>
+									<input type="number" class="form-control" id="usefinishcnt" name="usefinishcnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+							</div>
+							<br>
+							<div class="row five">
+								<div class="col-md-3 col-sm-3 col-sx-3">
+									<label for="usebeforecnt">使用前残</label>
+									<input type="number" class="form-control" id="usebeforecnt" name="usebeforecnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3">
+									<label for="usenowcnt">今回使用</label>
+									<input type="number" class="form-control" id="usenowcnt" name="usenowcnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3">
+									<label for="usefinishaftercnt">使用後済</label>
+									<input type="number" class="form-control" id="usefinishaftercnt" name="usefinishaftercnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3">
+									<label for="useafterremaincnt">使用後残</label>
+									<input type="number" class="form-control" id="useafterremaincnt" name="useafterremaincnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+							</div>
+							<br>
+							<div class="row six">
+								<div class="col-md-8 col-sm-8 col-sx-8">
+									<label for="reason">事由</label>
+									<textarea class="form-control" id="reason" name="reason" rows="2"></textarea>
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
 									<label for="ymdcnt">申込日</label>
@@ -558,12 +812,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			return false;
 		}
 
-		var totcnt = $("#totcnt").val();
-		var usecnt = $("#usecnt").val();
-		var usetime = $("#usetime").val();
-
 		$('#modal').modal('toggle');
-
 		// In the case of a new application, it cannot be used until the application category is selected.
 		$("#strymd").val("").prop('disabled', true);
 		$("#endymd").val("").prop('disabled', true);
@@ -573,13 +822,29 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$("#endtime").val("").prop('disabled', true);
 	});
 
-	// 年次有給休暇(計算)
-	$("#rdpyear, #gdyear").on("input", function() {
-    var rdpyearValue = parseFloat($("#rdpyear").val()) || 0;
-    var gdyearValue = parseFloat($("#gdyear").val()) || 0;
-    var totaly = rdpyearValue + gdyearValue;
-    $("#tothday").val(totaly);
-});
+	// ①総有給休暇数, ②＋③＝①
+	$("#oldcnt, #newcnt").on("input", function() {
+		var oldcntValue = parseFloat($("#oldcnt").val()) || 0;
+		var newcntValue = parseFloat($("#newcnt").val()) || 0;
+		var totaly = oldcntValue + newcntValue;
+		$("#tothday").val(totaly);
+	});
+
+	// ⑦使用後済数(④＋⑥)
+	$("#usefinishcnt, #usenowcnt").on("input", function() {
+		var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
+		var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
+		var totaly = usefinishcntValue + usenowcntValue;
+		$("#usefinishaftercnt").val(totaly);
+	});
+
+	// ⑧使用後残日数(⑤－⑥)
+	$("#usebeforecnt, #usenowcnt").on("input", function() {
+		var usebeforecntValue = parseFloat($("#usebeforecnt").val()) || 0;
+		var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
+		var suby = usebeforecntValue - usenowcntValue;
+		$("#useafterremaincnt").val(suby);
+	});
 
 	// Lock and unlock items when selecting vacation request type (day/hour)
 	$('input[type=radio][name=kyukatype]').change(function() {
@@ -591,6 +856,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			$("#endtime").prop('disabled', true);
 			$("#timecnt").val(0);
 			$("#timecnt").prop('disabled', true);
+			$("#ymdcnt").prop('disabled', false);
 		} else if (this.value == '0') {
 			// Time selection
 			$("#strymd").prop('disabled', false);
@@ -599,6 +865,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			$("#endtime").prop('disabled', false);
 			$("#ymdcnt").val(0);
 			$("#ymdcnt").prop('disabled', true);
+			$("#timecnt").prop('disabled', false);
 		}
 	});
 
@@ -650,30 +917,27 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$("#ymdcnt").val(dateDiff + 1);
 	});
 
-	// Calculation of vacation time change
-	$("#strtime").on("change keyup paste", function() {
-		if (($("#strtime").val() * 1 > $("#endtime").val() * 1) && ($("#endtime").val().length == 2)) {
-			$("#endtime").val($("#strtime").val());
-		}
-		var timeDiff = $("#endtime").val() - $("#strtime").val()
-
-		timeDiff = timeDiff > 4 ? timeDiff - 1 : timeDiff; // Excluding lunch time
-		timeDiff = timeDiff > 8 ? 8 : timeDiff; // Up to 8 hours of application time at a time
-		$("#timecnt").val(timeDiff);
+	$(document).ready(function() {
+		$("#endtime, #strtime").on("input", function() {
+			calculateTimeDifference();
+		});
 	});
 
-	// Calculation of vacation time change
-	$("#endtime").on("change keyup paste", function() {
-		if (($("#strtime").val() * 1 > $("#endtime").val() * 1) && ($("#endtime").val().length == 2)) {
-			$("#endtime").val($("#strtime").val());
+	function calculateTimeDifference() {
+		var endTime = $("#endtime").val();
+		var startTime = $("#strtime").val();
+
+		if (endTime !== "" && startTime !== "") {
+			endTime = parseInt(endTime, 10);
+			startTime = parseInt(startTime, 10);
+
+			// Check if the values are valid integers
+			if (!isNaN(endTime) && !isNaN(startTime)) {
+				var timeDifference = endTime - startTime;
+				$("#timecnt").val(timeDifference);
+			}
 		}
-		var timeDiff = $("#endtime").val() - $("#strtime").val()
-
-		timeDiff = timeDiff > 4 ? timeDiff - 1 : timeDiff; // Excluding lunch time
-		timeDiff = timeDiff > 8 ? 8 : timeDiff; // Up to 8 hours of application time at a time
-
-		$("#timecnt").val(timeDiff);
-	});
+	}
 
 	// Datepeeker Calender
 	$("#strymd").datepicker({
@@ -682,6 +946,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	$("#endymd").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+
+	$("#vacationstr").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+
+	$("#vacationend").datepicker({
 		changeYear: true,
 		dateFormat: 'yy/mm/dd'
 	});
