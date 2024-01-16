@@ -204,20 +204,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						?>
 							<tr>
 								<td>
-									<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-										<a href="#">
-											<span class="showModal">
-												<span class="kyukaReg_class">
-													<?= $userkyuka['kyukaid'] . ',' ?>
-												</span>
-												<?= $userkyuka['uid'] ?>
+									<a href="#">
+										<span class="showModal">
+											<span class="kyukaReg_class">
+												<?= $userkyuka['kyukaid'] . ',' ?>
 											</span>
-										</a>
-									<?php else : ?>
-										<span>
 											<?= $userkyuka['uid'] ?>
 										</span>
-									<?php endif; ?>
+									</a>
 								</td>
 								<td><span><?= $userkyuka['kyukaymd'] ?></span></td>
 								<td><span><?= substr($userkyuka['inymd'], 0, 4) ?>年<?= substr($userkyuka['inymd'], 5, 2) ?>月</span></td>
@@ -495,7 +489,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 	<!-- 編集 -->
 	<div class="row">
-		<div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
+		<div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog">
 				<form method="post">
 					<div class="modal-content">
@@ -506,23 +500,23 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="row one">
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukaymd">
 									<label for="kyukaymd">申請日</label>
-									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
+									<input type="text" class="form-control" name="udkyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 inymd">
 									<label for="inymd">入社年月</label>
-									<input type="text" class="form-control" name="inymd" style="text-align: center" value="<?= substr($_SESSION['auth_inymd'], 0, 4) ?>年<?= substr($_SESSION['auth_inymd'], 5, 2) ?>月" readonly>
+									<input type="text" class="form-control" name="udinymd" style="text-align: center" value="<?= substr($_SESSION['auth_inymd'], 0, 4) ?>年<?= substr($_SESSION['auth_inymd'], 5, 2) ?>月" readonly>
 								</div>
 								<div class="col-md-6 col-sm-6 col-sx-6 kyukacompanyname">
 									<label for="name">社員名</label>
 									<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-										<select class="form-control" id="kyukaname" name="kyukaname">
+										<select class="form-control" id="udkyukaname" name="udkyukaname">
 											<option value="" disabled selected>選択</option>
 											<?php foreach ($user_list as $key) : ?>
 												<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
 											<?php endforeach; ?>
 										</select>
 									<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
-										<select class="form-control" id="kyukaname" name="kyukaname">
+										<select class="form-control" id="udkyukaname" name="kyukaname">
 											<?php foreach ($user_list as $key) : ?>
 												<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
 											<?php endforeach; ?>
@@ -680,7 +674,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 	<!-- お知らせ -->
 	<div class="row">
-		<div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false">
+		<div class="modal" id="modal3" tabindex="-1" data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header"><span class="popup-title">お知らせ(注意)</span>
@@ -801,9 +795,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	</div>
 </div>
 <script>
-	// New button
+	// New button(新規)
 	$(document).on('click', '#btnNew', function(e) {
-		//Check Receive Kyuka or Not
+		// Check Receive Kyuka or Not
 		var currentDate = new Date();
 		var targetDate = new Date('<?php echo $_SESSION['auth_inymd'] ?>');
 		targetDate.setMonth(targetDate.getMonth() + 6);
@@ -961,7 +955,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	$(document).on('click', '#btnAnnt', function(e) {
-		$('#modal2').modal('toggle');
+		$('#modal3').modal('toggle');
 	});
 
 	// Long button treatment
@@ -1084,6 +1078,64 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$('#desttel').val('');
 	});
 
+	// 編集
+	$(document).on('click', '.showModal', function() {
+		$('#modal2').modal('toggle');
+		var ArrayData = $(this).text().trim();
+		var SeparateArr = ArrayData.split(',');
+		var Kyukaid = SeparateArr[0];
+
+		<?php
+		foreach ($userkyuka_list as $key) {
+		?>
+			if ('<?php echo $key['kyukaid'] ?>' === Kyukaid) {
+				$("#usname").text('<?php echo $key['uid'] ?>');
+				$("#uduid").text($('[name="uduid"]').val("<?php echo $key['uid'] ?>"));
+				$("#udpwd").text($('[name="udpwd"]').val("<?php echo $key['pwd'] ?>"));
+				$("#udname").text($('[name="udname"]').val("<?php echo $key['name'] ?>"));
+				$("#udgrade").text($('[name="udgrade"]').val("<?php echo $key['grade'] ?>"));
+				$("#udemail").text($('[name="udemail"]').val("<?php echo $key['email'] ?>"));
+				$("#currentEmail").text($('[name="currentEmail"]').val("<?php echo $key['email'] ?>"));
+
+				$("#uddept").val("<?php echo $key['dept'] ?>");
+				$("#udcompanyid").val("<?php echo $key['companyid']; ?>");
+				var genbaId = "<?php echo $key['genid']; ?>";
+				var options = $("#udgenba_list option");
+				options.each(function(index, option) {
+					console.log(option.value);
+					if (option.value == genbaId) {
+						$(option).prop("selected", true);
+						return false;
+					}
+				});
+
+				if (genbaId !== '' && $("#udgenba_list option:selected").val() !== genbaId) {
+					$("#udgenba_list option").eq(0).prop("selected", true);
+				}
+				var udsignstamp_old = $("input[name=udsignstamp_old]:hidden");
+				udsignstamp_old.val("<?php echo $key['signstamp'] ?>");
+				var udsignstamp_old = udsignstamp_old.val();
+				var imagePath = "<?= $PATH_IMAGE_STAMP . $key['signstamp'] ?>";
+				$("#udsignstamp").attr("src", imagePath);
+				$("#udbigo").text($('[name="udbigo"]').val("<?php echo $key['bigo'] ?>"));
+
+				//  get current usertype 
+				var type = $("input[name=ultype]:hidden");
+				type.val("<?php echo $key['type'] ?>");
+				var ultypeValue = $('#ultype').val();
+				$('input[name="uluser_type"]').each(function() {
+					if ($(this).val() === ultypeValue) {
+						$(this).prop('checked', true);
+					}
+				});
+
+
+			}
+		<?php
+		}
+		?>
+	});
+
 	// Click (modify) employee ID in the grid: popup & display contents
 	$(document).on('click', '.showModal2', function() {
 		$('#modal3').modal('toggle');
@@ -1121,8 +1173,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		}
 		?>
 	});
-
-
 
 	window.onload = function() {
 		setTimeout(hideLoadingOverlay, 1000);
