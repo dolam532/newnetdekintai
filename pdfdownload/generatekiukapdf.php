@@ -130,7 +130,6 @@ $kyukaShuruiFullTextShow = $kiukashurui_1.'　'.$kiukashurui_2.'　'.$kiukashuru
 							."$kiukashurui_10";
 
 
-
 //-----------// 
 //----6.-----// FORM DATAS IN  入社年月 AND  勤続年数 Line  Config Data here 
 //-----------// 
@@ -191,18 +190,26 @@ $kyukaCount6TextShow = $kyukaCount6Value .'日';
 $kyukaCount7TextShow = "\n$kyukaCount7Value 日";
 $kyukaCount8TextShow = "\n$kyukaCount8Value 日";
 
+//-----------// 
+//----9.-----// FORM DATAS IN  年次有給休暇残日数 Line  Config Data here 
+//-----------//
 
+$kyukaLocationTextShow = "
+日本、　　　　　　　韓国、　　　　　　その他（　　　　　）\n
+※緊急連絡先(　　　　                         　　)";
+
+
+//-----------// 
+//----10.-----// FORM DATAS IN  事由 Line  Config Data here 
+//-----------//
+
+$kyukaRiyuTextShow = "\n帰国です。";
 
 
 //====================  view datas config end ====================//// 
 
 //set output file name
-$fileOutputName = str_replace(' ', '', $name).'_'. $teishutsu_year.$teishutsu_month.$teishutsu_date .  substr($date_show, 5, 2).'_休暇届'.'_.pdf';
-
-
-
-
-
+$fileOutputName = str_replace(' ', '', $name).'_'. $teishutsu_year.$teishutsu_month.$teishutsu_date .  substr($date_show, 5, 2).'_休暇届'.'.pdf';
 
 
 // Set the X and Y coordinates for the cell
@@ -343,7 +350,6 @@ $tcpdf->MultiCell(150, $height5+23, $kyukaShuruiFullTextShow, 1, 0 ,   'C', true
 $tcpdf->Ln(0);
 
 
-
 // 6. 入社年月　Line
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
 $tcpdf->SetLineWidth(0.2); // Set the line width for the table border
@@ -443,181 +449,104 @@ $tcpdf->MultiCell(45, 14, "\n⑧使用後残日数\n(⑤－⑥)", 1, 'C', true);
 $height8 = $tcpdf->GetY() - $yTmp8;
 $tcpdf->SetXY($xTmp8 + 160, $yTmp8+35);
 $tcpdf->MultiCell(30, 14, $kyukaCount8TextShow, 1, 'C', true);
-$tcpdf->Ln(7);
+$tcpdf->Ln(0);
 
 
-
-
-
-
-
-
-// $xTmp8 = $tcpdf->GetX();
-// $yTmp8 = $tcpdf->GetY();
-
-// $height5 = $tcpdf->GetY() - $yTmp8;
-// $tcpdf->SetXY($xTmp8 + 40, $yTmp8);
-// $tcpdf->MultiCell(150, $height8+49, $kyukaShuruiFullTextShow, 1, 0 ,   'C', true);
-// $tcpdf->Ln(0);
-
-
-
-// $tcpdf->SetTextColor(255, 255, 0); // Set the text color for the data rows
-
-
-
-// function getColorForDate($date , $isHolyday) {
-//     if (strpos($date, '日') !== false) {
-//         return array(255, 0, 0); // Red
-//     } elseif (strpos($date, '土') !== false) {
-//         return array(0, 0, 255); // Blue
-//     } elseif ($isHolyday) {
-// 		return array(255, 0, 0); // Red
-//     } else {
-//         return array(40, 40, 40); // Black (default)
-//     }
-// }
-
-
-foreach ($data as $row) {
-	if ($row["template"] == "1") {
-
-		$cellColor = getColorForDate($row["date"] , $row["isHoliday"]);
-		$tcpdf->SetFont("kozgopromedium", "B", 10);
-		$tcpdf->SetTextColor($cellColor[0], $cellColor[1], $cellColor[2]); 
-		$tcpdf->Cell(20, 6.8, $row["date"], 1, 0, 'C', true);
-
-
-		$tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
-		$tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
-		$tcpdf->SetFont("kozgopromedium", "", 10);
-		$tcpdf->SetLineWidth(0.2);
-
-
-		$tcpdf->Cell(20, 6.8, 	formatHour($row["jobstarthh"]). ':' . $row["jobstartmm"], 1, 0, 'C', true);
-		$tcpdf->Cell(20, 6.8, 		formatHour($row["jobendhh"]). ':' . $row["jobendmm"], 1, 0, 'C', true);
-		$tcpdf->Cell(20, 6.8, 	formatHour($row["offtimehh"]). ':' . $row["offtimemm"], 1, 0, 'C', true);
-
-		// formatHour($row["offtimehh"])
-		$workhh = $row["workhh"];
-		$workmm = $row["workmm"];
-		if (empty($workhh) && empty($workmm)) {
-			$workTime = '';
-		} else {
-			$workTime = sprintf('%2d:%02d', $workhh, $workmm);
-		}
-		$tcpdf->Cell(20, 6.8, $workTime, 1, 0, 'C', true);
-
-		$tcpdf->Cell(60, 6.8, $row["comment"], 1, 0, 'C', true);
-		$tcpdf->Cell(30, 6.8, $row["bigo"], 1, 1, 'C', true); // Add 1 to move to the next line
-	} elseif ($row["template"] == "2") {
-		$cellColor = getColorForDate($row["date"] ,  $row["isHoliday"]);
-
-		$tcpdf->SetTextColor($cellColor[0], $cellColor[1], $cellColor[2]); 
-		$tcpdf->Cell(16, 6.8, $row["date"], 1, 0, 'C', true);
-
-
-		$tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
-		$tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
-		$tcpdf->SetFont("kozgopromedium", "", 10);
-		$tcpdf->SetLineWidth(0.2);
-
-
-		$tcpdf->Cell(12.5, 6.8, $row["daystarthh"] . ':' . $row["daystartmm"], 1, 0, 'C', true);
-		$tcpdf->Cell(12.5, 6.8, $row["dayendhh"] . ':' . $row["dayendmm"], 1, 0, 'C', true);
-		$tcpdf->Cell(12.5, 6.8, $row["jobstarthh"] . ':' . $row["jobstartmm"], 1, 0, 'C', true);
-		$tcpdf->Cell(12.5, 6.8, $row["jobendhh"] . ':' . $row["jobendmm"], 1, 0, 'C', true);
-		$tcpdf->Cell(18, 6.8, $row["offtimehh"] . ':' . $row["offtimemm"], 1, 0, 'C', true);
-
-		$workhh = $row["workhh"];
-		$workmm = $row["workmm"];
-		if (empty($workhh) && empty($workmm)) {
-			$workTime = '';
-		} else {
-			$workTime = sprintf('%02d:%02d', $workhh, $workmm);
-		}
-		$tcpdf->Cell(18, 6.8, $workTime, 1, 0, 'C', true);
-
-		$tcpdf->Cell(60, 6.8, $row["comment"], 1, 0, 'C', true);
-		$tcpdf->Cell(28, 6.8, $row["bigo"], 1, 1, 'C', true); // Add 1 to move to the next line
-	}
-}
-$tcpdf->Ln(5);
-
-
-
-// // Set up the table header  15
-// $tcpdf->SetFillColor(217, 237, 247); // Set the fill color for the header //#d9edf7 water blue(217, 237, 247).
-// $tcpdf->SetTextColor(0, 0, 0); // Set the text color for the header
-// $tcpdf->Cell(30, 6.8, '実働時間', 1, 0, 'C', true);
-
-
-// $tcpdf->SetFillColor(217, 237, 247); // Set the fill color for the header //#d9edf7 water blue(217, 237, 247).
-// $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
-// $tcpdf->SetFont("kozgopromedium", "", 12); // Set the font and style for the header
-
-
-
-
-// Set up the table data
+// 9. 休暇中居る場所　Line 
+$tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
+$tcpdf->SetLineWidth(0.2); // Set the line width for the table border
 $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
-$tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data
-if (!empty($workmonth_list)) {
-	if ($template == "1") {
-		// top
-		$tcpdf->Cell(30, 6.8, formatHour($totalworkhh_top) . ':' . $totalworkmm_top, 1, 0, 'C', true);
-		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
-		$tcpdf->Cell(30, 6.8, $cnprejob_top, 1, 0, 'C', true);
-		$tcpdf->Cell(30, 6.8, $cnactjob_top, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $holydayswork_top, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $offdayswork_top, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $closedayswork_top, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $delaydayswork_top, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $earlydayswork_top, 1, 1, 'C', true);
+$text9 = "\n\n休暇中居る場所"; // Use "\n" to create a new line
+$xTmp9 = $tcpdf->GetX();
+$yTmp9 = $tcpdf->GetY();
+$tcpdf->MultiCell(40, 21, $text9, 1, 'C', true);
+$height9 = $tcpdf->GetY() - $yTmp9;
+$tcpdf->SetXY($xTmp9 + 40, $yTmp9);
+$tcpdf->MultiCell(150, $height9, $kyukaLocationTextShow, 1, 0, 'C', true);
+$tcpdf->Ln(0);
 
-		// bottom
-		$tcpdf->Cell(30, 6.8, formatHour($totalworkhh). ':' . $totalworkmm, 1, 0, 'C', true);
-		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
-		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
-		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $offdayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $closedayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
-	} elseif ($template == "2") {
-		// top 
-		$tcpdf->Cell(30, 6.8, 	formatHour($totaldayhh_top) . ':' . $totaldaymm_top, 1, 0, 'C', true);
-		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
-		$tcpdf->Cell(30, 6.8, $cnprejob_top, 1, 0, 'C', true);
-		$tcpdf->Cell(30, 6.8, $cnactjob_top, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $holydayswork_top, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $offdayswork_top, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $closedayswork_top, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $delaydayswork_top, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $earlydayswork_top, 1, 1, 'C', true);
-		// bottom
-		$tcpdf->Cell(30, 6.8,		formatHour($totalworkhh). ':' . $totalworkmm, 1, 0, 'C', true);
-		$tcpdf->Cell(25, 5.1, '', 0, 0, 'C', false);
-		$tcpdf->Cell(30, 6.8, $cnprejob, 1, 0, 'C', true);
-		$tcpdf->Cell(30, 6.8, $cnactjob, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $holydayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $offdayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $closedayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $delaydayswork, 1, 0, 'C', true);
-		$tcpdf->Cell(15, 6.8, $earlydayswork, 1, 1, 'C', true);
-	}
-} 
+// 10. 事由　Line 
+$tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
+$tcpdf->SetLineWidth(0.2); // Set the line width for the table border
+$tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
+$tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
+$xTmp10 = $tcpdf->GetX();
+$yTmp10 = $tcpdf->GetY();
+$tcpdf->MultiCell(40, 14, "\n事由", 1, 'C', true);
+$height10 = $tcpdf->GetY() - $yTmp10;
+$tcpdf->SetXY($xTmp9 + 40, $yTmp10);
+$tcpdf->MultiCell(150, $height10, $kyukaRiyuTextShow, 1, 'C', true);
+$tcpdf->Ln(3);
 
-function formatHour($hours)
-{
-        if (strlen($hours) > 1 && substr($hours, 0, 1) === '0') {
-                return substr($hours, 1);
-        } else {
-                return $hours;
-        }
-}
+// 11. Footer 説明文 
+$tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
+$tcpdf->SetLineWidth(0.2); // Set the line width for the table border
+$tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
+$tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
+$tcpdf->MultiCell(190, 60, "\n上記の通り休暇を申請します。\n
+（注意）
+１．事前許可が必要なので、担当者に許可の届け（休暇届）を提出すること。
+・原則として１週間前までに、少なくとも前々日までに提出すること。
+・連続４日以上（所定休日が含まれる場合を含む。）の休暇を取得するときは、１ヵ月前までに提出すること。
+・緊急・病気の場合は、その時点ですぐに提出すること。
+２．年間で5日分はその年で必ず取ること。
+３．有給休暇は１年に限って繰り越しできます（2.の5日分は除外、0.5日分は除外）。
+４．半休(5時間以内)の場合は0.5日にて表現してください。その他詳しい内容は担当者に聞いてください。", 1, 'L', true);
+$tcpdf->Ln(7);
+$tcpdf->MultiCell(40, 5, "※年次有給休暇", 0, 'L', true);
+
+
+$tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
+$tcpdf->SetLineWidth(0.2); // Set the line width for the table border
+$tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
+$tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
+$xTmp11 = $tcpdf->GetX();
+$yTmp11 = $tcpdf->GetY();
+$tcpdf->MultiCell(40, 14, "\n勤続年数", 1, 'C', true);
+$tcpdf->SetXY($xTmp11, $yTmp11);
+
+//line 1
+$height11 = $tcpdf->GetY() - $yTmp11;
+$tcpdf->SetXY($xTmp11 + 40, $yTmp11);
+$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
+$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
+$tcpdf->Cell(18, 7, '１年', 1, 'C', true);
+$tcpdf->Cell(18, 7, '２年', 1, 'C', true);
+$tcpdf->Cell(18, 7, '３年', 1, 'C', true);
+$tcpdf->Cell(18, 7, '４年', 1, 'C', true);
+$tcpdf->Cell(18, 7, '５年', 1, 'C', true);
+$tcpdf->Cell(24, 7, '６年', 1, 'C', true);
+$tcpdf->Ln(7);
+
+// line 2 
+$height11 = $tcpdf->GetY() - $yTmp11;
+$tcpdf->SetXY($xTmp11 + 40, $yTmp11+7);
+$tcpdf->Cell(18, 7, '以内', 1, 'C', true);
+$tcpdf->Cell(18, 7, '', 1, 'C', true);
+$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
+$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
+$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
+$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
+$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
+$tcpdf->Cell(24, 7, '６ヵ月以上', 1, 'C', true);
+$tcpdf->Ln(7);
+
+// line 3 
+$xTmp12 = $tcpdf->GetX();
+$yTmp12 = $tcpdf->GetY();
+$tcpdf->Cell(40, 7, "付与日数", 1, 'C', true);
+$tcpdf->SetXY($xTmp12+40, $yTmp12);
+$height12 = $tcpdf->GetY() - $yTmp12;
+$tcpdf->Cell(18, 7, '無し', 1, 'C', true);
+$tcpdf->Cell(18, 7, '１０日', 1, 'C', true);
+$tcpdf->Cell(18, 7, '１１日', 1, 'C', true);
+$tcpdf->Cell(18, 7, '１２日', 1, 'C', true);
+$tcpdf->Cell(18, 7, '１４日', 1, 'C', true);
+$tcpdf->Cell(18, 7, '１６日', 1, 'C', true);
+$tcpdf->Cell(18, 7, '１８日', 1, 'C', true);
+$tcpdf->Cell(24, 7, '２０日', 1, 'C', true);
+
 
 
 $tcpdf->Output($fileOutputName, "I");
