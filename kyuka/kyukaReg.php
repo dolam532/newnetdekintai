@@ -62,33 +62,33 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	?>
 	<form method="post">
 		<div class="row">
-			<div class="col-md-2 text-left">
-				<div class="title_name">
-					<span class="text-left">休暇届</span>
+			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+				<div class="col-md-2 text-left">
+					<div class="title_name">
+						<span class="text-left">休暇届</span>
+					</div>
 				</div>
-			</div>
-			<div class="col-md-4 text-left">
-				<div class="title_condition">
-					<label>
-						<?php
-						foreach (ConstArray::$search_allowok as $key => $value) {
-						?>
-							<input type='radio' name='searchAllowok' value='<?= $key ?>' <?php if ($key == $_POST['searchAllowok']) {
-																								echo ' checked="checked"';
-																							} ?>>
-							<?= $value ?>
-							</input>
-						<?php
-						}
-						?>
-					</label>
+				<div class="col-md-4 text-left">
+					<div class="title_condition">
+						<label>
+							<?php
+							foreach (ConstArray::$search_allowok as $key => $value) {
+							?>
+								<input type='radio' name='searchAllowok' value='<?= $key ?>' <?php if ($key == $_POST['searchAllowok']) {
+																									echo ' checked="checked"';
+																								} ?>>
+								<?= $value ?>
+								</input>
+							<?php
+							}
+							?>
+						</label>
+					</div>
 				</div>
-			</div>
-			<div class="col-md-3 text-left">
-				<div class="title_condition">
-					<label>社員名 :
-						<select id="searchUid" name="searchUid" style="padding:2px; width:70%;">
-							<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+				<div class="col-md-3 text-left">
+					<div class="title_condition">
+						<label>社員名 :
+							<select id="searchUid" name="searchUid" style="padding:2px; width:70%;">
 								<option value="" selected="">選択なし</option>
 								<?php
 								foreach ($user_list as $value) {
@@ -101,45 +101,57 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<?php
 								}
 								?>
-							<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
-								<option value="<?= $_SESSION['auth_uid'] ?>"><?= $_SESSION['auth_name'] ?></option>
-							<?php endif; ?>
-						</select>
-					</label>
+							</select>
+						</label>
+					</div>
 				</div>
-			</div>
-			<div class="col-md-3 text-right">
-				<div class="title_condition">
-					<label>基準日 :
-						<select id="searchYY" name="searchYY" style="padding:2px;">
-							<option value="" selected="selected">選択なし</option>
-							<?php
-							foreach (ConstArray::$search_year as $key => $value) {
-							?>
-								<option value="<?= $key ?>" <?php if ($value == $_POST['searchYY']) {
-																echo ' selected="selected"';
-															} ?>>
-									<?= $value ?>
-								</option>
-							<?php
-							}
-							?>
-						</select>
-					</label>
+				<div class="col-md-3 text-right">
+					<div class="title_condition">
+						<label>基準日 :
+							<select id="searchYY" name="searchYY" style="padding:2px;">
+								<option value="" selected="selected">選択なし</option>
+								<?php
+								foreach (ConstArray::$search_year as $key => $value) {
+								?>
+									<option value="<?= $key ?>" <?php if ($value == $_POST['searchYY']) {
+																	echo ' selected="selected"';
+																} ?>>
+										<?= $value ?>
+									</option>
+								<?php
+								}
+								?>
+							</select>
+						</label>
+					</div>
+					<div class="title_btn">
+						<input type="submit" id="ClearButton" name="ClearButton" value="クリア ">&nbsp;
+						<input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
+						<input type="button" id="btnNew" value="新規 ">&nbsp;
+						<input type="button" id="btnAnnt" value="お知らせ ">&nbsp;
+						<input type="button" onclick="window.location.href='./vacationReg.php'" value="休暇情報 ">
+					</div>
 				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-6"></div>
-			<div class="col-md-6 text-right">
-				<div class="title_btn">
-					<input type="submit" id="ClearButton" name="ClearButton" value="クリア ">&nbsp;
-					<input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
-					<input type="button" id="btnNew" value="新規 ">&nbsp;
-					<input type="button" id="btnAnnt" value="お知らせ ">&nbsp;
-					<input type="button" onclick="window.location.href='./vacationReg.php'" value="休暇情報 ">
+			<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+				<div class="col-md-2 text-left">
+					<div class="title_name">
+						<span class="text-left">休暇届</span>
+					</div>
 				</div>
-			</div>
+				<div class="col-md-4 text-left"></div>
+				<div class="col-md-3 text-left">
+					<div class="title_condition">
+						<label>社員名 : <?= $_SESSION['auth_name'] ?></label>
+					</div>
+				</div>
+				<div class="col-md-3 text-right">
+					<div class="title_btn">
+						<input type="button" id="btnNew" value="新規 ">&nbsp;
+						<input type="button" id="btnAnnt" value="お知らせ ">&nbsp;
+						<input type="button" onclick="window.location.href='./vacationReg.php'" value="休暇情報 ">
+					</div>
+				</div>
+			<?php endif; ?>
 		</div>
 		<div class="form-group">
 			<table class="table table-bordered datatable">
@@ -240,30 +252,36 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<div class="modal-header">休年届登録(<span id="sname">New</span>)
 							<button class="close" data-dismiss="modal">x</button>
 						</div>
-						<div class="modal-body" style="text-align: left">
+						<div class="modal-body" style="text-align: left; height: 400px; overflow-y: auto;">
 							<div class="row one">
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukaymd">
 									<label for="kyukaymd">申請日</label>
 									<input type="text" class="form-control" name="kyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
 								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 kyukacompanyname">
+								<div class="col-md-3 col-sm-3 col-sx-3 inymd">
+									<label for="kyukaymd">入社年月</label>
+									<input type="text" class="form-control" name="inymd" style="text-align: center" value="<?= substr($_SESSION['auth_inymd'], 0, 4) ?>年<?= substr($_SESSION['auth_inymd'], 5, 2) ?>月" readonly>
+								</div>
+								<div class="col-md-6 col-sm-6 col-sx-6 kyukacompanyname">
 									<label for="kyukaymd">社員名</label>
-									<select class="form-control" id="kyukaname" name="kyukacode">
-										<option value="" disabled selected>選択</option>
-										<?php foreach ($user_list as $key) : ?>
-											<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
-										<?php endforeach; ?>
-									</select>
+									<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
+										<select class="form-control" id="kyukaname" name="kyukacode">
+											<option value="" disabled selected>選択</option>
+											<?php foreach ($user_list as $key) : ?>
+												<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
+											<?php endforeach; ?>
+										</select>
+									<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+										<select class="form-control" id="kyukaname" name="kyukacode">
+											<?php foreach ($user_list as $key) : ?>
+												<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
+											<?php endforeach; ?>
+										</select>
+									<?php endif; ?>
 								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 kyukacode">
-									<label for="kyukacode">休暇区分</label>
-									<select class="form-control" id="kyukaname" name="kyukacode">
-										<option value="" disabled selected style="font-size:10px;">選択</option>
-										<?php foreach ($codebase_list as $key) : ?>
-											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
-										<?php endforeach; ?>
-									</select>
-								</div>
+							</div>
+							<br>
+							<div class="row two">
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukatype">
 									<label for="kyukatype">申込区分</label>
 									<div class="custom-control custom-radio">
@@ -273,52 +291,94 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										<input type="radio" name="kyukatype" value="1">日付
 									</div>
 								</div>
-							</div>
-							<br>
-							<div class="row two">
-								<div class="col-md-3 col-sm-3 col-sx-3 day">
-									<label for="strymd">期間(F)</label>
-									<input type="text" class="form-control" id="strymd" name="strymd" placeholder="" required="required" maxlength="10" style="text-align: center">
+								<div class="col-md-4 col-sm-4 col-sx-4 kyukacode">
+									<label for="kyukacode">休暇区分</label>
+									<select class="form-control" id="kyukaname" name="kyukacode">
+										<option value="" disabled selected style="font-size:10px;">選択</option>
+										<?php foreach ($codebase_list as $key) : ?>
+											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
+										<?php endforeach; ?>
+									</select>
 								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 day">
-									<label for="endymd">期間(T)</label>
-									<input type="text" class="form-control" id="endymd" name="endymd" placeholder="" required="required" maxlength="10" style="text-align: center">
-								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 day">
-									<label for="strtime">時間(F)</label>
-									<input type="text" class="form-control" id="strtime" name="strtime" placeholder="" required="required" maxlength="2" style="text-align: center">
-								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 day">
-									<label for="endtime">時間(T)</label>
-									<input type="text" class="form-control" id="endtime" name="endtime" placeholder="" required="required" maxlength="2" style="text-align: center">
+								<div class="col-md-5 col-sm-5 col-sx-5 kyukatype">
+									<label for="kyukatype">年度算定期間</label>
+									<input type="text" class="form-control" id="annualcp" name="annualcp" placeholder="日付" required="required" maxlength="10" style="text-align: center">
 								</div>
 							</div>
 							<br>
 							<div class="row three">
-								<div class="col-md-2 col-sm-2 col-sx-2 no">
-									<label for="totcnt">当年付与</label>
-									<input type="text" class="form-control" id="totcnt" name="totcnt" placeholder="" style="text-align: center" readonly value="<?= $key['oldcnt'] + $key['newcnt'] ?>">
+								<div class="col-md-3 col-sm-3 col-sx-3 day">
+									<label for="strymd">期間(F)</label>
+									<input type="text" class="form-control" id="strymd" name="strymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
 								</div>
-								<div class="col-md-2 col-sm-2 col-sx-2 no">
-									<label for="usecnt">使用日数</label>
-									<input type="text" class="form-control" id="usecnt" name="usecnt" placeholder="" style="text-align: center" readonly value="<?= $key['usecnt'] ?>">
+								<div class="col-md-3 col-sm-3 col-sx-3 day">
+									<label for="endymd">期間(T)</label>
+									<input type="text" class="form-control" id="endymd" name="endymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
 								</div>
-								<div class=" col-md-2 col-sm-2 col-sx-2 no">
-									<label for="usetime">使用時間</label>
-									<input type="text" class="form-control" id="usetime" name="usetime" placeholder="" style="text-align: center" readonly value="<?= $key['usetime'] ?>">
+								<div class="col-md-3 col-sm-3 col-sx-3 day">
+									<label for="strtime">時間(F)</label>
+									<input type="number" class="form-control" id="strtime" name="strtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
 								</div>
-								<div class="col-md-2 col-sm-2 col-sx-2 no"></div>
-								<div class="col-md-2 col-sm-2 col-sx-2 no">
-									<label for="ymdcnt">申込日</label>
-									<input type="text" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="" style="text-align: center" readonly>
-								</div>
-								<div class="col-md-2 col-sm-2 col-sx-2 no">
-									<label for="timecnt">申込時間</label>
-									<input type="text" class="form-control" id="timecnt" name="timecnt" placeholder="" style="text-align: center" readonly>
+								<div class="col-md-3 col-sm-3 col-sx-3 day">
+									<label for="endtime">時間(T)</label>
+									<input type="number" class="form-control" id="endtime" name="endtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
 								</div>
 							</div>
 							<br>
 							<div class="row four">
+								<div class="col-md-3 col-sm-3 col-sx-3">
+									<label for="tothday">総有給休暇</label>
+									<input type="number" class="form-control" id="tothday" name="tothday" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3">
+									<label for="rdpyear">前年度の繰越残</label>
+									<input type="number" class="form-control" id="rdpyear" name="rdpyear" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class=" col-md-3 col-sm-3 col-sx-3">
+									<label for="gdyear">当該年度付与</label>
+									<input type="number" class="form-control" id="gdyear" name="gdyear" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3 no">
+									<label for="ufcnt">使用済数</label>
+									<input type="number" class="form-control" id="ufcnt" name="ufcnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+							</div>
+							<br>
+							<div class="row five">
+								<div class="col-md-3 col-sm-3 col-sx-3">
+									<label for="totcnt">使用前残</label>
+									<input type="number" class="form-control" id="totcnt" name="totcnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3">
+									<label for="usecnt">今回使用</label>
+									<input type="number" class="form-control" id="usecnt" name="usecnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3">
+									<label for="usetime">使用後済</label>
+									<input type="number" class="form-control" id="usetime" name="usetime" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3">
+									<label for="usetime">使用後残</label>
+									<input type="number" class="form-control" id="usetime" name="usetime" placeholder="番号" style="text-align: center" value="">
+								</div>
+							</div>
+							<br>
+							<div class="row six">
+								<div class="col-md-8 col-sm-8 col-sx-8">
+									<label for="reasion">事由</label>
+									<textarea class="form-control" id="reasion" name="reasion" rows="2"></textarea>
+								</div>
+								<div class="col-md-2 col-sm-2 col-sx-2">
+									<label for="ymdcnt">申込日</label>
+									<input type="number" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+								<div class="col-md-2 col-sm-2 col-sx-2">
+									<label for="timecnt">申込時間</label>
+									<input type="number" class="form-control" id="timecnt" name="timecnt" placeholder="番号" style="text-align: center" value="">
+								</div>
+							</div>
+							<br>
+							<div class="row seven">
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
 									<label for="destcode">暇中居る連絡先</label>
 									<div class="custom-control custom-radio">
@@ -330,32 +390,33 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
 									<label for="destplace">場所</label>
-									<input type="text" class="form-control" name="destplace" id="destplace" placeholder="" required="required" style="text-align: left">
+									<input type="text" class="form-control" name="destplace" id="destplace" placeholder="国" required="required" style="text-align: left">
 								</div>
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
 									<label for="desttel">Tel</label>
-									<input type="text" class="form-control" name="desttel" id="desttel" placeholder="" required="required" style="text-align: left">
+									<input type="text" class="form-control" name="desttel" id="desttel" placeholder="090xxxxxxxx" required="required" style="text-align: left">
 								</div>
 							</div>
-						</div>
-						<div class="modal-footer" style="text-align: center">
-							<div class="col-md-3 col-sm-3 col-sx-3"></div>
-							<div class="col-md-2 col-sm-2 col-sx-2 btn">
-								<p class="text-center">
-									<input type="submit" name="SaveKyuka" class="btn btn-primary btn-md" id="btnReg" role="button" value="登録">
-								</p>
+							<br>
+							<div class="row eight">
+								<div class="col-md-3 col-sm-3 col-sx-3"></div>
+								<div class="col-md-2 col-sm-2 col-sx-2 btn">
+									<p class="text-center">
+										<input type="submit" name="SaveKyuka" class="btn btn-primary btn-ms" id="btnReg" role="button" value="登録">
+									</p>
+								</div>
+								<div class="col-md-2 col-sm-2 col-sx-2 btn" style="margin-left: 5px;margin-right: 5px;">
+									<p class="text-center">
+										<a class="btn btn-success btn-ms" id="btnClear" role="button">クリア </a>
+									</p>
+								</div>
+								<div class="col-md-2 col-sm-2 col-sx-2 btn">
+									<p class="text-center">
+										<a class="btn btn-default btn-ms" data-dismiss="modal" role="button">閉じる </a>
+									</p>
+								</div>
+								<div class="col-md-3 col-sm-3 col-sx-3"></div>
 							</div>
-							<div class="col-md-2 col-sm-2 col-sx-2 btn">
-								<p class="text-center">
-									<a class="btn btn-success btn-md" id="btnClear" role="button">クリア </a>
-								</p>
-							</div>
-							<div class="col-md-2 col-sm-2 col-sx-2 btn">
-								<p class="text-center">
-									<a class="btn btn-default btn-md" data-dismiss="modal" role="button">閉じる </a>
-								</p>
-							</div>
-							<div class="col-md-3 col-sm-3 col-sx-3"></div>
 						</div>
 					</div>
 				</form>
@@ -488,6 +549,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 <script>
 	// New button
 	$(document).on('click', '#btnNew', function(e) {
+		//Check Receive Kyuka or Not
+		var currentDate = new Date();
+		var targetDate = new Date('<?php echo $_SESSION['auth_inymd'] ?>');
+		targetDate.setMonth(targetDate.getMonth() + 6);
+		if (targetDate >= currentDate) {
+			alert("<?php echo $kyuka_no_receive; ?>");
+			return false;
+		}
+
 		var totcnt = $("#totcnt").val();
 		var usecnt = $("#usecnt").val();
 		var usetime = $("#usetime").val();
@@ -503,6 +573,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$("#endtime").val("").prop('disabled', true);
 	});
 
+	// 年次有給休暇(計算)
+	$("#rdpyear, #gdyear").on("input", function() {
+    var rdpyearValue = parseFloat($("#rdpyear").val()) || 0;
+    var gdyearValue = parseFloat($("#gdyear").val()) || 0;
+    var totaly = rdpyearValue + gdyearValue;
+    $("#tothday").val(totaly);
+});
+
 	// Lock and unlock items when selecting vacation request type (day/hour)
 	$('input[type=radio][name=kyukatype]').change(function() {
 		if (this.value == '1') {
@@ -511,18 +589,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			$("#endymd").prop('disabled', false);
 			$("#strtime").prop('disabled', true);
 			$("#endtime").prop('disabled', true);
-			$("#ymdcnt").val("NaN");
 			$("#timecnt").val(0);
+			$("#timecnt").prop('disabled', true);
 		} else if (this.value == '0') {
 			// Time selection
 			$("#strymd").prop('disabled', false);
 			$("#endymd").prop('disabled', true);
 			$("#strtime").prop('disabled', false);
 			$("#endtime").prop('disabled', false);
-			$("#strtime").val(0);
-			$("#endtime").val(0);
 			$("#ymdcnt").val(0);
-			$("#timecnt").val(0);
+			$("#ymdcnt").prop('disabled', true);
 		}
 	});
 

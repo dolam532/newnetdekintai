@@ -22,6 +22,7 @@ if (isset($_POST['btnLogin'])) {
             $user_type = $data['type'];
             $user_genid = $data['genid'];
             $user_dept = $data['dept'];
+            $user_inymd = $data['inymd'];
             $user_signstamp = $data['signstamp'];
             $user_email = $data['email'];
         }
@@ -33,6 +34,7 @@ if (isset($_POST['btnLogin'])) {
         $_SESSION['auth_name'] = "$user_name";
         $_SESSION['auth_genid'] = "$user_genid";
         $_SESSION['auth_dept'] = "$user_dept";
+        $_SESSION['auth_inymd'] = "$user_inymd";
         $_SESSION['auth_signstamp_user'] = "$user_signstamp";
         $_SESSION['auth_email'] = "$user_email";
 
@@ -83,6 +85,7 @@ if (isset($_POST['btnLogout'])) {
     unset($_SESSION['auth_name']);
     unset($_SESSION['auth_genid']);
     unset($_SESSION['auth_dept']);
+    unset($_SESSION['auth_inymd']);
     unset($_SESSION['auth_signstamp_user']);
     unset($_SESSION['auth_email']);
 

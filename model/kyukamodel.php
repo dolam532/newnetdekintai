@@ -191,10 +191,12 @@ WHERE
 // Save data to tbl_userkyuka table of database
 if (isset($_POST['SaveKyuka'])) {
     $_POST['vacationid'] = intval($_POST['vacationid']);
+    $_POST['companyid'] = $_SESSION['auth_companyid'];
     $_POST['strtime'] = intval($_POST['strtime']);
     $_POST['endtime'] = intval($_POST['endtime']);
 
-    $uid = mysqli_real_escape_string($conn, $_POST['uid']);
+    $companyid = mysqli_real_escape_string($conn, $_SESSION['auth_companyid']);
+    $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
     $vacationid = mysqli_real_escape_string($conn, $_POST['vacationid']);
     $kyukaymd = mysqli_real_escape_string($conn, $_POST['kyukaymd']);
     $kyukatype = mysqli_real_escape_string($conn, $_POST['kyukatype']);
@@ -213,10 +215,17 @@ if (isset($_POST['SaveKyuka'])) {
     $allowdecide = "0";
     $allowdt = $reg_dt = date('Y-m-d H:i:s');
 
-    $sql_userkyuka_insert = mysqli_query($conn, "INSERT INTO `tbl_userkyuka` (`uid`, `vacationid`, `kyukaymd`, `kyukatype`, `strymd`, `endymd`, `ymdcnt`, `strtime`, `endtime`, `timecnt`, `kyukacode`, `destcode`, `destplace`, `desttel`, `allowok`, `allowid`, `allowdecide`, `allowdt`, `reg_dt` , `upt_dt`) 
-    VALUES ('$uid', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdecide', '$allowdt', '$reg_dt' , null)");
+    $sql_vacationinfo_insert = "INSERT INTO `tbl_vacationinfo` (`uid`, `vacationstr`, `vacationend`, `oldcnt`, `newcnt`, `usecnt`, `usetime`, `restcnt`, `reg_dt`, `upt_dt`) 
+    VALUES('$uid', '$vacationstr' ,'$vacationend' ,'$oldcnt', '$newcnt', '$usecnt', '$usetime', '$restcnt', '$reg_dt' , null)";
 
-    if ($sql_userkyuka_insert) {
+    $result = mysqli_query($conn, $sql_vacationinfo_insert);
+    $vacationid = mysqli_insert_id($conn);
+
+    $sql_userkyuka_insert = "INSERT INTO `tbl_userkyuka` (`companyid`, `uid`, `vacationid`, `kyukaymd`, `kyukatype`, `strymd`, `endymd`, `ymdcnt`, `strtime`, `endtime`, `timecnt`, `kyukacode`, `destcode`, `destplace`, `desttel`, `allowok`, `allowid`, `allowdecide`, `allowdt`, `reg_dt`, `upt_dt`) 
+    VALUES ('$companyid', '$uid', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdecide', '$allowdt', '$reg_dt' , null)";
+
+    $sql_userkyuka_result = mysqli_query($conn, $sql_userkyuka_insert);
+    if ($sql_userkyuka_result) {
         $_SESSION['save_success'] =  $save_success;
         header("Refresh:3");
     } else {
