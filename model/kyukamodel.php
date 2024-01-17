@@ -26,45 +26,7 @@ $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
 
 // kyukaReg.php
-// calculate year between 6month and 1 year
-$givenDate = strtotime($_SESSION['auth_inymd']);
-$currentTimestamp = time();
-
-$sixMonthsFromgivenDate = strtotime("+6 months", $givenDate);
-$oneYear6monthFromgivenDate = strtotime(" +1 year +6 months", $givenDate);
-$twoYear6monthFromgivenDate = strtotime(" +2 year +6 months", $givenDate);
-$threeYear6monthFromgivenDate = strtotime(" +3 year +6 months", $givenDate);
-$fourYear6monthFromgivenDate = strtotime(" +4 year +6 months", $givenDate);
-$fiveYear6monthFromgivenDate = strtotime(" +5 year +6 months", $givenDate);
-$sixYear6monthFromgivenDate = strtotime(" +6 year +6 months", $givenDate);
-
-if ($currentTimestamp >= $sixMonthsFromgivenDate && $currentTimestamp <= $oneYear6monthFromgivenDate) {
-    $oneYear6monthLastdateFromgivenDate = strtotime("-1 day", $oneYear6monthFromgivenDate);
-    $startdate_ = date('Y/m/d', $sixMonthsFromgivenDate);
-    $enddate_ = date('Y/m/d', $oneYear6monthLastdateFromgivenDate);
-} elseif ($currentTimestamp >= $oneYear6monthFromgivenDate && $currentTimestamp <= $twoYear6monthFromgivenDate) {
-    $twoYear6monthLastdateFromgivenDate = strtotime("-1 day", $twoYear6monthFromgivenDate);
-    $startdate_ = date('Y/m/d', $oneYear6monthFromgivenDate);
-    $enddate_ = date('Y/m/d', $twoYear6monthLastdateFromgivenDate);
-} elseif ($currentTimestamp >= $twoYear6monthFromgivenDate && $currentTimestamp <= $threeYear6monthFromgivenDate) {
-    $threeYear6monthLastdateFromgivenDate = strtotime("-1 day", $threeYear6monthFromgivenDate);
-    $startdate_ = date('Y/m/d', $twoYear6monthFromgivenDate);
-    $enddate_ = date('Y/m/d', $threeYear6monthLastdateFromgivenDate);
-} elseif ($currentTimestamp >= $threeYear6monthFromgivenDate && $currentTimestamp <= $fourYear6monthFromgivenDate) {
-    $fourYear6monthLastdateFromgivenDate = strtotime("-1 day", $fourYear6monthFromgivenDate);
-    $startdate_ = date('Y/m/d', $threeYear6monthFromgivenDate);
-    $enddate_ = date('Y/m/d', $fourYear6monthLastdateFromgivenDate);
-} elseif ($currentTimestamp >= $fourYear6monthFromgivenDate && $currentTimestamp <= $fiveYear6monthFromgivenDate) {
-    $fiveYear6monthLastdateFromgivenDate = strtotime("-1 day", $fiveYear6monthFromgivenDate);
-    $startdate_ = date('Y/m/d', $fourYear6monthFromgivenDate);
-    $enddate_ = date('Y/m/d', $fiveYear6monthLastdateFromgivenDate);
-} elseif ($currentTimestamp >= $fiveYear6monthFromgivenDate) {
-    $sixYear6monthLastdateFromgivenDate = strtotime("-1 day", $sixYear6monthFromgivenDate);
-    $startdate_ = date('Y/m/d', $fiveYear6monthFromgivenDate);
-    $enddate_ = date('Y/m/d', $sixYear6monthLastdateFromgivenDate);
-}
-
-// Select data from tbl_userkyuka
+// Select data from tbl_userkyuka & tbl_vacationinfo
 $sql_userkyuka = 'SELECT DISTINCT
     `tbl_userkyuka`.*,
     `tbl_user`.`uid`,
@@ -106,7 +68,49 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
 }
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
+$user_inymd_ = $userkyuka_list[0]['inymd'];
+$user_name_ = $userkyuka_list[0]['name'];
 
+// calculate year between 6month and 1 year
+$givenDate = strtotime($user_inymd_);
+$currentTimestamp = time();
+
+$sixMonthsFromgivenDate = strtotime("+6 months", $givenDate);
+$oneYear6monthFromgivenDate = strtotime(" +1 year +6 months", $givenDate);
+$twoYear6monthFromgivenDate = strtotime(" +2 year +6 months", $givenDate);
+$threeYear6monthFromgivenDate = strtotime(" +3 year +6 months", $givenDate);
+$fourYear6monthFromgivenDate = strtotime(" +4 year +6 months", $givenDate);
+$fiveYear6monthFromgivenDate = strtotime(" +5 year +6 months", $givenDate);
+$sixYear6monthFromgivenDate = strtotime(" +6 year +6 months", $givenDate);
+
+if ($currentTimestamp >= $sixMonthsFromgivenDate && $currentTimestamp <= $oneYear6monthFromgivenDate) {
+    $oneYear6monthLastdateFromgivenDate = strtotime("-1 day", $oneYear6monthFromgivenDate);
+    $startdate_ = date('Y/m/d', $sixMonthsFromgivenDate);
+    $enddate_ = date('Y/m/d', $oneYear6monthLastdateFromgivenDate);
+    $oldcnt_ = 0;
+    $newcnt_ = 10;
+    $tothday_ = $oldcnt_ + $newcnt_;
+} elseif ($currentTimestamp >= $oneYear6monthFromgivenDate && $currentTimestamp <= $twoYear6monthFromgivenDate) {
+    $twoYear6monthLastdateFromgivenDate = strtotime("-1 day", $twoYear6monthFromgivenDate);
+    $startdate_ = date('Y/m/d', $oneYear6monthFromgivenDate);
+    $enddate_ = date('Y/m/d', $twoYear6monthLastdateFromgivenDate);
+} elseif ($currentTimestamp >= $twoYear6monthFromgivenDate && $currentTimestamp <= $threeYear6monthFromgivenDate) {
+    $threeYear6monthLastdateFromgivenDate = strtotime("-1 day", $threeYear6monthFromgivenDate);
+    $startdate_ = date('Y/m/d', $twoYear6monthFromgivenDate);
+    $enddate_ = date('Y/m/d', $threeYear6monthLastdateFromgivenDate);
+} elseif ($currentTimestamp >= $threeYear6monthFromgivenDate && $currentTimestamp <= $fourYear6monthFromgivenDate) {
+    $fourYear6monthLastdateFromgivenDate = strtotime("-1 day", $fourYear6monthFromgivenDate);
+    $startdate_ = date('Y/m/d', $threeYear6monthFromgivenDate);
+    $enddate_ = date('Y/m/d', $fourYear6monthLastdateFromgivenDate);
+} elseif ($currentTimestamp >= $fourYear6monthFromgivenDate && $currentTimestamp <= $fiveYear6monthFromgivenDate) {
+    $fiveYear6monthLastdateFromgivenDate = strtotime("-1 day", $fiveYear6monthFromgivenDate);
+    $startdate_ = date('Y/m/d', $fourYear6monthFromgivenDate);
+    $enddate_ = date('Y/m/d', $fiveYear6monthLastdateFromgivenDate);
+} elseif ($currentTimestamp >= $fiveYear6monthFromgivenDate) {
+    $sixYear6monthLastdateFromgivenDate = strtotime("-1 day", $sixYear6monthFromgivenDate);
+    $startdate_ = date('Y/m/d', $fiveYear6monthFromgivenDate);
+    $enddate_ = date('Y/m/d', $sixYear6monthLastdateFromgivenDate);
+}
 
 // kyukaMonthly.php
 // Search Button Click
@@ -168,7 +172,7 @@ WHERE
     }
 }
 
-// Save data to tbl_userkyuka table of database
+// Save data to tbl_userkyuka & tbl_vacation table of database
 if (isset($_POST['SaveKyuka'])) {
     $_POST['strtime'] = intval($_POST['strtime']);
     $_POST['endtime'] = intval($_POST['endtime']);
@@ -207,7 +211,7 @@ if (isset($_POST['SaveKyuka'])) {
     $allowok = "0";
     $allowid = "0";
     $allowdecide = "0";
-    $allowdt = $reg_dt = date('Y-m-d H:i:s');
+    $reg_dt = date('Y-m-d H:i:s');
 
     $sql_vacationinfo_insert = "INSERT INTO `tbl_vacationinfo` (`companyid`, `uid`, `email`, `vacationstr`, `vacationend`, `tothday`, `oldcnt`, `newcnt`, `usefinishcnt`, `usebeforecnt`, `usenowcnt`, `usefinishaftercnt`, `useafterremaincnt`, `reg_dt`, `upt_dt`) 
     VALUES('$companyid', '$uid', '$email', '$vacationstr' ,'$vacationend', '$tothday', '$oldcnt', '$newcnt', '$usefinishcnt', '$usebeforecnt', '$usenowcnt', '$usefinishaftercnt', '$useafterremaincnt', '$reg_dt' , null)";
@@ -218,7 +222,7 @@ if (isset($_POST['SaveKyuka'])) {
     $vacationid = mysqli_insert_id($conn);
 
     $sql_userkyuka_insert = "INSERT INTO `tbl_userkyuka` (`companyid`, `uid`, `email`, `vacationid`, `kyukaymd`, `kyukatype`, `strymd`, `endymd`, `ymdcnt`, `strtime`, `endtime`, `timecnt`, `kyukacode`, `destcode`, `destplace`, `desttel`, `allowok`, `allowid`, `allowdecide`, `allowdt`, `reason`, `reg_dt`, `upt_dt`) 
-    VALUES ('$companyid', '$uid', '$email', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdecide', '$allowdt', '$reason', '$reg_dt', null)";
+    VALUES ('$companyid', '$uid', '$email', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdecide', null, '$reason', '$reg_dt', null)";
     $sql_userkyuka_result = mysqli_query($conn, $sql_userkyuka_insert);
 
     if ($sql_userkyuka_result && $sql_vacationinfo_result) {
@@ -227,6 +231,99 @@ if (isset($_POST['SaveKyuka'])) {
         header("Refresh:3");
     } else {
         mysqli_rollback($conn);
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Update tbl_userkyuka & tbl_vacation table of database
+if (isset($_POST['UpdateKyuka'])) {
+    $_POST['udstrtime'] = intval($_POST['udstrtime']);
+    $_POST['udendtime'] = intval($_POST['udendtime']);
+    $_POST['udtimecnt'] = intval($_POST['udtimecnt']);
+    $_POST['udymdcnt'] = intval($_POST['udymdcnt']);
+    $companyid = mysqli_real_escape_string($conn, $_SESSION['auth_companyid']);
+    $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
+    $email = mysqli_real_escape_string($conn, $_SESSION['auth_email']);
+    $kyukaid = mysqli_real_escape_string($conn, $_POST['udkyukaid']);
+    $vacationid = mysqli_real_escape_string($conn, $_POST['udvacationid']);
+
+    $vacationstr = mysqli_real_escape_string($conn, $_POST['udvacationstr']); // 5
+    $vacationend = mysqli_real_escape_string($conn, $_POST['udvacationend']); // 6
+    $tothday = mysqli_real_escape_string($conn, $_POST['udtothday']); // 11
+    $oldcnt = mysqli_real_escape_string($conn, $_POST['udoldcnt']); // 12
+    $newcnt = mysqli_real_escape_string($conn, $_POST['udnewcnt']); // 13
+    $usefinishcnt = mysqli_real_escape_string($conn, $_POST['udusefinishcnt']); // 14
+    $usebeforecnt = mysqli_real_escape_string($conn, $_POST['udusebeforecnt']); // 15
+    $usenowcnt = mysqli_real_escape_string($conn, $_POST['udusenowcnt']); // 16
+    $usefinishaftercnt = mysqli_real_escape_string($conn, $_POST['udusefinishaftercnt']); // 17
+    $useafterremaincnt = mysqli_real_escape_string($conn, $_POST['uduseafterremaincnt']); // 18
+    $reason = mysqli_real_escape_string($conn, $_POST['udreason']); // 19
+
+    $kyukaymd = mysqli_real_escape_string($conn, $_POST['udkyukaymd']); // 1
+    $kyukatype = mysqli_real_escape_string($conn, $_POST['udkyukatype']); // 3
+    $kyukacode = mysqli_real_escape_string($conn, $_POST['udkyukacode']); // 4
+    $strymd = mysqli_real_escape_string($conn, $_POST['udstrymd']); // 7
+    $endymd = mysqli_real_escape_string($conn, $_POST['udendymd']); // 8
+    $ymdcnt = mysqli_real_escape_string($conn, $_POST['udymdcnt']); // 20
+    $strtime = mysqli_real_escape_string($conn, $_POST['udstrtime']); // 9
+    $endtime = mysqli_real_escape_string($conn, $_POST['udendtime']); // 10
+    $timecnt = mysqli_real_escape_string($conn, $_POST['udtimecnt']); // 21
+    $kyukacode = mysqli_real_escape_string($conn, $_POST['udkyukacode']); // 21
+    $destcode = mysqli_real_escape_string($conn, $_POST['uddestcode']); // 22
+    $destplace = mysqli_real_escape_string($conn, $_POST['uddestplace']); // 23
+    $desttel = mysqli_real_escape_string($conn, $_POST['uddesttel']); // 24
+    $allowok = mysqli_real_escape_string($conn, $_POST['udallowok']);
+    $allowid = mysqli_real_escape_string($conn, $_POST['udallowid']);
+    $allowdecide = mysqli_real_escape_string($conn, $_POST['udallowdecide']);
+    $allowdt = mysqli_real_escape_string($conn, $_POST['udallowdt']);
+    $upt_dt = date('Y-m-d H:i:s');
+
+    $queries[] = "UPDATE tbl_vacationinfo SET 
+    vacationstr='$vacationstr',
+    vacationend='$vacationend',
+    tothday='$tothday',
+    oldcnt='$oldcnt',
+    newcnt='$newcnt',
+    usefinishcnt='$usefinishcnt',
+    usebeforecnt='$usebeforecnt',
+    usenowcnt='$usenowcnt',
+    usefinishaftercnt='$usefinishaftercnt',
+    useafterremaincnt='$useafterremaincnt',
+    upt_dt='$upt_dt'
+    WHERE vacationid ='$vacationid'
+    AND companyid ='$companyid'
+    AND uid ='$uid'
+    AND email ='$email'";
+
+    $queries[] = "UPDATE tbl_userkyuka SET 
+    kyukaymd='$kyukaymd',
+    kyukatype='$kyukatype',
+    strymd='$strymd',
+    endymd='$endymd',
+    ymdcnt='$ymdcnt',
+    strtime='$strtime',
+    endtime='$endtime',
+    timecnt='$timecnt',
+    kyukacode='$kyukacode',
+    destcode='$destcode',
+    destplace='$destplace',
+    desttel='$desttel',
+    allowok='$allowok',
+    allowid='$allowid',
+    allowdecide='$allowdecide',
+    allowdt='$allowdt',
+    reason='$reason',
+    upt_dt='$upt_dt'
+    WHERE kyukaid ='$kyukaid'
+    AND companyid ='$companyid'
+    AND uid ='$uid'
+    AND vacationid ='$vacationid'";
+
+    $sql = implode(';', $queries);
+    if ($conn->multi_query($sql) === TRUE) {
+        $_SESSION['update_success'] =  $update_success;
+        // header("Refresh:3");
+    } else {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
@@ -244,8 +341,8 @@ if (isset($_POST['DecideUpdateKyuka'])) {
         allowid='$allowid',
         allowok='$allowok',
         allowdecide='$allowdecide',
-        allowdt='$allowdt' , 
-        upt_dt = '$allowdt'
+        allowdt='$allowdt', 
+        upt_dt = '$upt_dt'
     WHERE uid ='$uid'";
 
         if ($conn->query($sql) === TRUE) {
@@ -263,8 +360,8 @@ if (isset($_POST['DecideUpdateKyuka'])) {
         allowid='$allowid',
         allowok='$allowok',
         allowdecide='$allowdecide',
-        allowdt='$allowdt' , 
-        upt_dt = '$allowdt'
+        allowdt='$allowdt', 
+        upt_dt = '$upt_dt'
     WHERE uid ='$uid'";
 
         $queries[] = "UPDATE tbl_vacationinfo SET 

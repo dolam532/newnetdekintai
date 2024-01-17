@@ -64,7 +64,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 <?php include('../inc/menu.php'); ?>
 <div class="container">
 	<?php
-	if (isset($_SESSION['save_success'])) {
+	if (isset($_SESSION['save_success']) && isset($_POST['SaveKyuka'])) {
 	?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -72,6 +72,28 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		</div>
 	<?php
 		unset($_SESSION['save_success']);
+	}
+	?>
+	<?php
+	if (isset($_SESSION['update_success']) && isset($_POST['UpdateKyuka'])) {
+	?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['update_success']; ?>
+		</div>
+	<?php
+		unset($_SESSION['update_success']);
+	}
+	?>
+	<?php
+	if (isset($_SESSION['delete_success']) && isset($_POST['btnDelKyuka'])) {
+	?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['delete_success']; ?>
+		</div>
+	<?php
+		unset($_SESSION['delete_success']);
 	}
 	?>
 	<form method="post">
@@ -319,24 +341,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 inymd">
 									<label for="inymd">入社年月</label>
-									<input type="text" class="form-control" name="inymd" style="text-align: center" value="<?= substr($_SESSION['auth_inymd'], 0, 4) ?>年<?= substr($_SESSION['auth_inymd'], 5, 2) ?>月" readonly>
+									<input type="text" class="form-control" name="inymd" style="text-align: center" value="<?= substr($user_inymd_, 0, 4) ?>年<?= substr($user_inymd_, 5, 2) ?>月" readonly>
 								</div>
 								<div class="col-md-6 col-sm-6 col-sx-6 kyukacompanyname">
 									<label for="name">社員名</label>
-									<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-										<select class="form-control" id="kyukaname" name="kyukaname">
-											<option value="" disabled selected>選択</option>
-											<?php foreach ($user_list as $key) : ?>
-												<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
-											<?php endforeach; ?>
-										</select>
-									<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
-										<select class="form-control" id="kyukaname" name="kyukaname">
-											<?php foreach ($user_list as $key) : ?>
-												<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
-											<?php endforeach; ?>
-										</select>
-									<?php endif; ?>
+									<input type="text" class="form-control" name="name" id="name" style="text-align: center" value="<?= $user_name_ ?>" readonly>
 								</div>
 							</div>
 							<br>
@@ -345,9 +354,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<label for="kyukatype">申込区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
-										<input type="radio" name="kyukatype" value="0">時間
+										<input type="radio" name="kyukatype" id="kyukatype" value="0">時間
 										&nbsp;&nbsp;
-										<input type="radio" name="kyukatype" value="1">日付
+										<input type="radio" name="kyukatype" id="kyukatype" value="1">日付
 									</div>
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukacode">
@@ -359,8 +368,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										<?php endforeach; ?>
 									</select>
 								</div>
-								<div class="col-md-6 col-sm-6 col-xs-6 kyukatype">
-									<label for="kyukatype">年度算定期間</label>
+								<div class="col-md-6 col-sm-6 col-xs-6 vacation">
+									<label for="vacation">年度算定期間</label>
 									<div class="groupinput">
 										<input type="text" class="form-control" id="vacationstr" name="vacationstr" placeholder="開始日" required="required" maxlength="10" style="text-align: center;" value="<?= $startdate_ ?>">
 										<div class="input-group-addon">~</div>
@@ -391,15 +400,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="row four">
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="tothday">総有給休暇</label>
-									<input type="number" class="form-control" id="tothday" name="tothday" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="tothday" name="tothday" placeholder="番号" style="text-align: center" value="<?= $tothday_ ?>">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="oldcnt">前年度の繰越残</label>
-									<input type="number" class="form-control" id="oldcnt" name="oldcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="oldcnt" name="oldcnt" placeholder="番号" style="text-align: center" value="<?= $oldcnt_ ?>">
 								</div>
 								<div class=" col-md-3 col-sm-3 col-sx-3">
 									<label for="newcnt">当該年度付与</label>
-									<input type="number" class="form-control" id="newcnt" name="newcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="newcnt" name="newcnt" placeholder="番号" style="text-align: center" value="<?= $newcnt_ ?>">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 no">
 									<label for="usefinishcnt">使用済数</label>
@@ -461,24 +470,22 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 							</div>
 							<br>
-							<div class="row eight">
-								<div class="col-md-3 col-sm-3 col-sx-3"></div>
-								<div class="col-md-2 col-sm-2 col-sx-2 btn">
+							<div class="modal-footer" style="text-align: center">
+								<div class="col-xs-3"></div>
+								<div class="col-xs-2">
 									<p class="text-center">
 										<input type="submit" name="SaveKyuka" class="btn btn-primary btn-ms" id="btnReg" role="button" value="登録">
 									</p>
 								</div>
-								<div class="col-md-2 col-sm-2 col-sx-2 btn" style="margin-left: 5px;margin-right: 5px;">
+								<div class="col-xs-2">
 									<p class="text-center">
-										<a class="btn btn-success btn-ms" id="btnClear" role="button">クリア </a>
+										<a class="btn btn-success btn-ms" id="btnClear" role="button">クリア</a>
 									</p>
 								</div>
-								<div class="col-md-2 col-sm-2 col-sx-2 btn">
-									<p class="text-center">
-										<a class="btn btn-default btn-ms" data-dismiss="modal" role="button">閉じる </a>
-									</p>
+								<div class="col-xs-2">
+									<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
 								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3"></div>
+								<div class="col-xs-3"></div>
 							</div>
 						</div>
 					</div>
@@ -493,7 +500,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			<div class="modal-dialog">
 				<form method="post">
 					<div class="modal-content">
-						<div class="modal-header">休年届登録(<span id="sname">New</span>)
+						<div class="modal-header">休年届編集(<span id="usname"></span>)
 							<button class="close" data-dismiss="modal">x</button>
 						</div>
 						<div class="modal-body" style="text-align: left; height: 600px; overflow-y: auto;">
@@ -501,27 +508,20 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukaymd">
 									<label for="kyukaymd">申請日</label>
 									<input type="text" class="form-control" name="udkyukaymd" style="text-align: center" value="<?= date('Y/m/d'); ?>" readonly>
+									<input type="hidden" name="udkyukaid" id="udkyukaid">
+									<input type="hidden" name="udvacationid" id="udvacationid">
+									<input type="hidden" name="udallowok" id="udallowok">
+									<input type="hidden" name="udallowid" id="udallowid">
+									<input type="hidden" name="udallowdecide" id="udallowdecide">
+									<input type="hidden" name="udallowdt" id="udallowdt">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 inymd">
 									<label for="inymd">入社年月</label>
-									<input type="text" class="form-control" name="udinymd" style="text-align: center" value="<?= substr($_SESSION['auth_inymd'], 0, 4) ?>年<?= substr($_SESSION['auth_inymd'], 5, 2) ?>月" readonly>
+									<input type="text" class="form-control" name="udinymd" style="text-align: center" value="<?= substr($user_inymd_, 0, 4) ?>年<?= substr($user_inymd_, 5, 2) ?>月" readonly>
 								</div>
 								<div class="col-md-6 col-sm-6 col-sx-6 kyukacompanyname">
 									<label for="name">社員名</label>
-									<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) : ?>
-										<select class="form-control" id="udkyukaname" name="udkyukaname">
-											<option value="" disabled selected>選択</option>
-											<?php foreach ($user_list as $key) : ?>
-												<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
-											<?php endforeach; ?>
-										</select>
-									<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
-										<select class="form-control" id="udkyukaname" name="kyukaname">
-											<?php foreach ($user_list as $key) : ?>
-												<option value="<?= $key["uid"] ?>"><?= $key["name"] ?></option>
-											<?php endforeach; ?>
-										</select>
-									<?php endif; ?>
+									<input type="text" class="form-control" name="udname" id="udname" style="text-align: center" value="<?= $user_name_ ?>" readonly>
 								</div>
 							</div>
 							<br>
@@ -530,26 +530,26 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<label for="kyukatype">申込区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
-										<input type="radio" name="kyukatype" value="0">時間
+										<input type="radio" name="udkyukatype" id="udkyukatype" value="0">時間
 										&nbsp;&nbsp;
-										<input type="radio" name="kyukatype" value="1">日付
+										<input type="radio" name="udkyukatype" id="udkyukatype" value="1">日付
 									</div>
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukacode">
 									<label for="kyukacode">休暇区分</label>
-									<select class="form-control" id="kyukacode" name="kyukacode">
+									<select class="form-control" id="udkyukacode" name="udkyukacode">
 										<option value="" disabled selected style="font-size:10px;">選択</option>
 										<?php foreach ($codebase_list as $key) : ?>
 											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
 										<?php endforeach; ?>
 									</select>
 								</div>
-								<div class="col-md-6 col-sm-6 col-xs-6 kyukatype">
-									<label for="kyukatype">年度算定期間</label>
+								<div class="col-md-6 col-sm-6 col-xs-6 vacation">
+									<label for="vacation">年度算定期間</label>
 									<div class="groupinput">
-										<input type="text" class="form-control" id="vacationstr" name="vacationstr" placeholder="開始日" required="required" maxlength="10" style="text-align: center;" value="<?= $startdate_ ?>">
+										<input type="text" class="form-control" id="udvacationstr" name="udvacationstr" placeholder="開始日" required="required" maxlength="10" style="text-align: center;">
 										<div class="input-group-addon">~</div>
-										<input type="text" class="form-control" id="vacationend" name="vacationend" placeholder="終了日" required="required" maxlength="10" style="text-align: center;" value="<?= $enddate_ ?>">
+										<input type="text" class="form-control" id="udvacationend" name="udvacationend" placeholder="終了日" required="required" maxlength="10" style="text-align: center;">
 									</div>
 								</div>
 							</div>
@@ -557,72 +557,72 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="row three">
 								<div class="col-md-3 col-sm-3 col-sx-3 day">
 									<label for="strymd">期間(F)</label>
-									<input type="text" class="form-control" id="strymd" name="strymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
+									<input type="text" class="form-control" id="udstrymd" name="udstrymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 day">
 									<label for="endymd">期間(T)</label>
-									<input type="text" class="form-control" id="endymd" name="endymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
+									<input type="text" class="form-control" id="udendymd" name="udendymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 day">
 									<label for="strtime">時間(F)</label>
-									<input type="number" class="form-control" id="strtime" name="strtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+									<input type="number" class="form-control" id="udstrtime" name="udstrtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 day">
 									<label for="endtime">時間(T)</label>
-									<input type="number" class="form-control" id="endtime" name="endtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+									<input type="number" class="form-control" id="udendtime" name="udendtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
 								</div>
 							</div>
 							<br>
 							<div class="row four">
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="tothday">総有給休暇</label>
-									<input type="number" class="form-control" id="tothday" name="tothday" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="udtothday" name="udtothday" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="oldcnt">前年度の繰越残</label>
-									<input type="number" class="form-control" id="oldcnt" name="oldcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="udoldcnt" name="udoldcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class=" col-md-3 col-sm-3 col-sx-3">
 									<label for="newcnt">当該年度付与</label>
-									<input type="number" class="form-control" id="newcnt" name="newcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="udnewcnt" name="udnewcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 no">
 									<label for="usefinishcnt">使用済数</label>
-									<input type="number" class="form-control" id="usefinishcnt" name="usefinishcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="udusefinishcnt" name="udusefinishcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
 							<div class="row five">
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="usebeforecnt">使用前残</label>
-									<input type="number" class="form-control" id="usebeforecnt" name="usebeforecnt" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="udusebeforecnt" name="udusebeforecnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="usenowcnt">今回使用</label>
-									<input type="number" class="form-control" id="usenowcnt" name="usenowcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="udusenowcnt" name="udusenowcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="usefinishaftercnt">使用後済</label>
-									<input type="number" class="form-control" id="usefinishaftercnt" name="usefinishaftercnt" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="udusefinishaftercnt" name="udusefinishaftercnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="useafterremaincnt">使用後残</label>
-									<input type="number" class="form-control" id="useafterremaincnt" name="useafterremaincnt" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="uduseafterremaincnt" name="uduseafterremaincnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
 							<div class="row six">
 								<div class="col-md-8 col-sm-8 col-sx-8">
 									<label for="reason">事由</label>
-									<textarea class="form-control" id="reason" name="reason" rows="2"></textarea>
+									<textarea class="form-control" id="udreason" name="udreason" rows="2"></textarea>
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
 									<label for="ymdcnt">申込日</label>
-									<input type="number" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="udymdcnt" name="udymdcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
 									<label for="timecnt">申込時間</label>
-									<input type="number" class="form-control" id="timecnt" name="timecnt" placeholder="番号" style="text-align: center" value="">
+									<input type="number" class="form-control" id="udtimecnt" name="udtimecnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
@@ -631,39 +631,42 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<label for="destcode">暇中居る連絡先</label>
 									<div class="custom-control custom-radio">
 										&nbsp;&nbsp;
-										<input type="radio" name="destcode" value="0">日本
-										<input type="radio" name="destcode" value="1">韓国
-										<input type="radio" name="destcode" value="2">その他
+										<input type="radio" name="uddestcode" id="uddestcode" value="0">日本
+										<input type="radio" name="uddestcode" id="uddestcode" value="1">韓国
+										<input type="radio" name="uddestcode" id="uddestcode" value="2">その他
 									</div>
 								</div>
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
 									<label for="destplace">場所</label>
-									<input type="text" class="form-control" name="destplace" id="destplace" placeholder="国" required="required" style="text-align: left">
+									<input type="text" class="form-control" name="uddestplace" id="uddestplace" placeholder="国" required="required" style="text-align: left">
 								</div>
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
 									<label for="desttel">Tel</label>
-									<input type="text" class="form-control" name="desttel" id="desttel" placeholder="090xxxxxxxx" required="required" style="text-align: left">
+									<input type="text" class="form-control" name="uddesttel" id="uddesttel" placeholder="090xxxxxxxx" required="required" style="text-align: left">
 								</div>
 							</div>
 							<br>
-							<div class="row eight">
-								<div class="col-md-3 col-sm-3 col-sx-3"></div>
-								<div class="col-md-2 col-sm-2 col-sx-2 btn">
+							<div class="modal-footer" style="text-align: center">
+								<div class="col-xs-2"></div>
+								<div class="col-xs-2">
 									<p class="text-center">
-										<input type="submit" name="SaveKyuka" class="btn btn-primary btn-ms" id="btnReg" role="button" value="登録">
+										<input type="submit" name="UpdateKyuka" class="btn btn-primary" id="btnUpdateKyuka" role="button" value="編集">
 									</p>
 								</div>
-								<div class="col-md-2 col-sm-2 col-sx-2 btn" style="margin-left: 5px;margin-right: 5px;">
+								<div class="col-xs-2">
 									<p class="text-center">
-										<a class="btn btn-success btn-ms" id="btnClear" role="button">クリア </a>
+										<input type="submit" name="btnDelKyuka" class="btn btn-warning" id="btnDelKyuka" role="button" value="削除">
 									</p>
 								</div>
-								<div class="col-md-2 col-sm-2 col-sx-2 btn">
+								<div class="col-xs-2">
 									<p class="text-center">
-										<a class="btn btn-default btn-ms" data-dismiss="modal" role="button">閉じる </a>
+										<a class="btn btn-success btn-ms" id="btnClearUpdate" role="button">クリア</a>
 									</p>
 								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3"></div>
+								<div class="col-xs-2">
+									<button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
+								</div>
+								<div class="col-xs-2"></div>
 							</div>
 						</div>
 					</div>
@@ -799,7 +802,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	$(document).on('click', '#btnNew', function(e) {
 		// Check Receive Kyuka or Not
 		var currentDate = new Date();
-		var targetDate = new Date('<?php echo $_SESSION['auth_inymd'] ?>');
+		var targetDate = new Date('<?php echo $user_inymd_ ?>');
 		targetDate.setMonth(targetDate.getMonth() + 6);
 		if (targetDate >= currentDate) {
 			alert("<?php echo $kyuka_no_receive; ?>");
@@ -882,7 +885,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var str = new Date($("#strymd").val());
 		var end = new Date($("#endymd").val());
 
-		if (isNull(end) || str > end) {
+		if (!end || str > end) {
 			$("#endymd").val($("#strymd").val());
 			end = new Date($("#endymd").val());
 		}
@@ -893,6 +896,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			$("#endymd").val($("#strymd").val());
 			return;
 		}
+
 		var dateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
 		$("#ymdcnt").val(dateDiff + 1);
 	});
@@ -912,8 +916,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	$(document).ready(function() {
+		// Function to calculate timecnt
 		$("#endtime, #strtime").on("input", function() {
 			calculateTimeDifference();
+		});
+
+		// Function to calculate timecnt
+		$("#udendtime, #udstrtime").on("input", function() {
+			udcalculateTimeDifference();
 		});
 	});
 
@@ -958,63 +968,50 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$('#modal3').modal('toggle');
 	});
 
-	// Long button treatment
+	// Check Empty
 	$(document).on('click', '#btnReg', function(e) {
 		var kyukatype = $("input[name='kyukatype']:checked").val();
-		var strymd = $("#strymd").val();
-		var endymd = $("#endymd").val();
-		var ymdcnt = $("#ymdcnt").val();
-		var strtime = $("#strtime").val() * 1;
-		var endtime = $("#endtime").val() * 1;
-		var timecnt = $("#timecnt").val() * 1;
-		var kyukaname = $("#kyukaname option:selected").text();
-		var destcode = $("input[name='destcode']:checked").val();
-		var destplace = $("#destplace").val();
-		var desttel = $("#desttel").val();
+		var kyukacode = $("#kyukacode").val();
 		var vacationstr = $("#vacationstr").val();
 		var vacationend = $("#vacationend").val();
+		var strymd = $("#strymd").val();
+		var endymd = $("#endymd").val();
+		var strtime = $("#strtime").val() * 1;
+		var endtime = $("#endtime").val() * 1;
+		var tothday = $("#tothday").val() * 1;
 		var oldcnt = $("#oldcnt").val() * 1;
 		var newcnt = $("#newcnt").val() * 1;
-		var usecnt = $("#usecnt").val() * 1;
-		var usetime = $("#usetime").val() * 1;
-		var restcnt = $("#restcnt").val() * 1;
-		var kyukatimelimit = $("#kyukatimelimit").val() * 1;
-
-		if (ymdcnt > (oldcnt + newcnt)) {
-			alert("<?php echo $kyuka_ymdcnt_01; ?>" + (oldcnt + newcnt) + "<?php echo $kyuka_ymdcnt_02; ?>");
-			$("#ymdcnt").focus();
-			return false;
-		}
-
-		if (kyukaname == "") {
-			alert("<?php echo $kyuka_name_select; ?>");
-			$("#kyukaname").focus();
-			return false;
-		}
-
-		// Check the vacation time limit available for the year (use time in the current year + time requested this time > error if annual use limit time)
-		if (usetime + timecnt > kyukatimelimit) {
-			alert("<?php echo $kyuka_time_limit_01; ?>" + kyukatimelimit + "<?php echo $kyuka_time_limit_02; ?>");
-			return false;
-		}
-
-		// Since the vacation request period must be available only within the period granted, in the case of a larger vacation, divide the application into two.
-		if (endymd > vacationend) {
-			alert("<?php echo $kyuka_endymd_01; ?>" + vacationstr + " ~ " + vacationend + "<?php echo $kyuka_endymd_02; ?>");
-			return false;
-		}
-
-		// 残数(日)計算
-		restcnt = oldcnt + newcnt - usecnt - parseInt(usetime / 8);
-		if (restcnt < 0) {
-			alert("<?php echo $kyuka_strymd; ?>");
-			$("#strymd").focus();
-			return false;
-		}
+		var usefinishcnt = $("#usefinishcnt").val() * 1;
+		var usebeforecnt = $("#usebeforecnt").val() * 1;
+		var usenowcnt = $("#usenowcnt").val() * 1;
+		var usefinishaftercnt = $("#usefinishaftercnt").val() * 1;
+		var useafterremaincnt = $("#useafterremaincnt").val() * 1;
+		var reason = $("#reason").val();
+		var destplace = $("#destplace").val();
+		var destcode = $("input[name='destcode']:checked").val();
+		var desttel = $("#desttel").val();
 
 		if (kyukatype != "0" && kyukatype != "1") {
 			alert("<?php echo $kyuka_type_select; ?>");
 			$("#kyukatype").focus();
+			return false;
+		}
+
+		if (!kyukacode) {
+			alert("<?php echo $kyuka_name_select; ?>");
+			$("#kyukacode").focus();
+			return false;
+		}
+
+		if (vacationstr == "") {
+			alert("<?php echo $kyuka_vacation_empty; ?>");
+			$("#vacationstr").focus();
+			return false;
+		}
+
+		if (vacationend == "") {
+			alert("<?php echo $kyuka_vacation_empty; ?>");
+			$("#vacationend").focus();
 			return false;
 		}
 
@@ -1042,6 +1039,60 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			return false;
 		}
 
+		if (tothday == "") {
+			alert("<?php echo $kyuka_tothday_empty; ?>");
+			$("#tothday").focus();
+			return false;
+		}
+
+		if (oldcnt == "") {
+			alert("<?php echo $kyuka_oldcnt_empty; ?>");
+			$("#oldcnt").focus();
+			return false;
+		}
+
+		if (newcnt == "") {
+			alert("<?php echo $kyuka_newcnt_empty; ?>");
+			$("#newcnt").focus();
+			return false;
+		}
+
+		if (usefinishcnt == "") {
+			alert("<?php echo $kyuka_usefinishcnt_empty; ?>");
+			$("#usefinishcnt").focus();
+			return false;
+		}
+
+		if (usebeforecnt == "") {
+			alert("<?php echo $kyuka_usebeforecnt_empty; ?>");
+			$("#usebeforecnt").focus();
+			return false;
+		}
+
+		if (usenowcnt == "") {
+			alert("<?php echo $kyuka_usenowcnt_empty; ?>");
+			$("#usenowcnt").focus();
+			return false;
+		}
+
+		if (usefinishaftercnt == "") {
+			alert("<?php echo $kyuka_usefinishaftercnt_empty; ?>");
+			$("#usefinishaftercnt").focus();
+			return false;
+		}
+
+		if (useafterremaincnt == "") {
+			alert("<?php echo $kyuka_useafterremaincnt_empty; ?>");
+			$("#useafterremaincnt").focus();
+			return false;
+		}
+
+		if (reason == "") {
+			alert("<?php echo $kyuka_reason_empty; ?>");
+			$("#reason").focus();
+			return false;
+		}
+
 		if (destcode != "0" && destcode != "1" && destcode != "2") {
 			alert("<?php echo $kyuka_destcode_select; ?>");
 			$("#destcode").focus();
@@ -1064,18 +1115,331 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	// Clear Input Tag Data
 	$(document).on('click', '#btnClear', function(e) {
 		$('#kyukaname').val('');
+		$("#kyukacode").val('');
 		$("input[name='kyukatype']").prop('checked', false);
 		$('#strymd').val('');
 		$('#endymd').val('');
 		$('#strtime').val('');
 		$('#endtime').val('');
-		$('#usecnt').val('');
-		$('#usetime').val('');
-		$('#ymdcnt').val('');
-		$('#timecnt').val('');
+		$('#tothday').val('');
+		$('#oldcnt').val('');
+		$('#newcnt').val('');
+		$('#usefinishcnt').val('');
+		$('#usebeforecnt').val('');
+		$('#usenowcnt').val('');
+		$('#usefinishaftercnt').val('');
+		$('#useafterremaincnt').val('');
+		$('#reason').val('');
+		$('#destplace').val('');
 		$("input[name='destcode']").prop('checked', false);
 		$('#destplace').val('');
 		$('#desttel').val('');
+		$('#ymdcnt').val('0');
+		$('#timecnt').val('0');
+	});
+
+
+	// 編集
+	// ①総有給休暇数, ②＋③＝①
+	$("#udoldcnt, #udnewcnt").on("input", function() {
+		var udoldcntValue = parseFloat($("#udoldcnt").val()) || 0;
+		var udnewcntValue = parseFloat($("#udnewcnt").val()) || 0;
+		var udtotaly = udoldcntValue + udnewcntValue;
+		$("#udtothday").val(udtotaly);
+	});
+
+	// ⑦使用後済数(④＋⑥)
+	$("#udusefinishcnt, #udusenowcnt").on("input", function() {
+		var udusefinishcntValue = parseFloat($("#udusefinishcnt").val()) || 0;
+		var udusenowcntValue = parseFloat($("#udusenowcnt").val()) || 0;
+		var udtotaly = udusefinishcntValue + udusenowcntValue;
+		$("#udusefinishaftercnt").val(udtotaly);
+	});
+
+	// ⑧使用後残日数(⑤－⑥)
+	$("#udusebeforecnt, #udusenowcnt").on("input", function() {
+		var udusebeforecntValue = parseFloat($("#udusebeforecnt").val()) || 0;
+		var udusenowcntValue = parseFloat($("#udusenowcnt").val()) || 0;
+		var udsuby = udusebeforecntValue - udusenowcntValue;
+		$("#uduseafterremaincnt").val(udsuby);
+	});
+
+	// Lock and unlock items when selecting vacation request type (day/hour)
+	$('input[type=radio][name=udkyukatype]').change(function() {
+		if (this.value == '1') {
+			// Select day
+			$("#udstrymd").prop('disabled', false);
+			$("#udendymd").prop('disabled', false);
+			$("#udstrtime").prop('disabled', true);
+			$("#udendtime").prop('disabled', true);
+			$("#udtimecnt").val(0);
+			$("#udtimecnt").prop('disabled', true);
+			$("#udymdcnt").prop('disabled', false);
+		} else if (this.value == '0') {
+			// Time selection
+			$("#udstrymd").prop('disabled', false);
+			$("#udendymd").prop('disabled', true);
+			$("#udstrtime").prop('disabled', false);
+			$("#udendtime").prop('disabled', false);
+			$("#udymdcnt").val(0);
+			$("#udymdcnt").prop('disabled', true);
+			$("#udtimecnt").prop('disabled', false);
+		}
+	});
+
+	// Contact while on vacation
+	$('input[type=radio][name=uddestcode]').change(function() {
+		if (this.value == '0') {
+			// Japan
+			$("#uddestplace").val("日本").prop('readonly', true);
+		} else if (this.value == '1') {
+			// Korea
+			$("#uddestplace").val("韓国").prop('readonly', true);
+		} else {
+			// Other
+			$("#uddestplace").val("").prop('readonly', false);
+		}
+	});
+
+	// Calculation of vacation days when vacation days (str) change
+	$("#udstrymd").change(function() {
+		var str = new Date($("#udstrymd").val());
+		var end = new Date($("#udendymd").val());
+
+		if (!end || str > end) {
+			$("#udendymd").val($("#udstrymd").val());
+			end = new Date($("#udendymd").val());
+		}
+
+		// If hours are selected, the number of days is set to 0.
+		if ($("input[name='udkyukatype']:checked").val() == "0") {
+			$("#udendymd").val($("#udstrymd").val());
+			return;
+		}
+
+		var uddateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
+		$("#udymdcnt").val(uddateDiff + 1);
+	});
+
+	// Calculation of vacation days when vacation days (end) change
+	$("#udendymd").change(function() {
+		var str = new Date($("#udstrymd").val());
+		var end = new Date($("#udendymd").val());
+
+		if (str > end) {
+			$("#udendymd").val($("#udstrymd").val());
+			end = new Date($("#udendymd").val());
+		}
+
+		var uddateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
+		$("#udymdcnt").val(uddateDiff + 1);
+	});
+
+	function udcalculateTimeDifference() {
+		var udendTime = $("#udendtime").val();
+		var udstartTime = $("#udstrtime").val();
+
+		if (udendTime !== "" && udstartTime !== "") {
+			udendTime = parseInt(udendTime, 10);
+			udstartTime = parseInt(udstartTime, 10);
+
+			// Check if the values are valid integers
+			if (!isNaN(udendTime) && !isNaN(udstartTime)) {
+				var udtimeDifference = udendTime - udstartTime;
+				$("#udtimecnt").val(udtimeDifference);
+			}
+		}
+	}
+
+	// Datepeeker Calender
+	$("#udstrymd").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+
+	$("#udendymd").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+
+	$("#udvacationstr").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+
+	$("#udvacationend").datepicker({
+		changeYear: true,
+		dateFormat: 'yy/mm/dd'
+	});
+
+	// Check Empty
+	$(document).on('click', '#btnUpdateKyuka', function(e) {
+		var kyukatype = $("input[name='udkyukatype']:checked").val();
+		var kyukacode = $("#udkyukacode").val();
+		var vacationstr = $("#udvacationstr").val();
+		var vacationend = $("#udvacationend").val();
+		var strymd = $("#udstrymd").val();
+		var endymd = $("#udendymd").val();
+		var strtime = $("#udstrtime").val() * 1;
+		var endtime = $("#udendtime").val() * 1;
+		var tothday = $("#udtothday").val() * 1;
+		var oldcnt = $("#udoldcnt").val() * 1;
+		var newcnt = $("#udnewcnt").val() * 1;
+		var usefinishcnt = $("#udusefinishcnt").val() * 1;
+		var usebeforecnt = $("#udusebeforecnt").val() * 1;
+		var usenowcnt = $("#udusenowcnt").val() * 1;
+		var usefinishaftercnt = $("#udusefinishaftercnt").val() * 1;
+		var useafterremaincnt = $("#uduseafterremaincnt").val() * 1;
+		var reason = $("#udreason").val();
+		var destplace = $("#uddestplace").val();
+		var destcode = $("input[name='uddestcode']:checked").val();
+		var desttel = $("#uddesttel").val();
+
+		if (kyukatype != "0" && kyukatype != "1") {
+			alert("<?php echo $kyuka_type_select; ?>");
+			$("#udkyukatype").focus();
+			return false;
+		}
+
+		if (!kyukacode) {
+			alert("<?php echo $kyuka_name_select; ?>");
+			$("#udkyukacode").focus();
+			return false;
+		}
+
+		if (vacationstr == "") {
+			alert("<?php echo $kyuka_vacation_empty; ?>");
+			$("#udvacationstr").focus();
+			return false;
+		}
+
+		if (vacationend == "") {
+			alert("<?php echo $kyuka_vacation_empty; ?>");
+			$("#udvacationend").focus();
+			return false;
+		}
+
+		if (strymd == "") {
+			alert("<?php echo $kyuka_strymd_empty; ?>");
+			$("#udstrymd").focus();
+			return false;
+		}
+
+		if (kyukatype == "1" && endymd == "") {
+			alert("<?php echo $kyuka_endymd_empty; ?>");
+			$("#udendymd").focus();
+			return false;
+		}
+
+		if (kyukatype == "0" && (strtime == "" || strtime == "0")) {
+			alert("<?php echo $kyuka_strtime_empty; ?>");
+			$("#udstrtime").focus();
+			return false;
+		}
+
+		if (kyukatype == "0" && (endtime == "" || endtime == "0")) {
+			alert("<?php echo $kyuka_endtime_empty; ?>");
+			$("#udendtime").focus();
+			return false;
+		}
+
+		if (tothday == "") {
+			alert("<?php echo $kyuka_tothday_empty; ?>");
+			$("#udtothday").focus();
+			return false;
+		}
+
+		if (oldcnt == "") {
+			alert("<?php echo $kyuka_oldcnt_empty; ?>");
+			$("#udoldcnt").focus();
+			return false;
+		}
+
+		if (newcnt == "") {
+			alert("<?php echo $kyuka_newcnt_empty; ?>");
+			$("#udnewcnt").focus();
+			return false;
+		}
+
+		if (usefinishcnt == "") {
+			alert("<?php echo $kyuka_usefinishcnt_empty; ?>");
+			$("#udusefinishcnt").focus();
+			return false;
+		}
+
+		if (usebeforecnt == "") {
+			alert("<?php echo $kyuka_usebeforecnt_empty; ?>");
+			$("#udusebeforecnt").focus();
+			return false;
+		}
+
+		if (usenowcnt == "") {
+			alert("<?php echo $kyuka_usenowcnt_empty; ?>");
+			$("#udusenowcnt").focus();
+			return false;
+		}
+
+		if (usefinishaftercnt == "") {
+			alert("<?php echo $kyuka_usefinishaftercnt_empty; ?>");
+			$("#udusefinishaftercnt").focus();
+			return false;
+		}
+
+		if (useafterremaincnt == "") {
+			alert("<?php echo $kyuka_useafterremaincnt_empty; ?>");
+			$("#uduseafterremaincnt").focus();
+			return false;
+		}
+
+		if (reason == "") {
+			alert("<?php echo $kyuka_reason_empty; ?>");
+			$("#udreason").focus();
+			return false;
+		}
+
+		if (destcode != "0" && destcode != "1" && destcode != "2") {
+			alert("<?php echo $kyuka_destcode_select; ?>");
+			$("#uddestcode").focus();
+			return false;
+		}
+
+		if (destplace == "") {
+			alert("<?php echo $kyuka_destplace_empty; ?>");
+			$("#uddestplace").focus();
+			return false;
+		}
+
+		if (desttel == "") {
+			alert("<?php echo $kyuka_desttel_empty; ?>");
+			$("#uddesttel").focus();
+			return false;
+		}
+	});
+
+	// Clear Input Tag Data
+	$(document).on('click', '#btnClearUpdate', function(e) {
+		$('#udkyukaname').val('');
+		$("#udkyukacode").val('');
+		$("input[name='udkyukatype']").prop('checked', false);
+		$('#udstrymd').val('');
+		$('#udendymd').val('');
+		$('#udstrtime').val('');
+		$('#udendtime').val('');
+		$('#udtothday').val('');
+		$('#udoldcnt').val('');
+		$('#udnewcnt').val('');
+		$('#udusefinishcnt').val('');
+		$('#udusebeforecnt').val('');
+		$('#udusenowcnt').val('');
+		$('#udusefinishaftercnt').val('');
+		$('#uduseafterremaincnt').val('');
+		$('#udreason').val('');
+		$('#uddestplace').val('');
+		$("input[name='uddestcode']").prop('checked', false);
+		$('#uddestplace').val('');
+		$('#uddesttel').val('');
+		$('#udymdcnt').val('0');
+		$('#udtimecnt').val('0');
 	});
 
 	// 編集
@@ -1089,47 +1453,46 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		foreach ($userkyuka_list as $key) {
 		?>
 			if ('<?php echo $key['kyukaid'] ?>' === Kyukaid) {
-				$("#usname").text('<?php echo $key['uid'] ?>');
-				$("#uduid").text($('[name="uduid"]').val("<?php echo $key['uid'] ?>"));
-				$("#udpwd").text($('[name="udpwd"]').val("<?php echo $key['pwd'] ?>"));
-				$("#udname").text($('[name="udname"]').val("<?php echo $key['name'] ?>"));
-				$("#udgrade").text($('[name="udgrade"]').val("<?php echo $key['grade'] ?>"));
-				$("#udemail").text($('[name="udemail"]').val("<?php echo $key['email'] ?>"));
-				$("#currentEmail").text($('[name="currentEmail"]').val("<?php echo $key['email'] ?>"));
-
-				$("#uddept").val("<?php echo $key['dept'] ?>");
-				$("#udcompanyid").val("<?php echo $key['companyid']; ?>");
-				var genbaId = "<?php echo $key['genid']; ?>";
-				var options = $("#udgenba_list option");
-				options.each(function(index, option) {
-					console.log(option.value);
-					if (option.value == genbaId) {
-						$(option).prop("selected", true);
-						return false;
-					}
-				});
-
-				if (genbaId !== '' && $("#udgenba_list option:selected").val() !== genbaId) {
-					$("#udgenba_list option").eq(0).prop("selected", true);
+				$("#usname").text('<?php echo $key['name'] ?>');
+				$("#udkyukaid").text($('[name="udkyukaid"]').val("<?php echo $key['kyukaid'] ?>"));
+				$("#udvacationid").text($('[name="udvacationid"]').val("<?php echo $key['vacationid'] ?>"));
+				$("#udallowok").text($('[name="udallowok"]').val("<?php echo $key['allowok'] ?>"));
+				$("#udallowid").text($('[name="udallowid"]').val("<?php echo $key['allowid'] ?>"));
+				$("#udallowdecide").text($('[name="udallowdecide"]').val("<?php echo $key['allowdecide'] ?>"));
+				$("#udallowdt").text($('[name="udallowdt"]').val("<?php echo $key['allowdt'] ?>"));
+				$("input[name='udkyukatype'][value='<?php echo $key['kyukatype']; ?>']").prop('checked', true);
+				var decide_readOnly = '<?php echo $key['kyukatype']; ?>';
+				if (decide_readOnly === "0") {
+					$("#udendymd").prop('disabled', true);
+					$("#udymdcnt").prop('disabled', true);
+				} else if (decide_readOnly === "1") {
+					$("#udstrtime").prop('disabled', true);
+					$("#udendtime").prop('disabled', true);
+					$("#udtimecnt").prop('disabled', true);
 				}
-				var udsignstamp_old = $("input[name=udsignstamp_old]:hidden");
-				udsignstamp_old.val("<?php echo $key['signstamp'] ?>");
-				var udsignstamp_old = udsignstamp_old.val();
-				var imagePath = "<?= $PATH_IMAGE_STAMP . $key['signstamp'] ?>";
-				$("#udsignstamp").attr("src", imagePath);
-				$("#udbigo").text($('[name="udbigo"]').val("<?php echo $key['bigo'] ?>"));
 
-				//  get current usertype 
-				var type = $("input[name=ultype]:hidden");
-				type.val("<?php echo $key['type'] ?>");
-				var ultypeValue = $('#ultype').val();
-				$('input[name="uluser_type"]').each(function() {
-					if ($(this).val() === ultypeValue) {
-						$(this).prop('checked', true);
-					}
-				});
-
-
+				$("select[name='udkyukacode']").val('<?php echo $key['kyukacode']; ?>');
+				$("#udvacationstr").text($('[name="udvacationstr"]').val("<?php echo $key['vacationstr'] ?>"));
+				$("#udvacationend").text($('[name="udvacationend"]').val("<?php echo $key['vacationend'] ?>"));
+				$("#udstrymd").text($('[name="udstrymd"]').val("<?php echo $key['strymd'] ?>"));
+				$("#udendymd").text($('[name="udendymd"]').val("<?php echo $key['endymd'] ?>"));
+				$("#udstrtime").text($('[name="udstrtime"]').val("<?php echo $key['strtime'] ?>"));
+				$("#udendtime").text($('[name="udendtime"]').val("<?php echo $key['endtime'] ?>"));
+				$("#udtothday").text($('[name="udtothday"]').val("<?php echo $key['tothday'] ?>"));
+				$("#udoldcnt").text($('[name="udoldcnt"]').val("<?php echo $key['oldcnt'] ?>"));
+				$("#udnewcnt").text($('[name="udnewcnt"]').val("<?php echo $key['newcnt'] ?>"));
+				$("#udusefinishcnt").text($('[name="udusefinishcnt"]').val("<?php echo $key['usefinishcnt'] ?>"));
+				$("#udusebeforecnt").text($('[name="udusebeforecnt"]').val("<?php echo $key['usebeforecnt'] ?>"));
+				$("#udusenowcnt").text($('[name="udusenowcnt"]').val("<?php echo $key['usenowcnt'] ?>"));
+				$("#udusefinishaftercnt").text($('[name="udusefinishaftercnt"]').val("<?php echo $key['usefinishaftercnt'] ?>"));
+				$("#uduseafterremaincnt").text($('[name="uduseafterremaincnt"]').val("<?php echo $key['useafterremaincnt'] ?>"));
+				$("#udreason").text($('[name="udreason"]').val("<?php echo $key['reason'] ?>"));
+				$("#udymdcnt").text($('[name="udymdcnt"]').val("<?php echo $key['ymdcnt'] ?>"));
+				$("#udtimecnt").text($('[name="udtimecnt"]').val("<?php echo $key['timecnt'] ?>"));
+				$("#udymdcnt").text($('[name="udymdcnt"]').val("<?php echo $key['ymdcnt'] ?>"));
+				$("input[name='uddestcode'][value='<?php echo $key['destcode']; ?>']").prop('checked', true);
+				$("#uddestplace").text($('[name="uddestplace"]').val("<?php echo $key['destplace'] ?>"));
+				$("#uddesttel").text($('[name="uddesttel"]').val("<?php echo $key['desttel'] ?>"));
 			}
 		<?php
 		}
