@@ -15,6 +15,8 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
 }
 $result_user = mysqli_query($conn, $sql_user);
 $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
+$user_inymd_ = $user_list[0]['inymd'];
+$user_name_ = $user_list[0]['name'];
 
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
@@ -68,8 +70,6 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
 }
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
-$user_inymd_ = $userkyuka_list[0]['inymd'];
-$user_name_ = $userkyuka_list[0]['name'];
 
 // calculate year between 6month and 1 year
 $givenDate = strtotime($user_inymd_);

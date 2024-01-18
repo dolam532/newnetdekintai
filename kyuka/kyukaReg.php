@@ -220,7 +220,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<tbody>
 					<?php if (empty($userkyuka_list)) { ?>
 						<tr>
-							<td colspan="21" align="center"><?php echo $data_save_no; ?></td>
+							<td colspan="22" align="center"><?php echo $data_save_no; ?></td>
 						</tr>
 						<?php } elseif (!empty($userkyuka_list)) {
 						foreach ($userkyuka_list as $userkyuka) {
@@ -320,7 +320,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<td>
 									<span>
 										<div class="print_btn">
-											<button id="submit-button" class="btn btn-default" style="width: auto;" type="button" value="<?= $userkyuka['kyukaid'] ?>">休暇印刷</button>
+											<button class="btn btn-default submit-button" style="width: auto;" type="button" data-kyukaid="<?= $userkyuka['kyukaid'] ?>">
+												休暇印刷
+											</button>
 											<!-- <button id="submit-button2" class="btn btn-default" style="width: auto;" type="button">提出</button> -->
 										</div>
 									</span>
@@ -685,7 +687,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 	<!-- PDF product -->
 	<form id="autopdf" action="../pdfdownload/generatekiukapdf.php" method="post" target="_blank">
-		
 		<input type="hidden" name="kyukaid" id="kyukaid-input" value="<?php echo htmlspecialchars(json_encode($kyukaid)); ?>">
 		<!-- <input type="hidden" name="data" value="<!?php echo htmlspecialchars(json_encode($datas)); ?>"> -->
 	</form>
@@ -1552,10 +1553,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	// Submit for 休暇印刷
-	$("#submit-button").click(function(event) {
+	$(".submit-button").click(function(event) {
 		event.preventDefault();
-		var aValue = $(this).val();
-		$("#autopdf #kyukaid-input").val(aValue);
+		var kyukaidValue = $(this).data("kyukaid");
+		$("#autopdf #kyukaid-input").val(kyukaidValue);
 		$("#autopdf").submit();
 		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();
