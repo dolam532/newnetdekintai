@@ -1,6 +1,11 @@
 <?php
 // Select data from tbl_user
-$sql_user = 'SELECT * FROM `tbl_user`';
+$sql_user = 'SELECT DISTINCT
+`tbl_user`.*,
+`tbl_company`.`kyukatype`
+FROM 
+    `tbl_user`
+CROSS JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`';
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_user .= 'ORDER BY `tbl_user`.`companyid`';
 } elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
@@ -17,6 +22,7 @@ $result_user = mysqli_query($conn, $sql_user);
 $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 $user_inymd_ = $user_list[0]['inymd'];
 $user_name_ = $user_list[0]['name'];
+$user_kyukatype_ = $user_list[0]['kyukatype'];
 
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
@@ -46,12 +52,13 @@ $sql_userkyuka = 'SELECT DISTINCT
     `tbl_vacationinfo`.`usebeforecnt`,
     `tbl_vacationinfo`.`usenowcnt`,
     `tbl_vacationinfo`.`usefinishaftercnt`,
-    `tbl_vacationinfo`.`useafterremaincnt`
+    `tbl_vacationinfo`.`useafterremaincnt`,
+    `tbl_company`.`kyukatype`
 FROM
     `tbl_userkyuka`
 CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`email` = `tbl_user`.`email`
 CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinfo`.`vacationid`
-CROSS JOIN `tbl_manageinfo` ON `tbl_user`.`companyid` = `tbl_manageinfo`.`companyid`';
+CROSS JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`';
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_userkyuka .= 'ORDER BY `tbl_userkyuka`.`kyukaid`';
 } elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {

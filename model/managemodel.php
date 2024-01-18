@@ -235,21 +235,10 @@ if (isset($_POST['btnUpdateCL'])) {
     $use_yn = mysqli_real_escape_string($conn, $_POST['uduse_yn']);
     $joken = mysqli_real_escape_string($conn, $_POST['udjoken']);
     $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
-    $template = mysqli_real_escape_string($conn, $_POST['use_type']);
+    $template = mysqli_real_escape_string($conn, $_POST['uduse_type']);
     $kyukatype = mysqli_real_escape_string($conn, $_POST['udkyukatype']);
 
     $sql = "UPDATE tbl_company SET 
-            companyname='$companyname',
-            staff='$staff',
-            telno='$telno',
-            address='$address',
-            bigo='$bigo',
-            companycode ='$companycode'
-        WHERE companyid ='$companyid'";
-
-    // check  main admin
-    if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
-        $sql = "UPDATE tbl_company SET 
             companyname='$companyname',
             staff='$staff',
             telno='$telno',
@@ -263,7 +252,6 @@ if (isset($_POST['btnUpdateCL'])) {
             template = '$template',
             kyukatype = '$kyukatype'
         WHERE companyid ='$companyid'";
-    }
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['update_success'] = $update_success;

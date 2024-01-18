@@ -287,7 +287,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 <div class="col-xs-6">
                                     <label for="kyukatype"><strong>休暇届タイプ</strong></label>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" id="kyukatype" name="kyukatype" value="<?php echo array_keys(ConstArray::$search_kyukatype)[0]; ?>">
+                                        <input type="radio" id="kyukatype" name="kyukatype" checked value="<?php echo array_keys(ConstArray::$search_kyukatype)[0]; ?>">
                                         <?php echo ConstArray::$search_kyukatype[array_keys(ConstArray::$search_kyukatype)[0]]; ?>
                                         <label class="template-notice-text"> (日付けのみ) </label>
                                         <br />
@@ -394,11 +394,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 <div class="col-xs-6">
                                     <label for="use_type"><strong>勤務表タイプ</strong></label>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" id="use_type" name="use_type" value="<?php echo array_keys(ConstArray::$search_template)[0]; ?>">
+                                        <input type="radio" id="uduse_type" name="uduse_type" value="<?php echo array_keys(ConstArray::$search_template)[0]; ?>">
                                         <?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[0]]; ?>
                                         <label class="template-notice-text"> (業務時間のみ) </label>
                                         <br />
-                                        <input type="radio" id="use_type" name="use_type" value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
+                                        <input type="radio" id="uduse_type" name="uduse_type" value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
                                         <?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[1]]; ?>
                                         <label class="template-notice-text"> (出退社時間+業務時間)</label>
                                     </div>
@@ -579,7 +579,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                 $("input[name='uduse_yn'][value='<?php echo $key['use_yn']; ?>']").prop('checked', true);
                 $("#udjoken").text($('[name="udjoken"]').val("<?php echo $key['joken'] ?>"));
                 $("#udbigo").text($('[name="udbigo"]').val("<?php echo $key['bigo'] ?>"));
-                $("input[name='use_type'][value='<?php echo $key['template']; ?>']").prop('checked', true);
+                $("input[name='uduse_type'][value='<?php echo $key['template']; ?>']").prop('checked', true);
                 $("input[name='udkyukatype'][value='<?php echo $key['kyukatype']; ?>']").prop('checked', true);
             }
         <?php
