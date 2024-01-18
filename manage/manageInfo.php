@@ -106,13 +106,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                         <th style="text-align: center; width: 25%;">Company Name</th>
                         <th style="text-align: center; width: 15%;">締切（月）</th>
                         <th style="text-align: center; width: 15%;">締切（日）</th>
-                        <th style="text-align: center; width: auto;">年間休暇時間</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php if (empty($manageinfo_list)) { ?>
                         <tr>
-                            <td colspan="9" align="center"><?php echo $data_save_no; ?></td>
+                            <td colspan="8" align="center"><?php echo $data_save_no; ?></td>
                         </tr>
                         <?php } elseif (!empty($manageinfo_list)) {
                         foreach ($manageinfo_list as $key) {
@@ -128,7 +127,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 </td>
                                 <td><span><?= $key['magamym'] ?></span></td>
                                 <td><span><?= $key['magamymd'] ?></span></td>
-                                <td><span><?= $key['kyukatimelimit'] ?></span></td>
                             </tr>
                     <?php
                         }
@@ -160,17 +158,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 </div>
                                 <br>
                                 <div class="row">
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-6">
                                         <label for="staff">締切（月）</label>
                                         <input type="text" class="form-control" name="magamym" id="magamYm" placeholder="2019/01" maxlength="100" style="text-align: left">
                                     </div>
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-6">
                                         <label for="telno">締切（日）</label>
                                         <input type="text" class="form-control" name="magamymd" id="magamYmd" placeholder="2019/01/01" maxlength="100" style="text-align: left">
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <label for="strymd">年間休暇時間</label>
-                                        <input type="text" class="form-control" name="kyukatimelimit" id="kyukatimelimit" maxlength="10" placeholder="40" style="text-align: left">
                                     </div>
                                 </div>
                             </div>
@@ -215,17 +209,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 </div>
                                 <br>
                                 <div class="row">
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-6">
                                         <label for="staff">締切（月）</label>
                                         <input type="text" class="form-control" name="udmagamym" id="udmagamYm" placeholder="2019/01" maxlength="100" style="text-align: left">
                                     </div>
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-6">
                                         <label for="telno">締切（日）</label>
                                         <input type="text" class="form-control" name="udmagamymd" id="udmagamYmd" placeholder="2019/01/01" maxlength="100" style="text-align: left">
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <label for="strymd">年間休暇時間</label>
-                                        <input type="text" class="form-control" name="udkyukatimelimit" id="udkyukatimelimit" maxlength="10" placeholder="40" style="text-align: left">
                                     </div>
                                 </div>
                             </div>
@@ -280,10 +270,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                 <label for="magamYmd">締切（日）</label>
                                 <input id="magamYmd" name="magamYmd" placeholder="yyyy/mm/dd" class="form-control" type="text" value="<?= $key['magamymd'] ?>">
                             </div>
-                            <div class="col-md-2">
-                                <label for="kyukatimelimit">年間休暇時間</label>
-                                <input id="kyukatimelimit" name="kyukatimelimit" class="form-control" type="text" value="<?= $key['kyukatimelimit'] ?>" maxlength="2">
-                            </div>
                             <div class="col-md-6"></div>
                         </div>
                 <?php
@@ -333,7 +319,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     $(document).on('click', '#btnReg', function(e) {
         var magamYm = $("#magamYm").val();
         var magamYmd = $("#magamYmd").val();
-        var kyukatimeLimit = $("#kyukatimelimit").val();
 
         if (magamYm == "") {
             alert("<?php echo $manage_magamym_empty; ?>");
@@ -344,19 +329,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         if (magamYmd == "") {
             alert("<?php echo $manage_magamymd_empty; ?>");
             $("#magamYmd").focus();
-            return false;
-        }
-
-        if (kyukatimeLimit == "") {
-            alert("<?php echo $manage_kyukatimelimit_empty; ?>");
-            $("#kyukatimelimit").focus();
-            return false;
-        }
-
-        if (isNaN(kyukatimeLimit)) {
-            alert("<?php echo $manage_kyukatimelimit_no; ?>");
-            e.preventDefault();
-            $("#kyukatimelimit").focus();
             return false;
         }
     });
@@ -371,7 +343,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         var companyname = $("#companyname").val();
         var magamYm = $("#magamYm").val();
         var magamYmd = $("#magamYmd").val();
-        var kyukatimeLimit = $("#kyukatimelimit").val();
 
         if (companyname == "") {
             alert("<?php echo $manage_Cname_empty; ?>");
@@ -388,19 +359,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         if (magamYmd == "") {
             alert("<?php echo $manage_magamymd_empty; ?>");
             $("#magamYmd").focus();
-            return false;
-        }
-
-        if (kyukatimeLimit == "") {
-            alert("<?php echo $manage_kyukatimelimit_empty; ?>");
-            $("#kyukatimelimit").focus();
-            return false;
-        }
-
-        if (isNaN(kyukatimeLimit)) {
-            alert("<?php echo $manage_kyukatimelimit_no; ?>");
-            e.preventDefault();
-            $("#kyukatimelimit").focus();
             return false;
         }
     });
@@ -422,7 +380,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                 $("#udcompanyname").text($('[name="udcompanyname"]').val("<?php echo $key['companyname'] ?>"));
                 $("#udmagamym").text($('[name="udmagamym"]').val("<?php echo $key['magamym'] ?>"));
                 $("#udmagamymd").text($('[name="udmagamymd"]').val("<?php echo $key['magamymd'] ?>"));
-                $("#udkyukatimelimit").text($('[name="udkyukatimelimit"]').val("<?php echo $key['kyukatimelimit'] ?>"));
             }
         <?php
         }
@@ -434,7 +391,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         var companyname = $("#udcompanyname").val();
         var magamYm = $("#udmagamYm").val();
         var magamYmd = $("#udmagamYmd").val();
-        var kyukatimeLimit = $("#udkyukatimelimit").val();
 
         if (companyname == "") {
             alert("<?php echo $manage_Cname_empty; ?>");
@@ -451,19 +407,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         if (magamYmd == "") {
             alert("<?php echo $manage_magamymd_empty; ?>");
             $("#udmagamYmd").focus();
-            return false;
-        }
-
-        if (kyukatimeLimit == "") {
-            alert("<?php echo $manage_kyukatimelimit_empty; ?>");
-            $("#udkyukatimelimit").focus();
-            return false;
-        }
-
-        if (isNaN(kyukatimeLimit)) {
-            alert("<?php echo $manage_kyukatimelimit_no; ?>");
-            e.preventDefault();
-            $("#udkyukatimelimit").focus();
             return false;
         }
     });

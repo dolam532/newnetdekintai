@@ -53,10 +53,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     }
 
     .template-notice-text {
-    font-size: smaller; 
-    color: red; 
-    font-style: italic; 
-}
+        font-size: smaller;
+        color: red;
+        font-style: italic;
+    }
 </style>
 <?php include('../inc/menu.php'); ?>
 <div class="container" style="margin-top:-20px;">
@@ -154,21 +154,23 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         <table class="table table-bordered datatable">
             <thead>
                 <tr class="info">
-                    <th style="text-align: center; width: 3%;">ID</th>
-                    <th style="text-align: center; width: 8%;">会社コード</th>
-                    <th style="text-align: center; width: 18%;">会社名</th>
+                    <th style="text-align: center; width: 2%;">ID</th>
+                    <th style="text-align: center; width: 6%;">会社コード</th>
+                    <th style="text-align: center; width: 15%;">会社名</th>
                     <th style="text-align: center; width: 8%;">担当者</th>
-                    <th style="text-align: center; width: 12%;">電話番号</th>
+                    <th style="text-align: center; width: 8%;">電話番号</th>
                     <th style="text-align: center; width: 12%;">契約期間</th>
                     <th style="text-align: center; width: 5%;">使用</th>
-                    <th style="text-align: center; width: 20%;">契約条件</th>
+                    <th style="text-align: center; width: 5%;">勤務表タイプ</th>
+                    <th style="text-align: center; width: 5%;">休暇届タイプ</th>
+                    <th style="text-align: center; width: 12%;">契約条件</th>
                     <th style="text-align: center; width: auto;">備考</th>
                 </tr>
             </thead>
             <tbody>
                 <?php if (empty($company_list)) { ?>
                     <tr>
-                        <td colspan="9" align="center"><?php echo $data_save_no; ?></td>
+                        <td colspan="11" align="center"><?php echo $data_save_no; ?></td>
                     </tr>
                     <?php } elseif (!empty($company_list)) {
                     foreach ($company_list as $key) {
@@ -196,6 +198,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                     ?>
                                 </span>
                             </td>
+                            <td><span><?= $key['template'] ?></span></td>
+                            <td><span><?= $key['kyukatype'] ?></span></td>
                             <td><span><?= $key['joken'] ?></span></td>
                             <td><span><?= $key['bigo'] ?></span></td>
                         </tr>
@@ -264,26 +268,34 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                         <input type="radio" name="use_yn" value="0">中止
                                     </div>
                                 </div>
-
                             </div>
                             <br>
                             <div class="row">
-                            <div class="col-xs-6">
-
-                                    <label for="use_type"><strong>タイプ</strong></label>
+                                <div class="col-xs-6">
+                                    <label for="use_type"><strong>勤務表タイプ</strong></label>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" id="use_type" name="use_type" checked
-                                            value="<?php echo array_keys(ConstArray::$search_template)[0];  ?>">
+                                        <input type="radio" id="use_type" name="use_type" checked value="<?php echo array_keys(ConstArray::$search_template)[0];  ?>">
                                         <?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[0]]; ?>
-                                        <label class="template-notice-text">   (業務時間のみ) </label>
+                                        <label class="template-notice-text"> (業務時間のみ) </label>
 
                                         <br />
-                                        <input type="radio" id="use_type" name="use_type"
-                                            value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
+                                        <input type="radio" id="use_type" name="use_type" value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
                                         <?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[1]]; ?>
-                                        <label class="template-notice-text">  (出退社時間+業務時間)</label>
+                                        <label class="template-notice-text"> (出退社時間+業務時間)</label>
                                     </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label for="kyukatype"><strong>休暇届タイプ</strong></label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="kyukatype" name="kyukatype" value="<?php echo array_keys(ConstArray::$search_kyukatype)[0]; ?>">
+                                        <?php echo ConstArray::$search_kyukatype[array_keys(ConstArray::$search_kyukatype)[0]]; ?>
+                                        <label class="template-notice-text"> (日付けのみ) </label>
+                                        <br />
+                                        <input type="radio" id="kyukatype" name="kyukatype" value="<?php echo array_keys(ConstArray::$search_kyukatype)[1]; ?>">
+                                        <?php echo ConstArray::$search_kyukatype[array_keys(ConstArray::$search_kyukatype)[1]]; ?>
+                                        <label class="template-notice-text"> (日付け+時間)</label>
                                     </div>
+                                </div>
                             </div>
                             <br>
                             <div class="row">
@@ -304,7 +316,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             <?php if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                                 <div class="col-md-3"></div>
                                 <div class="col-md-3">
-                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="登録"> 
+                                    <input type="submit" name="btnRegCL" class="btn btn-primary" id="btnRegCL" role="button" value="登録">
                                 </div>
                                 <div class="col-md-3">
                                     <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
@@ -329,7 +341,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             (<span id="usname"></span>)
                             <button class="close" data-dismiss="modal">x</button>
                         </div>
-
                         <div class="modal-body">
                             <div class="row">
                                 <div class="col-xs-2">
@@ -380,22 +391,30 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                             </div>
                             <br>
                             <div class="row">
-                            <div class="col-xs-6">
-                                
-                                    <label for="use_type"><strong>タイプ</strong></label>
+                                <div class="col-xs-6">
+                                    <label for="use_type"><strong>勤務表タイプ</strong></label>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" id="use_type" name="use_type"
-                                            value="<?php echo array_keys(ConstArray::$search_template)[0]; ?>">
+                                        <input type="radio" id="use_type" name="use_type" value="<?php echo array_keys(ConstArray::$search_template)[0]; ?>">
                                         <?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[0]]; ?>
-                                        <label class="template-notice-text">   (業務時間のみ) </label>
-                                    
+                                        <label class="template-notice-text"> (業務時間のみ) </label>
                                         <br />
-                                        <input type="radio" id="use_type" name="use_type"
-                                            value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
+                                        <input type="radio" id="use_type" name="use_type" value="<?php echo array_keys(ConstArray::$search_template)[1]; ?>">
                                         <?php echo ConstArray::$search_template[array_keys(ConstArray::$search_template)[1]]; ?>
-                                        <label class="template-notice-text">  (出退社時間+業務時間)</label>
+                                        <label class="template-notice-text"> (出退社時間+業務時間)</label>
                                     </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <label for="kyukatype"><strong>休暇届タイプ</strong></label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="udkyukatype" name="udkyukatype" value="<?php echo array_keys(ConstArray::$search_kyukatype)[0]; ?>">
+                                        <?php echo ConstArray::$search_kyukatype[array_keys(ConstArray::$search_kyukatype)[0]]; ?>
+                                        <label class="template-notice-text"> (日付けのみ) </label>
+                                        <br />
+                                        <input type="radio" id="udkyukatype" name="udkyukatype" value="<?php echo array_keys(ConstArray::$search_kyukatype)[1]; ?>">
+                                        <?php echo ConstArray::$search_kyukatype[array_keys(ConstArray::$search_kyukatype)[1]]; ?>
+                                        <label class="template-notice-text"> (日付け+時間)</label>
                                     </div>
+                                </div>
                             </div>
                             <br>
                             <div class="row">
@@ -437,7 +456,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
         $('#modal').modal('toggle');
     });
 
- 
     // Check Error
     $(document).on('click', '#btnRegCL', function(e) {
         var Companycode = $("#companycode").val();
@@ -562,6 +580,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                 $("#udjoken").text($('[name="udjoken"]').val("<?php echo $key['joken'] ?>"));
                 $("#udbigo").text($('[name="udbigo"]').val("<?php echo $key['bigo'] ?>"));
                 $("input[name='use_type'][value='<?php echo $key['template']; ?>']").prop('checked', true);
+                $("input[name='udkyukatype'][value='<?php echo $key['kyukatype']; ?>']").prop('checked', true);
             }
         <?php
         }
@@ -647,34 +666,33 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
     });
 
 
-    
-window.onload = function() {
-		setTimeout(hideLoadingOverlay, 500);
-		startLoading();
-};
+
+    window.onload = function() {
+        setTimeout(hideLoadingOverlay, 500);
+        startLoading();
+    };
 
 
-	// loading UX
-	function showLoadingOverlay() {
-		const overlay = document.getElementById("overlay");
-		overlay.style.display = "block";
-		document.body.style.pointerEvents = "none";
-	}
+    // loading UX
+    function showLoadingOverlay() {
+        const overlay = document.getElementById("overlay");
+        overlay.style.display = "block";
+        document.body.style.pointerEvents = "none";
+    }
 
-	function hideLoadingOverlay() {
-		const overlay = document.getElementById("overlay");
-		overlay.style.display = "none";
-		document.body.style.pointerEvents = "auto";
-	}
+    function hideLoadingOverlay() {
+        const overlay = document.getElementById("overlay");
+        overlay.style.display = "none";
+        document.body.style.pointerEvents = "auto";
+    }
 
-	showLoadingOverlay();
-	function startLoading() {
-		NProgress.start();
-		setTimeout(function () {
-			NProgress.done();
-		}, 500);
-	}
+    showLoadingOverlay();
+
+    function startLoading() {
+        NProgress.start();
+        setTimeout(function() {
+            NProgress.done();
+        }, 500);
+    }
 </script>
-
-
 <?php include('../inc/footer.php'); ?>

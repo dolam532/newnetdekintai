@@ -1,6 +1,8 @@
 <?php
 $reg_dt = date('Y-m-d H:i:s');
 $upt_dt = date('Y-m-d H:i:s');
+$magamym = date('Y/m');
+$magamymd = date('Y/m/d');
 
 
 // manageInfo.php
@@ -48,12 +50,11 @@ if (isset($_POST['btnRegMMI'])) {
     $magamYm = substr($_POST['magamym'], 0, 7);
     $magamym = mysqli_real_escape_string($conn, $magamYm);
     $magamymd = mysqli_real_escape_string($conn, $_POST['magamymd']);
-    $kyukatimelimit = mysqli_real_escape_string($conn, $_POST['kyukatimelimit']);
 
-    $sql = "INSERT INTO `tbl_manageinfo` (`companyid`, `magamym`, `magamymd`, `kyukatimelimit`, `reg_dt` , `upt_dt`)
-                VALUES ('$companyid', '$magamym', '$magamymd', '$kyukatimelimit', '$reg_dt' , null)
+    $sql = "INSERT INTO `tbl_manageinfo` (`companyid`, `magamym`, `magamymd`, `reg_dt`, `upt_dt`)
+                VALUES ('$companyid', '$magamym', '$magamymd', '$reg_dt', null)
             ON DUPLICATE KEY UPDATE
-            `magamym` = '$magamym', `magamymd` = '$magamymd', `kyukatimelimit` = '$kyukatimelimit', `upt_dt` = '$upt_dt'";
+            `magamym` = '$magamym', `magamymd` = '$magamymd', `upt_dt` = '$upt_dt'";
 
     $sql2 = "INSERT INTO `tbl_company` (`companyid`, `companyname`, `reg_dt` , `upt_dt`)
                 VALUES ('$companyid', '$companyname', '$reg_dt' , null)
@@ -74,12 +75,10 @@ if (isset($_POST['btnRegMi'])) {
     $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
     $magamym = mysqli_real_escape_string($conn, $magamYm);
     $magamymd = mysqli_real_escape_string($conn, $_POST['magamYmd']);
-    $kyukatimelimit = mysqli_real_escape_string($conn, $_POST['kyukatimelimit']);
 
     $sql = "UPDATE tbl_manageinfo SET 
                 magamym='$magamym',
                 magamymd='$magamymd',
-                kyukatimelimit='$kyukatimelimit',
                 upt_dt='$upt_dt'
             WHERE companyid ='$companyid'";
 
@@ -98,12 +97,10 @@ if (isset($_POST['btnUpdateMMI'])) {
     $magamYm = substr($_POST['udmagamym'], 0, 7);
     $magamym = mysqli_real_escape_string($conn, $magamYm);
     $magamymd = mysqli_real_escape_string($conn, $_POST['udmagamymd']);
-    $kyukatimelimit = mysqli_real_escape_string($conn, $_POST['udkyukatimelimit']);
 
     $sql = "UPDATE tbl_manageinfo SET 
         magamym='$magamym',
         magamymd='$magamymd',
-        kyukatimelimit='$kyukatimelimit',
         upt_dt='$upt_dt'
     WHERE companyid ='$companyid'";
 
@@ -199,21 +196,22 @@ if (isset($_POST['btnRegCL'])) {
     $address = mysqli_real_escape_string($conn, $_POST['address']);
     $use_yn = mysqli_real_escape_string($conn, $_POST['use_yn']);
     $joken = mysqli_real_escape_string($conn, $_POST['joken']);
-    $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
     $template = mysqli_real_escape_string($conn, $_POST['use_type']);
+    $kyukatype = mysqli_real_escape_string($conn, $_POST['kyukatype']);
+    $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
 
     $sql = "INSERT INTO `tbl_company` (`companyid`, `companycode`, `companyname`, `staff`, `telno`,
-                `strymd`, `endymd`, `address`, `use_yn`,`template` ,  `joken`, `bigo`, `reg_dt` ,`upt_dt` )
+                `strymd`, `endymd`, `address`, `use_yn`, `template`, `kyukatype`, `joken`, `bigo`, `reg_dt` ,`upt_dt` )
                 VALUES ('$companyid', '$companycode', '$companyname', '$staff', '$telno',
-                '$strymd', '$endymd', '$address', '$use_yn', '$template' , '$joken', '$bigo', '$reg_dt' , null)
+                '$strymd', '$endymd', '$address', '$use_yn', '$template', '$kyukatype', '$joken', '$bigo', '$reg_dt' , null)
             ON DUPLICATE KEY UPDATE
                 `companycode` = '$companycode', `companyname` = '$companyname', `staff` = '$staff',
                 `telno` = '$telno', `strymd` = '$strymd', `endymd` = '$endymd', `address` = '$address',
-                `use_yn` = '$use_yn', `template`  = '$template'  , `joken` = '$joken', `bigo` = '$bigo', `upt_dt` = '$upt_dt'";
+                `use_yn` = '$use_yn', `template`  = '$template', `kyukatype`  = '$kyukatype', `joken` = '$joken', `bigo` = '$bigo', `upt_dt` = '$upt_dt'";
 
 
-    $sql2 = "INSERT INTO `tbl_manageinfo` (`companyid`, `reg_dt` ,`upt_dt` )
-                VALUES ('$companyid', '$reg_dt' , null)
+    $sql2 = "INSERT INTO `tbl_manageinfo` (`companyid`, `magamym`, `magamymd`, `reg_dt` ,`upt_dt` )
+                VALUES ('$companyid', '$magamym', '$magamym', '$reg_dt', null)
             ON DUPLICATE KEY UPDATE
                 `upt_dt` = '$upt_dt'";
     if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE) {
@@ -238,6 +236,7 @@ if (isset($_POST['btnUpdateCL'])) {
     $joken = mysqli_real_escape_string($conn, $_POST['udjoken']);
     $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
     $template = mysqli_real_escape_string($conn, $_POST['use_type']);
+    $kyukatype = mysqli_real_escape_string($conn, $_POST['udkyukatype']);
 
     $sql = "UPDATE tbl_company SET 
             companyname='$companyname',
@@ -261,8 +260,8 @@ if (isset($_POST['btnUpdateCL'])) {
             joken='$joken',
             bigo='$bigo',
             companycode ='$companycode',
-            template = '$template'
-
+            template = '$template',
+            kyukatype = '$kyukatype'
         WHERE companyid ='$companyid'";
     }
 
@@ -356,7 +355,6 @@ if ($_POST['SearchButtonAM'] == NULL) {
             }, $gradeConditions);
 
             $whereClause[] = "`tbl_user`.`grade` LIKE '%" . implode("%' OR `tbl_user`.`grade` LIKE '%", $preparedConditions) . "%'";
-
         }
         $whereClause[] = '`tbl_user`.`companyid` = ' . $companyid;
         $whereClause[] = '`tbl_user`.`type` IN ("' . constant('ADMIN') . '", "' . constant('ADMINISTRATOR') . '")';
@@ -542,7 +540,6 @@ if (isset($_POST['btnUpdateAM'])) {
             }
             $sql = "UPDATE tbl_user SET   pwd='$pwd', name='$name',  email ='$email' , grade='$grade', signstamp='$fileName', type='$type',dept='$dept', bigo='$bigo', genid='$genid', inymd='$inymd',
                   outymd='$outymd', genstrymd='$genstrymd', genendymd='$genendymd', upt_dt='$upt_dt' WHERE `uid` ='$uid'";
-
         } else {
             $sql = "UPDATE tbl_user SET  pwd='$pwd', name='$name', grade='$grade', signstamp='$fileName'
             , dept='$dept', bigo='$bigo', type='$type' ,  genid='$genid' , upt_dt='$upt_dt' WHERE email ='$email'";

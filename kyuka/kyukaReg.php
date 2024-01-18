@@ -684,7 +684,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	</div>
 
 	<!-- PDF product -->
-	<form id="autopdf" action="../pdfdownload/generatekiukapdf.php" method="post" target="_blank">
+	<form id="autopdf" action="../pdfdownload/generatekyukapdf.php" method="post" target="_blank">
 		<input type="hidden" name="kyukaid" id="kyukaid-input" value="<?php echo htmlspecialchars(json_encode($kyukaid)); ?>">
 		<!-- <input type="hidden" name="data" value="<!?php echo htmlspecialchars(json_encode($datas)); ?>"> -->
 	</form>

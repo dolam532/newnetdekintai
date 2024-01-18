@@ -46,8 +46,7 @@ $sql_userkyuka = 'SELECT DISTINCT
     `tbl_vacationinfo`.`usebeforecnt`,
     `tbl_vacationinfo`.`usenowcnt`,
     `tbl_vacationinfo`.`usefinishaftercnt`,
-    `tbl_vacationinfo`.`useafterremaincnt`,
-    `tbl_manageinfo`.`kyukatimelimit`
+    `tbl_vacationinfo`.`useafterremaincnt`
 FROM
     `tbl_userkyuka`
 CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`email` = `tbl_user`.`email`

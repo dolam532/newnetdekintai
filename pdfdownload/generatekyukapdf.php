@@ -6,7 +6,6 @@ $tcpdf->SetPrintHeader(false);
 $tcpdf->SetLeftMargin(10); // Set the left margin to 0
 $tcpdf->AddPage();
 
-
 //==================== view datas config start ====================//// 
 // $kyukaid = json_decode($_POST['kyukaid'], true);
 // var_dump($kyukaid);
