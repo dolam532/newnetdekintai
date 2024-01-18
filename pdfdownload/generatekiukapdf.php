@@ -8,7 +8,8 @@ $tcpdf->AddPage();
 
 
 //==================== view datas config start ====================//// 
-
+// $kyukaid = json_decode($_POST['kyukaid'], true);
+// var_dump($kyukaid);
 //-----------// 
 //----1.-----// FORM DATAS IN TOP LEFT REGION
 //-----------// 

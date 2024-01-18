@@ -275,10 +275,9 @@ if (isset($_POST['UpdateKyuka'])) {
     $allowok = mysqli_real_escape_string($conn, $_POST['udallowok']);
     $allowid = mysqli_real_escape_string($conn, $_POST['udallowid']);
     $allowdecide = mysqli_real_escape_string($conn, $_POST['udallowdecide']);
-    $allowdt = mysqli_real_escape_string($conn, $_POST['udallowdt']);
     $upt_dt = date('Y-m-d H:i:s');
 
-    $queries[] = "UPDATE tbl_vacationinfo SET 
+    $queries1 = "UPDATE tbl_vacationinfo SET 
     vacationstr='$vacationstr',
     vacationend='$vacationend',
     tothday='$tothday',
@@ -295,7 +294,7 @@ if (isset($_POST['UpdateKyuka'])) {
     AND uid ='$uid'
     AND email ='$email'";
 
-    $queries[] = "UPDATE tbl_userkyuka SET 
+    $queries2 = "UPDATE tbl_userkyuka SET 
     kyukaymd='$kyukaymd',
     kyukatype='$kyukatype',
     strymd='$strymd',
@@ -311,7 +310,7 @@ if (isset($_POST['UpdateKyuka'])) {
     allowok='$allowok',
     allowid='$allowid',
     allowdecide='$allowdecide',
-    allowdt='$allowdt',
+    allowdt=null,
     reason='$reason',
     upt_dt='$upt_dt'
     WHERE kyukaid ='$kyukaid'
@@ -319,10 +318,43 @@ if (isset($_POST['UpdateKyuka'])) {
     AND uid ='$uid'
     AND vacationid ='$vacationid'";
 
-    $sql = implode(';', $queries);
-    if ($conn->multi_query($sql) === TRUE) {
+    $result1 = mysqli_query($conn, $queries1);
+    $result2 = mysqli_query($conn, $queries2);
+
+    if ($result1 && $result2) {
         $_SESSION['update_success'] =  $update_success;
-        // header("Refresh:3");
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Update tbl_userkyuka & tbl_vacation table of database
+if (isset($_POST['DelKyuka'])) {
+    $companyid = mysqli_real_escape_string($conn, $_SESSION['auth_companyid']);
+    $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
+    $email = mysqli_real_escape_string($conn, $_SESSION['auth_email']);
+    $kyukaid = mysqli_real_escape_string($conn, $_POST['udkyukaid']);
+    $vacationid = mysqli_real_escape_string($conn, $_POST['udvacationid']);
+
+    $queries1 = "DELETE FROM tbl_vacationinfo
+    WHERE vacationid ='$vacationid'
+    AND companyid ='$companyid'
+    AND uid ='$uid'
+    AND email ='$email'";
+
+    $queries2 = "DELETE FROM tbl_userkyuka
+    WHERE kyukaid ='$kyukaid'
+    AND companyid ='$companyid'
+    AND uid ='$uid'
+    AND vacationid ='$vacationid'";
+
+    $result1 = mysqli_query($conn, $queries1);
+    $result2 = mysqli_query($conn, $queries2);
+
+    if ($result1 && $result2) {
+        $_SESSION['delete_success'] =  $delete_success;
+        header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
     }

@@ -86,7 +86,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	}
 	?>
 	<?php
-	if (isset($_SESSION['delete_success']) && isset($_POST['btnDelKyuka'])) {
+	if (isset($_SESSION['delete_success']) && isset($_POST['DelKyuka'])) {
 	?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -214,6 +214,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<th style="text-align: center;">暇中居る連絡先</th>
 						<th style="text-align: center;">Tel</th>
 						<th style="text-align: center;">決裁</th>
+						<th style="text-align: center;">詳細情報</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -314,6 +315,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 													<?php } ?>
 												</span>
 											<?php } ?>
+									</span>
+								</td>
+								<td>
+									<span>
+										<div class="print_btn">
+											<button id="submit-button" class="btn btn-default" style="width: auto;" type="button" value="<?= $userkyuka['kyukaid'] ?>">休暇印刷</button>
+											<!-- <button id="submit-button2" class="btn btn-default" style="width: auto;" type="button">提出</button> -->
+										</div>
 									</span>
 								</td>
 							</tr>
@@ -513,7 +522,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<input type="hidden" name="udallowok" id="udallowok">
 									<input type="hidden" name="udallowid" id="udallowid">
 									<input type="hidden" name="udallowdecide" id="udallowdecide">
-									<input type="hidden" name="udallowdt" id="udallowdt">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 inymd">
 									<label for="inymd">入社年月</label>
@@ -655,7 +663,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 								<div class="col-xs-2">
 									<p class="text-center">
-										<input type="submit" name="btnDelKyuka" class="btn btn-warning" id="btnDelKyuka" role="button" value="削除">
+										<input type="submit" name="DelKyuka" class="btn btn-warning" id="btnDelKyuka" role="button" value="削除">
 									</p>
 								</div>
 								<div class="col-xs-2">
@@ -674,6 +682,13 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			</div>
 		</div>
 	</div>
+
+	<!-- PDF product -->
+	<form id="autopdf" action="../pdfdownload/generatekiukapdf.php" method="post" target="_blank">
+		
+		<input type="hidden" name="kyukaid" id="kyukaid-input" value="<?php echo htmlspecialchars(json_encode($kyukaid)); ?>">
+		<!-- <input type="hidden" name="data" value="<!?php echo htmlspecialchars(json_encode($datas)); ?>"> -->
+	</form>
 
 	<!-- お知らせ -->
 	<div class="row">
@@ -1459,7 +1474,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				$("#udallowok").text($('[name="udallowok"]').val("<?php echo $key['allowok'] ?>"));
 				$("#udallowid").text($('[name="udallowid"]').val("<?php echo $key['allowid'] ?>"));
 				$("#udallowdecide").text($('[name="udallowdecide"]').val("<?php echo $key['allowdecide'] ?>"));
-				$("#udallowdt").text($('[name="udallowdt"]').val("<?php echo $key['allowdt'] ?>"));
 				$("input[name='udkyukatype'][value='<?php echo $key['kyukatype']; ?>']").prop('checked', true);
 				var decide_readOnly = '<?php echo $key['kyukatype']; ?>';
 				if (decide_readOnly === "0") {
@@ -1535,6 +1549,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			}
 		}
 		?>
+	});
+
+	// Submit for 休暇印刷
+	$("#submit-button").click(function(event) {
+		event.preventDefault();
+		var aValue = $(this).val();
+		$("#autopdf #kyukaid-input").val(aValue);
+		$("#autopdf").submit();
+		setTimeout(hideLoadingOverlay, 1000);
+		startLoading();
 	});
 
 	window.onload = function() {
