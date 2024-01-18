@@ -984,7 +984,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		$('#modal3').modal('toggle');
 	});
 
-	// Check Empty
+	// Check Empty 登録
 	$(document).on('click', '#btnReg', function(e) {
 		var kyukatype = $("input[name='kyukatype']:checked").val();
 		var kyukacode = $("#kyukacode").val();
@@ -1061,7 +1061,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			return false;
 		}
 
-		if (oldcnt == "") {
+		if (oldcnt === "") {
 			alert("<?php echo $kyuka_oldcnt_empty; ?>");
 			$("#oldcnt").focus();
 			return false;
@@ -1288,7 +1288,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		dateFormat: 'yy/mm/dd'
 	});
 
-	// Check Empty
+	// Check Empty 編集
 	$(document).on('click', '#btnUpdateKyuka', function(e) {
 		var kyukatype = $("input[name='udkyukatype']:checked").val();
 		var kyukacode = $("#udkyukacode").val();
