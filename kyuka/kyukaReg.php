@@ -339,7 +339,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	<div class="row">
 		<div class="modal" id="modal" tabindex="-1" data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog">
-				<form method="post">
+				<form method="post" novalidate>
 					<div class="modal-content">
 						<div class="modal-header">休年届登録(<span id="sname">New</span>)
 							<button class="close" data-dismiss="modal">x</button>
@@ -509,7 +509,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	<div class="row">
 		<div class="modal" id="modal2" tabindex="-1" data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog">
-				<form method="post">
+				<form method="post" novalidate>
 					<div class="modal-content">
 						<div class="modal-header">休年届編集(<span id="usname"></span>)
 							<button class="close" data-dismiss="modal">x</button>
