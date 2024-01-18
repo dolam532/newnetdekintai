@@ -197,11 +197,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<th style="text-align: center;">申請日</th>
 						<th style="text-align: center;">入社年月</th>
 						<th style="text-align: center;">社員名</th>
-						<th style="text-align: center;">申込区分</th>
+						<th style="text-align: center;">申請区分</th>
 						<th style="text-align: center;">休暇区分</th>
 						<th style="text-align: center;">年度算定期間</th>
 						<th style="text-align: center;">申請期間</th>
-						<th style="text-align: center;">申込日(時)</th>
+						<th style="text-align: center;">申請日数(時間)</th>
 						<th style="text-align: center;">総有給休暇</th>
 						<th style="text-align: center;">前年度の繰越残</th>
 						<th style="text-align: center;">当該年度付与</th>
@@ -211,8 +211,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<th style="text-align: center;">使用後済</th>
 						<th style="text-align: center;">使用後残</th>
 						<th style="text-align: center;">事由</th>
-						<th style="text-align: center;">暇中居る連絡先</th>
-						<th style="text-align: center;">Tel</th>
+						<th style="text-align: center;">休暇中居る場所</th>
+						<th style="text-align: center;">緊急連絡先</th>
 						<th style="text-align: center;">決裁</th>
 						<th style="text-align: center;">詳細情報</th>
 					</tr>
@@ -323,7 +323,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 											<button class="btn btn-default submit-button" style="width: auto;" type="button" data-kyukaid="<?= $userkyuka['kyukaid'] ?>">
 												休暇印刷
 											</button>
-											<!-- <button id="submit-button2" class="btn btn-default" style="width: auto;" type="button">提出</button> -->
+											<button id="" class="btn btn-default" style="width: auto;" type="button">提出</button>
 										</div>
 									</span>
 								</td>
@@ -362,7 +362,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<br>
 							<div class="row two">
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukatype">
-									<label for="kyukatype">申込区分</label>
+									<label for="kyukatype">申請区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
 										<input type="radio" name="kyukatype" id="kyukatype" value="0">時間
@@ -452,31 +452,30 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<textarea class="form-control" id="reason" name="reason" rows="2"></textarea>
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
-									<label for="ymdcnt">申込日</label>
+									<label for="ymdcnt">申請日数</label>
 									<input type="number" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
-									<label for="timecnt">申込時間</label>
+									<label for="timecnt">申請時間</label>
 									<input type="number" class="form-control" id="timecnt" name="timecnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
 							<div class="row seven">
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
-									<label for="destcode">暇中居る連絡先</label>
+									<label for="destcode"></label>
 									<div class="custom-control custom-radio">
 										&nbsp;&nbsp;
 										<input type="radio" name="destcode" value="0">日本
-										<input type="radio" name="destcode" value="1">韓国
-										<input type="radio" name="destcode" value="2">その他
+										<input type="radio" name="destcode" value="1">その他
 									</div>
 								</div>
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
-									<label for="destplace">場所</label>
+									<label for="destplace">休暇中居る場所</label>
 									<input type="text" class="form-control" name="destplace" id="destplace" placeholder="国" required="required" style="text-align: left">
 								</div>
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
-									<label for="desttel">Tel</label>
+									<label for="desttel">緊急連絡先</label>
 									<input type="text" class="form-control" name="desttel" id="desttel" placeholder="090xxxxxxxx" required="required" style="text-align: left">
 								</div>
 							</div>
@@ -537,7 +536,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<br>
 							<div class="row two">
 								<div class="col-md-3 col-sm-3 col-sx-3 kyukatype">
-									<label for="kyukatype">申込区分</label>
+									<label for="kyukatype">申請区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
 										<input type="radio" name="udkyukatype" id="udkyukatype" value="0">時間
@@ -627,31 +626,30 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<textarea class="form-control" id="udreason" name="udreason" rows="2"></textarea>
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
-									<label for="ymdcnt">申込日</label>
+									<label for="ymdcnt">申請日数</label>
 									<input type="number" class="form-control" id="udymdcnt" name="udymdcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
-									<label for="timecnt">申込時間</label>
+									<label for="timecnt">申請時間</label>
 									<input type="number" class="form-control" id="udtimecnt" name="udtimecnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
 							<div class="row seven">
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
-									<label for="destcode">暇中居る連絡先</label>
+									<label for="destcode"></label>
 									<div class="custom-control custom-radio">
 										&nbsp;&nbsp;
 										<input type="radio" name="uddestcode" id="uddestcode" value="0">日本
-										<input type="radio" name="uddestcode" id="uddestcode" value="1">韓国
-										<input type="radio" name="uddestcode" id="uddestcode" value="2">その他
+										<input type="radio" name="uddestcode" id="uddestcode" value="1">その他
 									</div>
 								</div>
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
-									<label for="destplace">場所</label>
+									<label for="destplace">休暇中居る場所</label>
 									<input type="text" class="form-control" name="uddestplace" id="uddestplace" placeholder="国" required="required" style="text-align: left">
 								</div>
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
-									<label for="desttel">Tel</label>
+									<label for="desttel">緊急連絡先</label>
 									<input type="text" class="form-control" name="uddesttel" id="uddesttel" placeholder="090xxxxxxxx" required="required" style="text-align: left">
 								</div>
 							</div>
@@ -887,9 +885,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (this.value == '0') {
 			// Japan
 			$("#destplace").val("日本").prop('readonly', true);
-		} else if (this.value == '1') {
-			// Korea
-			$("#destplace").val("韓国").prop('readonly', true);
 		} else {
 			// Other
 			$("#destplace").val("").prop('readonly', false);
@@ -1208,9 +1203,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (this.value == '0') {
 			// Japan
 			$("#uddestplace").val("日本").prop('readonly', true);
-		} else if (this.value == '1') {
-			// Korea
-			$("#uddestplace").val("韓国").prop('readonly', true);
 		} else {
 			// Other
 			$("#uddestplace").val("").prop('readonly', false);
