@@ -197,17 +197,16 @@ if (isset($_POST['btnRegCL'])) {
     $use_yn = mysqli_real_escape_string($conn, $_POST['use_yn']);
     $joken = mysqli_real_escape_string($conn, $_POST['joken']);
     $template = mysqli_real_escape_string($conn, $_POST['use_type']);
-    $kyukatype = mysqli_real_escape_string($conn, $_POST['kyukatype']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
 
     $sql = "INSERT INTO `tbl_company` (`companyid`, `companycode`, `companyname`, `staff`, `telno`,
-                `strymd`, `endymd`, `address`, `use_yn`, `template`, `kyukatype`, `joken`, `bigo`, `reg_dt` ,`upt_dt` )
+                `strymd`, `endymd`, `address`, `use_yn`, `template`, `joken`, `bigo`, `reg_dt` ,`upt_dt` )
                 VALUES ('$companyid', '$companycode', '$companyname', '$staff', '$telno',
-                '$strymd', '$endymd', '$address', '$use_yn', '$template', '$kyukatype', '$joken', '$bigo', '$reg_dt' , null)
+                '$strymd', '$endymd', '$address', '$use_yn', '$template', '$joken', '$bigo', '$reg_dt' , null)
             ON DUPLICATE KEY UPDATE
                 `companycode` = '$companycode', `companyname` = '$companyname', `staff` = '$staff',
                 `telno` = '$telno', `strymd` = '$strymd', `endymd` = '$endymd', `address` = '$address',
-                `use_yn` = '$use_yn', `template`  = '$template', `kyukatype`  = '$kyukatype', `joken` = '$joken', `bigo` = '$bigo', `upt_dt` = '$upt_dt'";
+                `use_yn` = '$use_yn', `template`  = '$template', `joken` = '$joken', `bigo` = '$bigo', `upt_dt` = '$upt_dt'";
 
 
     $sql2 = "INSERT INTO `tbl_manageinfo` (`companyid`, `magamym`, `magamymd`, `reg_dt` ,`upt_dt` )
@@ -236,7 +235,6 @@ if (isset($_POST['btnUpdateCL'])) {
     $joken = mysqli_real_escape_string($conn, $_POST['udjoken']);
     $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
     $template = mysqli_real_escape_string($conn, $_POST['uduse_type']);
-    $kyukatype = mysqli_real_escape_string($conn, $_POST['udkyukatype']);
 
     $sql = "UPDATE tbl_company SET 
             companyname='$companyname',
@@ -249,8 +247,7 @@ if (isset($_POST['btnUpdateCL'])) {
             joken='$joken',
             bigo='$bigo',
             companycode ='$companycode',
-            template = '$template',
-            kyukatype = '$kyukatype'
+            template = '$template'
         WHERE companyid ='$companyid'";
 
     if ($conn->query($sql) === TRUE) {
@@ -649,5 +646,48 @@ function generateRandomString($length)
     }
     return $randomString;
 }
-// 2023-10-11/1340-006
-// upload image add end
+
+// companywList.php
+// Select database from tbl_companyworktime table
+if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    $sql_companyworktime_select = 'SELECT DISTINCT
+    `tbl_companyworktime`.*,
+    `tbl_company`.`companyname`
+    FROM `tbl_companyworktime` 
+    LEFT JOIN `tbl_company` ON `tbl_companyworktime`.`companyid` = `tbl_company`.`companyid`
+    ORDER BY `tbl_companyworktime`.`companyid`';
+} elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
+    $sql_companyworktime_select = 'SELECT * FROM `tbl_companyworktime` WHERE `tbl_company`.`companyid` 
+                            IN("' . $_SESSION['auth_companyid'] . '") ORDER BY `tbl_company`.`companyid`';
+}
+$result_companyworktime_select = mysqli_query($conn, $sql_companyworktime_select);
+$companyworktime_list = mysqli_fetch_all($result_companyworktime_select, MYSQLI_ASSOC);
+
+// Save Data to tbl_companyworktime table
+if (isset($_POST['btnRegCWL'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
+    $kyukatype = mysqli_real_escape_string($conn, $_POST['kyukatype']);
+    $starttime = mysqli_real_escape_string($conn, $_POST['starttime']);
+    $endtime = mysqli_real_escape_string($conn, $_POST['endtime']);
+    $worktime = mysqli_real_escape_string($conn, $_POST['worktime']);
+    $breakstarttime = mysqli_real_escape_string($conn, $_POST['breakstarttime']);
+    $breakendtime = mysqli_real_escape_string($conn, $_POST['breakendtime']);
+    $breaktime = mysqli_real_escape_string($conn, $_POST['breaktime']);
+    $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
+
+    $sql = "INSERT INTO `tbl_companyworktime` (`companyid`, `kyukatype`, `starttime`, `endtime`,
+            `breakstarttime`, `breakendtime`, `worktime`, `breaktime`, `bigo`, `reg_dt`, `upt_dt`)
+            VALUES ('$companyid', '$kyukatype', '$starttime', '$endtime', '$breakstarttime', '$breakendtime',
+            '$worktime', '$breaktime', '$bigo', '$reg_dt', null)
+        ON DUPLICATE KEY UPDATE
+            `kyukatype` = '$kyukatype', `starttime` = '$starttime', `endtime` = '$endtime',
+            `breakstarttime` = '$breakstarttime', `breakendtime` = '$breakendtime', `worktime` = '$worktime', 
+            `breaktime` = '$breaktime', `bigo` = '$bigo', `upt_dt` = '$upt_dt'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['save_success'] = $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}

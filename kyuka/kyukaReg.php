@@ -59,6 +59,25 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		border-collapse: collapse;
 		white-space: nowrap;
 	}
+
+	.divided {
+		position: relative;
+	}
+
+	.notice_time {
+		position: absolute;
+		top: -13px;
+		left: 311px;
+		padding: 0px;
+		z-index: 2;
+		color: red;
+		font-size: smaller;
+	}
+
+	.layout {
+		position: relative;
+		z-index: 1;
+	}
 </style>
 <title>休暇届</title>
 <?php include('../inc/menu.php'); ?>
@@ -365,7 +384,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<label for="kyukatype">申請区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
-										<input type="radio" name="kyukatype" id="kyukatype" value="0">時間
+										<?php if ($user_kyukatype_ == "1") : ?>
+											<input type="radio" name="kyukatype" id="kyukatype" value="0">半休
+										<?php elseif ($user_kyukatype_ == "2") : ?>
+											<input type="radio" name="kyukatype" id="kyukatype" value="0">時間
+										<?php endif; ?>
 										&nbsp;&nbsp;
 										<input type="radio" name="kyukatype" id="kyukatype" value="1">日付
 									</div>
@@ -398,13 +421,18 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<label for="endymd">期間(T)</label>
 									<input type="text" class="form-control" id="endymd" name="endymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
 								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 day">
-									<label for="strtime">時間(F)</label>
-									<input type="number" class="form-control" id="strtime" name="strtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
-								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 day">
-									<label for="endtime">時間(T)</label>
-									<input type="number" class="form-control" id="endtime" name="endtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+								<div class="divided">
+									<span class="notice_time">業務時間(9:00~18:00)、休憩時間(12:00~13:00)</span>
+									<div class="layout">
+										<div class="col-md-3 col-sm-3 col-sx-3 day">
+											<label for="strtime">時間(F)</label>
+											<input type="number" class="form-control" id="strtime" name="strtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+										</div>
+										<div class="col-md-3 col-sm-3 col-sx-3 day">
+											<label for="endtime">時間(T)</label>
+											<input type="number" class="form-control" id="endtime" name="endtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+										</div>
+									</div>
 								</div>
 							</div>
 							<br>
@@ -539,7 +567,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<label for="kyukatype">申請区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
-										<input type="radio" name="udkyukatype" id="udkyukatype" value="0">時間
+										<?php if ($user_kyukatype_ == "1") : ?>
+											<input type="radio" name="udkyukatype" id="udkyukatype" value="0">半休
+										<?php elseif ($user_kyukatype_ == "2") : ?>
+											<input type="radio" name="udkyukatype" id="udkyukatype" value="0">時間
+										<?php endif; ?>
 										&nbsp;&nbsp;
 										<input type="radio" name="udkyukatype" id="udkyukatype" value="1">日付
 									</div>
@@ -572,13 +604,18 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<label for="endymd">期間(T)</label>
 									<input type="text" class="form-control" id="udendymd" name="udendymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
 								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 day">
-									<label for="strtime">時間(F)</label>
-									<input type="number" class="form-control" id="udstrtime" name="udstrtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
-								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 day">
-									<label for="endtime">時間(T)</label>
-									<input type="number" class="form-control" id="udendtime" name="udendtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+								<div class="divided">
+									<span class="notice_time">業務時間(9:00~18:00)、休憩時間(12:00~13:00)</span>
+									<div class="layout">
+										<div class="col-md-3 col-sm-3 col-sx-3 day">
+											<label for="strtime">時間(F)</label>
+											<input type="number" class="form-control" id="udstrtime" name="udstrtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+										</div>
+										<div class="col-md-3 col-sm-3 col-sx-3 day">
+											<label for="endtime">時間(T)</label>
+											<input type="number" class="form-control" id="udendtime" name="udendtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+										</div>
+									</div>
 								</div>
 							</div>
 							<br>
@@ -938,17 +975,39 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		});
 	});
 
+	// function calculateTimeDifference() {
+	// 	var endTime = $("#endtime").val();
+	// 	var startTime = $("#strtime").val();
+
+	// 	if (endTime !== "" && startTime !== "") {
+	// 		endTime = parseInt(endTime, 10);
+	// 		startTime = parseInt(startTime, 10);
+
+	// 		// Check if the values are valid integers
+	// 		if (!isNaN(endTime) && !isNaN(startTime)) {
+	// 			var timeDifference = endTime - startTime;
+	// 			$("#timecnt").val(timeDifference);
+	// 		}
+	// 	}
+	// }
+
 	function calculateTimeDifference() {
-		var endTime = $("#endtime").val();
-		var startTime = $("#strtime").val();
-
-		if (endTime !== "" && startTime !== "") {
-			endTime = parseInt(endTime, 10);
-			startTime = parseInt(startTime, 10);
-
-			// Check if the values are valid integers
-			if (!isNaN(endTime) && !isNaN(startTime)) {
-				var timeDifference = endTime - startTime;
+		var strTimeValue = parseInt($("#strtime").val());
+		var endTimeValue = parseInt($("#endtime").val());
+		if (!isNaN(strTimeValue) && !isNaN(endTimeValue)) {
+			if (strTimeValue <= 12 && endTimeValue >= 13) {
+				if ("<?php echo $user_kyukatype_ ?>" == "1") {
+					var timeDifference = (endTimeValue - strTimeValue - 1) / 8;
+				} else if ("<?php echo $user_kyukatype_ ?>" == "2") {
+					var timeDifference = endTimeValue - strTimeValue - 1;
+				}
+				$("#timecnt").val(timeDifference);
+			} else {
+				if ("<?php echo $user_kyukatype_ ?>" == "1") {
+					var timeDifference = (endTimeValue - strTimeValue) / 8;
+				} else if ("<?php echo $user_kyukatype_ ?>" == "2") {
+					var timeDifference = endTimeValue - strTimeValue;
+				}
 				$("#timecnt").val(timeDifference);
 			}
 		}

@@ -183,3 +183,10 @@ $content_ctlC_empty = 'Type Codeを入力してください。';
 $content_ctlC_no = 'Type Codeをを番号で入力してください。';
 $content_ctlN_empty = 'Type Nameを入力してください。';
 $content_ctlC_duplicate = 'Type Codeが既存しましたので登録出来ませんでした。';
+
+// companywList
+$manage_CWname_empty = '会社名を選んでください。';
+$manage_CWstarttime_empty = '業務開始時間を入力してください。';
+$manage_CWendtime_empty = '業務終了時間を入力してください。';
+$manage_CWBreakstarttime_empty = '休憩開始時間を入力してください。';
+$manage_CWBreakendtime_empty = '休憩終了時間を入力してください。';
