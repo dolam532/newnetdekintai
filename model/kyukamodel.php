@@ -2,10 +2,16 @@
 // Select data from tbl_user
 $sql_user = 'SELECT DISTINCT
 `tbl_user`.*,
-`tbl_company`.`kyukatype`
+`tbl_companyworktime`.`kyukatype`,
+`tbl_companyworktime`.`starttime`,
+`tbl_companyworktime`.`endtime`,
+`tbl_companyworktime`.`breakstarttime`,
+`tbl_companyworktime`.`breakendtime`,
+`tbl_companyworktime`.`worktime`,
+`tbl_companyworktime`.`breaktime`
 FROM 
     `tbl_user`
-CROSS JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`';
+CROSS JOIN `tbl_companyworktime` ON `tbl_user`.`companyid` = `tbl_companyworktime`.`companyid`';
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_user .= 'ORDER BY `tbl_user`.`companyid`';
 } elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
@@ -23,6 +29,13 @@ $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 $user_inymd_ = $user_list[0]['inymd'];
 $user_name_ = $user_list[0]['name'];
 $user_kyukatype_ = $user_list[0]['kyukatype'];
+$user_starttime_ = $user_list[0]['starttime'];
+$user_endtime_ = $user_list[0]['endtime'];
+$user_breakstarttime_ = $user_list[0]['breakstarttime'];
+$user_breakendtime_ = $user_list[0]['breakendtime'];
+$user_worktime_ = $user_list[0]['worktime'];
+$user_breaktime_ = $user_list[0]['breaktime'];
+
 
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
@@ -53,12 +66,12 @@ $sql_userkyuka = 'SELECT DISTINCT
     `tbl_vacationinfo`.`usenowcnt`,
     `tbl_vacationinfo`.`usefinishaftercnt`,
     `tbl_vacationinfo`.`useafterremaincnt`,
-    `tbl_company`.`kyukatype`
+    `tbl_companyworktime`.`kyukatype`
 FROM
     `tbl_userkyuka`
 CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`email` = `tbl_user`.`email`
 CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinfo`.`vacationid`
-CROSS JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`';
+CROSS JOIN `tbl_companyworktime` ON `tbl_user`.`companyid` = `tbl_companyworktime`.`companyid`';
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_userkyuka .= 'ORDER BY `tbl_userkyuka`.`kyukaid`';
 } elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
@@ -180,11 +193,6 @@ WHERE
 
 // Save data to tbl_userkyuka & tbl_vacation table of database
 if (isset($_POST['SaveKyuka'])) {
-    $_POST['strtime'] = intval($_POST['strtime']);
-    $_POST['endtime'] = intval($_POST['endtime']);
-    $_POST['timecnt'] = intval($_POST['timecnt']);
-    $_POST['ymdcnt'] = intval($_POST['ymdcnt']);
-
     $companyid = mysqli_real_escape_string($conn, $_SESSION['auth_companyid']);
     $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
     $email = mysqli_real_escape_string($conn, $_SESSION['auth_email']);
@@ -243,10 +251,6 @@ if (isset($_POST['SaveKyuka'])) {
 
 // Update tbl_userkyuka & tbl_vacation table of database
 if (isset($_POST['UpdateKyuka'])) {
-    $_POST['udstrtime'] = intval($_POST['udstrtime']);
-    $_POST['udendtime'] = intval($_POST['udendtime']);
-    $_POST['udtimecnt'] = intval($_POST['udtimecnt']);
-    $_POST['udymdcnt'] = intval($_POST['udymdcnt']);
     $companyid = mysqli_real_escape_string($conn, $_SESSION['auth_companyid']);
     $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
     $email = mysqli_real_escape_string($conn, $_SESSION['auth_email']);

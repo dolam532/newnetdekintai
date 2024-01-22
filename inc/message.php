@@ -62,6 +62,7 @@ $kyuka_reason_empty = '事由を入力してください。';
 $kyuka_destcode_select = '暇中居る場所を選択してください。';
 $kyuka_destplace_empty = '場所を入力してください。';
 $kyuka_desttel_empty = '電話番号を入力してください。';
+$kyuka_timecnt_halfday = 'まだ半休なっていないです。確認してください。';
 
 // kintaiReg
 $kintai_start_empty = '出社時刻を入力してください。';
@@ -190,3 +191,4 @@ $manage_CWstarttime_empty = '業務開始時間を入力してください。';
 $manage_CWendtime_empty = '業務終了時間を入力してください。';
 $manage_CWBreakstarttime_empty = '休憩開始時間を入力してください。';
 $manage_CWBreakendtime_empty = '休憩終了時間を入力してください。';
+$manage_CWcompany_have = '登録済み業務時間です。';

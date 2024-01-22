@@ -657,8 +657,12 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     LEFT JOIN `tbl_company` ON `tbl_companyworktime`.`companyid` = `tbl_company`.`companyid`
     ORDER BY `tbl_companyworktime`.`companyid`';
 } elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
-    $sql_companyworktime_select = 'SELECT * FROM `tbl_companyworktime` WHERE `tbl_company`.`companyid` 
-                            IN("' . $_SESSION['auth_companyid'] . '") ORDER BY `tbl_company`.`companyid`';
+    $sql_companyworktime_select = 'SELECT DISTINCT
+    `tbl_companyworktime`.*,
+    `tbl_company`.`companyname`
+    FROM `tbl_companyworktime` 
+    LEFT JOIN `tbl_company` ON `tbl_companyworktime`.`companyid` = `tbl_company`.`companyid`
+    WHERE `tbl_companyworktime`.`companyid` IN("' . $_SESSION['auth_companyid'] . '")';
 }
 $result_companyworktime_select = mysqli_query($conn, $sql_companyworktime_select);
 $companyworktime_list = mysqli_fetch_all($result_companyworktime_select, MYSQLI_ASSOC);
@@ -686,6 +690,39 @@ if (isset($_POST['btnRegCWL'])) {
 
     if ($conn->query($sql) === TRUE) {
         $_SESSION['save_success'] = $save_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// Update Data to tbl_companyworktime table
+if (isset($_POST['btnUpdateCWL'])) {
+    $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
+    $kyukatype = mysqli_real_escape_string($conn, $_POST['udkyukatype']);
+    $starttime = mysqli_real_escape_string($conn, $_POST['udstarttime']);
+    $endtime = mysqli_real_escape_string($conn, $_POST['udendtime']);
+    $worktime = mysqli_real_escape_string($conn, $_POST['udworktime']);
+    $breakstarttime = mysqli_real_escape_string($conn, $_POST['udbreakstarttime']);
+    $breakendtime = mysqli_real_escape_string($conn, $_POST['udbreakendtime']);
+    $breaktime = mysqli_real_escape_string($conn, $_POST['udbreaktime']);
+    $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
+
+    $sql = "UPDATE tbl_companyworktime SET 
+            kyukatype='$kyukatype',
+            starttime='$starttime',
+            endtime='$endtime',
+            worktime='$worktime',
+            worktime='$worktime',
+            breakstarttime='$breakstarttime',
+            breakendtime='$breakendtime',
+            breaktime='$breaktime',
+            bigo='$bigo',
+            upt_dt = '$upt_dt'
+        WHERE companyid ='$companyid'";
+
+    if ($conn->query($sql) === TRUE) {
+        $_SESSION['update_success'] = $update_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);

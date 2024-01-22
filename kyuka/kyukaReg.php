@@ -263,7 +263,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										<?php
 										if ($userkyuka['kyukatype'] == 1) {
 											echo "日付";
-										} else {
+										} elseif ($userkyuka['kyukatype'] == 2) {
 											echo "時間";
 										}
 										?>
@@ -286,7 +286,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										<?php
 										if ($userkyuka['kyukatype'] == 1) {
 											echo $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'];
-																		} else {
+																		} elseif ($userkyuka['kyukatype'] == 2) {
 																			echo $userkyuka['strymd'] ?>~<?= $userkyuka['strymd'];
 																										}
 																											?>
@@ -297,7 +297,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										<?php
 										if ($userkyuka['kyukatype'] == 1) {
 											echo $userkyuka['ymdcnt'] . "日";
-										} else {
+										} elseif ($userkyuka['kyukatype'] == 2) {
 											echo $userkyuka['timecnt'] . "時間";
 										}
 										?>
@@ -422,15 +422,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<input type="text" class="form-control" id="endymd" name="endymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
 								</div>
 								<div class="divided">
-									<span class="notice_time">業務時間(9:00~18:00)、休憩時間(12:00~13:00)</span>
+									<span class="notice_time">業務時間(<?= $user_starttime_ ?>~<?= $user_endtime_ ?>)、休憩時間(<?= $user_breakstarttime_ ?>~<?= $user_breakendtime_ ?>)</span>
 									<div class="layout">
 										<div class="col-md-3 col-sm-3 col-sx-3 day">
 											<label for="strtime">時間(F)</label>
-											<input type="number" class="form-control" id="strtime" name="strtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+											<input type="text" class="form-control" id="strtime" name="strtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
 										</div>
 										<div class="col-md-3 col-sm-3 col-sx-3 day">
 											<label for="endtime">時間(T)</label>
-											<input type="number" class="form-control" id="endtime" name="endtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+											<input type="text" class="form-control" id="endtime" name="endtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
 										</div>
 									</div>
 								</div>
@@ -439,38 +439,38 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="row four">
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="tothday">総有給休暇</label>
-									<input type="number" class="form-control" id="tothday" name="tothday" placeholder="番号" style="text-align: center" value="<?= $tothday_ ?>">
+									<input type="text" class="form-control" id="tothday" name="tothday" placeholder="番号" style="text-align: center" value="<?= $tothday_ ?>">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="oldcnt">前年度の繰越残</label>
-									<input type="number" class="form-control" id="oldcnt" name="oldcnt" placeholder="番号" style="text-align: center" value="<?= $oldcnt_ ?>">
+									<input type="text" class="form-control" id="oldcnt" name="oldcnt" placeholder="番号" style="text-align: center" value="<?= $oldcnt_ ?>">
 								</div>
 								<div class=" col-md-3 col-sm-3 col-sx-3">
 									<label for="newcnt">当該年度付与</label>
-									<input type="number" class="form-control" id="newcnt" name="newcnt" placeholder="番号" style="text-align: center" value="<?= $newcnt_ ?>">
+									<input type="text" class="form-control" id="newcnt" name="newcnt" placeholder="番号" style="text-align: center" value="<?= $newcnt_ ?>">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 no">
 									<label for="usefinishcnt">使用済数</label>
-									<input type="number" class="form-control" id="usefinishcnt" name="usefinishcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="usefinishcnt" name="usefinishcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
 							<div class="row five">
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="usebeforecnt">使用前残</label>
-									<input type="number" class="form-control" id="usebeforecnt" name="usebeforecnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="usebeforecnt" name="usebeforecnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="usenowcnt">今回使用</label>
-									<input type="number" class="form-control" id="usenowcnt" name="usenowcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="usenowcnt" name="usenowcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="usefinishaftercnt">使用後済</label>
-									<input type="number" class="form-control" id="usefinishaftercnt" name="usefinishaftercnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="usefinishaftercnt" name="usefinishaftercnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="useafterremaincnt">使用後残</label>
-									<input type="number" class="form-control" id="useafterremaincnt" name="useafterremaincnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="useafterremaincnt" name="useafterremaincnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
@@ -481,11 +481,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
 									<label for="ymdcnt">申請日数</label>
-									<input type="number" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
-									<label for="timecnt">申請時間</label>
-									<input type="number" class="form-control" id="timecnt" name="timecnt" placeholder="番号" style="text-align: center" value="">
+									<label for="timecnt">
+										<?php if ($user_kyukatype_ == "1") : ?>
+											半休日数
+										<?php elseif ($user_kyukatype_ == "2") : ?>
+											申請時間
+										<?php endif; ?>
+									</label>
+									<input type="text" class="form-control" id="timecnt" name="timecnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
@@ -605,15 +611,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<input type="text" class="form-control" id="udendymd" name="udendymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
 								</div>
 								<div class="divided">
-									<span class="notice_time">業務時間(9:00~18:00)、休憩時間(12:00~13:00)</span>
+									<span class="notice_time">業務時間(<?= $user_starttime_ ?>~<?= $user_endtime_ ?>)、休憩時間(<?= $user_breakstarttime_ ?>~<?= $user_breakendtime_ ?>)</span>
 									<div class="layout">
 										<div class="col-md-3 col-sm-3 col-sx-3 day">
 											<label for="strtime">時間(F)</label>
-											<input type="number" class="form-control" id="udstrtime" name="udstrtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+											<input type="text" class="form-control" id="udstrtime" name="udstrtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
 										</div>
 										<div class="col-md-3 col-sm-3 col-sx-3 day">
 											<label for="endtime">時間(T)</label>
-											<input type="number" class="form-control" id="udendtime" name="udendtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
+											<input type="text" class="form-control" id="udendtime" name="udendtime" placeholder="00" required="required" maxlength="2" style="text-align: center">
 										</div>
 									</div>
 								</div>
@@ -622,38 +628,38 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="row four">
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="tothday">総有給休暇</label>
-									<input type="number" class="form-control" id="udtothday" name="udtothday" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="udtothday" name="udtothday" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="oldcnt">前年度の繰越残</label>
-									<input type="number" class="form-control" id="udoldcnt" name="udoldcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="udoldcnt" name="udoldcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class=" col-md-3 col-sm-3 col-sx-3">
 									<label for="newcnt">当該年度付与</label>
-									<input type="number" class="form-control" id="udnewcnt" name="udnewcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="udnewcnt" name="udnewcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3 no">
 									<label for="usefinishcnt">使用済数</label>
-									<input type="number" class="form-control" id="udusefinishcnt" name="udusefinishcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="udusefinishcnt" name="udusefinishcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
 							<div class="row five">
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="usebeforecnt">使用前残</label>
-									<input type="number" class="form-control" id="udusebeforecnt" name="udusebeforecnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="udusebeforecnt" name="udusebeforecnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="usenowcnt">今回使用</label>
-									<input type="number" class="form-control" id="udusenowcnt" name="udusenowcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="udusenowcnt" name="udusenowcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="usefinishaftercnt">使用後済</label>
-									<input type="number" class="form-control" id="udusefinishaftercnt" name="udusefinishaftercnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="udusefinishaftercnt" name="udusefinishaftercnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="useafterremaincnt">使用後残</label>
-									<input type="number" class="form-control" id="uduseafterremaincnt" name="uduseafterremaincnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="uduseafterremaincnt" name="uduseafterremaincnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
@@ -664,11 +670,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
 									<label for="ymdcnt">申請日数</label>
-									<input type="number" class="form-control" id="udymdcnt" name="udymdcnt" placeholder="番号" style="text-align: center" value="">
+									<input type="text" class="form-control" id="udymdcnt" name="udymdcnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
-									<label for="timecnt">申請時間</label>
-									<input type="number" class="form-control" id="udtimecnt" name="udtimecnt" placeholder="番号" style="text-align: center" value="">
+									<label for="timecnt">
+										<?php if ($user_kyukatype_ == "1") : ?>
+											半休日数
+										<?php elseif ($user_kyukatype_ == "2") : ?>
+											申請時間
+										<?php endif; ?>
+									</label>
+									<input type="text" class="form-control" id="udtimecnt" name="udtimecnt" placeholder="番号" style="text-align: center" value="">
 								</div>
 							</div>
 							<br>
@@ -994,17 +1006,56 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	function calculateTimeDifference() {
 		var strTimeValue = parseInt($("#strtime").val());
 		var endTimeValue = parseInt($("#endtime").val());
+
+		function convertTimeToDecimal(timeString) {
+			var timeParts = timeString.split(':');
+			var hours = parseInt(timeParts[0], 10);
+			var minutes = parseInt(timeParts[1], 10);
+			var minutesFraction = minutes / 60;
+			return hours + minutesFraction;
+		}
+
+		function convertTimeVariablesToDecimal() {
+			var breaktime_ = "<?php echo $user_breaktime_ ?>";
+			var user_breaktime_ = convertTimeToDecimal(breaktime_);
+
+			var worktime_ = "<?php echo $user_worktime_ ?>";
+			var user_worktime_ = convertTimeToDecimal(worktime_);
+
+			var starttime_ = "<?php echo $user_starttime_ ?>";
+			var user_starttime_ = convertTimeToDecimal(starttime_);
+
+			var endtime_ = "<?php echo $user_endtime_ ?>";
+			var user_endtime_ = convertTimeToDecimal(endtime_);
+
+			var breakstarttime_ = "<?php echo $user_breakstarttime_ ?>";
+			var user_breakstarttime_ = convertTimeToDecimal(breakstarttime_);
+
+			var breakendtime_ = "<?php echo $user_breakendtime_ ?>";
+			var user_breakendtime_ = convertTimeToDecimal(breakendtime_);
+
+			return {
+				user_breaktime_: user_breaktime_,
+				user_worktime_: user_worktime_,
+				user_starttime_: user_starttime_,
+				user_endtime_: user_endtime_,
+				user_breakstarttime_: user_breakstarttime_,
+				user_breakendtime_: user_breakendtime_
+			};
+		}
+		var times = convertTimeVariablesToDecimal();
+
 		if (!isNaN(strTimeValue) && !isNaN(endTimeValue)) {
-			if (strTimeValue <= 12 && endTimeValue >= 13) {
+			if (strTimeValue <= times.user_breakstarttime_ && endTimeValue >= times.user_breakendtime_) {
 				if ("<?php echo $user_kyukatype_ ?>" == "1") {
-					var timeDifference = (endTimeValue - strTimeValue - 1) / 8;
+					var timeDifference = (endTimeValue - strTimeValue - times.user_breaktime_) / times.user_worktime_;
 				} else if ("<?php echo $user_kyukatype_ ?>" == "2") {
-					var timeDifference = endTimeValue - strTimeValue - 1;
+					var timeDifference = endTimeValue - strTimeValue - times.user_breaktime_;
 				}
 				$("#timecnt").val(timeDifference);
 			} else {
 				if ("<?php echo $user_kyukatype_ ?>" == "1") {
-					var timeDifference = (endTimeValue - strTimeValue) / 8;
+					var timeDifference = (endTimeValue - strTimeValue) / times.user_worktime_;
 				} else if ("<?php echo $user_kyukatype_ ?>" == "2") {
 					var timeDifference = endTimeValue - strTimeValue;
 				}
@@ -1060,6 +1111,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var destplace = $("#destplace").val();
 		var destcode = $("input[name='destcode']:checked").val();
 		var desttel = $("#desttel").val();
+		var timecnt = $("#timecnt").val();
 
 		if (kyukatype != "0" && kyukatype != "1") {
 			alert("<?php echo $kyuka_type_select; ?>");
@@ -1178,6 +1230,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (desttel == "") {
 			alert("<?php echo $kyuka_desttel_empty; ?>");
 			$("#desttel").focus();
+			return false;
+		}
+
+		if (timecnt !== "0.5" && kyukatype === "0") {
+			alert("<?php echo $kyuka_timecnt_halfday; ?>");
+			$("#timecnt").focus();
 			return false;
 		}
 	});
@@ -1361,6 +1419,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var destplace = $("#uddestplace").val();
 		var destcode = $("input[name='uddestcode']:checked").val();
 		var desttel = $("#uddesttel").val();
+		var timecnt = $("#udtimecnt").val();
 
 		if (kyukatype != "0" && kyukatype != "1") {
 			alert("<?php echo $kyuka_type_select; ?>");
@@ -1479,6 +1538,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		if (desttel == "") {
 			alert("<?php echo $kyuka_desttel_empty; ?>");
 			$("#uddesttel").focus();
+			return false;
+		}
+
+		if (timecnt !== "0.5" && kyukatype === "0") {
+			alert("<?php echo $kyuka_timecnt_halfday; ?>");
+			$("#udtimecnt").focus();
 			return false;
 		}
 	});
