@@ -193,6 +193,15 @@ WHERE
 
 // Save data to tbl_userkyuka & tbl_vacation table of database
 if (isset($_POST['SaveKyuka'])) {
+    foreach ($codebase_list as $key) {
+        if ($key['code'] == $_POST['kyukacode'] && $_POST['inputTag'] == "") {
+            $kyukaname = $key['name'];
+        } elseif ($key['code'] == $_POST['kyukacode'] && $_POST['inputTag'] != "") {
+            $kyukaname_ = $key['name'];
+            $kyukaname_l = preg_replace('/ {3,}/', $_POST['inputTag'], $kyukaname);
+        }
+    }
+
     $companyid = mysqli_real_escape_string($conn, $_SESSION['auth_companyid']);
     $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
     $email = mysqli_real_escape_string($conn, $_SESSION['auth_email']);
@@ -213,6 +222,7 @@ if (isset($_POST['SaveKyuka'])) {
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $kyukatype = mysqli_real_escape_string($conn, $_POST['kyukatype']);
     $kyukacode = mysqli_real_escape_string($conn, $_POST['kyukacode']);
+    $kyukaname = mysqli_real_escape_string($conn, $kyukaname_l);
     $strymd = mysqli_real_escape_string($conn, $_POST['strymd']);
     $endymd = mysqli_real_escape_string($conn, $_POST['endymd']);
     $strtime = mysqli_real_escape_string($conn, $_POST['strtime']);
@@ -235,8 +245,8 @@ if (isset($_POST['SaveKyuka'])) {
     $sql_vacationinfo_result = mysqli_query($conn, $sql_vacationinfo_insert);
     $vacationid = mysqli_insert_id($conn);
 
-    $sql_userkyuka_insert = "INSERT INTO `tbl_userkyuka` (`companyid`, `uid`, `email`, `vacationid`, `kyukaymd`, `kyukatype`, `strymd`, `endymd`, `ymdcnt`, `strtime`, `endtime`, `timecnt`, `kyukacode`, `destcode`, `destplace`, `desttel`, `allowok`, `allowid`, `allowdecide`, `allowdt`, `reason`, `reg_dt`, `upt_dt`) 
-    VALUES ('$companyid', '$uid', '$email', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdecide', null, '$reason', '$reg_dt', null)";
+    $sql_userkyuka_insert = "INSERT INTO `tbl_userkyuka` (`companyid`, `uid`, `email`, `vacationid`, `kyukaymd`, `kyukatype`, `strymd`, `endymd`, `ymdcnt`, `strtime`, `endtime`, `timecnt`, `kyukacode`, `kyukaname`, `destcode`, `destplace`, `desttel`, `allowok`, `allowid`, `allowdecide`, `allowdt`, `reason`, `reg_dt`, `upt_dt`) 
+    VALUES ('$companyid', '$uid', '$email', '$vacationid', '$kyukaymd', '$kyukatype', '$strymd', '$endymd', '$ymdcnt', '$strtime', '$endtime', '$timecnt', '$kyukacode', '$kyukaname', '$destcode', '$destplace', '$desttel', '$allowok', '$allowid', '$allowdecide', null, '$reason', '$reg_dt', null)";
     $sql_userkyuka_result = mysqli_query($conn, $sql_userkyuka_insert);
 
     if ($sql_userkyuka_result && $sql_vacationinfo_result) {
@@ -272,6 +282,7 @@ if (isset($_POST['UpdateKyuka'])) {
     $kyukaymd = mysqli_real_escape_string($conn, $_POST['udkyukaymd']); // 1
     $kyukatype = mysqli_real_escape_string($conn, $_POST['udkyukatype']); // 3
     $kyukacode = mysqli_real_escape_string($conn, $_POST['udkyukacode']); // 4
+    $kyukaname = mysqli_real_escape_string($conn, $_POST['udkyukaname']); // 4
     $strymd = mysqli_real_escape_string($conn, $_POST['udstrymd']); // 7
     $endymd = mysqli_real_escape_string($conn, $_POST['udendymd']); // 8
     $ymdcnt = mysqli_real_escape_string($conn, $_POST['udymdcnt']); // 20
@@ -314,6 +325,7 @@ if (isset($_POST['UpdateKyuka'])) {
     endtime='$endtime',
     timecnt='$timecnt',
     kyukacode='$kyukacode',
+    kyukaname='$kyukaname',
     destcode='$destcode',
     destplace='$destplace',
     desttel='$desttel',

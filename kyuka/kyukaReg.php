@@ -401,6 +401,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
 										<?php endforeach; ?>
 									</select>
+									<input type="text" id="inputTag" name="inputTag" style="display: none;">
 								</div>
 								<div class="col-md-6 col-sm-6 col-xs-6 vacation">
 									<label for="vacation">年度算定期間</label>
@@ -984,6 +985,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		// Function to calculate timecnt
 		$("#udendtime, #udstrtime").on("input", function() {
 			udcalculateTimeDifference();
+		});
+
+		// Attach a change event to the kyukacode select
+		$("#kyukacode").change(function() {
+			if ($(this).val() === "12") {
+				$('#inputTag').show();
+			} else {
+				$('#inputTag').hide();
+			}
 		});
 	});
 
