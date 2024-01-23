@@ -192,3 +192,7 @@ $manage_CWendtime_empty = '業務終了時間を入力してください。';
 $manage_CWBreakstarttime_empty = '休憩開始時間を入力してください。';
 $manage_CWBreakendtime_empty = '休憩終了時間を入力してください。';
 $manage_CWcompany_have = '登録済み業務時間です。';
+
+// kyukaNotice
+$kyuka_info_not_existing='年次有給休暇日数登録を登録されていないですので、先に年次有給休暇日数登録を登録してください';
+

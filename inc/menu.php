@@ -88,6 +88,8 @@
                                 <li><a href="../manage/companyList.php">使用者編集</a></li>
                                 <li><a href="../manage/companywList.php">業務時間編集</a></li>
                                 <li><a href="../manage/adminList.php">管理者登録</a></li>
+                                <li><a href="../manage/kyukaNotice.php">休暇お知らせ登録</a></li>
+                                <li><a href="../manage/kyukaInfo.php">年次有給休暇日数登録</a></li>
                             </ul>
                         </li>
                     <?php endif; ?>

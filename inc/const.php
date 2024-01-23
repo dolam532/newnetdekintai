@@ -88,3 +88,7 @@ DEFINE('SEARCH_ALLOW', '9');
 
 // MIN LENGTH 社員登録のID&email
 $MAX_LENGTH_UID_USER = 10;
+
+// KyukaInfo + Kyuka notice 
+$MAX_KYUKA_INFO_COUNT= 21;
+$MIN_KYUKA_INFO_COUNT= 0;

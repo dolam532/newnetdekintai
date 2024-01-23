@@ -728,3 +728,104 @@ if (isset($_POST['btnUpdateCWL'])) {
         echo 'query error: ' . mysqli_error($conn);
     }
 }
+
+
+// kyukaNotice.php  
+$companyid = $_SESSION['auth_companyid'];
+$sqlFindKyukaNotice  =  "SELECT * FROM tbl_kyuka_notice WHERE `companyid` = $companyid";
+$resultKyukaNotice = mysqli_query($conn, $sqlFindKyukaNotice);
+$noDataKyuka = false;
+if (mysqli_num_rows($resultKyukaNotice) <= 0) {
+    $noDataKyuka = true;
+} 
+
+$sqlFindKyukaInfo = "SELECT * FROM `tbl_kyukainfo` WHERE `companyid` = $companyid";
+$resultKyukaInfo = mysqli_query($conn, $sqlFindKyukaInfo);
+$noDataKyukaInfo = false;
+
+if (mysqli_num_rows($resultKyukaInfo) <= 0) {
+    $noDataKyukaInfo = true;
+} 
+
+$kiukaNoticeList = mysqli_fetch_all($resultKyukaNotice, MYSQLI_ASSOC);
+$kiukaInfoList = mysqli_fetch_all($resultKyukaInfo, MYSQLI_ASSOC);
+
+// when no data  Kyuka Notice -> get default data
+if($noDataKyuka) {
+    $sqlFindKyukaNoticeDefault  =  "SELECT * FROM tbl_kyuka_notice WHERE companyid = 0 ";
+    $resultKyukaNoticeDefault = mysqli_query($conn, $sqlFindKyukaNoticeDefault);
+    $kiukaNoticeList = mysqli_fetch_all($resultKyukaNoticeDefault, MYSQLI_ASSOC);
+}
+
+// when no data  Kyuka Info -> get default data
+if($noDataKyukaInfo) {
+    $sqlFindKyukaInfoDefault  =  "SELECT * FROM tbl_kyukainfo WHERE companyid = 0 ";
+    $resultKyukaInfoDefault = mysqli_query($conn, $sqlFindKyukaInfoDefault);
+    $kiukaInfoList = mysqli_fetch_all($resultKyukaInfoDefault, MYSQLI_ASSOC);
+}
+
+$kiukaInfoListDatas = $kiukaInfoList[0];
+$kiukaInfoListDatasShow = array();
+
+for ($i = $MIN_KYUKA_INFO_COUNT ; $i <= $MAX_KYUKA_INFO_COUNT; $i++) {
+    $key = "ttop" . $i;
+    $keybottom = "tbottom" . $i;
+    if (!isset($kiukaInfoListDatas[$key]) || trim($kiukaInfoListDatas[$key]) == '') {
+        continue;
+    }
+    if (!isset($kiukaInfoListDatas[$keybottom]) || trim($kiukaInfoListDatas[$keybottom]) == '') {
+        continue;
+    }
+    $value = intval($kiukaInfoListDatas[$key]);
+    if ($value < 12) {
+        $kiukaInfoListDatasShow[$key] = $value . 'ヵ月';
+    } else {
+        $years = floor($value / 12);
+        $months = $value % 12;
+        if ($months == 0) {
+            $kiukaInfoListDatasShow[$key] = $years . '年';
+        } else {
+            $kiukaInfoListDatasShow[$key] = $years . '年' . $months . 'ヵ月';
+        }
+    }
+   
+    if ($i == $MIN_KYUKA_INFO_COUNT) {
+        $kiukaInfoListDatasShow['ttop0'] = $kiukaInfoListDatasShow[$key] . '以内';
+    }
+    if($i == $MAX_KYUKA_INFO_COUNT) {
+        $kiukaInfoListDatasShow[$key] .= '以上';
+    }
+    $kiukaInfoListDatasShow[$keybottom] = $kiukaInfoListDatas[$keybottom] . '日';
+
+}
+
+// register kyukanotice.php 
+if (isset($_POST['kyukanoticeRegister'])) {  
+    $title_value = mysqli_real_escape_string($conn, $_POST['title_value']);
+    $message_value = mysqli_real_escape_string($conn, $_POST['message_value']);
+    $subTitle_value = mysqli_real_escape_string($conn, $_POST['subTitle_value']);
+
+    // get current notice -> when null -> create new 
+    $sqlRegister = "UPDATE tbl_kyuka_notice SET  `title`='$title_value', `message`='$message_value', `subtitle`='$subTitle_value', 
+      upt_dt='$upt_dt' 
+     WHERE companyid = $companyid";
+    if ($noDataKyuka) {
+        $sqlRegister = "INSERT INTO tbl_kyuka_notice SET  `title`='$title_value', `message`='$message_value'
+        , `subtitle`='$subTitle_value', upt_dt='$upt_dt' , 
+        companyid = $companyid";
+    } 
+
+    if($noDataKyukaInfo) {
+         // return error -> Need register KyukaInfo First ***
+         $_SESSION['kyuka_info_not_existing'] = $kyuka_info_not_existing;
+         return;
+    }
+
+    if ($conn->query($sqlRegister) === TRUE) {
+    $_SESSION['update_success'] = $update_success;
+    header("Refresh:3");
+    } else {
+    echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
