@@ -670,7 +670,7 @@ $companyworktime_list = mysqli_fetch_all($result_companyworktime_select, MYSQLI_
 // Save Data to tbl_companyworktime table
 if (isset($_POST['btnRegCWL'])) {
     $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
-    $kyukatype = mysqli_real_escape_string($conn, $_POST['kyukatype']);
+    $kyukatemplate = mysqli_real_escape_string($conn, $_POST['kyukatemplate']);
     $starttime = mysqli_real_escape_string($conn, $_POST['starttime']);
     $endtime = mysqli_real_escape_string($conn, $_POST['endtime']);
     $worktime = mysqli_real_escape_string($conn, $_POST['worktime']);
@@ -679,12 +679,12 @@ if (isset($_POST['btnRegCWL'])) {
     $breaktime = mysqli_real_escape_string($conn, $_POST['breaktime']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
 
-    $sql = "INSERT INTO `tbl_companyworktime` (`companyid`, `kyukatype`, `starttime`, `endtime`,
+    $sql = "INSERT INTO `tbl_companyworktime` (`companyid`, `kyukatemplate`, `starttime`, `endtime`,
             `breakstarttime`, `breakendtime`, `worktime`, `breaktime`, `bigo`, `reg_dt`, `upt_dt`)
-            VALUES ('$companyid', '$kyukatype', '$starttime', '$endtime', '$breakstarttime', '$breakendtime',
+            VALUES ('$companyid', '$kyukatemplate', '$starttime', '$endtime', '$breakstarttime', '$breakendtime',
             '$worktime', '$breaktime', '$bigo', '$reg_dt', null)
         ON DUPLICATE KEY UPDATE
-            `kyukatype` = '$kyukatype', `starttime` = '$starttime', `endtime` = '$endtime',
+            `kyukatemplate` = '$kyukatemplate', `starttime` = '$starttime', `endtime` = '$endtime',
             `breakstarttime` = '$breakstarttime', `breakendtime` = '$breakendtime', `worktime` = '$worktime', 
             `breaktime` = '$breaktime', `bigo` = '$bigo', `upt_dt` = '$upt_dt'";
 
@@ -699,7 +699,7 @@ if (isset($_POST['btnRegCWL'])) {
 // Update Data to tbl_companyworktime table
 if (isset($_POST['btnUpdateCWL'])) {
     $companyid = mysqli_real_escape_string($conn, $_POST['udcompanyid']);
-    $kyukatype = mysqli_real_escape_string($conn, $_POST['udkyukatype']);
+    $kyukatemplate = mysqli_real_escape_string($conn, $_POST['udkyukatemplate']);
     $starttime = mysqli_real_escape_string($conn, $_POST['udstarttime']);
     $endtime = mysqli_real_escape_string($conn, $_POST['udendtime']);
     $worktime = mysqli_real_escape_string($conn, $_POST['udworktime']);
@@ -709,7 +709,7 @@ if (isset($_POST['btnUpdateCWL'])) {
     $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
 
     $sql = "UPDATE tbl_companyworktime SET 
-            kyukatype='$kyukatype',
+            kyukatemplate='$kyukatemplate',
             starttime='$starttime',
             endtime='$endtime',
             worktime='$worktime',

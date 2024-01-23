@@ -69,9 +69,9 @@ class ConstArray
         '2' => 'Template B'
     ];
 
-    public static $search_kyukatype = [
-        '1' => '休暇届タイプ A',
-        '2' => '休暇届タイプ B'
+    public static $search_kyukatemplate = [
+        '1' => '休暇届テンプレート A',
+        '2' => '休暇届テンプレート B'
     ];
 
     public static $search_hour = [

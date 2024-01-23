@@ -249,7 +249,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<a href="#">
 										<span class="showModal">
 											<span class="kyukaReg_class">
-												<?= $userkyuka['kyukaid'] . ',' ?>
+												<?= $userkyuka['kyukaid'] . ',' . $userkyuka['kyukaname'] ?>
 											</span>
 											<?= $userkyuka['uid'] ?>
 										</span>
@@ -261,32 +261,26 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<td>
 									<span>
 										<?php
-										if ($userkyuka['kyukatype'] == 1) {
-											echo "日付";
-										} elseif ($userkyuka['kyukatype'] == 2) {
+										if ($userkyuka['kyukatype'] == "0") {
+											if ($user_kyukatemplate_ == "1") {
+												echo "日付(半休）";
+											} elseif ($user_kyukatemplate_ == "2") {
+												echo "日付";
+											}
+										} elseif ($userkyuka['kyukatype'] == "1") {
 											echo "時間";
 										}
 										?>
 									</span>
 								</td>
-								<td>
-									<span>
-										<?php foreach ($codebase_list as $k) : ?>
-											<?php
-											if ($k['code'] == $userkyuka['kyukacode']) {
-												echo $k['name'];
-											}
-											?>
-										<?php endforeach; ?>
-									</span>
-								</td>
+								<td><span><?= $userkyuka['kyukaname'] ?></span></td>
 								<td><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
 								<td>
 									<span>
 										<?php
-										if ($userkyuka['kyukatype'] == 1) {
+										if ($userkyuka['kyukatype'] == "1") {
 											echo $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'];
-																		} elseif ($userkyuka['kyukatype'] == 2) {
+																		} elseif ($userkyuka['kyukatype'] == "0") {
 																			echo $userkyuka['strymd'] ?>~<?= $userkyuka['strymd'];
 																										}
 																											?>
@@ -295,10 +289,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								<td>
 									<span>
 										<?php
-										if ($userkyuka['kyukatype'] == 1) {
-											echo $userkyuka['ymdcnt'] . "日";
-										} elseif ($userkyuka['kyukatype'] == 2) {
+										if ($userkyuka['kyukatype'] == 0) {
 											echo $userkyuka['timecnt'] . "時間";
+										} elseif ($userkyuka['kyukatype'] == 1) {
+											echo $userkyuka['ymdcnt'] . "日";
 										}
 										?>
 									</span>
@@ -384,9 +378,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<label for="kyukatype">申請区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
-										<?php if ($user_kyukatype_ == "1") : ?>
+										<?php if ($user_kyukatemplate_ == "1") : ?>
 											<input type="radio" name="kyukatype" id="kyukatype" value="0">半休
-										<?php elseif ($user_kyukatype_ == "2") : ?>
+										<?php elseif ($user_kyukatemplate_ == "2") : ?>
 											<input type="radio" name="kyukatype" id="kyukatype" value="0">時間
 										<?php endif; ?>
 										&nbsp;&nbsp;
@@ -486,9 +480,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
 									<label for="timecnt">
-										<?php if ($user_kyukatype_ == "1") : ?>
+										<?php if ($user_kyukatemplate_ == "1") : ?>
 											半休日数
-										<?php elseif ($user_kyukatype_ == "2") : ?>
+										<?php elseif ($user_kyukatemplate_ == "2") : ?>
 											申請時間
 										<?php endif; ?>
 									</label>
@@ -574,9 +568,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<label for="kyukatype">申請区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
-										<?php if ($user_kyukatype_ == "1") : ?>
+										<?php if ($user_kyukatemplate_ == "1") : ?>
 											<input type="radio" name="udkyukatype" id="udkyukatype" value="0">半休
-										<?php elseif ($user_kyukatype_ == "2") : ?>
+										<?php elseif ($user_kyukatemplate_ == "2") : ?>
 											<input type="radio" name="udkyukatype" id="udkyukatype" value="0">時間
 										<?php endif; ?>
 										&nbsp;&nbsp;
@@ -591,6 +585,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
 										<?php endforeach; ?>
 									</select>
+									<input type="text" id="udinputTag" name="udinputTag" style="display: none;">
 								</div>
 								<div class="col-md-6 col-sm-6 col-xs-6 vacation">
 									<label for="vacation">年度算定期間</label>
@@ -675,9 +670,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 								<div class="col-md-2 col-sm-2 col-sx-2">
 									<label for="timecnt">
-										<?php if ($user_kyukatype_ == "1") : ?>
+										<?php if ($user_kyukatemplate_ == "1") : ?>
 											半休日数
-										<?php elseif ($user_kyukatype_ == "2") : ?>
+										<?php elseif ($user_kyukatemplate_ == "2") : ?>
 											申請時間
 										<?php endif; ?>
 									</label>
@@ -977,6 +972,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	$(document).ready(function() {
+		var regex = /\(|\)/; // Regular expression to match '(' or ')'
 		// Function to calculate timecnt
 		$("#endtime, #strtime").on("input", function() {
 			calculateTimeDifference();
@@ -989,7 +985,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 		// Attach a change event to the kyukacode select
 		$("#kyukacode").change(function() {
-			if ($(this).val() === "12") {
+			var selectedText = $(this).find("option:selected").text();
+			if (regex.test(selectedText)) {
 				$('#inputTag').show();
 			} else {
 				$('#inputTag').hide();
@@ -1057,16 +1054,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 		if (!isNaN(strTimeValue) && !isNaN(endTimeValue)) {
 			if (strTimeValue <= times.user_breakstarttime_ && endTimeValue >= times.user_breakendtime_) {
-				if ("<?php echo $user_kyukatype_ ?>" == "1") {
+				if ("<?php echo $user_kyukatemplate_ ?>" == "1") {
 					var timeDifference = (endTimeValue - strTimeValue - times.user_breaktime_) / times.user_worktime_;
-				} else if ("<?php echo $user_kyukatype_ ?>" == "2") {
+				} else if ("<?php echo $user_kyukatemplate_ ?>" == "2") {
 					var timeDifference = endTimeValue - strTimeValue - times.user_breaktime_;
 				}
 				$("#timecnt").val(timeDifference);
 			} else {
-				if ("<?php echo $user_kyukatype_ ?>" == "1") {
+				if ("<?php echo $user_kyukatemplate_ ?>" == "1") {
 					var timeDifference = (endTimeValue - strTimeValue) / times.user_worktime_;
-				} else if ("<?php echo $user_kyukatype_ ?>" == "2") {
+				} else if ("<?php echo $user_kyukatemplate_ ?>" == "2") {
 					var timeDifference = endTimeValue - strTimeValue;
 				}
 				$("#timecnt").val(timeDifference);
@@ -1122,6 +1119,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var destcode = $("input[name='destcode']:checked").val();
 		var desttel = $("#desttel").val();
 		var timecnt = $("#timecnt").val();
+		var user_kyukatemplate_ = "<?php echo $user_kyukatemplate_; ?>";
 
 		if (kyukatype != "0" && kyukatype != "1") {
 			alert("<?php echo $kyuka_type_select; ?>");
@@ -1243,7 +1241,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			return false;
 		}
 
-		if (timecnt !== "0.5" && kyukatype === "0") {
+		if (timecnt !== "0.5" && kyukatype === "0" && user_kyukatemplate_ === "1") {
 			alert("<?php echo $kyuka_timecnt_halfday; ?>");
 			$("#timecnt").focus();
 			return false;
@@ -1430,6 +1428,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var destcode = $("input[name='uddestcode']:checked").val();
 		var desttel = $("#uddesttel").val();
 		var timecnt = $("#udtimecnt").val();
+		var user_kyukatemplate_ = "<?php echo $user_kyukatemplate_; ?>";
 
 		if (kyukatype != "0" && kyukatype != "1") {
 			alert("<?php echo $kyuka_type_select; ?>");
@@ -1551,9 +1550,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			return false;
 		}
 
-		if (timecnt !== "0.5" && kyukatype === "0") {
+		if (timecnt !== "0.5" && kyukatype === "0" && user_kyukatemplate_ === "1") {
 			alert("<?php echo $kyuka_timecnt_halfday; ?>");
-			$("#udtimecnt").focus();
+			$("#timecnt").focus();
 			return false;
 		}
 	});
@@ -1590,7 +1589,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var ArrayData = $(this).text().trim();
 		var SeparateArr = ArrayData.split(',');
 		var Kyukaid = SeparateArr[0];
-
+		var Kyukaname = SeparateArr[1];
+		var regex = /\(|\)/;
+		var match = Kyukaname.match(/\((.*?)\)/);
+		var extractedText = match ? match[1] : null;
+		if (regex.test(Kyukaname)) {
+			$('#udinputTag').show();
+			$("#udinputTag").text($('[name="udinputTag"]').val(extractedText));
+		} else {
+			$('#udinputTag').hide();
+		}
 		<?php
 		foreach ($userkyuka_list as $key) {
 		?>
@@ -1613,6 +1621,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				}
 
 				$("select[name='udkyukacode']").val('<?php echo $key['kyukacode']; ?>');
+
+				$("#udkyukacode").change(function() {
+					var udselectedText = $(this).find("option:selected").text();
+					if (regex.test(udselectedText)) {
+						$('#udinputTag').show();
+						$("#udinputTag").text($('[name="udinputTag"]').val(""));
+					} else {
+						$('#udinputTag').hide();
+					}
+				});
+
 				$("#udvacationstr").text($('[name="udvacationstr"]').val("<?php echo $key['vacationstr'] ?>"));
 				$("#udvacationend").text($('[name="udvacationend"]').val("<?php echo $key['vacationend'] ?>"));
 				$("#udstrymd").text($('[name="udstrymd"]').val("<?php echo $key['strymd'] ?>"));

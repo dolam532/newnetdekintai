@@ -146,7 +146,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                     <th style="text-align: center; width: 10%;">休憩終了時間</th>
                     <th style="text-align: center; width: 10%;">業務時間</th>
                     <th style="text-align: center; width: 10%;">休憩時間</th>
-                    <th style="text-align: center; width: 8%;">休暇届タイプ</th>
+                    <th style="text-align: center; width: 8%;">休暇届テンプレート</th>
                     <th style="text-align: center; width: auto;">備考</th>
                 </tr>
             </thead>
@@ -175,7 +175,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                             <td><span><?= $key['breakstarttime'] ?></span></td>
                             <td><span><?= $key['worktime'] ?></span></td>
                             <td><span><?= $key['breaktime'] ?></span></td>
-                            <td><span><?= $key['kyukatype'] ?></span></td>
+                            <td><span><?= $key['kyukatemplate'] ?></span></td>
                             <td><span><?= $key['bigo'] ?></span></td>
                         </tr>
                 <?php
@@ -211,14 +211,14 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                     </select>
                                 </div>
                                 <div class="col-xs-6">
-                                    <label for="kyukatype"><strong>休暇届タイプ</strong></label>
+                                    <label for="kyukatemplate"><strong>休暇届テンプレート</strong></label>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" id="kyukatype" name="kyukatype" checked value="<?php echo array_keys(ConstArray::$search_kyukatype)[0]; ?>">
-                                        <?php echo ConstArray::$search_kyukatype[array_keys(ConstArray::$search_kyukatype)[0]]; ?>
+                                        <input type="radio" id="kyukatemplate" name="kyukatemplate" checked value="<?php echo array_keys(ConstArray::$search_kyukatemplate)[0]; ?>">
+                                        <?php echo ConstArray::$search_kyukatemplate[array_keys(ConstArray::$search_kyukatemplate)[0]]; ?>
                                         <label class="template-notice-text"> (日付けのみ) </label>
                                         <br />
-                                        <input type="radio" id="kyukatype" name="kyukatype" value="<?php echo array_keys(ConstArray::$search_kyukatype)[1]; ?>">
-                                        <?php echo ConstArray::$search_kyukatype[array_keys(ConstArray::$search_kyukatype)[1]]; ?>
+                                        <input type="radio" id="kyukatemplate" name="kyukatemplate" value="<?php echo array_keys(ConstArray::$search_kyukatemplate)[1]; ?>">
+                                        <?php echo ConstArray::$search_kyukatemplate[array_keys(ConstArray::$search_kyukatemplate)[1]]; ?>
                                         <label class="template-notice-text"> (日付け+時間)</label>
                                     </div>
                                 </div>
@@ -301,14 +301,14 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                     <input type="text" class="form-control" name="udcompanyname" id="udcompanyname" style="text-align: left" readonly>
                                 </div>
                                 <div class="col-xs-6">
-                                    <label for="kyukatype"><strong>休暇届タイプ</strong></label>
+                                    <label for="kyukatemplate"><strong>休暇届テンプレート</strong></label>
                                     <div class="custom-control custom-radio">
-                                        <input type="radio" id="udkyukatype" name="udkyukatype" value="<?php echo array_keys(ConstArray::$search_kyukatype)[0]; ?>">
-                                        <?php echo ConstArray::$search_kyukatype[array_keys(ConstArray::$search_kyukatype)[0]]; ?>
+                                        <input type="radio" id="udkyukatemplate" name="udkyukatemplate" value="<?php echo array_keys(ConstArray::$search_kyukatemplate)[0]; ?>">
+                                        <?php echo ConstArray::$search_kyukatemplate[array_keys(ConstArray::$search_kyukatemplate)[0]]; ?>
                                         <label class="template-notice-text"> (日付けのみ) </label>
                                         <br />
-                                        <input type="radio" id="udkyukatype" name="udkyukatype" value="<?php echo array_keys(ConstArray::$search_kyukatype)[1]; ?>">
-                                        <?php echo ConstArray::$search_kyukatype[array_keys(ConstArray::$search_kyukatype)[1]]; ?>
+                                        <input type="radio" id="udkyukatemplate" name="udkyukatemplate" value="<?php echo array_keys(ConstArray::$search_kyukatemplate)[1]; ?>">
+                                        <?php echo ConstArray::$search_kyukatemplate[array_keys(ConstArray::$search_kyukatemplate)[1]]; ?>
                                         <label class="template-notice-text"> (日付け+時間)</label>
                                     </div>
                                 </div>
@@ -512,7 +512,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                 $("#usname").text('<?php echo $key['companyname'] ?>');
                 $("#udcompanyid").text($('[name="udcompanyid"]').val("<?php echo $key['companyid'] ?>"));
                 $("#udcompanyname").text($('[name="udcompanyname"]').val("<?php echo $key['companyname'] ?>"));
-                $("input[name='udkyukatype'][value='<?php echo $key['kyukatype']; ?>']").prop('checked', true);
+                $("input[name='udkyukatemplate'][value='<?php echo $key['kyukatemplate']; ?>']").prop('checked', true);
                 $("#udstarttime").text($('[name="udstarttime"]').val("<?php echo $key['starttime'] ?>"));
                 $("#udendtime").text($('[name="udendtime"]').val("<?php echo $key['endtime'] ?>"));
                 $("#udworktime").text($('[name="udworktime"]').val("<?php echo $key['worktime'] ?>"));

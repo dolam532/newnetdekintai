@@ -2,7 +2,7 @@
 // Select data from tbl_user
 $sql_user = 'SELECT DISTINCT
 `tbl_user`.*,
-`tbl_companyworktime`.`kyukatype`,
+`tbl_companyworktime`.`kyukatemplate`,
 `tbl_companyworktime`.`starttime`,
 `tbl_companyworktime`.`endtime`,
 `tbl_companyworktime`.`breakstarttime`,
@@ -28,14 +28,13 @@ $result_user = mysqli_query($conn, $sql_user);
 $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 $user_inymd_ = $user_list[0]['inymd'];
 $user_name_ = $user_list[0]['name'];
-$user_kyukatype_ = $user_list[0]['kyukatype'];
+$user_kyukatemplate_ = $user_list[0]['kyukatemplate'];
 $user_starttime_ = $user_list[0]['starttime'];
 $user_endtime_ = $user_list[0]['endtime'];
 $user_breakstarttime_ = $user_list[0]['breakstarttime'];
 $user_breakendtime_ = $user_list[0]['breakendtime'];
 $user_worktime_ = $user_list[0]['worktime'];
 $user_breaktime_ = $user_list[0]['breaktime'];
-
 
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
@@ -66,7 +65,7 @@ $sql_userkyuka = 'SELECT DISTINCT
     `tbl_vacationinfo`.`usenowcnt`,
     `tbl_vacationinfo`.`usefinishaftercnt`,
     `tbl_vacationinfo`.`useafterremaincnt`,
-    `tbl_companyworktime`.`kyukatype`
+    `tbl_companyworktime`.`kyukatemplate`
 FROM
     `tbl_userkyuka`
 CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`email` = `tbl_user`.`email`
@@ -195,10 +194,12 @@ WHERE
 if (isset($_POST['SaveKyuka'])) {
     foreach ($codebase_list as $key) {
         if ($key['code'] == $_POST['kyukacode'] && $_POST['inputTag'] == "") {
-            $kyukaname = $key['name'];
+            $kyukaname_l = $key['name'];
         } elseif ($key['code'] == $_POST['kyukacode'] && $_POST['inputTag'] != "") {
             $kyukaname_ = $key['name'];
-            $kyukaname_l = preg_replace('/ {3,}/', $_POST['inputTag'], $kyukaname);
+            $start = strpos($kyukaname_, '(');
+            $end = strpos($kyukaname_, ')');
+            $kyukaname_l = substr_replace($kyukaname_, $_POST['inputTag'], $start + 1, $end - $start - 1);
         }
     }
 
@@ -261,6 +262,17 @@ if (isset($_POST['SaveKyuka'])) {
 
 // Update tbl_userkyuka & tbl_vacation table of database
 if (isset($_POST['UpdateKyuka'])) {
+    foreach ($codebase_list as $key) {
+        if ($key['code'] == $_POST['udkyukacode'] && $_POST['udinputTag'] == "") {
+            $kyukaname_l = $key['name'];
+        } elseif ($key['code'] == $_POST['udkyukacode'] && $_POST['udinputTag'] != "") {
+            $kyukaname_ = $key['name'];
+            $start = strpos($kyukaname_, '(');
+            $end = strpos($kyukaname_, ')');
+            $kyukaname_l = substr_replace($kyukaname_, $_POST['udinputTag'], $start + 1, $end - $start - 1);
+        }
+    }
+
     $companyid = mysqli_real_escape_string($conn, $_SESSION['auth_companyid']);
     $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
     $email = mysqli_real_escape_string($conn, $_SESSION['auth_email']);
@@ -281,8 +293,7 @@ if (isset($_POST['UpdateKyuka'])) {
 
     $kyukaymd = mysqli_real_escape_string($conn, $_POST['udkyukaymd']); // 1
     $kyukatype = mysqli_real_escape_string($conn, $_POST['udkyukatype']); // 3
-    $kyukacode = mysqli_real_escape_string($conn, $_POST['udkyukacode']); // 4
-    $kyukaname = mysqli_real_escape_string($conn, $_POST['udkyukaname']); // 4
+    $kyukaname = mysqli_real_escape_string($conn, $kyukaname_l); // 4
     $strymd = mysqli_real_escape_string($conn, $_POST['udstrymd']); // 7
     $endymd = mysqli_real_escape_string($conn, $_POST['udendymd']); // 8
     $ymdcnt = mysqli_real_escape_string($conn, $_POST['udymdcnt']); // 20
