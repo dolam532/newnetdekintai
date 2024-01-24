@@ -731,6 +731,8 @@ if (isset($_POST['btnUpdateCWL'])) {
 
 
 // kyukaNotice.php  
+
+// Get current value 
 $companyid = $_SESSION['auth_companyid'];
 $sqlFindKyukaNotice  =  "SELECT * FROM tbl_kyuka_notice WHERE `companyid` = $companyid";
 $resultKyukaNotice = mysqli_query($conn, $sqlFindKyukaNotice);
@@ -739,6 +741,7 @@ if (mysqli_num_rows($resultKyukaNotice) <= 0) {
     $noDataKyuka = true;
 } 
 
+// Get KyukaInfo
 $sqlFindKyukaInfo = "SELECT * FROM `tbl_kyukainfo` WHERE `companyid` = $companyid";
 $resultKyukaInfo = mysqli_query($conn, $sqlFindKyukaInfo);
 $noDataKyukaInfo = false;
@@ -746,6 +749,8 @@ $noDataKyukaInfo = false;
 if (mysqli_num_rows($resultKyukaInfo) <= 0) {
     $noDataKyukaInfo = true;
 } 
+
+
 
 $kiukaNoticeList = mysqli_fetch_all($resultKyukaNotice, MYSQLI_ASSOC);
 $kiukaInfoList = mysqli_fetch_all($resultKyukaInfo, MYSQLI_ASSOC);
@@ -764,6 +769,8 @@ if($noDataKyukaInfo) {
     $kiukaInfoList = mysqli_fetch_all($resultKyukaInfoDefault, MYSQLI_ASSOC);
 }
 
+
+// $kiukaInfoList
 $kiukaInfoListDatas = $kiukaInfoList[0];
 $kiukaInfoListDatasShow = array();
 
@@ -788,7 +795,7 @@ for ($i = $MIN_KYUKA_INFO_COUNT ; $i <= $MAX_KYUKA_INFO_COUNT; $i++) {
             $kiukaInfoListDatasShow[$key] = $years . '年' . $months . 'ヵ月';
         }
     }
-   
+    // add new min 
     if ($i == $MIN_KYUKA_INFO_COUNT) {
         $kiukaInfoListDatasShow['ttop0'] = $kiukaInfoListDatasShow[$key] . '以内';
     }
@@ -799,11 +806,18 @@ for ($i = $MIN_KYUKA_INFO_COUNT ; $i <= $MAX_KYUKA_INFO_COUNT; $i++) {
 
 }
 
-// register kyukanotice.php 
+    // foreach ($kiukaInfoListDatasShow as $key => $value) {
+    //     error_log("$key: $value");
+    // }
+    // error_log("--------------------");
+
+
+// register
 if (isset($_POST['kyukanoticeRegister'])) {  
     $title_value = mysqli_real_escape_string($conn, $_POST['title_value']);
     $message_value = mysqli_real_escape_string($conn, $_POST['message_value']);
     $subTitle_value = mysqli_real_escape_string($conn, $_POST['subTitle_value']);
+
 
     // get current notice -> when null -> create new 
     $sqlRegister = "UPDATE tbl_kyuka_notice SET  `title`='$title_value', `message`='$message_value', `subtitle`='$subTitle_value', 
@@ -827,5 +841,6 @@ if (isset($_POST['kyukanoticeRegister'])) {
     } else {
     echo 'query error: ' . mysqli_error($conn);
     }
+
 }
 
