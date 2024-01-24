@@ -38,12 +38,17 @@ $user_breaktime_ = $user_list[0]['breaktime'];
 
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
-WHERE `tbl_codebase`.`typecode` = "' . constant('VACATION_TYPE') . '"
-AND `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+WHERE `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
 GROUP BY `code`, `name`';
 $result_codebase = mysqli_query($conn, $sql_codebase);
 $codebase_list = mysqli_fetch_all($result_codebase, MYSQLI_ASSOC);
 
+$sql_codebase_kyuka = 'SELECT `code`, `name` FROM `tbl_codebase`
+WHERE `tbl_codebase`.`typecode` = "' . constant('VACATION_TYPE') . '"
+AND `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+GROUP BY `code`, `name`';
+$result_codebase_kyuka = mysqli_query($conn, $sql_codebase_kyuka);
+$codebase_list_kyuka = mysqli_fetch_all($result_codebase_kyuka, MYSQLI_ASSOC);
 
 // kyukaReg.php
 // Select data from tbl_userkyuka & tbl_vacationinfo
@@ -55,6 +60,7 @@ $sql_userkyuka = 'SELECT DISTINCT
     `tbl_user`.`dept`,
     `tbl_user`.`email`,
     `tbl_user`.`inymd`,
+    `tbl_user`.`signstamp`,
     `tbl_vacationinfo`.`vacationstr`,
     `tbl_vacationinfo`.`vacationend`,
     `tbl_vacationinfo`.`tothday`,
@@ -192,7 +198,7 @@ WHERE
 
 // Save data to tbl_userkyuka & tbl_vacation table of database
 if (isset($_POST['SaveKyuka'])) {
-    foreach ($codebase_list as $key) {
+    foreach ($codebase_list_kyuka as $key) {
         if ($key['code'] == $_POST['kyukacode'] && $_POST['inputTag'] == "") {
             $kyukaname_l = $key['name'];
         } elseif ($key['code'] == $_POST['kyukacode'] && $_POST['inputTag'] != "") {
@@ -262,7 +268,7 @@ if (isset($_POST['SaveKyuka'])) {
 
 // Update tbl_userkyuka & tbl_vacation table of database
 if (isset($_POST['UpdateKyuka'])) {
-    foreach ($codebase_list as $key) {
+    foreach ($codebase_list_kyuka as $key) {
         if ($key['code'] == $_POST['udkyukacode'] && $_POST['udinputTag'] == "") {
             $kyukaname_l = $key['name'];
         } elseif ($key['code'] == $_POST['udkyukacode'] && $_POST['udinputTag'] != "") {

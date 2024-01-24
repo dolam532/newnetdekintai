@@ -183,8 +183,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<input type="submit" id="ClearButton" name="ClearButton" value="クリア ">&nbsp;
 						<input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
 						<input type="button" id="btnNew" value="新規 ">&nbsp;
-						<input type="button" id="btnAnnt" value="お知らせ ">&nbsp;
-						<input type="button" onclick="window.location.href='./vacationReg.php'" value="休暇情報 ">
+						<input type="button" id="btnAnnt" value="お知らせ ">
 					</div>
 				</div>
 			<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
@@ -202,8 +201,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<div class="col-md-3 text-right">
 					<div class="title_btn">
 						<input type="button" id="btnNew" value="新規 ">&nbsp;
-						<input type="button" id="btnAnnt" value="お知らせ ">&nbsp;
-						<input type="button" onclick="window.location.href='./vacationReg.php'" value="休暇情報 ">
+						<input type="button" id="btnAnnt" value="お知らせ ">
 					</div>
 				</div>
 			<?php endif; ?>
@@ -290,7 +288,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<span>
 										<?php
 										if ($userkyuka['kyukatype'] == 0) {
-											echo $userkyuka['timecnt'] . "時間";
+											if ($user_kyukatemplate_ == "1") {
+												echo $userkyuka['timecnt'] . "日";
+											} elseif ($user_kyukatemplate_ == "2") {
+												echo $userkyuka['timecnt'] . "時間";
+											}
 										} elseif ($userkyuka['kyukatype'] == 1) {
 											echo $userkyuka['ymdcnt'] . "日";
 										}
@@ -391,7 +393,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<label for="kyukacode">休暇区分</label>
 									<select class="form-control" id="kyukacode" name="kyukacode">
 										<option value="" disabled selected style="font-size:10px;">選択</option>
-										<?php foreach ($codebase_list as $key) : ?>
+										<?php foreach ($codebase_list_kyuka as $key) : ?>
 											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
 										<?php endforeach; ?>
 									</select>
@@ -581,7 +583,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<label for="kyukacode">休暇区分</label>
 									<select class="form-control" id="udkyukacode" name="udkyukacode">
 										<option value="" disabled selected style="font-size:10px;">選択</option>
-										<?php foreach ($codebase_list as $key) : ?>
+										<?php foreach ($codebase_list_kyuka as $key) : ?>
 											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
 										<?php endforeach; ?>
 									</select>
@@ -728,10 +730,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		</div>
 	</div>
 
-	<!-- PDF product -->
+	<!-- PDF印刷 product -->
 	<form id="autopdf" action="../pdfdownload/generatekyukapdf.php" method="post" target="_blank">
-		<input type="hidden" name="kyukaid" id="kyukaid-input" value="<?php echo htmlspecialchars(json_encode($kyukaid)); ?>">
-		<!-- <input type="hidden" name="data" value="<!?php echo htmlspecialchars(json_encode($datas)); ?>"> -->
+		<input type="hidden" name="kyukaymd" id="kyukaymd-input">
+		<input type="hidden" name="name" id="name-input">
+		<input type="hidden" name="dept" id="dept-input">
+		<input type="hidden" name="signstamp" id="signstamp-input">
+		<input type="hidden" name="kyukatype" id="kyukatype-input">
+		<input type="hidden" name="strymd" id="strymd-input">
+		<input type="hidden" name="endymd" id="endymd-input">
+		<input type="hidden" name="strtime" id="strtime-input">
+		<input type="hidden" name="endtime" id="endtime-input">
 	</form>
 
 	<!-- お知らせ -->
@@ -804,7 +813,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 	<!-- Decide 決裁 -->
 	<div class="row">
-		<div class="modal" id="modal3" tabindex="-1" data-backdrop="static" data-keyboard="false">
+		<div class="modal" id="modal4" tabindex="-1" data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog">
 				<form method="post">
 					<div class="modal-content">
@@ -994,22 +1003,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		});
 	});
 
-	// function calculateTimeDifference() {
-	// 	var endTime = $("#endtime").val();
-	// 	var startTime = $("#strtime").val();
-
-	// 	if (endTime !== "" && startTime !== "") {
-	// 		endTime = parseInt(endTime, 10);
-	// 		startTime = parseInt(startTime, 10);
-
-	// 		// Check if the values are valid integers
-	// 		if (!isNaN(endTime) && !isNaN(startTime)) {
-	// 			var timeDifference = endTime - startTime;
-	// 			$("#timecnt").val(timeDifference);
-	// 		}
-	// 	}
-	// }
-
 	function calculateTimeDifference() {
 		var strTimeValue = parseInt($("#strtime").val());
 		var endTimeValue = parseInt($("#endtime").val());
@@ -1187,7 +1180,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			return false;
 		}
 
-		if (usefinishcnt == "") {
+		if (usefinishcnt === "") {
 			alert("<?php echo $kyuka_usefinishcnt_empty; ?>");
 			$("#usefinishcnt").focus();
 			return false;
@@ -1484,7 +1477,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			return false;
 		}
 
-		if (oldcnt == "") {
+		if (oldcnt === "") {
 			alert("<?php echo $kyuka_oldcnt_empty; ?>");
 			$("#udoldcnt").focus();
 			return false;
@@ -1496,7 +1489,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			return false;
 		}
 
-		if (usefinishcnt == "") {
+		if (usefinishcnt === "") {
 			alert("<?php echo $kyuka_usefinishcnt_empty; ?>");
 			$("#udusefinishcnt").focus();
 			return false;
@@ -1661,7 +1654,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 	// Click (modify) employee ID in the grid: popup & display contents
 	$(document).on('click', '.showModal2', function() {
-		$('#modal3').modal('toggle');
+		$('#modal4').modal('toggle');
 		var ArrayData = $(this).text();
 		var SeparateArr = ArrayData.split(',');
 		var Uid = SeparateArr[1];
@@ -1701,11 +1694,40 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	$(".submit-button").click(function(event) {
 		event.preventDefault();
 		var kyukaidValue = $(this).data("kyukaid");
-		$("#autopdf #kyukaid-input").val(kyukaidValue);
-		$("#autopdf").submit();
+		<?php
+		$codebaseListJson = json_encode($codebase_list);
+		if (!empty($userkyuka_list)) {
+			foreach ($userkyuka_list as $key) {
+		?>
+				if ('<?php echo $key['kyukaid'] ?>' == kyukaidValue) {
+					$("#autopdf #kyukaymd-input").val("<?php echo htmlspecialchars($key['kyukaymd']); ?>");
+					$("#autopdf #name-input").val("<?php echo htmlspecialchars($key['name']); ?>");
+					var codebaseList = <?php echo $codebaseListJson; ?>;
+					var kyukaidValue = '<?php echo $key['dept']; ?>';
+					var deptname = '';
+					for (var i = 0; i < codebaseList.length; i++) {
+						if (codebaseList[i]['code'] === kyukaidValue) {
+							deptname = codebaseList[i]['name'];
+							break;
+						}
+					}
+					$("#autopdf #dept-input").val(deptname);
+					$("#autopdf #signstamp-input").val("<?php echo htmlspecialchars($key['signstamp']); ?>");
+					$("#autopdf #kyukatype-input").val("<?php echo htmlspecialchars($key['kyukatype']); ?>");
+					$("#autopdf #strymd-input").val("<?php echo htmlspecialchars($key['strymd']); ?>");
+					$("#autopdf #endymd-input").val("<?php echo htmlspecialchars($key['endymd']); ?>");
+					$("#autopdf #strtime-input").val("<?php echo htmlspecialchars($key['strtime']); ?>");
+					$("#autopdf #endtime-input").val("<?php echo htmlspecialchars($key['endtime']); ?>");
+					$("#autopdf").submit();
+				}
+		<?php
+			}
+		}
+		?>
 		setTimeout(hideLoadingOverlay, 1000);
 		startLoading();
 	});
+
 
 	window.onload = function() {
 		setTimeout(hideLoadingOverlay, 1000);

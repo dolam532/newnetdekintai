@@ -201,7 +201,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                 </span></td>
                             <td>
                                 <span>
-                                    <?php foreach ($codebase_list as $k): ?>
+                                    <?php foreach ($codebase_list_dept as $k): ?>
                                         <?php
                                         if ($k['code'] == $key['dept']) {
                                             echo $k['name'];
@@ -291,7 +291,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                     <label for="dept">部署</label>
                                     <select class="form-control" id="dept" name="dept">
                                         <option value="" disabled selected>選択してください。</option>
-                                        <?php foreach ($codebase_list as $key): ?>
+                                        <?php foreach ($codebase_list_dept as $key): ?>
                                             <option value="<?= $key["code"] ?>">
                                                 <?= $key["name"] ?>
                                             </option>
@@ -422,7 +422,7 @@ if ($_SESSION['auth_type'] == constant('USER')) { // if not admin
                                     <label for="dept">部署</label>
                                     <select class="form-control" id="uddept" name="uddept">
                                         <option value="" disabled selected>選択してください。</option>
-                                        <?php foreach ($codebase_list as $key): ?>
+                                        <?php foreach ($codebase_list_dept as $key): ?>
                                             <option value="<?= $key["code"] ?>">
                                                 <?= $key["name"] ?>
                                             </option>

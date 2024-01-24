@@ -6,37 +6,44 @@ $tcpdf->SetPrintHeader(false);
 $tcpdf->SetLeftMargin(10); // Set the left margin to 0
 $tcpdf->AddPage();
 
-//==================== view datas config start ====================//// 
-// $kyukaid = json_decode($_POST['kyukaid'], true);
-// var_dump($kyukaid);
-//-----------// 
-//----1.-----// FORM DATAS IN TOP LEFT REGION
-//-----------// 
+// (Get Data)
+$kyukaymd = $_POST['kyukaymd'];
+$name = $_POST['name'];
+$dept = $_POST['dept'];
+$signstamp_user = $_POST['signstamp'];
+$kyukatype = $_POST['kyukatype'];
+$strymd = $_POST['strymd'];
+$strymd_w = date('w', strtotime($strymd));
+$strymd_youbi = ['日', '月', '火', '水', '木', '金', '土'][$strymd_w];
+if ($kyukatype == "0") { // Time
+	$endymd = $strymd; 
+	// 期間 ※半休のみ記入
+	$kyukaHalfRangeTextShow = substr($strymd, 0, 4) . '年 ' . substr($strymd, 5, 2) . '月 ' . substr($strymd, 8, 2) . '日' . '(' . $strymd_youbi . ')　'
+		. $strtime . '時 ' . '　～　' . $endtime . '時 ';
+} elseif ($kyukatype == "1") { // Day
+	$endymd = $_POST['endymd'];
+	// 期間 ※半休のみ記入
+	$kyukaHalfRangeTextShow = '    ' . '年 ' . '  ' . '月 ' . '  ' . '日' . '(' . ' ' . ') '
+		. $strtime . '時 ' . '　～　' . $endtime . '時 ';
+}
+$endymd_w = date('w', strtotime($endymd));
+$endymd_youbi = ['日', '月', '火', '水', '木', '金', '土'][$endymd_w];
+$strtime = $_POST['strtime'];
+$endtime = $_POST['endtime'];
 
-// 提出日付　↓　default  -> get datetime by 印鑑した日付
-$teishutsu_date = '31';
-$teishutsu_month = '12';
-$teishutsu_year  = '2024';
-$teishutsu_time = $teishutsu_year.' 年 '.$teishutsu_month.' 月 ' .$teishutsu_date.' 日';
+// (Show Data)
+// 期間
+$kyukaymd_time = substr($kyukaymd, 0, 4) . '年 ' . substr($kyukaymd, 5, 2) . '月 ' . substr($kyukaymd, 8, 2) . '日';
+$kyukaRangeTextShow = substr($strymd, 0, 4) . '年 ' . substr($strymd, 5, 2) . '月 ' . substr($strymd, 8, 2) . '日' . '(' . $strymd_youbi . ')　～　'
+	. substr($endymd, 0, 4) . '年 ' . substr($endymd, 5, 2) . '月 ' . substr($endymd, 8, 2) . '日' . '(' . $endymd_youbi . ')';
 
-// 所属　　
-// $dept = json_decode($_POST['dept'], true);
-$dept = '開発';
-
-
-// 氏名　
-// $name = json_decode($_POST['name'], true);
-$name = '山田太郎';
-
-// 印鑑　
-// $signstamp_user = json_decode($_POST['signstamp_user'], true);
-$signstamp_user = '1_aaaa_y8Y5DhIVfoXrdaH2.png';
+// user 印鑑
 $signstamp_user_ = '<img src="../assets/uploads/signstamp/' . $signstamp_user . '" width="40" height="40" />';
-$signstamp_user_show = '';  
+$signstamp_user_show = '';
 
 // check accept of user here 
 // if($submission_status > 0 && $submission_status < 11) {}
-$signstamp_user_show = $signstamp_user_;  
+$signstamp_user_show = $signstamp_user_;
 
 
 //-----------// 
@@ -51,55 +58,24 @@ $signstamp_admin_show = '';
 
 // check accept of sekininsha here 
 // if($submission_status > 2 && $submission_status < 11) {}   
-$signstamp_admin_show = $signstamp_admin_ ;
+$signstamp_admin_show = $signstamp_admin_;
 
 
 // 担当者印鑑
 // $signstamp_kanri = json_decode($_POST['signstamp_kanri'], true);
 $signstamp_kanri = '1_aaaa_y8Y5DhIVfoXrdaH2.png';
 $signstamp_kanri_ = '<img src="../assets/uploads/signstamp/' . $signstamp_kanri . '" width="40" height="40" />';
-$signstamp_kanri_show = '';  
+$signstamp_kanri_show = '';
 
 // check accept of tantosha here 
 // if($submission_status > 1 && $submission_status < 11) {} 
-$signstamp_kanri_show = $signstamp_kanri_ ;
-
-
-//-----------// 
-//----3.-----// FORM DATAS IN  期間 Line  Config Data here 
-//-----------// 
-$kiukaFullFromYear = 3333;
-$kiukaFullFromMonth = 33;
-$kiukaFullFromDate = 33;
-
-$kiukaFullToYear = 9999;
-$kiukaFullToMonth = 99;
-$kiukaFullToDate = 99;
-
-$kyukaFullFromDayOfWeek = '月';
-$kyukaFullToDayOfWeek = '水';
+$signstamp_kanri_show = $signstamp_kanri_;
 // this text view on table
-$kyukaRangeTextShow = $kiukaFullFromYear.'年 '. $kiukaFullFromMonth.'月 '.$kiukaFullFromDate.'日'.'('.$kyukaFullFromDayOfWeek.')　～　'
-						.$kiukaFullToYear.'年 '. $kiukaFullToMonth.'月 '.$kiukaFullToDate.'日'.'('.$kyukaFullToDayOfWeek.')';
+
 
 // '日' 
-$countKyukaRange = 1000 .'日';
+$countKyukaRange = 1000 . '日';
 
-
-//-----------// 
-//----4.-----// FORM DATAS IN  半日期間 Line  Config Data here 
-//-----------// 
-
-$kiukaHalfYear = '4444'.'年 ';
-$kiukaHalfMonth = '44'.'月 ';
-$kiukaHalfDate = '44'.'日';
-$kiukaHalfFromHour = '44'.'時';
-$kiukaHalfToHour = '44'.'時';
-
-$kyukaHalfDayOfWeek = '火';
-// this text view on table
-$kyukaHalfRangeTextShow = $kiukaHalfYear. $kiukaHalfMonth.$kiukaHalfDate.'('.$kyukaHalfDayOfWeek.')　'
-						. $kiukaHalfFromHour. '　～　'.$kiukaHalfToHour;
 
 
 
@@ -125,23 +101,23 @@ $kiukashurui_10 = '⑩その他(　                                   　　    
 // this text view on table
 
 
-$kyukaShuruiFullTextShow = $kiukashurui_1.'　'.$kiukashurui_2.'　'.$kiukashurui_3.'　'.$kiukashurui_4.'　'.$kiukashurui_5.'　'."\n"
-							.$kiukashurui_6.'　'.$kiukashurui_7.'　'.$kiukashurui_8.'　'.$kiukashurui_9.'　'."\n"
-							."$kiukashurui_10";
+$kyukaShuruiFullTextShow = $kiukashurui_1 . '　' . $kiukashurui_2 . '　' . $kiukashurui_3 . '　' . $kiukashurui_4 . '　' . $kiukashurui_5 . '　' . "\n"
+	. $kiukashurui_6 . '　' . $kiukashurui_7 . '　' . $kiukashurui_8 . '　' . $kiukashurui_9 . '　' . "\n"
+	. "$kiukashurui_10";
 
 
 //-----------// 
 //----6.-----// FORM DATAS IN  入社年月 AND  勤続年数 Line  Config Data here 
 //-----------// 
-$inYear = 66 ;
+$inYear = 66;
 $inMonth = 66;
 
-$inTimeYear = 69 ;
-$inTimeMonth = 69 ;
+$inTimeYear = 69;
+$inTimeMonth = 69;
 
-$inCompanyYMTextShow = $inYear.'年　'.$inMonth.'月　';
-$workInCompanyTimeTextShow = $inTimeYear.'年　'.$inTimeMonth.'ヵ月以上　';
-							
+$inCompanyYMTextShow = $inYear . '年　' . $inMonth . '月　';
+$workInCompanyTimeTextShow = $inTimeYear . '年　' . $inTimeMonth . 'ヵ月以上　';
+
 
 
 
@@ -159,8 +135,8 @@ $annualPaidToMonth = 77;
 $annualPaidToDate = 77;
 
 // this text view on table
-$annualPaidLeaveCalculationPeriodTextShow = $annualPaidFromYear.'年 '. $annualPaidFromMonth.'月 '.$annualPaidFromDate.'日'.'　～　'
-						.$annualPaidToYear.'年 '. $annualPaidToMonth.'月 '.$annualPaidToDate.'日';
+$annualPaidLeaveCalculationPeriodTextShow = $annualPaidFromYear . '年 ' . $annualPaidFromMonth . '月 ' . $annualPaidFromDate . '日' . '　～　'
+	. $annualPaidToYear . '年 ' . $annualPaidToMonth . '月 ' . $annualPaidToDate . '日';
 
 
 
@@ -181,12 +157,12 @@ $kyukaCount1Value = $kyukaCount4Value + $kyukaCount5Value;
 $kyukaCount7Value = $kyukaCount4Value + $kyukaCount6Value;
 $kyukaCount8Value = $kyukaCount5Value - $kyukaCount6Value;
 
-$kyukaCount1TextShow = $kyukaCount1Value .'日';
-$kyukaCount2TextShow = $kyukaCount2Value .'日';
-$kyukaCount3TextShow = $kyukaCount3Value .'日';
-$kyukaCount4TextShow = $kyukaCount4Value .'日';
-$kyukaCount5TextShow = $kyukaCount5Value .'日';
-$kyukaCount6TextShow = $kyukaCount6Value .'日';
+$kyukaCount1TextShow = $kyukaCount1Value . '日';
+$kyukaCount2TextShow = $kyukaCount2Value . '日';
+$kyukaCount3TextShow = $kyukaCount3Value . '日';
+$kyukaCount4TextShow = $kyukaCount4Value . '日';
+$kyukaCount5TextShow = $kyukaCount5Value . '日';
+$kyukaCount6TextShow = $kyukaCount6Value . '日';
 $kyukaCount7TextShow = "\n$kyukaCount7Value 日";
 $kyukaCount8TextShow = "\n$kyukaCount8Value 日";
 
@@ -209,7 +185,7 @@ $kyukaRiyuTextShow = "\n帰国です。";
 //====================  view datas config end ====================//// 
 
 //set output file name
-$fileOutputName = str_replace(' ', '', $name).'_'. $teishutsu_year.$teishutsu_month.$teishutsu_date .  substr($date_show, 5, 2).'_休暇届'.'.pdf';
+$fileOutputName = str_replace(' ', '', $name) . '_' . $teishutsu_year . $teishutsu_month . $teishutsu_date .  substr($date_show, 5, 2) . '_休暇届' . '.pdf';
 
 
 // Set the X and Y coordinates for the cell
@@ -260,15 +236,15 @@ $blankInName = str_repeat(' ', 45);
 // Text in the top left corner
 $tcpdf->SetFont("kozgopromedium", "B", 14); // Set the font and style for the text
 $tcpdf->SetXY(10, 25); // Set the X and Y position for the text
-$tcpdf->Cell(0, 7, $teishutsu_time , 0, 1, 'L'); // Output the text aligned to the left
+$tcpdf->Cell(0, 7, $kyukaymd_time, 0, 1, 'L'); // Output the text aligned to the left
 
 $tcpdf->SetFont("kozgopromedium", "U", 10);
-$tcpdf->Cell(0, 7, '所属：' . $blankInName. '', 0, 1, 'L'); // Output the text aligned to the left
+$tcpdf->Cell(0, 7, '所属：' . $blankInName . '', 0, 1, 'L'); // Output the text aligned to the left
 
 $textInMark = '(印)';
 $showName = mb_convert_kana($name, 'R', 'UTF-8');
 
-$tcpdf->Cell(0, 7, '氏名：' . $blankInName , 0, 0.3, 'L');
+$tcpdf->Cell(0, 7, '氏名：' . $blankInName, 0, 0.3, 'L');
 $tcpdf->SetFont("kozgopromedium", "", 10);
 
 
@@ -346,7 +322,7 @@ $yTmp5 = $tcpdf->GetY();
 $tcpdf->Cell(40, 23, $text5, 1, 'C', true);
 $height5 = $tcpdf->GetY() - $yTmp5;
 $tcpdf->SetXY($xTmp5 + 40, $yTmp5);
-$tcpdf->MultiCell(150, $height5+23, $kyukaShuruiFullTextShow, 1, 0 ,   'C', true);
+$tcpdf->MultiCell(150, $height5 + 23, $kyukaShuruiFullTextShow, 1, 0,   'C', true);
 $tcpdf->Ln(0);
 
 
@@ -406,7 +382,7 @@ $tcpdf->Ln(7);
 
 // line 2 
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 40, $yTmp8+7);
+$tcpdf->SetXY($xTmp8 + 40, $yTmp8 + 7);
 $tcpdf->Cell(45, 7, '②前年度の繰越残日数', 1, 'C', true);
 $tcpdf->Cell(30, 7, $kyukaCount2TextShow, 1, 'C', true);
 
@@ -416,7 +392,7 @@ $tcpdf->Ln(7);
 
 // line 3 
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 40, $yTmp8+14);
+$tcpdf->SetXY($xTmp8 + 40, $yTmp8 + 14);
 $tcpdf->Cell(45, 7, '③当該年度付与日数', 1, 'C', true);
 $tcpdf->Cell(30, 7, $kyukaCount3TextShow, 1, 'C', true);
 
@@ -425,29 +401,29 @@ $tcpdf->Cell(30, 7, $kyukaCount6TextShow, 1, 'C', true);
 $tcpdf->Ln(7);
 // line 4 5
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 40, $yTmp8+21);
+$tcpdf->SetXY($xTmp8 + 40, $yTmp8 + 21);
 $tcpdf->MultiCell(45, 28, "\n\n②＋③＝①\n④＋⑤＝①", 1, 'C', true);
 
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 85, $yTmp8+21);
+$tcpdf->SetXY($xTmp8 + 85, $yTmp8 + 21);
 $tcpdf->MultiCell(30, 28, "\n\n④＋⑥＝⑦\n⑤－⑥＝⑧\n④＋⑥＋⑧＝①", 1, 'C', true);
 
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 115, $yTmp8+21);
+$tcpdf->SetXY($xTmp8 + 115, $yTmp8 + 21);
 $tcpdf->MultiCell(45, 14, "\n⑦使用後済数\n(④＋⑥)", 1, 'C', true);
 
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 160, $yTmp8+21);
+$tcpdf->SetXY($xTmp8 + 160, $yTmp8 + 21);
 $tcpdf->MultiCell(30, 14, $kyukaCount7TextShow, 1, 'C', true);
 $tcpdf->Ln(7);
 
 // line 6 7
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 115, $yTmp8+35);
+$tcpdf->SetXY($xTmp8 + 115, $yTmp8 + 35);
 $tcpdf->MultiCell(45, 14, "\n⑧使用後残日数\n(⑤－⑥)", 1, 'C', true);
 
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 160, $yTmp8+35);
+$tcpdf->SetXY($xTmp8 + 160, $yTmp8 + 35);
 $tcpdf->MultiCell(30, 14, $kyukaCount8TextShow, 1, 'C', true);
 $tcpdf->Ln(0);
 
@@ -521,7 +497,7 @@ $tcpdf->Ln(7);
 
 // line 2 
 $height11 = $tcpdf->GetY() - $yTmp11;
-$tcpdf->SetXY($xTmp11 + 40, $yTmp11+7);
+$tcpdf->SetXY($xTmp11 + 40, $yTmp11 + 7);
 $tcpdf->Cell(18, 7, '以内', 1, 'C', true);
 $tcpdf->Cell(18, 7, '', 1, 'C', true);
 $tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
@@ -536,7 +512,7 @@ $tcpdf->Ln(7);
 $xTmp12 = $tcpdf->GetX();
 $yTmp12 = $tcpdf->GetY();
 $tcpdf->Cell(40, 7, "付与日数", 1, 'C', true);
-$tcpdf->SetXY($xTmp12+40, $yTmp12);
+$tcpdf->SetXY($xTmp12 + 40, $yTmp12);
 $height12 = $tcpdf->GetY() - $yTmp12;
 $tcpdf->Cell(18, 7, '無し', 1, 'C', true);
 $tcpdf->Cell(18, 7, '１０日', 1, 'C', true);
