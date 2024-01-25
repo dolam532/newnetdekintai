@@ -282,7 +282,23 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                         <label class="template-notice-text"> (出退社時間+業務時間)</label>
                                     </div>
                                 </div>
-                                <div class="col-xs-6"></div>
+                                           <!-- 2023/01/26 KyukaTemplate add start -->
+                                           <div class="col-xs-6">
+                                    <label for="kyuka_type"><strong>休暇届テンプレート</strong></label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="kyuka_type" name="kyuka_type" checked
+                                            value="<?php echo array_keys(ConstArray::$kyuka_templates)[0]; ?>">
+                                        <?php echo ConstArray::$kyuka_templates[array_keys(ConstArray::$kyuka_templates)[0]]; ?>
+                                        <label class="template-notice-text"> (日単位+半休)</label>
+
+                                        <br />
+                                        <input type="radio" id="kyuka_type" name="kyuka_type"
+                                            value="<?php echo array_keys(ConstArray::$kyuka_templates)[1]; ?>">
+                                        <?php echo ConstArray::$kyuka_templates[array_keys(ConstArray::$kyuka_templates)[1]]; ?>
+                                        <label class="template-notice-text"> (日単位＋時間単位)</label>
+                                    </div>
+                                </div>
+                                <!-- 2023/01/26 KyukaTemplate add end -->
                             </div>
                             <br>
                             <div class="row">
@@ -390,7 +406,24 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                         <label class="template-notice-text"> (出退社時間+業務時間)</label>
                                     </div>
                                 </div>
-                                <div class="col-xs-6"></div>
+                                   <!-- 2023/01/26 KyukaTemplate add start -->
+                                   <div class="col-xs-6">
+                                    <label for="kyuka_type"><strong>休暇届テンプレート</strong></label>
+                                    <div class="custom-control custom-radio">
+                                        <input type="radio" id="kyuka_type" name="kyuka_type"
+                                            value="<?php echo array_keys(ConstArray::$kyuka_templates)[0]; ?>">
+                                        <?php echo ConstArray::$kyuka_templates[array_keys(ConstArray::$kyuka_templates)[0]]; ?>
+                                        <label class="template-notice-text"> (日単位+半休)</label>
+
+
+                                        <br />
+                                        <input type="radio" id="kyuka_type" name="kyuka_type"
+                                            value="<?php echo array_keys(ConstArray::$kyuka_templates)[1]; ?>">
+                                        <?php echo ConstArray::$kyuka_templates[array_keys(ConstArray::$kyuka_templates)[1]]; ?>
+                                        <label class="template-notice-text"> (日単位＋時間単位)</label>
+                                    </div>
+                                </div>
+                                <!-- 2023/01/26 KyukaTemplate add end -->
                             </div>
                             <br>
                             <div class="row">
@@ -556,6 +589,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                 $("#udjoken").text($('[name="udjoken"]').val("<?php echo $key['joken'] ?>"));
                 $("#udbigo").text($('[name="udbigo"]').val("<?php echo $key['bigo'] ?>"));
                 $("input[name='uduse_type'][value='<?php echo $key['template']; ?>']").prop('checked', true);
+                $("input[name='kyuka_type'][value='<?php echo $key['kyukatemplate']; ?>']").prop('checked', true);
             }
         <?php
         }

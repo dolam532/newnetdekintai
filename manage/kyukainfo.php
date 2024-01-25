@@ -85,6 +85,30 @@ input[type=radio] {
     }
     ?>
 
+<?php
+    if (isset($_SESSION['user_type_undefined']) && isset($_POST['DeleteKyukaInfo'])) {
+        ?>
+<div class="alert alert-success alert-dismissible" role="alert" auto-close="5000">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <?php echo $_SESSION['user_type_undefined']; ?>
+</div>
+<?php
+        unset($_SESSION['user_type_undefined']);
+    }
+    ?>
+
+    <?php
+    if (isset($_SESSION['delete_success']) && isset($_POST['DeleteKyukaInfo'])) {
+        ?>
+        <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <?php echo $_SESSION['delete_success']; ?>
+        </div>
+        <?php
+        unset($_SESSION['delete_success']);
+    }
+    ?>
+
 
 <div class="row">
 
@@ -171,8 +195,6 @@ echo '</td>';
                         <input type="hidden" name="data_row_1">
                         <input type="hidden" name="title_row_2">
                         <input type="hidden" name="data_row_2">
-                        <input type="hidden" id="selectedId" name="selectedId">
-                       
                     </table>
                 </div>
 
@@ -186,20 +208,17 @@ echo '</td>';
         </div>
 
         <div class="print_btn-submit">
-            <!-- <form method="post" class="form-inline ml-2">
-                <button id="updateBtn" name="UpdateKyukaInfo" class="btn btn-info" style="width: auto;" >編集</button>
-            </form> -->
 
             <div class="print_btn">
-                <a href="#" onclick="kyukaUpdate()" id="updateBtn" name="UpdateKyukaInfo" class="btn btn-info"
+                <a href="#" onclick="kyukaUpdate()" id="updateBtn" name="UpdateKyukaInfoModal" class="btn btn-info"
                     style="width: auto;">編集</a>
             </div>
         </div>
 
         <div class="print_btn-submit">
             <form method="post" class="form-inline ml-2">
-                <button id="deleteBtn" name="DeleteKyukaInfo" class="btn btn-warning" style="width: auto;" type="submit"
-                    onclick="return confirm('選択した項目を削除でよろしいでしょうか？')">削除</button>
+               <input type="hidden" id="selectedId" name="selectedId">
+                <button id="deleteBtn" name="DeleteKyukaInfo" class="btn btn-warning" style="width: auto;" type="submit" >削除</button>
             </form>
         </div>
     </div>
@@ -306,7 +325,7 @@ echo '</td>';
 
                     </div>
                     <div class="modal-footer" style="text-align: center">
-                        <input type="submit" name="saveUpdateKyukaInfo" class="btn btn-primary" id="btnReg"
+                        <input type="submit" name="UpdateKyukaInfo" class="btn btn-primary" id="btnReg"
                             role="button" value="登録">
                         <button type="button" class="btn btn-default " data-dismiss="modal" id="modalClose">閉じる</button>
                     </div>
@@ -406,8 +425,6 @@ echo '</td>';
                                 <span style="color:red;" id="showUpdateNotice_add" name="showUpdateNotice_add"> </span>
                             </div>
                         </div>
-         
-
                     </div>
                     <input type="hidden" id="newMaxId" name="newMaxId">
                     <input type="hidden" id="insertWorkYear" name="insertWorkYear">
@@ -415,7 +432,7 @@ echo '</td>';
                     <input type="hidden" id="insertkyukaDays" name="insertkyukaDays">
 
                     <div class="modal-footer" style="text-align: center">
-                        <input type="submit" name="saveUpdateKyukaInfo_add" class="btn btn-primary" id="btnReg_add"
+                        <input type="submit" name="SaveKyukaInfo" class="btn btn-primary" id="btnReg_add"
                             role="button" value="登録">
                         <button type="button" class="btn btn-default" data-dismiss="modal" id="modalClose">閉じる</button>
                     </div>
@@ -425,19 +442,15 @@ echo '</td>';
     </div>
 </div>
 
-
-
-
-
-
 <script>
+    
 window.onload = function() {
     setTimeout(hideLoadingOverlay, 500);
     startLoading();
     inputSelectionCheckboxHandler();
     checkInputValue();
     showTextAfterSelectedHandler();
-
+    deleteCheck();
 };
 
 // Show 編集
@@ -497,44 +510,76 @@ function kyukaUpdate() {
         $('#workYearMonth').val(yearStr + monthStr + '以上');
         $('#showUpdateNotice').text("<?= $kyuka_info_max_workYm ?>");
     }
-
-    updateDataToUnputs();
-
-
+    updateDataToInputs();
 }
 
 // Show 追加
 function kyukaInsert(){
+
     $('#modal2').modal('toggle');
-    var kiukaInfoListDatasShow = <?php echo json_encode($kiukaInfoListDatasShow); ?>;
+    $('#workYearSelect_add').val("");
+    $('#workMonthSelect_add').val("");
+    $('#kyukadaySelect_add').val("");
+    $('#workYearMonth_add').val("");
+    $('#kyukaDayTime_add').val("");
+    checkValidInsert();
+	var kiukaInfoListDatasShow = <?php echo json_encode($kiukaInfoListDatasShow); ?>;
     var keys = Object.keys(kiukaInfoListDatasShow);
     var maxKey = keys[keys.length - 3].match(/\d+$/)[0];
-    console.log(maxKey);
-    $('#newMaxId').val(maxKey);
-
+    if (!isNaN(maxKey)) {
+        $('#newMaxId').val(Number(maxKey) + 1);
+    }    
 }
 
-function updateDataToUnputs() {
+function checkValidInsert() {
+    $('#btnReg_add').click(function(e) {
+        if ($(this).hasClass('disabled')) {
+            e.preventDefault();
+        }
+    });
+
+    var isInvalid = false;
+    var workYearSelect_add = $('#workYearSelect_add').val();
+    var workMonthSelect_add = $('#workMonthSelect_add').val();
+    var kyukadaySelect_add = $('#kyukadaySelect_add').val();
+    if ((workYearSelect_add == null || workYearSelect_add == 0) && (workMonthSelect_add == null || workMonthSelect_add == 0)) {
+        isInvalid = true;
+    }
+    if (kyukadaySelect_add == null) {
+        isInvalid = true;
+    }
+    $('#btnReg_add').removeClass('disabled')
+    if(isInvalid) {
+        $('#btnReg_add').addClass('disabled');
+    }
+
+}
+function deleteCheck() {
+    $('#deleteBtn').click(function(e) {
+        if ($(this).hasClass('disabled') || !confirm('選択した項目を削除でよろしいでしょうか？')) {
+            e.preventDefault();
+        }
+    });
+}
+
+function updateDataToInputs() {
+
+
     $('#selectedIndex').val( $('#selectedId').val());
     $('#updateWorkYear').val($('#workYearSelect').val());
     $('#updateWorkMonth').val($('#workMonthSelect').val());
     $('#updatekyukaDays').val($('#kyukadaySelect').val());
-
     $('#insertWorkYear').val($('#workYearSelect_add').val());
     $('#insertWorkMonth').val($('#workMonthSelect_add').val());
     $('#insertkyukaDays').val($('#kyukadaySelect_add').val());
 
 
-    
-    // set value to input 
-    // <input type="hidden" id="insertWorkYear" name="insertWorkYear">
-    //  <input type="hidden" id="insertWorkMonth" name="insertWorkMonth">
-    //  <input type="hidden" id="insertkyukaDays" name="insertkyukaDays">
 
 }
 
 // add funtion to select box in modal 
 function showTextAfterSelectedHandler() {
+
     $('#workYearSelect, #workMonthSelect').change(function() {
         var year = $('#workYearSelect').val();
         var month = $('#workMonthSelect').val();
@@ -546,22 +591,23 @@ function showTextAfterSelectedHandler() {
         if (month === null || isNaN(month) || month == 0) {
             monthStr = ''
         }
+        var selectedId = $('#selectedId').val();
         $('#workYearMonth').val(yearStr + monthStr);
-
-        updateDataToUnputs();
-
+         if(selectedId == <?= $MIN_KYUKA_INFO_COUNT?>) {
+        $('#workYearMonth').val(yearStr + monthStr + '以内');
+            }
+         if(selectedId == <?= $MAX_KYUKA_INFO_COUNT?>) {
+        $('#workYearMonth').val(yearStr + monthStr + '以上');
+         }
+         
+        updateDataToInputs();
     });
 
     $('#kyukadaySelect').change(function() {
         var days = $('#kyukadaySelect').val();
-
         $('#kyukaDayTime').val(days + '日');
-        updateDataToUnputs();
+        updateDataToInputs();
     });
-
-
-
-
     // Add New 
     $('#workYearSelect_add, #workMonthSelect_add').change(function() {
         var year = $('#workYearSelect_add').val();
@@ -575,17 +621,16 @@ function showTextAfterSelectedHandler() {
             monthStr = ''
         }
         $('#workYearMonth_add').val(yearStr + monthStr);
-        updateDataToUnputs();
+        updateDataToInputs();
+        checkValidInsert();
     });
 
     $('#kyukadaySelect_add').change(function() {
         var days = $('#kyukadaySelect_add').val();
-
         $('#kyukaDayTime_add').val(days + '日');
-        updateDataToUnputs();
+        updateDataToInputs();
+        checkValidInsert();
     });
-
-
 }
 
 
@@ -594,7 +639,6 @@ function inputSelectionCheckboxHandler() {
     $('input[id^="data-top-"]').each(function() {
         var $newRadioButton = $('<input  type="radio" name="radioButton">');
         $newRadioButton.val(this.id);
-
         $newRadioButton.change(function() {
             if (this.checked) {
                 var value = this.value.replace('data-top-', '');
@@ -602,40 +646,30 @@ function inputSelectionCheckboxHandler() {
                 checkInputValue();
             }
         });
-
         $(this).parent().parent().append($newRadioButton);
     });
 }
 
-
-function editFunction(id) {
-    console.log("Editing " + id);
-}
-
 function checkInputValue() {
-
-    if ($('#selectedId').val() === '' ) {
-        $('#updateBtn, #deleteBtn').addClass('disabled');
-    } else {
-        $('#updateBtn, #deleteBtn').removeClass('disabled');
-    }
-
-    if ($('#selectedId').val() == <?= $MIN_KYUKA_INFO_COUNT ?> || $('#selectedId').val() == <?= $MAX_KYUKA_INFO_COUNT ?> ) {
-        $('#deleteBtn').addClass('disabled');
-    } 
-
     $('#updateBtn, #deleteBtn').click(function(e) {
         if ($(this).hasClass('disabled')) {
             e.preventDefault();
         }
     });
+    if ($('#selectedId').val() === '' ) {
+        $('#updateBtn, #deleteBtn').addClass('disabled');
+    } else {
+        $('#updateBtn, #deleteBtn').removeClass('disabled');
+    }
+    if ($('#selectedId').val() == <?= $MIN_KYUKA_INFO_COUNT ?> || $('#selectedId').val() == <?= $MAX_KYUKA_INFO_COUNT ?> ) {
+        $('#deleteBtn').addClass('disabled');
+    } 
 
 }
 
 
 // get Data by form
 function validationData() {
-
     var title_value = $('#form_title').val();
     var message_value = $('#message-area').val();
     var subTitle_value = $('#sub_title').val();
@@ -657,7 +691,6 @@ function validationData() {
     $('input[name="data_row_1"]').val(data_row_1);
     $('input[name="title_row_2"]').val(title_row_2);
     $('input[name="data_row_2"]').val(data_row_2);
-    // set data to form 
     return true;
 }
 
