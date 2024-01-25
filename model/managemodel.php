@@ -186,6 +186,10 @@ if ($_POST['SearchButtonCL'] == NULL) {
 
 // Save Data to tbl_company
 if (isset($_POST['btnRegCL'])) {
+    if ($_SESSION['auth_type'] != constant('MAIN_ADMIN')) {
+        return;
+    }
+    
     $companyid = mysqli_real_escape_string($conn, $_POST['companyid']);
     $companycode = mysqli_real_escape_string($conn, $_POST['companycode']);
     $companyname = mysqli_real_escape_string($conn, $_POST['companyname']);
@@ -198,21 +202,21 @@ if (isset($_POST['btnRegCL'])) {
     $joken = mysqli_real_escape_string($conn, $_POST['joken']);
     $template = mysqli_real_escape_string($conn, $_POST['use_type']);
     $bigo = mysqli_real_escape_string($conn, $_POST['bigo']);
-
+    $kyuka_template = mysqli_real_escape_string($conn, $_POST['kyuka_type']);
     $sql = "INSERT INTO `tbl_company` (`companyid`, `companycode`, `companyname`, `staff`, `telno`,
-                `strymd`, `endymd`, `address`, `use_yn`, `template`, `joken`, `bigo`, `reg_dt` ,`upt_dt` )
+                `strymd`, `endymd`, `address`, `use_yn`,`template` , `kyukatemplate` , `joken`, `bigo`, `reg_dt` ,`upt_dt` )
                 VALUES ('$companyid', '$companycode', '$companyname', '$staff', '$telno',
-                '$strymd', '$endymd', '$address', '$use_yn', '$template', '$joken', '$bigo', '$reg_dt' , null)
+                '$strymd', '$endymd', '$address', '$use_yn', '$template' ,  $kyuka_template ,  '$joken', '$bigo', '$reg_dt' , null)
             ON DUPLICATE KEY UPDATE
                 `companycode` = '$companycode', `companyname` = '$companyname', `staff` = '$staff',
                 `telno` = '$telno', `strymd` = '$strymd', `endymd` = '$endymd', `address` = '$address',
-                `use_yn` = '$use_yn', `template`  = '$template', `joken` = '$joken', `bigo` = '$bigo', `upt_dt` = '$upt_dt'";
+                `use_yn` = '$use_yn', `template`  = '$template'  , `kyukatemplate`= $kyuka_template ,   `joken` = '$joken', `bigo` = '$bigo', `upt_dt` = '$upt_dt'";
 
-
-    $sql2 = "INSERT INTO `tbl_manageinfo` (`companyid`, `magamym`, `magamymd`, `reg_dt` ,`upt_dt` )
-                VALUES ('$companyid', '$magamym', '$magamym', '$reg_dt', null)
+    $sql2 = "INSERT INTO `tbl_manageinfo` (`companyid`, `reg_dt` ,`upt_dt` )
+                VALUES ('$companyid', '$reg_dt' , null)
             ON DUPLICATE KEY UPDATE
                 `upt_dt` = '$upt_dt'";
+
     if ($conn->query($sql) === TRUE && $conn->query($sql2) === TRUE) {
         $_SESSION['save_success'] = $save_success;
         header("Refresh:3");
@@ -235,8 +239,22 @@ if (isset($_POST['btnUpdateCL'])) {
     $joken = mysqli_real_escape_string($conn, $_POST['udjoken']);
     $bigo = mysqli_real_escape_string($conn, $_POST['udbigo']);
     $template = mysqli_real_escape_string($conn, $_POST['uduse_type']);
+    $kyuka_template = mysqli_real_escape_string($conn, $_POST['kyuka_type']);
 
     $sql = "UPDATE tbl_company SET 
+            companyname='$companyname',
+            staff='$staff',
+            telno='$telno',
+            address='$address',
+            bigo='$bigo',
+            companycode ='$companycode' ,
+            template = '$template',
+            kyukatemplate= $kyuka_template 
+        WHERE companyid ='$companyid'";
+
+    // check  main admin
+    if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+        $sql = "UPDATE tbl_company SET 
             companyname='$companyname',
             staff='$staff',
             telno='$telno',
@@ -247,9 +265,10 @@ if (isset($_POST['btnUpdateCL'])) {
             joken='$joken',
             bigo='$bigo',
             companycode ='$companycode',
-            template = '$template'
+            template = '$template',
+            kyukatemplate= $kyuka_template 
         WHERE companyid ='$companyid'";
-
+    }
     if ($conn->query($sql) === TRUE) {
         $_SESSION['update_success'] = $update_success;
         header("Refresh:3");
@@ -729,7 +748,6 @@ if (isset($_POST['btnUpdateCWL'])) {
     }
 }
 
-
 // kyukaNotice.php  
 
 // Get current value 
@@ -750,23 +768,28 @@ if (mysqli_num_rows($resultKyukaInfo) <= 0) {
     $noDataKyukaInfo = true;
 } 
 
-
-
 $kiukaNoticeList = mysqli_fetch_all($resultKyukaNotice, MYSQLI_ASSOC);
 $kiukaInfoList = mysqli_fetch_all($resultKyukaInfo, MYSQLI_ASSOC);
 
-// when no data  Kyuka Notice -> get default data
+// When new Company -> Insert Default Data
 if($noDataKyuka) {
-    $sqlFindKyukaNoticeDefault  =  "SELECT * FROM tbl_kyuka_notice WHERE companyid = 0 ";
-    $resultKyukaNoticeDefault = mysqli_query($conn, $sqlFindKyukaNoticeDefault);
-    $kiukaNoticeList = mysqli_fetch_all($resultKyukaNoticeDefault, MYSQLI_ASSOC);
+    $sqlInsertDefault =  "INSERT INTO `tbl_kyuka_notice` ( `companyid`, `title`, `message`, `subtitle`, `upt_dt`) VALUES
+	($companyid, 'お知らせ(注意)', '1 事前許可が必要なので、担当者に許可の届け (休暇届) を提出すること。\r\n ・原則として1週間前までに、少なくとも前々日までに提出すること。\r\n ・連続4日以上 (所定休日が含まれる場合を含む。) の休暇を取得するときは、1ヵ月前までに提出すること。\r\n ・緊急・病気の場合は、その時点ですぐに提出すること。\r\n2 年間で5日分はその年で必ず取ること。\r\n3 有給休暇は1年に限って繰り越しできます (2の5日分は除外、 0.5日分は除外)。\r\n4 半休(5時間以内)の場合は0.5日にて表現してください。その他詳しい内容は担当者に聞いてください。                    ', '※ 年次有給休暇', '2024-01-18') ;";
+    mysqli_query($conn, $sqlInsertDefault);
+      // one more time get data 
+      $resultKyukaNotice = mysqli_query($conn, $sqlFindKyukaNotice);
+      $kiukaNoticeList = mysqli_fetch_all($resultKyukaNotice, MYSQLI_ASSOC);
+      header("Refresh:3");
 }
-
-// when no data  Kyuka Info -> get default data
 if($noDataKyukaInfo) {
-    $sqlFindKyukaInfoDefault  =  "SELECT * FROM tbl_kyukainfo WHERE companyid = 0 ";
-    $resultKyukaInfoDefault = mysqli_query($conn, $sqlFindKyukaInfoDefault);
-    $kiukaInfoList = mysqli_fetch_all($resultKyukaInfoDefault, MYSQLI_ASSOC);
+    $sqlInsertDefault = "INSERT INTO `tbl_kyukainfo` ( `companyid`, `titletop`, `titlebottom`, `ttop0`, `ttop1`, `ttop2`, `ttop3`, `ttop4`, `ttop5`, `ttop6`, `ttop7`, `ttop8`, `ttop9`, `ttop10`, `ttop11`, `ttop12`, `ttop13`, `ttop14`, `ttop15`, `ttop16`, `ttop17`, `ttop18`, `ttop19`, `ttop20`, `ttop21`, `tbottom0`, `tbottom1`, `tbottom2`, `tbottom3`, `tbottom4`, `tbottom5`, `tbottom6`, `tbottom7`, `tbottom8`, `tbottom9`, `tbottom10`, `tbottom11`, `tbottom12`, `tbottom13`, `tbottom14`, `tbottom15`, `tbottom16`, `tbottom17`, `tbottom18`, `tbottom19`, `tbottom20`, `tbottom21`, `upt_dt`)
+                 VALUES
+	            ( $companyid, '勤続年数', '付与日数	', 6, 6, 12, 30, 42, 54, 66, 78, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 78, 0, 10, 11, 12, 14, 16, 18, 20, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 25, '$upt_dt') ";
+     mysqli_query($conn, $sqlInsertDefault);
+    // one more time get data 
+    $resultKyukaInfo = mysqli_query($conn, $sqlFindKyukaInfo);
+    $kiukaInfoList = mysqli_fetch_all($resultKyukaInfo, MYSQLI_ASSOC);
+    header("Refresh:3");
 }
 
 
@@ -805,14 +828,7 @@ for ($i = $MIN_KYUKA_INFO_COUNT ; $i <= $MAX_KYUKA_INFO_COUNT; $i++) {
     $kiukaInfoListDatasShow[$keybottom] = $kiukaInfoListDatas[$keybottom] . '日';
 
 }
-
-    // foreach ($kiukaInfoListDatasShow as $key => $value) {
-    //     error_log("$key: $value");
-    // }
-    // error_log("--------------------");
-
-
-// register
+// KyukaNotice Register
 if (isset($_POST['kyukanoticeRegister'])) {  
     $title_value = mysqli_real_escape_string($conn, $_POST['title_value']);
     $message_value = mysqli_real_escape_string($conn, $_POST['message_value']);
@@ -840,6 +856,41 @@ if (isset($_POST['kyukanoticeRegister'])) {
     header("Refresh:3");
     } else {
     echo 'query error: ' . mysqli_error($conn);
+    }
+}
+
+// kyukaInfo.php  
+if (isset($_POST['SaveKyukaInfo'])) {  
+    error_log("SaveKyukaInfo");
+}
+
+if (isset($_POST['UpdateKyukaInfo'])) {  
+    error_log("UpdateKyukaInfo");
+}
+
+
+// KyukaInfo Delete
+if (isset($_POST['DeleteKyukaInfo'])) {  
+    $selectedId = mysqli_real_escape_string($conn, $_POST['selectedId']);
+    if( $selectedId ==  $MIN_KYUKA_INFO_COUNT || $selectedId ==  $MAX_KYUKA_INFO_COUNT ) {
+        return;
+    }
+    // Check Admin 
+    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
+        $_SESSION['$user_type_undefined'] = $user_type_undefined;
+        return;
+    }
+        $strTopField = 'ttop'. $selectedId;
+        $strBottomField = 'tbottom'. $selectedId;
+        $sqlDelete = "UPDATE tbl_kyukainfo SET  `$strTopField`= null , `$strBottomField`= null, 
+        upt_dt='$upt_dt' 
+        WHERE companyid = $companyid";
+
+    if ($conn->query($sqlDelete) === TRUE) {
+        $_SESSION['delete_success'] = $delete_success;
+        header("Refresh:3");
+    } else {
+        echo 'query error: ' . mysqli_error($conn);
     }
 
 }
