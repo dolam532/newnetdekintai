@@ -741,6 +741,24 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<input type="hidden" name="endymd" id="endymd-input">
 		<input type="hidden" name="strtime" id="strtime-input">
 		<input type="hidden" name="endtime" id="endtime-input">
+		<input type="hidden" name="ymdcnt" id="ymdcnt-input">
+		<input type="hidden" name="timecnt" id="timecnt-input">
+		<input type="hidden" name="kyukaname" id="kyukaname-input">
+		<input type="hidden" name="inymd" id="inymd-input">
+		<input type="hidden" name="kyukatemplate" id="kyukatemplate-input">
+		<input type="hidden" name="vacationstr" id="vacationstr-input">
+		<input type="hidden" name="vacationend" id="vacationend-input">
+		<input type="hidden" name="tothday" id="tothday-input">
+		<input type="hidden" name="newcnt" id="newcnt-input">
+		<input type="hidden" name="oldcnt" id="oldcnt-input">
+		<input type="hidden" name="usefinishcnt" id="usefinishcnt-input">
+		<input type="hidden" name="usebeforecnt" id="usebeforecnt-input">
+		<input type="hidden" name="usenowcnt" id="usenowcnt-input">
+		<input type="hidden" name="usefinishaftercnt" id="usefinishaftercnt-input">
+		<input type="hidden" name="useafterremaincnt" id="useafterremaincnt-input">
+		<input type="hidden" name="reason" id="reason-input">
+		<input type="hidden" name="destplace" id="destplace-input">
+		<input type="hidden" name="desttel" id="desttel-input">
 	</form>
 
 	<!-- お知らせ -->
@@ -1718,6 +1736,24 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#autopdf #endymd-input").val("<?php echo htmlspecialchars($key['endymd']); ?>");
 					$("#autopdf #strtime-input").val("<?php echo htmlspecialchars($key['strtime']); ?>");
 					$("#autopdf #endtime-input").val("<?php echo htmlspecialchars($key['endtime']); ?>");
+					$("#autopdf #ymdcnt-input").val("<?php echo htmlspecialchars($key['ymdcnt']); ?>");
+					$("#autopdf #timecnt-input").val("<?php echo htmlspecialchars($key['timecnt']); ?>");
+					$("#autopdf #kyukaname-input").val("<?php echo htmlspecialchars($key['kyukaname']); ?>");
+					$("#autopdf #inymd-input").val("<?php echo htmlspecialchars($key['inymd']); ?>");
+					$("#autopdf #kyukatemplate-input").val("<?php echo htmlspecialchars($key['kyukatemplate']); ?>");
+					$("#autopdf #vacationstr-input").val("<?php echo htmlspecialchars($key['vacationstr']); ?>");
+					$("#autopdf #vacationend-input").val("<?php echo htmlspecialchars($key['vacationend']); ?>");
+					$("#autopdf #tothday-input").val("<?php echo htmlspecialchars($key['tothday']); ?>");
+					$("#autopdf #oldcnt-input").val("<?php echo htmlspecialchars($key['oldcnt']); ?>");
+					$("#autopdf #newcnt-input").val("<?php echo htmlspecialchars($key['newcnt']); ?>");
+					$("#autopdf #usefinishcnt-input").val("<?php echo htmlspecialchars($key['usefinishcnt']); ?>");
+					$("#autopdf #usebeforecnt-input").val("<?php echo htmlspecialchars($key['usebeforecnt']); ?>");
+					$("#autopdf #usenowcnt-input").val("<?php echo htmlspecialchars($key['usenowcnt']); ?>");
+					$("#autopdf #usefinishaftercnt-input").val("<?php echo htmlspecialchars($key['usefinishaftercnt']); ?>");
+					$("#autopdf #useafterremaincnt-input").val("<?php echo htmlspecialchars($key['useafterremaincnt']); ?>");
+					$("#autopdf #reason-input").val("<?php echo htmlspecialchars($key['reason']); ?>");
+					$("#autopdf #destplace-input").val("<?php echo htmlspecialchars($key['destplace']); ?>");
+					$("#autopdf #desttel-input").val("<?php echo htmlspecialchars($key['desttel']); ?>");
 					$("#autopdf").submit();
 				}
 		<?php

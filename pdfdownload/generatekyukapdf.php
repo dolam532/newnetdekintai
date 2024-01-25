@@ -13,23 +13,49 @@ $dept = $_POST['dept'];
 $signstamp_user = $_POST['signstamp'];
 $kyukatype = $_POST['kyukatype'];
 $strymd = $_POST['strymd'];
+$strtime = $_POST['strtime'];
+$endtime = $_POST['endtime'];
+$timecnt = $_POST['timecnt'];
+$ymdcnt = $_POST['ymdcnt'];
+$kyukaname = $_POST['kyukaname'];
+$inymd = $_POST['inymd'];
+$kyukatemplate = $_POST['kyukatemplate'];
+$tothday = $_POST['tothday'];
+$newcnt = $_POST['newcnt'];
+$oldcnt = $_POST['oldcnt'];
+$usefinishcnt = $_POST['usefinishcnt'];
+$usebeforecnt = $_POST['usebeforecnt'];
+$usenowcnt = $_POST['usenowcnt'];
+$usefinishaftercnt = $_POST['usefinishaftercnt'];
+$useafterremaincnt = $_POST['useafterremaincnt'];
+$reason = $_POST['reason'];
+$destplace = $_POST['destplace'];
+$desttel = $_POST['desttel'];
+
+
 $strymd_w = date('w', strtotime($strymd));
 $strymd_youbi = ['日', '月', '火', '水', '木', '金', '土'][$strymd_w];
 if ($kyukatype == "0") { // Time
-	$endymd = $strymd; 
+	$endymd = $strymd;
 	// 期間 ※半休のみ記入
 	$kyukaHalfRangeTextShow = substr($strymd, 0, 4) . '年 ' . substr($strymd, 5, 2) . '月 ' . substr($strymd, 8, 2) . '日' . '(' . $strymd_youbi . ')　'
 		. $strtime . '時 ' . '　～　' . $endtime . '時 ';
+	// Kyuka Count
+	if ($kyukatemplate == "1") {
+		$kyuka_count = $timecnt . '日';
+	} elseif ($kyukatemplate == "2") {
+		$kyuka_count = $timecnt . '時';
+	}
 } elseif ($kyukatype == "1") { // Day
 	$endymd = $_POST['endymd'];
 	// 期間 ※半休のみ記入
-	$kyukaHalfRangeTextShow = '    ' . '年 ' . '  ' . '月 ' . '  ' . '日' . '(' . ' ' . ') '
-		. $strtime . '時 ' . '　～　' . $endtime . '時 ';
+	$kyukaHalfRangeTextShow = '      ' . '年 ' . '     ' . '月 ' . '     ' . '日' . '(' . '     ' . ') '
+		. '        ' . '時 ' . '　～　' . '    ' . '時 ';
+	// Kyuka Count
+	$kyuka_count = $ymdcnt . '日';
 }
 $endymd_w = date('w', strtotime($endymd));
 $endymd_youbi = ['日', '月', '火', '水', '木', '金', '土'][$endymd_w];
-$strtime = $_POST['strtime'];
-$endtime = $_POST['endtime'];
 
 // (Show Data)
 // 期間
@@ -40,6 +66,16 @@ $kyukaRangeTextShow = substr($strymd, 0, 4) . '年 ' . substr($strymd, 5, 2) . '
 // user 印鑑
 $signstamp_user_ = '<img src="../assets/uploads/signstamp/' . $signstamp_user . '" width="40" height="40" />';
 $signstamp_user_show = '';
+
+// 年次有給休暇残日数
+$tothday_count = $tothday . '日';
+$newcnt_count = $newcnt . '日';
+$oldcnt_count = $oldcnt . '日';
+$usefinishcnt_count = $usefinishcnt . '日';
+$usebeforecnt_count = $usebeforecnt . '日';
+$usenowcnt_count = $usenowcnt . '日';
+$usefinishaftercnt_count = $usefinishaftercnt . '日';
+$useafterremaincnt_count = $useafterremaincnt . '日';
 
 // check accept of user here 
 // if($submission_status > 0 && $submission_status < 11) {}
@@ -73,9 +109,6 @@ $signstamp_kanri_show = $signstamp_kanri_;
 // this text view on table
 
 
-// '日' 
-$countKyukaRange = 1000 . '日';
-
 
 
 
@@ -87,35 +120,14 @@ $countKyukaRange = 1000 . '日';
 // 　⑥慶弔休暇　⑦代休　　⑧振替休日　⑨特別休暇(　　　                 　　　　　　)　
 //   ⑩その他(　                                   　　                 　　　　　　)
 
-$kiukashurui_1 = '①年次有給休暇';
-$kiukashurui_2 = '②産前産後休暇';
-$kiukashurui_3 = '③生理休暇';
-$kiukashurui_4 = '④育児休業';
-$kiukashurui_5 = '⑤介護休業　　　                 　　　　　　　　　　　　';
-$kiukashurui_6 = '⑥慶弔休暇';
-$kiukashurui_7 = '⑦代休';
-$kiukashurui_8 = '⑧振替休日';
-$kiukashurui_9 = '⑨特別休暇(　　　                 　　　　　　　　　　　　　)';
-$kiukashurui_10 = '⑩その他(　                                   　　                 　　　　　　)';
-
-// this text view on table
-
-
-$kyukaShuruiFullTextShow = $kiukashurui_1 . '　' . $kiukashurui_2 . '　' . $kiukashurui_3 . '　' . $kiukashurui_4 . '　' . $kiukashurui_5 . '　' . "\n"
-	. $kiukashurui_6 . '　' . $kiukashurui_7 . '　' . $kiukashurui_8 . '　' . $kiukashurui_9 . '　' . "\n"
-	. "$kiukashurui_10";
-
-
 //-----------// 
 //----6.-----// FORM DATAS IN  入社年月 AND  勤続年数 Line  Config Data here 
 //-----------// 
-$inYear = 66;
-$inMonth = 66;
 
 $inTimeYear = 69;
 $inTimeMonth = 69;
 
-$inCompanyYMTextShow = $inYear . '年　' . $inMonth . '月　';
+$enter_company = substr($inymd, 0, 4) . '年　' . substr($inymd, 5, 2) . '月　';
 $workInCompanyTimeTextShow = $inTimeYear . '年　' . $inTimeMonth . 'ヵ月以上　';
 
 
@@ -157,29 +169,15 @@ $kyukaCount1Value = $kyukaCount4Value + $kyukaCount5Value;
 $kyukaCount7Value = $kyukaCount4Value + $kyukaCount6Value;
 $kyukaCount8Value = $kyukaCount5Value - $kyukaCount6Value;
 
-$kyukaCount1TextShow = $kyukaCount1Value . '日';
-$kyukaCount2TextShow = $kyukaCount2Value . '日';
-$kyukaCount3TextShow = $kyukaCount3Value . '日';
-$kyukaCount4TextShow = $kyukaCount4Value . '日';
-$kyukaCount5TextShow = $kyukaCount5Value . '日';
-$kyukaCount6TextShow = $kyukaCount6Value . '日';
-$kyukaCount7TextShow = "\n$kyukaCount7Value 日";
-$kyukaCount8TextShow = "\n$kyukaCount8Value 日";
+
 
 //-----------// 
 //----9.-----// FORM DATAS IN  年次有給休暇残日数 Line  Config Data here 
 //-----------//
 
-$kyukaLocationTextShow = "
-日本、　　　　　　　韓国、　　　　　　その他（　　　　　）\n
-※緊急連絡先(　　　　                         　　)";
+$placeandcontect = $destplace . "\t※緊急連絡先(" . $desttel . ")";
 
 
-//-----------// 
-//----10.-----// FORM DATAS IN  事由 Line  Config Data here 
-//-----------//
-
-$kyukaRiyuTextShow = "\n帰国です。";
 
 
 //====================  view datas config end ====================//// 
@@ -292,7 +290,7 @@ $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $tcpdf->Cell(40, 7, '期間', 1, 0, 'C', true); // Add 'LTRB' to draw an outer border for the cell
 $tcpdf->Cell(110, 7, $kyukaRangeTextShow, 1, 0, 'C', true); // Add 'LTRB' to draw an outer border for the cell
-$tcpdf->Cell(40, 16, $countKyukaRange, 1, 0, 'C', true); // Add 1 to move to the next line
+$tcpdf->Cell(40, 16, $kyuka_count, 1, 0, 'C', true); // Add 1 to move to the next line
 $tcpdf->Ln(7);
 
 // 4. 期間  *半休　Line 
@@ -322,7 +320,7 @@ $yTmp5 = $tcpdf->GetY();
 $tcpdf->Cell(40, 23, $text5, 1, 'C', true);
 $height5 = $tcpdf->GetY() - $yTmp5;
 $tcpdf->SetXY($xTmp5 + 40, $yTmp5);
-$tcpdf->MultiCell(150, $height5 + 23, $kyukaShuruiFullTextShow, 1, 0,   'C', true);
+$tcpdf->MultiCell(150, $height5 + 23, $kyukaname, 1, 0,   'C', true);
 $tcpdf->Ln(0);
 
 
@@ -335,7 +333,7 @@ $text6 = "入社年月"; // Use "\n" to create a new line
 $tcpdf->Cell(40, 7, $text6, 1, 'C', true);
 $text6 = "入社年月"; // Use "\n" to create a new line
 
-$tcpdf->Cell(55, 7, $inCompanyYMTextShow, 1, 'C', true);
+$tcpdf->Cell(55, 7, $enter_company, 1, 'C', true);
 $text6 = "入社年月"; // Use "\n" to create a new line
 $tcpdf->Cell(40, 7, '勤続年数', 1, 'C', true);
 $text6 = "入社年月"; // Use "\n" to create a new line
@@ -374,30 +372,30 @@ $tcpdf->MultiCell(40, 49, $text8, 1, 'C', true);
 $height8 = $tcpdf->GetY() - $yTmp8;
 $tcpdf->SetXY($xTmp8 + 40, $yTmp8);
 $tcpdf->Cell(45, 7, '①総有給休暇数', 1, 'C', true);
-$tcpdf->Cell(30, 7, $kyukaCount1TextShow, 1, 'C', true);
+$tcpdf->Cell(30, 7, $tothday_count, 1, 'C', true);
 
 $tcpdf->Cell(45, 7, '④使用済数', 1, 'C', true);
-$tcpdf->Cell(30, 7, $kyukaCount4TextShow, 1, 'C', true);
+$tcpdf->Cell(30, 7, $usefinishcnt_count, 1, 'C', true);
 $tcpdf->Ln(7);
 
 // line 2 
 $height8 = $tcpdf->GetY() - $yTmp8;
 $tcpdf->SetXY($xTmp8 + 40, $yTmp8 + 7);
 $tcpdf->Cell(45, 7, '②前年度の繰越残日数', 1, 'C', true);
-$tcpdf->Cell(30, 7, $kyukaCount2TextShow, 1, 'C', true);
+$tcpdf->Cell(30, 7, $newcnt_count, 1, 'C', true);
 
 $tcpdf->Cell(45, 7, '⑤使用前残日数', 1, 'C', true);
-$tcpdf->Cell(30, 7, $kyukaCount5TextShow, 1, 'C', true);
+$tcpdf->Cell(30, 7, $usebeforecnt_count, 1, 'C', true);
 $tcpdf->Ln(7);
 
 // line 3 
 $height8 = $tcpdf->GetY() - $yTmp8;
 $tcpdf->SetXY($xTmp8 + 40, $yTmp8 + 14);
 $tcpdf->Cell(45, 7, '③当該年度付与日数', 1, 'C', true);
-$tcpdf->Cell(30, 7, $kyukaCount3TextShow, 1, 'C', true);
+$tcpdf->Cell(30, 7, $oldcnt_count, 1, 'C', true);
 
 $tcpdf->Cell(45, 7, '⑥今回使用数', 1, 'C', true);
-$tcpdf->Cell(30, 7, $kyukaCount6TextShow, 1, 'C', true);
+$tcpdf->Cell(30, 7, $usenowcnt_count, 1, 'C', true);
 $tcpdf->Ln(7);
 // line 4 5
 $height8 = $tcpdf->GetY() - $yTmp8;
@@ -414,7 +412,7 @@ $tcpdf->MultiCell(45, 14, "\n⑦使用後済数\n(④＋⑥)", 1, 'C', true);
 
 $height8 = $tcpdf->GetY() - $yTmp8;
 $tcpdf->SetXY($xTmp8 + 160, $yTmp8 + 21);
-$tcpdf->MultiCell(30, 14, $kyukaCount7TextShow, 1, 'C', true);
+$tcpdf->MultiCell(30, 14, $usefinishaftercnt_count, 1, 'C', true);
 $tcpdf->Ln(7);
 
 // line 6 7
@@ -424,7 +422,7 @@ $tcpdf->MultiCell(45, 14, "\n⑧使用後残日数\n(⑤－⑥)", 1, 'C', true);
 
 $height8 = $tcpdf->GetY() - $yTmp8;
 $tcpdf->SetXY($xTmp8 + 160, $yTmp8 + 35);
-$tcpdf->MultiCell(30, 14, $kyukaCount8TextShow, 1, 'C', true);
+$tcpdf->MultiCell(30, 14, $useafterremaincnt_count, 1, 'C', true);
 $tcpdf->Ln(0);
 
 
@@ -439,7 +437,7 @@ $yTmp9 = $tcpdf->GetY();
 $tcpdf->MultiCell(40, 21, $text9, 1, 'C', true);
 $height9 = $tcpdf->GetY() - $yTmp9;
 $tcpdf->SetXY($xTmp9 + 40, $yTmp9);
-$tcpdf->MultiCell(150, $height9, $kyukaLocationTextShow, 1, 0, 'C', true);
+$tcpdf->MultiCell(150, $height9, $placeandcontect, 1, 0, 'C', true);
 $tcpdf->Ln(0);
 
 // 10. 事由　Line 
@@ -452,7 +450,7 @@ $yTmp10 = $tcpdf->GetY();
 $tcpdf->MultiCell(40, 14, "\n事由", 1, 'C', true);
 $height10 = $tcpdf->GetY() - $yTmp10;
 $tcpdf->SetXY($xTmp9 + 40, $yTmp10);
-$tcpdf->MultiCell(150, $height10, $kyukaRiyuTextShow, 1, 'C', true);
+$tcpdf->MultiCell(150, $height10, $reason, 1, 'C', true);
 $tcpdf->Ln(3);
 
 // 11. Footer 説明文 
