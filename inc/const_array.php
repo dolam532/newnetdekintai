@@ -64,16 +64,12 @@ class ConstArray
         '31' => '31'
     ];
 
-    public static $search_template = [
+
+    public static $kyuka_templates = [
         '1' => 'Template A',
         '2' => 'Template B'
     ];
 
-        public static $kyuka_templates = [
-            '1' => 'Template A',
-            '2' => 'Template B'
-        ];
-     
 
     public static $search_kyukatemplate = [
         '1' => '休暇届テンプレート A',

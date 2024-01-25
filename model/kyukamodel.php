@@ -2,16 +2,10 @@
 // Select data from tbl_user
 $sql_user = 'SELECT DISTINCT
 `tbl_user`.*,
-`tbl_companyworktime`.`kyukatemplate`,
-`tbl_companyworktime`.`starttime`,
-`tbl_companyworktime`.`endtime`,
-`tbl_companyworktime`.`breakstarttime`,
-`tbl_companyworktime`.`breakendtime`,
-`tbl_companyworktime`.`worktime`,
-`tbl_companyworktime`.`breaktime`
+`tbl_company`.`kyukatemplate`
 FROM 
     `tbl_user`
-CROSS JOIN `tbl_companyworktime` ON `tbl_user`.`companyid` = `tbl_companyworktime`.`companyid`';
+CROSS JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`';
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_user .= 'ORDER BY `tbl_user`.`companyid`';
 } elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
@@ -50,6 +44,33 @@ GROUP BY `code`, `name`';
 $result_codebase_kyuka = mysqli_query($conn, $sql_codebase_kyuka);
 $codebase_list_kyuka = mysqli_fetch_all($result_codebase_kyuka, MYSQLI_ASSOC);
 
+// Select data from tbl_kyukainfo
+$sql_kyukainfo = 'SELECT * FROM `tbl_kyukainfo`
+WHERE `tbl_kyukainfo`.`companyid` = "' . $_SESSION['auth_companyid'] . '"';
+$result_kyukainfo = mysqli_query($conn, $sql_kyukainfo);
+$kyukainfo_list = mysqli_fetch_all($result_kyukainfo, MYSQLI_ASSOC);
+function filterNull($value)
+{
+    return $value !== null;
+}
+$kyukainfo_list = array_map('array_filter', $kyukainfo_list);
+// Initialize arrays for ttop and tbottom
+$ttopArray = [];
+$tbottomArray = [];
+
+// Iterate through the original array
+foreach ($kyukainfo_list[0] as $key => $value) {
+    // Check if the key starts with 'ttop'
+    if (strpos($key, 'ttop') === 0) {
+        $ttopArray[$key] = $value;
+    }
+
+    // Check if the key starts with 'tbottom'
+    if (strpos($key, 'tbottom') === 0) {
+        $tbottomArray[$key] = $value;
+    }
+}
+
 // kyukaReg.php
 // Select data from tbl_userkyuka & tbl_vacationinfo
 $sql_userkyuka = 'SELECT DISTINCT
@@ -71,12 +92,12 @@ $sql_userkyuka = 'SELECT DISTINCT
     `tbl_vacationinfo`.`usenowcnt`,
     `tbl_vacationinfo`.`usefinishaftercnt`,
     `tbl_vacationinfo`.`useafterremaincnt`,
-    `tbl_companyworktime`.`kyukatemplate`
+    `tbl_company`.`kyukatemplate`
 FROM
     `tbl_userkyuka`
 CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`email` = `tbl_user`.`email`
 CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinfo`.`vacationid`
-CROSS JOIN `tbl_companyworktime` ON `tbl_user`.`companyid` = `tbl_companyworktime`.`companyid`';
+CROSS JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`';
 if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_userkyuka .= 'ORDER BY `tbl_userkyuka`.`kyukaid`';
 } elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
@@ -483,6 +504,7 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
 }
 $result_vacationinfo = mysqli_query($conn, $sql_vacationinfo);
 $vacationinfo_list = mysqli_fetch_all($result_vacationinfo, MYSQLI_ASSOC);
+
 // Save data to tbl_vacationinfo table of database
 if (isset($_POST['SaveUpdateKyuka'])) {
     $reg_dt = date('Y-m-d H:i:s');
