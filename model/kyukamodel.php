@@ -24,7 +24,11 @@ $user_inymd_ = $user_list[0]['inymd'];
 $user_name_ = $user_list[0]['name'];
 $user_kyukatemplate_ = $user_list[0]['kyukatemplate'];
 $givenDate = strtotime($user_inymd_);
-$currentTimestamp = time();
+$currentDate = time();
+$givenDateTime = new DateTime("@$givenDate");
+$currentDateTime = new DateTime("@$currentDate");
+$interval = $givenDateTime->diff($currentDateTime);
+$numberOfMonths = $interval->format('%m');
 
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
@@ -50,24 +54,66 @@ function filterNull($value)
     return $value !== null;
 }
 $kyukainfo_list = array_map('array_filter', $kyukainfo_list);
-// Initialize arrays for ttop and tbottom
-$ttopArray = [];
-$tbottomArray = [];
+// Define variables to store the maximum values
+$maxTtop = null;
+$maxTbottom = null;
+$minTtop = null;
+$minTbottom = null;
 
-// Iterate through the original array
-foreach ($kyukainfo_list[0] as $key => $value) {
-    // Check if the key starts with 'ttop'
-    if (strpos($key, 'ttop') === 0) {
-        $ttopArray[$key] = strtotime("+" . $value . " months", $givenDate);
-        // $ttopArray[$key] = $value;
+// Define the upper limit for n
+$upperLimit = 21;
+
+// Iterate from 0 to the upper limit
+for ($n = 0; $n < $upperLimit; $n++) {
+    $ttopKey = "ttop" . $n;
+    $tbottomKey = "tbottom" . $n;
+
+    if (isset($kyukainfo_list[0][$ttopKey]) && $kyukainfo_list[0][$ttopKey] <= $numberOfMonths) {
+        // Update the maximum values if a larger value is encountered
+        if ($maxTtop === null || $kyukainfo_list[0][$ttopKey] > $kyukainfo_list[0][$maxTtop]) {
+            $maxTtop = $ttopKey;
+        }
+
+        if ($maxTbottom === null || $kyukainfo_list[0][$ttopKey] > $kyukainfo_list[0][$maxTbottom]) {
+            $maxTbottom = $tbottomKey;
+        }
     }
 
-    // Check if the key starts with 'tbottom'
-    if (strpos($key, 'tbottom') === 0) {
-        $tbottomArray[$key] = $value;
+    if (isset($kyukainfo_list[0][$ttopKey]) && $kyukainfo_list[0][$ttopKey] >= $numberOfMonths) {
+        // Update the maximum values if a larger value is encountered
+        if ($minTtop === null || $kyukainfo_list[0][$ttopKey] < $kyukainfo_list[0][$minTtop]) {
+            $minTtop = $ttopKey;
+        }
+
+        if ($minTbottom === null || $kyukainfo_list[0][$ttopKey] < $kyukainfo_list[0][$minTbottom]) {
+            $minTbottom = $tbottomKey;
+        }
     }
 }
-var_dump($ttopArray);
+
+// Display the largest values using var_dump
+if ($maxTtop !== null && $maxTbottom !== null) {
+    $last_data_max = [$maxTtop => $kyukainfo_list[0][$maxTtop], $maxTbottom => $kyukainfo_list[0][$maxTbottom]];
+    $lastTtopMax = $last_data_max[$maxTtop];
+    $lastTbottomMax = $last_data_max[$maxTbottom];
+}
+
+// Display the largest values using var_dump
+if ($minTtop !== null && $minTbottom !== null) {
+    $last_data_min = [$minTtop => $kyukainfo_list[0][$minTtop], $minTbottom => $kyukainfo_list[0][$minTbottom]];
+    $lastTtopMin = $last_data_min[$minTtop];
+    $lastTbottomMin = $last_data_min[$minTbottom];
+}
+
+$startmonth = strtotime("+" . $lastTtopMax . " months", $givenDate);
+$endmonth = strtotime("+" . $lastTtopMin . " months", $givenDate);
+$enddate = strtotime("-1 day", $endmonth);
+$startdate_ = date('Y/m/d', $startmonth);
+$enddate_ = date('Y/m/d', $enddate);
+$newcnt_ = $lastTbottomMax;
+$tothday_ = $lastTbottomMax;
+$oldcnt_= $tothday_ - $newcnt_;
+
 // kyukaReg.php
 // Select data from tbl_userkyuka & tbl_vacationinfo
 $sql_userkyuka = 'SELECT DISTINCT
@@ -113,46 +159,6 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 
-// calculate year between 6month and 1 year
-// $givenDate = strtotime($user_inymd_);
-// $currentTimestamp = time();
-
-$sixMonthsFromgivenDate = strtotime("+6 months", $givenDate);
-$oneYear6monthFromgivenDate = strtotime(" +1 year +6 months", $givenDate);
-$twoYear6monthFromgivenDate = strtotime(" +2 year +6 months", $givenDate);
-$threeYear6monthFromgivenDate = strtotime(" +3 year +6 months", $givenDate);
-$fourYear6monthFromgivenDate = strtotime(" +4 year +6 months", $givenDate);
-$fiveYear6monthFromgivenDate = strtotime(" +5 year +6 months", $givenDate);
-$sixYear6monthFromgivenDate = strtotime(" +6 year +6 months", $givenDate);
-
-if ($currentTimestamp >= $sixMonthsFromgivenDate && $currentTimestamp <= $oneYear6monthFromgivenDate) {
-    $oneYear6monthLastdateFromgivenDate = strtotime("-1 day", $oneYear6monthFromgivenDate);
-    $startdate_ = date('Y/m/d', $sixMonthsFromgivenDate);
-    $enddate_ = date('Y/m/d', $oneYear6monthLastdateFromgivenDate);
-    $oldcnt_ = 0;
-    $newcnt_ = 10;
-    $tothday_ = $oldcnt_ + $newcnt_;
-} elseif ($currentTimestamp >= $oneYear6monthFromgivenDate && $currentTimestamp <= $twoYear6monthFromgivenDate) {
-    $twoYear6monthLastdateFromgivenDate = strtotime("-1 day", $twoYear6monthFromgivenDate);
-    $startdate_ = date('Y/m/d', $oneYear6monthFromgivenDate);
-    $enddate_ = date('Y/m/d', $twoYear6monthLastdateFromgivenDate);
-} elseif ($currentTimestamp >= $twoYear6monthFromgivenDate && $currentTimestamp <= $threeYear6monthFromgivenDate) {
-    $threeYear6monthLastdateFromgivenDate = strtotime("-1 day", $threeYear6monthFromgivenDate);
-    $startdate_ = date('Y/m/d', $twoYear6monthFromgivenDate);
-    $enddate_ = date('Y/m/d', $threeYear6monthLastdateFromgivenDate);
-} elseif ($currentTimestamp >= $threeYear6monthFromgivenDate && $currentTimestamp <= $fourYear6monthFromgivenDate) {
-    $fourYear6monthLastdateFromgivenDate = strtotime("-1 day", $fourYear6monthFromgivenDate);
-    $startdate_ = date('Y/m/d', $threeYear6monthFromgivenDate);
-    $enddate_ = date('Y/m/d', $fourYear6monthLastdateFromgivenDate);
-} elseif ($currentTimestamp >= $fourYear6monthFromgivenDate && $currentTimestamp <= $fiveYear6monthFromgivenDate) {
-    $fiveYear6monthLastdateFromgivenDate = strtotime("-1 day", $fiveYear6monthFromgivenDate);
-    $startdate_ = date('Y/m/d', $fourYear6monthFromgivenDate);
-    $enddate_ = date('Y/m/d', $fiveYear6monthLastdateFromgivenDate);
-} elseif ($currentTimestamp >= $fiveYear6monthFromgivenDate) {
-    $sixYear6monthLastdateFromgivenDate = strtotime("-1 day", $sixYear6monthFromgivenDate);
-    $startdate_ = date('Y/m/d', $fiveYear6monthFromgivenDate);
-    $enddate_ = date('Y/m/d', $sixYear6monthLastdateFromgivenDate);
-}
 
 // kyukaMonthly.php
 // Search Button Click
