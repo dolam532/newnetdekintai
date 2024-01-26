@@ -23,6 +23,8 @@ $user_list = mysqli_fetch_all($result_user, MYSQLI_ASSOC);
 $user_inymd_ = $user_list[0]['inymd'];
 $user_name_ = $user_list[0]['name'];
 $user_kyukatemplate_ = $user_list[0]['kyukatemplate'];
+$givenDate = strtotime($user_inymd_);
+$currentTimestamp = time();
 
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
@@ -56,7 +58,8 @@ $tbottomArray = [];
 foreach ($kyukainfo_list[0] as $key => $value) {
     // Check if the key starts with 'ttop'
     if (strpos($key, 'ttop') === 0) {
-        $ttopArray[$key] = $value;
+        $ttopArray[$key] = strtotime("+" . $value . " months", $givenDate);
+        // $ttopArray[$key] = $value;
     }
 
     // Check if the key starts with 'tbottom'
@@ -64,7 +67,7 @@ foreach ($kyukainfo_list[0] as $key => $value) {
         $tbottomArray[$key] = $value;
     }
 }
-
+var_dump($ttopArray);
 // kyukaReg.php
 // Select data from tbl_userkyuka & tbl_vacationinfo
 $sql_userkyuka = 'SELECT DISTINCT
@@ -111,8 +114,8 @@ $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 
 // calculate year between 6month and 1 year
-$givenDate = strtotime($user_inymd_);
-$currentTimestamp = time();
+// $givenDate = strtotime($user_inymd_);
+// $currentTimestamp = time();
 
 $sixMonthsFromgivenDate = strtotime("+6 months", $givenDate);
 $oneYear6monthFromgivenDate = strtotime(" +1 year +6 months", $givenDate);

@@ -1009,28 +1009,37 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	$(document).ready(function() {
-		var regex = /\(|\)/; // Regular expression to match '(' or ')'
-		// Function to calculate timecnt
-		$("#endtime, #strtime").on("input", function() {
-			calculateTimeDifference();
-		});
-
-		// Function to calculate timecnt
-		$("#udendtime, #udstrtime").on("input", function() {
-			udcalculateTimeDifference();
+		$('#strtime, #endtime').on('input', function() {
+			var strtimeValue = $('#strtime').val() || '0';
+			var endtimeValue = $('#endtime').val() || '0';
+			$('#timecnt').val(endtimeValue - strtimeValue);
 		});
 
 		$('input[name="kyukatype"]').change(function() {
 			if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
-				// Set the value of the input with ID "timecnt" to a specific value
 				$('#timecnt').val('0.5');
+			}
+
+			if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
+				$('#strtime, #endtime').on('input', function() {
+					var strtimeValue = $('#strtime').val() || '0';
+					var endtimeValue = $('#endtime').val() || '0';
+					$('#timecnt').val(endtimeValue - strtimeValue);
+				});
 			}
 		});
 
 		$('input[name="udkyukatype"]').change(function() {
 			if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
-				// Set the value of the input with ID "timecnt" to a specific value
 				$('#udtimecnt').val('0.5');
+			}
+
+			if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
+				$('#udstrtime, #udendtime').on('input', function() {
+					var strtimeValue = $('#udstrtime').val() || '0';
+					var endtimeValue = $('#udendtime').val() || '0';
+					$('#udtimecnt').val(endtimeValue - strtimeValue);
+				});
 			}
 		});
 	});
@@ -1338,22 +1347,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var uddateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
 		$("#udymdcnt").val(uddateDiff + 1);
 	});
-
-	function udcalculateTimeDifference() {
-		var udendTime = $("#udendtime").val();
-		var udstartTime = $("#udstrtime").val();
-
-		if (udendTime !== "" && udstartTime !== "") {
-			udendTime = parseInt(udendTime, 10);
-			udstartTime = parseInt(udstartTime, 10);
-
-			// Check if the values are valid integers
-			if (!isNaN(udendTime) && !isNaN(udstartTime)) {
-				var udtimeDifference = udendTime - udstartTime;
-				$("#udtimecnt").val(udtimeDifference);
-			}
-		}
-	}
 
 	// Datepeeker Calender
 	$("#udstrymd").datepicker({

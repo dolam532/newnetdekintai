@@ -18,6 +18,8 @@ $endtime = $_POST['endtime'];
 $timecnt = $_POST['timecnt'];
 $ymdcnt = $_POST['ymdcnt'];
 $kyukaname = $_POST['kyukaname'];
+$kyukanamedetail = $_POST['kyukanamedetail'];
+$kyukaname_ = $kyukaname . $kyukanamedetail;
 $inymd = $_POST['inymd'];
 $kyukatemplate = $_POST['kyukatemplate'];
 $tothday = $_POST['tothday'];
@@ -320,7 +322,7 @@ $yTmp5 = $tcpdf->GetY();
 $tcpdf->Cell(40, 23, $text5, 1, 'C', true);
 $height5 = $tcpdf->GetY() - $yTmp5;
 $tcpdf->SetXY($xTmp5 + 40, $yTmp5);
-$tcpdf->MultiCell(150, $height5 + 23, $kyukaname, 1, 0,   'C', true);
+$tcpdf->MultiCell(150, $height5 + 23, $kyukaname_, 1, 0,   'C', true);
 $tcpdf->Ln(0);
 
 
