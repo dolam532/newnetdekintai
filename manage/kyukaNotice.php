@@ -216,32 +216,10 @@ window.onload = function() {
 
 
 // get Data by form 
-
-
 function validationData() {
-
-    var title_value = $('#form_title').val();
-    var message_value = $('#message-area').val();
-    var subTitle_value = $('#sub_title').val();
-
-    var title_row_1 = $('textarea[name="title-row-1"]').val().replace(/,/g, '、');
-    var data_row_1 = $('textarea[name="data-row-1"]').map(function() {
-        return $(this).val().replace(/,/g, '、');
-    }).get().join(',');
-
-    var title_row_2 = $('textarea[name="title-row-2"]').val().replace(/,/g, '、');
-    var data_row_2 = $('textarea[name="data-row-2"]').map(function() {
-        return $(this).val().replace(/,/g, '、');
-    }).get().join(',');
-
-    $('input[name="title_value"]').val(title_value);
-    $('input[name="message_value"]').val(message_value);
-    $('input[name="subTitle_value"]').val(subTitle_value);
-    $('input[name="title_row_1"]').val(title_row_1);
-    $('input[name="data_row_1"]').val(data_row_1);
-    $('input[name="title_row_2"]').val(title_row_2);
-    $('input[name="data_row_2"]').val(data_row_2);
-    // set data to form 
+    $('input[name="title_value"]').val($('#form_title').val());
+    $('input[name="message_value"]').val($('#message-area').val());
+    $('input[name="subTitle_value"]').val($('#sub_title').val());
     return true;
 }
 

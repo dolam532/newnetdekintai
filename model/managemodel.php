@@ -771,21 +771,25 @@ if (mysqli_num_rows($resultKyukaInfo) <= 0) {
 $kiukaNoticeList = mysqli_fetch_all($resultKyukaNotice, MYSQLI_ASSOC);
 $kiukaInfoList = mysqli_fetch_all($resultKyukaInfo, MYSQLI_ASSOC);
 
-// When new Company -> Insert Default Data
+
 if($noDataKyuka) {
     $sqlInsertDefault =  "INSERT INTO `tbl_kyuka_notice` ( `companyid`, `title`, `message`, `subtitle`, `upt_dt`) VALUES
 	($companyid, 'お知らせ(注意)', '1 事前許可が必要なので、担当者に許可の届け (休暇届) を提出すること。\r\n ・原則として1週間前までに、少なくとも前々日までに提出すること。\r\n ・連続4日以上 (所定休日が含まれる場合を含む。) の休暇を取得するときは、1ヵ月前までに提出すること。\r\n ・緊急・病気の場合は、その時点ですぐに提出すること。\r\n2 年間で5日分はその年で必ず取ること。\r\n3 有給休暇は1年に限って繰り越しできます (2の5日分は除外、 0.5日分は除外)。\r\n4 半休(5時間以内)の場合は0.5日にて表現してください。その他詳しい内容は担当者に聞いてください。                    ', '※ 年次有給休暇', '2024-01-18') ;";
     mysqli_query($conn, $sqlInsertDefault);
+    $noDataKyuka = false;
       // one more time get data 
       $resultKyukaNotice = mysqli_query($conn, $sqlFindKyukaNotice);
       $kiukaNoticeList = mysqli_fetch_all($resultKyukaNotice, MYSQLI_ASSOC);
       header("Refresh:3");
 }
+
+
 if($noDataKyukaInfo) {
     $sqlInsertDefault = "INSERT INTO `tbl_kyukainfo` ( `companyid`, `titletop`, `titlebottom`, `ttop0`, `ttop1`, `ttop2`, `ttop3`, `ttop4`, `ttop5`, `ttop6`, `ttop7`, `ttop8`, `ttop9`, `ttop10`, `ttop11`, `ttop12`, `ttop13`, `ttop14`, `ttop15`, `ttop16`, `ttop17`, `ttop18`, `ttop19`, `ttop20`, `ttop21`, `tbottom0`, `tbottom1`, `tbottom2`, `tbottom3`, `tbottom4`, `tbottom5`, `tbottom6`, `tbottom7`, `tbottom8`, `tbottom9`, `tbottom10`, `tbottom11`, `tbottom12`, `tbottom13`, `tbottom14`, `tbottom15`, `tbottom16`, `tbottom17`, `tbottom18`, `tbottom19`, `tbottom20`, `tbottom21`, `upt_dt`)
                  VALUES
 	            ( $companyid, '勤続年数', '付与日数	', 6, 6, 12, 30, 42, 54, 66, 78, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 78, 0, 10, 11, 12, 14, 16, 18, 20, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 25, '$upt_dt') ";
      mysqli_query($conn, $sqlInsertDefault);
+     $noDataKyukaInfo = false;
     // one more time get data 
     $resultKyukaInfo = mysqli_query($conn, $sqlFindKyukaInfo);
     $kiukaInfoList = mysqli_fetch_all($resultKyukaInfo, MYSQLI_ASSOC);
@@ -828,17 +832,18 @@ for ($i = $MIN_KYUKA_INFO_COUNT ; $i <= $MAX_KYUKA_INFO_COUNT; $i++) {
     $kiukaInfoListDatasShow[$keybottom] = $kiukaInfoListDatas[$keybottom] . '日';
 
 }
-// KyukaNotice Register
+
+
+// register
 if (isset($_POST['kyukanoticeRegister'])) {  
     $title_value = mysqli_real_escape_string($conn, $_POST['title_value']);
     $message_value = mysqli_real_escape_string($conn, $_POST['message_value']);
     $subTitle_value = mysqli_real_escape_string($conn, $_POST['subTitle_value']);
-
-
     // get current notice -> when null -> create new 
     $sqlRegister = "UPDATE tbl_kyuka_notice SET  `title`='$title_value', `message`='$message_value', `subtitle`='$subTitle_value', 
       upt_dt='$upt_dt' 
      WHERE companyid = $companyid";
+
     if ($noDataKyuka) {
         $sqlRegister = "INSERT INTO tbl_kyuka_notice SET  `title`='$title_value', `message`='$message_value'
         , `subtitle`='$subTitle_value', upt_dt='$upt_dt' , 
@@ -860,18 +865,106 @@ if (isset($_POST['kyukanoticeRegister'])) {
 }
 
 // kyukaInfo.php  
+// 
+
 if (isset($_POST['SaveKyukaInfo'])) {  
-    error_log("SaveKyukaInfo");
+   // Check Admin 
+    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
+        $_SESSION['$user_type_undefined'] = $user_type_undefined;
+        return;
+    }
+    $newIndex = mysqli_real_escape_string($conn, $_POST['newMaxId']);
+    $workYearValue = mysqli_real_escape_string($conn, $_POST['insertWorkYear']);
+    $workMonthValue = mysqli_real_escape_string($conn, $_POST['insertWorkMonth']);
+    $kyukaDaysValue = mysqli_real_escape_string($conn, $_POST['insertkyukaDays']);
+
+    // check valid 
+    if(!isset($kyukaDaysValue)) {
+        return;
+    }
+    if($workYearValue == 0 &&  $workMonthValue == 0 ) {
+        return;
+    }
+    if( !isset($workYearValue) &&!isset($workMonthValue) ) {
+        return;
+    }
+    
+
+
+    if(!isset($workMonthValue)) {
+        $workMonthValue = 0;
+    }
+    if($workYearValue > 0 && isset($workYearValue) ) {
+        $workMonthValue = $workMonthValue + $workYearValue*12;
+    }
+
+    $strTopField = 'ttop'. $newIndex;
+    $strBottomField = 'tbottom'. $newIndex;
+
+    $sqlSaveInfo = "UPDATE tbl_kyukainfo SET  `$strTopField`=  $workMonthValue , `$strBottomField`= $kyukaDaysValue, 
+    upt_dt='$upt_dt' 
+    WHERE companyid = $companyid";
+
+    if ($conn->query($sqlSaveInfo) === TRUE) {
+    $_SESSION['update_success'] = $update_success;
+    header("Refresh:3");
+    } else {
+    echo 'query error: ' . mysqli_error($conn);
+    }
+
+
 }
 
 if (isset($_POST['UpdateKyukaInfo'])) {  
-    error_log("UpdateKyukaInfo");
+    // Check Admin 
+    if ($_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
+        $_SESSION['$user_type_undefined'] = $user_type_undefined;
+        return;
+    }
+    $selectedIndex = mysqli_real_escape_string($conn, $_POST['selectedIndex']);
+    $workYearValue = mysqli_real_escape_string($conn, $_POST['updateWorkYear']);
+    $workMonthValue = mysqli_real_escape_string($conn, $_POST['updateWorkMonth']);
+    $kyukaDaysValue = mysqli_real_escape_string($conn, $_POST['updatekyukaDays']);
+    
+    // check valid 
+    if(!isset($kyukaDaysValue)) {
+        return;
+    }
+    if($workYearValue == 0 &&  $workMonthValue == 0 ) {
+        return;
+    }
+    if( !isset($workYearValue) &&!isset($workMonthValue) ) {
+        return;
+    }
+    
+
+    if(!isset($workMonthValue)) {
+        $workMonthValue = 0;
+    }
+    if($workYearValue > 0 && isset($workYearValue) ) {
+        $workMonthValue = $workMonthValue + $workYearValue*12;
+    }
+
+    $strTopField = 'ttop'. $selectedIndex;
+    $strBottomField = 'tbottom'. $selectedIndex;
+
+    $sqlSaveInfo = "UPDATE tbl_kyukainfo SET  `$strTopField`=  $workMonthValue , `$strBottomField`= $kyukaDaysValue, 
+    upt_dt='$upt_dt' 
+    WHERE companyid = $companyid";
+
+    if ($conn->query($sqlSaveInfo) === TRUE) {
+    $_SESSION['update_success'] = $update_success;
+    header("Refresh:3");
+    } else {
+    echo 'query error: ' . mysqli_error($conn);
+    }
 }
 
 
-// KyukaInfo Delete
+// $companyid = $_SESSION['auth_companyid'];
 if (isset($_POST['DeleteKyukaInfo'])) {  
     $selectedId = mysqli_real_escape_string($conn, $_POST['selectedId']);
+    // Check do not delete Min Or Max 
     if( $selectedId ==  $MIN_KYUKA_INFO_COUNT || $selectedId ==  $MAX_KYUKA_INFO_COUNT ) {
         return;
     }
