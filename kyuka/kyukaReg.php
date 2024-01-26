@@ -271,7 +271,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										?>
 									</span>
 								</td>
-								<td><span><?= $userkyuka['kyukaname'] ?></span></td>
+								<td><span><?= $userkyuka['kyukaname'] . $userkyuka['kyukanamedetail'] ?></span></td>
 								<td><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
 								<td>
 									<span>
@@ -376,7 +376,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<br>
 							<div class="row two">
-								<div class="col-md-3 col-sm-3 col-sx-3 kyukatype">
+								<div class="col-md-4 col-sm-4 col-sx-4 kyukatype">
 									<label for="kyukatype">申請区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
@@ -389,17 +389,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										<input type="radio" name="kyukatype" id="kyukatype" value="1">日付
 									</div>
 								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 kyukacode">
-									<label for="kyukacode">休暇区分</label>
-									<select class="form-control" id="kyukacode" name="kyukacode">
-										<option value="" disabled selected style="font-size:10px;">選択</option>
-										<?php foreach ($codebase_list_kyuka as $key) : ?>
-											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
-										<?php endforeach; ?>
-									</select>
-									<input type="text" id="inputTag" name="inputTag" style="display: none;">
-								</div>
-								<div class="col-md-6 col-sm-6 col-xs-6 vacation">
+								<div class="col-md-8 col-sm-8 col-xs-8 vacation">
 									<label for="vacation">年度算定期間</label>
 									<div class="groupinput">
 										<input type="text" class="form-control" id="vacationstr" name="vacationstr" placeholder="開始日" required="required" maxlength="10" style="text-align: center;" value="<?= $startdate_ ?>">
@@ -410,6 +400,21 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<br>
 							<div class="row three">
+								<div class="col-md-4 col-sm-4 col-sx-4 kyukacode">
+									<label for="kyukacode">休暇区分</label>
+									<select class="form-control" id="kyukacode" name="kyukacode">
+										<option value="" disabled selected style="font-size:10px;">選択してください。</option>
+										<?php foreach ($codebase_list_kyuka as $key) : ?>
+											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+								<div class="col-md-8 col-sm-8 col-sx-8 kyukacode">
+									<label for="kyukacode">休暇区分詳細</label>
+									<textarea class="form-control" id="kyukanamedetail" name="kyukanamedetail" rows="1"></textarea>
+								</div>
+							</div>
+							<div class="row four">
 								<div class="col-md-3 col-sm-3 col-sx-3 day">
 									<label for="strymd">期間(F)</label>
 									<input type="text" class="form-control" id="strymd" name="strymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
@@ -419,7 +424,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<input type="text" class="form-control" id="endymd" name="endymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
 								</div>
 								<div class="divided">
-									<span class="notice_time">業務時間(<?= $user_starttime_ ?>~<?= $user_endtime_ ?>)、休憩時間(<?= $user_breakstarttime_ ?>~<?= $user_breakendtime_ ?>)</span>
 									<div class="layout">
 										<div class="col-md-3 col-sm-3 col-sx-3 day">
 											<label for="strtime">時間(F)</label>
@@ -433,7 +437,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 							</div>
 							<br>
-							<div class="row four">
+							<div class="row five">
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="tothday">総有給休暇</label>
 									<input type="text" class="form-control" id="tothday" name="tothday" placeholder="番号" style="text-align: center" value="<?= $tothday_ ?>">
@@ -452,7 +456,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 							</div>
 							<br>
-							<div class="row five">
+							<div class="row six">
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="usebeforecnt">使用前残</label>
 									<input type="text" class="form-control" id="usebeforecnt" name="usebeforecnt" placeholder="番号" style="text-align: center" value="">
@@ -471,7 +475,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 							</div>
 							<br>
-							<div class="row six">
+							<div class="row seven">
 								<div class="col-md-8 col-sm-8 col-sx-8">
 									<label for="reason">事由</label>
 									<textarea class="form-control" id="reason" name="reason" rows="2"></textarea>
@@ -492,7 +496,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 							</div>
 							<br>
-							<div class="row seven">
+							<div class="row eight">
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
 									<label for="destcode"></label>
 									<div class="custom-control custom-radio">
@@ -566,7 +570,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<br>
 							<div class="row two">
-								<div class="col-md-3 col-sm-3 col-sx-3 kyukatype">
+								<div class="col-md-4 col-sm-4 col-sx-4 kyukatype">
 									<label for="kyukatype">申請区分</label>
 									<div class="custom-control custom-radio">
 										&nbsp;
@@ -579,17 +583,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										<input type="radio" name="udkyukatype" id="udkyukatype" value="1">日付
 									</div>
 								</div>
-								<div class="col-md-3 col-sm-3 col-sx-3 kyukacode">
-									<label for="kyukacode">休暇区分</label>
-									<select class="form-control" id="udkyukacode" name="udkyukacode">
-										<option value="" disabled selected style="font-size:10px;">選択</option>
-										<?php foreach ($codebase_list_kyuka as $key) : ?>
-											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
-										<?php endforeach; ?>
-									</select>
-									<input type="text" id="udinputTag" name="udinputTag" style="display: none;">
-								</div>
-								<div class="col-md-6 col-sm-6 col-xs-6 vacation">
+								<div class="col-md-8 col-sm-8 col-xs-8 vacation">
 									<label for="vacation">年度算定期間</label>
 									<div class="groupinput">
 										<input type="text" class="form-control" id="udvacationstr" name="udvacationstr" placeholder="開始日" required="required" maxlength="10" style="text-align: center;">
@@ -600,6 +594,22 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							</div>
 							<br>
 							<div class="row three">
+								<div class="col-md-4 col-sm-4 col-sx-4 kyukacode">
+									<label for="kyukacode">休暇区分</label>
+									<select class="form-control" id="udkyukacode" name="udkyukacode">
+										<option value="" disabled selected style="font-size:10px;">選択してください。</option>
+										<?php foreach ($codebase_list_kyuka as $key) : ?>
+											<option value="<?= $key["code"] ?>"><?= $key["name"] ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+								<div class="col-md-8 col-sm-8 col-sx-8 kyukacode">
+									<label for="kyukacode">休暇区分詳細</label>
+									<textarea class="form-control" id="udkyukanamedetail" name="udkyukanamedetail" rows="1"></textarea>
+								</div>
+							</div>
+							<br>
+							<div class="row four">
 								<div class="col-md-3 col-sm-3 col-sx-3 day">
 									<label for="strymd">期間(F)</label>
 									<input type="text" class="form-control" id="udstrymd" name="udstrymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
@@ -609,7 +619,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<input type="text" class="form-control" id="udendymd" name="udendymd" placeholder="日付" required="required" maxlength="10" style="text-align: center">
 								</div>
 								<div class="divided">
-									<span class="notice_time">業務時間(<?= $user_starttime_ ?>~<?= $user_endtime_ ?>)、休憩時間(<?= $user_breakstarttime_ ?>~<?= $user_breakendtime_ ?>)</span>
 									<div class="layout">
 										<div class="col-md-3 col-sm-3 col-sx-3 day">
 											<label for="strtime">時間(F)</label>
@@ -623,7 +632,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 							</div>
 							<br>
-							<div class="row four">
+							<div class="row five">
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="tothday">総有給休暇</label>
 									<input type="text" class="form-control" id="udtothday" name="udtothday" placeholder="番号" style="text-align: center" value="">
@@ -642,7 +651,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 							</div>
 							<br>
-							<div class="row five">
+							<div class="row six">
 								<div class="col-md-3 col-sm-3 col-sx-3">
 									<label for="usebeforecnt">使用前残</label>
 									<input type="text" class="form-control" id="udusebeforecnt" name="udusebeforecnt" placeholder="番号" style="text-align: center" value="">
@@ -661,7 +670,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 							</div>
 							<br>
-							<div class="row six">
+							<div class="row seven">
 								<div class="col-md-8 col-sm-8 col-sx-8">
 									<label for="reason">事由</label>
 									<textarea class="form-control" id="udreason" name="udreason" rows="2"></textarea>
@@ -682,7 +691,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 							</div>
 							<br>
-							<div class="row seven">
+							<div class="row eight">
 								<div class="col-md-4 col-sm-4 col-sx-4 address">
 									<label for="destcode"></label>
 									<div class="custom-control custom-radio">
@@ -744,6 +753,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<input type="hidden" name="ymdcnt" id="ymdcnt-input">
 		<input type="hidden" name="timecnt" id="timecnt-input">
 		<input type="hidden" name="kyukaname" id="kyukaname-input">
+		<input type="hidden" name="kyukanamedetail" id="kyukanamedetail-input">
 		<input type="hidden" name="inymd" id="inymd-input">
 		<input type="hidden" name="kyukatemplate" id="kyukatemplate-input">
 		<input type="hidden" name="vacationstr" id="vacationstr-input">
@@ -1010,13 +1020,17 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			udcalculateTimeDifference();
 		});
 
-		// Attach a change event to the kyukacode select
-		$("#kyukacode").change(function() {
-			var selectedText = $(this).find("option:selected").text();
-			if (regex.test(selectedText)) {
-				$('#inputTag').show();
-			} else {
-				$('#inputTag').hide();
+		$('input[name="kyukatype"]').change(function() {
+			if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
+				// Set the value of the input with ID "timecnt" to a specific value
+				$('#timecnt').val('0.5');
+			}
+		});
+
+		$('input[name="udkyukatype"]').change(function() {
+			if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
+				// Set the value of the input with ID "timecnt" to a specific value
+				$('#udtimecnt').val('0.5');
 			}
 		});
 	});
@@ -1031,54 +1045,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			var minutes = parseInt(timeParts[1], 10);
 			var minutesFraction = minutes / 60;
 			return hours + minutesFraction;
-		}
-
-		function convertTimeVariablesToDecimal() {
-			var breaktime_ = "<?php echo $user_breaktime_ ?>";
-			var user_breaktime_ = convertTimeToDecimal(breaktime_);
-
-			var worktime_ = "<?php echo $user_worktime_ ?>";
-			var user_worktime_ = convertTimeToDecimal(worktime_);
-
-			var starttime_ = "<?php echo $user_starttime_ ?>";
-			var user_starttime_ = convertTimeToDecimal(starttime_);
-
-			var endtime_ = "<?php echo $user_endtime_ ?>";
-			var user_endtime_ = convertTimeToDecimal(endtime_);
-
-			var breakstarttime_ = "<?php echo $user_breakstarttime_ ?>";
-			var user_breakstarttime_ = convertTimeToDecimal(breakstarttime_);
-
-			var breakendtime_ = "<?php echo $user_breakendtime_ ?>";
-			var user_breakendtime_ = convertTimeToDecimal(breakendtime_);
-
-			return {
-				user_breaktime_: user_breaktime_,
-				user_worktime_: user_worktime_,
-				user_starttime_: user_starttime_,
-				user_endtime_: user_endtime_,
-				user_breakstarttime_: user_breakstarttime_,
-				user_breakendtime_: user_breakendtime_
-			};
-		}
-		var times = convertTimeVariablesToDecimal();
-
-		if (!isNaN(strTimeValue) && !isNaN(endTimeValue)) {
-			if (strTimeValue <= times.user_breakstarttime_ && endTimeValue >= times.user_breakendtime_) {
-				if ("<?php echo $user_kyukatemplate_ ?>" == "1") {
-					var timeDifference = (endTimeValue - strTimeValue - times.user_breaktime_) / times.user_worktime_;
-				} else if ("<?php echo $user_kyukatemplate_ ?>" == "2") {
-					var timeDifference = endTimeValue - strTimeValue - times.user_breaktime_;
-				}
-				$("#timecnt").val(timeDifference);
-			} else {
-				if ("<?php echo $user_kyukatemplate_ ?>" == "1") {
-					var timeDifference = (endTimeValue - strTimeValue) / times.user_worktime_;
-				} else if ("<?php echo $user_kyukatemplate_ ?>" == "2") {
-					var timeDifference = endTimeValue - strTimeValue;
-				}
-				$("#timecnt").val(timeDifference);
-			}
 		}
 	}
 
@@ -1129,7 +1095,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var destplace = $("#destplace").val();
 		var destcode = $("input[name='destcode']:checked").val();
 		var desttel = $("#desttel").val();
-		var timecnt = $("#timecnt").val();
 		var user_kyukatemplate_ = "<?php echo $user_kyukatemplate_; ?>";
 
 		if (kyukatype != "0" && kyukatype != "1") {
@@ -1251,17 +1216,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			$("#desttel").focus();
 			return false;
 		}
-
-		if (timecnt !== "0.5" && kyukatype === "0" && user_kyukatemplate_ === "1") {
-			alert("<?php echo $kyuka_timecnt_halfday; ?>");
-			$("#timecnt").focus();
-			return false;
-		}
 	});
 
 	// Clear Input Tag Data
 	$(document).on('click', '#btnClear', function(e) {
 		$('#kyukaname').val('');
+		$('#kyukanamedetail').val('');
 		$("#kyukacode").val('');
 		$("input[name='kyukatype']").prop('checked', false);
 		$('#strymd').val('');
@@ -1438,7 +1398,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var destplace = $("#uddestplace").val();
 		var destcode = $("input[name='uddestcode']:checked").val();
 		var desttel = $("#uddesttel").val();
-		var timecnt = $("#udtimecnt").val();
 		var user_kyukatemplate_ = "<?php echo $user_kyukatemplate_; ?>";
 
 		if (kyukatype != "0" && kyukatype != "1") {
@@ -1560,17 +1519,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 			$("#uddesttel").focus();
 			return false;
 		}
-
-		if (timecnt !== "0.5" && kyukatype === "0" && user_kyukatemplate_ === "1") {
-			alert("<?php echo $kyuka_timecnt_halfday; ?>");
-			$("#timecnt").focus();
-			return false;
-		}
 	});
 
 	// Clear Input Tag Data
 	$(document).on('click', '#btnClearUpdate', function(e) {
 		$('#udkyukaname').val('');
+		$('#udkyukanamedetail').val('');
 		$("#udkyukacode").val('');
 		$("input[name='udkyukatype']").prop('checked', false);
 		$('#udstrymd').val('');
@@ -1604,12 +1558,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		var regex = /\(|\)/;
 		var match = Kyukaname.match(/\((.*?)\)/);
 		var extractedText = match ? match[1] : null;
-		if (regex.test(Kyukaname)) {
-			$('#udinputTag').show();
-			$("#udinputTag").text($('[name="udinputTag"]').val(extractedText));
-		} else {
-			$('#udinputTag').hide();
-		}
 		<?php
 		foreach ($userkyuka_list as $key) {
 		?>
@@ -1632,17 +1580,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				}
 
 				$("select[name='udkyukacode']").val('<?php echo $key['kyukacode']; ?>');
-
-				$("#udkyukacode").change(function() {
-					var udselectedText = $(this).find("option:selected").text();
-					if (regex.test(udselectedText)) {
-						$('#udinputTag').show();
-						$("#udinputTag").text($('[name="udinputTag"]').val(""));
-					} else {
-						$('#udinputTag').hide();
-					}
-				});
-
+				$("#udkyukanamedetail").text($('[name="udkyukanamedetail"]').val("<?php echo $key['kyukanamedetail'] ?>"));
 				$("#udvacationstr").text($('[name="udvacationstr"]').val("<?php echo $key['vacationstr'] ?>"));
 				$("#udvacationend").text($('[name="udvacationend"]').val("<?php echo $key['vacationend'] ?>"));
 				$("#udstrymd").text($('[name="udstrymd"]').val("<?php echo $key['strymd'] ?>"));
@@ -1739,6 +1677,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#autopdf #ymdcnt-input").val("<?php echo htmlspecialchars($key['ymdcnt']); ?>");
 					$("#autopdf #timecnt-input").val("<?php echo htmlspecialchars($key['timecnt']); ?>");
 					$("#autopdf #kyukaname-input").val("<?php echo htmlspecialchars($key['kyukaname']); ?>");
+					$("#autopdf #kyukanamedetail-input").val("<?php echo htmlspecialchars($key['kyukanamedetail']); ?>");
 					$("#autopdf #inymd-input").val("<?php echo htmlspecialchars($key['inymd']); ?>");
 					$("#autopdf #kyukatemplate-input").val("<?php echo htmlspecialchars($key['kyukatemplate']); ?>");
 					$("#autopdf #vacationstr-input").val("<?php echo htmlspecialchars($key['vacationstr']); ?>");

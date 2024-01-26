@@ -62,7 +62,6 @@ $kyuka_reason_empty = '事由を入力してください。';
 $kyuka_destcode_select = '暇中居る場所を選択してください。';
 $kyuka_destplace_empty = '場所を入力してください。';
 $kyuka_desttel_empty = '電話番号を入力してください。';
-$kyuka_timecnt_halfday = 'まだ半休なっていないです。確認してください。';
 
 // kintaiReg
 $kintai_start_empty = '出社時刻を入力してください。';
