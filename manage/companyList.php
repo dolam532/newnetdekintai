@@ -287,14 +287,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                     <label for="kyuka_type"><strong>休暇届テンプレート</strong></label>
                                     <div class="custom-control custom-radio">
                                         <input type="radio" id="kyuka_type" name="kyuka_type" checked
-                                            value="<?php echo array_keys(ConstArray::$kyuka_templates)[0]; ?>">
-                                        <?php echo ConstArray::$kyuka_templates[array_keys(ConstArray::$kyuka_templates)[0]]; ?>
+                                            value="<?php echo array_keys(ConstArray::$search_kyukatemplate)[0]; ?>">
+                                        <?php echo ConstArray::$search_kyukatemplate[array_keys(ConstArray::$search_kyukatemplate)[0]]; ?>
                                         <label class="template-notice-text"> (日単位+半休)</label>
 
                                         <br />
                                         <input type="radio" id="kyuka_type" name="kyuka_type"
-                                            value="<?php echo array_keys(ConstArray::$kyuka_templates)[1]; ?>">
-                                        <?php echo ConstArray::$kyuka_templates[array_keys(ConstArray::$kyuka_templates)[1]]; ?>
+                                            value="<?php echo array_keys(ConstArray::$search_kyukatemplate)[1]; ?>">
+                                        <?php echo ConstArray::$search_kyukatemplate[array_keys(ConstArray::$search_kyukatemplate)[1]]; ?>
                                         <label class="template-notice-text"> (日単位＋時間単位)</label>
                                     </div>
                                 </div>
@@ -411,15 +411,15 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
                                     <label for="kyuka_type"><strong>休暇届テンプレート</strong></label>
                                     <div class="custom-control custom-radio">
                                         <input type="radio" id="kyuka_type" name="kyuka_type"
-                                            value="<?php echo array_keys(ConstArray::$kyuka_templates)[0]; ?>">
-                                        <?php echo ConstArray::$kyuka_templates[array_keys(ConstArray::$kyuka_templates)[0]]; ?>
+                                            value="<?php echo array_keys(ConstArray::$search_kyukatemplate)[0]; ?>">
+                                        <?php echo ConstArray::$search_kyukatemplate[array_keys(ConstArray::$search_kyukatemplate)[0]]; ?>
                                         <label class="template-notice-text"> (日単位+半休)</label>
 
 
                                         <br />
                                         <input type="radio" id="kyuka_type" name="kyuka_type"
-                                            value="<?php echo array_keys(ConstArray::$kyuka_templates)[1]; ?>">
-                                        <?php echo ConstArray::$kyuka_templates[array_keys(ConstArray::$kyuka_templates)[1]]; ?>
+                                            value="<?php echo array_keys(ConstArray::$search_kyukatemplate)[1]; ?>">
+                                        <?php echo ConstArray::$search_kyukatemplate[array_keys(ConstArray::$search_kyukatemplate)[1]]; ?>
                                         <label class="template-notice-text"> (日単位＋時間単位)</label>
                                     </div>
                                 </div>

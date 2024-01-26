@@ -64,13 +64,13 @@ class ConstArray
         '31' => '31'
     ];
 
-
-    public static $kyuka_templates = [
+    // 勤務表Template
+    public static $search_template = [
         '1' => 'Template A',
         '2' => 'Template B'
     ];
 
-
+  // 休暇届Template
     public static $search_kyukatemplate = [
         '1' => '休暇届テンプレート A',
         '2' => '休暇届テンプレート B'

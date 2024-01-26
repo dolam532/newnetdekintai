@@ -109,6 +109,20 @@ input[type=radio] {
     }
     ?>
 
+<?php
+    if (isset($_SESSION['update_success']) && isset($_POST['SaveKyukaInfo'])) {
+        ?>
+<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <?php echo $_SESSION['update_success']; ?>
+</div>
+<?php
+        unset($_SESSION['update_success']);
+    }
+    ?>
+
+
+
 
 <div class="row">
 
@@ -262,7 +276,7 @@ echo '</td>';
                                     onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                                     <option value="" selected disabled>月</option>
                                     <?php
-									for ($i = 0; $i <= 12; $i++) {
+									for ($i = 0; $i <= 11; $i++) {
 									?>
                                     <option value="<?= $i ?>" >
                                         <?= $i ?>
@@ -369,7 +383,7 @@ echo '</td>';
                                     onfocus='this.size=6;' onblur='this.size=1;' onchange='this.size=1; this.blur();'>
                                     <option value="" selected disabled>月</option>
                                     <?php
-									for ($i = 0; $i <= 12; $i++) {
+									for ($i = 0; $i <= 11; $i++) {
 									?>
                                     <option value="<?= $i ?>" >
                                         <?= $i ?>
@@ -443,7 +457,6 @@ echo '</td>';
 </div>
 
 <script>
-    
 window.onload = function() {
     setTimeout(hideLoadingOverlay, 500);
     startLoading();
@@ -460,10 +473,9 @@ function kyukaUpdate() {
     var keytop = "ttop" + selectedId;
     var keybottom = "tbottom" + selectedId;
     var kiukaInfoListDatasShow = <?php echo json_encode($kiukaInfoListDatasShow); ?>;
-
+    checkValidUpdate() ;
     var selectedTopTextValue = kiukaInfoListDatasShow[keytop];
     var selectedBottomTextValue = kiukaInfoListDatasShow[keybottom];
-
 
     var selectedTopvalueYear = 0;
     var selectedTopvalueMonth = 0;
@@ -511,10 +523,18 @@ function kyukaUpdate() {
         $('#showUpdateNotice').text("<?= $kyuka_info_max_workYm ?>");
     }
     updateDataToInputs();
+   
 }
 
 // Show 追加
 function kyukaInsert(){
+	var kiukaInfoListDatasShow = <?php echo json_encode($kiukaInfoListDatasShow); ?>;
+    var keys = Object.keys(kiukaInfoListDatasShow);
+    var maxKey = keys[keys.length - 3].match(/\d+$/)[0];
+	if( maxKey >= <?= $MAX_KYUKA_INFO_COUNT ?>) {
+		alert("年次有給休暇日数登録最大数は"+ <?= $MAX_KYUKA_INFO_COUNT - 1 ?> +"までです。")
+        return;
+	}
 
     $('#modal2').modal('toggle');
     $('#workYearSelect_add').val("");
@@ -523,9 +543,8 @@ function kyukaInsert(){
     $('#workYearMonth_add').val("");
     $('#kyukaDayTime_add').val("");
     checkValidInsert();
-	var kiukaInfoListDatasShow = <?php echo json_encode($kiukaInfoListDatasShow); ?>;
-    var keys = Object.keys(kiukaInfoListDatasShow);
-    var maxKey = keys[keys.length - 3].match(/\d+$/)[0];
+
+
     if (!isNaN(maxKey)) {
         $('#newMaxId').val(Number(maxKey) + 1);
     }    
@@ -554,6 +573,32 @@ function checkValidInsert() {
     }
 
 }
+
+
+function checkValidUpdate() {
+    $('#btnReg').click(function(e) {
+        if ($(this).hasClass('disabled')) {
+            e.preventDefault();
+        }
+    });
+
+    var isInvalid = false;
+    var workYearSelect_add = $('#workYearSelect').val();
+    var workMonthSelect_add = $('#workMonthSelect').val();
+    var kyukadaySelect_add = $('#kyukadaySelect').val();
+    if ((workYearSelect_add == null || workYearSelect_add == 0) && (workMonthSelect_add == null || workMonthSelect_add == 0)) {
+        isInvalid = true;
+    }
+    if (kyukadaySelect_add == null) {
+        isInvalid = true;
+    }
+    $('#btnReg').removeClass('disabled')
+    if(isInvalid) {
+        $('#btnReg').addClass('disabled');
+    }
+
+}
+
 function deleteCheck() {
     $('#deleteBtn').click(function(e) {
         if ($(this).hasClass('disabled') || !confirm('選択した項目を削除でよろしいでしょうか？')) {
@@ -563,8 +608,6 @@ function deleteCheck() {
 }
 
 function updateDataToInputs() {
-
-
     $('#selectedIndex').val( $('#selectedId').val());
     $('#updateWorkYear').val($('#workYearSelect').val());
     $('#updateWorkMonth').val($('#workMonthSelect').val());
@@ -572,14 +615,10 @@ function updateDataToInputs() {
     $('#insertWorkYear').val($('#workYearSelect_add').val());
     $('#insertWorkMonth').val($('#workMonthSelect_add').val());
     $('#insertkyukaDays').val($('#kyukadaySelect_add').val());
-
-
-
 }
 
 // add funtion to select box in modal 
 function showTextAfterSelectedHandler() {
-
     $('#workYearSelect, #workMonthSelect').change(function() {
         var year = $('#workYearSelect').val();
         var month = $('#workMonthSelect').val();
@@ -591,7 +630,8 @@ function showTextAfterSelectedHandler() {
         if (month === null || isNaN(month) || month == 0) {
             monthStr = ''
         }
-        var selectedId = $('#selectedId').val();
+        $('#workYearMonth').val(yearStr + monthStr);
+		var selectedId = $('#selectedId').val();
         $('#workYearMonth').val(yearStr + monthStr);
          if(selectedId == <?= $MIN_KYUKA_INFO_COUNT?>) {
         $('#workYearMonth').val(yearStr + monthStr + '以内');
@@ -599,14 +639,15 @@ function showTextAfterSelectedHandler() {
          if(selectedId == <?= $MAX_KYUKA_INFO_COUNT?>) {
         $('#workYearMonth').val(yearStr + monthStr + '以上');
          }
-         
         updateDataToInputs();
+        checkValidUpdate() ;
     });
 
     $('#kyukadaySelect').change(function() {
         var days = $('#kyukadaySelect').val();
         $('#kyukaDayTime').val(days + '日');
         updateDataToInputs();
+        checkValidUpdate() ;
     });
     // Add New 
     $('#workYearSelect_add, #workMonthSelect_add').change(function() {
@@ -621,6 +662,8 @@ function showTextAfterSelectedHandler() {
             monthStr = ''
         }
         $('#workYearMonth_add').val(yearStr + monthStr);
+		
+		
         updateDataToInputs();
         checkValidInsert();
     });
@@ -670,6 +713,7 @@ function checkInputValue() {
 
 // get Data by form
 function validationData() {
+
     var title_value = $('#form_title').val();
     var message_value = $('#message-area').val();
     var subTitle_value = $('#sub_title').val();
