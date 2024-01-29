@@ -91,14 +91,14 @@ for ($n = 0; $n < $upperLimit; $n++) {
     }
 }
 
-// Display the largest values using var_dump
+// Display the largest values
 if ($maxTtop !== null && $maxTbottom !== null) {
     $last_data_max = [$maxTtop => $kyukainfo_list[0][$maxTtop], $maxTbottom => $kyukainfo_list[0][$maxTbottom]];
     $lastTtopMax = $last_data_max[$maxTtop];
     $lastTbottomMax = $last_data_max[$maxTbottom];
 }
 
-// Display the largest values using var_dump
+// Display the largest values
 if ($minTtop !== null && $minTbottom !== null) {
     $last_data_min = [$minTtop => $kyukainfo_list[0][$minTtop], $minTbottom => $kyukainfo_list[0][$minTbottom]];
     $lastTtopMin = $last_data_min[$minTtop];
@@ -113,6 +113,12 @@ $enddate_ = date('Y/m/d', $enddate);
 $newcnt_ = $lastTbottomMax;
 $tothday_ = $lastTbottomMax;
 $oldcnt_= $tothday_ - $newcnt_;
+
+// Select data from tbl_kyuka_notice
+$sql_kyuka_notice = 'SELECT * FROM `tbl_kyuka_notice`
+WHERE `tbl_kyuka_notice`.`companyid` = "' . $_SESSION['auth_companyid'] . '"';
+$result_kyuka_notice = mysqli_query($conn, $sql_kyuka_notice);
+$kyuka_notice_list = mysqli_fetch_all($result_kyuka_notice, MYSQLI_ASSOC);
 
 // kyukaReg.php
 // Select data from tbl_userkyuka & tbl_vacationinfo

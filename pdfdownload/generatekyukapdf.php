@@ -33,7 +33,14 @@ $useafterremaincnt = $_POST['useafterremaincnt'];
 $reason = $_POST['reason'];
 $destplace = $_POST['destplace'];
 $desttel = $_POST['desttel'];
+$monthcount = $_POST['monthcount'];
+$startdate = $_POST['startdate'];
+$enddate = $_POST['enddate'];
 
+// Calculation
+$month_remain = $monthcount % 12; // the remainder
+$year_remain_float = $monthcount / 12; // the quotient
+$year_remain = intval($year_remain_float);
 
 $strymd_w = date('w', strtotime($strymd));
 $strymd_youbi = ['日', '月', '火', '水', '木', '金', '土'][$strymd_w];
@@ -80,83 +87,23 @@ $usefinishaftercnt_count = $usefinishaftercnt . '日';
 $useafterremaincnt_count = $useafterremaincnt . '日';
 
 // check accept of user here 
-// if($submission_status > 0 && $submission_status < 11) {}
 $signstamp_user_show = $signstamp_user_;
 
-
-//-----------// 
-//----2.-----// FORM DATAS IN TOP RIGHT REGION
-//-----------// 
-
 // 責任者印鑑
-/// $signstamp_admin = json_decode($_POST['signstamp_admin'], true);
 $signstamp_admin = '1_aaaa_y8Y5DhIVfoXrdaH2.png';
 $signstamp_admin_ = '<img src="../assets/uploads/signstamp/' . $signstamp_admin . '" width="40" height="40" />';
 $signstamp_admin_show = '';
-
-// check accept of sekininsha here 
-// if($submission_status > 2 && $submission_status < 11) {}   
 $signstamp_admin_show = $signstamp_admin_;
 
-
 // 担当者印鑑
-// $signstamp_kanri = json_decode($_POST['signstamp_kanri'], true);
 $signstamp_kanri = '1_aaaa_y8Y5DhIVfoXrdaH2.png';
 $signstamp_kanri_ = '<img src="../assets/uploads/signstamp/' . $signstamp_kanri . '" width="40" height="40" />';
 $signstamp_kanri_show = '';
-
-// check accept of tantosha here 
-// if($submission_status > 1 && $submission_status < 11) {} 
 $signstamp_kanri_show = $signstamp_kanri_;
-// this text view on table
-
-
-
-
-
-//-----------// 
-//----5.-----// FORM DATAS IN  休暇区分 Line  Config Data here 
-//-----------// 
-
-// 　①年次有給休暇　 　②産前産後休暇　　③生理休暇　　④育児休業 　⑤介護休業　
-// 　⑥慶弔休暇　⑦代休　　⑧振替休日　⑨特別休暇(　　　                 　　　　　　)　
-//   ⑩その他(　                                   　　                 　　　　　　)
-
-//-----------// 
-//----6.-----// FORM DATAS IN  入社年月 AND  勤続年数 Line  Config Data here 
-//-----------// 
-
-$inTimeYear = 69;
-$inTimeMonth = 69;
-
 $enter_company = substr($inymd, 0, 4) . '年　' . substr($inymd, 5, 2) . '月　';
-$workInCompanyTimeTextShow = $inTimeYear . '年　' . $inTimeMonth . 'ヵ月以上　';
-
-
-
-
-
-//-----------// 
-//----7.-----// FORM DATAS IN  年次有給休暇当該年度算定期間 Line  Config Data here 
-//-----------// 
-
-$annualPaidFromYear = 7777;
-$annualPaidFromMonth = 77;
-$annualPaidFromDate = 77;
-
-$annualPaidToYear = 7777;
-$annualPaidToMonth = 77;
-$annualPaidToDate = 77;
-
-// this text view on table
-$annualPaidLeaveCalculationPeriodTextShow = $annualPaidFromYear . '年 ' . $annualPaidFromMonth . '月 ' . $annualPaidFromDate . '日' . '　～　'
-	. $annualPaidToYear . '年 ' . $annualPaidToMonth . '月 ' . $annualPaidToDate . '日';
-
-
-
-//-----------// 
-//----8.-----// FORM DATAS IN  年次有給休暇残日数 Line  Config Data here 
-//-----------//
+$calgetkyukawhy = $year_remain . '年　' . $month_remain . 'ヵ月以上　';
+$calannualduration = substr($startdate, 0, 4) . '年 ' . substr($startdate, 5, 2) . '月 ' . substr($startdate, 8, 2) . '日' . '　～　'
+	. substr($enddate, 0, 4) . '年 ' . substr($enddate, 5, 2) . '月 ' . substr($enddate, 8, 2) . '日';
 
 // from data value
 $kyukaCount2Value = 5;
@@ -171,20 +118,10 @@ $kyukaCount1Value = $kyukaCount4Value + $kyukaCount5Value;
 $kyukaCount7Value = $kyukaCount4Value + $kyukaCount6Value;
 $kyukaCount8Value = $kyukaCount5Value - $kyukaCount6Value;
 
-
-
-//-----------// 
-//----9.-----// FORM DATAS IN  年次有給休暇残日数 Line  Config Data here 
-//-----------//
-
+// 年次有給休暇残日数
 $placeandcontect = $destplace . "\t※緊急連絡先(" . $desttel . ")";
 
-
-
-
-//====================  view datas config end ====================//// 
-
-//set output file name
+// set output file name
 $fileOutputName = str_replace(' ', '', $name) . '_' . $teishutsu_year . $teishutsu_month . $teishutsu_date .  substr($date_show, 5, 2) . '_休暇届' . '.pdf';
 
 
@@ -218,22 +155,13 @@ $align = 'L';
 
 // set turn of next page and set margin 
 $tcpdf->SetAutoPageBreak(false, 10);
-
-// Define your CSS styles
 $style_bold = 'font-weight: 700;';
-
-//===== VIEW DRAWING=====///
-
-
-// 0. MAIN Title  DRAW
 $tcpdf->SetFont("kozgopromedium", "U", 25); // Set the font, style, and size for the title
-// $tcpdf->writeHTMLCell(0, 8, '', '', '<span style="' . $style_bold . '">' . substr($date_show, 0, 4) . '年' . substr($date_show, 5, 2) . '月 勤務表' . '</span>', 0, 1, false, true, 'C');
 $tcpdf->writeHTMLCell(0, 15, '', '', '<span style="' . $style_bold . '">' .  '休暇届' . '</span>', 0, 1, false, true, 'C');
 
 
 // 1. TABLE HEADER LEFT DRAW
 $blankInName = str_repeat(' ', 45);
-// Text in the top left corner
 $tcpdf->SetFont("kozgopromedium", "B", 14); // Set the font and style for the text
 $tcpdf->SetXY(10, 25); // Set the X and Y position for the text
 $tcpdf->Cell(0, 7, $kyukaymd_time, 0, 1, 'L'); // Output the text aligned to the left
@@ -248,7 +176,7 @@ $tcpdf->Cell(0, 7, '氏名：' . $blankInName, 0, 0.3, 'L');
 $tcpdf->SetFont("kozgopromedium", "", 10);
 
 
-//dept  
+// dept  
 $tcpdf->writeHTMLCell($w, $h, $x_dept, $y_dept, $dept, $border, $ln, 0, true, $align);
 // name 
 $tcpdf->writeHTMLCell($w, $h, $x_name, $y_name, $showName, $border, $ln, 0, true, $align);
@@ -265,7 +193,6 @@ $tcpdf->SetFont("kozgopromedium", "", 12); // Set the font and style for the tab
 $tcpdf->SetLineWidth(0.2); // Set the line width for the table borders
 
 $tcpdf->SetXY(140, 25); // Set the X and Y position for the table
-// $tcpdf->SetFillColor(240, 240, 240); // Set the fill color for the header
 $tcpdf->SetFillColor(217, 237, 247); // Set the fill color for the header //#d9edf7 water blue(217, 237, 247).
 $tcpdf->Cell(30, 8, '責任者', 1, 0, 'C', true); // Output the first cell with background color
 $tcpdf->Cell(30, 8, '担当者', 1, 1, 'C', true); // Output the second cell with background color
@@ -282,8 +209,6 @@ $tcpdf->writeHTMLCell($w, $h, $x_kanri, $y_kanri, $signstamp_kanri_show, $border
 $tcpdf->Ln(22);
 
 
-
-
 // Table Body
 // 3. 期間 Line 
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
@@ -295,8 +220,8 @@ $tcpdf->Cell(110, 7, $kyukaRangeTextShow, 1, 0, 'C', true); // Add 'LTRB' to dra
 $tcpdf->Cell(40, 16, $kyuka_count, 1, 0, 'C', true); // Add 1 to move to the next line
 $tcpdf->Ln(7);
 
-// 4. 期間  *半休　Line 
 
+// 4. 期間  *半休　Line 
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
 $tcpdf->SetLineWidth(0.2); // Set the line width for the table border
 $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
@@ -322,7 +247,7 @@ $yTmp5 = $tcpdf->GetY();
 $tcpdf->Cell(40, 23, $text5, 1, 'C', true);
 $height5 = $tcpdf->GetY() - $yTmp5;
 $tcpdf->SetXY($xTmp5 + 40, $yTmp5);
-$tcpdf->MultiCell(150, $height5 + 23, $kyukaname_, 1, 0,   'C', true);
+$tcpdf->MultiCell(150, $height5 + 23, $kyukaname_, 1, 'C', true);
 $tcpdf->Ln(0);
 
 
@@ -339,9 +264,8 @@ $tcpdf->Cell(55, 7, $enter_company, 1, 'C', true);
 $text6 = "入社年月"; // Use "\n" to create a new line
 $tcpdf->Cell(40, 7, '勤続年数', 1, 'C', true);
 $text6 = "入社年月"; // Use "\n" to create a new line
-$tcpdf->Cell(55, 7, $workInCompanyTimeTextShow, 1, 'C', true);
+$tcpdf->Cell(55, 7, $calgetkyukawhy, 1, 'C', true);
 $tcpdf->Ln(7);
-
 
 
 // 7. 年次有給休暇 当該年度算定期間　Line
@@ -355,7 +279,7 @@ $yTmp7 = $tcpdf->GetY();
 $tcpdf->MultiCell(40, 7, $text7, 1, 'C', true);
 $height7 = $tcpdf->GetY() - $yTmp7;
 $tcpdf->SetXY($xTmp7 + 40, $yTmp7);
-$tcpdf->Cell(150, $height7, $annualPaidLeaveCalculationPeriodTextShow, 1, 0, 'C', true);
+$tcpdf->Cell(150, $height7, $calannualduration, 1, 0, 'C', true);
 $tcpdf->Ln(9);
 
 
@@ -439,8 +363,9 @@ $yTmp9 = $tcpdf->GetY();
 $tcpdf->MultiCell(40, 21, $text9, 1, 'C', true);
 $height9 = $tcpdf->GetY() - $yTmp9;
 $tcpdf->SetXY($xTmp9 + 40, $yTmp9);
-$tcpdf->MultiCell(150, $height9, $placeandcontect, 1, 0, 'C', true);
+$tcpdf->MultiCell(150, $height9, $placeandcontect, 1, 'C', true);
 $tcpdf->Ln(0);
+
 
 // 10. 事由　Line 
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
@@ -454,6 +379,7 @@ $height10 = $tcpdf->GetY() - $yTmp10;
 $tcpdf->SetXY($xTmp9 + 40, $yTmp10);
 $tcpdf->MultiCell(150, $height10, $reason, 1, 'C', true);
 $tcpdf->Ln(3);
+
 
 // 11. Footer 説明文 
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
@@ -522,7 +448,5 @@ $tcpdf->Cell(18, 7, '１４日', 1, 'C', true);
 $tcpdf->Cell(18, 7, '１６日', 1, 'C', true);
 $tcpdf->Cell(18, 7, '１８日', 1, 'C', true);
 $tcpdf->Cell(24, 7, '２０日', 1, 'C', true);
-
-
 
 $tcpdf->Output($fileOutputName, "I");

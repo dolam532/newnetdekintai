@@ -769,6 +769,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<input type="hidden" name="reason" id="reason-input">
 		<input type="hidden" name="destplace" id="destplace-input">
 		<input type="hidden" name="desttel" id="desttel-input">
+
+		<input type="hidden" name="monthcount" id="monthcount-input">
+		<input type="hidden" name="startdate" id="startdate-input">
+		<input type="hidden" name="enddate" id="enddate-input">
 	</form>
 
 	<!-- お知らせ -->
@@ -1686,6 +1690,10 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#autopdf #reason-input").val("<?php echo htmlspecialchars($key['reason']); ?>");
 					$("#autopdf #destplace-input").val("<?php echo htmlspecialchars($key['destplace']); ?>");
 					$("#autopdf #desttel-input").val("<?php echo htmlspecialchars($key['desttel']); ?>");
+					
+					$("#autopdf #monthcount-input").val("<?php echo htmlspecialchars($lastTtopMax); ?>");
+					$("#autopdf #startdate-input").val("<?php echo htmlspecialchars($startdate_); ?>");
+					$("#autopdf #enddate-input").val("<?php echo htmlspecialchars($enddate_); ?>");
 					$("#autopdf").submit();
 				}
 		<?php
