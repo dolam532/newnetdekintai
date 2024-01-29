@@ -37,6 +37,39 @@ $monthcount = $_POST['monthcount'];
 $startdate = $_POST['startdate'];
 $enddate = $_POST['enddate'];
 
+
+//=== データ遷移出来ません
+// FIX ME
+// kyukapdf notice  data 
+$noticeMainTitle= json_decode($_POST['KyukaNoticeMainTitle']);
+$noticeMessageShow = json_decode($_POST['KyukaNoticeMessage']);
+$noticeSubTitle=json_decode($_POST['KyukaNoticeSubTitle']);
+
+
+if (!isset($noticeMessageShow) || $noticeMessageShow =='' ) {
+    $noticeMessageShow = "休暇お知らせ登録されていませんでした。";
+} else {
+	$noticeMessageShow = $KyukaNoticeDatas['message'];
+	$noticeMainTitle = $KyukaNoticeDatas['title'];
+	$noticeSubTitle = $KyukaNoticeDatas['subtitle'];
+}
+
+error_log($noticeMessageShow);
+error_log($noticeMessageShow);
+error_log($noticeSubTitle);
+
+
+// kyukapdf info data 
+
+$KyukaInfoDatas = json_decode($_POST['KyukaInfoDatas'], true);
+if ($KyukaInfoDatas == null || isset($KyukaInfoDatas) ) {
+    $KyukaInfoDatas = "休暇お知らせ登録されていませんでした。";
+} else {
+
+}
+
+
+
 // Calculation
 $month_remain = $monthcount % 12; // the remainder
 $year_remain_float = $monthcount / 12; // the quotient
@@ -388,15 +421,9 @@ $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $tcpdf->MultiCell(190, 60, "\n上記の通り休暇を申請します。\n
 （注意）
-１．事前許可が必要なので、担当者に許可の届け（休暇届）を提出すること。
-・原則として１週間前までに、少なくとも前々日までに提出すること。
-・連続４日以上（所定休日が含まれる場合を含む。）の休暇を取得するときは、１ヵ月前までに提出すること。
-・緊急・病気の場合は、その時点ですぐに提出すること。
-２．年間で5日分はその年で必ず取ること。
-３．有給休暇は１年に限って繰り越しできます（2.の5日分は除外、0.5日分は除外）。
-４．半休(5時間以内)の場合は0.5日にて表現してください。その他詳しい内容は担当者に聞いてください。", 1, 'L', true);
+" . $noticeMessageShow, 1, 'L', true);
 $tcpdf->Ln(7);
-$tcpdf->MultiCell(40, 5, "※年次有給休暇", 0, 'L', true);
+$tcpdf->MultiCell(40, 5, $noticeSubTitle, 0, 'L', true);
 
 
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows

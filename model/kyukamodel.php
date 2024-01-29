@@ -481,3 +481,61 @@ if (isset($_POST['DecideUpdateKyuka'])) {
         }
     }
 }
+
+// Get Data Notice 
+
+$companyid = $_SESSION['auth_companyid'];
+$sqlFindKyukaNotice  =  "SELECT * FROM tbl_kyuka_notice WHERE `companyid` = $companyid LIMIT 1";
+$resultKyukaNotice = mysqli_query($conn, $sqlFindKyukaNotice);
+$kiukaNoticeList = mysqli_fetch_all($resultKyukaNotice, MYSQLI_ASSOC);
+
+// Get Data KyukaInfo
+$sqlFindKyukaInfo = "SELECT * FROM `tbl_kyukainfo` WHERE `companyid` = $companyid LIMIT 1";
+$resultKyukaInfo = mysqli_query($conn, $sqlFindKyukaInfo);
+$noDataKyukaInfo = false;
+$kiukaInfoList = mysqli_fetch_all($resultKyukaInfo, MYSQLI_ASSOC);
+$kiukaInfoListDatasShow = array();
+
+
+if (mysqli_num_rows($resultKyukaInfo) > 0) {
+    $kiukaInfoListDatas = $kiukaInfoList[0];
+    for ($i = $MIN_KYUKA_INFO_COUNT ; $i <= $MAX_KYUKA_INFO_COUNT; $i++) {
+    $key = "ttop" . $i;
+    $keybottom = "tbottom" . $i;
+    if (!isset($kiukaInfoListDatas[$key]) || trim($kiukaInfoListDatas[$key]) == '') {
+        continue;
+    }
+    if (!isset($kiukaInfoListDatas[$keybottom]) || trim($kiukaInfoListDatas[$keybottom]) == '') {
+        continue;
+    }
+    $value = intval($kiukaInfoListDatas[$key]);
+    if ($value < 12) {
+        $kiukaInfoListDatasShow[$key] = $value . 'ヵ月';
+    } else {
+        $years = floor($value / 12);
+        $months = $value % 12;
+        if ($months == 0) {
+            $kiukaInfoListDatasShow[$key] = $years . '年';
+        } else {
+            $kiukaInfoListDatasShow[$key] = $years . '年' . $months . 'ヵ月';
+        }
+    }
+    // add new min 
+    if ($i == $MIN_KYUKA_INFO_COUNT) {
+        $kiukaInfoListDatasShow['ttop0'] = $kiukaInfoListDatasShow[$key] . '以内';
+    }
+    if($i == $MAX_KYUKA_INFO_COUNT) {
+        $kiukaInfoListDatasShow[$key] .= '以上';
+    }
+    $kiukaInfoListDatasShow[$keybottom] = $kiukaInfoListDatas[$keybottom] . '日';
+
+}
+
+
+} 
+
+
+
+
+
+
