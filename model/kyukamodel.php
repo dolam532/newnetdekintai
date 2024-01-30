@@ -45,15 +45,58 @@ $result_codebase_kyuka = mysqli_query($conn, $sql_codebase_kyuka);
 $codebase_list_kyuka = mysqli_fetch_all($result_codebase_kyuka, MYSQLI_ASSOC);
 
 // Select data from tbl_kyukainfo
-$sql_kyukainfo = 'SELECT * FROM `tbl_kyukainfo`
+$sqlFindKyukaInfo = 'SELECT * FROM `tbl_kyukainfo`
 WHERE `tbl_kyukainfo`.`companyid` = "' . $_SESSION['auth_companyid'] . '"';
-$result_kyukainfo = mysqli_query($conn, $sql_kyukainfo);
-$kyukainfo_list = mysqli_fetch_all($result_kyukainfo, MYSQLI_ASSOC);
+$resultKyukaInfo = mysqli_query($conn, $sqlFindKyukaInfo);
+$noDataKyukaInfo = false;
+$kiukaInfoList = mysqli_fetch_all($resultKyukaInfo, MYSQLI_ASSOC);
+$kiukaInfoListDatasShow = array();
+$kyukainfo_titletop = $kiukaInfoList[0]["titletop"];
+$kyukainfo_titlebottom = $kiukaInfoList[0]["titlebottom"];
+
+if (mysqli_num_rows($resultKyukaInfo) > 0) {
+    $kiukaInfoListDatas = $kiukaInfoList[0];
+    for ($i = $MIN_KYUKA_INFO_COUNT; $i <= $MAX_KYUKA_INFO_COUNT; $i++) {
+        $key = "ttop" . $i;
+        $keybottom = "tbottom" . $i;
+        if (!isset($kiukaInfoListDatas[$key]) || trim($kiukaInfoListDatas[$key]) == '') {
+            continue;
+        }
+        if (!isset($kiukaInfoListDatas[$keybottom]) || trim($kiukaInfoListDatas[$keybottom]) == '') {
+            continue;
+        }
+        $value = intval($kiukaInfoListDatas[$key]);
+        if ($value < 12) {
+            $kyukaInfoListtop[] = $kiukaInfoListDatasShow[$key] = $value . 'ヵ月';
+        } else {
+            $years = floor($value / 12);
+            $months = $value % 12;
+            if ($months == 0) {
+                $kyukaInfoListtop[] = $kiukaInfoListDatasShow[$key] = $years . '年';
+            } else {
+                $kyukaInfoListtop[] = $kiukaInfoListDatasShow[$key] = $years . '年' . $months . 'ヵ月';
+            }
+        }
+        // add new min 
+        if ($i == $MIN_KYUKA_INFO_COUNT) {
+            $kyukaInfoListtop[0] = $kiukaInfoListDatasShow['ttop0'] = $kiukaInfoListDatasShow[$key] . '以内';
+        }
+        if ($i == $MAX_KYUKA_INFO_COUNT) {
+            end($kyukaInfoListtop);
+            $key = key($kyukaInfoListtop);
+            $kyukaInfoListtop[$key] .= '以上';
+            $kiukaInfoListDatasShow[$key] .= '以上';
+        }
+        $kyukaInfoListbottom[] = $kiukaInfoListDatasShow[$keybottom] = $kiukaInfoListDatas[$keybottom] . '日';
+    }
+}
+$kyukaInfoListtopString = implode(',', $kyukaInfoListtop);
+$kyukaInfoListbottomString = implode(',', $kyukaInfoListbottom);
 function filterNull($value)
 {
     return $value !== null;
 }
-$kyukainfo_list = array_map('array_filter', $kyukainfo_list);
+$kiukaInfoList = array_map('array_filter', $kiukaInfoList);
 // Define variables to store the maximum values
 $maxTtop = null;
 $maxTbottom = null;
@@ -68,24 +111,24 @@ for ($n = 0; $n < $upperLimit; $n++) {
     $ttopKey = "ttop" . $n;
     $tbottomKey = "tbottom" . $n;
 
-    if (isset($kyukainfo_list[0][$ttopKey]) && $kyukainfo_list[0][$ttopKey] <= $numberOfMonths) {
+    if (isset($kiukaInfoList[0][$ttopKey]) && $kiukaInfoList[0][$ttopKey] <= $numberOfMonths) {
         // Update the maximum values if a larger value is encountered
-        if ($maxTtop === null || $kyukainfo_list[0][$ttopKey] > $kyukainfo_list[0][$maxTtop]) {
+        if ($maxTtop === null || $kiukaInfoList[0][$ttopKey] > $kiukaInfoList[0][$maxTtop]) {
             $maxTtop = $ttopKey;
         }
 
-        if ($maxTbottom === null || $kyukainfo_list[0][$ttopKey] > $kyukainfo_list[0][$maxTbottom]) {
+        if ($maxTbottom === null || $kiukaInfoList[0][$ttopKey] > $kiukaInfoList[0][$maxTbottom]) {
             $maxTbottom = $tbottomKey;
         }
     }
 
-    if (isset($kyukainfo_list[0][$ttopKey]) && $kyukainfo_list[0][$ttopKey] >= $numberOfMonths) {
+    if (isset($kiukaInfoList[0][$ttopKey]) && $kiukaInfoList[0][$ttopKey] >= $numberOfMonths) {
         // Update the maximum values if a larger value is encountered
-        if ($minTtop === null || $kyukainfo_list[0][$ttopKey] < $kyukainfo_list[0][$minTtop]) {
+        if ($minTtop === null || $kiukaInfoList[0][$ttopKey] < $kiukaInfoList[0][$minTtop]) {
             $minTtop = $ttopKey;
         }
 
-        if ($minTbottom === null || $kyukainfo_list[0][$ttopKey] < $kyukainfo_list[0][$minTbottom]) {
+        if ($minTbottom === null || $kiukaInfoList[0][$ttopKey] < $kiukaInfoList[0][$minTbottom]) {
             $minTbottom = $tbottomKey;
         }
     }
@@ -93,14 +136,14 @@ for ($n = 0; $n < $upperLimit; $n++) {
 
 // Display the largest values
 if ($maxTtop !== null && $maxTbottom !== null) {
-    $last_data_max = [$maxTtop => $kyukainfo_list[0][$maxTtop], $maxTbottom => $kyukainfo_list[0][$maxTbottom]];
+    $last_data_max = [$maxTtop => $kiukaInfoList[0][$maxTtop], $maxTbottom => $kiukaInfoList[0][$maxTbottom]];
     $lastTtopMax = $last_data_max[$maxTtop];
     $lastTbottomMax = $last_data_max[$maxTbottom];
 }
 
 // Display the largest values
 if ($minTtop !== null && $minTbottom !== null) {
-    $last_data_min = [$minTtop => $kyukainfo_list[0][$minTtop], $minTbottom => $kyukainfo_list[0][$minTbottom]];
+    $last_data_min = [$minTtop => $kiukaInfoList[0][$minTtop], $minTbottom => $kiukaInfoList[0][$minTbottom]];
     $lastTtopMin = $last_data_min[$minTtop];
     $lastTbottomMin = $last_data_min[$minTbottom];
 }
@@ -112,7 +155,7 @@ $startdate_ = date('Y/m/d', $startmonth);
 $enddate_ = date('Y/m/d', $enddate);
 $newcnt_ = $lastTbottomMax;
 $tothday_ = $lastTbottomMax;
-$oldcnt_= $tothday_ - $newcnt_;
+$oldcnt_ = $tothday_ - $newcnt_;
 
 // Select data from tbl_kyuka_notice
 $sql_kyuka_notice = 'SELECT * FROM `tbl_kyuka_notice`
@@ -484,61 +527,3 @@ if (isset($_POST['DecideUpdateKyuka'])) {
         }
     }
 }
-
-// Get Data Notice 
-
-$companyid = $_SESSION['auth_companyid'];
-$sqlFindKyukaNotice  =  "SELECT * FROM tbl_kyuka_notice WHERE `companyid` = $companyid LIMIT 1";
-$resultKyukaNotice = mysqli_query($conn, $sqlFindKyukaNotice);
-$kiukaNoticeList = mysqli_fetch_all($resultKyukaNotice, MYSQLI_ASSOC);
-
-// Get Data KyukaInfo
-$sqlFindKyukaInfo = "SELECT * FROM `tbl_kyukainfo` WHERE `companyid` = $companyid LIMIT 1";
-$resultKyukaInfo = mysqli_query($conn, $sqlFindKyukaInfo);
-$noDataKyukaInfo = false;
-$kiukaInfoList = mysqli_fetch_all($resultKyukaInfo, MYSQLI_ASSOC);
-$kiukaInfoListDatasShow = array();
-
-
-if (mysqli_num_rows($resultKyukaInfo) > 0) {
-    $kiukaInfoListDatas = $kiukaInfoList[0];
-    for ($i = $MIN_KYUKA_INFO_COUNT ; $i <= $MAX_KYUKA_INFO_COUNT; $i++) {
-    $key = "ttop" . $i;
-    $keybottom = "tbottom" . $i;
-    if (!isset($kiukaInfoListDatas[$key]) || trim($kiukaInfoListDatas[$key]) == '') {
-        continue;
-    }
-    if (!isset($kiukaInfoListDatas[$keybottom]) || trim($kiukaInfoListDatas[$keybottom]) == '') {
-        continue;
-    }
-    $value = intval($kiukaInfoListDatas[$key]);
-    if ($value < 12) {
-        $kiukaInfoListDatasShow[$key] = $value . 'ヵ月';
-    } else {
-        $years = floor($value / 12);
-        $months = $value % 12;
-        if ($months == 0) {
-            $kiukaInfoListDatasShow[$key] = $years . '年';
-        } else {
-            $kiukaInfoListDatasShow[$key] = $years . '年' . $months . 'ヵ月';
-        }
-    }
-    // add new min 
-    if ($i == $MIN_KYUKA_INFO_COUNT) {
-        $kiukaInfoListDatasShow['ttop0'] = $kiukaInfoListDatasShow[$key] . '以内';
-    }
-    if($i == $MAX_KYUKA_INFO_COUNT) {
-        $kiukaInfoListDatasShow[$key] .= '以上';
-    }
-    $kiukaInfoListDatasShow[$keybottom] = $kiukaInfoListDatas[$keybottom] . '日';
-
-}
-
-
-} 
-
-
-
-
-
-

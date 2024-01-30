@@ -37,12 +37,18 @@ $monthcount = $_POST['monthcount'];
 $startdate = $_POST['startdate'];
 $enddate = $_POST['enddate'];
 
-
 // Get data from tbl_kyuka_notice
 $noticetitle = $_POST['noticetitle'];
 $noticemessage = $_POST['noticemessage'];
 $noticesubtitle = $_POST['noticesubtitle'];
 
+// Get data from tbl_kyukainfo
+$infotitletop = $_POST['infotitletop'];
+$infotitlebottom = $_POST['infotitlebottom'];
+$kyukaInfoListtopString = $_POST['kyukaInfoListtopString'];
+$kyukaInfoListtopArray = explode(',', $kyukaInfoListtopString);
+$kyukaInfoListbottomString = $_POST['kyukaInfoListbottomString'];
+$kyukaInfoListbottomArray = explode(',', $kyukaInfoListbottomString);
 
 // Calculation
 $month_remain = $monthcount % 12; // the remainder
@@ -406,48 +412,40 @@ $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $xTmp11 = $tcpdf->GetX();
 $yTmp11 = $tcpdf->GetY();
-$tcpdf->MultiCell(40, 14, "\n勤続年数", 1, 'C', true);
+$tcpdf->Cell(30, 7, "\n" . $infotitletop, 1, 'C', true);
 $tcpdf->SetXY($xTmp11, $yTmp11);
 
 //line 1
 $height11 = $tcpdf->GetY() - $yTmp11;
-$tcpdf->SetXY($xTmp11 + 40, $yTmp11);
-$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
-$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
-$tcpdf->Cell(18, 7, '１年', 1, 'C', true);
-$tcpdf->Cell(18, 7, '２年', 1, 'C', true);
-$tcpdf->Cell(18, 7, '３年', 1, 'C', true);
-$tcpdf->Cell(18, 7, '４年', 1, 'C', true);
-$tcpdf->Cell(18, 7, '５年', 1, 'C', true);
-$tcpdf->Cell(24, 7, '６年', 1, 'C', true);
+$tcpdf->SetXY($xTmp11 + 30, $yTmp11);
+foreach ($kyukaInfoListtopArray as $key => $value) {
+	if (count($kyukaInfoListbottomArray) < 8) {
+		$tcpdf->Cell(20, 7, $value, 1, 'C', true);
+	} elseif (count($kyukaInfoListbottomArray) >= 8) {
+		if ($key < 8) {
+			$tcpdf->Cell(19.5, 7, $value, 1, 'C', true);
+		}
+		
+	}
+}
 $tcpdf->Ln(7);
 
 // line 2 
-$height11 = $tcpdf->GetY() - $yTmp11;
-$tcpdf->SetXY($xTmp11 + 40, $yTmp11 + 7);
-$tcpdf->Cell(18, 7, '以内', 1, 'C', true);
-$tcpdf->Cell(18, 7, '', 1, 'C', true);
-$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
-$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
-$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
-$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
-$tcpdf->Cell(18, 7, '６ヵ月', 1, 'C', true);
-$tcpdf->Cell(24, 7, '６ヵ月以上', 1, 'C', true);
-$tcpdf->Ln(7);
-
-// line 3 
 $xTmp12 = $tcpdf->GetX();
 $yTmp12 = $tcpdf->GetY();
-$tcpdf->Cell(40, 7, "付与日数", 1, 'C', true);
-$tcpdf->SetXY($xTmp12 + 40, $yTmp12);
+$tcpdf->Cell(30, 7, "\n" . $infotitlebottom, 1, 'C', true);
+$tcpdf->SetXY($xTmp12 + 30, $yTmp12);
 $height12 = $tcpdf->GetY() - $yTmp12;
-$tcpdf->Cell(18, 7, '無し', 1, 'C', true);
-$tcpdf->Cell(18, 7, '１０日', 1, 'C', true);
-$tcpdf->Cell(18, 7, '１１日', 1, 'C', true);
-$tcpdf->Cell(18, 7, '１２日', 1, 'C', true);
-$tcpdf->Cell(18, 7, '１４日', 1, 'C', true);
-$tcpdf->Cell(18, 7, '１６日', 1, 'C', true);
-$tcpdf->Cell(18, 7, '１８日', 1, 'C', true);
-$tcpdf->Cell(24, 7, '２０日', 1, 'C', true);
-
+foreach ($kyukaInfoListbottomArray as $key => $value) {
+	if (count($kyukaInfoListbottomArray) < 8) {
+		$tcpdf->Cell(20, 7, $value, 1, 'C', true);
+	} elseif (count($kyukaInfoListbottomArray) >= 8) {
+		if ($key < 8) {
+			$tcpdf->Cell(19.5, 7, $value, 1, 'C', true);
+		}
+		if ($key >= 8) {
+			$tcpdf->Cell(0, 7, '...', 0, 1, 'L');
+		}
+	}
+}
 $tcpdf->Output($fileOutputName, "I");
