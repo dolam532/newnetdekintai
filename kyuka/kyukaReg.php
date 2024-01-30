@@ -902,39 +902,26 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 								</div>
 							</div>
 							<div class="col-md-12 col-ms-12">
-								<table class="table table-bordered datatable">
-									<thead>
-										<tr>
-											<th class="info table-notic" style="text-align: center; color: #31708f;">
-												<?= trim($kiukaInfoList[0]['titletop']) ?></th>
-											<?php
-											for ($i = $MIN_KYUKA_INFO_COUNT; $i <= $MAX_KYUKA_INFO_COUNT; $i++) {
-												$key = "ttop" . $i;
-												if (!isset($kiukaInfoListDatasShow[$key]) || trim($kiukaInfoListDatasShow[$key]) == '') {
-													continue;
-												}
-												$text =  trim($kiukaInfoListDatasShow[$key]);
-												echo '<td name="data-row-' . $i . '" class="table-notic" style="text-align: center;">' . $text . '</td>';
-											}
-											?>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<th class="info" style="text-align: center; color: #31708f;">
-												<?= trim($kiukaInfoList[0]['titlebottom']) ?></th>
-											<?php
-											for ($i = $MIN_KYUKA_INFO_COUNT; $i <= $MAX_KYUKA_INFO_COUNT; $i++) {
-												$key = "tbottom" . $i;
-												if (!isset($kiukaInfoListDatasShow[$key]) || trim($kiukaInfoListDatasShow[$key]) == '') {
-													continue;
-												}
-												$text =  trim($kiukaInfoListDatasShow[$key]);
-												echo '<td name="data-row-' . $i . '" class="table-notic" style="text-align: center;">' . $text . '</td>';
-											}
-											?>
-										</tr>
-									</tbody>
+								<table class="table table-bordered datatable" style="margin-top: -80px; white-space: normal;">
+									<?php
+									$elementsPerTable = 8;
+									for ($i = 0; $i < count($kyukaInfoListtop); $i += $elementsPerTable) {
+										echo '<tr>';
+										echo '<th class="info" style="width:20%; text-align: center; color: #31708f;">' . trim($kiukaInfoList[0]['titletop']) . '</th>';
+										for ($j = $i; $j < $i + $elementsPerTable && $j < count($kyukaInfoListtop); $j++) {
+											echo '<td name="data-row-' . $i . '" class="table-notic" style="width:10%; text-align: center;">' . $kyukaInfoListtop[$j] . '</td>';
+										}
+										echo '</tr>';
+										echo '<br>';
+										echo '<tr>';
+										echo '<th class="info" style="width:20%; text-align: center; color: #31708f;">' . trim($kiukaInfoList[0]['titlebottom']) . '</th>';
+										for ($j = $i; $j < $i + $elementsPerTable && $j < count($kyukaInfoListbottom); $j++) {
+											echo '<td name="data-row-' . $i . '" class="table-notic" style="width:10%; text-align: center;">' . $kyukaInfoListbottom[$j] . '</td>';
+										}
+										echo '</tr>';
+										echo '<br>';
+									}
+									?>
 								</table>
 							</div>
 						</div>
@@ -1894,6 +1881,5 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		});
 
 	}
-	
 </script>
 <?php include('../inc/footer.php'); ?>
