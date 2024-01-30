@@ -140,20 +140,20 @@ $fileOutputName = str_replace(' ', '', $name) . '_' . $teishutsu_year . $teishut
 
 // Set the X and Y coordinates for the cell
 $x_user = 56;
-$y_user = 36;
+$y_user = 43;
 $x_StampMark = 60;
-$y_StampMark = 40;
+$y_StampMark = 48;
 
 $x_name = 20;
-$y_name = 40;
+$y_name = 47;
 
 $x_dept = 20;
-$y_dept = 33;
+$y_dept = 39;
 
 $x_admin = 105;
-$y_admin = 36;
+$y_admin = 40;
 $x_kanri = 177;
-$y_kanri = 36;
+$y_kanri = 40;
 
 // Width and height for the cell
 $w = 100;
@@ -172,20 +172,21 @@ $style_bold = 'font-weight: 700;';
 $tcpdf->SetFont("kozgopromedium", "U", 25); // Set the font, style, and size for the title
 $tcpdf->writeHTMLCell(0, 15, '', '', '<span style="' . $style_bold . '">' .  '休暇届' . '</span>', 0, 1, false, true, 'C');
 
-
 // 1. TABLE HEADER LEFT DRAW
-$blankInName = str_repeat(' ', 45);
+$blankInName = str_repeat(' ', 50);
 $tcpdf->SetFont("kozgopromedium", "B", 14); // Set the font and style for the text
 $tcpdf->SetXY(10, 25); // Set the X and Y position for the text
-$tcpdf->Cell(0, 7, $kyukaymd_time, 0, 1, 'L'); // Output the text aligned to the left
+$tcpdf->Cell(0, 8, $kyukaymd_time, 0, 1, 'L'); // Output the text aligned to the left
+$tcpdf->Ln(5);
 
 $tcpdf->SetFont("kozgopromedium", "U", 10);
-$tcpdf->Cell(0, 7, '所属：' . $blankInName . '', 0, 1, 'L'); // Output the text aligned to the left
+// $tcpdf->SetXY(10, 30); 
+$tcpdf->Cell(0, 8, '所属：' . $blankInName . '', 0, 1, 'L'); // Output the text aligned to the left
 
 $textInMark = '(印)';
 $showName = mb_convert_kana($name, 'R', 'UTF-8');
 
-$tcpdf->Cell(0, 7, '氏名：' . $blankInName, 0, 0.3, 'L');
+$tcpdf->Cell(0, 8, '氏名：' . $blankInName, 0, 0.3, 'L');
 $tcpdf->SetFont("kozgopromedium", "", 10);
 
 
@@ -205,18 +206,18 @@ $tcpdf->SetTextColor(0, 0, 0); // Set the text color for the table cells
 $tcpdf->SetFont("kozgopromedium", "", 12); // Set the font and style for the table cells
 $tcpdf->SetLineWidth(0.2); // Set the line width for the table borders
 
-$tcpdf->SetXY(140, 25); // Set the X and Y position for the table
+$tcpdf->SetXY(140, 27); // Set the X and Y position for the table
 $tcpdf->SetFillColor(217, 237, 247); // Set the fill color for the header //#d9edf7 water blue(217, 237, 247).
 $tcpdf->Cell(30, 8, '責任者', 1, 0, 'C', true); // Output the first cell with background color
 $tcpdf->Cell(30, 8, '担当者', 1, 1, 'C', true); // Output the second cell with background color
 
-$tcpdf->SetXY(140, 33); // Set the X and Y position for the table
+$tcpdf->SetXY(140, 35); // Set the X and Y position for the table
 $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
 $tcpdf->SetLineWidth(0.2); // Set the line width for the table border
-$tcpdf->Cell(30, 21, '', 1, 0, 'C');
-$tcpdf->Cell(30, 21, '', 1, 1, 'C');
+$tcpdf->Cell(30, 23, '', 1, 0, 'C');
+$tcpdf->Cell(30, 23, '', 1, 1, 'C');
 $tcpdf->writeHTMLCell($w, $h, $x_admin, $y_admin, $signstamp_admin_show, $border, $ln, 0, true, 'C');
 $tcpdf->writeHTMLCell($w, $h, $x_kanri, $y_kanri, $signstamp_kanri_show, $border, 0, 0, true, $align);
 $tcpdf->Ln(22);
@@ -228,10 +229,10 @@ $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the dat
 $tcpdf->SetLineWidth(0.2); // Set the line width for the table border
 $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
-$tcpdf->Cell(40, 7, '期間', 1, 0, 'C', true); // Add 'LTRB' to draw an outer border for the cell
-$tcpdf->Cell(110, 7, $kyukaRangeTextShow, 1, 0, 'C', true); // Add 'LTRB' to draw an outer border for the cell
-$tcpdf->Cell(40, 16, $kyuka_count, 1, 0, 'C', true); // Add 1 to move to the next line
-$tcpdf->Ln(7);
+$tcpdf->Cell(40, 8, '期間', 1, 0, 'C', true); // Add 'LTRB' to draw an outer border for the cell
+$tcpdf->Cell(110, 8, $kyukaRangeTextShow, 1, 0, 'C', true); // Add 'LTRB' to draw an outer border for the cell
+$tcpdf->Cell(40, 17, $kyuka_count, 1, 0, 'C', true); // Add 1 to move to the next line
+$tcpdf->Ln(8);
 
 
 // 4. 期間  *半休　Line 
@@ -242,7 +243,7 @@ $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $text4 = "期間\n※半休のみ記入"; // Use "\n" to create a new line
 $xTmp4 = $tcpdf->GetX();
 $yTmp4 = $tcpdf->GetY();
-$tcpdf->MultiCell(40, 7, $text4, 1, 'C', true);
+$tcpdf->MultiCell(40, 8, $text4, 1, 'C', true);
 $height4 = $tcpdf->GetY() - $yTmp4;
 $tcpdf->SetXY($xTmp4 + 40, $yTmp4);
 $tcpdf->Cell(110, $height4, $kyukaHalfRangeTextShow, 1, 0, 'C', true);
@@ -257,10 +258,9 @@ $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $text5 = "休暇区分"; // Use "\n" to create a new line
 $xTmp5 = $tcpdf->GetX();
 $yTmp5 = $tcpdf->GetY();
-$tcpdf->Cell(40, 23, $text5, 1, 'C', true);
-$height5 = $tcpdf->GetY() - $yTmp5;
+$tcpdf->Cell(40, 14, $text5, 1, 'C', true);
 $tcpdf->SetXY($xTmp5 + 40, $yTmp5);
-$tcpdf->MultiCell(150, $height5 + 23, $kyukaname_, 1, 'C', true);
+$tcpdf->MultiCell(150, 14, "\n" . $kyukaname_, 1, 'C', true);
 $tcpdf->Ln(0);
 
 
@@ -270,15 +270,15 @@ $tcpdf->SetLineWidth(0.2); // Set the line width for the table border
 $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $text6 = "入社年月"; // Use "\n" to create a new line
-$tcpdf->Cell(40, 7, $text6, 1, 'C', true);
+$tcpdf->Cell(40, 8, $text6, 1, 'C', true);
 $text6 = "入社年月"; // Use "\n" to create a new line
 
-$tcpdf->Cell(55, 7, $enter_company, 1, 'C', true);
+$tcpdf->Cell(55, 8, $enter_company, 1, 'C', true);
 $text6 = "入社年月"; // Use "\n" to create a new line
-$tcpdf->Cell(40, 7, '勤続年数', 1, 'C', true);
+$tcpdf->Cell(40, 8, '勤続年数', 1, 'C', true);
 $text6 = "入社年月"; // Use "\n" to create a new line
-$tcpdf->Cell(55, 7, $calgetkyukawhy, 1, 'C', true);
-$tcpdf->Ln(7);
+$tcpdf->Cell(55, 8, $calgetkyukawhy, 1, 'C', true);
+$tcpdf->Ln(8);
 
 
 // 7. 年次有給休暇 当該年度算定期間　Line
@@ -289,7 +289,7 @@ $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $text7 = "年次有給休暇\n当該年度算定期間"; // Use "\n" to create a new line
 $xTmp7 = $tcpdf->GetX();
 $yTmp7 = $tcpdf->GetY();
-$tcpdf->MultiCell(40, 7, $text7, 1, 'C', true);
+$tcpdf->MultiCell(40, 8, $text7, 1, 'C', true);
 $height7 = $tcpdf->GetY() - $yTmp7;
 $tcpdf->SetXY($xTmp7 + 40, $yTmp7);
 $tcpdf->Cell(150, $height7, $calannualduration, 1, 0, 'C', true);
@@ -310,54 +310,55 @@ $tcpdf->MultiCell(40, 49, $text8, 1, 'C', true);
 // line 1 
 $height8 = $tcpdf->GetY() - $yTmp8;
 $tcpdf->SetXY($xTmp8 + 40, $yTmp8);
-$tcpdf->Cell(45, 7, '①総有給休暇数', 1, 'C', true);
-$tcpdf->Cell(30, 7, $tothday_count, 1, 'C', true);
+$tcpdf->Cell(45, 8, '①総有給休暇数', 1, 'C', true);
+$tcpdf->Cell(30, 8, $tothday_count, 1, 'C', true);
 
-$tcpdf->Cell(45, 7, '④使用済数', 1, 'C', true);
-$tcpdf->Cell(30, 7, $usefinishcnt_count, 1, 'C', true);
-$tcpdf->Ln(7);
+$tcpdf->Cell(45, 8, '④使用済数', 1, 'C', true);
+$tcpdf->Cell(30, 8, $usefinishcnt_count, 1, 'C', true);
+$tcpdf->Ln(8);
 
 // line 2 
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 40, $yTmp8 + 7);
-$tcpdf->Cell(45, 7, '②前年度の繰越残日数', 1, 'C', true);
-$tcpdf->Cell(30, 7, $newcnt_count, 1, 'C', true);
+$tcpdf->SetXY($xTmp8 + 40, $yTmp8 + 8);
+$tcpdf->Cell(45, 8, '②前年度の繰越残日数', 1, 'C', true);
+$tcpdf->Cell(30, 8, $newcnt_count, 1, 'C', true);
 
-$tcpdf->Cell(45, 7, '⑤使用前残日数', 1, 'C', true);
-$tcpdf->Cell(30, 7, $usebeforecnt_count, 1, 'C', true);
-$tcpdf->Ln(7);
+$tcpdf->Cell(45, 8, '⑤使用前残日数', 1, 'C', true);
+$tcpdf->Cell(30, 8, $usebeforecnt_count, 1, 'C', true);
+$tcpdf->Ln(10);
 
 // line 3 
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 40, $yTmp8 + 14);
-$tcpdf->Cell(45, 7, '③当該年度付与日数', 1, 'C', true);
-$tcpdf->Cell(30, 7, $oldcnt_count, 1, 'C', true);
+$tcpdf->SetXY($xTmp8 + 40, $yTmp8 + 16);
+$tcpdf->Cell(45, 8, '③当該年度付与日数', 1, 'C', true);
+$tcpdf->Cell(30, 8, $oldcnt_count, 1, 'C', true);
 
-$tcpdf->Cell(45, 7, '⑥今回使用数', 1, 'C', true);
-$tcpdf->Cell(30, 7, $usenowcnt_count, 1, 'C', true);
-$tcpdf->Ln(7);
+$tcpdf->Cell(45, 8, '⑥今回使用数', 1, 'C', true);
+$tcpdf->Cell(30, 8, $usenowcnt_count, 1, 'C', true);
+$tcpdf->Ln(8);
+
 // line 4 5
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 40, $yTmp8 + 21);
+$tcpdf->SetXY($xTmp8 + 40, $yTmp8 + 24);
 $tcpdf->MultiCell(45, 28, "\n\n②＋③＝①\n④＋⑤＝①", 1, 'C', true);
 
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 85, $yTmp8 + 21);
-$tcpdf->MultiCell(30, 28, "\n\n④＋⑥＝⑦\n⑤－⑥＝⑧\n④＋⑥＋⑧＝①", 1, 'C', true);
+$tcpdf->SetXY($xTmp8 + 85, $yTmp8 + 24);
+$tcpdf->MultiCell(30, 28, "\n④＋⑥＝⑦\n⑤－⑥＝⑧\n④＋⑥＋⑧＝①", 1, 'C', true);
 
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 115, $yTmp8 + 21);
-$tcpdf->MultiCell(45, 14, "\n⑦使用後済数\n(④＋⑥)", 1, 'C', true);
+$tcpdf->SetXY($xTmp8 + 115, $yTmp8 + 24);
+$tcpdf->MultiCell(45, 14, "⑦使用後済数\n(④＋⑥)", 1, 'C', true);
 
 $height8 = $tcpdf->GetY() - $yTmp8;
-$tcpdf->SetXY($xTmp8 + 160, $yTmp8 + 21);
+$tcpdf->SetXY($xTmp8 + 160, $yTmp8 + 24);
 $tcpdf->MultiCell(30, 14, $usefinishaftercnt_count, 1, 'C', true);
-$tcpdf->Ln(7);
+$tcpdf->Ln(8);
 
 // line 6 7
 $height8 = $tcpdf->GetY() - $yTmp8;
 $tcpdf->SetXY($xTmp8 + 115, $yTmp8 + 35);
-$tcpdf->MultiCell(45, 14, "\n⑧使用後残日数\n(⑤－⑥)", 1, 'C', true);
+$tcpdf->MultiCell(45, 14, "⑧使用後残日数\n(⑤－⑥)", 1, 'C', true);
 
 $height8 = $tcpdf->GetY() - $yTmp8;
 $tcpdf->SetXY($xTmp8 + 160, $yTmp8 + 35);
@@ -370,13 +371,12 @@ $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the dat
 $tcpdf->SetLineWidth(0.2); // Set the line width for the table border
 $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
-$text9 = "\n\n休暇中居る場所"; // Use "\n" to create a new line
+$text9 = "\n休暇中居る場所"; // Use "\n" to create a new line
 $xTmp9 = $tcpdf->GetX();
 $yTmp9 = $tcpdf->GetY();
-$tcpdf->MultiCell(40, 21, $text9, 1, 'C', true);
-$height9 = $tcpdf->GetY() - $yTmp9;
+$tcpdf->MultiCell(40, 14, $text9, 1, 'C', true);
 $tcpdf->SetXY($xTmp9 + 40, $yTmp9);
-$tcpdf->MultiCell(150, $height9, $placeandcontect, 1, 'C', true);
+$tcpdf->MultiCell(150, 14, "\n" . $placeandcontect, 1, 'C', true);
 $tcpdf->Ln(0);
 
 
@@ -388,9 +388,8 @@ $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $xTmp10 = $tcpdf->GetX();
 $yTmp10 = $tcpdf->GetY();
 $tcpdf->MultiCell(40, 14, "\n事由", 1, 'C', true);
-$height10 = $tcpdf->GetY() - $yTmp10;
 $tcpdf->SetXY($xTmp9 + 40, $yTmp10);
-$tcpdf->MultiCell(150, $height10, $reason, 1, 'C', true);
+$tcpdf->MultiCell(150, 14, "\n" . $reason, 1, 'C', true);
 $tcpdf->Ln(3);
 
 
@@ -402,7 +401,7 @@ $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $tcpdf->MultiCell(190, 60, "\n上記の通り休暇を申請します。\n
 （注意）
 " . $noticemessage, 1, 'L', true);
-$tcpdf->Ln(7);
+$tcpdf->Ln(8);
 $tcpdf->MultiCell(40, 5, $noticesubtitle, 0, 'L', true);
 
 
@@ -412,7 +411,7 @@ $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $xTmp11 = $tcpdf->GetX();
 $yTmp11 = $tcpdf->GetY();
-$tcpdf->Cell(30, 7, "\n" . $infotitletop, 1, 'C', true);
+$tcpdf->Cell(30, 8, "\n" . $infotitletop, 1, 'C', true);
 $tcpdf->SetXY($xTmp11, $yTmp11);
 
 //line 1
@@ -420,31 +419,30 @@ $height11 = $tcpdf->GetY() - $yTmp11;
 $tcpdf->SetXY($xTmp11 + 30, $yTmp11);
 foreach ($kyukaInfoListtopArray as $key => $value) {
 	if (count($kyukaInfoListbottomArray) < 8) {
-		$tcpdf->Cell(20, 7, $value, 1, 'C', true);
+		$tcpdf->Cell(20, 8, $value, 1, 'C', true);
 	} elseif (count($kyukaInfoListbottomArray) >= 8) {
 		if ($key < 8) {
-			$tcpdf->Cell(19.5, 7, $value, 1, 'C', true);
+			$tcpdf->Cell(19.5, 8, $value, 1, 'C', true);
 		}
-		
 	}
 }
-$tcpdf->Ln(7);
+$tcpdf->Ln(8);
 
 // line 2 
 $xTmp12 = $tcpdf->GetX();
 $yTmp12 = $tcpdf->GetY();
-$tcpdf->Cell(30, 7, "\n" . $infotitlebottom, 1, 'C', true);
+$tcpdf->Cell(30, 8, "\n" . $infotitlebottom, 1, 'C', true);
 $tcpdf->SetXY($xTmp12 + 30, $yTmp12);
 $height12 = $tcpdf->GetY() - $yTmp12;
 foreach ($kyukaInfoListbottomArray as $key => $value) {
 	if (count($kyukaInfoListbottomArray) < 8) {
-		$tcpdf->Cell(20, 7, $value, 1, 'C', true);
+		$tcpdf->Cell(20, 8, $value, 1, 'C', true);
 	} elseif (count($kyukaInfoListbottomArray) >= 8) {
 		if ($key < 8) {
-			$tcpdf->Cell(19.5, 7, $value, 1, 'C', true);
+			$tcpdf->Cell(19.5, 8, $value, 1, 'C', true);
 		}
 		if ($key >= 8) {
-			$tcpdf->Cell(0, 7, '...', 0, 1, 'L');
+			$tcpdf->Cell(0, 8, '...', 0, 1, 'L');
 		}
 	}
 }
