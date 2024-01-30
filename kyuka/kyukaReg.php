@@ -862,6 +862,10 @@ span.kyukaReg_class {
         <input type="hidden" name="startdate" id="startdate-input">
         <input type="hidden" name="enddate" id="enddate-input">
 
+		<input type="hidden" name="noticetitle" value="<?php echo htmlspecialchars($kyuka_notice_title); ?>">
+		<input type="hidden" name="noticesubtitle" value="<?php echo htmlspecialchars($kyuka_notice_subtitle); ?>">
+		<input type="hidden" name="noticemessage" value="<?php echo htmlspecialchars($kyuka_notice_message); ?>">
+
         <input type="hidden" name="KyukaNoticeMainTitle" id="KyukaNoticeMainTitle-input">
         <input type="hidden" name="KyukaNoticeSubTitle" id="KyukaNoticeSubTitle-input">
         <input type="hidden" name="KyukaNoticeMessage" id="KyukaNoticeMessage-input">
@@ -1797,13 +1801,6 @@ $(".submit-button").click(function(event) {
         $("#autopdf #monthcount-input").val("<?php echo htmlspecialchars($lastTtopMax); ?>");
         $("#autopdf #startdate-input").val("<?php echo htmlspecialchars($startdate_); ?>");
         $("#autopdf #enddate-input").val("<?php echo htmlspecialchars($enddate_); ?>");
-        $("#autopdf #KyukaNoticeMainTitle-input").val("<?php echo htmlspecialchars($kiukaNoticeList[0]['title']); ?>");
-        $("#autopdf #KyukaNoticeSubTitle-input").val("<?php echo htmlspecialchars($kiukaNoticeList[0]['subtitle']); ?>");
-       		 <?php
-			$message = $kiukaNoticeList[0]['message'];
-			$message = str_replace(array("\r\n", "\r", "\n"), '\\n', $message);
-			?>
-        $("#autopdf #KyukaNoticeMessage-input").val("<?php echo $message; ?>");
         $("#autopdf").submit();
     }
     <?php

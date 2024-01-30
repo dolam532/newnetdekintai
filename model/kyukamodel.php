@@ -119,6 +119,9 @@ $sql_kyuka_notice = 'SELECT * FROM `tbl_kyuka_notice`
 WHERE `tbl_kyuka_notice`.`companyid` = "' . $_SESSION['auth_companyid'] . '"';
 $result_kyuka_notice = mysqli_query($conn, $sql_kyuka_notice);
 $kyuka_notice_list = mysqli_fetch_all($result_kyuka_notice, MYSQLI_ASSOC);
+$kyuka_notice_title = $kyuka_notice_list[0]['title'];
+$kyuka_notice_message = $kyuka_notice_list[0]['message'];
+$kyuka_notice_subtitle = $kyuka_notice_list[0]['subtitle'];
 
 // kyukaReg.php
 // Select data from tbl_userkyuka & tbl_vacationinfo

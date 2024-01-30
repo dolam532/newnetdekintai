@@ -38,36 +38,10 @@ $startdate = $_POST['startdate'];
 $enddate = $_POST['enddate'];
 
 
-//=== データ遷移出来ません
-// FIX ME
-// kyukapdf notice  data 
-$noticeMainTitle= json_decode($_POST['KyukaNoticeMainTitle']);
-$noticeMessageShow = json_decode($_POST['KyukaNoticeMessage']);
-$noticeSubTitle=json_decode($_POST['KyukaNoticeSubTitle']);
-
-
-if (!isset($noticeMessageShow) || $noticeMessageShow =='' ) {
-    $noticeMessageShow = "休暇お知らせ登録されていませんでした。";
-} else {
-	$noticeMessageShow = $KyukaNoticeDatas['message'];
-	$noticeMainTitle = $KyukaNoticeDatas['title'];
-	$noticeSubTitle = $KyukaNoticeDatas['subtitle'];
-}
-
-error_log($noticeMessageShow);
-error_log($noticeMessageShow);
-error_log($noticeSubTitle);
-
-
-// kyukapdf info data 
-
-$KyukaInfoDatas = json_decode($_POST['KyukaInfoDatas'], true);
-if ($KyukaInfoDatas == null || isset($KyukaInfoDatas) ) {
-    $KyukaInfoDatas = "休暇お知らせ登録されていませんでした。";
-} else {
-
-}
-
+// Get data from tbl_kyuka_notice
+$noticetitle = $_POST['noticetitle'];
+$noticemessage = $_POST['noticemessage'];
+$noticesubtitle = $_POST['noticesubtitle'];
 
 
 // Calculation
@@ -421,9 +395,9 @@ $tcpdf->SetFillColor(255, 255, 255); // Set the fill color for the data rows
 $tcpdf->SetTextColor(40, 40, 40); // Set the text color for the data rows
 $tcpdf->MultiCell(190, 60, "\n上記の通り休暇を申請します。\n
 （注意）
-" . $noticeMessageShow, 1, 'L', true);
+" . $noticemessage, 1, 'L', true);
 $tcpdf->Ln(7);
-$tcpdf->MultiCell(40, 5, $noticeSubTitle, 0, 'L', true);
+$tcpdf->MultiCell(40, 5, $noticesubtitle, 0, 'L', true);
 
 
 $tcpdf->SetFont("kozgopromedium", "", 10); // Set the font and style for the data rows
