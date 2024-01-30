@@ -62,6 +62,16 @@ $kyuka_reason_empty = '事由を入力してください。';
 $kyuka_destcode_select = '暇中居る場所を選択してください。';
 $kyuka_destplace_empty = '場所を入力してください。';
 $kyuka_desttel_empty = '電話番号を入力してください。';
+$user_kyuka_data_not_found='選択したデータが見つかりませんでした。再度ログインして、操作してください。';
+$user_kyuka_kakutei_success='提出確定しました。変更がある場合は管理者へ連絡してください。';
+$user_kyuka_kakutei_fail='休暇届がまだ提出されていないです。ご確認お願い致します。';
+$user_kyuka_modoshi_submit='編集中に戻しますか？';
+$user_kyuka_modoshi_success='編集中に戻しました。これから、編集可能です。';
+$user_kyuka_modoshi_fail='編集に戻しエラー発生しました。';
+
+
+
+
 
 // kintaiReg
 $kintai_start_empty = '出社時刻を入力してください。';

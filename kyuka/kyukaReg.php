@@ -140,6 +140,69 @@ span.kyukaReg_class {
 		unset($_SESSION['delete_success']);
 	}
 	?>
+
+    <?php
+	if (isset($_SESSION['kakutei_success']) && isset($_POST['Kyukateishutsu'])) {
+	?>
+    <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <?php echo $_SESSION['kakutei_success']; ?>
+    </div>
+    <?php
+		unset($_SESSION['kakutei_success']);
+	}
+	?>
+
+    <?php
+	if (isset($_SESSION['user_kyuka_data_not_found']) && isset($_POST['Kyukateishutsu'])) {
+		?>
+    <div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <?php echo $_SESSION['user_kyuka_data_not_found']; ?>
+    </div>
+    <?php
+		unset($_SESSION['user_kyuka_data_not_found']);
+	}
+	?>
+
+    <?php
+	if (isset($_SESSION['kakutei_fail']) && isset($_POST['Kyukateishutsu'])) {
+		?>
+    <div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <?php echo $_SESSION['kakutei_fail']; ?>
+    </div>
+    <?php
+		unset($_SESSION['kakutei_fail']);
+	}
+	?>
+
+
+<?php
+	if (isset($_SESSION['user_kyuka_modoshi_success']) && isset($_POST['KyukateiHenshuModoshi'])) {
+	?>
+    <div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <?php echo $_SESSION['user_kyuka_modoshi_success']; ?>
+    </div>
+    <?php
+		unset($_SESSION['user_kyuka_modoshi_success']);
+	}
+	?>
+
+
+<?php
+	if (isset($_SESSION['user_kyuka_modoshi_fail']) && isset($_POST['KyukateiHenshuModoshi'])) {
+		?>
+    <div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <?php echo $_SESSION['user_kyuka_modoshi_fail']; ?>
+    </div>
+    <?php
+		unset($_SESSION['user_kyuka_modoshi_fail']);
+	}
+	?>
+
     <form method="post">
         <div class="row">
             <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
@@ -367,7 +430,26 @@ span.kyukaReg_class {
                                         data-kyukaid="<?= $userkyuka['kyukaid'] ?>">
                                         休暇印刷
                                     </button>
-                                    <button id="" class="btn btn-default" style="width: auto;" type="button">提出</button>
+                                    <form method="post">
+                                        <button type="submit" name="Kyukateishutsu" 
+                                            class="btn btn-default" style="width: auto;" type="button"
+                                            onclick="return checkTeiShutsuSubmit()">提出</button>
+                                        <input type="hidden"  name="selectedUserKyukaId"
+                                            value="<?= $userkyuka['kyukaid'] ?>">
+                                            <input type="hidden"  name="selectedUserKyukaSubmissionStatus"
+                                            value="<?= $userkyuka['submission_status'] ?>">
+                                    </form>
+                                    <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                                    <form method="post">
+                                        <button type="submit" name="KyukateiHenshuModoshi" 
+                                            class="btn btn-default" style="width: auto;" type="button"
+                                            onclick="return checkHenshuChuModoshiSubmit()">編集中に戻す</button>
+                                        <input type="hidden"  name="selectedUserKyukaIdHenshuModoshi"
+                                            value="<?= $userkyuka['kyukaid'] ?>">
+                                            <input type="hidden"  name="selectedUserKyukaSubmissionStatusHenshuModoshi"
+                                            value="<?= $userkyuka['submission_status'] ?>">
+                                    </form>
+                                    <?php endif; ?>
                                 </div>
                             </span>
                         </td>
@@ -862,13 +944,11 @@ span.kyukaReg_class {
         <input type="hidden" name="startdate" id="startdate-input">
         <input type="hidden" name="enddate" id="enddate-input">
 
-		<input type="hidden" name="noticetitle" value="<?php echo htmlspecialchars($kyuka_notice_title); ?>">
-		<input type="hidden" name="noticesubtitle" value="<?php echo htmlspecialchars($kyuka_notice_subtitle); ?>">
-		<input type="hidden" name="noticemessage" value="<?php echo htmlspecialchars($kyuka_notice_message); ?>">
+        <input type="hidden" name="noticetitle" value="<?php echo htmlspecialchars($kyuka_notice_title); ?>">
+        <input type="hidden" name="noticesubtitle" value="<?php echo htmlspecialchars($kyuka_notice_subtitle); ?>">
+        <input type="hidden" name="noticemessage" value="<?php echo htmlspecialchars($kyuka_notice_message); ?>">
 
-        <input type="hidden" name="KyukaNoticeMainTitle" id="KyukaNoticeMainTitle-input">
-        <input type="hidden" name="KyukaNoticeSubTitle" id="KyukaNoticeSubTitle-input">
-        <input type="hidden" name="KyukaNoticeMessage" id="KyukaNoticeMessage-input">
+
     </form>
 
     <!-- お知らせ -->
@@ -1148,6 +1228,9 @@ $(document).ready(function() {
             });
         }
     });
+
+
+    SetFormViewBySubmissionStatusHandler();
 });
 
 function calculateTimeDifference() {
@@ -1650,6 +1733,14 @@ $(document).on('click', '#btnClearUpdate', function(e) {
 
 // 編集
 $(document).on('click', '.showModal', function() {
+    // check submissionStatus can't show 
+    $selected_UserKyuka_SubmissionStatus  = "<?php echo $key['submission_status'] ?>"
+    if($selected_UserKyuka_SubmissionStatus !== '<?php echo array_search(0, $SUBMISSTION_STATUS); ?>') {
+        alert('<?= $user_kyuka_kakutei_success?>')
+    return;
+    }
+
+
     $('#modal2').modal('toggle');
     var ArrayData = $(this).text().trim();
     var SeparateArr = ArrayData.split(',');
@@ -1735,7 +1826,7 @@ $(document).on('click', '.showModal2', function() {
     if ('<?php echo $key['uid'] ?>' == Uid) {
         var oldusecnt = $("input[name=oldusecnt]:hidden");
         oldusecnt.val("<?php echo $key['usecnt'] ?>");
-        var oldusecnt = oldusecnt.val();			
+        var oldusecnt = oldusecnt.val();
         var oldusetime = $("input[name=oldusetime]:hidden");
         oldusetime.val("<?php echo $key['usetime'] ?>");
         var oldusetime = oldusetime.val();
@@ -1792,9 +1883,9 @@ $(".submit-button").click(function(event) {
         $("#autopdf #usebeforecnt-input").val("<?php echo htmlspecialchars($key['usebeforecnt']); ?>");
         $("#autopdf #usenowcnt-input").val("<?php echo htmlspecialchars($key['usenowcnt']); ?>");
         $("#autopdf #usefinishaftercnt-input").val(
-        "<?php echo htmlspecialchars($key['usefinishaftercnt']); ?>");
+            "<?php echo htmlspecialchars($key['usefinishaftercnt']); ?>");
         $("#autopdf #useafterremaincnt-input").val(
-        "<?php echo htmlspecialchars($key['useafterremaincnt']); ?>");
+            "<?php echo htmlspecialchars($key['useafterremaincnt']); ?>");
         $("#autopdf #reason-input").val("<?php echo htmlspecialchars($key['reason']); ?>");
         $("#autopdf #destplace-input").val("<?php echo htmlspecialchars($key['destplace']); ?>");
         $("#autopdf #desttel-input").val("<?php echo htmlspecialchars($key['desttel']); ?>");
@@ -1830,5 +1921,69 @@ function autoGrow(textarea) {
         textarea.style.height = scrollHeight + "px";
     }
 }
+
+
+// Check TeiShutsuBeforeSubmit
+function checkTeiShutsuSubmit() {
+    if (confirm("<?php echo $kakutei_ninsho_message ?>")) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
+
+// Check CheckHenshuChuModoshiSubmit
+function checkHenshuChuModoshiSubmit() {
+    if (confirm("<?php echo $user_kyuka_modoshi_submit ?>")) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
+
+
+
+function SetFormViewBySubmissionStatusHandler() {
+		// Set Turn On Off Button 
+		setOnOffTeiShutsuButton();
+        setOnOffModoshisuButton();
+
+	}
+
+
+function setOnOffTeiShutsuButton() {
+var buttons = $("button[name='Kyukateishutsu']");
+buttons.each(function() {
+    var inputValue = $(this).siblings("input[name='selectedUserKyukaSubmissionStatus']").val();
+    if (inputValue === '<?php echo array_search(0, $SUBMISSTION_STATUS); ?>') {
+        $(this).prop('enable', false);
+    } else {
+        $(this).prop('disabled', true);
+    }
+});
+
+}
+
+
+function setOnOffModoshisuButton() {
+var buttons = $("button[name='KyukateiHenshuModoshi']");
+buttons.each(function() {
+    var inputValue = $(this).siblings("input[name='selectedUserKyukaSubmissionStatusHenshuModoshi']").val();
+    if (inputValue === '<?php echo array_search(0, $SUBMISSTION_STATUS); ?>') {
+        $(this).prop('disabled', true);
+    } else {
+        $(this).prop('enable', false);
+    
+    }
+});
+
+}
+
+
+
+
+
 </script>
 <?php include('../inc/footer.php'); ?>
