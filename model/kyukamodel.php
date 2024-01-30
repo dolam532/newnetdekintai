@@ -527,3 +527,53 @@ if (isset($_POST['DecideUpdateKyuka'])) {
         }
     }
 }
+
+// kyuka 提出
+$currentUseUid = $_SESSION['auth_uid'];
+$currentUseCompanyId = $_SESSION['auth_companyid'];
+
+
+if (isset($_POST['Kyukateishutsu'])) {
+    $selectedUserKyukaId = mysqli_real_escape_string($conn, $_POST['selectedUserKyukaId']);
+    // check is registed workmonth ?
+    $sql_get_selectedUserKyuka = 'SELECT * FROM tbl_userkyuka WHERE  
+    `tbl_userkyuka`.`companyid` IN("' . $currentUseCompanyId . '") AND `tbl_userkyuka`.`kyukaid` IN("' . $selectedUserKyukaId . '")';
+    $result = $conn->query($sql_get_selectedUserKyuka);
+    if ($result === false) {
+        $_SESSION['$user_kyuka_data_not_found'] = $user_kyuka_data_not_found;
+        return;
+    } 
+    $resultUserKyuka = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $kyuka_submission_code =  $resultUserKyuka[0]['submission_status'];
+    if($kyuka_submission_code == 0) {       
+        $query_teishutsu_kyuka = 'UPDATE tbl_userkyuka SET `submission_status` = 1 , `upt_dt`="' . $upt_dt . ' "  WHERE  
+        `tbl_userkyuka`.`companyid` IN("' . $currentUseCompanyId . '") AND `tbl_userkyuka`.`kyukaid` IN("' . $selectedUserKyukaId . '")';
+
+        if ($conn->query($query_teishutsu_kyuka) === TRUE) {
+            $_SESSION['user_kyuka_kakutei_success'] = $user_kyuka_kakutei_success;
+            header("Refresh: 3");
+        } else {
+            $_SESSION['user_kyuka_kakutei_fail'] = $user_kyuka_kakutei_fail;
+        }
+
+    }
+
+}
+
+// User Kyuka 編集戻し
+
+if (isset($_POST['KyukateiHenshuModoshi'])) {
+    // check admin
+    if ($_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
+        return;
+    }
+    $selectedUserKyukaModoshiId = mysqli_real_escape_string($conn, $_POST['selectedUserKyukaIdHenshuModoshi']);
+        $query_teishutsu_kyuka = 'UPDATE tbl_userkyuka SET `submission_status` = 0 , `upt_dt`="' . $upt_dt . ' "  WHERE  
+        `tbl_userkyuka`.`companyid` IN("' . $currentUseCompanyId . '") AND `tbl_userkyuka`.`kyukaid` IN("' . $selectedUserKyukaModoshiId . '")';
+        if ($conn->query($query_teishutsu_kyuka) === TRUE) {
+            $_SESSION['user_kyuka_modoshi_success'] = $user_kyuka_modoshi_success;
+            header("Refresh: 3");
+        } else {
+            $_SESSION['user_kyuka_modoshi_fail'] = $user_kyuka_modoshi_fail;
+        }
+}

@@ -957,7 +957,6 @@ $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
 $currentUseUid = $_SESSION['auth_uid'];
 $currentUseCompanyId = $_SESSION['auth_companyid'];
 
-
 // WorkmonthKakutei 
 if (isset($_POST['WorkmonthKakutei'])) {
     // check is registed workmonth ?
@@ -1004,9 +1003,6 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
     }
     // WorkmonthShonin
     if (isset($_POST['WorkmonthShonin'])) {
-        // 2023-11-16  Update Sekinin  Kanri  add start // 
-        // $kanrishaUid = mysqli_real_escape_string($conn, $_POST['selectedKanri']);
-        // $sekininshaUid = mysqli_real_escape_string($conn, $_POST['selectedSekinin']);
         $kanrishaUid = $email_;
         $sekininshaUid = $email_;
 
@@ -1015,8 +1011,6 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
             $_SESSION['Shonin_KanriSha_Undefine'] = $Shonin_KanriSha_Undefine;
             return;
         }
-        //2023-11-16   Update Sekinin  Kanri  add end // 
-
 
         if ($currentSubmission_status == 1 || $currentSubmission_status == 2) {
             // 2023-11-16 Update Sekinin  Kanri  chg start // 
@@ -1030,7 +1024,6 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
                 echo 'query error: ' . mysqli_error($conn);
             }
 
-            // 2023-11-16 Update Sekinin  Kanri  add start // 
         } else if ($currentSubmission_status == 3) {
             // change kanrisha uid when sekininsha shoninzumi 
             $query_shonin = 'UPDATE tbl_workmonth SET `submission_status` = 3 , `upt_dt`="' . $upt_dt . ' " , `kanrisha_uid`="' . $kanrishaUid . ' "   WHERE `tbl_workmonth`.`email` 
@@ -1042,8 +1035,6 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
             } else {
                 echo 'query error: ' . mysqli_error($conn);
             }
-
-            // 2023-11-16  Update Sekinin  Kanri  add end // 
 
         } else {
             $_SESSION['shonin_notkakutei_fail'] = $shonin_notkakutei_fail;
@@ -1091,20 +1082,7 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
 
 // 2023/11/10 submission-status  add end 
 
-
-
 // 2023-11-16  Update Sekinin  Kanri  chg start // 
-// $sql_user_admin = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMIN') . '"';
-// $result_user_admin = mysqli_query($conn, $sql_user_admin);
-// $signstamp_admin = mysqli_fetch_all($result_user_admin, MYSQLI_ASSOC);
-
-// $sql_user_kanri = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMINISTRATOR') . '"';
-// $result_user_kanri = mysqli_query($conn, $sql_user_kanri);
-// $signstamp_kanri = mysqli_fetch_all($result_user_kanri, MYSQLI_ASSOC);
-
-// $admin_listKanri = sortUsersByAuthUid($admin_listKanri_select, trim($selectedKanri));
-// $admin_listSekinin = sortUsersByAuthUid($admin_listSekinin_select, trim($selectedSekinin));
-
 
 $sql_user_kanri = 'SELECT * FROM `tbl_user` WHERE `tbl_user`.`type`="' . constant('ADMINISTRATOR') . '"';
 if ($selectedKanri != '' && isset($selectedKanri)) {
@@ -1116,8 +1094,6 @@ if ($selectedSekinin != '' && isset($selectedSekinin)) {
     $sql_user_admin = "SELECT * FROM `tbl_user` WHERE `tbl_user`.`email` = '$selectedSekinin'";
 }
 
-error_log("Querry KANRI " . $sql_user_kanri);
-error_log("Querry ADMIN " . $sql_user_admin);
 if ($selectedSekinin != '' && isset($selectedSekinin)) {
     $sql_user_admin = "SELECT * FROM `tbl_user` WHERE `tbl_user`.`email` = '$selectedSekinin'";
 }
@@ -1128,10 +1104,6 @@ if ($selectedTeishutsu != '' && isset($selectedTeishutsu)) {
 }
 
 // $selectedTeishutsu
-
-error_log("Querry KANRI " . $sql_user_kanri);
-error_log("Querry ADMIN " . $sql_user_admin);
-error_log("Querry TEISHUTSU " . $sql_user_teishutsu);
 
 $result_user_admin = mysqli_query($conn, $sql_user_admin);
 $signstamp_admin = mysqli_fetch_all($result_user_admin, MYSQLI_ASSOC);
