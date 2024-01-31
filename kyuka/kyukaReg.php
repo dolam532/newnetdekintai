@@ -201,14 +201,14 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		unset($_SESSION['user_kyuka_modoshi_fail']);
 	}
 	?>
-	<form method="post">
-		<div class="row">
-			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-				<div class="col-md-2 text-left">
-					<div class="title_name">
-						<span class="text-left">休暇届</span>
-					</div>
+	<div class="row">
+		<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+			<div class="col-md-2 text-left">
+				<div class="title_name">
+					<span class="text-left">休暇届</span>
 				</div>
+			</div>
+			<form method="post">
 				<div class="col-md-4 text-left">
 					<div class="title_condition">
 						<label>
@@ -229,12 +229,12 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 				<div class="col-md-3 text-left">
 					<div class="title_condition">
 						<label>社員名 :
-							<select id="searchUid" name="searchUid" style="padding:2px; width:70%;">
+							<select id="searchName" name="searchName" style="padding:2px; width:70%;">
 								<option value="" selected="">選択なし</option>
 								<?php
 								foreach ($user_list as $value) {
 								?>
-									<option value="<?= $value['uid'] ?>" <?php if ($value['uid'] == $_POST['searchUid']) {
+									<option value="<?= $value['name'] ?>" <?php if ($value['name'] == $_POST['searchName']) {
 																				echo ' selected="selected"';
 																			} ?>>
 										<?= $value['name'] ?>
@@ -272,181 +272,181 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 						<input type="button" id="btnAnnt" value="お知らせ ">
 					</div>
 				</div>
-			<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
-				<div class="col-md-2 text-left">
-					<div class="title_name">
-						<span class="text-left">休暇届</span>
-					</div>
+			</form>
+		<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+			<div class="col-md-2 text-left">
+				<div class="title_name">
+					<span class="text-left">休暇届</span>
 				</div>
-				<div class="col-md-4 text-left"></div>
-				<div class="col-md-3 text-left">
-					<div class="title_condition">
-						<label>社員名 : <?= $_SESSION['auth_name'] ?></label>
-					</div>
+			</div>
+			<div class="col-md-4 text-left"></div>
+			<div class="col-md-3 text-left">
+				<div class="title_condition">
+					<label>社員名 : <?= $_SESSION['auth_name'] ?></label>
 				</div>
-				<div class="col-md-3 text-right">
-					<div class="title_btn">
-						<input type="button" id="btnNew" value="新規 ">&nbsp;
-						<input type="button" id="btnAnnt" value="お知らせ ">
-					</div>
+			</div>
+			<div class="col-md-3 text-right">
+				<div class="title_btn">
+					<input type="button" id="btnNew" value="新規 ">&nbsp;
+					<input type="button" id="btnAnnt" value="お知らせ ">
 				</div>
-			<?php endif; ?>
-		</div>
-		<div class="form-group table-wrap">
-			<table class="table table-bordered datatable" style="overflow-x: auto;">
-				<thead>
-					<tr class="info">
-						<th style="text-align: center;">ID</th>
-						<th style="text-align: center;">申請日</th>
-						<th style="text-align: center;">入社年月</th>
-						<th style="text-align: center;">社員名</th>
-						<th style="text-align: center;">申請区分</th>
-						<th style="text-align: center;">休暇区分</th>
-						<th style="text-align: center;">年度算定期間</th>
-						<th style="text-align: center;">申請期間</th>
-						<th style="text-align: center;">申請日数(時間)</th>
-						<th style="text-align: center;">総有給休暇</th>
-						<th style="text-align: center;">前年度の繰越残</th>
-						<th style="text-align: center;">当該年度付与</th>
-						<th style="text-align: center;">使用済数</th>
-						<th style="text-align: center;">使用前残</th>
-						<th style="text-align: center;">今回使用</th>
-						<th style="text-align: center;">使用後済</th>
-						<th style="text-align: center;">使用後残</th>
-						<th style="text-align: center;">事由</th>
-						<th style="text-align: center;">休暇中居る場所</th>
-						<th style="text-align: center;">緊急連絡先</th>
-						<th style="text-align: center;">決裁</th>
-						<th style="text-align: center;">詳細情報</th>
+			</div>
+		<?php endif; ?>
+	</div>
+	<div class="form-group table-wrap">
+		<table class="table table-bordered datatable" style="overflow-x: auto;">
+			<thead>
+				<tr class="info">
+					<th style="text-align: center;">ID</th>
+					<th style="text-align: center;">申請日</th>
+					<th style="text-align: center;">入社年月</th>
+					<th style="text-align: center;">社員名</th>
+					<th style="text-align: center;">申請区分</th>
+					<th style="text-align: center;">休暇区分</th>
+					<th style="text-align: center;">年度算定期間</th>
+					<th style="text-align: center;">申請期間</th>
+					<th style="text-align: center;">申請日数(時間)</th>
+					<th style="text-align: center;">総有給休暇</th>
+					<th style="text-align: center;">前年度の繰越残</th>
+					<th style="text-align: center;">当該年度付与</th>
+					<th style="text-align: center;">使用済数</th>
+					<th style="text-align: center;">使用前残</th>
+					<th style="text-align: center;">今回使用</th>
+					<th style="text-align: center;">使用後済</th>
+					<th style="text-align: center;">使用後残</th>
+					<th style="text-align: center;">事由</th>
+					<th style="text-align: center;">休暇中居る場所</th>
+					<th style="text-align: center;">緊急連絡先</th>
+					<th style="text-align: center;">決裁</th>
+					<th style="text-align: center;">詳細情報</th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php if (empty($userkyuka_list)) { ?>
+					<tr>
+						<td colspan="22" align="center"><?php echo $data_save_no; ?></td>
 					</tr>
-				</thead>
-				<tbody>
-					<?php if (empty($userkyuka_list)) { ?>
+					<?php } elseif (!empty($userkyuka_list)) {
+					foreach ($userkyuka_list as $userkyuka) {
+					?>
 						<tr>
-							<td colspan="22" align="center"><?php echo $data_save_no; ?></td>
-						</tr>
-						<?php } elseif (!empty($userkyuka_list)) {
-						foreach ($userkyuka_list as $userkyuka) {
-						?>
-							<tr>
-								<td>
-									<a href="#">
-										<span class="showModal">
-											<span class="kyukaReg_class">
-												<?= $userkyuka['kyukaid'] . ',' . $userkyuka['kyukaname'] ?>
-											</span>
-											<?= $userkyuka['uid'] ?>
+							<td>
+								<a href="#">
+									<span class="showModal">
+										<span class="kyukaReg_class">
+											<?= $userkyuka['kyukaid'] . ',' . $userkyuka['kyukaname'] ?>
 										</span>
-									</a>
-								</td>
-								<td><span><?= $userkyuka['kyukaymd'] ?></span></td>
-								<td><span><?= substr($userkyuka['inymd'], 0, 4) ?>年<?= substr($userkyuka['inymd'], 5, 2) ?>月</span>
-								</td>
-								<td><span><?= $userkyuka['name'] ?></span></td>
-								<td>
-									<span>
-										<?php
-										if ($userkyuka['kyukatype'] == "0") {
-											if ($user_kyukatemplate_ == "1") {
-												echo "日付(半休）";
-											} elseif ($user_kyukatemplate_ == "2") {
-												echo "日付";
-											}
-										} elseif ($userkyuka['kyukatype'] == "1") {
-											echo "時間";
-										}
-										?>
+										<?= $userkyuka['uid'] ?>
 									</span>
-								</td>
-								<td><span><?= $userkyuka['kyukaname'] . $userkyuka['kyukanamedetail'] ?></span></td>
-								<td><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
-								<td>
-									<span>
-										<?php
-										if ($userkyuka['kyukatype'] == "1") {
-											echo $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'];
-																		} elseif ($userkyuka['kyukatype'] == "0") {
-																			echo $userkyuka['strymd'] ?>~<?= $userkyuka['strymd'];
+								</a>
+							</td>
+							<td><span><?= $userkyuka['kyukaymd'] ?></span></td>
+							<td><span><?= substr($userkyuka['inymd'], 0, 4) ?>年<?= substr($userkyuka['inymd'], 5, 2) ?>月</span>
+							</td>
+							<td><span><?= $userkyuka['name'] ?></span></td>
+							<td>
+								<span>
+									<?php
+									if ($userkyuka['kyukatype'] == "0") {
+										if ($user_kyukatemplate_ == "1") {
+											echo "日付(半休）";
+										} elseif ($user_kyukatemplate_ == "2") {
+											echo "日付";
+										}
+									} elseif ($userkyuka['kyukatype'] == "1") {
+										echo "時間";
+									}
+									?>
+								</span>
+							</td>
+							<td><span><?= $userkyuka['kyukaname'] . $userkyuka['kyukanamedetail'] ?></span></td>
+							<td><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
+							<td>
+								<span>
+									<?php
+									if ($userkyuka['kyukatype'] == "1") {
+										echo $userkyuka['strymd'] ?>~<?= $userkyuka['endymd'];
+																	} elseif ($userkyuka['kyukatype'] == "0") {
+																		echo $userkyuka['strymd'] ?>~<?= $userkyuka['strymd'];
 																										}
 																											?>
-									</span>
-								</td>
-								<td>
-									<span>
-										<?php
-										if ($userkyuka['kyukatype'] == 0) {
-											if ($user_kyukatemplate_ == "1") {
-												echo $userkyuka['timecnt'] . "日";
-											} elseif ($user_kyukatemplate_ == "2") {
-												echo $userkyuka['timecnt'] . "時間";
-											}
-										} elseif ($userkyuka['kyukatype'] == 1) {
-											echo $userkyuka['ymdcnt'] . "日";
+								</span>
+							</td>
+							<td>
+								<span>
+									<?php
+									if ($userkyuka['kyukatype'] == 0) {
+										if ($user_kyukatemplate_ == "1") {
+											echo $userkyuka['timecnt'] . "日";
+										} elseif ($user_kyukatemplate_ == "2") {
+											echo $userkyuka['timecnt'] . "時間";
 										}
-										?>
-									</span>
-								</td>
-								<td><span><?= $userkyuka['tothday'] ?></span></td>
-								<td><span><?= $userkyuka['oldcnt'] ?></span></td>
-								<td><span><?= $userkyuka['newcnt'] ?></span></td>
-								<td><span><?= $userkyuka['usefinishcnt'] ?></span></td>
-								<td><span><?= $userkyuka['usebeforecnt'] ?></span></td>
-								<td><span><?= $userkyuka['usenowcnt'] ?></span></td>
-								<td><span><?= $userkyuka['usefinishaftercnt'] ?></span></td>
-								<td><span><?= $userkyuka['useafterremaincnt'] ?></span></td>
-								<td><span><?= $userkyuka['reason'] ?></span></td>
-								<td><span><?= $userkyuka['destplace'] ?></span></td>
-								<td><span><?= $userkyuka['desttel'] ?></span></td>
-								<td>
-									<span>
-										<?php
-										if ($userkyuka['allowok'] == "0") { ?>
-											<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-												<a href="#"><span style="color:red;text-decoration-line: underline;" class="showModal2">未決裁<span class="vacationid_class"><?= ',' . $userkyuka['uid'] . ',' . $userkyuka['ymdcnt']  . ',' . $userkyuka['timecnt'] ?></span></span>
-												<?php else : ?>
-													<span style="color:red;">未決裁</span>
-												<?php endif; ?>
-											<?php } else { ?>
-												<span>
-													決裁完了
-													<?php
-													if ($userkyuka['allowdecide'] == "0") { ?>
-														<span style="color:red;">NG</span>
-													<?php } else { ?>
-														OK
-													<?php } ?>
-												</span>
-											<?php } ?>
-									</span>
-								</td>
-								<td>
-									<span>
-										<div class="print_btn">
-											<button class="btn btn-default submit-button" style="width: auto;" type="button" data-kyukaid="<?= $userkyuka['kyukaid'] ?>">
-												休暇印刷
-											</button>
-											<form method="post">
-												<button type="submit" name="Kyukateishutsu" class="btn btn-default" style="width: auto;" type="button" onclick="return checkTeiShutsuSubmit()">提出</button>
-												<input type="hidden" name="selectedUserKyukaId" value="<?= $userkyuka['kyukaid'] ?>">
-												<input type="hidden" name="selectedUserKyukaSubmissionStatus" value="<?= $userkyuka['submission_status'] ?>">
-											</form>
-											<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-												<form method="post">
-													<button type="submit" name="KyukateiHenshuModoshi" class="btn btn-default" style="width: auto;" type="button" onclick="return checkHenshuChuModoshiSubmit()">編集中に戻す</button>
-													<input type="hidden" name="selectedUserKyukaIdHenshuModoshi" value="<?= $userkyuka['kyukaid'] ?>">
-													<input type="hidden" name="selectedUserKyukaSubmissionStatusHenshuModoshi" value="<?= $userkyuka['submission_status'] ?>">
-												</form>
+									} elseif ($userkyuka['kyukatype'] == 1) {
+										echo $userkyuka['ymdcnt'] . "日";
+									}
+									?>
+								</span>
+							</td>
+							<td><span><?= $userkyuka['tothday'] ?></span></td>
+							<td><span><?= $userkyuka['oldcnt'] ?></span></td>
+							<td><span><?= $userkyuka['newcnt'] ?></span></td>
+							<td><span><?= $userkyuka['usefinishcnt'] ?></span></td>
+							<td><span><?= $userkyuka['usebeforecnt'] ?></span></td>
+							<td><span><?= $userkyuka['usenowcnt'] ?></span></td>
+							<td><span><?= $userkyuka['usefinishaftercnt'] ?></span></td>
+							<td><span><?= $userkyuka['useafterremaincnt'] ?></span></td>
+							<td><span><?= $userkyuka['reason'] ?></span></td>
+							<td><span><?= $userkyuka['destplace'] ?></span></td>
+							<td><span><?= $userkyuka['desttel'] ?></span></td>
+							<td>
+								<span>
+									<?php
+									if ($userkyuka['allowok'] == "0") { ?>
+										<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+											<a href="#"><span style="color:red;text-decoration-line: underline;" class="showModal2">未決裁<span class="vacationid_class"><?= ',' . $userkyuka['uid'] . ',' . $userkyuka['ymdcnt']  . ',' . $userkyuka['timecnt'] ?></span></span>
+											<?php else : ?>
+												<span style="color:red;">未決裁</span>
 											<?php endif; ?>
-										</div>
-									</span>
-								</td>
-							</tr>
-					<?php }
-					} ?>
-				</tbody>
-			</table>
-		</div>
-	</form>
+										<?php } else { ?>
+											<span>
+												決裁完了
+												<?php
+												if ($userkyuka['allowdecide'] == "0") { ?>
+													<span style="color:red;">NG</span>
+												<?php } else { ?>
+													OK
+												<?php } ?>
+											</span>
+										<?php } ?>
+								</span>
+							</td>
+							<td>
+								<span>
+									<div class="print_btn">
+										<button class="btn btn-default submit-button" style="width: auto;" type="button" data-kyukaid="<?= $userkyuka['kyukaid'] ?>">
+											休暇印刷
+										</button>
+										<form method="post">
+											<button type="submit" name="Kyukateishutsu" class="btn btn-default" style="width: auto;" type="button" onclick="return checkTeiShutsuSubmit()">提出</button>
+											<input type="hidden" name="selectedUserKyukaId" value="<?= $userkyuka['kyukaid'] ?>">
+											<input type="hidden" name="selectedUserKyukaSubmissionStatus" value="<?= $userkyuka['submission_status'] ?>">
+										</form>
+										<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+											<form method="post">
+												<button type="submit" name="KyukateiHenshuModoshi" class="btn btn-default" style="width: auto;" type="button" onclick="return checkHenshuChuModoshiSubmit()">編集中に戻す</button>
+												<input type="hidden" name="selectedUserKyukaIdHenshuModoshi" value="<?= $userkyuka['kyukaid'] ?>">
+												<input type="hidden" name="selectedUserKyukaSubmissionStatusHenshuModoshi" value="<?= $userkyuka['submission_status'] ?>">
+											</form>
+										<?php endif; ?>
+									</div>
+								</span>
+							</td>
+						</tr>
+				<?php }
+				} ?>
+			</tbody>
+		</table>
+	</div>
 
 	<!-- 新規 -->
 	<div class="row">
@@ -875,6 +875,11 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<input type="hidden" name="noticetitle" value="<?php echo htmlspecialchars($kyuka_notice_title); ?>">
 		<input type="hidden" name="noticesubtitle" value="<?php echo htmlspecialchars($kyuka_notice_subtitle); ?>">
 		<input type="hidden" name="noticemessage" value="<?php echo htmlspecialchars($kyuka_notice_message); ?>">
+
+		<input type="hidden" name="infotitletop" value="<?php echo htmlspecialchars($kyukainfo_titletop); ?>">
+		<input type="hidden" name="infotitlebottom" value="<?php echo htmlspecialchars($kyukainfo_titlebottom); ?>">
+		<input type="hidden" name="kyukaInfoListtopString" value="<?php echo htmlspecialchars($kyukaInfoListtopString); ?>">
+		<input type="hidden" name="kyukaInfoListbottomString" value="<?php echo htmlspecialchars($kyukaInfoListbottomString); ?>">
 	</form>
 
 	<!-- お知らせ -->
