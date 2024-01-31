@@ -652,11 +652,6 @@ if (isset($_POST['Kyukateishutsu'])) {
     }
     $resultUserKyuka = mysqli_fetch_all($result, MYSQLI_ASSOC);
     $kyuka_submission_code =  $resultUserKyuka[0]['submission_status'];
-<<<<<<< HEAD
-    if ($kyuka_submission_code == 0) {
-        $query_teishutsu_kyuka = 'UPDATE tbl_userkyuka SET `submission_status` = 1 , `upt_dt`="' . $upt_dt . ' "  WHERE  
-        `tbl_userkyuka`.`companyid` IN("' . $currentUseCompanyId . '") AND `tbl_userkyuka`.`kyukaid` IN("' . $selectedUserKyukaId . '")';
-=======
 
     if($kyuka_submission_code == 0) {       
         $query_teishutsu_kyuka = "UPDATE tbl_userkyuka SET `submission_status` = 1 , `teishutsu_uid` = '$currentUseEmail' , `upt_dt`='$upt_dt'  WHERE  
@@ -667,7 +662,6 @@ if (isset($_POST['Kyukateishutsu'])) {
             $result_user_stamp = $conn->query($query_get_stamp);
             $user_stamp = mysqli_fetch_all($result_user_stamp, MYSQLI_ASSOC);
         }
->>>>>>> 78a88bbee614c4f92a00a87ea34e2ba36cded079
 
         if ($conn->query($query_teishutsu_kyuka) === TRUE) {
             $_SESSION['user_kyuka_kakutei_success'] = $user_kyuka_kakutei_success;
@@ -678,24 +672,6 @@ if (isset($_POST['Kyukateishutsu'])) {
     }
 }
 
-<<<<<<< HEAD
-// User Kyuka 編集戻し
-if (isset($_POST['KyukateiHenshuModoshi'])) {
-    // check admin
-    if ($_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
-        return;
-    }
-    $selectedUserKyukaModoshiId = mysqli_real_escape_string($conn, $_POST['selectedUserKyukaIdHenshuModoshi']);
-    $query_teishutsu_kyuka = 'UPDATE tbl_userkyuka SET `submission_status` = 0 , `upt_dt`="' . $upt_dt . ' "  WHERE  
-        `tbl_userkyuka`.`companyid` IN("' . $currentUseCompanyId . '") AND `tbl_userkyuka`.`kyukaid` IN("' . $selectedUserKyukaModoshiId . '")';
-    if ($conn->query($query_teishutsu_kyuka) === TRUE) {
-        $_SESSION['user_kyuka_modoshi_success'] = $user_kyuka_modoshi_success;
-        header("Refresh: 3");
-    } else {
-        $_SESSION['user_kyuka_modoshi_fail'] = $user_kyuka_modoshi_fail;
-    }
-}
-=======
 
 //  Admin Only Action 
 if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
@@ -785,5 +761,3 @@ if (isset($_POST['KyukaSekininshaShonin'])) {
 }
 
 }
-
->>>>>>> 78a88bbee614c4f92a00a87ea34e2ba36cded079

@@ -201,13 +201,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		unset($_SESSION['user_kyuka_modoshi_fail']);
 	}
 	?>
-<<<<<<< HEAD
-	<div class="row">
-		<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-			<div class="col-md-2 text-left">
-				<div class="title_name">
-					<span class="text-left">休暇届</span>
-=======
 
 <?php
 	if (isset($_SESSION['tanto_shonin_success']) && isset($_POST['KyukaTantoshaShonin'])) {
@@ -267,7 +260,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<div class="title_name">
 						<span class="text-left">休暇届</span>
 					</div>
->>>>>>> 78a88bbee614c4f92a00a87ea34e2ba36cded079
 				</div>
 			</div>
 			<form method="post">
@@ -443,33 +435,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										} elseif ($user_kyukatemplate_ == "2") {
 											echo $userkyuka['timecnt'] . "時間";
 										}
-<<<<<<< HEAD
-									} elseif ($userkyuka['kyukatype'] == 1) {
-										echo $userkyuka['ymdcnt'] . "日";
-									}
-									?>
-								</span>
-							</td>
-							<td><span><?= $userkyuka['tothday'] ?></span></td>
-							<td><span><?= $userkyuka['oldcnt'] ?></span></td>
-							<td><span><?= $userkyuka['newcnt'] ?></span></td>
-							<td><span><?= $userkyuka['usefinishcnt'] ?></span></td>
-							<td><span><?= $userkyuka['usebeforecnt'] ?></span></td>
-							<td><span><?= $userkyuka['usenowcnt'] ?></span></td>
-							<td><span><?= $userkyuka['usefinishaftercnt'] ?></span></td>
-							<td><span><?= $userkyuka['useafterremaincnt'] ?></span></td>
-							<td><span><?= $userkyuka['reason'] ?></span></td>
-							<td><span><?= $userkyuka['destplace'] ?></span></td>
-							<td><span><?= $userkyuka['desttel'] ?></span></td>
-							<td>
-								<span>
-									<?php
-									if ($userkyuka['allowok'] == "0") { ?>
-										<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-											<a href="#"><span style="color:red;text-decoration-line: underline;" class="showModal2">未決裁<span class="vacationid_class"><?= ',' . $userkyuka['uid'] . ',' . $userkyuka['ymdcnt']  . ',' . $userkyuka['timecnt'] ?></span></span>
-											<?php else : ?>
-												<span style="color:red;">未決裁</span>
-=======
 										?>
 									</span>
 								</td>
@@ -535,7 +500,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 													<input type="hidden" name="selectedUserKyukaSekininShoninId" value="<?= $userkyuka['kyukaid'] ?>">
 													<input type="hidden" name="selectedUserKyukaSubmissionStatusAdmin" value="<?= $userkyuka['submission_status'] ?>">
 												</form>
->>>>>>> 78a88bbee614c4f92a00a87ea34e2ba36cded079
 											<?php endif; ?>
 										<?php } else { ?>
 											<span>
@@ -1006,21 +970,16 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<input type="hidden" name="noticesubtitle" value="<?php echo htmlspecialchars($kyuka_notice_subtitle); ?>">
 		<input type="hidden" name="noticemessage" value="<?php echo htmlspecialchars($kyuka_notice_message); ?>">
 
-<<<<<<< HEAD
 		<input type="hidden" name="infotitletop" value="<?php echo htmlspecialchars($kyukainfo_titletop); ?>">
 		<input type="hidden" name="infotitlebottom" value="<?php echo htmlspecialchars($kyukainfo_titlebottom); ?>">
 		<input type="hidden" name="kyukaInfoListtopString" value="<?php echo htmlspecialchars($kyukaInfoListtopString); ?>">
 		<input type="hidden" name="kyukaInfoListbottomString" value="<?php echo htmlspecialchars($kyukaInfoListbottomString); ?>">
-=======
+
 		<input type="hidden" name="signstamp_sekinin" id="signstamp_sekinin-input" >
 		<input type="hidden" name="signstamp_tanto"  id="signstamp_tanto-input" >
 		<input type="hidden" name="signstamp_user" id="signstamp_user-input" >
 
 		<!-- $user_stamp -->
-
-
-
->>>>>>> 78a88bbee614c4f92a00a87ea34e2ba36cded079
 	</form>
 
 	<!-- お知らせ -->
