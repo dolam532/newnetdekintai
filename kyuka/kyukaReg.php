@@ -178,7 +178,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 
 	<?php
-	if (isset($_SESSION['user_kyuka_modoshi_success']) && isset($_POST['KyukateiHenshuModoshi'])) {
+	if (isset($_SESSION['user_kyuka_modoshi_success']) && isset($_POST['KyukaHenshuModoshi'])) {
 	?>
 		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -191,7 +191,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 
 	<?php
-	if (isset($_SESSION['user_kyuka_modoshi_fail']) && isset($_POST['KyukateiHenshuModoshi'])) {
+	if (isset($_SESSION['user_kyuka_modoshi_fail']) && isset($_POST['KyukaHenshuModoshi'])) {
 	?>
 		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
 			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -201,11 +201,73 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		unset($_SESSION['user_kyuka_modoshi_fail']);
 	}
 	?>
+<<<<<<< HEAD
 	<div class="row">
 		<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
 			<div class="col-md-2 text-left">
 				<div class="title_name">
 					<span class="text-left">休暇届</span>
+=======
+
+<?php
+	if (isset($_SESSION['tanto_shonin_success']) && isset($_POST['KyukaTantoshaShonin'])) {
+	?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['tanto_shonin_success']; ?>
+		</div>
+	<?php
+		unset($_SESSION['tanto_shonin_success']);
+	}
+	?>
+
+<?php
+	if (isset($_SESSION['sekinin_shonin_success']) && isset($_POST['KyukaSekininshaShonin'])) {
+	?>
+		<div class="alert alert-success alert-dismissible" role="alert" auto-close="3000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['sekinin_shonin_success']; ?>
+		</div>
+	<?php
+		unset($_SESSION['sekinin_shonin_success']);
+	}
+	?>
+<?php
+	if (isset($_SESSION['tanto_shonin_error']) && isset($_POST['KyukaTantoshaShonin'])) {
+	?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['tanto_shonin_error']; ?>
+		</div>
+	<?php
+		unset($_SESSION['tanto_shonin_error']);
+	}
+	?>
+
+
+
+<?php
+	if (isset($_SESSION['sekinin_shonin_error']) && isset($_POST['KyukaSekininshaShonin'])) {
+	?>
+		<div class="alert alert-danger alert-dismissible" role="alert" auto-close="5000">
+			<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+			<?php echo $_SESSION['sekinin_shonin_error']; ?>
+		</div>
+	<?php
+		unset($_SESSION['sekinin_shonin_error']);
+	}
+	?>
+
+
+
+	<form method="post">
+		<div class="row">
+			<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+				<div class="col-md-2 text-left">
+					<div class="title_name">
+						<span class="text-left">休暇届</span>
+					</div>
+>>>>>>> 78a88bbee614c4f92a00a87ea34e2ba36cded079
 				</div>
 			</div>
 			<form method="post">
@@ -381,6 +443,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										} elseif ($user_kyukatemplate_ == "2") {
 											echo $userkyuka['timecnt'] . "時間";
 										}
+<<<<<<< HEAD
 									} elseif ($userkyuka['kyukatype'] == 1) {
 										echo $userkyuka['ymdcnt'] . "日";
 									}
@@ -406,6 +469,73 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 											<a href="#"><span style="color:red;text-decoration-line: underline;" class="showModal2">未決裁<span class="vacationid_class"><?= ',' . $userkyuka['uid'] . ',' . $userkyuka['ymdcnt']  . ',' . $userkyuka['timecnt'] ?></span></span>
 											<?php else : ?>
 												<span style="color:red;">未決裁</span>
+=======
+										?>
+									</span>
+								</td>
+								<td><span><?= $userkyuka['tothday'] ?></span></td>
+								<td><span><?= $userkyuka['oldcnt'] ?></span></td>
+								<td><span><?= $userkyuka['newcnt'] ?></span></td>
+								<td><span><?= $userkyuka['usefinishcnt'] ?></span></td>
+								<td><span><?= $userkyuka['usebeforecnt'] ?></span></td>
+								<td><span><?= $userkyuka['usenowcnt'] ?></span></td>
+								<td><span><?= $userkyuka['usefinishaftercnt'] ?></span></td>
+								<td><span><?= $userkyuka['useafterremaincnt'] ?></span></td>
+								<td><span><?= $userkyuka['reason'] ?></span></td>
+								<td><span><?= $userkyuka['destplace'] ?></span></td>
+								<td><span><?= $userkyuka['desttel'] ?></span></td>
+								<td>
+									<span>
+										<?php
+										if ($userkyuka['allowok'] == "0") { ?>
+											<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+												<a href="#"><span style="color:red;text-decoration-line: underline;" class="showModal2">未決裁<span class="vacationid_class"><?= ',' . $userkyuka['uid'] . ',' . $userkyuka['ymdcnt']  . ',' . $userkyuka['timecnt'] ?></span></span>
+												<?php else : ?>
+													<span style="color:red;">未決裁</span>
+												<?php endif; ?>
+											<?php } else { ?>
+												<span>
+													決裁完了
+													<?php
+													if ($userkyuka['allowdecide'] == "0") { ?>
+														<span style="color:red;">NG</span>
+													<?php } else { ?>
+														OK
+													<?php } ?>
+												</span>
+											<?php } ?>
+									</span>
+								</td>
+								<td>
+									<span>
+										<div class="print_btn">
+											<button class="btn btn-default submit-button" style="width: auto;" type="button" data-kyukaid="<?= $userkyuka['kyukaid'] ?>">
+												休暇印刷
+											</button>
+											<form method="post">
+												<button type="submit" name="Kyukateishutsu" class="btn btn-default" style="width: auto;" type="button" onclick="return checkTeiShutsuSubmit()">提出</button>
+												<input type="hidden" name="selectedUserKyukaId" value="<?= $userkyuka['kyukaid'] ?>">
+												<input type="hidden" name="selectedUserKyukaEmail" value="<?= $userkyuka['email'] ?>">
+												<input type="hidden" name="selectedUserKyukaSubmissionStatus" value="<?= $userkyuka['submission_status'] ?>">
+											</form>
+											<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+												<form method="post">
+													<button type="submit" name="KyukaHenshuModoshi" class="btn btn-default" style="width: auto;" type="button" onclick="return checkHenshuChuModoshiSubmit()">編集中に戻す</button>
+													<input type="hidden" name="selectedUserKyukaModoshiId" value="<?= $userkyuka['kyukaid'] ?>">
+													<input type="hidden" name="selectedUserKyukaSubmissionStatusAdmin" value="<?= $userkyuka['submission_status'] ?>">
+												</form>
+												<form method="post">
+													<button type="submit" name="KyukaTantoshaShonin" class="btn btn-default" style="width: auto;" type="button" onclick="return checkTantoshaShoninSubmit()">担当者承認</button>
+													<input type="hidden" name="selectedUserKyukaTantoShoninId" value="<?= $userkyuka['kyukaid'] ?>">
+													<input type="hidden" name="selectedUserKyukaSubmissionStatusAdmin" value="<?= $userkyuka['submission_status'] ?>">
+								
+												</form>
+												<form method="post">
+													<button type="submit" name="KyukaSekininshaShonin" class="btn btn-default" style="width: auto;" type="button" onclick="return checkSekininshaShoninSubmit()">責任者承認</button>
+													<input type="hidden" name="selectedUserKyukaSekininShoninId" value="<?= $userkyuka['kyukaid'] ?>">
+													<input type="hidden" name="selectedUserKyukaSubmissionStatusAdmin" value="<?= $userkyuka['submission_status'] ?>">
+												</form>
+>>>>>>> 78a88bbee614c4f92a00a87ea34e2ba36cded079
 											<?php endif; ?>
 										<?php } else { ?>
 											<span>
@@ -876,10 +1006,21 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<input type="hidden" name="noticesubtitle" value="<?php echo htmlspecialchars($kyuka_notice_subtitle); ?>">
 		<input type="hidden" name="noticemessage" value="<?php echo htmlspecialchars($kyuka_notice_message); ?>">
 
+<<<<<<< HEAD
 		<input type="hidden" name="infotitletop" value="<?php echo htmlspecialchars($kyukainfo_titletop); ?>">
 		<input type="hidden" name="infotitlebottom" value="<?php echo htmlspecialchars($kyukainfo_titlebottom); ?>">
 		<input type="hidden" name="kyukaInfoListtopString" value="<?php echo htmlspecialchars($kyukaInfoListtopString); ?>">
 		<input type="hidden" name="kyukaInfoListbottomString" value="<?php echo htmlspecialchars($kyukaInfoListbottomString); ?>">
+=======
+		<input type="hidden" name="signstamp_sekinin" id="signstamp_sekinin-input" >
+		<input type="hidden" name="signstamp_tanto"  id="signstamp_tanto-input" >
+		<input type="hidden" name="signstamp_user" id="signstamp_user-input" >
+
+		<!-- $user_stamp -->
+
+
+
+>>>>>>> 78a88bbee614c4f92a00a87ea34e2ba36cded079
 	</form>
 
 	<!-- お知らせ -->
@@ -950,8 +1091,8 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 							<div class="row one">
 								<div class="col-md-2 col-sm-2 col-sx-2"></div>
 								<div class="col-md-4 col-sm-4 col-sx-4 uid">
-									<label for="uid">ID</label>
-									<input type="text" class="form-control" id="duid" name="duid" style="text-align: left" readonly>
+									<label for="uid">社員</label>
+									<input type="text"  class="form-control" id="duid" name="duid" style="text-align: left" readonly>
 									<input type="hidden" id="allowok" name="allowok" value="1">
 									<input type="hidden" id="newymdcnt" name="newymdcnt">
 									<input type="hidden" id="newtimecnt" name="newtimecnt">
@@ -1796,6 +1937,9 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#autopdf #reason-input").val("<?php echo htmlspecialchars($key['reason']); ?>");
 					$("#autopdf #destplace-input").val("<?php echo htmlspecialchars($key['destplace']); ?>");
 					$("#autopdf #desttel-input").val("<?php echo htmlspecialchars($key['desttel']); ?>");
+					$("#autopdf #signstamp_user-input").val("<?php echo htmlspecialchars($key['teishutsu_stamp']); ?>");
+					$("#autopdf #signstamp_tanto-input").val("<?php echo htmlspecialchars($key['tantosha_stamp']); ?>");
+					$("#autopdf #signstamp_sekinin-input").val("<?php echo htmlspecialchars($key['sekininsha_stamp']); ?>");
 					$("#autopdf").submit();
 				}
 		<?php
@@ -1843,12 +1987,27 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		}
 
 	}
+	function checkTantoshaShoninSubmit() {
+		if (confirm("<?php echo $user_kyuka_tantosha_submit ?>")) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
+	function checkSekininshaShoninSubmit() {
+		if (confirm("<?php echo $user_kyuka_sekininsha_submit ?>")) {
+			return true;
+		} else {
+			return false;
+		}
+
+	}
 
 	function SetFormViewBySubmissionStatusHandler() {
 		// Set Turn On Off Button 
 		setOnOffTeiShutsuButton();
-		setOnOffModoshisuButton();
-
+		setOnOffAdminButons();
 	}
 
 	function setOnOffTeiShutsuButton() {
@@ -1864,17 +2023,21 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 
 	}
 
-	function setOnOffModoshisuButton() {
-		var buttons = $("button[name='KyukateiHenshuModoshi']");
-		buttons.each(function() {
-			var inputValue = $(this).siblings("input[name='selectedUserKyukaSubmissionStatusHenshuModoshi']").val();
-			if (inputValue === '<?php echo array_search(0, $SUBMISSTION_STATUS); ?>') {
-				$(this).prop('disabled', true);
-			} else {
-				$(this).prop('enable', false);
+	function setOnOffAdminButons() {
+	var buttonsModoshi = $("button[name='KyukaHenshuModoshi']");
+	var buttonsTantoSha = $("button[name='KyukaTantoshaShonin']");
+	var buttonsSekininSha = $("button[name='KyukaSekininshaShonin']");
+	var buttons = buttonsTantoSha.add(buttonsSekininSha).add(buttonsModoshi);
 
-			}
-		});
+	buttons.each(function() {
+    var inputValue = $(this).siblings("input[name='selectedUserKyukaSubmissionStatusAdmin']").val();
+    if (inputValue === '<?php echo array_search(0, $SUBMISSTION_STATUS); ?>') {
+        $(this).prop('disabled', true);
+    } else {
+        $(this).prop('disabled', false);
+    }
+});
+
 
 	}
 </script>

@@ -65,12 +65,15 @@ $kyuka_desttel_empty = '電話番号を入力してください。';
 $user_kyuka_data_not_found='選択したデータが見つかりませんでした。再度ログインして、操作してください。';
 $user_kyuka_kakutei_success='提出確定しました。変更がある場合は管理者へ連絡してください。';
 $user_kyuka_kakutei_fail='休暇届がまだ提出されていないです。ご確認お願い致します。';
-$user_kyuka_modoshi_submit='編集中に戻しますか？';
+$user_kyuka_modoshi_submit='編集中に戻します。選択した休暇届が編集可能になります。\nよろしいでしょうか？';
 $user_kyuka_modoshi_success='編集中に戻しました。これから、編集可能です。';
 $user_kyuka_modoshi_fail='編集に戻しエラー発生しました。';
-
-
-
+$tanto_shonin_success = '担当者承認成功しました。変更がある場合は編集中に戻し編集してください。';
+$tanto_shonin_error = '担当者承認失敗しました。最初からやり直してください。';
+$sekinin_shonin_success = '責任者承認成功しました。変更がある場合は編集中に戻し編集してください。';
+$sekinin_shonin_error = '責任者承認失敗しました。最初からやり直してください。';
+$user_kyuka_tantosha_submit ='担当者承認確定します。\nよろしいでしょうか？';
+$user_kyuka_sekininsha_submit='責任者承認確定します。\nよろしいでしょうか？';
 
 
 // kintaiReg

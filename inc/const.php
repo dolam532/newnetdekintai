@@ -1,9 +1,14 @@
 <?php
 
 // Database data
-DEFINE('DB_HOST', '153.127.255.167');
-DEFINE('DB_USER', 'ndk');
-DEFINE('DB_PASSWORD', 'ganandkadm2019');
+// DEFINE('DB_HOST', '153.127.255.167');
+// DEFINE('DB_USER', 'ndk');
+// DEFINE('DB_PASSWORD', 'ganandkadm2019');
+// DEFINE('DB_NAME', 'newndk');
+
+DEFINE('DB_HOST', 'localhost');
+DEFINE('DB_USER', 'root');
+DEFINE('DB_PASSWORD', 'root');
 DEFINE('DB_NAME', 'newndk');
 
 // Loginout Admin, User, ADMINISTRATOR
