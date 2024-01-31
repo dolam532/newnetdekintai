@@ -435,6 +435,7 @@ $tcpdf->Cell(30, 8, "\n" . $infotitlebottom, 1, 'C', true);
 $tcpdf->SetXY($xTmp12 + 30, $yTmp12);
 $height12 = $tcpdf->GetY() - $yTmp12;
 
+$showEllipsis = true;
 foreach ($kyukaInfoListbottomArray as $key => $value) {
 	if (count($kyukaInfoListbottomArray) < 8) {
 		$tcpdf->Cell(20, 8, $value, 1, 'C', true);
@@ -442,9 +443,9 @@ foreach ($kyukaInfoListbottomArray as $key => $value) {
 		if ($key < 8) {
 			$tcpdf->Cell(19.5, 8, $value, 1, 'C', true);
 		}
-		if ($key >= 8) {
+		if ($key >= 8 && $showEllipsis) {
 			$tcpdf->Cell(0, 8, '...', 0, 1, 'L');
-			break;
+			$showEllipsis = false;
 		}
 	}
 }
