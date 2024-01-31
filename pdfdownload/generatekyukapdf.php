@@ -10,7 +10,7 @@ $tcpdf->AddPage();
 $kyukaymd = $_POST['kyukaymd'];
 $name = $_POST['name'];
 $dept = $_POST['dept'];
-$signstamp_user = $_POST['signstamp'];
+$signstamp_user = $_POST['signstamp_user'];
 $kyukatype = $_POST['kyukatype'];
 $strymd = $_POST['strymd'];
 $strtime = $_POST['strtime'];
@@ -86,8 +86,8 @@ $kyukaRangeTextShow = substr($strymd, 0, 4) . '年 ' . substr($strymd, 5, 2) . '
 	. substr($endymd, 0, 4) . '年 ' . substr($endymd, 5, 2) . '月 ' . substr($endymd, 8, 2) . '日' . '(' . $endymd_youbi . ')';
 
 // user 印鑑
-$signstamp_user_ = '<img src="../assets/uploads/signstamp/' . $signstamp_user . '" width="40" height="40" />';
-$signstamp_user_show = '';
+$signstamp_user_ = '<img src="../assets/uploads/signstamp/' . $signstamp_user  . '" width="40" height="40" />';
+$signstamp_user_show = $signstamp_user_;
 
 // 年次有給休暇残日数
 $tothday_count = $tothday . '日';
@@ -99,17 +99,19 @@ $usenowcnt_count = $usenowcnt . '日';
 $usefinishaftercnt_count = $usefinishaftercnt . '日';
 $useafterremaincnt_count = $useafterremaincnt . '日';
 
-// check accept of user here 
-$signstamp_user_show = $signstamp_user_;
+
 
 // 責任者印鑑
-$signstamp_admin = '1_aaaa_y8Y5DhIVfoXrdaH2.png';
+// $signstamp_admin = '1_aaaa_y8Y5DhIVfoXrdaH2.png';
+$signstamp_admin = $_POST['signstamp_sekinin'];
+
 $signstamp_admin_ = '<img src="../assets/uploads/signstamp/' . $signstamp_admin . '" width="40" height="40" />';
 $signstamp_admin_show = '';
 $signstamp_admin_show = $signstamp_admin_;
 
 // 担当者印鑑
-$signstamp_kanri = '1_aaaa_y8Y5DhIVfoXrdaH2.png';
+// $signstamp_kanri = '1_aaaa_y8Y5DhIVfoXrdaH2.png';
+$signstamp_kanri = $_POST['signstamp_tanto'];
 $signstamp_kanri_ = '<img src="../assets/uploads/signstamp/' . $signstamp_kanri . '" width="40" height="40" />';
 $signstamp_kanri_show = '';
 $signstamp_kanri_show = $signstamp_kanri_;
