@@ -875,10 +875,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		<input type="hidden" name="noticetitle" value="<?php echo htmlspecialchars($kyuka_notice_title); ?>">
 		<input type="hidden" name="noticesubtitle" value="<?php echo htmlspecialchars($kyuka_notice_subtitle); ?>">
 		<input type="hidden" name="noticemessage" value="<?php echo htmlspecialchars($kyuka_notice_message); ?>">
-
-		<input type="hidden" name="KyukaNoticeMainTitle" id="KyukaNoticeMainTitle-input">
-		<input type="hidden" name="KyukaNoticeSubTitle" id="KyukaNoticeSubTitle-input">
-		<input type="hidden" name="KyukaNoticeMessage" id="KyukaNoticeMessage-input">
 	</form>
 
 	<!-- お知らせ -->
@@ -892,9 +888,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<div class="modal-body" style="text-align: left">
 						<div class="row">
 							<div class="col-md-12 col-ms-12">
-								<textarea class="alert alert-warning" readonly id="message-area2" name="message-area2" style="width:100%; overflow: hidden; resize: none;" style="width: 100%; overflow:auto;" oninput="autoGrow(this)" rows="4">
-									<?= trim($kyuka_notice_list[0]['message']) ?>
-                    			</textarea>
+								<textarea class="alert alert-warning" readonly id="message-area2" name="message-area2" style="width:100%; overflow: hidden; resize: none;" style="width: 100%; overflow:auto;" oninput="autoGrow(this)" rows="4"><?= trim($kyuka_notice_list[0]['message']) ?></textarea>
 							</div>
 							<div class="col-md-12 col-ms-12 sub-middle">
 								<div class="alert alert-info" style="margin-bottom: 10px;">
@@ -1797,9 +1791,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					$("#autopdf #reason-input").val("<?php echo htmlspecialchars($key['reason']); ?>");
 					$("#autopdf #destplace-input").val("<?php echo htmlspecialchars($key['destplace']); ?>");
 					$("#autopdf #desttel-input").val("<?php echo htmlspecialchars($key['desttel']); ?>");
-					$("#autopdf #monthcount-input").val("<?php echo htmlspecialchars($lastTtopMax); ?>");
-					$("#autopdf #startdate-input").val("<?php echo htmlspecialchars($startdate_); ?>");
-					$("#autopdf #enddate-input").val("<?php echo htmlspecialchars($enddate_); ?>");
 					$("#autopdf").submit();
 				}
 		<?php
