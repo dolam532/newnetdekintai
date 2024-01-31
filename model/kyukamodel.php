@@ -209,8 +209,80 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"';
 }
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
-$userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
+$userkyuka_list_ = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 
+if (!empty($userkyuka_list_)) {
+    foreach ($userkyuka_list_ as $key) {
+        $AllowOk[] = $key['allowok'];
+        $UId[] = $key['uid'];
+        $KyukaY[] = substr($key['kyukaymd'], 0, 4);
+        $Name[] = $key['name'];
+        $VacationY[] = substr($key['vacationstr'], 0, 4);
+    }
+}
+$AllowOk = array_unique($AllowOk);
+$UId = array_unique($UId);
+$KyukaY = array_unique($KyukaY);
+$Name = array_unique($Name);
+$VacationY = array_unique($VacationY);
+
+if (($_POST['btnSearchReg'] == NULL && $_POST['ClearButton'] == NULL) || isset($_POST['ClearButton'])) {
+    $_POST['searchAllowok'] = constant('SEARCH_ALLOW');
+    $_POST['searchYY'] = "";
+    $_POST['searchName'] = "";
+    $userkyuka_list = $userkyuka_list_;
+} elseif (isset($_POST['btnSearchReg'])) {
+    if ($_POST['searchAllowok'] == constant('SEARCH_ALLOW')) {
+        $searchAllowok = implode('","', $AllowOk);
+    } else {
+        $searchAllowok = $_POST['searchAllowok'];
+    }
+    if ($_POST['searchName'] == "") {
+        $searchName = implode('","', $Name);
+    } else {
+        $searchName = $_POST['searchName'];
+    }
+    if ($_POST['searchYY'] == "") {
+        $searchYY = implode('","', $KyukaY);
+    } else {
+        $searchYY = $_POST['searchYY'];
+    }
+
+    $sql_userkyuka = 'SELECT DISTINCT
+    `tbl_userkyuka`.*,
+    `tbl_user`.`uid`,
+    `tbl_user`.`companyid`,
+    `tbl_user`.`name`,
+    `tbl_user`.`dept`,
+    `tbl_user`.`email`,
+    `tbl_user`.`inymd`,
+    `tbl_user`.`signstamp`,
+    `tbl_vacationinfo`.`vacationstr`,
+    `tbl_vacationinfo`.`vacationend`,
+    `tbl_vacationinfo`.`tothday`,
+    `tbl_vacationinfo`.`oldcnt`,
+    `tbl_vacationinfo`.`newcnt`,
+    `tbl_vacationinfo`.`usefinishcnt`,
+    `tbl_vacationinfo`.`usebeforecnt`,
+    `tbl_vacationinfo`.`usenowcnt`,
+    `tbl_vacationinfo`.`usefinishaftercnt`,
+    `tbl_vacationinfo`.`useafterremaincnt`,
+    `tbl_company`.`kyukatemplate`
+FROM
+    `tbl_userkyuka`
+CROSS JOIN `tbl_user` ON `tbl_userkyuka`.`email` = `tbl_user`.`email`
+CROSS JOIN `tbl_vacationinfo` ON `tbl_userkyuka`.`vacationid` = `tbl_vacationinfo`.`vacationid`
+CROSS JOIN `tbl_company` ON `tbl_user`.`companyid` = `tbl_company`.`companyid`
+CROSS JOIN `tbl_manageinfo` ON `tbl_user`.`companyid` = `tbl_manageinfo`.`companyid`
+WHERE `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
+AND `tbl_userkyuka`.`allowok` IN("' . $searchAllowok . '") 
+AND `tbl_user`.`name` IN ("' . $searchName . '") 
+AND LEFT(`tbl_userkyuka`.`kyukaymd`, 4)  IN ("' . $searchYY . '")
+ORDER BY `tbl_userkyuka`.`kyukaid`';
+    $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
+    $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
+}
 
 // kyukaMonthly.php
 // Search Button Click
@@ -542,10 +614,10 @@ if (isset($_POST['Kyukateishutsu'])) {
     if ($result === false) {
         $_SESSION['$user_kyuka_data_not_found'] = $user_kyuka_data_not_found;
         return;
-    } 
+    }
     $resultUserKyuka = mysqli_fetch_all($result, MYSQLI_ASSOC);
     $kyuka_submission_code =  $resultUserKyuka[0]['submission_status'];
-    if($kyuka_submission_code == 0) {       
+    if ($kyuka_submission_code == 0) {
         $query_teishutsu_kyuka = 'UPDATE tbl_userkyuka SET `submission_status` = 1 , `upt_dt`="' . $upt_dt . ' "  WHERE  
         `tbl_userkyuka`.`companyid` IN("' . $currentUseCompanyId . '") AND `tbl_userkyuka`.`kyukaid` IN("' . $selectedUserKyukaId . '")';
 
@@ -555,25 +627,22 @@ if (isset($_POST['Kyukateishutsu'])) {
         } else {
             $_SESSION['user_kyuka_kakutei_fail'] = $user_kyuka_kakutei_fail;
         }
-
     }
-
 }
 
 // User Kyuka 編集戻し
-
 if (isset($_POST['KyukateiHenshuModoshi'])) {
     // check admin
     if ($_SESSION['auth_type'] !== constant('ADMINISTRATOR') && $_SESSION['auth_type'] !== constant('ADMIN') && $_SESSION['auth_type'] !== constant('MAIN_ADMIN')) {
         return;
     }
     $selectedUserKyukaModoshiId = mysqli_real_escape_string($conn, $_POST['selectedUserKyukaIdHenshuModoshi']);
-        $query_teishutsu_kyuka = 'UPDATE tbl_userkyuka SET `submission_status` = 0 , `upt_dt`="' . $upt_dt . ' "  WHERE  
+    $query_teishutsu_kyuka = 'UPDATE tbl_userkyuka SET `submission_status` = 0 , `upt_dt`="' . $upt_dt . ' "  WHERE  
         `tbl_userkyuka`.`companyid` IN("' . $currentUseCompanyId . '") AND `tbl_userkyuka`.`kyukaid` IN("' . $selectedUserKyukaModoshiId . '")';
-        if ($conn->query($query_teishutsu_kyuka) === TRUE) {
-            $_SESSION['user_kyuka_modoshi_success'] = $user_kyuka_modoshi_success;
-            header("Refresh: 3");
-        } else {
-            $_SESSION['user_kyuka_modoshi_fail'] = $user_kyuka_modoshi_fail;
-        }
+    if ($conn->query($query_teishutsu_kyuka) === TRUE) {
+        $_SESSION['user_kyuka_modoshi_success'] = $user_kyuka_modoshi_success;
+        header("Refresh: 3");
+    } else {
+        $_SESSION['user_kyuka_modoshi_fail'] = $user_kyuka_modoshi_fail;
+    }
 }
