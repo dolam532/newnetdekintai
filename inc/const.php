@@ -6,11 +6,6 @@ DEFINE('DB_USER', 'ndk');
 DEFINE('DB_PASSWORD', 'ganandkadm2019');
 DEFINE('DB_NAME', 'newndk');
 
-// DEFINE('DB_HOST', 'localhost');
-// DEFINE('DB_USER', 'root');
-// DEFINE('DB_PASSWORD', 'root');
-// DEFINE('DB_NAME', 'newndk');
-
 // Loginout Admin, User, ADMINISTRATOR
 DEFINE('MAIN_ADMIN', '9');
 DEFINE('MAIN_COMPANY_ID', '0');
