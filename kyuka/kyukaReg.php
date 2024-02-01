@@ -514,27 +514,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 										<?php } ?>
 								</span>
 							</td>
-							<td>
-								<span>
-									<div class="print_btn">
-										<button class="btn btn-default submit-button" style="width: auto;" type="button" data-kyukaid="<?= $userkyuka['kyukaid'] ?>">
-											休暇印刷
-										</button>
-										<form method="post">
-											<button type="submit" name="Kyukateishutsu" class="btn btn-default" style="width: auto;" type="button" onclick="return checkTeiShutsuSubmit()">提出</button>
-											<input type="hidden" name="selectedUserKyukaId" value="<?= $userkyuka['kyukaid'] ?>">
-											<input type="hidden" name="selectedUserKyukaSubmissionStatus" value="<?= $userkyuka['submission_status'] ?>">
-										</form>
-										<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-											<form method="post">
-												<button type="submit" name="KyukateiHenshuModoshi" class="btn btn-default" style="width: auto;" type="button" onclick="return checkHenshuChuModoshiSubmit()">編集中に戻す</button>
-												<input type="hidden" name="selectedUserKyukaIdHenshuModoshi" value="<?= $userkyuka['kyukaid'] ?>">
-												<input type="hidden" name="selectedUserKyukaSubmissionStatusHenshuModoshi" value="<?= $userkyuka['submission_status'] ?>">
-											</form>
-										<?php endif; ?>
-									</div>
-								</span>
-							</td>
 						</tr>
 				<?php }
 				} ?>
@@ -1205,12 +1184,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 	});
 
 	$(document).ready(function() {
-		$('#strtime, #endtime').on('input', function() {
-			var strtimeValue = $('#strtime').val() || '0';
-			var endtimeValue = $('#endtime').val() || '0';
-			$('#timecnt').val(endtimeValue - strtimeValue);
-		});
-
 		$('input[name="kyukatype"]').change(function() {
 			if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
 				$('#timecnt').val('0.5');
@@ -1240,19 +1213,6 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 		});
 		SetFormViewBySubmissionStatusHandler();
 	});
-
-	function calculateTimeDifference() {
-		var strTimeValue = parseInt($("#strtime").val());
-		var endTimeValue = parseInt($("#endtime").val());
-
-		function convertTimeToDecimal(timeString) {
-			var timeParts = timeString.split(':');
-			var hours = parseInt(timeParts[0], 10);
-			var minutes = parseInt(timeParts[1], 10);
-			var minutesFraction = minutes / 60;
-			return hours + minutesFraction;
-		}
-	}
 
 	// Datepeeker Calender
 	$("#strymd").datepicker({
