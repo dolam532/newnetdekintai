@@ -689,9 +689,9 @@ if (isset($_POST['KyukaHenshuModoshi'])) {
     } 
     $resultUserKyuka = mysqli_fetch_all($result, MYSQLI_ASSOC);
     $current_submission_code =  $resultUserKyuka[0]['submission_status'];
-        $query_modoshi_kyuka = 'UPDATE tbl_userkyuka SET `submission_status` = 0 ,   `teishutsu_uid` = null ,  `tantosha_uid` = null ,
-        `sekininsha_uid` = null , `upt_dt`="' . $upt_dt . ' "  WHERE  
-        `tbl_userkyuka`.`companyid` IN("' . $currentUseCompanyId . '") AND `tbl_userkyuka`.`kyukaid` IN("' . $selectedId . '")';
+        $query_modoshi_kyuka = "UPDATE tbl_userkyuka SET `submission_status` = 0 ,  allowok = '0', `teishutsu_uid` = null ,  `tantosha_uid` = null ,
+        `sekininsha_uid` = null , `upt_dt`='$upt_dt'  WHERE  
+        `tbl_userkyuka`.`companyid` IN('$currentUseCompanyId') AND `tbl_userkyuka`.`kyukaid` IN('$selectedId')";
         if ($conn->query($query_modoshi_kyuka) === TRUE) {
             $_SESSION['user_kyuka_modoshi_success'] = $user_kyuka_modoshi_success;
             header("Refresh: 3");
