@@ -15,6 +15,23 @@ DEFINE('ADMINISTRATOR', '3');
 DEFINE('DOMAIN_NAME', 'new.netdekintai.com');
 DEFINE('URL_NAME', 'http://new.netdekintai.com/index.php');
 
+
+// // Database data
+// DEFINE('DB_HOST', '153.127.255.167');
+// DEFINE('DB_USER', 'ndk');
+// DEFINE('DB_PASSWORD', 'ganandkadm2019');
+// DEFINE('DB_NAME', 'servicendk');
+
+// // Loginout Admin, User, ADMINISTRATOR
+// DEFINE('MAIN_ADMIN', '9');
+// DEFINE('MAIN_COMPANY_ID', '0');
+// DEFINE('ADMIN', '6');
+// DEFINE('USER', '1');
+// DEFINE('ADMINISTRATOR', '3');
+// DEFINE('DOMAIN_NAME', 'netdekintai.com');
+// DEFINE('URL_NAME', 'http://netdekintai.com/index.php');
+
+
 // USE YES OR NO
 DEFINE('USE_NO', '0');
 DEFINE('USE_YES', '1');
@@ -81,10 +98,25 @@ $SUBMISSTION_STATUS_FILTER = array(
     
 );
 
+$KYUKA_SUBMISSTION_STATUS = array(
+    0 => '編集中',
+    1 => '提出済み',
+    2 => '担当者承認済み',
+    3 => '責任者承認済み',
+
+);
+
+$KYUKA_SUBMISSTION_STATUS_FILTER = array(
+    -1 => '全て',
+    0 => '編集中',
+    1 => '提出済み',
+    2 => '担当者承認済み',
+    3 => '責任者承認済み',
+    
+);
+
 // ALLOW TYPE
 DEFINE('SEARCH_ALLOW', '9');
-
-
 
 // MIN LENGTH 社員登録のID&email
 $MAX_LENGTH_UID_USER = 10;
