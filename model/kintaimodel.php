@@ -1135,3 +1135,5 @@ function formatMinute($minute)
         return $minute;
     }
 }
+
+error_log("Nghia_test");
