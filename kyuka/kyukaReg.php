@@ -332,73 +332,6 @@ span.kyukaReg_class {
                             <?php
 								}
 								?>
-<<<<<<< HEAD
-							</select>
-						</label>
-					</div>
-					<div class="title_btn">
-						<input type="submit" id="ClearButton" name="ClearButton" value="クリア ">&nbsp;
-						<input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
-						<input type="button" id="btnNew" value="新規 ">&nbsp;
-						<input type="button" id="btnAnnt" value="お知らせ ">
-					</div>
-				</div>
-			</form>
-		<?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
-			<div class="col-md-2 text-left">
-				<div class="title_name">
-					<span class="text-left">休暇届</span>
-				</div>
-			</div>
-			<div class="col-md-4 text-left"></div>
-			<div class="col-md-3 text-left">
-				<div class="title_condition">
-					<label>社員名 : <?= $_SESSION['auth_name'] ?></label>
-				</div>
-			</div>
-			<div class="col-md-3 text-right">
-				<div class="title_btn">
-					<input type="button" id="btnNew" value="新規 ">&nbsp;
-					<input type="button" id="btnAnnt" value="お知らせ ">
-				</div>
-			</div>
-		<?php endif; ?>
-	</div>
-	<div class="form-group table-wrap">
-		<table class="table table-bordered datatable" style="overflow-x: auto;">
-			<thead>
-				<tr class="info">
-					<th style="text-align: center;">ID</th>
-					<th style="text-align: center;">申請日</th>
-					<th style="text-align: center;">入社年月</th>
-					<th style="text-align: center;">社員名</th>
-					<th style="text-align: center;">申請区分</th>
-					<th style="text-align: center;">休暇区分</th>
-					<th style="text-align: center;">年度算定期間</th>
-					<th style="text-align: center;">申請期間</th>
-					<th style="text-align: center;">申請日数(時間)</th>
-					<th style="text-align: center;">総有給休暇</th>
-					<th style="text-align: center;">前年度の繰越残</th>
-					<th style="text-align: center;">当該年度付与</th>
-					<th style="text-align: center;">使用済数</th>
-					<th style="text-align: center;">使用前残</th>
-					<th style="text-align: center;">今回使用</th>
-					<th style="text-align: center;">使用後済</th>
-					<th style="text-align: center;">使用後残</th>
-					<th style="text-align: center;">事由</th>
-					<th style="text-align: center;">休暇中居る場所</th>
-					<th style="text-align: center;">緊急連絡先</th>
-					<th style="text-align: center;">状態</th>
-					<th style="text-align: center;">詳細情報</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php if (empty($userkyuka_list)) { ?>
-					<tr>
-						<td colspan="22" align="center"><?php echo $data_save_no; ?></td>
-					</tr>
-					<?php } elseif (!empty($userkyuka_list)) {
-=======
                         </select>
                     </label>
                 </div>
@@ -495,7 +428,6 @@ span.kyukaReg_class {
                 <td colspan="22" align="center"><?php echo $data_save_no; ?></td>
             </tr>
             <?php } elseif (!empty($userkyuka_list)) {
->>>>>>> 8c2d13c5c671df0992defa73ed850f3d0c3db920
 					foreach ($userkyuka_list as $userkyuka) {
 					?>
             <tr>
@@ -552,88 +484,6 @@ span.kyukaReg_class {
 											echo $userkyuka['timecnt'] . "時間";
 										}
 										?>
-<<<<<<< HEAD
-									</span>
-								</td>
-								<td><span><?= $userkyuka['tothday'] ?></span></td>
-								<td><span><?= $userkyuka['oldcnt'] ?></span></td>
-								<td><span><?= $userkyuka['newcnt'] ?></span></td>
-								<td><span><?= $userkyuka['usefinishcnt'] ?></span></td>
-								<td><span><?= $userkyuka['usebeforecnt'] ?></span></td>
-								<td><span><?= $userkyuka['usenowcnt'] ?></span></td>
-								<td><span><?= $userkyuka['usefinishaftercnt'] ?></span></td>
-								<td><span><?= $userkyuka['useafterremaincnt'] ?></span></td>
-								<td><span><?= $userkyuka['reason'] ?></span></td>
-								<td><span><?= $userkyuka['destplace'] ?></span></td>
-								<td><span><?= $userkyuka['desttel'] ?></span></td>
-								<td>
-									<span>
-										<?php
-										if ($userkyuka['allowok'] == "0") { ?>
-											<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-												<a href="#"><span style="color:red;text-decoration-line: underline;" class="showModal2">未決裁<span class="vacationid_class"><?= ',' . $userkyuka['uid'] . ',' . $userkyuka['ymdcnt']  . ',' . $userkyuka['timecnt'] ?></span></span>
-												<?php else : ?>
-													<span style="color:red;">未決裁</span>
-												<?php endif; ?>
-											<?php } else { ?>
-												<span>
-													決裁完了
-													<?php
-													if ($userkyuka['allowdecide'] == "0") { ?>
-														<span style="color:red;">NG</span>
-													<?php } else { ?>
-														OK
-													<?php } ?>
-												</span>
-											<?php } ?>
-									</span>
-								</td>
-								<td>
-									<span>
-										<div class="print_btn">
-											<button class="btn btn-default submit-button" style="width: auto;" type="button" data-kyukaid="<?= $userkyuka['kyukaid'] ?>">
-												休暇届印刷
-											</button>
-											<form method="post">
-												<button type="submit" name="Kyukateishutsu" class="btn btn-default" style="width: auto;" type="button" onclick="return checkTeiShutsuSubmit()">提出</button>
-												<input type="hidden" name="selectedUserKyukaId" value="<?= $userkyuka['kyukaid'] ?>">
-												<input type="hidden" name="selectedUserKyukaEmail" value="<?= $userkyuka['email'] ?>">
-												<input type="hidden" name="selectedUserKyukaSubmissionStatus" value="<?= $userkyuka['submission_status'] ?>">
-											</form>
-											<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-												<form method="post">
-													<button type="submit" name="KyukaHenshuModoshi" class="btn btn-default" style="width: auto;" type="button" onclick="return checkHenshuChuModoshiSubmit()">編集中に戻す</button>
-													<input type="hidden" name="selectedUserKyukaModoshiId" value="<?= $userkyuka['kyukaid'] ?>">
-													<input type="hidden" name="selectedUserKyukaSubmissionStatusAdmin" value="<?= $userkyuka['submission_status'] ?>">
-												</form>
-												<form method="post">
-													<button type="submit" name="KyukaTantoshaShonin" class="btn btn-default" style="width: auto;" type="button" onclick="return checkTantoshaShoninSubmit()">担当者承認</button>
-													<input type="hidden" name="selectedUserKyukaTantoShoninId" value="<?= $userkyuka['kyukaid'] ?>">
-													<input type="hidden" name="selectedUserKyukaSubmissionStatusAdmin" value="<?= $userkyuka['submission_status'] ?>">
-								
-												</form>
-												<form method="post">
-													<button type="submit" name="KyukaSekininshaShonin" class="btn btn-default" style="width: auto;" type="button" onclick="return checkSekininshaShoninSubmit()">責任者承認</button>
-													<input type="hidden" name="selectedUserKyukaSekininShoninId" value="<?= $userkyuka['kyukaid'] ?>">
-													<input type="hidden" name="selectedUserKyukaSubmissionStatusAdmin" value="<?= $userkyuka['submission_status'] ?>">
-												</form>
-											<?php endif; ?>
-										<?php } else { ?>
-											<span>
-												決裁完了
-												<?php
-												if ($userkyuka['allowdecide'] == "0") { ?>
-													<span style="color:red;">NG</span>
-												<?php } else { ?>
-													OK
-												<?php } ?>
-											</span>
-										<?php } ?>
-								</span>
-							</td>
-						</tr>
-				<?php }
-=======
                     </span>
                 </td>
                 <td><span><?= $userkyuka['tothday'] ?></span></td>
@@ -675,7 +525,6 @@ span.kyukaReg_class {
                 </td>
             </tr>
             <?php }
->>>>>>> 8c2d13c5c671df0992defa73ed850f3d0c3db920
 				} ?>
         </tbody>
     </table>
