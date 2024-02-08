@@ -678,20 +678,12 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
 
 // User Kyuka 編集戻し
 if (isset($_POST['KyukaHenshuModoshi'])) {
-
-    $selectedId = mysqli_real_escape_string($conn, $_POST['selectedUserKyukaModoshiId']);
-    $sql_get_selectedUserKyukaStatus = 'SELECT * FROM tbl_userkyuka WHERE  
-    `tbl_userkyuka`.`companyid` IN("' . $currentUseCompanyId . '") AND `tbl_userkyuka`.`kyukaid` IN("' . $selectedId . '")';
-    $result = $conn->query($sql_get_selectedUserKyukaStatus);
-    // check is registed userKyuka ?
-    if ($result === false) {
-        return;
-    } 
-    $resultUserKyuka = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    $current_submission_code =  $resultUserKyuka[0]['submission_status'];
+    $selectedId = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-input']);
+    $selectedIdArray = explode(',', $selectedId); 
+    $selectedIdList = implode("','", $selectedIdArray);
         $query_modoshi_kyuka = "UPDATE tbl_userkyuka SET `submission_status` = 0 ,  allowok = '0', `teishutsu_uid` = null ,  `tantosha_uid` = null ,
         `sekininsha_uid` = null , `upt_dt`='$upt_dt'  WHERE  
-        `tbl_userkyuka`.`companyid` IN('$currentUseCompanyId') AND `tbl_userkyuka`.`kyukaid` IN('$selectedId')";
+        `tbl_userkyuka`.`companyid` IN('$currentUseCompanyId') AND `tbl_userkyuka`.`kyukaid` IN('$selectedIdList')";
         if ($conn->query($query_modoshi_kyuka) === TRUE) {
             $_SESSION['user_kyuka_modoshi_success'] = $user_kyuka_modoshi_success;
             header("Refresh: 3");
@@ -702,27 +694,14 @@ if (isset($_POST['KyukaHenshuModoshi'])) {
 
 // User Kyuka TantoshaShonin    selectedUserKyukaTantoShoninId
 if (isset($_POST['KyukaTantoshaShonin'])) {
-    $selectedId = mysqli_real_escape_string($conn, $_POST['selectedUserKyukaTantoShoninId']);
-    $sql_get_selectedUserKyukaStatus = 'SELECT * FROM tbl_userkyuka WHERE  
-    `tbl_userkyuka`.`companyid` IN("' . $currentUseCompanyId . '") AND `tbl_userkyuka`.`kyukaid` IN("' . $selectedId . '")';
-    $result = $conn->query($sql_get_selectedUserKyukaStatus);
-    // check is registed userKyuka ?
-    if ($result === false) {
-        return;
-    } 
-    $resultUserKyuka = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    $current_submission_code =  $resultUserKyuka[0]['submission_status'];
+    $selectedId = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-input']);
+    $selectedIdArray = explode(',', $selectedId); 
+    $selectedIdList = implode("','", $selectedIdArray);
 
-    if($current_submission_code != 1 && $current_submission_code != 2 && $current_submission_code != 3) {
-        return;
-    }
     $savingCode = 2;
-    // when 責任者確認済み
-     if($current_submission_code == 3) { 
-         $savingCode  = 3;
-     }
+
      $query_shonin = "UPDATE tbl_userkyuka SET `submission_status` = '$savingCode' , `tantosha_uid` = '$currentUseEmail' , `upt_dt`='$upt_dt'  WHERE  
-     `tbl_userkyuka`.`companyid` IN('$currentUseCompanyId') AND `tbl_userkyuka`.`kyukaid` IN('$selectedId')";
+     `tbl_userkyuka`.`companyid` IN('$currentUseCompanyId') AND `tbl_userkyuka`.`kyukaid` IN('$selectedIdList')";
         if ($conn->query($query_shonin) === TRUE) {
             $_SESSION['tanto_shonin_success'] = $tanto_shonin_success;
             header("Refresh: 3");
@@ -732,31 +711,9 @@ if (isset($_POST['KyukaTantoshaShonin'])) {
   
 }
 
-// User Kyuka SekininshaShonin     selectedUserKyukaSekininShoninId
+// User Kyuka SekininshaShonin     selectedUserKyukaSekininShoninId --> NGHIA
 if (isset($_POST['KyukaSekininshaShonin'])) {  
-    $selectedId = mysqli_real_escape_string($conn, $_POST['selectedUserKyukaSekininShoninId']);
-    $sql_get_selectedUserKyukaStatus = 'SELECT * FROM tbl_userkyuka WHERE  
-    `tbl_userkyuka`.`companyid` IN("' . $currentUseCompanyId . '") AND `tbl_userkyuka`.`kyukaid` IN("' . $selectedId . '")';
-    $result = $conn->query($sql_get_selectedUserKyukaStatus);
-    // check is registed userKyuka ?
-    if ($result === false) {
-        return;
-    } 
-    $resultUserKyuka = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    $current_submission_code =  $resultUserKyuka[0]['submission_status'];
 
-    if($current_submission_code != 1 && $current_submission_code != 2 && $current_submission_code != 3) {
-        return;
-    }
-    $savingCode = 3;
-     $query_shonin = "UPDATE tbl_userkyuka SET `submission_status` = '$savingCode' , `sekininsha_uid` = '$currentUseEmail' , `upt_dt`='$upt_dt'  WHERE  
-     `tbl_userkyuka`.`companyid` IN('$currentUseCompanyId') AND `tbl_userkyuka`.`kyukaid` IN('$selectedId')";
-        if ($conn->query($query_shonin) === TRUE) {
-            $_SESSION['sekinin_shonin_success'] = $sekinin_shonin_success;
-            header("Refresh: 3");
-      } else {
-            $_SESSION['sekinin_shonin_error'] = $sekinin_shonin_error;
-     }
 
 }
 
