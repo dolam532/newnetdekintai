@@ -371,7 +371,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 					<th style="text-align: center;">事由</th>
 					<th style="text-align: center;">休暇中居る場所</th>
 					<th style="text-align: center;">緊急連絡先</th>
-					<th style="text-align: center;">決裁</th>
+					<th style="text-align: center;">状態</th>
 					<th style="text-align: center;">詳細情報</th>
 				</tr>
 			</thead>
@@ -475,7 +475,7 @@ echo "<link rel='stylesheet' href='//code.jquery.com/ui/1.12.1/themes/smoothness
 									<span>
 										<div class="print_btn">
 											<button class="btn btn-default submit-button" style="width: auto;" type="button" data-kyukaid="<?= $userkyuka['kyukaid'] ?>">
-												休暇印刷
+												休暇届印刷
 											</button>
 											<form method="post">
 												<button type="submit" name="Kyukateishutsu" class="btn btn-default" style="width: auto;" type="button" onclick="return checkTeiShutsuSubmit()">提出</button>
