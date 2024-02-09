@@ -283,19 +283,24 @@ span.kyukaReg_class {
         <form method="post">
             <div class="col-md-4 text-left">
                 <div class="title_condition">
-                    <label>
+                    <!-- $KYUKA_SUBMISSTION_STATUS_FILTER -->
+                    <select id="filterByStatusCode" name="filterByStatusCode" class="form-control" size="1"
+                        onfocus='this.size=6;' onblur='this.size=1;'
+                        onchange='this.size=1; this.blur();handleSelectFilterStatusChange()'>
                         <?php
-							foreach (ConstArray::$search_allowok as $key => $value) {
-							?>
-                        <input type='radio' name='searchAllowok' value='<?= $key ?>' <?php if ($key == $_POST['searchAllowok']) {
-																									echo ' checked="checked"';
-																								} ?>>
-                        <?= $value ?>
-                        </input>
+						foreach ($KYUKA_SUBMISSTION_STATUS_FILTER as $key => $value) {
+										?>
+                        <option name="filterSubmissionStatusCodeOption" size="10" value="<?= $key ?>" <?php if ($key == $filterByStatusCode) {
+											  echo ' selected="selected"';
+										  } ?>>
+                            <?= $value ?>
+                        </option>
                         <?php
-							}
-							?>
-                    </label>
+									}
+									?>
+                    </select>
+
+
                 </div>
             </div>
             <div class="col-md-3 text-left">
@@ -320,22 +325,12 @@ span.kyukaReg_class {
             </div>
             <div class="col-md-3 text-right">
                 <div class="title_condition">
-                    <label>基準日 :
-                        <select id="searchYY" name="searchYY" style="padding:2px;">
-                            <option value="" selected="selected">選択なし</option>
-                            <?php
-								foreach (ConstArray::$search_year as $key => $value) {
-								?>
-                            <option value="<?= $key ?>" <?php if ($value == $_POST['searchYY']) {
-																	echo ' selected="selected"';
-																} ?>>
-                                <?= $value ?>
-                            </option>
-                            <?php
-								}
-								?>
-                        </select>
-                    </label>
+
+                    <label for="searchKyukaByYear">申請年</label>
+                    <input id="searchKyukaByYear" name="searchKyukaByYear" type="number" value="<?=$searchByYear ?>"/>
+                    <label for="searchKyukaByMonth">申請月</label>
+                    <input id="searchKyukaByMonth"  name="searchKyukaByMonth" type="number" value="<?=$searchByMonth ?>"/>
+
                 </div>
                 <div class="title_btn">
                     <input type="submit" id="ClearButton" name="ClearButton" value="クリア ">&nbsp;
@@ -344,6 +339,7 @@ span.kyukaReg_class {
                     <input type="button" id="btnAnnt" value="お知らせ ">
                 </div>
             </div>
+            <input type="hidden" id="selectedFilterByStatusCode" name="selectedFilterByStatusCode" value="<?= $filterByStatusCode?>"  />
         </form>
         <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
         <div class="col-md-2 text-left">
@@ -364,42 +360,40 @@ span.kyukaReg_class {
             </div>
         </div>
         <?php endif; ?>
-	
-		<?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-			<div class="col-md-6 text-right" style="display: flex; justify-content: flex-end;">
-						<form method="post" style="margin: 0 10px;">
-                                <button type="submit" name="KyukaHenshuModoshi" class=""
-                                    style="width: auto;" type="button"
-                                    onclick="return checkHenshuChuModoshiSubmit()">編集中に戻す</button>
-                               
-									<input type="hidden"  name="user-kyuka-multi-select-input">
-                            </form>
-                            <form method="post" style="margin: 0 10px;">
-                                <button type="submit" name="KyukaTantoshaShonin" class=""
-                                    style="width: auto;" type="button"
-                                    onclick="return checkTantoshaShoninSubmit()">担当者承認</button>
-                               
-                              
-									<input type="hidden"  name="user-kyuka-multi-select-input">
-                            </form>
-						
-                            <form method="post" style="margin: 0 10px;">
-                                <button type="submit" name="KyukaSekininshaShonin" class=""
-                                    style="width: auto;" type="button"
-                                    onclick="return checkSekininshaShoninSubmit()">責任者承認</button>
-                               
-                             
-									<input type="hidden"  name="user-kyuka-multi-select-input">
-                            </form>
-							</div>
-                            <?php endif; ?>
-					
+
+        <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+        <div class="col-md-6 text-right" style="display: flex; justify-content: flex-end;">
+            <form method="post" style="margin: 0 10px;">
+                <button type="submit" name="KyukaHenshuModoshi" class="" style="width: auto;" type="button"
+                    onclick="return checkHenshuChuModoshiSubmit()">編集中に戻す</button>
+
+                <input type="hidden" name="user-kyuka-multi-select-input">
+                <input type="hidden" name="user-kyuka-multi-select-status">
+            </form>
+            <form method="post" style="margin: 0 10px;">
+                <button type="submit" name="KyukaTantoshaShonin" class="" style="width: auto;" type="button"
+                    onclick="return checkTantoshaShoninSubmit()">担当者承認</button>
+                <input type="hidden" name="user-kyuka-multi-select-status">
+
+                <input type="hidden" name="user-kyuka-multi-select-input">
+            </form>
+
+            <form method="post" style="margin: 0 10px;">
+                <button type="submit" name="KyukaSekininshaShonin" class="" style="width: auto;" type="button"
+                    onclick="return checkSekininshaShoninSubmit()">責任者承認</button>
+
+                <input type="hidden" name="user-kyuka-multi-select-status">
+                <input type="hidden" name="user-kyuka-multi-select-input">
+            </form>
+        </div>
+        <?php endif; ?>
+
 </div>
 <div class="form-group table-wrap">
     <table class="table table-bordered datatable" >
         <thead>
             <tr class="info">
-			<th style="text-align: center;">選択</th>
+                <th style="text-align: center;">選択</th>
                 <th style="text-align: center;">ID</th>
                 <th style="text-align: center;">申請日</th>
                 <th style="text-align: center;">入社年月</th>
@@ -433,7 +427,8 @@ span.kyukaReg_class {
 					foreach ($userkyuka_list as $userkyuka) {
 					?>
             <tr>
-			<td><input type="checkbox" class="user-kyuka-select-checkbox" value="<?= $userkyuka['kyukaid'] ?>"></td>
+                <td><input type="checkbox" class="user-kyuka-select-checkbox" value="<?= $userkyuka['kyukaid'] ?>"
+                        data-status-value="<?= $userkyuka['submission_status'] ?>"></td>
                 <td>
                     <a href="#">
                         <span class="showModal">
@@ -521,7 +516,7 @@ span.kyukaReg_class {
                                 <input type="hidden" name="selectedUserKyukaSubmissionStatus"
                                     value="<?= $userkyuka['submission_status'] ?>">
                             </form>
-                            
+
                             <?php } ?>
                     </span>
                 </td>
@@ -952,20 +947,21 @@ span.kyukaReg_class {
                             <div class="col-xs-2"></div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input name="modal-update-kyuka-btn" type="submit" name="UpdateKyuka"
-                                        class="btn btn-primary" id="btnUpdateKyuka" role="button" value="編集">
+                                    <input type="submit" name="UpdateKyuka"
+                                        class="btn btn-primary modal-update-kyuka-btn" id="btnUpdateKyuka" role="button"
+                                        value="編集">
                                 </p>
                             </div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input name="modal-update-kyuka-btn" type="submit" name="DelKyuka"
-                                        class="btn btn-warning" id="btnDelKyuka" role="button" value="削除">
+                                    <input type="submit" name="DelKyuka" class="btn btn-warning modal-update-kyuka-btn"
+                                        id="btnDelKyuka" role="button" value="削除">
                                 </p>
                             </div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input name="modal-update-kyuka-btn" class="btn btn-success btn-ms"
-                                        id="btnClearUpdate" role="button" value="クリア" />
+                                    <input class="btn btn-success btn-ms" id="btnClearUpdate modal-update-kyuka-btn"
+                                        role="button" value="クリア" />
                                 </p>
                             </div>
                             <div class="col-xs-2">
@@ -1293,7 +1289,7 @@ $(document).ready(function() {
         }
     });
     SetFormViewBySubmissionStatusHandler();
-	multiUserKyukaSelectHandler() ;
+    multiUserKyukaSelectHandler();
 });
 
 // Datepeeker Calender
@@ -1986,27 +1982,39 @@ function checkTeiShutsuSubmit() {
 
 }
 
+
+
 // Check CheckHenshuChuModoshiSubmit
 function checkHenshuChuModoshiSubmit() {
-	var listSelectedUid = $("input[name='user-kyuka-multi-select-input']").val().trim();
-	if(listSelectedUid === ''){
-		alert("<?php echo $multi_select_is_empty ?>")
-		return false;
-	} 
+    var listSelectedUid = $("input[name='user-kyuka-multi-select-input']").val().trim();
+    if (listSelectedUid === '') {
+        alert("<?php echo $multi_select_is_empty ?>")
+        return false;
+    }
+    var isSameStatusSelected = checkSameStatusSubmitBefore();
+    if (!isSameStatusSelected) {
+        alert("<?php echo $same_kyuka_status_select_msg ?>")
+        return false;
+    }
+
     if (confirm("<?php echo $user_kyuka_modoshi_submit ?>")) {
         return true;
     } else {
         return false;
     }
-
 }
 
 function checkTantoshaShoninSubmit() {
-	var listSelectedUid = $("input[name='user-kyuka-multi-select-input']").val().trim();
-	if(listSelectedUid === ''){
-		alert("<?php echo $multi_select_is_empty ?>")
-		return false;
-	} 
+    var listSelectedUid = $("input[name='user-kyuka-multi-select-input']").val().trim();
+    if (listSelectedUid === '') {
+        alert("<?php echo $multi_select_is_empty ?>")
+        return false;
+    }
+    var isSameStatusSelected = checkSameStatusSubmitBefore();
+    if (!isSameStatusSelected) {
+        alert("<?php echo $same_kyuka_status_select_msg ?>")
+        return false;
+    }
     if (confirm("<?php echo $user_kyuka_tantosha_submit ?>")) {
         return true;
     } else {
@@ -2016,17 +2024,29 @@ function checkTantoshaShoninSubmit() {
 }
 
 function checkSekininshaShoninSubmit() {
-	var listSelectedUid = $("input[name='user-kyuka-multi-select-input']").val().trim();
-	if(listSelectedUid === ''){
-		alert("<?php echo $multi_select_is_empty ?>")
-		return false;
-	} 
+    var listSelectedUid = $("input[name='user-kyuka-multi-select-input']").val().trim();
+    if (listSelectedUid === '') {
+        alert("<?php echo $multi_select_is_empty ?>")
+        return false;
+    }
+    var isSameStatusSelected = checkSameStatusSubmitBefore();
+    if (!isSameStatusSelected) {
+        alert("<?php echo $same_kyuka_status_select_msg ?>")
+        return false;
+    }
     if (confirm("<?php echo $user_kyuka_sekininsha_submit ?>")) {
         return true;
     } else {
         return false;
     }
+}
 
+
+function checkSameStatusSubmitBefore() {
+    var listSelectedStatus = $("input[name='user-kyuka-multi-select-status']").val().trim().split(',');
+    return listSelectedStatus.every(function(status) {
+        return status === listSelectedStatus[0];
+    });
 }
 
 function SetFormViewBySubmissionStatusHandler() {
@@ -2067,7 +2087,7 @@ function setOnOffAdminButons() {
 
 
 function SetColorToSubmissionStatus() {
-    $('span[name="show-submission-status"]').each(function() {
+    $('span[name="show-submission-status"], option[name="filterSubmissionStatusCodeOption"]').each(function() {
         var submissionStatusText = $(this).text().trim();
         $(this).removeClass();
         if (submissionStatusText === '<?php echo $KYUKA_SUBMISSTION_STATUS[0] ?>') {
@@ -2083,11 +2103,12 @@ function SetColorToSubmissionStatus() {
         }
     });
 
+
 }
 
 
 function setOnModalChangeDataButtonHidden(flag) {
-    var elements = $("input[name='modal-update-kyuka-btn']");
+    var elements = $(".modal-update-kyuka-btn");
     elements.each(function() {
         if (flag) {
             $(this).removeClass('hiddenInput');
@@ -2095,23 +2116,34 @@ function setOnModalChangeDataButtonHidden(flag) {
             $(this).addClass('hiddenInput');
         }
     });
+
 }
 
 // Multi Select User Kyuka 
-function multiUserKyukaSelectHandler()  {
+function multiUserKyukaSelectHandler() {
     var selectedIds = [];
+    var selectedStatuses = [];
     $('.user-kyuka-select-checkbox').change(function() {
-        if(this.checked) {
+        var statusValue = $(this).data('status-value');
+        if (this.checked) {
             selectedIds.push($(this).val());
+            selectedStatuses.push(statusValue);
         } else {
-            selectedIds = selectedIds.filter(id => id !== $(this).val());
+            var index = selectedIds.indexOf($(this).val());
+            if (index !== -1) {
+                selectedIds.splice(index, 1);
+                selectedStatuses.splice(index, 1);
+            }
         }
-		$("input[name='user-kyuka-multi-select-input']").val(selectedIds.join(','));
+        $("input[name='user-kyuka-multi-select-input']").val(selectedIds.join(','));
+        $("input[name='user-kyuka-multi-select-status']").val(selectedStatuses.join(','));
     });
+
 }
 
-
-
-
+function handleSelectFilterStatusChange() {
+    var selectedValue = $('#filterByStatusCode').val();
+    $('#selectedFilterByStatusCode').val(selectedValue);
+}
 </script>
 <?php include('../inc/footer.php'); ?>
