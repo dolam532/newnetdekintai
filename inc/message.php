@@ -75,6 +75,7 @@ $sekinin_shonin_error = '責任者承認失敗しました。最初からやり�
 $user_kyuka_tantosha_submit ='担当者承認確定します。\nよろしいでしょうか？';
 $user_kyuka_sekininsha_submit='責任者承認確定します。\nよろしいでしょうか？';
 $multi_select_is_empty='休暇届を選択してください';
+$same_kyuka_status_select_msg='同じ状態の休暇届を選択してください。';
 
 
 // kintaiReg
