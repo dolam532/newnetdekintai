@@ -119,6 +119,8 @@ span.kyukaReg_class {
 .hiddenInput {
     display: none;
 }
+
+
 </style>
 <title>休暇届</title>
 <?php include('../inc/menu.php'); ?>
@@ -394,7 +396,7 @@ span.kyukaReg_class {
 					
 </div>
 <div class="form-group table-wrap">
-    <table class="table table-bordered datatable" style="overflow-x: auto;">
+    <table class="table table-bordered datatable" >
         <thead>
             <tr class="info">
 			<th style="text-align: center;">選択</th>
@@ -418,7 +420,7 @@ span.kyukaReg_class {
                 <th style="text-align: center;">事由</th>
                 <th style="text-align: center;">休暇中居る場所</th>
                 <th style="text-align: center;">緊急連絡先</th>
-                <th style="text-align: center;">決裁</th>
+                <th style="text-align: center;">状態</th>
                 <th style="text-align: center;">詳細情報</th>
             </tr>
         </thead>
@@ -509,7 +511,7 @@ span.kyukaReg_class {
                         <div class="print_btn">
                             <button class="btn btn-default submit-button" style="width: auto;" type="button"
                                 data-kyukaid="<?= $userkyuka['kyukaid'] ?>">
-                                休暇印刷
+                                休暇届印刷
                             </button>
                             <form method="post">
                                 <button type="submit" name="Kyukateishutsu" class="btn btn-default" style="width: auto;"

@@ -711,10 +711,22 @@ if (isset($_POST['KyukaTantoshaShonin'])) {
   
 }
 
-// User Kyuka SekininshaShonin     selectedUserKyukaSekininShoninId --> NGHIA
-if (isset($_POST['KyukaSekininshaShonin'])) {  
+// User Kyuka SekininshaShonin   selectedUserKyukaSekininShoninId
+if (isset($_POST['KyukaSekininshaShonin'])) {
+    $selectedId = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-input']);
+    $selectedIdArray = explode(',', $selectedId);
+    $selectedIdList = implode("','", $selectedIdArray);
 
+    $savingCode = 3;
 
+    $query_shonin = "UPDATE tbl_userkyuka SET submission_status = '$savingCode', sekininsha_uid = '$currentUseEmail', upt_dt = '$upt_dt' WHERE
+        tbl_userkyuka.companyid IN('$currentUseCompanyId') AND tbl_userkyuka.kyukaid IN('$selectedIdList')";
+    if ($conn -> query($query_shonin) === TRUE) {
+        $_SESSION['sekinin_shonin_success'] = $sekinin_shonin_success;
+        header("Refresh: 3");
+    } else {
+        $_SESSION['sekinin_shonin_error'] = $sekinin_shonin_error;
+    }
 }
 
 }
