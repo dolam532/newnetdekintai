@@ -76,6 +76,7 @@ $user_kyuka_tantosha_submit ='担当者承認確定します。\nよろしいで
 $user_kyuka_sekininsha_submit='責任者承認確定します。\nよろしいでしょうか？';
 $multi_select_is_empty='休暇届を選択してください';
 $same_kyuka_status_select_msg='同じ状態の休暇届を選択してください。';
+$miteishutsu_kyuka_selected_error_msg='提出していない休暇届を操作できません。\n提出してかかもう一度やり直してください。';
 
 
 // kintaiReg

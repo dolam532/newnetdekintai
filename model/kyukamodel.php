@@ -225,7 +225,7 @@ $UId = array_unique($UId);
 $KyukaY = array_unique($KyukaY);
 $Name = array_unique($Name);
 $VacationY = array_unique($VacationY);
-if(!isset($filterByStatusCode)){
+if (!isset($filterByStatusCode)) {
     $filterByStatusCode = -1;
 }
 if (($_POST['btnSearchReg'] == NULL && $_POST['ClearButton'] == NULL) || isset($_POST['ClearButton'])) {
@@ -252,7 +252,7 @@ if (($_POST['btnSearchReg'] == NULL && $_POST['ClearButton'] == NULL) || isset($
     //     $searchYY = $_POST['searchYY'];
     // }
 
-     $sql_userkyuka = 'SELECT DISTINCT
+    $sql_userkyuka = 'SELECT DISTINCT
         `tbl_userkyuka`.*,
         `tbl_user`.`uid`,
         `tbl_user`.`companyid`,
@@ -281,16 +281,16 @@ if (($_POST['btnSearchReg'] == NULL && $_POST['ClearButton'] == NULL) || isset($
     WHERE `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
     AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
 
-    $filterByStatusCode =  mysqli_real_escape_string($conn, $_POST['selectedFilterByStatusCode']);
-    if(!isset($filterByStatusCode)){
+    $filterByStatusCode = mysqli_real_escape_string($conn, $_POST['selectedFilterByStatusCode']);
+    if (!isset($filterByStatusCode)) {
         $filterByStatusCode = -1;
     }
-    if($filterByStatusCode != -1 && isset($filterByStatusCode)){
+    if ($filterByStatusCode != -1 && isset($filterByStatusCode)) {
         $sql_userkyuka .= "AND `tbl_userkyuka`.`submission_status` = $filterByStatusCode ";
-    } 
+    }
 
-    $searchByYear =  mysqli_real_escape_string($conn, $_POST['searchKyukaByYear']);
-    $searchByMonth =  mysqli_real_escape_string($conn, $_POST['searchKyukaByMonth']);
+    $searchByYear = mysqli_real_escape_string($conn, $_POST['searchKyukaByYear']);
+    $searchByMonth = mysqli_real_escape_string($conn, $_POST['searchKyukaByMonth']);
     if (!empty($searchByYear) && !empty($searchByMonth)) {
         $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('$searchByYear/%$searchByMonth/%') ";
     } else if (!empty($searchByYear) && empty($searchByMonth)) {
@@ -299,9 +299,9 @@ if (($_POST['btnSearchReg'] == NULL && $_POST['ClearButton'] == NULL) || isset($
         $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('%/%$searchByMonth/%') ";
     } else {
     }
-    $sql_userkyuka.="ORDER BY `tbl_userkyuka`.`kyukaid` ;";
-        $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
-        $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
+    $sql_userkyuka .= "ORDER BY `tbl_userkyuka`.`kyukaid` ;";
+    $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
+    $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 
 
 }
@@ -312,7 +312,7 @@ foreach ($userkyuka_list as $key => $value) {
     $sekininsha_uid = $value['sekininsha_uid'];
     $userkyuka_uid = $value['email'];
 
-    if ($teishutsu_uid !== $userkyuka_uid ) {
+    if ($teishutsu_uid !== $userkyuka_uid) {
         $userkyuka_list[$key]['teishutsu_stamp'] = "other_user";
     } else {
         $sql_teishutsu = "SELECT signstamp FROM tbl_user WHERE `email` = '$teishutsu_uid'";
@@ -348,7 +348,7 @@ if ($_POST['btnSearchMon'] != NULL) {
     } else {
         $searchYY = $_POST['searchYY'];
     }
-    if ($_SESSION['auth_type'] == constant('ADMIN') ||  $_SESSION['auth_type'] == constant('ADMINISTRATOR')  || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
+    if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         $sql_userkyuka = 'SELECT DISTINCT
     `tbl_userkyuka`.*,
     `tbl_user`.`name`,
@@ -457,7 +457,7 @@ if (isset($_POST['SaveKyuka'])) {
 
     if ($sql_userkyuka_result && $sql_vacationinfo_result) {
         mysqli_commit($conn);
-        $_SESSION['save_success'] =  $save_success;
+        $_SESSION['save_success'] = $save_success;
         header("Refresh:3");
     } else {
         mysqli_rollback($conn);
@@ -482,16 +482,16 @@ if (isset($_POST['UpdateKyuka'])) {
     $email = mysqli_real_escape_string($conn, $_SESSION['auth_email']);
     $kyukaid = mysqli_real_escape_string($conn, $_POST['udkyukaid']);
     $vacationid = mysqli_real_escape_string($conn, $_POST['udvacationid']);
- // check submitted by admin 
- $sql_get_status_this_kyuka = "SELECT `submission_status` FROM `tbl_userkyuka` WHERE `kyukaid` = $kyukaid LIMIT 1";
- $result_find_status = mysqli_query($conn, $sql_get_status_this_kyuka);
- $this_submission_status = mysqli_fetch_assoc($result_find_status)['submission_status'];
+    // check submitted by admin 
+    $sql_get_status_this_kyuka = "SELECT `submission_status` FROM `tbl_userkyuka` WHERE `kyukaid` = $kyukaid LIMIT 1";
+    $result_find_status = mysqli_query($conn, $sql_get_status_this_kyuka);
+    $this_submission_status = mysqli_fetch_assoc($result_find_status)['submission_status'];
 
- $isAdminSession = $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN');
- // WHEN 編集中ではない状態で、ユーザーが削除しようと
- if( $this_submission_status != array_keys($KYUKA_SUBMISSTION_STATUS)[0]  && !$isAdminSession){
-     return;
- }
+    $isAdminSession = $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN');
+    // WHEN 編集中ではない状態で、ユーザーが削除しようと
+    if ($this_submission_status != array_keys($KYUKA_SUBMISSTION_STATUS)[0] && !$isAdminSession) {
+        return;
+    }
 
     $vacationstr = mysqli_real_escape_string($conn, $_POST['udvacationstr']); // 5
     $vacationend = mysqli_real_escape_string($conn, $_POST['udvacationend']); // 6
@@ -571,7 +571,7 @@ if (isset($_POST['UpdateKyuka'])) {
     $result2 = mysqli_query($conn, $queries2);
 
     if ($result1 && $result2) {
-        $_SESSION['update_success'] =  $update_success;
+        $_SESSION['update_success'] = $update_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -591,10 +591,10 @@ if (isset($_POST['DelKyuka'])) {
     $sql_get_status_this_kyuka = "SELECT `submission_status` FROM `tbl_userkyuka` WHERE `kyukaid` = $kyukaid LIMIT 1";
     $result_find_status = mysqli_query($conn, $sql_get_status_this_kyuka);
     $this_submission_status = mysqli_fetch_assoc($result_find_status)['submission_status'];
-   
+
     $isAdminSession = $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN');
     // WHEN 編集中ではない状態で、ユーザーが削除しようと
-    if( $this_submission_status != array_keys($KYUKA_SUBMISSTION_STATUS)[0]  && !$isAdminSession){
+    if ($this_submission_status != array_keys($KYUKA_SUBMISSTION_STATUS)[0] && !$isAdminSession) {
         return;
     }
 
@@ -614,7 +614,7 @@ if (isset($_POST['DelKyuka'])) {
     $result2 = mysqli_query($conn, $queries2);
 
     if ($result1 && $result2) {
-        $_SESSION['delete_success'] =  $delete_success;
+        $_SESSION['delete_success'] = $delete_success;
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
@@ -640,7 +640,7 @@ if (isset($_POST['DecideUpdateKyuka'])) {
     WHERE uid ='$uid'";
 
         if ($conn->query($sql) === TRUE) {
-            $_SESSION['save_success'] =  $save_success;
+            $_SESSION['save_success'] = $save_success;
             header("Refresh:3");
         } else {
             echo 'query error: ' . mysqli_error($conn);
@@ -666,7 +666,7 @@ if (isset($_POST['DecideUpdateKyuka'])) {
 
         $sql = implode(';', $queries);
         if ($conn->multi_query($sql) === TRUE) {
-            $_SESSION['save_success'] =  $save_success;
+            $_SESSION['save_success'] = $save_success;
             header("Refresh:3");
         } else {
             echo 'query error: ' . mysqli_error($conn);
@@ -686,7 +686,7 @@ if (isset($_POST['Kyukateishutsu'])) {
     $selectedUserKyukaId = mysqli_real_escape_string($conn, $_POST['selectedUserKyukaId']);
     $selectedUserKyukaEmail = mysqli_real_escape_string($conn, $_POST['selectedUserKyukaEmail']);
 
-    
+
     // check is registed userKyuka ?
     $sql_get_selectedUserKyukaStatus = 'SELECT * FROM tbl_userkyuka WHERE  
     `tbl_userkyuka`.`companyid` IN("' . $currentUseCompanyId . '") AND `tbl_userkyuka`.`kyukaid` IN("' . $selectedUserKyukaId . '")';
@@ -696,13 +696,13 @@ if (isset($_POST['Kyukateishutsu'])) {
         return;
     }
     $resultUserKyuka = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    $kyuka_submission_code =  $resultUserKyuka[0]['submission_status'];
+    $kyuka_submission_code = $resultUserKyuka[0]['submission_status'];
 
-    if($kyuka_submission_code == 0) {       
+    if ($kyuka_submission_code == 0) {
         $query_teishutsu_kyuka = "UPDATE tbl_userkyuka SET `submission_status` = 1 , `teishutsu_uid` = '$currentUseEmail' , `upt_dt`='$upt_dt'  WHERE  
         `tbl_userkyuka`.`companyid` IN('$currentUseCompanyId') AND `tbl_userkyuka`.`kyukaid` IN('$selectedUserKyukaId')";
         // set User SignStamp
-        if($selectedUserKyukaEmail ==$currentUseEmail ) {
+        if ($selectedUserKyukaEmail == $currentUseEmail) {
             $query_get_stamp = "SELECT `tbl_user`.`signstamp` FROM tbl_user where `tbl_user`.`email` = '$currentUseEmail' ";
             $result_user_stamp = $conn->query($query_get_stamp);
             $user_stamp = mysqli_fetch_all($result_user_stamp, MYSQLI_ASSOC);
@@ -721,11 +721,11 @@ if (isset($_POST['Kyukateishutsu'])) {
 //  Admin Only Action 
 if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
 
-// User Kyuka 編集戻し
-if (isset($_POST['KyukaHenshuModoshi'])) {
-    $selectedId = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-input']);
-    $selectedIdArray = explode(',', $selectedId); 
-    $selectedIdList = implode("','", $selectedIdArray);
+    // User Kyuka 編集戻し
+    if (isset($_POST['KyukaHenshuModoshi'])) {
+        $selectedId = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-input']);
+        $selectedIdArray = explode(',', $selectedId);
+        $selectedIdList = implode("','", $selectedIdArray);
         $query_modoshi_kyuka = "UPDATE tbl_userkyuka SET `submission_status` = 0 ,  allowok = '0', `teishutsu_uid` = null ,  `tantosha_uid` = null ,
         `sekininsha_uid` = null , `upt_dt`='$upt_dt'  WHERE  
         `tbl_userkyuka`.`companyid` IN('$currentUseCompanyId') AND `tbl_userkyuka`.`kyukaid` IN('$selectedIdList')";
@@ -735,49 +735,67 @@ if (isset($_POST['KyukaHenshuModoshi'])) {
         } else {
             $_SESSION['user_kyuka_modoshi_fail'] = $user_kyuka_modoshi_fail;
         }
-}
-
-// User Kyuka TantoshaShonin    selectedUserKyukaTantoShoninId
-if (isset($_POST['KyukaTantoshaShonin'])) {
-    $selectedId = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-input']);
-    $selectedIdArray = explode(',', $selectedId); 
-    $selectedIdList = implode("','", $selectedIdArray);
-    $savingCode = 2;
-
-    $selectedStatus = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-status']);
-    $selectedStatusFirst = $selectedStatus[0];
-    if($selectedStatusFirst == 3) {
-        $savingCode = $selectedStatusFirst;
     }
-  
 
-     $query_shonin = "UPDATE tbl_userkyuka SET `submission_status` = '$savingCode' , `tantosha_uid` = '$currentUseEmail' , `upt_dt`='$upt_dt'  WHERE  
+    // User Kyuka TantoshaShonin    selectedUserKyukaTantoShoninId
+    if (isset($_POST['KyukaTantoshaShonin'])) {
+        $selectedId = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-input']);
+        $selectedIdArray = explode(',', $selectedId);
+        $selectedIdList = implode("','", $selectedIdArray);
+        $savingCode = 2;
+
+        $zeroIndex = array_search(0, $KYUKA_SUBMISSTION_STATUS);
+        $selectedStatus = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-status']);
+        $selectedStatusArray = explode(',', $selectedStatus);
+        // check status
+        foreach ($selectedStatusArray as $id) {
+            if ($id == $zeroIndex) {
+                return;
+            }
+        }
+
+        $selectedStatusFirst = $selectedStatus[0];
+        if ($selectedStatusFirst == 3) {
+            $savingCode = $selectedStatusFirst;
+        }
+
+
+        $query_shonin = "UPDATE tbl_userkyuka SET `submission_status` = '$savingCode' , `tantosha_uid` = '$currentUseEmail' , `upt_dt`='$upt_dt'  WHERE  
      `tbl_userkyuka`.`companyid` IN('$currentUseCompanyId') AND `tbl_userkyuka`.`kyukaid` IN('$selectedIdList')";
         if ($conn->query($query_shonin) === TRUE) {
             $_SESSION['tanto_shonin_success'] = $tanto_shonin_success;
             header("Refresh: 3");
-      } else {
+        } else {
             $_SESSION['tanto_shonin_error'] = $tanto_shonin_error;
-     }
-  
-}
+        }
 
-// User Kyuka SekininshaShonin   selectedUserKyukaSekininShoninId
-if (isset($_POST['KyukaSekininshaShonin'])) {
-    $selectedId = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-input']);
-    $selectedIdArray = explode(',', $selectedId);
-    $selectedIdList = implode("','", $selectedIdArray);
-
-    $savingCode = 3;
-
-    $query_shonin = "UPDATE tbl_userkyuka SET submission_status = '$savingCode', sekininsha_uid = '$currentUseEmail', upt_dt = '$upt_dt' WHERE
-        tbl_userkyuka.companyid IN('$currentUseCompanyId') AND tbl_userkyuka.kyukaid IN('$selectedIdList')";
-    if ($conn -> query($query_shonin) === TRUE) {
-        $_SESSION['sekinin_shonin_success'] = $sekinin_shonin_success;
-        header("Refresh: 3");
-    } else {
-        $_SESSION['sekinin_shonin_error'] = $sekinin_shonin_error;
     }
-}
+
+    // User Kyuka SekininshaShonin   selectedUserKyukaSekininShoninId
+    if (isset($_POST['KyukaSekininshaShonin'])) {
+        $selectedId = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-input']);
+        $selectedStatus = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-status']);
+        $selectedIdArray = explode(',', $selectedId);
+        $selectedIdList = implode("','", $selectedIdArray);
+        $zeroIndex = array_search(0, $KYUKA_SUBMISSTION_STATUS);
+        $selectedStatusArray = explode(',', $selectedStatus);
+        // check status
+        foreach ($selectedStatusArray as $id) {
+            if ($id == $zeroIndex) {
+                return;
+            }
+        }
+
+        $savingCode = 3;
+
+        $query_shonin = "UPDATE tbl_userkyuka SET submission_status = '$savingCode', sekininsha_uid = '$currentUseEmail', upt_dt = '$upt_dt' WHERE
+        tbl_userkyuka.companyid IN('$currentUseCompanyId') AND tbl_userkyuka.kyukaid IN('$selectedIdList')";
+        if ($conn->query($query_shonin) === TRUE) {
+            $_SESSION['sekinin_shonin_success'] = $sekinin_shonin_success;
+            header("Refresh: 3");
+        } else {
+            $_SESSION['sekinin_shonin_error'] = $sekinin_shonin_error;
+        }
+    }
 
 }

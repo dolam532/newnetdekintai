@@ -283,10 +283,11 @@ span.kyukaReg_class {
         <form method="post">
             <div class="col-md-4 text-left">
                 <div class="title_condition">
-                    <!-- $KYUKA_SUBMISSTION_STATUS_FILTER -->
-                    <select id="filterByStatusCode" name="filterByStatusCode" class="form-control" size="1"
-                        onfocus='this.size=6;' onblur='this.size=1;'
-                        onchange='this.size=1; this.blur();handleSelectFilterStatusChange()'>
+         
+                <label for="filterByStatusCode">状態</label>
+                                 <!-- $KYUKA_SUBMISSTION_STATUS_FILTER -->
+                                 <select id="filterByStatusCode" name="filterByStatusCode"  
+                        onchange='handleSelectFilterStatusChange()' style="padding:2px; width:70%;">
                         <?php
 						foreach ($KYUKA_SUBMISSTION_STATUS_FILTER as $key => $value) {
 										?>
@@ -299,8 +300,6 @@ span.kyukaReg_class {
 									}
 									?>
                     </select>
-
-
                 </div>
             </div>
             <div class="col-md-3 text-left">
@@ -327,42 +326,29 @@ span.kyukaReg_class {
                 <div class="title_condition">
 
                     <label for="searchKyukaByYear">申請年</label>
-                    <input id="searchKyukaByYear" name="searchKyukaByYear" type="number" value="<?=$searchByYear ?>"/>
+                    <input style="width:50%;" id="searchKyukaByYear" name="searchKyukaByYear" type="number" value="<?=$searchByYear ?>"/>
+                    <br>
                     <label for="searchKyukaByMonth">申請月</label>
-                    <input id="searchKyukaByMonth"  name="searchKyukaByMonth" type="number" value="<?=$searchByMonth ?>"/>
-
+                    <input style="width:50%;" id="searchKyukaByMonth"  name="searchKyukaByMonth" type="number" value="<?=$searchByMonth ?>"/>
+                    <br>
+                   
                 </div>
+ 
                 <div class="title_btn">
                     <input type="submit" id="ClearButton" name="ClearButton" value="クリア ">&nbsp;
                     <input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
                     <input type="button" id="btnNew" value="新規 ">&nbsp;
                     <input type="button" id="btnAnnt" value="お知らせ ">
                 </div>
+
+
+
             </div>
             <input type="hidden" id="selectedFilterByStatusCode" name="selectedFilterByStatusCode" value="<?= $filterByStatusCode?>"  />
         </form>
-        <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
-        <div class="col-md-2 text-left">
-            <div class="title_name">
-                <span class="text-left">休暇届</span>
-            </div>
-        </div>
-        <div class="col-md-4 text-left"></div>
-        <div class="col-md-3 text-left">
-            <div class="title_condition">
-                <label>社員名 : <?= $_SESSION['auth_name'] ?></label>
-            </div>
-        </div>
-        <div class="col-md-3 text-right">
-            <div class="title_btn">
-                <input type="button" id="btnNew" value="新規 ">&nbsp;
-                <input type="button" id="btnAnnt" value="お知らせ ">
-            </div>
-        </div>
-        <?php endif; ?>
-
         <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-        <div class="col-md-6 text-right" style="display: flex; justify-content: flex-end;">
+
+            <div class="col-md-12 text-right" style="display: flex; justify-content: flex-start;">
             <form method="post" style="margin: 0 10px;">
                 <button type="submit" name="KyukaHenshuModoshi" class="" style="width: auto;" type="button"
                     onclick="return checkHenshuChuModoshiSubmit()">編集中に戻す</button>
@@ -385,8 +371,31 @@ span.kyukaReg_class {
                 <input type="hidden" name="user-kyuka-multi-select-status">
                 <input type="hidden" name="user-kyuka-multi-select-input">
             </form>
+        <?php endif; ?>
+
+        </div>
+
+        <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
+        <div class="col-md-2 text-left">
+            <div class="title_name">
+                <span class="text-left">休暇届</span>
+            </div>
+        </div>
+        <div class="col-md-4 text-left"></div>
+        <div class="col-md-3 text-left">
+            <div class="title_condition">
+                <label>社員名 : <?= $_SESSION['auth_name'] ?></label>
+            </div>
+        </div>
+        <div class="col-md-3 text-right">
+            <div class="title_btn">
+                <input type="button" id="btnNew" value="新規 ">&nbsp;
+                <input type="button" id="btnAnnt" value="お知らせ ">
+            </div>
         </div>
         <?php endif; ?>
+
+       
 
 </div>
 <div class="form-group table-wrap">
@@ -1996,6 +2005,11 @@ function checkHenshuChuModoshiSubmit() {
         alert("<?php echo $same_kyuka_status_select_msg ?>")
         return false;
     }
+    var isMiteiShutsuKyukaSelected = checkSelectedTeishutsuKyuka();
+    if (!isMiteiShutsuKyukaSelected) {
+        alert("<?php echo $miteishutsu_kyuka_selected_error_msg ?>")
+        return false;
+    }
 
     if (confirm("<?php echo $user_kyuka_modoshi_submit ?>")) {
         return true;
@@ -2015,6 +2029,11 @@ function checkTantoshaShoninSubmit() {
         alert("<?php echo $same_kyuka_status_select_msg ?>")
         return false;
     }
+    var isMiteiShutsuKyukaSelected = checkSelectedTeishutsuKyuka();
+    if (!isMiteiShutsuKyukaSelected) {
+        alert("<?php echo $miteishutsu_kyuka_selected_error_msg ?>")
+        return false;
+    }
     if (confirm("<?php echo $user_kyuka_tantosha_submit ?>")) {
         return true;
     } else {
@@ -2022,6 +2041,8 @@ function checkTantoshaShoninSubmit() {
     }
 
 }
+
+// $miteishutsu_kyuka_selected_error_msg
 
 function checkSekininshaShoninSubmit() {
     var listSelectedUid = $("input[name='user-kyuka-multi-select-input']").val().trim();
@@ -2034,6 +2055,12 @@ function checkSekininshaShoninSubmit() {
         alert("<?php echo $same_kyuka_status_select_msg ?>")
         return false;
     }
+    var isMiteiShutsuKyukaSelected = checkSelectedTeishutsuKyuka();
+    if (!isMiteiShutsuKyukaSelected) {
+        alert("<?php echo $miteishutsu_kyuka_selected_error_msg ?>")
+        return false;
+    }
+
     if (confirm("<?php echo $user_kyuka_sekininsha_submit ?>")) {
         return true;
     } else {
@@ -2046,6 +2073,13 @@ function checkSameStatusSubmitBefore() {
     var listSelectedStatus = $("input[name='user-kyuka-multi-select-status']").val().trim().split(',');
     return listSelectedStatus.every(function(status) {
         return status === listSelectedStatus[0];
+    });
+}
+
+function checkSelectedTeishutsuKyuka() {
+    var listSelectedStatus = $("input[name='user-kyuka-multi-select-status']").val().trim().split(',');
+    return !listSelectedStatus.some(function(status) {
+        return status ===  '<?php echo array_search(0, $KYUKA_SUBMISSTION_STATUS); ?>';
     });
 }
 
