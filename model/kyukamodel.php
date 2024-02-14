@@ -288,6 +288,10 @@ if (($_POST['btnSearchReg'] == NULL && $_POST['ClearButton'] == NULL) || isset($
     if ($filterByStatusCode != -1 && isset($filterByStatusCode)) {
         $sql_userkyuka .= "AND `tbl_userkyuka`.`submission_status` = $filterByStatusCode ";
     }
+    if ($_POST['searchName'] != "") {
+        $searchEmail = $_POST['searchName'];
+        $sql_userkyuka .= "AND `tbl_userkyuka`.`email`  LIKE('%$searchEmail%') ";
+    } 
 
     $searchByYear = mysqli_real_escape_string($conn, $_POST['searchKyukaByYear']);
     $searchByMonth = mysqli_real_escape_string($conn, $_POST['searchKyukaByMonth']);

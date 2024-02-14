@@ -310,7 +310,7 @@ span.kyukaReg_class {
                             <?php
 								foreach ($user_list as $value) {
 								?>
-                            <option value="<?= $value['name'] ?>" <?php if ($value['name'] == $_POST['searchName']) {
+                            <option value="<?= $value['email'] ?>" <?php if ($value['email'] == $_POST['searchName']) {
 																				echo ' selected="selected"';
 																			} ?>>
                                 <?= $value['name'] ?>
