@@ -30,6 +30,19 @@ $currentDateTime = new DateTime("@$currentDate");
 $interval = $givenDateTime->diff($currentDateTime);
 $numberOfMonths = $interval->format('%m');
 
+
+$currenUser_email = $_SESSION['auth_email'];
+$sql_getCurrentUserInYmd = "SELECT `inymd` FROM `tbl_user`
+WHERE `tbl_user`.`email` = '$currenUser_email'";
+
+$result_CurrentUserInYmd = mysqli_query($conn, $sql_getCurrentUserInYmd);
+$currentUserInYmd = "";
+    if ($row = mysqli_fetch_assoc($result_CurrentUserInYmd)) {
+        $currentUserInYmd = $row['inymd'];
+    } 
+
+
+
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
 WHERE `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"

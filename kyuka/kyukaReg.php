@@ -555,13 +555,13 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3 inymd">
                                 <label for="inymd">入社年月</label>
                                 <input type="text" class="form-control" name="inymd" style="text-align: center"
-                                    value="<?= substr($user_inymd_, 0, 4) ?>年<?= substr($user_inymd_, 5, 2) ?>月"
+                                    value="<?= substr($currentUserInYmd, 0, 4) ?>年<?= substr($currentUserInYmd, 5, 2) ?>月"
                                     readonly>
                             </div>
                             <div class="col-md-6 col-sm-6 col-sx-6 kyukacompanyname">
                                 <label for="name">社員名</label>
                                 <input type="text" class="form-control" name="name" id="name" style="text-align: center"
-                                    value="<?= $user_name_ ?>" readonly>
+                                    value="<?= $_SESSION['auth_name'] ?>" readonly>
                             </div>
                         </div>
                         <br>
@@ -779,12 +779,13 @@ span.kyukaReg_class {
                                 <label for="inymd">入社年月</label>
                                 <input type="text" class="form-control" name="udinymd" style="text-align: center"
                                     value="<?= substr($user_inymd_, 0, 4) ?>年<?= substr($user_inymd_, 5, 2) ?>月"
-                                    readonly>
+                                    readonly>  <!-- FIX ME SELECTED USER IN YMD-->
                             </div>
                             <div class="col-md-6 col-sm-6 col-sx-6 kyukacompanyname">
                                 <label for="name">社員名</label>
                                 <input type="text" class="form-control" name="udname" id="udname"
-                                    style="text-align: center" value="<?= $user_name_ ?>" readonly>
+                                    style="text-align: center" value="<?= $user_name_ ?>" readonly>   <!-- FIX ME SELECTED USER NAME-->
+                                 
                             </div>
                         </div>
                         <br>
@@ -1159,7 +1160,7 @@ span.kyukaReg_class {
 $(document).on('click', '#btnNew', function(e) {
     // Check Receive Kyuka or Not
     var currentDate = new Date();
-    var targetDate = new Date('<?php echo $user_inymd_ ?>');
+    var targetDate = new Date('<?php echo $currentUserInYmd ?>');
     targetDate.setMonth(targetDate.getMonth() + 6);
     if (targetDate >= currentDate) {
         alert("<?php echo $kyuka_no_receive; ?>");
