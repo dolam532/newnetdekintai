@@ -306,7 +306,7 @@ span.kyukaReg_class {
                 <div class="title_condition">
                     <label>社員名 :
                         <select id="searchName" name="searchName" style="padding:2px; width:70%;">
-                            <option value="" selected="">選択なし</option>
+                            <option value="" selected="">全て</option>
                             <?php
 								foreach ($user_list as $value) {
 								?>
@@ -373,6 +373,7 @@ span.kyukaReg_class {
             </form>
         <?php endif; ?>
 
+      
         </div>
 
         <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
@@ -402,27 +403,17 @@ span.kyukaReg_class {
     <table class="table table-bordered datatable" >
         <thead>
             <tr class="info">
+            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                 <th style="text-align: center;">選択</th>
-                <th style="text-align: center;">ID</th>
+            <?php endif; ?>
+                <!-- <th style="text-align: center;">ID</th> -->
+                <th style="text-align: center;">社員名</th>
                 <th style="text-align: center;">申請日</th>
                 <th style="text-align: center;">入社年月</th>
-                <th style="text-align: center;">社員名</th>
                 <th style="text-align: center;">申請区分</th>
                 <th style="text-align: center;">休暇区分</th>
-                <th style="text-align: center;">年度算定期間</th>
                 <th style="text-align: center;">申請期間</th>
                 <th style="text-align: center;">申請日数(時間)</th>
-                <th style="text-align: center;">総有給休暇</th>
-                <th style="text-align: center;">前年度の繰越残</th>
-                <th style="text-align: center;">当該年度付与</th>
-                <th style="text-align: center;">使用済数</th>
-                <th style="text-align: center;">使用前残</th>
-                <th style="text-align: center;">今回使用</th>
-                <th style="text-align: center;">使用後済</th>
-                <th style="text-align: center;">使用後残</th>
-                <th style="text-align: center;">事由</th>
-                <th style="text-align: center;">休暇中居る場所</th>
-                <th style="text-align: center;">緊急連絡先</th>
                 <th style="text-align: center;">状態</th>
                 <th style="text-align: center;">詳細情報</th>
             </tr>
@@ -436,9 +427,12 @@ span.kyukaReg_class {
 					foreach ($userkyuka_list as $userkyuka) {
 					?>
             <tr>
+            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                 <td><input type="checkbox" class="user-kyuka-select-checkbox" value="<?= $userkyuka['kyukaid'] ?>"
                         data-status-value="<?= $userkyuka['submission_status'] ?>"></td>
-                <td>
+            <?php endif; ?>
+                        
+                <td style="display:none;">
                     <a href="#">
                         <span class="showModal">
                             <span class="kyukaReg_class">
@@ -448,10 +442,20 @@ span.kyukaReg_class {
                         </span>
                     </a>
                 </td>
+                <td><span>
+                    <a href="#">
+                        <span class="showModal">
+                            <span class="kyukaReg_class" style="display:none;" >
+                                <?= $userkyuka['kyukaid'] . ',' . $userkyuka['kyukaname'] ?>
+                            </span>
+                            <?= $userkyuka['name']?>
+                        </span>
+                    </a>
+                </span></td>
                 <td><span><?= $userkyuka['kyukaymd'] ?></span></td>
                 <td><span><?= substr($userkyuka['inymd'], 0, 4) ?>年<?= substr($userkyuka['inymd'], 5, 2) ?>月</span>
                 </td>
-                <td><span><?= $userkyuka['name'] ?></span></td>
+        
                 <td>
                     <span>
                         <?php
@@ -468,7 +472,6 @@ span.kyukaReg_class {
                     </span>
                 </td>
                 <td><span><?= $userkyuka['kyukaname'] . $userkyuka['kyukanamedetail'] ?></span></td>
-                <td><span><?= $userkyuka['vacationstr'] ?>~<?= $userkyuka['vacationend'] ?></span></td>
                 <td>
                     <span>
                         <?php
@@ -492,22 +495,10 @@ span.kyukaReg_class {
 										?>
                     </span>
                 </td>
-                <td><span><?= $userkyuka['tothday'] ?></span></td>
-                <td><span><?= $userkyuka['oldcnt'] ?></span></td>
-                <td><span><?= $userkyuka['newcnt'] ?></span></td>
-                <td><span><?= $userkyuka['usefinishcnt'] ?></span></td>
-                <td><span><?= $userkyuka['usebeforecnt'] ?></span></td>
-                <td><span><?= $userkyuka['usenowcnt'] ?></span></td>
-                <td><span><?= $userkyuka['usefinishaftercnt'] ?></span></td>
-                <td><span><?= $userkyuka['useafterremaincnt'] ?></span></td>
-                <td><span><?= $userkyuka['reason'] ?></span></td>
-                <td><span><?= $userkyuka['destplace'] ?></span></td>
-                <td><span><?= $userkyuka['desttel'] ?></span></td>
+              
                 <td>
                     <span name="show-submission-status">
                         <?php echo $KYUKA_SUBMISSTION_STATUS[$userkyuka['submission_status']]?>
-
-
                     </span>
                 </td>
                 <td>
@@ -959,7 +950,7 @@ span.kyukaReg_class {
                                 <p class="text-center">
                                     <input type="submit" name="UpdateKyuka"
                                         class="btn btn-primary modal-update-kyuka-btn" id="btnUpdateKyuka" role="button"
-                                        value="編集">
+                                        value="登登録">
                                 </p>
                             </div>
                             <div class="col-xs-2">
@@ -970,7 +961,7 @@ span.kyukaReg_class {
                             </div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input class="btn btn-success btn-ms" id="btnClearUpdate modal-update-kyuka-btn"
+                                    <input class="btn btn-success btn-ms modal-update-kyuka-btn" id="btnClearUpdate"
                                         role="button" value="クリア" />
                                 </p>
                             </div>

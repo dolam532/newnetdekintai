@@ -214,12 +214,13 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
     AND 
         `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
-        ORDER BY `tbl_userkyuka`.`kyukaid`';
+        ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid`;';
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_userkyuka .= 'WHERE
         `tbl_user`.`type` = "' . $_SESSION['auth_type'] . '"
     AND
-        `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"';
+        `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"
+        ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid`;';
 }
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list_ = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
@@ -316,7 +317,7 @@ if (($_POST['btnSearchReg'] == NULL && $_POST['ClearButton'] == NULL) || isset($
         $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('%/%$searchByMonth/%') ";
     } else {
     }
-    $sql_userkyuka .= "ORDER BY `tbl_userkyuka`.`kyukaid` ;";
+    $sql_userkyuka .= "ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid`;";
     $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
     $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 
