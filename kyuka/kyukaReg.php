@@ -402,11 +402,12 @@ span.kyukaReg_class {
     <table class="table table-bordered datatable" >
         <thead>
             <tr class="info">
-                <th style="text-align: center;">選択</th>
-                <th style="text-align: center;">ID</th>
+                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                    <th style="text-align: center;">選択</th>
+                <?php endif; ?>
+                <th style="text-align: center;">社員名</th>
                 <th style="text-align: center;">申請日</th>
                 <th style="text-align: center;">入社年月</th>
-                <th style="text-align: center;">社員名</th>
                 <th style="text-align: center;">申請区分</th>
                 <th style="text-align: center;">休暇区分</th>
                 <th style="text-align: center;">年度算定期間</th>
@@ -430,28 +431,33 @@ span.kyukaReg_class {
         <tbody>
             <?php if (empty($userkyuka_list)) { ?>
             <tr>
-                <td colspan="22" align="center"><?php echo $data_save_no; ?></td>
+                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                    <td colspan="22" align="center"><?php echo $data_save_no; ?></td>
+                <?php else: ?>
+                    <td colspan="21" align="center"><?php echo $data_save_no; ?></td>
+                <?php endif; ?>
             </tr>
             <?php } elseif (!empty($userkyuka_list)) {
 					foreach ($userkyuka_list as $userkyuka) {
 					?>
             <tr>
+                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                 <td><input type="checkbox" class="user-kyuka-select-checkbox" value="<?= $userkyuka['kyukaid'] ?>"
                         data-status-value="<?= $userkyuka['submission_status'] ?>"></td>
+                <?php endif; ?>
                 <td>
                     <a href="#">
                         <span class="showModal">
                             <span class="kyukaReg_class">
                                 <?= $userkyuka['kyukaid'] . ',' . $userkyuka['kyukaname'] ?>
                             </span>
-                            <?= $userkyuka['uid'] ?>
+                            <?= $userkyuka['name'] ?>
                         </span>
                     </a>
                 </td>
                 <td><span><?= $userkyuka['kyukaymd'] ?></span></td>
                 <td><span><?= substr($userkyuka['inymd'], 0, 4) ?>年<?= substr($userkyuka['inymd'], 5, 2) ?>月</span>
                 </td>
-                <td><span><?= $userkyuka['name'] ?></span></td>
                 <td>
                     <span>
                         <?php
@@ -542,7 +548,7 @@ span.kyukaReg_class {
         <div class="modal-dialog">
             <form method="post" novalidate>
                 <div class="modal-content">
-                    <div class="modal-header">休年届登録(<span id="sname">New</span>)
+                    <div class="modal-header">休暇届登録(<span id="sname">New</span>)
                         <button class="close" data-dismiss="modal">x</button>
                     </div>
                     <div class="modal-body" style="text-align: left; height: 600px; overflow-y: auto;">
@@ -760,7 +766,7 @@ span.kyukaReg_class {
         <div class="modal-dialog">
             <form method="post" novalidate>
                 <div class="modal-content">
-                    <div class="modal-header">休年届編集(<span id="usname"></span>)
+                    <div class="modal-header">休暇届編集(<span id="usname"></span>)
                         <button class="close" data-dismiss="modal">x</button>
                     </div>
                     <div class="modal-body" style="text-align: left; height: 600px; overflow-y: auto;">
@@ -953,24 +959,24 @@ span.kyukaReg_class {
                             </div>
                         </div>
                         <br>
-                        <div class="modal-footer" style="text-align: center">
+                        <div class="modal-footer modal-update-kyuka-btn" style="text-align: center">
                             <div class="col-xs-2"></div>
                             <div class="col-xs-2">
                                 <p class="text-center">
                                     <input type="submit" name="UpdateKyuka"
-                                        class="btn btn-primary modal-update-kyuka-btn" id="btnUpdateKyuka" role="button"
+                                        class="btn btn-primary" id="btnUpdateKyuka" role="button"
                                         value="編集">
                                 </p>
                             </div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input type="submit" name="DelKyuka" class="btn btn-warning modal-update-kyuka-btn"
+                                    <input type="submit" name="DelKyuka" class="btn btn-warning"
                                         id="btnDelKyuka" role="button" value="削除">
                                 </p>
                             </div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input class="btn btn-success btn-ms" id="btnClearUpdate modal-update-kyuka-btn"
+                                    <input class="btn btn-success btn-ms" id="btnClearUpdate"
                                         role="button" value="クリア" />
                                 </p>
                             </div>
@@ -979,6 +985,14 @@ span.kyukaReg_class {
                                     id="modalClose">閉じる</button>
                             </div>
                             <div class="col-xs-2"></div>
+                        </div>
+                        <div class="modal-footer show-div" style="text-align: center">
+                            <div class="col-xs-5"></div>
+                            <div class="col-xs-2">
+                                <button type="button" class="btn btn-default" data-dismiss="modal"
+                                    id="modalClose">閉じる</button>
+                            </div>
+                            <div class="col-xs-5"></div>
                         </div>
                     </div>
                 </div>
@@ -2146,12 +2160,13 @@ function setOnModalChangeDataButtonHidden(flag) {
     var elements = $(".modal-update-kyuka-btn");
     elements.each(function() {
         if (flag) {
-            $(this).removeClass('hiddenInput');
+            $(this).show();
+            $(".show-div").hide();
         } else {
-            $(this).addClass('hiddenInput');
+            $(".show-div").show();
+            $(this).hide();
         }
     });
-
 }
 
 // Multi Select User Kyuka 
