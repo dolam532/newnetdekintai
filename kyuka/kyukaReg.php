@@ -406,7 +406,6 @@ span.kyukaReg_class {
             <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                 <th style="text-align: center;">選択</th>
             <?php endif; ?>
-                <!-- <th style="text-align: center;">ID</th> -->
                 <th style="text-align: center;">社員名</th>
                 <th style="text-align: center;">申請日</th>
                 <th style="text-align: center;">入社年月</th>
@@ -422,9 +421,9 @@ span.kyukaReg_class {
             <?php if (empty($userkyuka_list)) { ?>
             <tr>
                 <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                    <td colspan="22" align="center"><?php echo $data_save_no; ?></td>
+                    <td colspan="10" align="center"><?php echo $data_save_no; ?></td>
                 <?php else: ?>
-                    <td colspan="21" align="center"><?php echo $data_save_no; ?></td>
+                    <td colspan="9" align="center"><?php echo $data_save_no; ?></td>
                 <?php endif; ?>
             </tr>
             <?php } elseif (!empty($userkyuka_list)) {
@@ -435,22 +434,11 @@ span.kyukaReg_class {
                 <td><input type="checkbox" class="user-kyuka-select-checkbox" value="<?= $userkyuka['kyukaid'] ?>"
                         data-status-value="<?= $userkyuka['submission_status'] ?>"></td>
             <?php endif; ?>
-                        
-                <td style="display:none;">
-                    <a href="#">
-                        <span class="showModal">
-                            <span class="kyukaReg_class">
-                                <?= $userkyuka['kyukaid'] . ',' . $userkyuka['kyukaname'] ?>
-                            </span>
-                            <?= $userkyuka['name'] ?>
-                        </span>
-                    </a>
-                </td>
                 <td><span>
                     <a href="#">
                         <span class="showModal">
                             <span class="kyukaReg_class" style="display:none;" >
-                                <?= $userkyuka['kyukaid'] . ',' . $userkyuka['kyukaname'] ?>
+                                <?= $userkyuka['kyukaid'] . ','  ?>
                             </span>
                             <?= $userkyuka['name']?>
                         </span>
@@ -952,7 +940,7 @@ span.kyukaReg_class {
                             <div class="col-xs-2">
                                 <p class="text-center">
                                     <input type="submit" name="UpdateKyuka"
-                                        class="btn btn-primary modal-update-kyuka-btn" id="btnUpdateKyuka" role="button"
+                                        class="btn btn-primary" id="btnUpdateKyuka" role="button"
                                         value="登登録">
                                 </p>
                             </div>
@@ -964,7 +952,7 @@ span.kyukaReg_class {
                             </div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input class="btn btn-success btn-ms modal-update-kyuka-btn" id="btnClearUpdate"
+                                    <input class="btn btn-success btn-ms" id="btnClearUpdate"
                                         role="button" value="クリア" />
                                 </p>
                             </div>
@@ -1796,14 +1784,11 @@ $(document).on('click', '.showModal', function() {
     var ArrayData = $(this).text().trim();
     var SeparateArr = ArrayData.split(',');
     var Kyukaid = SeparateArr[0];
-    var Kyukaname = SeparateArr[1];
-    var regex = /\(|\)/;
-    var match = Kyukaname.match(/\((.*?)\)/);
-    var extractedText = match ? match[1] : null;
+    var Name = SeparateArr[1].trim();
     <?php
 		foreach ($userkyuka_list as $key) {
 		?>
-    if ('<?php echo $key['kyukaid'] ?>' === Kyukaid) {
+    if ('<?php echo $key['kyukaid'] ?>' === Kyukaid && '<?php echo $key['name'] ?>' === Name) {
         isAdmin = false;
         isSubmised = false;
         var isAdmin =
@@ -1818,6 +1803,9 @@ $(document).on('click', '.showModal', function() {
         }
 
         $("#usname").text('<?php echo $key['name'] ?>');
+        $("#udkyukaymd").text($('[name="udkyukaymd"]').val("<?php echo $key['kyukaymd'] ?>"));
+        $("#udinymd").text($('[name="udinymd"]').val("<?php echo $key['inymd'] ?>"));
+        $("#udname").text($('[name="udname"]').val("<?php echo $key['name'] ?>"));
         $("#udkyukaid").text($('[name="udkyukaid"]').val("<?php echo $key['kyukaid'] ?>"));
         $("#udvacationid").text($('[name="udvacationid"]').val("<?php echo $key['vacationid'] ?>"));
         $("#udallowok").text($('[name="udallowok"]').val("<?php echo $key['allowok'] ?>"));
@@ -1856,7 +1844,6 @@ $(document).on('click', '.showModal', function() {
         $("#udreason").text($('[name="udreason"]').val("<?php echo $key['reason'] ?>"));
         $("#udymdcnt").text($('[name="udymdcnt"]').val("<?php echo $key['ymdcnt'] ?>"));
         $("#udtimecnt").text($('[name="udtimecnt"]').val("<?php echo $key['timecnt'] ?>"));
-        $("#udymdcnt").text($('[name="udymdcnt"]').val("<?php echo $key['ymdcnt'] ?>"));
         $("input[name='uddestcode'][value='<?php echo $key['destcode']; ?>']").prop('checked', true);
         $("#uddestplace").text($('[name="uddestplace"]').val("<?php echo $key['destplace'] ?>"));
         $("#uddesttel").text($('[name="uddesttel"]').val("<?php echo $key['desttel'] ?>"));
