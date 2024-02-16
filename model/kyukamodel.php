@@ -30,6 +30,15 @@ $currentDateTime = new DateTime("@$currentDate");
 $interval = $givenDateTime->diff($currentDateTime);
 $numberOfMonths = $interval->format('%m');
 
+if(!isset($searchByYear) || empty($searchByYear)) {
+    $searchByYear = date("Y"); 
+}
+
+if(!isset($searchByMonth) || empty($searchByMonth)) {
+    $searchByMonth = date("m");
+}
+
+
 
 $currenUser_email = $_SESSION['auth_email'];
 $sql_getCurrentUserInYmd = "SELECT `inymd` FROM `tbl_user`
@@ -210,11 +219,27 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_userkyuka .= 'ORDER BY `tbl_userkyuka`.`kyukaid`';
 } elseif ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
     $sql_userkyuka .= 'CROSS JOIN `tbl_manageinfo` ON `tbl_user`.`companyid` = `tbl_manageinfo`.`companyid`
-    WHERE
-        `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
-    AND 
-        `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")
-        ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid`;';
+        WHERE `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
+        AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
+      
+        if ($filterByStatusCode != -1 && isset($filterByStatusCode)) {
+            $sql_userkyuka .= "AND `tbl_userkyuka`.`submission_status` = $filterByStatusCode ";
+        }
+        if ($_POST['searchName'] != "") {
+            $searchEmail = $_POST['searchName'];
+            $sql_userkyuka .= "AND `tbl_userkyuka`.`email`  LIKE('%$searchEmail%') ";
+        } 
+        if (!empty($searchByYear) && !empty($searchByMonth) && $searchByMonth != '-1') {
+            $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('$searchByYear/%$searchByMonth/%') ";
+        } else if (!empty($searchByYear) && empty($searchByMonth)) {
+            $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('$searchByYear/%') ";
+        } else if (empty($searchByYear) && !empty($searchByMonth) && $searchByMonth != '-1') {
+            $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('%/%$searchByMonth/%') ";
+        } else {
+        }
+        $sql_userkyuka .= "ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid`;";
+        error_log($sql_userkyuka);
+
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_userkyuka .= 'WHERE
         `tbl_user`.`type` = "' . $_SESSION['auth_type'] . '"
@@ -239,6 +264,8 @@ $UId = array_unique($UId);
 $KyukaY = array_unique($KyukaY);
 $Name = array_unique($Name);
 $VacationY = array_unique($VacationY);
+
+error_log("COODE: ".$filterByStatusCode);
 if (!isset($filterByStatusCode)) {
     $filterByStatusCode = -1;
 }
@@ -309,15 +336,16 @@ if (($_POST['btnSearchReg'] == NULL && $_POST['ClearButton'] == NULL) || isset($
 
     $searchByYear = mysqli_real_escape_string($conn, $_POST['searchKyukaByYear']);
     $searchByMonth = mysqli_real_escape_string($conn, $_POST['searchKyukaByMonth']);
-    if (!empty($searchByYear) && !empty($searchByMonth)) {
+    if (!empty($searchByYear) && !empty($searchByMonth) && $searchByMonth != '-1') {
         $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('$searchByYear/%$searchByMonth/%') ";
     } else if (!empty($searchByYear) && empty($searchByMonth)) {
         $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('$searchByYear/%') ";
-    } else if (empty($searchByYear) && !empty($searchByMonth)) {
+    } else if (empty($searchByYear) && !empty($searchByMonth) && $searchByMonth != '-1') {
         $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('%/%$searchByMonth/%') ";
     } else {
     }
     $sql_userkyuka .= "ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid`;";
+ 
     $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
     $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
 
@@ -744,6 +772,8 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
         $selectedId = mysqli_real_escape_string($conn, $_POST['user-kyuka-multi-select-input']);
         $selectedIdArray = explode(',', $selectedId);
         $selectedIdList = implode("','", $selectedIdArray);
+        // Current Searching Value  
+
         $query_modoshi_kyuka = "UPDATE tbl_userkyuka SET `submission_status` = 0 ,  allowok = '0', `teishutsu_uid` = null ,  `tantosha_uid` = null ,
         `sekininsha_uid` = null , `upt_dt`='$upt_dt'  WHERE  
         `tbl_userkyuka`.`companyid` IN('$currentUseCompanyId') AND `tbl_userkyuka`.`kyukaid` IN('$selectedIdList')";

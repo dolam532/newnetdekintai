@@ -325,13 +325,23 @@ span.kyukaReg_class {
             <div class="col-md-3 text-right">
                 <div class="title_condition">
 
-                    <label for="searchKyukaByYear">申請年</label>
-                    <input style="width:50%;" id="searchKyukaByYear" name="searchKyukaByYear" type="number" value="<?=$searchByYear ?>"/>
+                    <label for="searchKyukaByYear">申請年月</label>
+                    <input style="width:30%;" id="searchKyukaByYear" name="searchKyukaByYear" type="number" value="<?=$searchByYear ?>"/>
+                    <select id="searchKyukaByMonth"  name="searchKyukaByMonth" class="seldate" style="padding:3px;">
+							<?php
+							foreach (ConstArray::$search_month_kyuka as $key => $value) {
+								?>
+								<option value="<?= $key ?>" <?php if ($key == $searchByMonth) {
+									  echo ' selected="selected"';
+								  } ?>>
+									<?= $value ?>
+								</option>
+								<?php
+							}
+							?>
+						</select>
                     <br>
-                    <label for="searchKyukaByMonth">申請月</label>
-                    <input style="width:50%;" id="searchKyukaByMonth"  name="searchKyukaByMonth" type="number" value="<?=$searchByMonth ?>"/>
-                    <br>
-                   
+                 
                 </div>
  
                 <div class="title_btn">
@@ -346,8 +356,12 @@ span.kyukaReg_class {
             </div>
             <input type="hidden" id="selectedFilterByStatusCode" name="selectedFilterByStatusCode" value="<?= $filterByStatusCode?>"  />
         </form>
-        <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+   
 
+        <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+           <div class="row">
+           
+      
             <div class="col-md-12 text-right" style="display: flex; justify-content: flex-start;">
             <form method="post" style="margin: 0 10px;">
                 <button type="submit" name="KyukaHenshuModoshi" class="" style="width: auto;" type="button"
@@ -372,9 +386,11 @@ span.kyukaReg_class {
                 <input type="hidden" name="user-kyuka-multi-select-input">
             </form>
         <?php endif; ?>
-
-      
         </div>
+       
+    
+   
+    </div>
 
         <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
         <div class="col-md-2 text-left">
@@ -400,6 +416,9 @@ span.kyukaReg_class {
 
 </div>
 <div class="form-group table-wrap">
+<div class="col-md-2 text-right" style="display: flex; justify-content: flex-start;">
+            <input type="checkbox" id="user-kyuka-select-all-checkbox" value="全て選択" />
+            </div>
     <table class="table table-bordered datatable" >
         <thead>
             <tr class="info">
@@ -941,7 +960,7 @@ span.kyukaReg_class {
                                 <p class="text-center">
                                     <input type="submit" name="UpdateKyuka"
                                         class="btn btn-primary" id="btnUpdateKyuka" role="button"
-                                        value="登登録">
+                                        value="登録">
                                 </p>
                             </div>
                             <div class="col-xs-2">
@@ -1957,6 +1976,7 @@ $(".submit-button").click(function(event) {
 window.onload = function() {
     setTimeout(hideLoadingOverlay, 1000);
     startLoading();
+    selectAllUserKyukaSelectHandler();
 
 };
 
@@ -2145,25 +2165,47 @@ function setOnModalChangeDataButtonHidden(flag) {
 }
 
 // Multi Select User Kyuka 
-function multiUserKyukaSelectHandler() {
-    var selectedIds = [];
-    var selectedStatuses = [];
-    $('.user-kyuka-select-checkbox').change(function() {
-        var statusValue = $(this).data('status-value');
-        if (this.checked) {
-            selectedIds.push($(this).val());
-            selectedStatuses.push(statusValue);
-        } else {
-            var index = selectedIds.indexOf($(this).val());
-            if (index !== -1) {
-                selectedIds.splice(index, 1);
-                selectedStatuses.splice(index, 1);
-            }
-        }
-        $("input[name='user-kyuka-multi-select-input']").val(selectedIds.join(','));
-        $("input[name='user-kyuka-multi-select-status']").val(selectedStatuses.join(','));
-    });
+var selectedIds = [];
+var selectedStatuses = [];
 
+function multiUserKyukaSelectHandler() {
+    $('.user-kyuka-select-checkbox').change(function() {
+        updateSelectedValues(this);
+    });
+}
+
+function updateSelectedValues(checkBox) {
+    var statusValue = $(checkBox).data('status-value');
+    if (checkBox.checked) {
+        selectedIds.push($(checkBox).val());
+        selectedStatuses.push(statusValue);
+    } else {
+        var index = selectedIds.indexOf($(checkBox).val());
+        if (index !== -1) {
+            selectedIds.splice(index, 1);
+            selectedStatuses.splice(index, 1);
+        }
+    }
+    $("input[name='user-kyuka-multi-select-input']").val(selectedIds.join(','));
+    $("input[name='user-kyuka-multi-select-status']").val(selectedStatuses.join(','));
+
+    // If all checkboxes are unchecked, uncheck the select all checkbox
+    if ($('.user-kyuka-select-checkbox:checked').length === 0) {
+        $('#user-kyuka-select-all-checkbox').prop('checked', false);
+        selectedIds = [];
+        selectedStatuses = [];
+    }
+}
+
+function selectAllUserKyukaSelectHandler() {
+    $('#user-kyuka-select-all-checkbox').change(function() {
+             selectedIds = [];
+            selectedStatuses = [];
+        $('.user-kyuka-select-checkbox').each(function() {
+            $(this).prop('checked', $('#user-kyuka-select-all-checkbox').is(':checked'));
+            updateSelectedValues(this);
+        });
+    });
 }
 
 function handleSelectFilterStatusChange() {
