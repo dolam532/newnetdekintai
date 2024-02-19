@@ -502,6 +502,14 @@ span.kyukaReg_class {
 										} elseif ($user_kyukatemplate_ == "2") {
 											echo $userkyuka['timecnt'] . "時間";
 										}
+                                    }
+                                    if($userkyuka['kyukatype'] == 1) {
+                                        if ($user_kyukatemplate_ == "1") {
+											echo $userkyuka['timecnt'] . "日";
+										} elseif ($user_kyukatemplate_ == "2") {
+											echo $userkyuka['timecnt'] . "日";
+										} 
+                                    }
 										?>
                     </span>
                 </td>
@@ -526,8 +534,6 @@ span.kyukaReg_class {
                                 <input type="hidden" name="selectedUserKyukaSubmissionStatus"
                                     value="<?= $userkyuka['submission_status'] ?>">
                             </form>
-
-                            <?php } ?>
                     </span>
                 </td>
             </tr>
