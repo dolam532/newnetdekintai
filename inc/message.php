@@ -41,7 +41,6 @@ $email_is_dupplicate = 'メールが存在されています。他のメール�
 $user_type_undefined = '権限がありませんでした。担当者まで連絡してください。';
 
 // kyukaReg
-$kyuka_no_receive = '休暇はまだ取得出来ません。';
 $kyuka_type_select = '申込区分を選択してください。';
 $kyuka_name_select = '休暇区分を選択してください。';
 $kyuka_destcode_select = '暇中居る場所を選択してください。';

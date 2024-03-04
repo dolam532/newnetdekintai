@@ -30,11 +30,11 @@ $currentDateTime = new DateTime("@$currentDate");
 $interval = $givenDateTime->diff($currentDateTime);
 $numberOfMonths = $interval->format('%m');
 
-if(!isset($searchByYear) || empty($searchByYear)) {
-    $searchByYear = date("Y"); 
+if (!isset($searchByYear) || empty($searchByYear)) {
+    $searchByYear = date("Y");
 }
 
-if(!isset($searchByMonth) || empty($searchByMonth)) {
+if (!isset($searchByMonth) || empty($searchByMonth)) {
     $searchByMonth = date("m");
 }
 
@@ -46,9 +46,9 @@ WHERE `tbl_user`.`email` = '$currenUser_email'";
 
 $result_CurrentUserInYmd = mysqli_query($conn, $sql_getCurrentUserInYmd);
 $currentUserInYmd = "";
-    if ($row = mysqli_fetch_assoc($result_CurrentUserInYmd)) {
-        $currentUserInYmd = $row['inymd'];
-    } 
+if ($row = mysqli_fetch_assoc($result_CurrentUserInYmd)) {
+    $currentUserInYmd = $row['inymd'];
+}
 
 
 
@@ -170,8 +170,11 @@ if ($minTtop !== null && $minTbottom !== null) {
     $lastTbottomMin = $last_data_min[$minTbottom];
 }
 
+if ($lastTtopMax == null) {
+    $lastTtopMax = "6";
+}
 $startmonth = strtotime("+" . $lastTtopMax . " months", $givenDate);
-$endmonth = strtotime("+" . $lastTtopMin . " months", $givenDate);
+$endmonth = strtotime("+12 months", $startmonth);
 $enddate = strtotime("-1 day", $endmonth);
 $startdate_ = date('Y/m/d', $startmonth);
 $enddate_ = date('Y/m/d', $enddate);
@@ -221,25 +224,24 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
     $sql_userkyuka .= 'CROSS JOIN `tbl_manageinfo` ON `tbl_user`.`companyid` = `tbl_manageinfo`.`companyid`
         WHERE `tbl_user`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
         AND `tbl_user`.`type` IN("' . constant('ADMIN') . '", "' . constant('USER') . '", "' . constant('ADMINISTRATOR') . '")';
-      
-        if ($filterByStatusCode != -1 && isset($filterByStatusCode)) {
-            $sql_userkyuka .= "AND `tbl_userkyuka`.`submission_status` = $filterByStatusCode ";
-        }
-        if ($_POST['searchName'] != "") {
-            $searchEmail = $_POST['searchName'];
-            $sql_userkyuka .= "AND `tbl_userkyuka`.`email`  LIKE('%$searchEmail%') ";
-        } 
-        if (!empty($searchByYear) && !empty($searchByMonth) && $searchByMonth != '-1') {
-            $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('$searchByYear/%$searchByMonth/%') ";
-        } else if (!empty($searchByYear) && empty($searchByMonth)) {
-            $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('$searchByYear/%') ";
-        } else if (empty($searchByYear) && !empty($searchByMonth) && $searchByMonth != '-1') {
-            $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('%/%$searchByMonth/%') ";
-        } else {
-        }
-        $sql_userkyuka .= "ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid`;";
-        error_log($sql_userkyuka);
 
+    if ($filterByStatusCode != -1 && isset($filterByStatusCode)) {
+        $sql_userkyuka .= "AND `tbl_userkyuka`.`submission_status` = $filterByStatusCode ";
+    }
+    if ($_POST['searchName'] != "") {
+        $searchEmail = $_POST['searchName'];
+        $sql_userkyuka .= "AND `tbl_userkyuka`.`email`  LIKE('%$searchEmail%') ";
+    }
+    if (!empty($searchByYear) && !empty($searchByMonth) && $searchByMonth != '-1') {
+        $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('$searchByYear/%$searchByMonth/%') ";
+    } else if (!empty($searchByYear) && empty($searchByMonth)) {
+        $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('$searchByYear/%') ";
+    } else if (empty($searchByYear) && !empty($searchByMonth) && $searchByMonth != '-1') {
+        $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('%/%$searchByMonth/%') ";
+    } else {
+    }
+    $sql_userkyuka .= "ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid`;";
+    error_log($sql_userkyuka);
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_userkyuka .= 'WHERE
         `tbl_user`.`type` = "' . $_SESSION['auth_type'] . '"
@@ -265,34 +267,15 @@ $KyukaY = array_unique($KyukaY);
 $Name = array_unique($Name);
 $VacationY = array_unique($VacationY);
 
-error_log("COODE: ".$filterByStatusCode);
+error_log("COODE: " . $filterByStatusCode);
 if (!isset($filterByStatusCode)) {
     $filterByStatusCode = -1;
 }
 if (($_POST['btnSearchReg'] == NULL && $_POST['ClearButton'] == NULL) || isset($_POST['ClearButton'])) {
-    // $_POST['searchAllowok'] = constant('SEARCH_ALLOW');
-    // $_POST['searchYY'] = "";
-    // $_POST['searchName'] = "";
     $filterByStatusCode = -1;
 
     $userkyuka_list = $userkyuka_list_;
 } elseif (isset($_POST['btnSearchReg'])) {
-    // if ($_POST['searchAllowok'] == constant('SEARCH_ALLOW')) {
-    //     $searchAllowok = implode('","', $AllowOk);
-    // } else {
-    //     $searchAllowok = $_POST['searchAllowok'];
-    // }
-    // if ($_POST['searchName'] == "") {
-    //     $searchName = implode('","', $Name);
-    // } else {
-    //     $searchName = $_POST['searchName'];
-    // }
-    // if ($_POST['searchYY'] == "") {
-    //     $searchYY = implode('","', $KyukaY);
-    // } else {
-    //     $searchYY = $_POST['searchYY'];
-    // }
-
     $sql_userkyuka = 'SELECT DISTINCT
         `tbl_userkyuka`.*,
         `tbl_user`.`uid`,
@@ -332,7 +315,7 @@ if (($_POST['btnSearchReg'] == NULL && $_POST['ClearButton'] == NULL) || isset($
     if ($_POST['searchName'] != "") {
         $searchEmail = $_POST['searchName'];
         $sql_userkyuka .= "AND `tbl_userkyuka`.`email`  LIKE('%$searchEmail%') ";
-    } 
+    }
 
     $searchByYear = mysqli_real_escape_string($conn, $_POST['searchKyukaByYear']);
     $searchByMonth = mysqli_real_escape_string($conn, $_POST['searchKyukaByMonth']);
@@ -345,11 +328,9 @@ if (($_POST['btnSearchReg'] == NULL && $_POST['ClearButton'] == NULL) || isset($
     } else {
     }
     $sql_userkyuka .= "ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid`;";
- 
+
     $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
     $userkyuka_list = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
-
-
 }
 
 foreach ($userkyuka_list as $key => $value) {
@@ -524,10 +505,16 @@ if (isset($_POST['UpdateKyuka'])) {
     }
 
     $companyid = mysqli_real_escape_string($conn, $_SESSION['auth_companyid']);
-    $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
-    $email = mysqli_real_escape_string($conn, $_SESSION['auth_email']);
+    if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')){
+        $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
+        $email = mysqli_real_escape_string($conn, $_POST['udemail']);
+    }elseif($_SESSION['auth_type'] == constant('USER')){
+        $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
+        $email = mysqli_real_escape_string($conn, $_SESSION['auth_email']);
+    }
     $kyukaid = mysqli_real_escape_string($conn, $_POST['udkyukaid']);
     $vacationid = mysqli_real_escape_string($conn, $_POST['udvacationid']);
+
     // check submitted by admin 
     $sql_get_status_this_kyuka = "SELECT `submission_status` FROM `tbl_userkyuka` WHERE `kyukaid` = $kyukaid LIMIT 1";
     $result_find_status = mysqli_query($conn, $sql_get_status_this_kyuka);
@@ -624,9 +611,7 @@ if (isset($_POST['UpdateKyuka'])) {
     }
 }
 
-// Update tbl_userkyuka & tbl_vacation table of database
-
-
+// Delete tbl_userkyuka & tbl_vacation table of database
 if (isset($_POST['DelKyuka'])) {
     $companyid = mysqli_real_escape_string($conn, $_SESSION['auth_companyid']);
     $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
@@ -664,59 +649,6 @@ if (isset($_POST['DelKyuka'])) {
         header("Refresh:3");
     } else {
         echo 'query error: ' . mysqli_error($conn);
-    }
-}
-
-// Update data to tbl_userkyuka table of database
-if (isset($_POST['DecideUpdateKyuka'])) {
-    $allowdt = date('Y-m-d H:i:s');
-    $uid = mysqli_real_escape_string($conn, $_POST['duid']);
-    $allowid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
-    $allowok = mysqli_real_escape_string($conn, $_POST['allowok']);
-    $allowdecide = mysqli_real_escape_string($conn, $_POST['decide_allowok']);
-
-
-    if ($_POST['decide_allowok'] == "0") {
-        $sql = "UPDATE tbl_userkyuka SET 
-        allowid='$allowid',
-        allowok='$allowok',
-        allowdecide='$allowdecide',
-        allowdt='$allowdt', 
-        upt_dt = '$upt_dt'
-    WHERE uid ='$uid'";
-
-        if ($conn->query($sql) === TRUE) {
-            $_SESSION['save_success'] = $save_success;
-            header("Refresh:3");
-        } else {
-            echo 'query error: ' . mysqli_error($conn);
-        }
-    } elseif ($_POST['decide_allowok'] == "1") {
-        $usecnt = $_POST['oldusecnt'] + $_POST['newymdcnt'];
-        $usetime = $_POST['oldusetime'] + $_POST['newtimecnt'];
-        $restcnt = $_POST['oldrestcnt'] + 1;
-
-        $queries[] = "UPDATE tbl_userkyuka SET 
-        allowid='$allowid',
-        allowok='$allowok',
-        allowdecide='$allowdecide',
-        allowdt='$allowdt', 
-        upt_dt = '$upt_dt'
-    WHERE uid ='$uid'";
-
-        $queries[] = "UPDATE tbl_vacationinfo SET 
-        usecnt='$usecnt',
-        usetime='$usetime',
-        restcnt='$restcnt'
-    WHERE uid ='$uid'";
-
-        $sql = implode(';', $queries);
-        if ($conn->multi_query($sql) === TRUE) {
-            $_SESSION['save_success'] = $save_success;
-            header("Refresh:3");
-        } else {
-            echo 'query error: ' . mysqli_error($conn);
-        }
     }
 }
 
@@ -816,7 +748,6 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
         } else {
             $_SESSION['tanto_shonin_error'] = $tanto_shonin_error;
         }
-
     }
 
     // User Kyuka SekininshaShonin   selectedUserKyukaSekininShoninId
@@ -845,5 +776,4 @@ if ($_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'
             $_SESSION['sekinin_shonin_error'] = $sekinin_shonin_error;
         }
     }
-
 }

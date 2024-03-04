@@ -778,6 +778,8 @@ span.kyukaReg_class {
                                 <label for="kyukaymd">申請日</label>
                                 <input type="text" class="form-control" name="udkyukaymd" style="text-align: center"
                                     value="<?= date('Y/m/d'); ?>" readonly>
+                                <input type="hidden" name="uduid" id="uduid">
+                                <input type="hidden" name="udemail" id="udemail">
                                 <input type="hidden" name="udkyukaid" id="udkyukaid">
                                 <input type="hidden" name="udvacationid" id="udvacationid">
                                 <input type="hidden" name="udallowok" id="udallowok">
@@ -1113,77 +1115,9 @@ span.kyukaReg_class {
         </div>
     </div>
 </div>
-
-<!-- Decide 決裁 -->
-<div class="row">
-    <div class="modal" id="modal4" tabindex="-1" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-            <form method="post">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <span id="ustitle">決裁の決定</span>
-                        <button class="close" data-dismiss="modal">x</button>
-                    </div>
-
-                    <div class="modal-body" style="text-align: left">
-                        <div class="row one">
-                            <div class="col-md-2 col-sm-2 col-sx-2"></div>
-                            <div class="col-md-4 col-sm-4 col-sx-4 uid">
-                                <label for="uid">社員</label>
-                                <input type="text" class="form-control" id="duid" name="duid" style="text-align: left"
-                                    readonly>
-                                <input type="hidden" id="allowok" name="allowok" value="1">
-                                <input type="hidden" id="newymdcnt" name="newymdcnt">
-                                <input type="hidden" id="newtimecnt" name="newtimecnt">
-                                <input type="hidden" id="oldusecnt" name="oldusecnt">
-                                <input type="hidden" id="oldusetime" name="oldusetime">
-                                <input type="hidden" id="oldrestcnt" name="oldrestcnt">
-                            </div>
-                            <div class="col-md-4 col-sm-4 col-sx-4 vacationstr">
-                                <label for="destcode">許可の決定</label>
-                                <div class="custom-control custom-radio">
-                                    <input type="radio" class="decide_allowok" name="decide_allowok" value="0"
-                                        style="margin-right: 5px;">NG&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <input type="radio" class="decide_allowok" name="decide_allowok" value="1"
-                                        style="margin-right: 5px;">OK
-                                </div>
-                            </div>
-                            <div class="col-md-2 col-sm-2 col-sx-2"></div>
-                        </div>
-                    </div>
-                    <div class="modal-footer" style="text-align: center">
-                        <div class="col-md-4 col-sm-4 col-sx-4"></div>
-                        <div class="col-md-2 col-sm-2 col-sx-2 btn">
-                            <p class="text-center">
-                                <input type="submit" name="DecideUpdateKyuka" class="btn btn-primary btn-md"
-                                    id="btnRegDecideUpdate" role="button" value="登録">
-                            </p>
-                        </div>
-                        <div class="col-md-2 col-sm-2 col-sx-2 btn">
-                            <p class="text-center">
-                                <a class="btn btn-default btn-md" data-dismiss="modal" role="button">閉じる </a>
-                            </p>
-                        </div>
-                        <div class="col-md-4 col-sm-4 col-sx-4"></div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-</div>
 <script>
 // New button(新規)
 $(document).on('click', '#btnNew', function(e) {
-    // Check Receive Kyuka or Not
-    var currentDate = new Date();
-    var targetDate = new Date('<?php echo $currentUserInYmd ?>');
-    targetDate.setMonth(targetDate.getMonth() + 6);
-    if (targetDate >= currentDate) {
-        alert("<?php echo $kyuka_no_receive; ?>");
-        return false;
-    }
-
     $('#modal').modal('toggle');
     // In the case of a new application, it cannot be used until the application category is selected.
     $("#strymd").val("").prop('disabled', true);
@@ -1833,6 +1767,8 @@ $(document).on('click', '.showModal', function() {
         $("#udkyukaymd").text($('[name="udkyukaymd"]').val("<?php echo $key['kyukaymd'] ?>"));
         $("#udinymd").text($('[name="udinymd"]').val("<?php echo $key['inymd'] ?>"));
         $("#udname").text($('[name="udname"]').val("<?php echo $key['name'] ?>"));
+        $("#uduid").text($('[name="uduid"]').val("<?php echo $key['uid'] ?>"));
+        $("#udemail").text($('[name="udemail"]').val("<?php echo $key['email'] ?>"));
         $("#udkyukaid").text($('[name="udkyukaid"]').val("<?php echo $key['kyukaid'] ?>"));
         $("#udvacationid").text($('[name="udvacationid"]').val("<?php echo $key['vacationid'] ?>"));
         $("#udallowok").text($('[name="udallowok"]').val("<?php echo $key['allowok'] ?>"));
@@ -1843,6 +1779,8 @@ $(document).on('click', '.showModal', function() {
         if (decide_readOnly === "0") {
             $("#udendymd").prop('disabled', true);
             $("#udymdcnt").prop('disabled', true);
+            $("#udstrtime").prop('disabled', false);
+            $("#udendtime").prop('disabled', false);
         } else if (decide_readOnly === "1") {
             $("#udstrtime").prop('disabled', true);
             $("#udendtime").prop('disabled', true);
