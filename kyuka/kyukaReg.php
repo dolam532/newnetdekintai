@@ -435,7 +435,7 @@ span.kyukaReg_class {
                 <th style="text-align: center;">申請期間</th>
                 <th style="text-align: center;">申請日数(時間)</th>
                 <th style="text-align: center;">状態</th>
-                <th style="text-align: center;">詳細情報</th>
+                <th style="text-align: center;">処理</th>
             </tr>
         </thead>
         <tbody>
@@ -478,7 +478,7 @@ span.kyukaReg_class {
 											echo "日付";
 										}
 									} elseif ($userkyuka['kyukatype'] == "1") {
-										echo "時間";
+										echo " 時間";
 									}
 									?>
                     </span>
@@ -500,17 +500,13 @@ span.kyukaReg_class {
                         <?php
 									if ($userkyuka['kyukatype'] == 0) {
 										if ($user_kyukatemplate_ == "1") {
-											echo $userkyuka['timecnt'] . "日";
+											echo ($userkyuka['ymdcnt']+$userkyuka['timecnt']) . "日";
 										} elseif ($user_kyukatemplate_ == "2") {
 											echo $userkyuka['timecnt'] . "時間";
 										}
                                     }
                                     if($userkyuka['kyukatype'] == 1) {
-                                        if ($user_kyukatemplate_ == "1") {
-											echo $userkyuka['timecnt'] . "日";
-										} elseif ($user_kyukatemplate_ == "2") {
-											echo $userkyuka['timecnt'] . "日";
-										} 
+                                        echo ($userkyuka['ymdcnt']+$userkyuka['timecnt']) . "日";
                                     }
 										?>
                     </span>
