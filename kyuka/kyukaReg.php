@@ -417,7 +417,9 @@ span.kyukaReg_class {
 </div>
 <div class="form-group table-wrap">
 <div class="col-md-2 text-right" style="display: flex; justify-content: flex-start;">
+        <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
             <input type="checkbox" id="user-kyuka-select-all-checkbox" value="全て選択" />
+        <?php endif; ?>
             </div>
     <table class="table table-bordered datatable" >
         <thead>
