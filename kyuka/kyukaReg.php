@@ -618,25 +618,25 @@ span.kyukaReg_class {
                         </div>
                         <div class="row four">
                             <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                <label for="strymd">期間(F)</label>
+                                <label for="strymd">期間(From)</label>
                                 <input type="text" class="form-control" id="strymd" name="strymd" placeholder="日付"
                                     required="required" maxlength="10" style="text-align: center">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                <label for="endymd">期間(T)</label>
+                                <label for="endymd">期間(To)</label>
                                 <input type="text" class="form-control" id="endymd" name="endymd" placeholder="日付"
                                     required="required" maxlength="10" style="text-align: center">
                             </div>
                             <div class="divided">
                                 <div class="layout">
                                     <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                        <label for="strtime">時間(F)</label>
+                                        <label for="strtime">時間(From)</label>
                                         <input type="text" class="form-control" id="strtime" name="strtime"
                                             placeholder="00" required="required" maxlength="2"
                                             style="text-align: center">
                                     </div>
                                     <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                        <label for="endtime">時間(T)</label>
+                                        <label for="endtime">時間(To)</label>
                                         <input type="text" class="form-control" id="endtime" name="endtime"
                                             placeholder="00" required="required" maxlength="2"
                                             style="text-align: center">
@@ -646,10 +646,10 @@ span.kyukaReg_class {
                         </div>
                         <br>
                         <div class="row five">
-                            <div class="col-md-3 col-sm-3 col-sx-3">
+                            <div class="col-md-3 col-sm-3 col-sx-3 ">
                                 <label for="tothday">総有給休暇</label>
                                 <input type="text" class="form-control" id="tothday" name="tothday" placeholder="番号"
-                                    style="text-align: center" value="<?= $tothday_ ?>">
+                                    style="text-align: center; background-color: #EEEEEE;" value="<?= $tothday_ ?>">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="oldcnt">前年度の繰越残</label>
@@ -672,7 +672,7 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usebeforecnt">使用前残</label>
                                 <input type="text" class="form-control" id="usebeforecnt" name="usebeforecnt"
-                                    placeholder="番号" style="text-align: center" value="">
+                                    placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usenowcnt">今回使用</label>
@@ -682,12 +682,12 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usefinishaftercnt">使用後済</label>
                                 <input type="text" class="form-control" id="usefinishaftercnt" name="usefinishaftercnt"
-                                    placeholder="番号" style="text-align: center" value="">
+                                    placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="useafterremaincnt">使用後残</label>
                                 <input type="text" class="form-control" id="useafterremaincnt" name="useafterremaincnt"
-                                    placeholder="番号" style="text-align: center" value="">
+                                    placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                         </div>
                         <br>
@@ -1192,24 +1192,27 @@ $(document).on('click', '#btnNew', function(e) {
     $("#endtime").val("").prop('disabled', true);
 });
 
-// ①総有給休暇数, ②＋③＝①
-$("#oldcnt, #newcnt").on("input", function() {
+//自動計算
+$("#oldcnt, #newcnt, #tothday, #usefinishcnt, #usenowcnt").on("input", function() {
+    // ①総有給休暇数, ②＋③＝①
     var oldcntValue = parseFloat($("#oldcnt").val()) || 0;
     var newcntValue = parseFloat($("#newcnt").val()) || 0;
     var totaly = oldcntValue + newcntValue;
     $("#tothday").val(totaly);
-});
 
-// ⑦使用後済数(④＋⑥)
-$("#usefinishcnt, #usenowcnt").on("input", function() {
+    //⑤使用前残, ⑤＝①ー④
+    var tothdayValue = parseFloat($("#tothday").val()) || 0;
+    var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
+    var usebeforecntValue = tothdayValue - usefinishcntValue;
+    $("#usebeforecnt").val(usebeforecntValue);
+
+    // ⑦使用後済数(④＋⑥)
     var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
     var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
     var totaly = usefinishcntValue + usenowcntValue;
     $("#usefinishaftercnt").val(totaly);
-});
 
-// ⑧使用後残日数(⑤－⑥)
-$("#usebeforecnt, #usenowcnt").on("input", function() {
+    // ⑧使用後残日数(⑤－⑥)
     var usebeforecntValue = parseFloat($("#usebeforecnt").val()) || 0;
     var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
     var suby = usebeforecntValue - usenowcntValue;
@@ -1438,6 +1441,11 @@ $(document).on('click', '#btnReg', function(e) {
         $("#usefinishcnt").focus();
         return false;
     }
+    if (usefinishcnt >= tothday) {
+        alert("<?php echo $kyuka_usefinishcnt_edit; ?>");
+        $("#usefinishcnt").focus();
+        return false;
+    }
 
     if (usebeforecnt == "") {
         alert("<?php echo $kyuka_usebeforecnt_empty; ?>");
@@ -1447,6 +1455,11 @@ $(document).on('click', '#btnReg', function(e) {
 
     if (usenowcnt == "") {
         alert("<?php echo $kyuka_usenowcnt_empty; ?>");
+        $("#usenowcnt").focus();
+        return false;
+    }
+    if (usenowcnt > usebeforecnt) {
+        alert("<?php echo $kyuka_usenowcnt_edit; ?>");
         $("#usenowcnt").focus();
         return false;
     }
