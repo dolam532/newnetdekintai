@@ -675,7 +675,7 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usenowcnt">今回使用</label>
                                 <input type="text" class="form-control" id="usenowcnt" name="usenowcnt" placeholder="番号"
-                                    style="text-align: center" value="">
+                                    style="text-align: center;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usefinishaftercnt">使用後済</label>
@@ -686,6 +686,12 @@ span.kyukaReg_class {
                                 <label for="useafterremaincnt">使用後残</label>
                                 <input type="text" class="form-control" id="useafterremaincnt" name="useafterremaincnt"
                                     placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row six2">
+                            <div class="col-md-12 col-sm-6 col-sx-6">
+                                <span class="text-danger">※1時間を0.125日(1時間/1日8時間)として計算してください。</span>
                             </div>
                         </div>
                         <br>
@@ -987,14 +993,6 @@ span.kyukaReg_class {
                             </div>
                             <div class="col-xs-2"></div>
                         </div>
-                        <div class="modal-footer show-div" style="text-align: center">
-                            <div class="col-xs-5"></div>
-                            <div class="col-xs-2">
-                                <button type="button" class="btn btn-default" data-dismiss="modal"
-                                    id="modalClose">閉じる</button>
-                            </div>
-                            <div class="col-xs-5"></div>
-                        </div>
                     </div>
                 </div>
             </form>
@@ -1115,6 +1113,8 @@ span.kyukaReg_class {
 // New button(新規)
 $(document).on('click', '#btnNew', function(e) {
     $('#modal').modal('toggle');
+
+    $("input[name='kyukatype']").prop('checked', false);
     // In the case of a new application, it cannot be used until the application category is selected.
     $("#strymd").val("").prop('disabled', true);
     $("#endymd").val("").prop('disabled', true);
@@ -1122,10 +1122,29 @@ $(document).on('click', '#btnNew', function(e) {
     // In the case of a new application, it cannot be used until the application category is selected.
     $("#strtime").val("").prop('disabled', true);
     $("#endtime").val("").prop('disabled', true);
+
+    //初期化
+    $("#kyukacode").val("");
+    $("#strymd").val("");
+    $("#endymd").val("");
+    $("#strtime").val("");
+    $("#endtime").val("");
+    $("#timecnt").val(0);
+    $("#usefinishcnt").val("");
+    $("#usebeforecnt").val("");
+    $("#usenowcnt").val("");
+    $("#usefinishaftercnt").val("");
+    $("#useafterremaincnt").val("");
+    $("#ymdcnt").val("");
+    $("#timecnt").val("");
 });
 
 //自動計算
-$("#oldcnt, #newcnt, #tothday, #usefinishcnt, #usenowcnt").on("input", function() {
+$("#oldcnt, #newcnt, #tothday, #usefinishcnt, #usenowcnt, #ymdcnt").on("input", function() {
+    //⑥今回使用＝申請日数
+    var ymdcntValue = parseFloat($('#ymdcnt').val()) || '0';
+    $('#usenowcnt').val(ymdcntValue);
+
     // ①総有給休暇数, ②＋③＝①
     var oldcntValue = parseFloat($("#oldcnt").val()) || 0;
     var newcntValue = parseFloat($("#newcnt").val()) || 0;
@@ -1159,9 +1178,21 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#endymd").prop('disabled', false);
         $("#strtime").prop('disabled', true);
         $("#endtime").prop('disabled', true);
-        $("#timecnt").val(0);
         $("#timecnt").prop('disabled', true);
         $("#ymdcnt").prop('disabled', false);
+        
+        //初期化に戻す
+        $("#kyukacode").val("");
+        $("#strymd").val("");
+        $("#endymd").val("");
+        $("#strtime").val("");
+        $("#endtime").val("");
+        $("#timecnt").val(0);
+        $("#usefinishcnt").val("");
+        $("#usebeforecnt").val("");
+        $("#usenowcnt").val("");
+        $("#usefinishaftercnt").val("");
+        $("#useafterremaincnt").val("");
     } else if (this.value == '0') {
         // Time selection
         $("#strymd").prop('disabled', false);
@@ -1171,6 +1202,19 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#ymdcnt").val(0);
         $("#ymdcnt").prop('disabled', true);
         $("#timecnt").prop('disabled', false);
+        
+        //初期化に戻す
+        $("#kyukacode").val("");
+        $("#strymd").val("");
+        $("#endymd").val("");
+        $("#strtime").val("");
+        $("#endtime").val("");
+        $("#timecnt").val(0);
+        $("#usefinishcnt").val("");
+        $("#usebeforecnt").val("");
+        $("#usenowcnt").val("");
+        $("#usefinishaftercnt").val("");
+        $("#useafterremaincnt").val("");
     }
 });
 
@@ -1222,15 +1266,26 @@ $("#endymd").change(function() {
 
 $(document).ready(function() {
     $('input[name="kyukatype"]').change(function() {
-        if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
-            $('#timecnt').val('0.5');
+        //kyukatemplate A, 日付
+        if ($(this).val() == "1" && <?php echo $user_kyukatemplate_; ?> == "1") {
+            $('#ymdcnt').on('input', function() {      
+                
+            });
         }
 
+        //kyukatemplate A, 半休
+        if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
+            $('#timecnt').val('0.5');
+            $("#usenowcnt").val('0.5');
+        }
+
+        //kyukatemplate B, 時間
         if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
             $('#strtime, #endtime').on('input', function() {
                 var strtimeValue = $('#strtime').val() || '0';
                 var endtimeValue = $('#endtime').val() || '0';
                 $('#timecnt').val(endtimeValue - strtimeValue);
+                $('#ymdcnt').val((endtimeValue - strtimeValue)*0.125);
             });
         }
     });
