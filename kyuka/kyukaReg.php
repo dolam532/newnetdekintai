@@ -496,19 +496,19 @@ span.kyukaReg_class {
                     </span>
                 </td>
                 <td>
-                    <span>
+                <span>
                         <?php
-									if ($userkyuka['kyukatype'] == 0) {
-										if ($user_kyukatemplate_ == "1") {
-											echo ($userkyuka['ymdcnt']+$userkyuka['timecnt']) . "日";
-										} elseif ($user_kyukatemplate_ == "2") {
-											echo $userkyuka['timecnt'] . "時間";
-										}
+                        if ($userkyuka['kyukatype'] == 0) {
+                                    if ($user_kyukatemplate_ == "1") {
+                                        echo ((double)$userkyuka['ymdcnt']+(double)$userkyuka['timecnt']) . "日";
+                                    } elseif ($user_kyukatemplate_ == "2") {
+                                        echo $userkyuka['timecnt'] . "時間";
                                     }
-                                    if($userkyuka['kyukatype'] == 1) {
-                                        echo ($userkyuka['ymdcnt']+$userkyuka['timecnt']) . "日";
-                                    }
-										?>
+                                }
+                                if($userkyuka['kyukatype'] == 1) {
+                                    echo ((double)$userkyuka['ymdcnt']+(double)$userkyuka['timecnt']) . "日";
+                                }
+                              ?>
                     </span>
                 </td>
               
@@ -675,7 +675,7 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usenowcnt">今回使用</label>
                                 <input type="text" class="form-control" id="usenowcnt" name="usenowcnt" placeholder="番号"
-                                    style="text-align: center;" value="">
+                                    style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usefinishaftercnt">使用後済</label>
@@ -849,25 +849,25 @@ span.kyukaReg_class {
                         <br>
                         <div class="row four">
                             <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                <label for="strymd">期間(F)</label>
+                                <label for="strymd">期間(From)</label>
                                 <input type="text" class="form-control" id="udstrymd" name="udstrymd" placeholder="日付"
                                     required="required" maxlength="10" style="text-align: center">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                <label for="endymd">期間(T)</label>
+                                <label for="endymd">期間(To)</label>
                                 <input type="text" class="form-control" id="udendymd" name="udendymd" placeholder="日付"
                                     required="required" maxlength="10" style="text-align: center">
                             </div>
                             <div class="divided">
                                 <div class="layout">
                                     <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                        <label for="strtime">時間(F)</label>
+                                        <label for="strtime">時間(From)</label>
                                         <input type="text" class="form-control" id="udstrtime" name="udstrtime"
                                             placeholder="00" required="required" maxlength="2"
                                             style="text-align: center">
                                     </div>
                                     <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                        <label for="endtime">時間(T)</label>
+                                        <label for="endtime">時間(To)</label>
                                         <input type="text" class="form-control" id="udendtime" name="udendtime"
                                             placeholder="00" required="required" maxlength="2"
                                             style="text-align: center">
@@ -880,7 +880,7 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="tothday">総有給休暇</label>
                                 <input type="text" class="form-control" id="udtothday" name="udtothday" placeholder="番号"
-                                    style="text-align: center" value="">
+                                    style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="oldcnt">前年度の繰越残</label>
@@ -903,7 +903,7 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usebeforecnt">使用前残</label>
                                 <input type="text" class="form-control" id="udusebeforecnt" name="udusebeforecnt"
-                                    placeholder="番号" style="text-align: center" value="">
+                                    placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usenowcnt">今回使用</label>
@@ -913,12 +913,18 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usefinishaftercnt">使用後済</label>
                                 <input type="text" class="form-control" id="udusefinishaftercnt"
-                                    name="udusefinishaftercnt" placeholder="番号" style="text-align: center" value="">
+                                    name="udusefinishaftercnt" placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="useafterremaincnt">使用後残</label>
                                 <input type="text" class="form-control" id="uduseafterremaincnt"
-                                    name="uduseafterremaincnt" placeholder="番号" style="text-align: center" value="">
+                                    name="uduseafterremaincnt" placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row six2">
+                            <div class="col-md-12 col-sm-6 col-sx-6">
+                                <span class="text-danger">※1時間を0.125日(1時間/1日8時間)として計算してください。</span>
                             </div>
                         </div>
                         <br>
@@ -1139,37 +1145,6 @@ $(document).on('click', '#btnNew', function(e) {
     $("#timecnt").val("");
 });
 
-//自動計算
-$("#oldcnt, #newcnt, #tothday, #usefinishcnt, #usenowcnt, #ymdcnt").on("input", function() {
-    //⑥今回使用＝申請日数
-    var ymdcntValue = parseFloat($('#ymdcnt').val()) || '0';
-    $('#usenowcnt').val(ymdcntValue);
-
-    // ①総有給休暇数, ②＋③＝①
-    var oldcntValue = parseFloat($("#oldcnt").val()) || 0;
-    var newcntValue = parseFloat($("#newcnt").val()) || 0;
-    var totaly = oldcntValue + newcntValue;
-    $("#tothday").val(totaly);
-
-    //⑤使用前残, ⑤＝①ー④
-    var tothdayValue = parseFloat($("#tothday").val()) || 0;
-    var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
-    var usebeforecntValue = tothdayValue - usefinishcntValue;
-    $("#usebeforecnt").val(usebeforecntValue);
-
-    // ⑦使用後済数(④＋⑥)
-    var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
-    var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
-    var totaly = usefinishcntValue + usenowcntValue;
-    $("#usefinishaftercnt").val(totaly);
-
-    // ⑧使用後残日数(⑤－⑥)
-    var usebeforecntValue = parseFloat($("#usebeforecnt").val()) || 0;
-    var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
-    var suby = usebeforecntValue - usenowcntValue;
-    $("#useafterremaincnt").val(suby);
-});
-
 // Lock and unlock items when selecting vacation request type (day/hour)
 $('input[type=radio][name=kyukatype]').change(function() {
     if (this.value == '1') {
@@ -1193,13 +1168,13 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#usenowcnt").val("");
         $("#usefinishaftercnt").val("");
         $("#useafterremaincnt").val("");
+        $("#ymdcnt").val("");
     } else if (this.value == '0') {
         // Time selection
         $("#strymd").prop('disabled', false);
         $("#endymd").prop('disabled', true);
         $("#strtime").prop('disabled', false);
         $("#endtime").prop('disabled', false);
-        $("#ymdcnt").val(0);
         $("#ymdcnt").prop('disabled', true);
         $("#timecnt").prop('disabled', false);
         
@@ -1215,6 +1190,7 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#usenowcnt").val("");
         $("#usefinishaftercnt").val("");
         $("#useafterremaincnt").val("");
+        $("#ymdcnt").val(0);
     }
 });
 
@@ -1239,9 +1215,12 @@ $("#strymd").change(function() {
         end = new Date($("#endymd").val());
     }
 
-    // If hours are selected, the number of days is set to 0.
+    // If hours are selected, the number of days is set 
     if ($("input[name='kyukatype']:checked").val() == "0") {
-        $("#ymdcnt").val("0");
+        $("#timecnt").on('input', function() {
+            var timecntValue = $("#timecnt").val() || 0;
+            $("#ymdcnt").val(timecntValue*0.125);
+        });
         $("#endymd").val($("#strymd").val());
         return;
     }
@@ -1266,17 +1245,11 @@ $("#endymd").change(function() {
 
 $(document).ready(function() {
     $('input[name="kyukatype"]').change(function() {
-        //kyukatemplate A, 日付
-        if ($(this).val() == "1" && <?php echo $user_kyukatemplate_; ?> == "1") {
-            $('#ymdcnt').on('input', function() {      
-                
-            });
-        }
-
         //kyukatemplate A, 半休
         if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
             $('#timecnt').val('0.5');
             $("#usenowcnt").val('0.5');
+            $("#timecnt").prop('disabled', true);
         }
 
         //kyukatemplate B, 時間
@@ -1285,26 +1258,53 @@ $(document).ready(function() {
                 var strtimeValue = $('#strtime').val() || '0';
                 var endtimeValue = $('#endtime').val() || '0';
                 $('#timecnt').val(endtimeValue - strtimeValue);
-                $('#ymdcnt').val((endtimeValue - strtimeValue)*0.125);
-            });
-        }
-    });
-
-    $('input[name="udkyukatype"]').change(function() {
-        if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
-            $('#udtimecnt').val('0.5');
-        }
-
-        if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
-            $('#udstrtime, #udendtime').on('input', function() {
-                var strtimeValue = $('#udstrtime').val() || '0';
-                var endtimeValue = $('#udendtime').val() || '0';
-                $('#udtimecnt').val(endtimeValue - strtimeValue);
+                $('#ymdcnt').val($('#timecnt').val()*0.125);
+                $('#usenowcnt').val($('#ymdcnt').val());
             });
         }
     });
     SetFormViewBySubmissionStatusHandler();
     multiUserKyukaSelectHandler();
+});
+
+//自動計算
+$("#oldcnt, #newcnt, #tothday, #usefinishcnt, #usenowcnt, #ymdcnt, #timecnt").on("input", function() {
+    // ①総有給休暇数, ②＋③＝①
+    var oldcntValue = parseFloat($("#oldcnt").val()) || 0;
+    var newcntValue = parseFloat($("#newcnt").val()) || 0;
+    var totaly = oldcntValue + newcntValue;
+    $("#tothday").val(totaly);
+
+    //⑤使用前残, ⑤＝①ー④
+    var tothdayValue = parseFloat($("#tothday").val()) || 0;
+    var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
+    var usebeforecntValue = tothdayValue - usefinishcntValue;
+    $("#usebeforecnt").val(usebeforecntValue);
+
+    //⑥今回使用
+    if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
+        $("#usenowcnt").val('0.5');
+    }
+    else if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
+        $('#ymdcnt').val($('#timecnt').val()*0.125);
+        $('#usenowcnt').val($('#ymdcnt').val());
+    }
+    else {
+        var ymdcntValue = parseFloat($("#ymdcnt").val());
+        $("#usenowcnt").val(ymdcntValue);
+    }
+
+    // ⑦使用後済数(④＋⑥)
+    var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
+    var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
+    var totaly = usefinishcntValue + usenowcntValue;
+    $("#usefinishaftercnt").val(totaly);
+
+    // ⑧使用後残日数(⑤－⑥)
+    var usebeforecntValue = parseFloat($("#usebeforecnt").val()) || 0;
+    var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
+    var suby = usebeforecntValue - usenowcntValue;
+    $("#useafterremaincnt").val(suby);
 });
 
 // Datepeeker Calender
@@ -1813,18 +1813,15 @@ $(document).on('click', '.showModal', function() {
     <?php
 		foreach ($userkyuka_list as $key) {
 		?>
-    if ('<?php echo $key['kyukaid'] ?>' === Kyukaid && '<?php echo $key['name'] ?>' === Name) {
+        if ('<?php echo $key['kyukaid'] ?>' === Kyukaid && '<?php echo $key['name'] ?>' === Name) {
         isAdmin = false;
         isSubmised = false;
         var isAdmin =
             <?php echo ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) ? 'true' : 'false'; ?>;
         var isSubmised =
             <?php echo ($key['submission_status'] != array_search(0, $KYUKA_SUBMISSTION_STATUS)) ? 'true' : 'false'; ?>;
-        if (!isAdmin && isSubmised) {
+        if (isSubmised) {
             setOnModalChangeDataButtonHidden(false);
-        }
-        if (isAdmin) {
-            setOnModalChangeDataButtonHidden(true);
         }
 
         $("#usname").text('<?php echo $key['name'] ?>');
