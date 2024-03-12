@@ -50,8 +50,6 @@ if ($row = mysqli_fetch_assoc($result_CurrentUserInYmd)) {
     $currentUserInYmd = $row['inymd'];
 }
 
-
-
 // Select data from tbl_codebase
 $sql_codebase = 'SELECT `code`, `name` FROM `tbl_codebase`
 WHERE `tbl_codebase`.`companyid` = "' . $_SESSION['auth_companyid'] . '"
@@ -135,8 +133,26 @@ foreach ($topvalue as $key => $value) {
     }
 }
 
-$nearestValueBottom = $bottomvalue[$nearestIndex];
+// last year
+// $sql_vacationinfo_last = 'SELECT * FROM `tbl_vacationinfo`
+// WHERE `tbl_vacationinfo`.`uid` = "' . $_SESSION['auth_uid'] . '"ORDER BY `vacationid` DESC LIMIT 1';
+// $result_vacationinfo_last = mysqli_query($conn, $sql_vacationinfo_last);
+// $vacationinfo_last = mysqli_fetch_all($result_vacationinfo_last, MYSQLI_ASSOC);
 
+$lastyearIndex = $nearestIndex - 1;
+if ($lastyearIndex >= 0) {
+    $lastyearValueTop = $topvalue[$lastyearIndex];
+    $lastyearValueBottom = $bottomvalue[$lastyearIndex];
+    // if ($lastyearValueBottom > 0) {
+    //     $lastyearRemainDay = $vacationinfo_last[0]['useafterremaincnt'];
+    // }
+} elseif ($lastyearIndex < 0) {
+    $lastyearValueTop = 0;
+    $lastyearValueBottom = 0;
+}
+
+// now year
+$nearestValueBottom = $bottomvalue[$nearestIndex];
 if ($nearestValueTop == null) {
     $nearestValueTop = $topvalue[0];
 }
@@ -151,8 +167,8 @@ $enddate = strtotime("-1 day", $endmonth);
 $startdate_ = date('Y/m/d', $startmonth);
 $enddate_ = date('Y/m/d', $enddate);
 $newcnt_ = $nearestValueBottom;
-$tothday_ = $nearestValueBottom;
-$oldcnt_ = $tothday_ - $newcnt_;
+$oldcnt_ = $lastyearValueBottom;
+$tothday_ = $newcnt_ + $oldcnt_;
 
 // Select data from tbl_kyuka_notice
 $sql_kyuka_notice = 'SELECT * FROM `tbl_kyuka_notice`

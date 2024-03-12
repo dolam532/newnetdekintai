@@ -50,10 +50,6 @@ span.kyukaReg_class {
     display: table;
 }
 
-.table-wrap {
-    overflow-x: scroll;
-}
-
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -415,7 +411,7 @@ span.kyukaReg_class {
        
 
 </div>
-<div class="form-group table-wrap">
+<div class="form-group">
 <div class="col-md-2 text-right" style="display: flex; justify-content: flex-start;">
         <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
             <input type="checkbox" id="user-kyuka-select-all-checkbox" value="全て選択" />
@@ -1368,6 +1364,7 @@ $(document).on('click', '#btnReg', function(e) {
     var desttel = $("#desttel").val();
     var user_kyukatemplate_ = "<?php echo $user_kyukatemplate_; ?>";
 
+
     if (kyukatype != "0" && kyukatype != "1") {
         alert("<?php echo $kyuka_type_select; ?>");
         $("#kyukatype").focus();
@@ -1452,7 +1449,7 @@ $(document).on('click', '#btnReg', function(e) {
         return false;
     }
 
-    if (usefinishaftercnt == "") {
+    if (usefinishaftercnt === "") {
         alert("<?php echo $kyuka_usefinishaftercnt_empty; ?>");
         $("#usefinishaftercnt").focus();
         return false;
