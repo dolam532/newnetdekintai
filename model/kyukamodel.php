@@ -240,14 +240,13 @@ if ($_SESSION['auth_type'] == constant('MAIN_ADMIN')) {
         $sql_userkyuka .= "AND `tbl_userkyuka`.`kyukaymd` LIKE('%/%$searchByMonth/%') ";
     } else {
     }
-    $sql_userkyuka .= "ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid`;";
-    error_log($sql_userkyuka);
+    $sql_userkyuka .= "ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid` DESC;";
 } elseif ($_SESSION['auth_type'] == constant('USER')) {
     $sql_userkyuka .= 'WHERE
         `tbl_user`.`type` = "' . $_SESSION['auth_type'] . '"
     AND
         `tbl_user`.`uid` = "' . $_SESSION['auth_uid'] . '"
-        ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid`;';
+        ORDER BY `tbl_userkyuka`.`kyukaymd` DESC, `tbl_userkyuka`.`kyukaid` DESC;';
 }
 $result_userkyuka = mysqli_query($conn, $sql_userkyuka);
 $userkyuka_list_ = mysqli_fetch_all($result_userkyuka, MYSQLI_ASSOC);
@@ -267,7 +266,6 @@ $KyukaY = array_unique($KyukaY);
 $Name = array_unique($Name);
 $VacationY = array_unique($VacationY);
 
-error_log("COODE: " . $filterByStatusCode);
 if (!isset($filterByStatusCode)) {
     $filterByStatusCode = -1;
 }
@@ -465,6 +463,7 @@ if (isset($_POST['SaveKyuka'])) {
     $destcode = mysqli_real_escape_string($conn, $_POST['destcode']);
     $destplace = mysqli_real_escape_string($conn, $_POST['destplace']);
     $desttel = mysqli_real_escape_string($conn, $_POST['desttel']);
+
     $allowok = "0";
     $allowid = "0";
     $allowdecide = "0";
@@ -521,8 +520,7 @@ if (isset($_POST['UpdateKyuka'])) {
     $this_submission_status = mysqli_fetch_assoc($result_find_status)['submission_status'];
 
     $isAdminSession = $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN');
-    // WHEN 編集中ではない状態で、ユーザーが削除しようと
-    if ($this_submission_status != array_keys($KYUKA_SUBMISSTION_STATUS)[0] && !$isAdminSession) {
+    if ($this_submission_status != array_keys($KYUKA_SUBMISSTION_STATUS)[0]) {
         return;
     }
 
@@ -625,9 +623,12 @@ if (isset($_POST['DelKyuka'])) {
 
     $isAdminSession = $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN');
     // WHEN 編集中ではない状態で、ユーザーが削除しようと
-    if ($this_submission_status != array_keys($KYUKA_SUBMISSTION_STATUS)[0] && !$isAdminSession) {
+    if ($this_submission_status != array_keys($KYUKA_SUBMISSTION_STATUS)[0]) {
+        error_log( 'Status Not henshuuchuu : '. $this_submission_status);
         return;
     }
+
+    
 
     $queries1 = "DELETE FROM tbl_vacationinfo
     WHERE vacationid ='$vacationid'
@@ -640,6 +641,20 @@ if (isset($_POST['DelKyuka'])) {
     AND companyid ='$companyid'
     AND uid ='$uid'
     AND vacationid ='$vacationid'";
+
+    //  admin clear not used kyuka or this user 
+if($isAdminSession) {
+    $queries1 = "DELETE FROM tbl_vacationinfo
+    WHERE vacationid ='$vacationid'
+    AND companyid ='$companyid'";
+
+$queries2 = "DELETE FROM tbl_userkyuka
+WHERE kyukaid ='$kyukaid'
+AND companyid ='$companyid'
+AND vacationid ='$vacationid'";
+
+}
+
 
     $result1 = mysqli_query($conn, $queries1);
     $result2 = mysqli_query($conn, $queries2);
