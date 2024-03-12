@@ -841,25 +841,25 @@ span.kyukaReg_class {
                         <br>
                         <div class="row four">
                             <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                <label for="strymd">期間(F)</label>
+                                <label for="strymd">期間(From)</label>
                                 <input type="text" class="form-control" id="udstrymd" name="udstrymd" placeholder="日付"
                                     required="required" maxlength="10" style="text-align: center">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                <label for="endymd">期間(T)</label>
+                                <label for="endymd">期間(To)</label>
                                 <input type="text" class="form-control" id="udendymd" name="udendymd" placeholder="日付"
                                     required="required" maxlength="10" style="text-align: center">
                             </div>
                             <div class="divided">
                                 <div class="layout">
                                     <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                        <label for="strtime">時間(F)</label>
+                                        <label for="strtime">時間(From)</label>
                                         <input type="text" class="form-control" id="udstrtime" name="udstrtime"
                                             placeholder="00" required="required" maxlength="2"
                                             style="text-align: center">
                                     </div>
                                     <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                        <label for="endtime">時間(T)</label>
+                                        <label for="endtime">時間(To)</label>
                                         <input type="text" class="form-control" id="udendtime" name="udendtime"
                                             placeholder="00" required="required" maxlength="2"
                                             style="text-align: center">
@@ -1171,15 +1171,6 @@ span.kyukaReg_class {
 <script>
 // New button(新規)
 $(document).on('click', '#btnNew', function(e) {
-    // Check Receive Kyuka or Not
-    var currentDate = new Date();
-    var targetDate = new Date('<?php echo $currentUserInYmd ?>');
-    targetDate.setMonth(targetDate.getMonth() + 6);
-    if (targetDate >= currentDate) {
-        alert("<?php echo $kyuka_no_receive; ?>");
-        return false;
-    }
-
     $('#modal').modal('toggle');
     // In the case of a new application, it cannot be used until the application category is selected.
     $("#strymd").val("").prop('disabled', true);

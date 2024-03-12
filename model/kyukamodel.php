@@ -87,6 +87,8 @@ if (mysqli_num_rows($resultKyukaInfo) > 0) {
         if (!isset($kiukaInfoListDatas[$keybottom]) || trim($kiukaInfoListDatas[$keybottom]) == '') {
             continue;
         }
+        $topvalue[] = $kiukaInfoListDatas[$key];
+        $bottomvalue[] = $kiukaInfoListDatas[$keybottom];
         $value = intval($kiukaInfoListDatas[$key]);
         if ($value < 12) {
             $kyukaInfoListtop[] = $kiukaInfoListDatasShow[$key] = $value . 'ヵ月';
@@ -114,72 +116,42 @@ if (mysqli_num_rows($resultKyukaInfo) > 0) {
 }
 $kyukaInfoListtopString = implode(',', $kyukaInfoListtop);
 $kyukaInfoListbottomString = implode(',', $kyukaInfoListbottom);
-function filterNull($value)
-{
-    return $value !== null;
-}
-$kiukaInfoList = array_map('array_filter', $kiukaInfoList);
-// Define variables to store the maximum values
-$maxTtop = null;
-$maxTbottom = null;
-$minTtop = null;
-$minTbottom = null;
 
-// Define the upper limit for n
-$upperLimit = 21;
+$currentDate = new DateTime(); // Current date
+$startDate = new DateTime($user_inymd_); // Given start date
+$interval = $currentDate->diff($startDate);
+$count_months = $interval->y * 12 + $interval->m; // Total months
 
-// Iterate from 0 to the upper limit
-for ($n = 0; $n < $upperLimit; $n++) {
-    $ttopKey = "ttop" . $n;
-    $tbottomKey = "tbottom" . $n;
+$nearestValueTop = null;
+$nearestIndex = null;
+$maxDifference = null;
 
-    if (isset($kiukaInfoList[0][$ttopKey]) && $kiukaInfoList[0][$ttopKey] <= $numberOfMonths) {
-        // Update the maximum values if a larger value is encountered
-        if ($maxTtop === null || $kiukaInfoList[0][$ttopKey] > $kiukaInfoList[0][$maxTtop]) {
-            $maxTtop = $ttopKey;
-        }
-
-        if ($maxTbottom === null || $kiukaInfoList[0][$ttopKey] > $kiukaInfoList[0][$maxTbottom]) {
-            $maxTbottom = $tbottomKey;
-        }
-    }
-
-    if (isset($kiukaInfoList[0][$ttopKey]) && $kiukaInfoList[0][$ttopKey] >= $numberOfMonths) {
-        // Update the maximum values if a larger value is encountered
-        if ($minTtop === null || $kiukaInfoList[0][$ttopKey] < $kiukaInfoList[0][$minTtop]) {
-            $minTtop = $ttopKey;
-        }
-
-        if ($minTbottom === null || $kiukaInfoList[0][$ttopKey] < $kiukaInfoList[0][$minTbottom]) {
-            $minTbottom = $tbottomKey;
-        }
+foreach ($topvalue as $key => $value) {
+    $difference = $count_months - $value;
+    if ($difference > 0 && ($maxDifference === null || $difference > $maxDifference)) {
+        $nearestValueTop = $value;
+        $nearestIndex = $key;
+        $minDifference = $difference;
     }
 }
 
-// Display the largest values
-if ($maxTtop !== null && $maxTbottom !== null) {
-    $last_data_max = [$maxTtop => $kiukaInfoList[0][$maxTtop], $maxTbottom => $kiukaInfoList[0][$maxTbottom]];
-    $lastTtopMax = $last_data_max[$maxTtop];
-    $lastTbottomMax = $last_data_max[$maxTbottom];
+$nearestValueBottom = $bottomvalue[$nearestIndex];
+
+if ($nearestValueTop == null) {
+    $nearestValueTop = $topvalue[0];
 }
 
-// Display the largest values
-if ($minTtop !== null && $minTbottom !== null) {
-    $last_data_min = [$minTtop => $kiukaInfoList[0][$minTtop], $minTbottom => $kiukaInfoList[0][$minTbottom]];
-    $lastTtopMin = $last_data_min[$minTtop];
-    $lastTbottomMin = $last_data_min[$minTbottom];
+if ($nearestValueBottom == null) {
+    $nearestValueBottom = $bottomvalue[0];
 }
 
-if ($lastTtopMax == null) {
-    $lastTtopMax = "6";
-}
-$startmonth = strtotime("+" . $lastTtopMax . " months", $givenDate);
+$startmonth = strtotime("+" . $nearestValueTop . " months", $givenDate);
 $endmonth = strtotime("+12 months", $startmonth);
 $enddate = strtotime("-1 day", $endmonth);
 $startdate_ = date('Y/m/d', $startmonth);
 $enddate_ = date('Y/m/d', $enddate);
-$newcnt_ = $lastTbottomMax;
-$tothday_ = $lastTbottomMax;
+$newcnt_ = $nearestValueBottom;
+$tothday_ = $nearestValueBottom;
 $oldcnt_ = $tothday_ - $newcnt_;
 
 // Select data from tbl_kyuka_notice
@@ -504,10 +476,10 @@ if (isset($_POST['UpdateKyuka'])) {
     }
 
     $companyid = mysqli_real_escape_string($conn, $_SESSION['auth_companyid']);
-    if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')){
+    if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR')) {
         $uid = mysqli_real_escape_string($conn, $_POST['uduid']);
         $email = mysqli_real_escape_string($conn, $_POST['udemail']);
-    }elseif($_SESSION['auth_type'] == constant('USER')){
+    } elseif ($_SESSION['auth_type'] == constant('USER')) {
         $uid = mysqli_real_escape_string($conn, $_SESSION['auth_uid']);
         $email = mysqli_real_escape_string($conn, $_SESSION['auth_email']);
     }
@@ -624,11 +596,11 @@ if (isset($_POST['DelKyuka'])) {
     $isAdminSession = $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('MAIN_ADMIN');
     // WHEN 編集中ではない状態で、ユーザーが削除しようと
     if ($this_submission_status != array_keys($KYUKA_SUBMISSTION_STATUS)[0]) {
-        error_log( 'Status Not henshuuchuu : '. $this_submission_status);
+        error_log('Status Not henshuuchuu : ' . $this_submission_status);
         return;
     }
 
-    
+
 
     $queries1 = "DELETE FROM tbl_vacationinfo
     WHERE vacationid ='$vacationid'
@@ -643,17 +615,16 @@ if (isset($_POST['DelKyuka'])) {
     AND vacationid ='$vacationid'";
 
     //  admin clear not used kyuka or this user 
-if($isAdminSession) {
-    $queries1 = "DELETE FROM tbl_vacationinfo
+    if ($isAdminSession) {
+        $queries1 = "DELETE FROM tbl_vacationinfo
     WHERE vacationid ='$vacationid'
     AND companyid ='$companyid'";
 
-$queries2 = "DELETE FROM tbl_userkyuka
+        $queries2 = "DELETE FROM tbl_userkyuka
 WHERE kyukaid ='$kyukaid'
 AND companyid ='$companyid'
 AND vacationid ='$vacationid'";
-
-}
+    }
 
 
     $result1 = mysqli_query($conn, $queries1);
