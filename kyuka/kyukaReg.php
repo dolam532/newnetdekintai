@@ -647,7 +647,7 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="tothday">総有給休暇</label>
                                 <input type="text" class="form-control" id="tothday" name="tothday" placeholder="番号"
-                                    style="text-align: center" value="<?= $tothday_ ?>">
+                                    style="text-align: center; background-color: #EEEEEE;" value="<?= $tothday_ ?>">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="oldcnt">前年度の繰越残</label>
@@ -670,22 +670,22 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usebeforecnt">使用前残</label>
                                 <input type="text" class="form-control" id="usebeforecnt" name="usebeforecnt"
-                                    placeholder="番号" style="text-align: center" value="">
+                                    placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usenowcnt">今回使用</label>
                                 <input type="text" class="form-control" id="usenowcnt" name="usenowcnt" placeholder="番号"
-                                    style="text-align: center" value="">
+                                    style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usefinishaftercnt">使用後済</label>
                                 <input type="text" class="form-control" id="usefinishaftercnt" name="usefinishaftercnt"
-                                    placeholder="番号" style="text-align: center" value="">
+                                    placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="useafterremaincnt">使用後残</label>
                                 <input type="text" class="form-control" id="useafterremaincnt" name="useafterremaincnt"
-                                    placeholder="番号" style="text-align: center" value="">
+                                    placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                         </div>
                         <br>
@@ -1225,6 +1225,21 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#timecnt").val(0);
         $("#timecnt").prop('disabled', true);
         $("#ymdcnt").prop('disabled', false);
+
+        
+        //初期化に戻す
+        $("#kyukacode").val("");
+        $("#strymd").val("");
+        $("#endymd").val("");
+        $("#strtime").val("");
+        $("#endtime").val("");
+        $("#timecnt").val(0);
+        $("#usefinishcnt").val("");
+        $("#usebeforecnt").val("");
+        $("#usenowcnt").val("");
+        $("#usefinishaftercnt").val("");
+        $("#useafterremaincnt").val("");
+        $("#ymdcnt").val("");
     } else if (this.value == '0') {
         // Time selection
         $("#strymd").prop('disabled', false);
@@ -1234,6 +1249,21 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#ymdcnt").val(0);
         $("#ymdcnt").prop('disabled', true);
         $("#timecnt").prop('disabled', false);
+
+        
+        //初期化に戻す
+        $("#kyukacode").val("");
+        $("#strymd").val("");
+        $("#endymd").val("");
+        $("#strtime").val("");
+        $("#endtime").val("");
+        $("#timecnt").val(0);
+        $("#usefinishcnt").val("");
+        $("#usebeforecnt").val("");
+        $("#usenowcnt").val("");
+        $("#usefinishaftercnt").val("");
+        $("#useafterremaincnt").val("");
+        $("#ymdcnt").val(0);
     }
 });
 
@@ -1285,8 +1315,12 @@ $("#endymd").change(function() {
 
 $(document).ready(function() {
     $('input[name="kyukatype"]').change(function() {
+
+        //kyukatemplate A, 半休
         if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
             $('#timecnt').val('0.5');
+            $("#usenowcnt").val('0.5');
+            $("#timecnt").prop('disabled', true);
         }
 
         if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
@@ -1294,6 +1328,8 @@ $(document).ready(function() {
                 var strtimeValue = $('#strtime').val() || '0';
                 var endtimeValue = $('#endtime').val() || '0';
                 $('#timecnt').val(endtimeValue - strtimeValue);
+                $('#ymdcnt').val($('#timecnt').val()*0.125);
+                $('#usenowcnt').val($('#ymdcnt').val());
             });
         }
     });
