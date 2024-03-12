@@ -685,6 +685,11 @@ span.kyukaReg_class {
                             </div>
                         </div>
                         <br>
+                        <div class="row six2">
+                            <div class="col-md-12 col-sm-6 col-sx-6">
+                                <span class="text-danger">※1時間を0.125日(1時間/1日8時間)として計算してください。</span>
+                            </div>
+                        </div>
                         <div class="row seven">
                             <div class="col-md-8 col-sm-8 col-sx-8">
                                 <label for="reason">事由</label>
@@ -868,7 +873,7 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="tothday">総有給休暇</label>
                                 <input type="text" class="form-control" id="udtothday" name="udtothday" placeholder="番号"
-                                    style="text-align: center" value="">
+                                    style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="oldcnt">前年度の繰越残</label>
@@ -891,25 +896,30 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usebeforecnt">使用前残</label>
                                 <input type="text" class="form-control" id="udusebeforecnt" name="udusebeforecnt"
-                                    placeholder="番号" style="text-align: center" value="">
+                                    placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usenowcnt">今回使用</label>
                                 <input type="text" class="form-control" id="udusenowcnt" name="udusenowcnt"
-                                    placeholder="番号" style="text-align: center" value="">
+                                    placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usefinishaftercnt">使用後済</label>
                                 <input type="text" class="form-control" id="udusefinishaftercnt"
-                                    name="udusefinishaftercnt" placeholder="番号" style="text-align: center" value="">
+                                    name="udusefinishaftercnt" placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="useafterremaincnt">使用後残</label>
                                 <input type="text" class="form-control" id="uduseafterremaincnt"
-                                    name="uduseafterremaincnt" placeholder="番号" style="text-align: center" value="">
+                                    name="uduseafterremaincnt" placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                         </div>
                         <br>
+                        <div class="row six2">
+                            <div class="col-md-12 col-sm-6 col-sx-6">
+                                <span class="text-danger">※1時間を0.125日(1時間/1日8時間)として計算してください。</span>
+                            </div>
+                        </div>
                         <div class="row seven">
                             <div class="col-md-8 col-sm-8 col-sx-8">
                                 <label for="reason">事由</label>
@@ -1175,6 +1185,29 @@ $(document).on('click', '#btnNew', function(e) {
     // In the case of a new application, it cannot be used until the application category is selected.
     $("#strtime").val("").prop('disabled', true);
     $("#endtime").val("").prop('disabled', true);
+
+    //初期化
+    $("input[name='kyukatype']").prop("checked", false);
+    $("#kyukacode").val("");
+    $("#kyukanamedetail").val("");
+    $("#strymd").val("");
+    $("#endymd").val("");
+    $("#strtime").val("");
+    $("#endtime").val("");
+    $("#tothday").val("");
+    $("#oldcnt").val("");
+    $("#newcnt").val("");
+    $("#usefinishcnt").val("");
+    $("#usebeforecnt").val("");
+    $("#usenowcnt").val("");
+    $("#usefinishaftercnt").val("");
+    $("#useafterremaincnt").val("");
+    $("#reason").val("");
+    $("#ymdcnt").val("");
+    $("#timecnt").val("");
+    $("input[name='destcode']").prop("checked", false);
+    $("#destplace").val("");
+    $("#desttel").val("");
 });
 
 // Lock and unlock items when selecting vacation request type (day/hour)
@@ -1192,6 +1225,7 @@ $('input[type=radio][name=kyukatype]').change(function() {
         
         //初期化に戻す
         $("#kyukacode").val("");
+        $("#kyukanamedetail").val("");
         $("#strymd").val("");
         $("#endymd").val("");
         $("#strtime").val("");
@@ -1216,6 +1250,7 @@ $('input[type=radio][name=kyukatype]').change(function() {
         
         //初期化に戻す
         $("#kyukacode").val("");
+        $("#kyukanamedetail").val("");
         $("#strymd").val("");
         $("#endymd").val("");
         $("#strtime").val("");
@@ -1226,7 +1261,7 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#usenowcnt").val("");
         $("#usefinishaftercnt").val("");
         $("#useafterremaincnt").val("");
-        $("#ymdcnt").val(0);
+        $("#ymdcnt").val("");
     }
 });
 
@@ -1238,6 +1273,7 @@ $('input[type=radio][name=destcode]').change(function() {
     } else {
         // Other
         $("#destplace").val("").prop('readonly', false);
+        $("#destplace").focus();
     }
 });
 
@@ -1251,15 +1287,15 @@ $("#strymd").change(function() {
         end = new Date($("#endymd").val());
     }
 
-    // If hours are selected, the number of days is set to 0.
+    // If hours are selected, endymd = strymd
     if ($("input[name='kyukatype']:checked").val() == "0") {
-        $("#ymdcnt").val("0");
         $("#endymd").val($("#strymd").val());
         return;
     }
 
     var dateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
     $("#ymdcnt").val(dateDiff + 1);
+    $('#usenowcnt').val($('#ymdcnt').val());
 });
 
 // Calculation of vacation days when vacation days (end) change
@@ -1274,6 +1310,7 @@ $("#endymd").change(function() {
 
     var dateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
     $("#ymdcnt").val(dateDiff + 1);
+    $('#usenowcnt').val($('#ymdcnt').val());
 });
 
 $(document).ready(function() {
@@ -1296,22 +1333,48 @@ $(document).ready(function() {
             });
         }
     });
-
-    $('input[name="udkyukatype"]').change(function() {
-        if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
-            $('#udtimecnt').val('0.5');
-        }
-
-        if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
-            $('#udstrtime, #udendtime').on('input', function() {
-                var strtimeValue = $('#udstrtime').val() || '0';
-                var endtimeValue = $('#udendtime').val() || '0';
-                $('#udtimecnt').val(endtimeValue - strtimeValue);
-            });
-        }
-    });
     SetFormViewBySubmissionStatusHandler();
     multiUserKyukaSelectHandler();
+});
+
+//自動計算で表示
+$("#oldcnt, #newcnt, #tothday, #usefinishcnt, #usenowcnt, #ymdcnt, #timecnt").on("input", function() {
+    // ①総有給休暇数, ②＋③＝①
+    var oldcntValue = parseFloat($("#oldcnt").val()) || 0;
+    var newcntValue = parseFloat($("#newcnt").val()) || 0;
+    var totaly = oldcntValue + newcntValue;
+    $("#tothday").val(totaly);
+
+    //⑤使用前残, ⑤＝①ー④
+    var tothdayValue = parseFloat($("#tothday").val()) || 0;
+    var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
+    var usebeforecntValue = tothdayValue - usefinishcntValue;
+    $("#usebeforecnt").val(usebeforecntValue);
+
+    //⑥今回使用
+    if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
+        $("#usenowcnt").val('0.5');
+    }
+    else if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
+        $('#ymdcnt').val($('#timecnt').val()*0.125);
+        $('#usenowcnt').val($('#ymdcnt').val());
+    }
+    else {
+        var ymdcntValue = parseFloat($("#ymdcnt").val());
+        $("#usenowcnt").val(ymdcntValue);
+    }
+
+    // ⑦使用後済数(④＋⑥)
+    var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
+    var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
+    var totaly = usefinishcntValue + usenowcntValue;
+    $("#usefinishaftercnt").val(totaly);
+
+    // ⑧使用後残日数(⑤－⑥)
+    var usebeforecntValue = parseFloat($("#usebeforecnt").val()) || 0;
+    var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
+    var suby = usebeforecntValue - usenowcntValue;
+    $("#useafterremaincnt").val(suby);
 });
 
 // Datepeeker Calender
@@ -1515,24 +1578,40 @@ $(document).on('click', '#btnClear', function(e) {
 
 
 // 編集
-// ①総有給休暇数, ②＋③＝①
-$("#udoldcnt, #udnewcnt").on("input", function() {
+//自動計算で表示
+$("#udoldcnt, #udnewcnt, #tudothday, #udusefinishcnt, #udusenowcnt, #udymdcnt, #udtimecnt").on("input", function() {
+    // ①総有給休暇数, ②＋③＝①
     var udoldcntValue = parseFloat($("#udoldcnt").val()) || 0;
     var udnewcntValue = parseFloat($("#udnewcnt").val()) || 0;
     var udtotaly = udoldcntValue + udnewcntValue;
     $("#udtothday").val(udtotaly);
-});
 
-// ⑦使用後済数(④＋⑥)
-$("#udusefinishcnt, #udusenowcnt").on("input", function() {
+    //⑤使用前残, ⑤＝①ー④
+    var udtothdayValue = parseFloat($("#udtothday").val()) || 0;
+    var udusefinishcntValue = parseFloat($("#udusefinishcnt").val()) || 0;
+    var udusebeforecntValue = udtothdayValue - udusefinishcntValue;
+    $("#udusebeforecnt").val(udusebeforecntValue);
+
+    //⑥今回使用
+    if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
+        $("#udusenowcnt").val('0.5');
+    }
+    else if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
+        $('#udymdcnt').val($('#udtimecnt').val()*0.125);
+        $('#udusenowcnt').val($('#udymdcnt').val());
+    }
+    else {
+        var udymdcntValue = parseFloat($("#udymdcnt").val());
+        $("#udusenowcnt").val(udymdcntValue);
+    }
+
+    // ⑦使用後済数(④＋⑥)
     var udusefinishcntValue = parseFloat($("#udusefinishcnt").val()) || 0;
     var udusenowcntValue = parseFloat($("#udusenowcnt").val()) || 0;
     var udtotaly = udusefinishcntValue + udusenowcntValue;
     $("#udusefinishaftercnt").val(udtotaly);
-});
 
-// ⑧使用後残日数(⑤－⑥)
-$("#udusebeforecnt, #udusenowcnt").on("input", function() {
+    // ⑧使用後残日数(⑤－⑥)
     var udusebeforecntValue = parseFloat($("#udusebeforecnt").val()) || 0;
     var udusenowcntValue = parseFloat($("#udusenowcnt").val()) || 0;
     var udsuby = udusebeforecntValue - udusenowcntValue;
@@ -1550,6 +1629,21 @@ $('input[type=radio][name=udkyukatype]').change(function() {
         $("#udtimecnt").val(0);
         $("#udtimecnt").prop('disabled', true);
         $("#udymdcnt").prop('disabled', false);
+
+        //初期化に戻す
+        $("#udkyukacode").val("");
+        $("#udkyukanamedetail").val("");
+        $("#udstrymd").val("");
+        $("#udendymd").val("");
+        $("#udstrtime").val("");
+        $("#udendtime").val("");
+        $("#udtimecnt").val(0);
+        $("#udusefinishcnt").val("");
+        $("#udusebeforecnt").val("");
+        $("#udusenowcnt").val("");
+        $("#udusefinishaftercnt").val("");
+        $("#uduseafterremaincnt").val("");
+        $("#udymdcnt").val("");
     } else if (this.value == '0') {
         // Time selection
         $("#udstrymd").prop('disabled', false);
@@ -1559,6 +1653,21 @@ $('input[type=radio][name=udkyukatype]').change(function() {
         $("#udymdcnt").val(0);
         $("#udymdcnt").prop('disabled', true);
         $("#udtimecnt").prop('disabled', false);
+
+        //初期化に戻す
+        $("#udkyukacode").val("");
+        $("#udkyukanamedetail").val("");
+        $("#udstrymd").val("");
+        $("#udendymd").val("");
+        $("#udstrtime").val("");
+        $("#udendtime").val("");
+        $("#udtimecnt").val(0);
+        $("#udusefinishcnt").val("");
+        $("#udusebeforecnt").val("");
+        $("#udusenowcnt").val("");
+        $("#udusefinishaftercnt").val("");
+        $("#uduseafterremaincnt").val("");
+        $("#udymdcnt").val("");
     }
 });
 
@@ -1570,6 +1679,7 @@ $('input[type=radio][name=uddestcode]').change(function() {
     } else {
         // Other
         $("#uddestplace").val("").prop('readonly', false);
+        $("#uddestplace").focus();
     }
 });
 
@@ -1771,6 +1881,12 @@ $(document).on('click', '#btnUpdateKyuka', function(e) {
         $("#uddesttel").focus();
         return false;
     }
+
+    if (confirm("<?php echo $kyuka_submit ?>")) {
+        return true;
+    } else {
+        return false;
+    }
 });
 
 // Clear Input Tag Data
@@ -1798,6 +1914,15 @@ $(document).on('click', '#btnClearUpdate', function(e) {
     $('#uddesttel').val('');
     $('#udymdcnt').val('0');
     $('#udtimecnt').val('0');
+});
+
+//Delete kyuka
+$(document).on('click', '#btnDelKyuka', function(e) {
+    if (confirm("<?php echo $kyuka_delete_mgs ?>")) {
+        return true;
+    } else {
+        return false;
+    }
 });
 
 // 編集
