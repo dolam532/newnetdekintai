@@ -616,25 +616,25 @@ span.kyukaReg_class {
                         </div>
                         <div class="row four">
                             <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                <label for="strymd">期間(F)</label>
+                                <label for="strymd">期間(From)</label>
                                 <input type="text" class="form-control" id="strymd" name="strymd" placeholder="日付"
                                     required="required" maxlength="10" style="text-align: center">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                <label for="endymd">期間(T)</label>
+                                <label for="endymd">期間(To)</label>
                                 <input type="text" class="form-control" id="endymd" name="endymd" placeholder="日付"
                                     required="required" maxlength="10" style="text-align: center">
                             </div>
                             <div class="divided">
                                 <div class="layout">
                                     <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                        <label for="strtime">時間(F)</label>
+                                        <label for="strtime">時間(From)</label>
                                         <input type="text" class="form-control" id="strtime" name="strtime"
                                             placeholder="00" required="required" maxlength="2"
                                             style="text-align: center">
                                     </div>
                                     <div class="col-md-3 col-sm-3 col-sx-3 day">
-                                        <label for="endtime">時間(T)</label>
+                                        <label for="endtime">時間(To)</label>
                                         <input type="text" class="form-control" id="endtime" name="endtime"
                                             placeholder="00" required="required" maxlength="2"
                                             style="text-align: center">
@@ -1194,30 +1194,6 @@ $(document).on('click', '#btnNew', function(e) {
     // In the case of a new application, it cannot be used until the application category is selected.
     $("#strtime").val("").prop('disabled', true);
     $("#endtime").val("").prop('disabled', true);
-});
-
-// ①総有給休暇数, ②＋③＝①
-$("#oldcnt, #newcnt").on("input", function() {
-    var oldcntValue = parseFloat($("#oldcnt").val()) || 0;
-    var newcntValue = parseFloat($("#newcnt").val()) || 0;
-    var totaly = oldcntValue + newcntValue;
-    $("#tothday").val(totaly);
-});
-
-// ⑦使用後済数(④＋⑥)
-$("#usefinishcnt, #usenowcnt").on("input", function() {
-    var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
-    var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
-    var totaly = usefinishcntValue + usenowcntValue;
-    $("#usefinishaftercnt").val(totaly);
-});
-
-// ⑧使用後残日数(⑤－⑥)
-$("#usebeforecnt, #usenowcnt").on("input", function() {
-    var usebeforecntValue = parseFloat($("#usebeforecnt").val()) || 0;
-    var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
-    var suby = usebeforecntValue - usenowcntValue;
-    $("#useafterremaincnt").val(suby);
 });
 
 // Lock and unlock items when selecting vacation request type (day/hour)
