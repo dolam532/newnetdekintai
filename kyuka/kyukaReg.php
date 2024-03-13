@@ -1174,7 +1174,16 @@ span.kyukaReg_class {
     </div>
 </div>
 </div>
+
 <script>
+//Disabling Enter Key for Textboxes, Radio
+$("input:text, input:radio").keypress(function(event) {
+    if (event.keyCode === 13) {
+        event.preventDefault();
+        return false;
+    }
+});
+
 // New button(新規)
 $(document).on('click', '#btnNew', function(e) {
     $('#modal').modal('toggle');
@@ -1187,6 +1196,7 @@ $(document).on('click', '#btnNew', function(e) {
     $("#endtime").val("").prop('disabled', true);
 
     //初期化
+    $("input[name='kyukatype']").focus();
     $("input[name='kyukatype']").prop("checked", false);
     $("#kyukacode").val("");
     $("#kyukanamedetail").val("");
@@ -1218,7 +1228,6 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#endymd").prop('disabled', false);
         $("#strtime").prop('disabled', true);
         $("#endtime").prop('disabled', true);
-        $("#timecnt").val(0);
         $("#timecnt").prop('disabled', true);
         $("#ymdcnt").prop('disabled', false);
 
@@ -1230,20 +1239,26 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#endymd").val("");
         $("#strtime").val("");
         $("#endtime").val("");
-        $("#timecnt").val(0);
+        $("#tothday").val("");
+        $("#oldcnt").val("");
+        $("#newcnt").val("");
         $("#usefinishcnt").val("");
         $("#usebeforecnt").val("");
         $("#usenowcnt").val("");
         $("#usefinishaftercnt").val("");
         $("#useafterremaincnt").val("");
+        $("#reason").val("");
         $("#ymdcnt").val("");
+        $("#timecnt").val("");
+        $("input[name='destcode']").prop("checked", false);
+        $("#destplace").val("");
+        $("#desttel").val("");
     } else if (this.value == '0') {
-        // Time selection
+        // Time or Halfday selection
         $("#strymd").prop('disabled', false);
         $("#endymd").prop('disabled', true);
         $("#strtime").prop('disabled', false);
         $("#endtime").prop('disabled', false);
-        $("#ymdcnt").val(0);
         $("#ymdcnt").prop('disabled', true);
         $("#timecnt").prop('disabled', false);
 
@@ -1255,13 +1270,40 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#endymd").val("");
         $("#strtime").val("");
         $("#endtime").val("");
-        $("#timecnt").val(0);
+        $("#tothday").val("");
+        $("#oldcnt").val("");
+        $("#newcnt").val("");
         $("#usefinishcnt").val("");
         $("#usebeforecnt").val("");
         $("#usenowcnt").val("");
         $("#usefinishaftercnt").val("");
         $("#useafterremaincnt").val("");
+        $("#reason").val("");
         $("#ymdcnt").val("");
+        $("#timecnt").val("");
+        $("input[name='destcode']").prop("checked", false);
+        $("#destplace").val("");
+        $("#desttel").val("");
+    }
+});
+
+$('input[name="kyukatype"]').change(function() {
+
+    //kyukatemplate A, 半休
+    if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
+        $('#timecnt').val('0.5');
+        $("#usenowcnt").val('0.5');
+        $("#timecnt").prop('disabled', true);
+    }
+
+    if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
+        $('#strtime, #endtime').on('input', function() {
+            var strtimeValue = $('#strtime').val() || '0';
+            var endtimeValue = $('#endtime').val() || '0';
+            $('#timecnt').val(endtimeValue - strtimeValue);
+            $('#ymdcnt').val($('#timecnt').val()*0.125);
+            $('#usenowcnt').val($('#ymdcnt').val());
+        });
     }
 });
 
@@ -1311,30 +1353,6 @@ $("#endymd").change(function() {
     var dateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
     $("#ymdcnt").val(dateDiff + 1);
     $('#usenowcnt').val($('#ymdcnt').val());
-});
-
-$(document).ready(function() {
-    $('input[name="kyukatype"]').change(function() {
-
-        //kyukatemplate A, 半休
-        if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
-            $('#timecnt').val('0.5');
-            $("#usenowcnt").val('0.5');
-            $("#timecnt").prop('disabled', true);
-        }
-
-        if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
-            $('#strtime, #endtime').on('input', function() {
-                var strtimeValue = $('#strtime').val() || '0';
-                var endtimeValue = $('#endtime').val() || '0';
-                $('#timecnt').val(endtimeValue - strtimeValue);
-                $('#ymdcnt').val($('#timecnt').val()*0.125);
-                $('#usenowcnt').val($('#ymdcnt').val());
-            });
-        }
-    });
-    SetFormViewBySubmissionStatusHandler();
-    multiUserKyukaSelectHandler();
 });
 
 //自動計算で表示
@@ -1396,11 +1414,6 @@ $("#vacationstr").datepicker({
 $("#vacationend").datepicker({
     changeYear: true,
     dateFormat: 'yy/mm/dd'
-});
-
-$(document).on('click', '#btnAnnt', function(e) {
-    $('#modal3').modal('toggle');
-    autoGrow(document.getElementById("message-area2"));
 });
 
 // Check Empty 登録
@@ -1576,6 +1589,18 @@ $(document).on('click', '#btnClear', function(e) {
     $('#timecnt').val('0');
 });
 
+//お知らせ
+$(document).on('click', '#btnAnnt', function(e) {
+    $('#modal3').modal('toggle');
+    autoGrow(document.getElementById("message-area2"));
+});
+
+//multiUserKyukaSelect
+$(document).ready(function() {
+    SetFormViewBySubmissionStatusHandler();
+    multiUserKyukaSelectHandler();
+});
+
 
 // 編集
 //自動計算で表示
@@ -1593,10 +1618,10 @@ $("#udoldcnt, #udnewcnt, #tudothday, #udusefinishcnt, #udusenowcnt, #udymdcnt, #
     $("#udusebeforecnt").val(udusebeforecntValue);
 
     //⑥今回使用
-    if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
+    if ($("input[name='udkyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
         $("#udusenowcnt").val('0.5');
     }
-    else if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
+    else if ($("input[name='udkyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
         $('#udymdcnt').val($('#udtimecnt').val()*0.125);
         $('#udusenowcnt').val($('#udymdcnt').val());
     }
@@ -1626,7 +1651,6 @@ $('input[type=radio][name=udkyukatype]').change(function() {
         $("#udendymd").prop('disabled', false);
         $("#udstrtime").prop('disabled', true);
         $("#udendtime").prop('disabled', true);
-        $("#udtimecnt").val(0);
         $("#udtimecnt").prop('disabled', true);
         $("#udymdcnt").prop('disabled', false);
 
@@ -1637,20 +1661,26 @@ $('input[type=radio][name=udkyukatype]').change(function() {
         $("#udendymd").val("");
         $("#udstrtime").val("");
         $("#udendtime").val("");
-        $("#udtimecnt").val(0);
+        $("#udtothday").val("");
+        $("#udoldcnt").val("");
+        $("#udnewcnt").val("");
         $("#udusefinishcnt").val("");
         $("#udusebeforecnt").val("");
         $("#udusenowcnt").val("");
         $("#udusefinishaftercnt").val("");
         $("#uduseafterremaincnt").val("");
+        $("#udreason").val("");
         $("#udymdcnt").val("");
+        $("#udtimecnt").val("");
+        $("input[name='uddestcode']").prop("checked", false);
+        $("#uddestplace").val("");
+        $("#uddesttel").val("");
     } else if (this.value == '0') {
         // Time selection
         $("#udstrymd").prop('disabled', false);
         $("#udendymd").prop('disabled', true);
         $("#udstrtime").prop('disabled', false);
         $("#udendtime").prop('disabled', false);
-        $("#udymdcnt").val(0);
         $("#udymdcnt").prop('disabled', true);
         $("#udtimecnt").prop('disabled', false);
 
@@ -1661,13 +1691,20 @@ $('input[type=radio][name=udkyukatype]').change(function() {
         $("#udendymd").val("");
         $("#udstrtime").val("");
         $("#udendtime").val("");
-        $("#udtimecnt").val(0);
+        $("#udtothday").val("");
+        $("#udoldcnt").val("");
+        $("#udnewcnt").val("");
         $("#udusefinishcnt").val("");
         $("#udusebeforecnt").val("");
         $("#udusenowcnt").val("");
         $("#udusefinishaftercnt").val("");
         $("#uduseafterremaincnt").val("");
+        $("#udreason").val("");
         $("#udymdcnt").val("");
+        $("#udtimecnt").val("");
+        $("input[name='uddestcode']").prop("checked", false);
+        $("#uddestplace").val("");
+        $("#uddesttel").val("");
     }
 });
 
