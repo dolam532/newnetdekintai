@@ -1213,7 +1213,7 @@ $(document).on('click', '#btnNew', function(e) {
     $("#endymd").val("");
     $("#strtime").val("");
     $("#endtime").val("");
-    $("#tothday").val("");
+    // $("#tothday").val("");
     $("#oldcnt").val("");
     $("#newcnt").val("");
     $("#usefinishcnt").val("");
@@ -1248,7 +1248,7 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#endymd").val("");
         $("#strtime").val("");
         $("#endtime").val("");
-        $("#tothday").val("");
+        // $("#tothday").val("");
         $("#oldcnt").val("");
         $("#newcnt").val("");
         $("#usefinishcnt").val("");
@@ -1279,7 +1279,7 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#endymd").val("");
         $("#strtime").val("");
         $("#endtime").val("");
-        $("#tothday").val("");
+        // $("#tothday").val("");
         $("#oldcnt").val("");
         $("#newcnt").val("");
         $("#usefinishcnt").val("");
@@ -1698,7 +1698,7 @@ $('input[type=radio][name=udkyukatype]').change(function() {
         $("#udendymd").val("");
         $("#udstrtime").val("");
         $("#udendtime").val("");
-        $("#udtothday").val("");
+        // $("#udtothday").val("");
         $("#udoldcnt").val("");
         $("#udnewcnt").val("");
         $("#udusefinishcnt").val("");
@@ -1728,7 +1728,7 @@ $('input[type=radio][name=udkyukatype]').change(function() {
         $("#udendymd").val("");
         $("#udstrtime").val("");
         $("#udendtime").val("");
-        $("#udtothday").val("");
+        // $("#udtothday").val("");
         $("#udoldcnt").val("");
         $("#udnewcnt").val("");
         $("#udusefinishcnt").val("");
