@@ -122,53 +122,32 @@ $count_months = $interval->y * 12 + $interval->m; // Total months
 
 $nearestValueTop = null;
 $nearestIndex = null;
-$maxDifference = null;
 
 foreach ($topvalue as $key => $value) {
-    $difference = $count_months - $value;
-    if ($difference > 0 && ($maxDifference === null || $difference > $maxDifference)) {
-        $nearestValueTop = $value;
-        $nearestIndex = $key;
-        $minDifference = $difference;
+    if ($value < $count_months) {
+        $nearestValueTop[] = $value;
+        $nearestIndex[] = $key;
     }
 }
-
-// last year
-// $sql_vacationinfo_last = 'SELECT * FROM `tbl_vacationinfo`
-// WHERE `tbl_vacationinfo`.`uid` = "' . $_SESSION['auth_uid'] . '"ORDER BY `vacationid` DESC LIMIT 1';
-// $result_vacationinfo_last = mysqli_query($conn, $sql_vacationinfo_last);
-// $vacationinfo_last = mysqli_fetch_all($result_vacationinfo_last, MYSQLI_ASSOC);
-
-$lastyearIndex = $nearestIndex - 1;
-if ($lastyearIndex >= 0) {
-    $lastyearValueTop = $topvalue[$lastyearIndex];
-    $lastyearValueBottom = $bottomvalue[$lastyearIndex];
-    // if ($lastyearValueBottom > 0) {
-    //     $lastyearRemainDay = $vacationinfo_last[0]['useafterremaincnt'];
-    // }
-} elseif ($lastyearIndex < 0) {
-    $lastyearValueTop = 0;
-    $lastyearValueBottom = 0;
-}
+$topValue_ = max($nearestValueTop);
+$topKey_ = array_search($topValue_, $nearestValueTop);
+$bottomValue_ = $bottomvalue[$topKey_];
 
 // now year
-$nearestValueBottom = $bottomvalue[$nearestIndex];
-if ($nearestValueTop == null) {
-    $nearestValueTop = $topvalue[0];
+if ($topValue_ == null) {
+    $topValue_ = $topvalue[0];
 }
 
-if ($nearestValueBottom == null) {
-    $nearestValueBottom = $bottomvalue[0];
+if ($bottomValue_ == null) {
+    $bottomValue_ = $bottomvalue[0];
 }
 
-$startmonth = strtotime("+" . $nearestValueTop . " months", $givenDate);
+$startmonth = strtotime("+" . $topValue_ . " months", $givenDate);
 $endmonth = strtotime("+12 months", $startmonth);
 $enddate = strtotime("-1 day", $endmonth);
 $startdate_ = date('Y/m/d', $startmonth);
 $enddate_ = date('Y/m/d', $enddate);
-$newcnt_ = $nearestValueBottom;
-$oldcnt_ = $lastyearValueBottom;
-$tothday_ = $newcnt_ + $oldcnt_;
+$newcnt_ = $bottomValue_;
 
 // Select data from tbl_kyuka_notice
 $sql_kyuka_notice = 'SELECT * FROM `tbl_kyuka_notice`
