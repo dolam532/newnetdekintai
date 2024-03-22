@@ -644,12 +644,12 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="tothday">総有給休暇</label>
                                 <input type="text" class="form-control" id="tothday" name="tothday" placeholder="番号"
-                                    style="text-align: center; background-color: #EEEEEE;" value="<?= $tothday_ ?>">
+                                    style="text-align: center; background-color: #EEEEEE;">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="oldcnt">前年度の繰越残</label>
                                 <input type="text" class="form-control" id="oldcnt" name="oldcnt" placeholder="番号"
-                                    style="text-align: center" value="<?= $oldcnt_ ?>">
+                                    style="text-align: center">
                             </div>
                             <div class=" col-md-3 col-sm-3 col-sx-3">
                                 <label for="newcnt">当該年度付与</label>
@@ -1213,9 +1213,9 @@ $(document).on('click', '#btnNew', function(e) {
     $("#endymd").val("");
     $("#strtime").val("");
     $("#endtime").val("");
-    // $("#tothday").val("");
+    $("#tothday").val("");
     $("#oldcnt").val("");
-    $("#newcnt").val("");
+    // $("#newcnt").val("");
     $("#usefinishcnt").val("");
     $("#usebeforecnt").val("");
     $("#usenowcnt").val("");
@@ -1248,9 +1248,9 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#endymd").val("");
         $("#strtime").val("");
         $("#endtime").val("");
-        // $("#tothday").val("");
+        $("#tothday").val("");
         $("#oldcnt").val("");
-        $("#newcnt").val("");
+        // $("#newcnt").val("");
         $("#usefinishcnt").val("");
         $("#usebeforecnt").val("");
         $("#usenowcnt").val("");
@@ -1279,9 +1279,9 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#endymd").val("");
         $("#strtime").val("");
         $("#endtime").val("");
-        // $("#tothday").val("");
+        $("#tothday").val("");
         $("#oldcnt").val("");
-        $("#newcnt").val("");
+        // $("#newcnt").val("");
         $("#usefinishcnt").val("");
         $("#usebeforecnt").val("");
         $("#usenowcnt").val("");
@@ -1698,9 +1698,9 @@ $('input[type=radio][name=udkyukatype]').change(function() {
         $("#udendymd").val("");
         $("#udstrtime").val("");
         $("#udendtime").val("");
-        // $("#udtothday").val("");
+        $("#udtothday").val("");
         $("#udoldcnt").val("");
-        $("#udnewcnt").val("");
+        // $("#udnewcnt").val("");
         $("#udusefinishcnt").val("");
         $("#udusebeforecnt").val("");
         $("#udusenowcnt").val("");
@@ -1728,9 +1728,9 @@ $('input[type=radio][name=udkyukatype]').change(function() {
         $("#udendymd").val("");
         $("#udstrtime").val("");
         $("#udendtime").val("");
-        // $("#udtothday").val("");
+        $("#udtothday").val("");
         $("#udoldcnt").val("");
-        $("#udnewcnt").val("");
+        // $("#udnewcnt").val("");
         $("#udusefinishcnt").val("");
         $("#udusebeforecnt").val("");
         $("#udusenowcnt").val("");
