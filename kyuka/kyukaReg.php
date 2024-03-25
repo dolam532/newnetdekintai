@@ -115,8 +115,6 @@ span.kyukaReg_class {
 .hiddenInput {
     display: none;
 }
-
-
 </style>
 <title>休暇届</title>
 <?php include('../inc/menu.php'); ?>
@@ -279,10 +277,10 @@ span.kyukaReg_class {
         <form method="post">
             <div class="col-md-4 text-left">
                 <div class="title_condition">
-         
-                <label for="filterByStatusCode">状態</label>
-                                 <!-- $KYUKA_SUBMISSTION_STATUS_FILTER -->
-                                 <select id="filterByStatusCode" name="filterByStatusCode"  
+
+                    <label for="filterByStatusCode">状態</label>
+                    <!-- $KYUKA_SUBMISSTION_STATUS_FILTER -->
+                    <select id="filterByStatusCode" name="filterByStatusCode"
                         onchange='handleSelectFilterStatusChange()' style="padding:2px; width:70%;">
                         <?php
 						foreach ($KYUKA_SUBMISSTION_STATUS_FILTER as $key => $value) {
@@ -322,24 +320,25 @@ span.kyukaReg_class {
                 <div class="title_condition">
 
                     <label for="searchKyukaByYear">申請年月</label>
-                    <input style="width:30%;" id="searchKyukaByYear" name="searchKyukaByYear" type="number" value="<?=$searchByYear ?>"/>
-                    <select id="searchKyukaByMonth"  name="searchKyukaByMonth" class="seldate" style="padding:3px;">
-							<?php
+                    <input style="width:30%;" id="searchKyukaByYear" name="searchKyukaByYear" type="number"
+                        value="<?=$searchByYear ?>" />
+                    <select id="searchKyukaByMonth" name="searchKyukaByMonth" class="seldate" style="padding:3px;">
+                        <?php
 							foreach (ConstArray::$search_month_kyuka as $key => $value) {
 								?>
-								<option value="<?= $key ?>" <?php if ($key == $searchByMonth) {
+                        <option value="<?= $key ?>" <?php if ($key == $searchByMonth) {
 									  echo ' selected="selected"';
 								  } ?>>
-									<?= $value ?>
-								</option>
-								<?php
+                            <?= $value ?>
+                        </option>
+                        <?php
 							}
 							?>
-						</select>
+                    </select>
                     <br>
-                 
+
                 </div>
- 
+
                 <div class="title_btn">
                     <input type="submit" id="ClearButton" name="ClearButton" value="クリア ">&nbsp;
                     <input type="submit" name="btnSearchReg" value="検索 ">&nbsp;
@@ -350,43 +349,44 @@ span.kyukaReg_class {
 
 
             </div>
-            <input type="hidden" id="selectedFilterByStatusCode" name="selectedFilterByStatusCode" value="<?= $filterByStatusCode?>"  />
+            <input type="hidden" id="selectedFilterByStatusCode" name="selectedFilterByStatusCode"
+                value="<?= $filterByStatusCode?>" />
         </form>
-   
+
 
         <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-           <div class="row">
-           
-      
+        <div class="row">
+
+
             <div class="col-md-12 text-right" style="display: flex; justify-content: flex-start;">
-            <form method="post" style="margin: 0 10px;">
-                <button type="submit" name="KyukaHenshuModoshi" class="" style="width: auto;" type="button"
-                    onclick="return checkHenshuChuModoshiSubmit()">編集中に戻す</button>
+                <form method="post" style="margin: 0 10px;">
+                    <button type="submit" name="KyukaHenshuModoshi" class="" style="width: auto;" type="button"
+                        onclick="return checkHenshuChuModoshiSubmit()">編集中に戻す</button>
 
-                <input type="hidden" name="user-kyuka-multi-select-input">
-                <input type="hidden" name="user-kyuka-multi-select-status">
-            </form>
-            <form method="post" style="margin: 0 10px;">
-                <button type="submit" name="KyukaTantoshaShonin" class="" style="width: auto;" type="button"
-                    onclick="return checkTantoshaShoninSubmit()">担当者承認</button>
-                <input type="hidden" name="user-kyuka-multi-select-status">
+                    <input type="hidden" name="user-kyuka-multi-select-input">
+                    <input type="hidden" name="user-kyuka-multi-select-status">
+                </form>
+                <form method="post" style="margin: 0 10px;">
+                    <button type="submit" name="KyukaTantoshaShonin" class="" style="width: auto;" type="button"
+                        onclick="return checkTantoshaShoninSubmit()">担当者承認</button>
+                    <input type="hidden" name="user-kyuka-multi-select-status">
 
-                <input type="hidden" name="user-kyuka-multi-select-input">
-            </form>
+                    <input type="hidden" name="user-kyuka-multi-select-input">
+                </form>
 
-            <form method="post" style="margin: 0 10px;">
-                <button type="submit" name="KyukaSekininshaShonin" class="" style="width: auto;" type="button"
-                    onclick="return checkSekininshaShoninSubmit()">責任者承認</button>
+                <form method="post" style="margin: 0 10px;">
+                    <button type="submit" name="KyukaSekininshaShonin" class="" style="width: auto;" type="button"
+                        onclick="return checkSekininshaShoninSubmit()">責任者承認</button>
 
-                <input type="hidden" name="user-kyuka-multi-select-status">
-                <input type="hidden" name="user-kyuka-multi-select-input">
-            </form>
-        <?php endif; ?>
+                    <input type="hidden" name="user-kyuka-multi-select-status">
+                    <input type="hidden" name="user-kyuka-multi-select-input">
+                </form>
+                <?php endif; ?>
+            </div>
+
+
+
         </div>
-       
-    
-   
-    </div>
 
         <?php elseif ($_SESSION['auth_type'] == constant('USER')) : ?>
         <div class="col-md-2 text-left">
@@ -408,21 +408,21 @@ span.kyukaReg_class {
         </div>
         <?php endif; ?>
 
-       
+
 
 </div>
 <div class="form-group">
-<div class="col-md-2 text-right" style="display: flex; justify-content: flex-start;">
+    <div class="col-md-2 text-right" style="display: flex; justify-content: flex-start;">
         <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-            <input type="checkbox" id="user-kyuka-select-all-checkbox" value="全て選択" />
+        <input type="checkbox" id="user-kyuka-select-all-checkbox" value="全て選択" />
         <?php endif; ?>
-            </div>
-    <table class="table table-bordered datatable" >
+    </div>
+    <table class="table table-bordered datatable">
         <thead>
             <tr class="info">
-            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                 <th style="text-align: center;">選択</th>
-            <?php endif; ?>
+                <?php endif; ?>
                 <th style="text-align: center;">社員名</th>
                 <th style="text-align: center;">申請日</th>
                 <th style="text-align: center;">入社年月</th>
@@ -438,29 +438,29 @@ span.kyukaReg_class {
             <?php if (empty($userkyuka_list)) { ?>
             <tr>
                 <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
-                    <td colspan="10" align="center"><?php echo $data_save_no; ?></td>
+                <td colspan="10" align="center"><?php echo $data_save_no; ?></td>
                 <?php else: ?>
-                    <td colspan="9" align="center"><?php echo $data_save_no; ?></td>
+                <td colspan="9" align="center"><?php echo $data_save_no; ?></td>
                 <?php endif; ?>
             </tr>
             <?php } elseif (!empty($userkyuka_list)) {
 					foreach ($userkyuka_list as $userkyuka) {
 					?>
             <tr>
-            <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
+                <?php if ($_SESSION['auth_type'] == constant('ADMIN') || $_SESSION['auth_type'] == constant('ADMINISTRATOR') || $_SESSION['auth_type'] == constant('MAIN_ADMIN')) : ?>
                 <td><input type="checkbox" class="user-kyuka-select-checkbox" value="<?= $userkyuka['kyukaid'] ?>"
                         data-status-value="<?= $userkyuka['submission_status'] ?>"></td>
-            <?php endif; ?>
+                <?php endif; ?>
                 <td><span>
-                    <a href="#">
-                        <span class="showModal">
-                            <span class="kyukaReg_class" style="display:none;" >
-                                <?= $userkyuka['kyukaid'] . ','  ?>
+                        <a href="#">
+                            <span class="showModal">
+                                <span class="kyukaReg_class" style="display:none;">
+                                    <?= $userkyuka['kyukaid'] . ','  ?>
+                                </span>
+                                <?= $userkyuka['name']?>
                             </span>
-                            <?= $userkyuka['name']?>
-                        </span>
-                    </a>
-                </span></td>
+                        </a>
+                    </span></td>
                 <td><span><?= $userkyuka['kyukaymd'] ?></span></td>
                 <td><span><?= substr($userkyuka['inymd'], 0, 4) ?>年<?= substr($userkyuka['inymd'], 5, 2) ?>月</span>
                 </td>
@@ -477,7 +477,7 @@ span.kyukaReg_class {
                                     echo "時間";
                                 }
                             }
-						?>  
+						?>
                     </span>
                 </td>
                 <td><span><?= $userkyuka['kyukaname'] . $userkyuka['kyukanamedetail'] ?></span></td>
@@ -497,18 +497,17 @@ span.kyukaReg_class {
                         <?php
 									if ($userkyuka['kyukatype'] == 0) {
 										if ($user_kyukatemplate_ == "1") {
-											echo ($userkyuka['ymdcnt']+$userkyuka['timecnt']) . "日";
+											echo ($userkyuka['ymdcnt']) . "日";
 										} elseif ($user_kyukatemplate_ == "2") {
 											echo $userkyuka['timecnt'] . "時間";
 										}
                                     }
                                     if($userkyuka['kyukatype'] == 1) {
-                                        echo ($userkyuka['ymdcnt']+$userkyuka['timecnt']) . "日";
+                                        echo ($userkyuka['ymdcnt']) . "日";
                                     }
 										?>
                     </span>
                 </td>
-              
                 <td>
                     <span name="show-submission-status">
                         <?php echo $KYUKA_SUBMISSTION_STATUS[$userkyuka['submission_status']]?>
@@ -696,22 +695,30 @@ span.kyukaReg_class {
                                 <label for="reason">事由</label>
                                 <textarea class="form-control" id="reason" name="reason" rows="2"></textarea>
                             </div>
+                            <?php if ($user_kyukatemplate_ == "1") : ?>
+                            <div class="col-md-2 col-sm-2 col-sx-2"></div>
                             <div class="col-md-2 col-sm-2 col-sx-2">
                                 <label for="ymdcnt">申請日数</label>
                                 <input type="text" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="番号"
                                     style="text-align: center" value="">
                             </div>
+                            <input type="hidden" class="form-control" id="timecnt" name="timecnt" value="" hidden
+                                style="display:none;">
+                            <?php elseif ($user_kyukatemplate_ == "2") : ?>
                             <div class="col-md-2 col-sm-2 col-sx-2">
-                                <label for="timecnt">
-                                    <?php if ($user_kyukatemplate_ == "1") : ?>
-                                    半休日数
-                                    <?php elseif ($user_kyukatemplate_ == "2") : ?>
+                                <label for="timecnt" class="kyuka-kbn-time-div">
                                     申請時間
-                                    <?php endif; ?>
                                 </label>
-                                <input type="text" class="form-control" id="timecnt" name="timecnt" placeholder="番号"
+                                <input type="text" class="form-control kyuka-kbn-time-div" id="timecnt" name="timecnt"
+                                    placeholder="番号" style="text-align: center" value="">
+                            </div>
+
+                            <div class="col-md-2 col-sm-2 col-sx-2">
+                                <label for="ymdcnt">申請日数</label>
+                                <input type="text" class="form-control" id="ymdcnt" name="ymdcnt" placeholder="番号"
                                     style="text-align: center" value="">
                             </div>
+                            <?php endif; ?>
                         </div>
                         <br>
                         <div class="row eight">
@@ -786,13 +793,14 @@ span.kyukaReg_class {
                                 <label for="inymd">入社年月</label>
                                 <input type="text" class="form-control" name="udinymd" style="text-align: center"
                                     value="<?= substr($user_inymd_, 0, 4) ?>年<?= substr($user_inymd_, 5, 2) ?>月"
-                                    readonly>  <!-- FIX ME SELECTED USER IN YMD-->
+                                    readonly> <!-- FIX ME SELECTED USER IN YMD-->
                             </div>
                             <div class="col-md-6 col-sm-6 col-sx-6 kyukacompanyname">
                                 <label for="name">社員名</label>
                                 <input type="text" class="form-control" name="udname" id="udname"
-                                    style="text-align: center" value="<?= $user_name_ ?>" readonly>   <!-- FIX ME SELECTED USER NAME-->
-                                 
+                                    style="text-align: center" value="<?= $user_name_ ?>" readonly>
+                                <!-- FIX ME SELECTED USER NAME-->
+
                             </div>
                         </div>
                         <br>
@@ -907,12 +915,14 @@ span.kyukaReg_class {
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="usefinishaftercnt">使用後済</label>
                                 <input type="text" class="form-control" id="udusefinishaftercnt"
-                                    name="udusefinishaftercnt" placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
+                                    name="udusefinishaftercnt" placeholder="番号"
+                                    style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                             <div class="col-md-3 col-sm-3 col-sx-3">
                                 <label for="useafterremaincnt">使用後残</label>
                                 <input type="text" class="form-control" id="uduseafterremaincnt"
-                                    name="uduseafterremaincnt" placeholder="番号" style="text-align: center; background-color: #EEEEEE;" value="">
+                                    name="uduseafterremaincnt" placeholder="番号"
+                                    style="text-align: center; background-color: #EEEEEE;" value="">
                             </div>
                         </div>
                         <br>
@@ -926,22 +936,32 @@ span.kyukaReg_class {
                                 <label for="reason">事由</label>
                                 <textarea class="form-control" id="udreason" name="udreason" rows="2"></textarea>
                             </div>
+                            <?php if ($user_kyukatemplate_ == "1") : ?>
+                            <div class="col-md-2 col-sm-2 col-sx-2"></div>
                             <div class="col-md-2 col-sm-2 col-sx-2">
-                                <label for="ymdcnt">申請日数</label>
+                                <label for="udymdcnt">申請日数</label>
                                 <input type="text" class="form-control" id="udymdcnt" name="udymdcnt" placeholder="番号"
                                     style="text-align: center" value="">
                             </div>
+
+                            <?php elseif ($user_kyukatemplate_ == "2") : ?>
+
                             <div class="col-md-2 col-sm-2 col-sx-2">
-                                <label for="timecnt">
-                                    <?php if ($user_kyukatemplate_ == "1") : ?>
-                                    半休日数
-                                    <?php elseif ($user_kyukatemplate_ == "2") : ?>
+                                <label for="udtimecnt" class="kyuka-ud-kbn-time-div">
                                     申請時間
-                                    <?php endif; ?>
                                 </label>
-                                <input type="text" class="form-control" id="udtimecnt" name="udtimecnt" placeholder="番号"
+                                <input type="text" class="form-control kyuka-ud-kbn-time-div" id="udtimecnt"
+                                    name="udtimecnt" placeholder="番号" style="text-align: center" value="">
+                            </div>
+
+                            <div class="col-md-2 col-sm-2 col-sx-2">
+                                <label for="udymdcnt">申請日数</label>
+                                <input type="text" class="form-control" id="udymdcnt" name="udymdcnt" placeholder="番号"
                                     style="text-align: center" value="">
                             </div>
+                            <?php endif; ?>
+
+
                         </div>
                         <br>
                         <div class="row eight">
@@ -969,21 +989,20 @@ span.kyukaReg_class {
                             <div class="col-xs-2"></div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input type="submit" name="UpdateKyuka"
-                                        class="btn btn-primary" id="btnUpdateKyuka" role="button"
-                                        value="登録">
+                                    <input type="submit" name="UpdateKyuka" class="btn btn-primary" id="btnUpdateKyuka"
+                                        role="button" value="登録">
                                 </p>
                             </div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input type="submit" name="DelKyuka" class="btn btn-warning"
-                                        id="btnDelKyuka" role="button" value="削除">
+                                    <input type="submit" name="DelKyuka" class="btn btn-warning" id="btnDelKyuka"
+                                        role="button" value="削除">
                                 </p>
                             </div>
                             <div class="col-xs-2">
                                 <p class="text-center">
-                                    <input class="btn btn-success btn-ms" id="btnClearUpdate"
-                                        role="button" value="クリア" />
+                                    <input class="btn btn-success btn-ms" id="btnClearUpdate" role="button"
+                                        value="クリア" />
                                 </p>
                             </div>
                             <div class="col-xs-2">
@@ -1207,27 +1226,11 @@ $(document).on('click', '#btnNew', function(e) {
     //初期化
     $("input[name='kyukatype']").focus();
     $("input[name='kyukatype']").prop("checked", false);
-    $("#kyukacode").val("");
-    $("#kyukanamedetail").val("");
-    $("#strymd").val("");
-    $("#endymd").val("");
-    $("#strtime").val("");
-    $("#endtime").val("");
-    $("#tothday").val("");
-    $("#oldcnt").val("");
-    // $("#newcnt").val("");
-    $("#usefinishcnt").val("");
-    $("#usebeforecnt").val("");
-    $("#usenowcnt").val("");
-    $("#usefinishaftercnt").val("");
-    $("#useafterremaincnt").val("");
-    $("#reason").val("");
-    $("#ymdcnt").val("");
-    $("#timecnt").val("");
-    $("input[name='destcode']").prop("checked", false);
-    $("#destplace").val("");
-    $("#desttel").val("");
+
+    clearNewModalInputs();
 });
+
+
 
 // Lock and unlock items when selecting vacation request type (day/hour)
 $('input[type=radio][name=kyukatype]').change(function() {
@@ -1237,87 +1240,53 @@ $('input[type=radio][name=kyukatype]').change(function() {
         $("#endymd").prop('disabled', false);
         $("#strtime").prop('disabled', true);
         $("#endtime").prop('disabled', true);
-        $("#timecnt").prop('disabled', true);
+
+        $("#timecnt").prop('disabled', false);
         $("#ymdcnt").prop('disabled', false);
 
-        
+
         //初期化に戻す
-        $("#kyukacode").val("");
-        $("#kyukanamedetail").val("");
-        $("#strymd").val("");
-        $("#endymd").val("");
-        $("#strtime").val("");
-        $("#endtime").val("");
-        $("#tothday").val("");
-        $("#oldcnt").val("");
-        // $("#newcnt").val("");
-        $("#usefinishcnt").val("");
-        $("#usebeforecnt").val("");
-        $("#usenowcnt").val("");
-        $("#usefinishaftercnt").val("");
-        $("#useafterremaincnt").val("");
-        $("#reason").val("");
-        $("#ymdcnt").val("");
-        $("#timecnt").val("");
-        $("input[name='destcode']").prop("checked", false);
-        $("#destplace").val("");
-        $("#desttel").val("");
+        clearNewModalInputs();
+
+
     } else if (this.value == '0') {
         // Time or Halfday selection
         $("#strymd").prop('disabled', false);
         $("#endymd").prop('disabled', true);
         $("#strtime").prop('disabled', false);
         $("#endtime").prop('disabled', false);
-        $("#ymdcnt").prop('disabled', true);
+
+        $("#ymdcnt").prop('disabled', false);
         $("#timecnt").prop('disabled', false);
 
-        
         //初期化に戻す
-        $("#kyukacode").val("");
-        $("#kyukanamedetail").val("");
-        $("#strymd").val("");
-        $("#endymd").val("");
-        $("#strtime").val("");
-        $("#endtime").val("");
-        $("#tothday").val("");
-        $("#oldcnt").val("");
-        // $("#newcnt").val("");
-        $("#usefinishcnt").val("");
-        $("#usebeforecnt").val("");
-        $("#usenowcnt").val("");
-        $("#usefinishaftercnt").val("");
-        $("#useafterremaincnt").val("");
-        $("#reason").val("");
-        $("#ymdcnt").val("");
-        $("#timecnt").val("");
-        $("input[name='destcode']").prop("checked", false);
-        $("#destplace").val("");
-        $("#desttel").val("");
+        clearNewModalInputs();
     }
 });
 
-$('input[name="kyukatype"]').change(function() {
 
+
+$('input[name="kyukatype"]').change(function() {
+    updateTimeCountByStartTimeAndEndTime()
     //kyukatemplate A, 半休
     if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
-        $("#timecnt").val(0.5);
+        $("#ymdcnt").val(0.5);
         $("#usenowcnt").val(0.5);
-        $("#timecnt").prop('disabled', true);
     }
-
     if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
-        var strtimeValue = parseFloat($("#strtime").val()) || 0;
-        var endtimeValue = parseFloat($("#endtime").val()) || 0;
+        $(".kyuka-kbn-time-div").show();
 
-        var timecntValue = endtimeValue - strtimeValue;
-
-        $("#timecnt").val(timecntValue);
     }
+    if ($(this).val() == "1" && <?php echo $user_kyukatemplate_; ?> == "2") {
+        $(".kyuka-kbn-time-div").hide();
+    }
+    //kyukatemplate B, 時間
+
 });
 
 // Contact while on vacation
 $('input[type=radio][name=destcode]').change(function() {
-    switch(this.value) {
+    switch (this.value) {
         case "0":
             // Japan
             $("#destplace").val("日本").prop('readonly', true);
@@ -1331,106 +1300,76 @@ $('input[type=radio][name=destcode]').change(function() {
     }
 });
 
-// Calculation of vacation days when vacation days (str) change
-$("#strymd").change(function() {
-    var str = new Date($("#strymd").val());
-    var end = new Date($("#endymd").val());
 
-    if (!end || str > end) {
-        $("#endymd").val($("#strymd").val());
-        end = new Date($("#endymd").val());
-    }
-
-    // If hours are selected, endymd = strymd
-    if ($("input[name='kyukatype']:checked").val() == "0") {
-        $("#endymd").val($("#strymd").val());
-        return;
-    }
-
-    var dateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
-    $("#ymdcnt").val(dateDiff + 1);
-    $("#usenowcnt").val($("#ymdcnt").val());
-});
-
-// Calculation of vacation days when vacation days (end) change
-$("#endymd").change(function() {
-    var str = new Date($("#strymd").val());
-    var end = new Date($("#endymd").val());
-
-    if (str > end) {
-        $("#endymd").val($("#strymd").val());
-        end = new Date($("#endymd").val());
-    }
-
-    var dateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
-    $("#ymdcnt").val(dateDiff + 1);
-    $("#usenowcnt").val($("#ymdcnt").val());
-});
 
 
 $(document).ready(function() {
+    kyukaStartTimeEndTimeHandler();
+    kyukaStartDayAndEndDayHandler();
+
     //自動計算で表示
-    $("#strymd, #endymd, #strtime, #endtime, #oldcnt, #newcnt, #tothday, #usefinishcnt, #usenowcnt, #ymdcnt, #timecnt").on("input", function() {
-        //⑥今回使用
-        if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == 1) {
-            $("#usenowcnt").val(0.5);
-        }
-        if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == 2) {
-            var strtime = $("#strtime").val();
-            var endtime = $("#endtime").val();
-            if (strtime == '' || endtime == ''){
-                $("#usenowcnt").val("");
+    $("#oldcnt, #newcnt, #tothday, #usefinishcnt, #usenowcnt, #ymdcnt").on("input",
+        function() {
+            //⑥今回使用
+            if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> ==
+                1) {
+                $("#usenowcnt").val(0.5);
+                $("#ymdcnt").val(0.5);
+            }
+            if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> ==
+                2) {
+                var strtime = $("#strtime").val();
+                var endtime = $("#endtime").val();
+                if (strtime == '' || endtime == '') {
+                    $("#usenowcnt").val("");
+                    $("#usefinishaftercnt").val("");
+                    $("#useafterremaincnt").val("");
+                    return;
+                }
+                caculatedKyukaYmdCountHandler($(this).attr("id"));
+            }
+            if ($("input[name='kyukatype']:checked").val() == "1" && (<?php echo $user_kyukatemplate_; ?> ==
+                    1 || <?php echo $user_kyukatemplate_; ?> == 2)) {
+                if ($("#ymdcnt").val() == '') {
+                    $("#usenowcnt").val("");
+                    $("#usefinishaftercnt").val("");
+                    $("#useafterremaincnt").val("");
+                    return;
+                }
+                var ymdcntValue = parseFloat($("#ymdcnt").val());
+                $("#usenowcnt").val(ymdcntValue);
+            }
+
+            // ①総有給休暇数, ②＋③＝①
+            var oldcntValue = parseFloat($("#oldcnt").val()) || 0;
+            var newcntValue = parseFloat($("#newcnt").val()) || 0;
+            var totaly = oldcntValue + newcntValue;
+            if ($("#oldcnt").val() == '' || $("#newcnt").val() == '' || $("#usefinishcnt").val() == '') {
+                $("#usebeforecnt").val("");
                 $("#usefinishaftercnt").val("");
                 $("#useafterremaincnt").val("");
-                $("#ymdcnt").val("");
-                $("#timecnt").val("");
                 return;
             }
-            $("#timecnt").val(parseFloat(endtime) - parseFloat(strtime));
-            $("#ymdcnt").val($("#timecnt").val() * 0.125);
-            $("#usenowcnt").val($("#ymdcnt").val());
-        }
-        if ($("input[name='kyukatype']:checked").val() == "1" && (<?php echo $user_kyukatemplate_; ?> == 1 || <?php echo $user_kyukatemplate_; ?> == 2)) {
-            var ymdcntValue = parseFloat($("#ymdcnt").val());
-            if($("#ymdcnt").val() == ''){
-                $("#usenowcnt").val("");
-                $("#usefinishaftercnt").val("");
-                $("#useafterremaincnt").val("");
-                return;
-            }
-            $("#usenowcnt").val(ymdcntValue);
-        }
+            $("#tothday").val(totaly);
 
-        // ①総有給休暇数, ②＋③＝①
-        var oldcntValue = parseFloat($("#oldcnt").val()) || 0;
-        var newcntValue = parseFloat($("#newcnt").val()) || 0;
-        var totaly = oldcntValue + newcntValue;
-        if ($("#oldcnt").val() == '' || $("#newcnt").val() == '' || $("#usefinishcnt").val() == ''){
-            $("#usebeforecnt").val("");
-            $("#usefinishaftercnt").val("");
-            $("#useafterremaincnt").val("");
-            return;
-        }
-        $("#tothday").val(totaly);
+            //⑤使用前残, ⑤＝①ー④
+            var tothdayValue = parseFloat($("#tothday").val()) || 0;
+            var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
+            var usebeforecntValue = tothdayValue - usefinishcntValue;
+            $("#usebeforecnt").val(usebeforecntValue);
 
-        //⑤使用前残, ⑤＝①ー④
-        var tothdayValue = parseFloat($("#tothday").val()) || 0;
-        var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
-        var usebeforecntValue = tothdayValue - usefinishcntValue;
-        $("#usebeforecnt").val(usebeforecntValue);
+            // ⑦使用後済数(④＋⑥)
+            var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
+            var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
+            var totaly = usefinishcntValue + usenowcntValue;
+            $("#usefinishaftercnt").val(totaly);
 
-        // ⑦使用後済数(④＋⑥)
-        var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
-        var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
-        var totaly = usefinishcntValue + usenowcntValue;
-        $("#usefinishaftercnt").val(totaly);
-
-        // ⑧使用後残日数(⑤－⑥)
-        var usebeforecntValue = parseFloat($("#usebeforecnt").val()) || 0;
-        var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
-        var suby = usebeforecntValue - usenowcntValue;
-        $("#useafterremaincnt").val(suby);
-    });
+            // ⑧使用後残日数(⑤－⑥)
+            var usebeforecntValue = parseFloat($("#usebeforecnt").val()) || 0;
+            var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
+            var suby = usebeforecntValue - usenowcntValue;
+            $("#useafterremaincnt").val(suby);
+        });
 });
 // Datepeeker Calender
 $("#strymd").datepicker({
@@ -1469,8 +1408,9 @@ $(document).on('click', '#btnReg', function(e) {
     var usefinishcnt = $("#usefinishcnt").val();
     var usebeforecnt = $("#usebeforecnt").val();
     var usenowcnt = $("#usenowcnt").val();
+    var ymdcnt = $("#ymdcnt").val();
     var usefinishaftercnt = $("#usefinishaftercnt").val();
-    var useafterremaincnt = $("#useafterremaincnt").val() 
+    var useafterremaincnt = $("#useafterremaincnt").val()
     var reason = $("#reason").val();
     var destplace = $("#destplace").val();
     var destcode = $("input[name='destcode']:checked").val();
@@ -1556,6 +1496,13 @@ $(document).on('click', '#btnReg', function(e) {
         return false;
     }
 
+
+    if (ymdcnt == "") {
+        alert("<?php echo $kyuka_usenowcnt_empty; ?>");
+        $("#ymdcnt").focus();
+        return false;
+    }
+
     if (usenowcnt == "") {
         alert("<?php echo $kyuka_usenowcnt_empty; ?>");
         $("#usenowcnt").focus();
@@ -1601,29 +1548,8 @@ $(document).on('click', '#btnReg', function(e) {
 
 // Clear Input Tag Data
 $(document).on('click', '#btnClear', function(e) {
-    $('#kyukaname').val('');
-    $('#kyukanamedetail').val('');
-    $("#kyukacode").val('');
-    $("input[name='kyukatype']").prop('checked', false);
-    $('#strymd').val('');
-    $('#endymd').val('');
-    $('#strtime').val('');
-    $('#endtime').val('');
-    $('#tothday').val('');
-    $('#oldcnt').val('');
     $('#newcnt').val('');
-    $('#usefinishcnt').val('');
-    $('#usebeforecnt').val('');
-    $('#usenowcnt').val('');
-    $('#usefinishaftercnt').val('');
-    $('#useafterremaincnt').val('');
-    $('#reason').val('');
-    $('#destplace').val('');
-    $("input[name='destcode']").prop('checked', false);
-    $('#destplace').val('');
-    $('#desttel').val('');
-    $('#ymdcnt').val('0');
-    $('#timecnt').val('0');
+    clearNewModalInputs();
 });
 
 //お知らせ
@@ -1641,7 +1567,7 @@ $(document).ready(function() {
 
 // 編集
 //自動計算で表示
-$("#udoldcnt, #udnewcnt, #tudothday, #udusefinishcnt, #udusenowcnt, #udymdcnt, #udtimecnt").on("input", function() {
+$("#udoldcnt, #udnewcnt, #tudothday, #udusefinishcnt, #udusenowcnt, #udymdcnt").on("input", function() {
     // ①総有給休暇数, ②＋③＝①
     var udoldcntValue = parseFloat($("#udoldcnt").val()) || 0;
     var udnewcntValue = parseFloat($("#udnewcnt").val()) || 0;
@@ -1657,16 +1583,17 @@ $("#udoldcnt, #udnewcnt, #tudothday, #udusefinishcnt, #udusenowcnt, #udymdcnt, #
     //⑥今回使用
     if ($("input[name='udkyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
         $("#udusenowcnt").val('0.5');
-    }
-    else if ($("input[name='udkyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
-        $('#udymdcnt').val($('#udtimecnt').val()*0.125);
-        $('#udusenowcnt').val($('#udymdcnt').val());
-    }
-    else {
-        var udymdcntValue = parseFloat($("#udymdcnt").val());
-        $("#udusenowcnt").val(udymdcntValue);
-    }
-
+                $("#udymdcnt").val('0.5');
+    } else if ($("input[name='udkyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> ==
+        "2") {
+        caculatedKyukaYmdCountHandler($(this).attr("id"));
+    } 
+    var udymdcntValue = parseFloat($("#udymdcnt").val());
+        $("#udusenowcnt").val(0);
+        if (!isNaN(udymdcntValue)) {
+            $("#udusenowcnt").val(udymdcntValue);
+        }
+ 
     // ⑦使用後済数(④＋⑥)
     var udusefinishcntValue = parseFloat($("#udusefinishcnt").val()) || 0;
     var udusenowcntValue = parseFloat($("#udusenowcnt").val()) || 0;
@@ -1680,69 +1607,33 @@ $("#udoldcnt, #udnewcnt, #tudothday, #udusefinishcnt, #udusenowcnt, #udymdcnt, #
     $("#uduseafterremaincnt").val(udsuby);
 });
 
-// Lock and unlock items when selecting vacation request type (day/hour)
-$('input[type=radio][name=udkyukatype]').change(function() {
-    if (this.value == '1') {
+
+function updateModalKbnTimeHandler() {
+    var selectedKbn = $("input[name='udkyukatype']:checked").val();
+    if (selectedKbn == '1') {
         // Select day
         $("#udstrymd").prop('disabled', false);
         $("#udendymd").prop('disabled', false);
         $("#udstrtime").prop('disabled', true);
         $("#udendtime").prop('disabled', true);
-        $("#udtimecnt").prop('disabled', true);
-        $("#udymdcnt").prop('disabled', false);
+        $(".kyuka-ud-kbn-time-div").hide();
 
-        //初期化に戻す
-        $("#udkyukacode").val("");
-        $("#udkyukanamedetail").val("");
-        $("#udstrymd").val("");
-        $("#udendymd").val("");
-        $("#udstrtime").val("");
-        $("#udendtime").val("");
-        $("#udtothday").val("");
-        $("#udoldcnt").val("");
-        // $("#udnewcnt").val("");
-        $("#udusefinishcnt").val("");
-        $("#udusebeforecnt").val("");
-        $("#udusenowcnt").val("");
-        $("#udusefinishaftercnt").val("");
-        $("#uduseafterremaincnt").val("");
-        $("#udreason").val("");
-        $("#udymdcnt").val("");
-        $("#udtimecnt").val("");
-        $("input[name='uddestcode']").prop("checked", false);
-        $("#uddestplace").val("");
-        $("#uddesttel").val("");
-    } else if (this.value == '0') {
+    } else if (selectedKbn == '0') {
         // Time selection
         $("#udstrymd").prop('disabled', false);
         $("#udendymd").prop('disabled', true);
         $("#udstrtime").prop('disabled', false);
         $("#udendtime").prop('disabled', false);
-        $("#udymdcnt").prop('disabled', true);
-        $("#udtimecnt").prop('disabled', false);
-
-        //初期化に戻す
-        $("#udkyukacode").val("");
-        $("#udkyukanamedetail").val("");
-        $("#udstrymd").val("");
-        $("#udendymd").val("");
-        $("#udstrtime").val("");
-        $("#udendtime").val("");
-        $("#udtothday").val("");
-        $("#udoldcnt").val("");
-        // $("#udnewcnt").val("");
-        $("#udusefinishcnt").val("");
-        $("#udusebeforecnt").val("");
-        $("#udusenowcnt").val("");
-        $("#udusefinishaftercnt").val("");
-        $("#uduseafterremaincnt").val("");
-        $("#udreason").val("");
-        $("#udymdcnt").val("");
-        $("#udtimecnt").val("");
-        $("input[name='uddestcode']").prop("checked", false);
-        $("#uddestplace").val("");
-        $("#uddesttel").val("");
+        $(".kyuka-ud-kbn-time-div").show();
     }
+}
+
+
+
+// Lock and unlock items when selecting vacation request type (day/hour)
+$('input[type=radio][name=udkyukatype]').change(function() {
+    clearUpdateModalInputs();
+    updateModalKbnTimeHandler();
 });
 
 // Contact while on vacation
@@ -2003,6 +1894,7 @@ $(document).on('click', '#btnDelKyuka', function(e) {
 $(document).on('click', '.showModal', function() {
     setOnModalChangeDataButtonHidden(true);
     $('#modal2').modal('toggle');
+
     var ArrayData = $(this).text().trim();
     var SeparateArr = ArrayData.split(',');
     var Kyukaid = SeparateArr[0];
@@ -2020,7 +1912,7 @@ $(document).on('click', '.showModal', function() {
         if (isSubmised) {
             setOnModalChangeDataButtonHidden(false);
         }
-        
+
 
         $("#usname").text('<?php echo $key['name'] ?>');
         $("#udkyukaymd").text($('[name="udkyukaymd"]').val("<?php echo $key['kyukaymd'] ?>"));
@@ -2035,11 +1927,11 @@ $(document).on('click', '.showModal', function() {
         var decide_readOnly = '<?php echo $key['kyukatype']; ?>';
         if (decide_readOnly === "0") {
             $("#udendymd").prop('disabled', true);
-            $("#udymdcnt").prop('disabled', true);
+            $("#udymdcnt").prop('disabled', false);
         } else if (decide_readOnly === "1") {
             $("#udstrtime").prop('disabled', true);
-            $("#udendtime").prop('disabled', true);
-            $("#udtimecnt").prop('disabled', true);
+            $("#udendtime").prop('disabled', false);
+            $("#udtimecnt").prop('disabled', false);
         }
 
         $("select[name='udkyukacode']").val('<?php echo $key['kyukacode']; ?>');
@@ -2071,6 +1963,7 @@ $(document).on('click', '.showModal', function() {
     <?php
 		}
 		?>
+    updateModalKbnTimeHandler();
 });
 
 // Click (modify) employee ID in the grid: popup & display contents
@@ -2290,7 +2183,7 @@ function checkSameStatusSubmitBefore() {
 function checkSelectedTeishutsuKyuka() {
     var listSelectedStatus = $("input[name='user-kyuka-multi-select-status']").val().trim().split(',');
     return !listSelectedStatus.some(function(status) {
-        return status ===  '<?php echo array_search(0, $KYUKA_SUBMISSTION_STATUS); ?>';
+        return status === '<?php echo array_search(0, $KYUKA_SUBMISSTION_STATUS); ?>';
     });
 }
 
@@ -2400,8 +2293,8 @@ function updateSelectedValues(checkBox) {
 
 function selectAllUserKyukaSelectHandler() {
     $('#user-kyuka-select-all-checkbox').change(function() {
-             selectedIds = [];
-            selectedStatuses = [];
+        selectedIds = [];
+        selectedStatuses = [];
         $('.user-kyuka-select-checkbox').each(function() {
             $(this).prop('checked', $('#user-kyuka-select-all-checkbox').is(':checked'));
             updateSelectedValues(this);
@@ -2412,6 +2305,245 @@ function selectAllUserKyukaSelectHandler() {
 function handleSelectFilterStatusChange() {
     var selectedValue = $('#filterByStatusCode').val();
     $('#selectedFilterByStatusCode').val(selectedValue);
+}
+
+function calculateKyukaHoursCreate() {
+    const startTime = $("#strtime").val();
+    const endTime = $("#endtime").val();
+    if (!startTime || !endTime) {
+        return 0;
+    }
+    const start = parseFloat(startTime);
+    let end = parseFloat(endTime);
+    if (end < start) {
+        end += 24;
+    }
+    return end - start;
+}
+
+function calculateKyukaHoursUpdate() {
+    const startTime = $("#udstrtime").val();
+    const endTime = $("#udendtime").val();
+    if (!startTime || !endTime) {
+        return 0;
+    }
+    const start = parseFloat(startTime);
+    let end = parseFloat(endTime);
+    if (end < start) {
+        end += 24;
+    }
+    return end - start;
+}
+
+function updateTimeCountByStartTimeAndEndTime() {
+    // Create 
+    var caculatedKyukaTime = calculateKyukaHoursCreate();
+    $("#timecnt").val(caculatedKyukaTime);
+    $("#ymdcnt").val(caculatedKyukaTime * 0.125);
+    $("#usenowcnt").val($("#ymdcnt").val());
+
+    if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> ==
+        1) {
+        $("#usenowcnt").val(0.5);
+        $("#ymdcnt").val(0.5);
+    }
+    if ($("input[name='kyukatype']:checked").val() == "1") {
+        $("#usenowcnt").val(0);
+        $("#ymdcnt").val(0);
+    }
+
+    // Update
+    var caculatedKyukaTime = calculateKyukaHoursUpdate();
+    $("#udtimecnt").val(caculatedKyukaTime);
+    $("#udymdcnt").val(caculatedKyukaTime * 0.125);
+    $("#udusenowcnt").val($("#udymdcnt").val());
+
+    if ($("input[name='udkyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> ==
+        1) {
+        $("#udusenowcnt").val(0.5);
+        $("#udymdcnt").val(0.5);
+    }
+    if ($("input[name='udkyukatype']:checked").val() == "1") {
+        $("#udusenowcnt").val(0);
+        $("#udymdcnt").val(0);
+    }
+
+}
+
+
+function clearNewModalInputs() {
+    $("#kyukacode").val("");
+    $("#kyukanamedetail").val("");
+    $("#strymd").val("");
+    $("#endymd").val("");
+    $("#strtime").val("");
+    $("#endtime").val("");
+    $("#tothday").val("");
+    $("#oldcnt").val("");
+    // $("#newcnt").val("");
+    $("#usefinishcnt").val("");
+    $("#usebeforecnt").val("");
+    $("#usenowcnt").val("");
+    $("#usefinishaftercnt").val("");
+    $("#useafterremaincnt").val("");
+    $("#reason").val("");
+    $("#ymdcnt").val("0");
+    $("#timecnt").val("0");
+    $("input[name='destcode']").prop("checked", false);
+    $("#destplace").val("");
+    $("#desttel").val("");
+
+
+
+
+}
+
+function clearUpdateModalInputs() {
+    $("#udkyukacode").val("");
+    $("#udkyukanamedetail").val("");
+    $("#udstrymd").val("");
+    $("#udendymd").val("");
+    $("#udstrtime").val("");
+    $("#udendtime").val("");
+    $("#udtothday").val("");
+    $("#udoldcnt").val("");
+    // $("#udnewcnt").val("");
+    $("#udusefinishcnt").val("");
+    $("#udusebeforecnt").val("");
+    $("#udusenowcnt").val("");
+    $("#udusefinishaftercnt").val("");
+    $("#uduseafterremaincnt").val("");
+    $("#udreason").val("");
+    $("#udymdcnt").val("");
+    $("#udtimecnt").val("");
+    $("input[name='uddestcode']").prop("checked", false);
+    $("#uddestplace").val("");
+    $("#uddesttel").val("");
+
+}
+
+
+
+
+function kyukaStartTimeEndTimeHandler() {
+    // Create
+    $("#strtime, #endtime").on("input", function() {
+        updateTimeCountByStartTimeAndEndTime();
+
+    });
+    $("#timecnt").on("input", function() {
+        kyukaUpdateTimeCountInputHandler();
+    });
+
+    // Update
+    $("#udstrtime, #udendtime").on("input", function() {
+        updateTimeCountByStartTimeAndEndTime();
+
+    });
+    $("#udtimecnt").on("input", function() {
+        kyukaUpdateTimeCountInputHandler();
+    });
+
+}
+
+function kyukaUpdateTimeCountInputHandler() {
+    // Create
+    var currentTimeCountValue = $("#timecnt").val();
+    var timeToDay = currentTimeCountValue * 0.125;
+    $("#ymdcnt").val(timeToDay);
+    $("#usenowcnt").val(timeToDay);
+
+    // Update
+    var currentTimeCountValue = $("#udtimecnt").val();
+    var timeToDay = currentTimeCountValue * 0.125;
+    $("#udymdcnt").val(timeToDay);
+    $("#udusenowcnt").val(timeToDay);
+
+}
+
+   
+function caculatedKyukaYmdCountHandler(elementId) {
+     // Create
+    if (elementId == 'usenowcnt') {
+        $('#ymdcnt').val($('#' + elementId).val());
+    }
+    if (elementId == 'ymdcnt') {
+        $('#usenowcnt').val($('#' + elementId).val());
+    }
+
+    // Update 
+    if (elementId == 'udusenowcnt') {
+        $('#udymdcnt').val($('#' + elementId).val());
+    }
+    if (elementId == 'udymdcnt') {
+        $('#udusenowcnt').val($('#' + elementId).val());
+    }
+}
+
+function kyukaStartDayAndEndDayHandler() {
+    $("#endymd , #strymd").change(function() {
+        calculateCreateKyukaStartDayAndEndDay();
+    });
+    $("#udendymd , #udstrymd").change(function() {
+        calculateUpdateKyukaStartDayAndEndDay();
+    });
+}
+
+
+
+function calculateUpdateKyukaStartDayAndEndDay() {
+    var str = new Date($("#udstrymd").val());
+    var end = new Date($("#udendymd").val());
+
+    if (!isNaN(str.getTime()) && !isNaN(end.getTime())) {
+        if (str > end) {
+            $("#udendymd").val($("#udstrymd").val());
+            end = new Date($("#udendymd").val());
+        }
+
+        if ($("input[name='kyukatype']:checked").val() == "0") {
+            $("#udendymd").val($("#udstrymd").val());
+            $("#udymdcnt").val(0);
+            $("#udusenowcnt").val(0);
+            return;
+        }
+
+        var dateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
+        $("#udymdcnt").val(dateDiff + 1);
+        $("#udusenowcnt").val($("#udymdcnt").val());
+    } else {
+        $("#udymdcnt").val(0);
+        $("#udusenowcnt").val(0);
+    }
+}
+
+
+
+
+function calculateCreateKyukaStartDayAndEndDay() {
+    var str = new Date($("#strymd").val());
+    var end = new Date($("#endymd").val());
+
+    if (!isNaN(str.getTime()) && !isNaN(end.getTime())) {
+        if (str > end) {
+            $("#endymd").val($("#strymd").val());
+            end = new Date($("#endymd").val());
+        }
+
+        if ($("input[name='kyukatype']:checked").val() == "0") {
+            $("#endymd").val($("#strymd").val());
+            $("#ymdcnt").val(0);
+            $("#usenowcnt").val(0);
+            return;
+        }
+
+        var dateDiff = Math.ceil((end.getTime() - str.getTime()) / (1000 * 3600 * 24));
+        $("#ymdcnt").val(dateDiff + 1);
+        $("#usenowcnt").val($("#ymdcnt").val());
+    } else {
+        $("#ymdcnt").val(0);
+        $("#usenowcnt").val(0);
+    }
 }
 </script>
 <?php include('../inc/footer.php'); ?>

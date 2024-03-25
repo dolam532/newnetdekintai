@@ -430,7 +430,6 @@ if (isset($_POST['SaveKyuka'])) {
     $destcode = mysqli_real_escape_string($conn, $_POST['destcode']);
     $destplace = mysqli_real_escape_string($conn, $_POST['destplace']);
     $desttel = mysqli_real_escape_string($conn, $_POST['desttel']);
-
     $allowok = "0";
     $allowid = "0";
     $allowdecide = "0";
@@ -536,7 +535,6 @@ if (isset($_POST['UpdateKyuka'])) {
     upt_dt='$upt_dt'
     WHERE vacationid ='$vacationid'
     AND companyid ='$companyid'
-    AND uid ='$uid'
     AND email ='$email'";
 
     $queries2 = "UPDATE tbl_userkyuka SET 
@@ -562,8 +560,10 @@ if (isset($_POST['UpdateKyuka'])) {
     upt_dt='$upt_dt'
     WHERE kyukaid ='$kyukaid'
     AND companyid ='$companyid'
-    AND uid ='$uid'
     AND vacationid ='$vacationid'";
+
+    error_log($queries1);
+    error_log($queries2);
 
     $result1 = mysqli_query($conn, $queries1);
     $result2 = mysqli_query($conn, $queries2);
