@@ -687,7 +687,11 @@ span.kyukaReg_class {
                         <br>
                         <div class="row six2">
                             <div class="col-md-12 col-sm-6 col-sx-6">
-                                <span class="text-danger">※1時間を0.125日(1時間/1日8時間)として計算してください。</span>
+                                <?php if ($user_kyukatemplate_ == "1") : ?>
+                                    <div id="alert_hankyu" style="color: red; visibility: hidden;">※申請時間は4時間超えました。一日で登録することをお勧めします。</span>
+                                <?php elseif ($user_kyukatemplate_ == "2") : ?>
+                                    <span class="text-danger">※1時間を0.125日(1時間/1日8時間)として計算してください。</span>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="row seven">
@@ -928,7 +932,11 @@ span.kyukaReg_class {
                         <br>
                         <div class="row six2">
                             <div class="col-md-12 col-sm-6 col-sx-6">
-                                <span class="text-danger">※1時間を0.125日(1時間/1日8時間)として計算してください。</span>
+                                <?php if ($user_kyukatemplate_ == "1") : ?>
+                                    <div id="udalert_hankyu" style="color: red; visibility: hidden;">※申請時間は4時間超えました。一日で登録することをお勧めします。</span>
+                                <?php elseif ($user_kyukatemplate_ == "2") : ?>
+                                    <span class="text-danger">※1時間を0.125日(1時間/1日8時間)として計算してください。</span>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="row seven">
@@ -1245,6 +1253,13 @@ function createModelInputsHandler() {
     // 時間(From) , 時間(To)
     $("#strtime, #endtime").on("input", function() {
         updateTimeCountByStartTimeAndEndTime();
+        var strtimeValue = parseFloat($("#strtime").val());
+        var endimeValue = parseFloat($("#endtime").val());
+        if((endimeValue-strtimeValue) > 4){
+            $('#alert_hankyu').show().css('visibility', 'visible');
+        } else {
+            $('#alert_hankyu').show().css('visibility', 'hidden');
+        }
     });
     //  申請時間
     $("#timecnt").on("input", function() {
@@ -1325,6 +1340,13 @@ function updateModelInputsHandler() {
     //  期間(From), 日付 期間(To)
     $("#udstrtime, #udendtime").on("input", function() {
         updateTimeCountByStartTimeAndEndTime();
+        var udstrtimeValue = parseFloat($("#udstrtime").val());
+        var udendimeValue = parseFloat($("#udendtime").val());
+        if((udendimeValue-udstrtimeValue) > 4){
+            $('#udalert_hankyu').show().css('visibility', 'visible');
+        } else {
+            $('#udalert_hankyu').show().css('visibility', 'hidden');
+        }
     });
 
     //  申請時間
@@ -1417,6 +1439,7 @@ $(document).on('click', '#btnNew', function(e) {
     //初期化
     $("input[name='kyukatype']").focus();
     $("input[name='kyukatype']").prop("checked", false);
+    $('#alert_hankyu').show().css('visibility', 'hidden');
 
     clearNewModalInputs();
 });
@@ -2016,6 +2039,13 @@ $(document).on('click', '.showModal', function() {
 		}
 		?>
     updateModalKbnTimeHandler();
+    var udstrtimeValue = parseFloat($("#udstrtime").val());
+        var udendimeValue = parseFloat($("#udendtime").val());
+        if((udendimeValue-udstrtimeValue) > 4){
+            $('#udalert_hankyu').show().css('visibility', 'visible');
+        } else {
+            $('#udalert_hankyu').show().css('visibility', 'hidden');
+        }
 });
 
 // Click (modify) employee ID in the grid: popup & display contents
