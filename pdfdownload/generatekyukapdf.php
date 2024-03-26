@@ -62,19 +62,23 @@ if ($kyukatype == "0") { // Time
 	// 期間 ※半休のみ記入
 	$kyukaHalfRangeTextShow = substr($strymd, 0, 4) . '年 ' . substr($strymd, 5, 2) . '月 ' . substr($strymd, 8, 2) . '日' . '(' . $strymd_youbi . ')　'
 		. $strtime . '時 ' . '　～　' . $endtime . '時 ';
+	
 	// Kyuka Count
 	if ($kyukatemplate == "1") {
-		$kyuka_count = $timecnt . '日';
+		$kyuka_count = $ymdcnt . '日';
 	} elseif ($kyukatemplate == "2") {
 		$kyuka_count = $timecnt . '時';
 	}
+
 } elseif ($kyukatype == "1") { // Day
 	$endymd = $_POST['endymd'];
 	// 期間 ※半休のみ記入
 	$kyukaHalfRangeTextShow = '      ' . '年 ' . '     ' . '月 ' . '     ' . '日' . '(' . '     ' . ') '
 		. '        ' . '時 ' . '　～　' . '    ' . '時 ';
+
 	// Kyuka Count
 	$kyuka_count = $ymdcnt . '日';
+	
 }
 $endymd_w = date('w', strtotime($endymd));
 $endymd_youbi = ['日', '月', '火', '水', '木', '金', '土'][$endymd_w];

@@ -1196,13 +1196,204 @@ span.kyukaReg_class {
 </div>
 
 <script>
+$(document).ready(function() {
+    scrollToTop();
+    SetFormViewBySubmissionStatusHandler();
+    multiUserKyukaSelectHandler();
+    modalsHandler();
+
+});
+
+function modalsHandler() {
+    kyukaKbnSelectHandler();
+    createModelInputsHandler();
+    updateModelInputsHandler();
+
+}
+
+// 申請区分 
+function kyukaKbnSelectHandler() {
+    $('input[name="kyukatype"]').change(function() {
+        updateTimeCountByStartTimeAndEndTime()
+        //kyukatemplate A, 半休
+        if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
+            $("#ymdcnt").val(0.5);
+            $("#usenowcnt").val(0.5);
+        }
+        if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
+            $(".kyuka-kbn-time-div").show();
+
+        }
+        if ($(this).val() == "1" && <?php echo $user_kyukatemplate_; ?> == "2") {
+            $(".kyuka-kbn-time-div").hide();
+        }
+
+    });
+}
+
+
+// 新規
+//自動計算で表示
+function createModelInputsHandler() {
+
+    // 期間(From), 日付 期間(To)
+    $("#endymd , #strymd").change(function() {
+        calculateCreateKyukaStartDayAndEndDay();
+        automationCalculateCreateModelInputs(this);
+    });
+
+    // 時間(From) , 時間(To)
+    $("#strtime, #endtime").on("input", function() {
+        updateTimeCountByStartTimeAndEndTime();
+    });
+    //  申請時間
+    $("#timecnt").on("input", function() {
+        kyukaUpdateTimeCountInputHandler();
+    });
+
+    $("#oldcnt, #newcnt, #tothday, #usefinishcnt, #usenowcnt, #ymdcnt ,#strtime, #endtime,#timecnt").on(
+        "input",
+        function() {
+            automationCalculateCreateModelInputs(this);
+        });
+}
+
+
+// 自動計算 新規
+function automationCalculateCreateModelInputs(thisElement) {
+    var elementId = $(thisElement).attr("id");
+    //⑥今回使用
+    if ($("input[name='kyukatype']:checked").val() == "0") {
+        caculatedKyukaYmdCount(elementId);
+        if ($("#strtime").val() == '' || $("#endtime").val() == '') {
+            $("#usenowcnt").val("0");
+            $("#usefinishaftercnt").val("0");
+            $("#useafterremaincnt").val("0");
+            return;
+        }
+    }
+    if ($("input[name='kyukatype']:checked").val() == "1") {
+        caculatedKyukaYmdCount(elementId);
+        if ($("#ymdcnt").val() == '' ||  $("#usenowcnt").val() == '') {
+            $("#usefinishaftercnt").val("0");
+            $("#useafterremaincnt").val("0");
+            return;
+        }
+    }
+    // ①総有給休暇数, ②＋③＝①
+    var oldcntValue = parseFloat($("#oldcnt").val()) || 0;
+    var newcntValue = parseFloat($("#newcnt").val()) || 0;
+    var totaly = oldcntValue + newcntValue;
+    if ($("#oldcnt").val() == '' || $("#newcnt").val() == '' || $("#usefinishcnt").val() == '') {
+        $("#usebeforecnt").val("");
+        $("#usefinishaftercnt").val("");
+        $("#useafterremaincnt").val("");
+        return;
+    }
+    $("#tothday").val(totaly);
+
+    //⑤使用前残, ⑤＝①ー④
+    var tothdayValue = parseFloat($("#tothday").val()) || 0;
+    var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
+    var usebeforecntValue = tothdayValue - usefinishcntValue;
+    $("#usebeforecnt").val(usebeforecntValue);
+
+    // ⑦使用後済数(④＋⑥)
+    var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
+    var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
+    var totaly = usefinishcntValue + usenowcntValue;
+    $("#usefinishaftercnt").val(totaly);
+
+    // ⑧使用後残日数(⑤－⑥)
+    var usebeforecntValue = parseFloat($("#usebeforecnt").val()) || 0;
+    var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
+    var suby = usebeforecntValue - usenowcntValue;
+    $("#useafterremaincnt").val(suby);
+}
+
+
+// 編集
+//自動計算で表示
+function updateModelInputsHandler() {
+
+    // 期間(From), 日付 期間(To)
+    $("#udendymd , #udstrymd").change(function() {
+        calculateUpdateKyukaStartDayAndEndDay();
+        automationCalculateUpdateModelInputs(this);
+    });
+
+    //  期間(From), 日付 期間(To)
+    $("#udstrtime, #udendtime").on("input", function() {
+        updateTimeCountByStartTimeAndEndTime();
+    });
+
+    //  申請時間
+    $("#udtimecnt").on("input", function() {
+        kyukaUpdateTimeCountInputHandler();
+    });
+
+    $("#udoldcnt, #udnewcnt, #tudothday, #udusefinishcnt, #udusenowcnt, #udymdcnt,udstrtime, #udendtime,#udtimecnt").on(
+        "input",
+        function() {
+            automationCalculateUpdateModelInputs(this);
+        });
+}
+
+function automationCalculateUpdateModelInputs(thisElement) {
+    var elementId = $(thisElement).attr("id");
+    if ($("input[name='udkyukatype']:checked").val() == "0") {
+        caculatedKyukaYmdCount(elementId);
+        if ($("#strtime").val() == '' || $("#endtime").val() == '') {
+            $("#usenowcnt").val("0");
+            $("#usefinishaftercnt").val("0");
+            $("#useafterremaincnt").val("0");
+            return;
+        }
+    }
+
+    if ($("input[name='udkyukatype']:checked").val() == "1") {
+        caculatedKyukaYmdCount(elementId);
+        if ($("#udymdcnt").val() == '' ||  $("#uudsenowcnt").val() == '') {
+            $("#udusefinishaftercnt").val("0");
+            $("#uduseafterremaincnt").val("0");
+            return;
+        }
+    }
+
+    // ①総有給休暇数, ②＋③＝①
+    var udoldcntValue = parseFloat($("#udoldcnt").val()) || 0;
+    var udnewcntValue = parseFloat($("#udnewcnt").val()) || 0;
+    var udtotaly = udoldcntValue + udnewcntValue;
+    $("#udtothday").val(udtotaly);
+
+    //⑤使用前残, ⑤＝①ー④
+    var udtothdayValue = parseFloat($("#udtothday").val()) || 0;
+    var udusefinishcntValue = parseFloat($("#udusefinishcnt").val()) || 0;
+    var udusebeforecntValue = udtothdayValue - udusefinishcntValue;
+    $("#udusebeforecnt").val(udusebeforecntValue);
+
+    // ⑦使用後済数(④＋⑥)
+    var udusefinishcntValue = parseFloat($("#udusefinishcnt").val()) || 0;
+    var udusenowcntValue = parseFloat($("#udusenowcnt").val()) || 0;
+    var udtotaly = udusefinishcntValue + udusenowcntValue;
+    $("#udusefinishaftercnt").val(udtotaly);
+
+    // ⑧使用後残日数(⑤－⑥)
+    var udusebeforecntValue = parseFloat($("#udusebeforecnt").val()) || 0;
+    var udusenowcntValue = parseFloat($("#udusenowcnt").val()) || 0;
+    var udsuby = udusebeforecntValue - udusenowcntValue;
+    $("#uduseafterremaincnt").val(udsuby);
+
+}
+
+
 function scrollToTop() {
     window.scrollTo({
         top: 0,
         behavior: 'smooth'
     });
 }
-scrollToTop();
+
 
 //Disabling Enter Key for Textboxes, Radio
 $("input:text, input:radio").keypress(function(event) {
@@ -1263,27 +1454,6 @@ $('input[type=radio][name=kyukatype]').change(function() {
         clearNewModalInputs();
     }
 });
-
-
-
-$('input[name="kyukatype"]').change(function() {
-    updateTimeCountByStartTimeAndEndTime()
-    //kyukatemplate A, 半休
-    if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
-        $("#ymdcnt").val(0.5);
-        $("#usenowcnt").val(0.5);
-    }
-    if ($(this).val() == "0" && <?php echo $user_kyukatemplate_; ?> == "2") {
-        $(".kyuka-kbn-time-div").show();
-
-    }
-    if ($(this).val() == "1" && <?php echo $user_kyukatemplate_; ?> == "2") {
-        $(".kyuka-kbn-time-div").hide();
-    }
-    //kyukatemplate B, 時間
-
-});
-
 // Contact while on vacation
 $('input[type=radio][name=destcode]').change(function() {
     switch (this.value) {
@@ -1301,76 +1471,6 @@ $('input[type=radio][name=destcode]').change(function() {
 });
 
 
-
-
-$(document).ready(function() {
-    kyukaStartTimeEndTimeHandler();
-    kyukaStartDayAndEndDayHandler();
-
-    //自動計算で表示
-    $("#oldcnt, #newcnt, #tothday, #usefinishcnt, #usenowcnt, #ymdcnt").on("input",
-        function() {
-            //⑥今回使用
-            if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> ==
-                1) {
-                $("#usenowcnt").val(0.5);
-                $("#ymdcnt").val(0.5);
-            }
-            if ($("input[name='kyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> ==
-                2) {
-                var strtime = $("#strtime").val();
-                var endtime = $("#endtime").val();
-                if (strtime == '' || endtime == '') {
-                    $("#usenowcnt").val("");
-                    $("#usefinishaftercnt").val("");
-                    $("#useafterremaincnt").val("");
-                    return;
-                }
-                caculatedKyukaYmdCountHandler($(this).attr("id"));
-            }
-            if ($("input[name='kyukatype']:checked").val() == "1" && (<?php echo $user_kyukatemplate_; ?> ==
-                    1 || <?php echo $user_kyukatemplate_; ?> == 2)) {
-                if ($("#ymdcnt").val() == '') {
-                    $("#usenowcnt").val("");
-                    $("#usefinishaftercnt").val("");
-                    $("#useafterremaincnt").val("");
-                    return;
-                }
-                var ymdcntValue = parseFloat($("#ymdcnt").val());
-                $("#usenowcnt").val(ymdcntValue);
-            }
-
-            // ①総有給休暇数, ②＋③＝①
-            var oldcntValue = parseFloat($("#oldcnt").val()) || 0;
-            var newcntValue = parseFloat($("#newcnt").val()) || 0;
-            var totaly = oldcntValue + newcntValue;
-            if ($("#oldcnt").val() == '' || $("#newcnt").val() == '' || $("#usefinishcnt").val() == '') {
-                $("#usebeforecnt").val("");
-                $("#usefinishaftercnt").val("");
-                $("#useafterremaincnt").val("");
-                return;
-            }
-            $("#tothday").val(totaly);
-
-            //⑤使用前残, ⑤＝①ー④
-            var tothdayValue = parseFloat($("#tothday").val()) || 0;
-            var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
-            var usebeforecntValue = tothdayValue - usefinishcntValue;
-            $("#usebeforecnt").val(usebeforecntValue);
-
-            // ⑦使用後済数(④＋⑥)
-            var usefinishcntValue = parseFloat($("#usefinishcnt").val()) || 0;
-            var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
-            var totaly = usefinishcntValue + usenowcntValue;
-            $("#usefinishaftercnt").val(totaly);
-
-            // ⑧使用後残日数(⑤－⑥)
-            var usebeforecntValue = parseFloat($("#usebeforecnt").val()) || 0;
-            var usenowcntValue = parseFloat($("#usenowcnt").val()) || 0;
-            var suby = usebeforecntValue - usenowcntValue;
-            $("#useafterremaincnt").val(suby);
-        });
-});
 // Datepeeker Calender
 $("#strymd").datepicker({
     changeYear: true,
@@ -1558,54 +1658,6 @@ $(document).on('click', '#btnAnnt', function(e) {
     autoGrow(document.getElementById("message-area2"));
 });
 
-//multiUserKyukaSelect
-$(document).ready(function() {
-    SetFormViewBySubmissionStatusHandler();
-    multiUserKyukaSelectHandler();
-});
-
-
-// 編集
-//自動計算で表示
-$("#udoldcnt, #udnewcnt, #tudothday, #udusefinishcnt, #udusenowcnt, #udymdcnt").on("input", function() {
-    // ①総有給休暇数, ②＋③＝①
-    var udoldcntValue = parseFloat($("#udoldcnt").val()) || 0;
-    var udnewcntValue = parseFloat($("#udnewcnt").val()) || 0;
-    var udtotaly = udoldcntValue + udnewcntValue;
-    $("#udtothday").val(udtotaly);
-
-    //⑤使用前残, ⑤＝①ー④
-    var udtothdayValue = parseFloat($("#udtothday").val()) || 0;
-    var udusefinishcntValue = parseFloat($("#udusefinishcnt").val()) || 0;
-    var udusebeforecntValue = udtothdayValue - udusefinishcntValue;
-    $("#udusebeforecnt").val(udusebeforecntValue);
-
-    //⑥今回使用
-    if ($("input[name='udkyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> == "1") {
-        $("#udusenowcnt").val('0.5');
-                $("#udymdcnt").val('0.5');
-    } else if ($("input[name='udkyukatype']:checked").val() == "0" && <?php echo $user_kyukatemplate_; ?> ==
-        "2") {
-        caculatedKyukaYmdCountHandler($(this).attr("id"));
-    } 
-    var udymdcntValue = parseFloat($("#udymdcnt").val());
-        $("#udusenowcnt").val(0);
-        if (!isNaN(udymdcntValue)) {
-            $("#udusenowcnt").val(udymdcntValue);
-        }
- 
-    // ⑦使用後済数(④＋⑥)
-    var udusefinishcntValue = parseFloat($("#udusefinishcnt").val()) || 0;
-    var udusenowcntValue = parseFloat($("#udusenowcnt").val()) || 0;
-    var udtotaly = udusefinishcntValue + udusenowcntValue;
-    $("#udusefinishaftercnt").val(udtotaly);
-
-    // ⑧使用後残日数(⑤－⑥)
-    var udusebeforecntValue = parseFloat($("#udusebeforecnt").val()) || 0;
-    var udusenowcntValue = parseFloat($("#udusenowcnt").val()) || 0;
-    var udsuby = udusebeforecntValue - udusenowcntValue;
-    $("#uduseafterremaincnt").val(udsuby);
-});
 
 
 function updateModalKbnTimeHandler() {
@@ -2425,26 +2477,6 @@ function clearUpdateModalInputs() {
 
 
 
-function kyukaStartTimeEndTimeHandler() {
-    // Create
-    $("#strtime, #endtime").on("input", function() {
-        updateTimeCountByStartTimeAndEndTime();
-
-    });
-    $("#timecnt").on("input", function() {
-        kyukaUpdateTimeCountInputHandler();
-    });
-
-    // Update
-    $("#udstrtime, #udendtime").on("input", function() {
-        updateTimeCountByStartTimeAndEndTime();
-
-    });
-    $("#udtimecnt").on("input", function() {
-        kyukaUpdateTimeCountInputHandler();
-    });
-
-}
 
 function kyukaUpdateTimeCountInputHandler() {
     // Create
@@ -2461,9 +2493,11 @@ function kyukaUpdateTimeCountInputHandler() {
 
 }
 
-   
-function caculatedKyukaYmdCountHandler(elementId) {
-     // Create
+
+
+
+function caculatedKyukaYmdCount(elementId) {
+    // Create
     if (elementId == 'usenowcnt') {
         $('#ymdcnt').val($('#' + elementId).val());
     }
@@ -2480,14 +2514,6 @@ function caculatedKyukaYmdCountHandler(elementId) {
     }
 }
 
-function kyukaStartDayAndEndDayHandler() {
-    $("#endymd , #strymd").change(function() {
-        calculateCreateKyukaStartDayAndEndDay();
-    });
-    $("#udendymd , #udstrymd").change(function() {
-        calculateUpdateKyukaStartDayAndEndDay();
-    });
-}
 
 
 
