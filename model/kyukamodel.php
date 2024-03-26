@@ -136,7 +136,7 @@ $valuesAreSame = (count($uniqueValues) === 1);
 $topValue_ = max($nearestValueTop);
 $topKey_ = array_search($topValue_, $nearestValueTop);
 if($valuesAreSame==true){
-    $topKey_= $topKey_+1;
+    $topKey_= end($nearestIndex);
 }
 $bottomValue_ = $bottomvalue[$topKey_];
 
