@@ -688,7 +688,7 @@ span.kyukaReg_class {
                         <div class="row six2">
                             <div class="col-md-12 col-sm-6 col-sx-6">
                                 <?php if ($user_kyukatemplate_ == "1") : ?>
-                                    <div id="alert_hankyu" style="color: red; visibility: hidden;">※申請時間は4時間超えました。一日で登録することをお勧めします。</span>
+                                    <span id="alert_hankyu" style="color: red; visibility: hidden;">※申請時間は4時間超えました。一日で登録することをお勧めします。</span>
                                 <?php elseif ($user_kyukatemplate_ == "2") : ?>
                                     <span class="text-danger">※1時間を0.125日(1時間/1日8時間)として計算してください。</span>
                                 <?php endif; ?>
@@ -933,7 +933,7 @@ span.kyukaReg_class {
                         <div class="row six2">
                             <div class="col-md-12 col-sm-6 col-sx-6">
                                 <?php if ($user_kyukatemplate_ == "1") : ?>
-                                    <div id="udalert_hankyu" style="color: red; visibility: hidden;">※申請時間は4時間超えました。一日で登録することをお勧めします。</span>
+                                    <span id="udalert_hankyu" style="color: red; visibility: hidden;">※申請時間は4時間超えました。一日で登録することをお勧めします。</span>
                                 <?php elseif ($user_kyukatemplate_ == "2") : ?>
                                     <span class="text-danger">※1時間を0.125日(1時間/1日8時間)として計算してください。</span>
                                 <?php endif; ?>
@@ -951,7 +951,8 @@ span.kyukaReg_class {
                                 <input type="text" class="form-control" id="udymdcnt" name="udymdcnt" placeholder="番号"
                                     style="text-align: center" value="">
                             </div>
-
+                            <input type="hidden" class="form-control" id="udtimecnt" name="udtimecnt" value="" hidden
+                                style="display:none;">
                             <?php elseif ($user_kyukatemplate_ == "2") : ?>
 
                             <div class="col-md-2 col-sm-2 col-sx-2">
@@ -1253,9 +1254,8 @@ function createModelInputsHandler() {
     // 時間(From) , 時間(To)
     $("#strtime, #endtime").on("input", function() {
         updateTimeCountByStartTimeAndEndTime();
-        var strtimeValue = parseFloat($("#strtime").val());
-        var endimeValue = parseFloat($("#endtime").val());
-        if((endimeValue-strtimeValue) > 4){
+        var timecntValue = parseFloat($("#timecnt").val());
+        if(timecntValue > 4){
             $('#alert_hankyu').show().css('visibility', 'visible');
         } else {
             $('#alert_hankyu').show().css('visibility', 'hidden');
@@ -1340,9 +1340,8 @@ function updateModelInputsHandler() {
     //  期間(From), 日付 期間(To)
     $("#udstrtime, #udendtime").on("input", function() {
         updateTimeCountByStartTimeAndEndTime();
-        var udstrtimeValue = parseFloat($("#udstrtime").val());
-        var udendimeValue = parseFloat($("#udendtime").val());
-        if((udendimeValue-udstrtimeValue) > 4){
+        var udtimecntValue = parseFloat($("#udtimecnt").val());
+        if(udtimecntValue > 4){
             $('#udalert_hankyu').show().css('visibility', 'visible');
         } else {
             $('#udalert_hankyu').show().css('visibility', 'hidden');

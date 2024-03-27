@@ -50,7 +50,17 @@ $kyukaInfoListtopArray = explode(',', $kyukaInfoListtopString);
 $kyukaInfoListbottomString = $_POST['kyukaInfoListbottomString'];
 $kyukaInfoListbottomArray = explode(',', $kyukaInfoListbottomString);
 
+
+$now = new \DateTime('now');
+$nowmonth = $now->format('m');
+$nowyear = $now->format('Y');
+
+$inyear = substr($inymd, 0, 4);
+$inmonth = substr($inymd, 5, 2);
+
+
 // Calculation
+$monthcount = ($nowmonth + $nowyear * 12) - ($inyear * 12 + $inmonth);
 $month_remain = $monthcount % 12; // the remainder
 $year_remain_float = $monthcount / 12; // the quotient
 $year_remain = intval($year_remain_float);
