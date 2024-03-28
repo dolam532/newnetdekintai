@@ -854,6 +854,7 @@ $(document).on('click', '#btnReg', function(e) {
     var passwordRegex = /^[A-Za-z0-9]+$/; // 半角英数字のみを許可
     var dept = $("#dept").val();
     var grade = $("#grade").val();
+    var inymd = $("#inymd").val();
     var genba_list = $("#genba_list").val();
 
     if (pwd == "") {
@@ -911,6 +912,12 @@ $(document).on('click', '#btnReg', function(e) {
         e.preventDefault();
         return;
     }
+    if (inymd == "") {
+        alert("<?php echo $user_inymd_empty; ?>");
+        $("#inymd").focus();
+        e.preventDefault();
+        return;
+    }
     if (genba_list == "") {
         alert("<?php echo $user_genba_list_empty; ?>");
         $("#genba_list").focus();
@@ -928,6 +935,7 @@ $(document).on('click', '#UpdatebtnReg', function(e) {
     var passwordRegex = /^[A-Za-z0-9]+$/; // 半角英数字のみを許可
     var dept = $("#uldept").val();
     var grade = $("#ulgrade").val();
+    var inymd = $("#ulinymd").val();
     var genba_list = $("#ulgenba_list").val();
 
     if (pwd == "") {
@@ -982,6 +990,12 @@ $(document).on('click', '#UpdatebtnReg', function(e) {
     if (grade == "") {
         alert("<?php echo $user_grade_empty; ?>");
         $("#ulgrade").focus();
+        e.preventDefault();
+        return;
+    }
+    if (inymd == "") {
+        alert("<?php echo $user_inymd_empty; ?>");
+        $("#ulinymd").focus();
         e.preventDefault();
         return;
     }
